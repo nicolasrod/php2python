@@ -39,6 +39,8 @@ Roadmap
 - [ ] Address limitations of Python language (single expression lambdas, assigns in statements).
 - [ ] Finish implementing all of the supporting PHP functions to run WordPress.
 - [ ] Rearrange AST nodes to simplify conversion.
+- [ ] Refactor converted code to output Flask/Django code instead. Required an overhaul of the
+  import mechanism.
 - [ ] Massive cleanup.
 
 
