@@ -1,7 +1,6 @@
 # php2py
 
-Convert PHP code to Python running under CGI (beta)
-
+Convert PHP code to Python running under CGI (beta).
 
 ## Requirements
 
@@ -33,13 +32,15 @@ Any PR's and/or comments are more than welcome.
 
 ## Roadmap
 
-- [x] Complete implementation of AST nodes transformation
-- [ ] Address limitations of Python language (single expression lambdas, assigns in statements)
-- [ ] Finish implementing all of the supporting PHP functions to run WordPress 
-- [ ] Rearrange AST nodes to simplify conversion 
-- [ ] Massive cleanup 
+- [x] Complete implementation of AST nodes transformation.
+- [ ] Address limitations of Python language (single expression lambdas, assigns in statements).
+- [ ] Finish implementing all of the supporting PHP functions to run WordPress.
+- [ ] Rearrange AST nodes to simplify conversion.
+- [ ] Massive cleanup.
+
 
 ## Licence
+
 
 Copyright Nicolás Rodriguez (nicolasrod@google.com)
 
