@@ -1,15 +1,17 @@
-# php2py
+PHP2Python
+==========
 
 Convert PHP code to Python running under CGI (beta).
 
-## Requirements
-
+Requirements
+------------
 
 - PHP 7 with Package PHP-Parser installed (https://github.com/nikic/PHP-Parser#quick-start)
 - Python 3 with Package goto-statement installed (https://pypi.org/project/goto-statement/)
 
 
-## Converting WordPress source code to Python
+Converting WordPress source code to Python
+------------------------------------------
 
 In ./wordpress-5.4 is a copy of WP and its convertion with the tool:
 
@@ -30,7 +32,8 @@ There are a few things left to finish in order to get a complete working convert
 
 Any PR's and/or comments are more than welcome.
 
-## Roadmap
+Roadmap
+-------
 
 - [x] Complete implementation of AST nodes transformation.
 - [ ] Address limitations of Python language (single expression lambdas, assigns in statements).
@@ -39,8 +42,8 @@ Any PR's and/or comments are more than welcome.
 - [ ] Massive cleanup.
 
 
-## Licence
-
+Licence
+-------
 
 Copyright Nicolás Rodriguez (nicolasrod@google.com)
 
@@ -49,3 +52,5 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
