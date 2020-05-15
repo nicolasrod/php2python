@@ -19,7 +19,7 @@ In ./wordpress-5.4 is a copy of WP and its convertion with the tool:
 $ python3 php2py.py --keep-ast ./wordpress-5.4
 ```
 
-This produces *.py files, the *.ast (because --keep-ast is used) and if there's any error (which should be at the moment) *.errors.txt files.
+This produces \*.py files, the \*.ast (because --keep-ast is used) and if there's any error (which should be at the moment) \*.errors.txt files.
 
 In order to run the converted files you need to specify the full path of the PHP compatibility library in the *PHP2PY_COMPAT* environmental variable:
 
