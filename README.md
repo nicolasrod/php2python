@@ -2,10 +2,13 @@
 
 Convert PHP code to Python running under CGI (beta)
 
+
 ## Requirements
+
 
 - PHP 7 with Package PHP-Parser installed (https://github.com/nikic/PHP-Parser#quick-start)
 - Python 3 with Package goto-statement installed (https://pypi.org/project/goto-statement/)
+
 
 ## Converting WordPress source code to Python
 
@@ -29,12 +32,12 @@ There are a few things left to finish in order to get a complete working convert
 Any PR's and/or comments are more than welcome.
 
 ## Roadmap
- 
-| &check; | Complete implementation of AST nodes transformation |
-| | Address limitations of Python language (single expression lambdas, assigns in statements) |
-| | Finish implementing all of the supporting PHP functions to run WordPress |
-| | Rearrange AST nodes to simplify conversion |
-| | Massive cleanup |
+
+- [x] Complete implementation of AST nodes transformation
+- [ ] Address limitations of Python language (single expression lambdas, assigns in statements)
+- [ ] Finish implementing all of the supporting PHP functions to run WordPress 
+- [ ] Rearrange AST nodes to simplify conversion 
+- [ ] Massive cleanup 
 
 ## Licence
 
