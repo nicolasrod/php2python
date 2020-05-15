@@ -1,0 +1,2824 @@
+[
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "wp_styles",
+      "attributes": {
+        "startLine": 20,
+        "endLine": 20
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Global",
+        "vars": [
+          {
+            "nodeType": "Expr_Variable",
+            "name": "wp_styles",
+            "attributes": {
+              "startLine": 21,
+              "endLine": 21
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 21,
+          "endLine": 21
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BooleanNot",
+          "expr": {
+            "nodeType": "Expr_Instanceof",
+            "expr": {
+              "nodeType": "Expr_Variable",
+              "name": "wp_styles",
+              "attributes": {
+                "startLine": 22,
+                "endLine": 22
+              }
+            },
+            "class": {
+              "nodeType": "Name",
+              "parts": [
+                "WP_Styles"
+              ],
+              "attributes": {
+                "startLine": 22,
+                "endLine": 22
+              }
+            },
+            "attributes": {
+              "startLine": 22,
+              "endLine": 22
+            }
+          },
+          "attributes": {
+            "startLine": 22,
+            "endLine": 22
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "wp_styles",
+                "attributes": {
+                  "startLine": 23,
+                  "endLine": 23
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_New",
+                "class": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "WP_Styles"
+                  ],
+                  "attributes": {
+                    "startLine": 23,
+                    "endLine": 23
+                  }
+                },
+                "args": [],
+                "attributes": {
+                  "startLine": 23,
+                  "endLine": 23
+                }
+              },
+              "attributes": {
+                "startLine": 23,
+                "endLine": 23
+              }
+            },
+            "attributes": {
+              "startLine": 23,
+              "endLine": 23
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 22,
+          "endLine": 24
+        }
+      },
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_Variable",
+          "name": "wp_styles",
+          "attributes": {
+            "startLine": 25,
+            "endLine": 25
+          }
+        },
+        "attributes": {
+          "startLine": 25,
+          "endLine": 25
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 20,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Dependencies API: Styles functions\n *\n * @since 2.6.0\n *\n * @package WordPress\n * @subpackage Dependencies\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 9,
+          "endFilePos": 122,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Initialize $wp_styles if it has not been set.\n *\n * @global WP_Styles $wp_styles\n *\n * @since 4.2.0\n *\n * @return WP_Styles WP_Styles instance.\n */",
+          "line": 11,
+          "filePos": 125,
+          "tokenPos": 3,
+          "endLine": 19,
+          "endFilePos": 278,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 26
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "wp_print_styles",
+      "attributes": {
+        "startLine": 42,
+        "endLine": 42
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "handles",
+          "attributes": {
+            "startLine": 42,
+            "endLine": 42
+          }
+        },
+        "default": {
+          "nodeType": "Expr_ConstFetch",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "false"
+            ],
+            "attributes": {
+              "startLine": 42,
+              "endLine": 42
+            }
+          },
+          "attributes": {
+            "startLine": 42,
+            "endLine": 42
+          }
+        },
+        "attributes": {
+          "startLine": 42,
+          "endLine": 42
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BinaryOp_Identical",
+          "left": {
+            "nodeType": "Scalar_String",
+            "value": "",
+            "attributes": {
+              "startLine": 43,
+              "endLine": 43,
+              "kind": 1
+            }
+          },
+          "right": {
+            "nodeType": "Expr_Variable",
+            "name": "handles",
+            "attributes": {
+              "startLine": 43,
+              "endLine": 43
+            }
+          },
+          "attributes": {
+            "startLine": 43,
+            "endLine": 43
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "handles",
+                "attributes": {
+                  "startLine": 44,
+                  "comments": [
+                    {
+                      "nodeType": "Comment",
+                      "text": "// For 'wp_head'.\n",
+                      "line": 43,
+                      "filePos": 1020,
+                      "tokenPos": 89,
+                      "endLine": 44,
+                      "endFilePos": 1037,
+                      "endTokenPos": 89
+                    }
+                  ],
+                  "endLine": 44
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_ConstFetch",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "false"
+                  ],
+                  "attributes": {
+                    "startLine": 44,
+                    "endLine": 44
+                  }
+                },
+                "attributes": {
+                  "startLine": 44,
+                  "endLine": 44
+                }
+              },
+              "attributes": {
+                "startLine": 44,
+                "comments": [
+                  {
+                    "nodeType": "Comment",
+                    "text": "// For 'wp_head'.\n",
+                    "line": 43,
+                    "filePos": 1020,
+                    "tokenPos": 89,
+                    "endLine": 44,
+                    "endFilePos": 1037,
+                    "endTokenPos": 89
+                  }
+                ],
+                "endLine": 44
+              }
+            },
+            "attributes": {
+              "startLine": 44,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// For 'wp_head'.\n",
+                  "line": 43,
+                  "filePos": 1020,
+                  "tokenPos": 89,
+                  "endLine": 44,
+                  "endFilePos": 1037,
+                  "endTokenPos": 89
+                }
+              ],
+              "endLine": 44
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 43,
+          "endLine": 45
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BooleanNot",
+          "expr": {
+            "nodeType": "Expr_Variable",
+            "name": "handles",
+            "attributes": {
+              "startLine": 47,
+              "endLine": 47
+            }
+          },
+          "attributes": {
+            "startLine": 47,
+            "endLine": 47
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "do_action"
+                ],
+                "attributes": {
+                  "startLine": 53,
+                  "comments": [
+                    {
+                      "nodeType": "Comment_Doc",
+                      "text": "/**\n\t\t * Fires before styles in the $handles queue are printed.\n\t\t *\n\t\t * @since 2.6.0\n\t\t */",
+                      "line": 48,
+                      "filePos": 1085,
+                      "tokenPos": 112,
+                      "endLine": 52,
+                      "endFilePos": 1176,
+                      "endTokenPos": 112
+                    }
+                  ],
+                  "endLine": 53
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "wp_print_styles",
+                    "attributes": {
+                      "startLine": 53,
+                      "endLine": 53,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 53,
+                    "endLine": 53
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 53,
+                "comments": [
+                  {
+                    "nodeType": "Comment_Doc",
+                    "text": "/**\n\t\t * Fires before styles in the $handles queue are printed.\n\t\t *\n\t\t * @since 2.6.0\n\t\t */",
+                    "line": 48,
+                    "filePos": 1085,
+                    "tokenPos": 112,
+                    "endLine": 52,
+                    "endFilePos": 1176,
+                    "endTokenPos": 112
+                  }
+                ],
+                "endLine": 53
+              }
+            },
+            "attributes": {
+              "startLine": 53,
+              "comments": [
+                {
+                  "nodeType": "Comment_Doc",
+                  "text": "/**\n\t\t * Fires before styles in the $handles queue are printed.\n\t\t *\n\t\t * @since 2.6.0\n\t\t */",
+                  "line": 48,
+                  "filePos": 1085,
+                  "tokenPos": 112,
+                  "endLine": 52,
+                  "endFilePos": 1176,
+                  "endTokenPos": 112
+                }
+              ],
+              "endLine": 53
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 47,
+          "endLine": 54
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "_wp_scripts_maybe_doing_it_wrong"
+            ],
+            "attributes": {
+              "startLine": 56,
+              "endLine": 56
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_MagicConst_Function",
+                "attributes": {
+                  "startLine": 56,
+                  "endLine": 56
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 56,
+                "endLine": 56
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 56,
+            "endLine": 56
+          }
+        },
+        "attributes": {
+          "startLine": 56,
+          "endLine": 56
+        }
+      },
+      {
+        "nodeType": "Stmt_Global",
+        "vars": [
+          {
+            "nodeType": "Expr_Variable",
+            "name": "wp_styles",
+            "attributes": {
+              "startLine": 58,
+              "endLine": 58
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 58,
+          "endLine": 58
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BooleanNot",
+          "expr": {
+            "nodeType": "Expr_Instanceof",
+            "expr": {
+              "nodeType": "Expr_Variable",
+              "name": "wp_styles",
+              "attributes": {
+                "startLine": 59,
+                "endLine": 59
+              }
+            },
+            "class": {
+              "nodeType": "Name",
+              "parts": [
+                "WP_Styles"
+              ],
+              "attributes": {
+                "startLine": 59,
+                "endLine": 59
+              }
+            },
+            "attributes": {
+              "startLine": 59,
+              "endLine": 59
+            }
+          },
+          "attributes": {
+            "startLine": 59,
+            "endLine": 59
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BooleanNot",
+              "expr": {
+                "nodeType": "Expr_Variable",
+                "name": "handles",
+                "attributes": {
+                  "startLine": 60,
+                  "endLine": 60
+                }
+              },
+              "attributes": {
+                "startLine": 60,
+                "endLine": 60
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Return",
+                "expr": {
+                  "nodeType": "Expr_Array",
+                  "items": [],
+                  "attributes": {
+                    "startLine": 61,
+                    "endLine": 61,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 61,
+                  "endLine": 61
+                }
+              },
+              {
+                "nodeType": "Stmt_Nop",
+                "attributes": {
+                  "comments": [
+                    {
+                      "nodeType": "Comment",
+                      "text": "// No need to instantiate if nothing is there.\n",
+                      "line": 61,
+                      "filePos": 1377,
+                      "tokenPos": 176,
+                      "endLine": 62,
+                      "endFilePos": 1423,
+                      "endTokenPos": 176
+                    }
+                  ],
+                  "startLine": 62,
+                  "endLine": 62,
+                  "startFilePos": 1424,
+                  "endFilePos": 1423,
+                  "startTokenPos": 177,
+                  "endTokenPos": 176
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 60,
+              "endLine": 62
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 59,
+          "endLine": 63
+        }
+      },
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_MethodCall",
+          "var": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "wp_styles"
+              ],
+              "attributes": {
+                "startLine": 65,
+                "endLine": 65
+              }
+            },
+            "args": [],
+            "attributes": {
+              "startLine": 65,
+              "endLine": 65
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "do_items",
+            "attributes": {
+              "startLine": 65,
+              "endLine": 65
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "handles",
+                "attributes": {
+                  "startLine": 65,
+                  "endLine": 65
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 65,
+                "endLine": 65
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 65,
+            "endLine": 65
+          }
+        },
+        "attributes": {
+          "startLine": 65,
+          "endLine": 65
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 42,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Display styles that are in the $handles queue.\n *\n * Passing an empty array to $handles prints the queue,\n * passing an array with one string prints that style,\n * and passing an array of strings prints those styles.\n *\n * @global WP_Styles $wp_styles The WP_Styles object for printing styles.\n *\n * @since 2.6.0\n *\n * @param string|bool|array $handles Styles to be printed. Default 'false'.\n * @return string[] On success, an array of handles of processed WP_Dependencies items; otherwise, an empty array.\n */",
+          "line": 28,
+          "filePos": 429,
+          "tokenPos": 58,
+          "endLine": 41,
+          "endFilePos": 945,
+          "endTokenPos": 58
+        }
+      ],
+      "endLine": 66
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "wp_add_inline_style",
+      "attributes": {
+        "startLine": 84,
+        "endLine": 84
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "handle",
+          "attributes": {
+            "startLine": 84,
+            "endLine": 84
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 84,
+          "endLine": 84
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "data",
+          "attributes": {
+            "startLine": 84,
+            "endLine": 84
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 84,
+          "endLine": 84
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "_wp_scripts_maybe_doing_it_wrong"
+            ],
+            "attributes": {
+              "startLine": 85,
+              "endLine": 85
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_MagicConst_Function",
+                "attributes": {
+                  "startLine": 85,
+                  "endLine": 85
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 85,
+                "endLine": 85
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 85,
+            "endLine": 85
+          }
+        },
+        "attributes": {
+          "startLine": 85,
+          "endLine": 85
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BinaryOp_NotIdentical",
+          "left": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "false"
+              ],
+              "attributes": {
+                "startLine": 87,
+                "endLine": 87
+              }
+            },
+            "attributes": {
+              "startLine": 87,
+              "endLine": 87
+            }
+          },
+          "right": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "stripos"
+              ],
+              "attributes": {
+                "startLine": 87,
+                "endLine": 87
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "data",
+                  "attributes": {
+                    "startLine": 87,
+                    "endLine": 87
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 87,
+                  "endLine": 87
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "</style>",
+                  "attributes": {
+                    "startLine": 87,
+                    "endLine": 87,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 87,
+                  "endLine": 87
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 87,
+              "endLine": 87
+            }
+          },
+          "attributes": {
+            "startLine": 87,
+            "endLine": 87
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "_doing_it_wrong"
+                ],
+                "attributes": {
+                  "startLine": 88,
+                  "endLine": 88
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_MagicConst_Function",
+                    "attributes": {
+                      "startLine": 89,
+                      "endLine": 89
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 89,
+                    "endLine": 89
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "sprintf"
+                      ],
+                      "attributes": {
+                        "startLine": 90,
+                        "endLine": 90
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_FuncCall",
+                          "name": {
+                            "nodeType": "Name",
+                            "parts": [
+                              "__"
+                            ],
+                            "attributes": {
+                              "startLine": 92,
+                              "comments": [
+                                {
+                                  "nodeType": "Comment",
+                                  "text": "/* translators: 1: <style>, 2: wp_add_inline_style() */",
+                                  "line": 91,
+                                  "filePos": 2309,
+                                  "tokenPos": 253,
+                                  "endLine": 91,
+                                  "endFilePos": 2363,
+                                  "endTokenPos": 253
+                                }
+                              ],
+                              "endLine": 92
+                            }
+                          },
+                          "args": [
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Scalar_String",
+                                "value": "Do not pass %1$s tags to %2$s.",
+                                "attributes": {
+                                  "startLine": 92,
+                                  "endLine": 92,
+                                  "kind": 1
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 92,
+                                "endLine": 92
+                              }
+                            }
+                          ],
+                          "attributes": {
+                            "startLine": 92,
+                            "comments": [
+                              {
+                                "nodeType": "Comment",
+                                "text": "/* translators: 1: <style>, 2: wp_add_inline_style() */",
+                                "line": 91,
+                                "filePos": 2309,
+                                "tokenPos": 253,
+                                "endLine": 91,
+                                "endFilePos": 2363,
+                                "endTokenPos": 253
+                              }
+                            ],
+                            "endLine": 92
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 92,
+                          "comments": [
+                            {
+                              "nodeType": "Comment",
+                              "text": "/* translators: 1: <style>, 2: wp_add_inline_style() */",
+                              "line": 91,
+                              "filePos": 2309,
+                              "tokenPos": 253,
+                              "endLine": 91,
+                              "endFilePos": 2363,
+                              "endTokenPos": 253
+                            }
+                          ],
+                          "endLine": 92
+                        }
+                      },
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Scalar_String",
+                          "value": "<code>&lt;style&gt;</code>",
+                          "attributes": {
+                            "startLine": 93,
+                            "endLine": 93,
+                            "kind": 1
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 93,
+                          "endLine": 93
+                        }
+                      },
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Scalar_String",
+                          "value": "<code>wp_add_inline_style()</code>",
+                          "attributes": {
+                            "startLine": 94,
+                            "endLine": 94,
+                            "kind": 1
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 94,
+                          "endLine": 94
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 90,
+                      "endLine": 95
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 90,
+                    "endLine": 95
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "3.7.0",
+                    "attributes": {
+                      "startLine": 96,
+                      "endLine": 96,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 96,
+                    "endLine": 96
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 88,
+                "endLine": 97
+              }
+            },
+            "attributes": {
+              "startLine": 88,
+              "endLine": 97
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "data",
+                "attributes": {
+                  "startLine": 98,
+                  "endLine": 98
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "trim"
+                  ],
+                  "attributes": {
+                    "startLine": 98,
+                    "endLine": 98
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_FuncCall",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "preg_replace"
+                        ],
+                        "attributes": {
+                          "startLine": 98,
+                          "endLine": 98
+                        }
+                      },
+                      "args": [
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Scalar_String",
+                            "value": "#<style[^>]*>(.*)</style>#is",
+                            "attributes": {
+                              "startLine": 98,
+                              "endLine": 98,
+                              "kind": 1
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 98,
+                            "endLine": 98
+                          }
+                        },
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Scalar_String",
+                            "value": "$1",
+                            "attributes": {
+                              "startLine": 98,
+                              "endLine": 98,
+                              "kind": 1
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 98,
+                            "endLine": 98
+                          }
+                        },
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Expr_Variable",
+                            "name": "data",
+                            "attributes": {
+                              "startLine": 98,
+                              "endLine": 98
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 98,
+                            "endLine": 98
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 98,
+                        "endLine": 98
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 98,
+                      "endLine": 98
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 98,
+                  "endLine": 98
+                }
+              },
+              "attributes": {
+                "startLine": 98,
+                "endLine": 98
+              }
+            },
+            "attributes": {
+              "startLine": 98,
+              "endLine": 98
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 87,
+          "endLine": 99
+        }
+      },
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_MethodCall",
+          "var": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "wp_styles"
+              ],
+              "attributes": {
+                "startLine": 101,
+                "endLine": 101
+              }
+            },
+            "args": [],
+            "attributes": {
+              "startLine": 101,
+              "endLine": 101
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "add_inline_style",
+            "attributes": {
+              "startLine": 101,
+              "endLine": 101
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "handle",
+                "attributes": {
+                  "startLine": 101,
+                  "endLine": 101
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 101,
+                "endLine": 101
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "data",
+                "attributes": {
+                  "startLine": 101,
+                  "endLine": 101
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 101,
+                "endLine": 101
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 101,
+            "endLine": 101
+          }
+        },
+        "attributes": {
+          "startLine": 101,
+          "endLine": 101
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 84,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Add extra CSS styles to a registered stylesheet.\n *\n * Styles will only be added if the stylesheet is already in the queue.\n * Accepts a string $data containing the CSS. If two or more CSS code blocks\n * are added to the same stylesheet $handle, they will be printed in the order\n * they were added, i.e. the latter added styles can redeclare the previous.\n *\n * @see WP_Styles::add_inline_style()\n *\n * @since 3.3.0\n *\n * @param string $handle Name of the stylesheet to add the extra styles to.\n * @param string $data   String containing the CSS styles to be added.\n * @return bool True on success, false on failure.\n */",
+          "line": 68,
+          "filePos": 1478,
+          "tokenPos": 198,
+          "endLine": 83,
+          "endFilePos": 2105,
+          "endTokenPos": 198
+        }
+      ],
+      "endLine": 102
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "wp_register_style",
+      "attributes": {
+        "startLine": 126,
+        "endLine": 126
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "handle",
+          "attributes": {
+            "startLine": 126,
+            "endLine": 126
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 126,
+          "endLine": 126
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "src",
+          "attributes": {
+            "startLine": 126,
+            "endLine": 126
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 126,
+          "endLine": 126
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "deps",
+          "attributes": {
+            "startLine": 126,
+            "endLine": 126
+          }
+        },
+        "default": {
+          "nodeType": "Expr_Array",
+          "items": [],
+          "attributes": {
+            "startLine": 126,
+            "endLine": 126,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 126,
+          "endLine": 126
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "ver",
+          "attributes": {
+            "startLine": 126,
+            "endLine": 126
+          }
+        },
+        "default": {
+          "nodeType": "Expr_ConstFetch",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "false"
+            ],
+            "attributes": {
+              "startLine": 126,
+              "endLine": 126
+            }
+          },
+          "attributes": {
+            "startLine": 126,
+            "endLine": 126
+          }
+        },
+        "attributes": {
+          "startLine": 126,
+          "endLine": 126
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "media",
+          "attributes": {
+            "startLine": 126,
+            "endLine": 126
+          }
+        },
+        "default": {
+          "nodeType": "Scalar_String",
+          "value": "all",
+          "attributes": {
+            "startLine": 126,
+            "endLine": 126,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 126,
+          "endLine": 126
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "_wp_scripts_maybe_doing_it_wrong"
+            ],
+            "attributes": {
+              "startLine": 127,
+              "endLine": 127
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_MagicConst_Function",
+                "attributes": {
+                  "startLine": 127,
+                  "endLine": 127
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 127,
+                "endLine": 127
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 127,
+            "endLine": 127
+          }
+        },
+        "attributes": {
+          "startLine": 127,
+          "endLine": 127
+        }
+      },
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_MethodCall",
+          "var": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "wp_styles"
+              ],
+              "attributes": {
+                "startLine": 129,
+                "endLine": 129
+              }
+            },
+            "args": [],
+            "attributes": {
+              "startLine": 129,
+              "endLine": 129
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "add",
+            "attributes": {
+              "startLine": 129,
+              "endLine": 129
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "handle",
+                "attributes": {
+                  "startLine": 129,
+                  "endLine": 129
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 129,
+                "endLine": 129
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "src",
+                "attributes": {
+                  "startLine": 129,
+                  "endLine": 129
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 129,
+                "endLine": 129
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "deps",
+                "attributes": {
+                  "startLine": 129,
+                  "endLine": 129
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 129,
+                "endLine": 129
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "ver",
+                "attributes": {
+                  "startLine": 129,
+                  "endLine": 129
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 129,
+                "endLine": 129
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "media",
+                "attributes": {
+                  "startLine": 129,
+                  "endLine": 129
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 129,
+                "endLine": 129
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 129,
+            "endLine": 129
+          }
+        },
+        "attributes": {
+          "startLine": 129,
+          "endLine": 129
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 126,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Register a CSS stylesheet.\n *\n * @see WP_Dependencies::add()\n * @link https://www.w3.org/TR/CSS2/media.html#media-types List of CSS media types.\n *\n * @since 2.6.0\n * @since 4.3.0 A return value was added.\n *\n * @param string           $handle Name of the stylesheet. Should be unique.\n * @param string|bool      $src    Full URL of the stylesheet, or path of the stylesheet relative to the WordPress root directory.\n *                                 If source is set to false, stylesheet is an alias of other stylesheets it depends on.\n * @param string[]         $deps   Optional. An array of registered stylesheet handles this stylesheet depends on. Default empty array.\n * @param string|bool|null $ver    Optional. String specifying stylesheet version number, if it has one, which is added to the URL\n *                                 as a query string for cache busting purposes. If version is set to false, a version\n *                                 number is automatically added equal to current installed WordPress version.\n *                                 If set to null, no version is added.\n * @param string           $media  Optional. The media for which this stylesheet has been defined.\n *                                 Default 'all'. Accepts media types like 'all', 'print' and 'screen', or media queries like\n *                                 '(orientation: portrait)' and '(max-width: 640px)'.\n * @return bool Whether the style has been registered. True on success, false on failure.\n */",
+          "line": 104,
+          "filePos": 2649,
+          "tokenPos": 320,
+          "endLine": 125,
+          "endFilePos": 4167,
+          "endTokenPos": 320
+        }
+      ],
+      "endLine": 130
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "wp_deregister_style",
+      "attributes": {
+        "startLine": 141,
+        "endLine": 141
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "handle",
+          "attributes": {
+            "startLine": 141,
+            "endLine": 141
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 141,
+          "endLine": 141
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "_wp_scripts_maybe_doing_it_wrong"
+            ],
+            "attributes": {
+              "startLine": 142,
+              "endLine": 142
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_MagicConst_Function",
+                "attributes": {
+                  "startLine": 142,
+                  "endLine": 142
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 142,
+                "endLine": 142
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 142,
+            "endLine": 142
+          }
+        },
+        "attributes": {
+          "startLine": 142,
+          "endLine": 142
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_MethodCall",
+          "var": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "wp_styles"
+              ],
+              "attributes": {
+                "startLine": 144,
+                "endLine": 144
+              }
+            },
+            "args": [],
+            "attributes": {
+              "startLine": 144,
+              "endLine": 144
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "remove",
+            "attributes": {
+              "startLine": 144,
+              "endLine": 144
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "handle",
+                "attributes": {
+                  "startLine": 144,
+                  "endLine": 144
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 144,
+                "endLine": 144
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 144,
+            "endLine": 144
+          }
+        },
+        "attributes": {
+          "startLine": 144,
+          "endLine": 144
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 141,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Remove a registered stylesheet.\n *\n * @see WP_Dependencies::remove()\n *\n * @since 2.1.0\n *\n * @param string $handle Name of the stylesheet to be removed.\n */",
+          "line": 132,
+          "filePos": 4381,
+          "tokenPos": 395,
+          "endLine": 140,
+          "endFilePos": 4544,
+          "endTokenPos": 395
+        }
+      ],
+      "endLine": 145
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "wp_enqueue_style",
+      "attributes": {
+        "startLine": 170,
+        "endLine": 170
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "handle",
+          "attributes": {
+            "startLine": 170,
+            "endLine": 170
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 170,
+          "endLine": 170
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "src",
+          "attributes": {
+            "startLine": 170,
+            "endLine": 170
+          }
+        },
+        "default": {
+          "nodeType": "Scalar_String",
+          "value": "",
+          "attributes": {
+            "startLine": 170,
+            "endLine": 170,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 170,
+          "endLine": 170
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "deps",
+          "attributes": {
+            "startLine": 170,
+            "endLine": 170
+          }
+        },
+        "default": {
+          "nodeType": "Expr_Array",
+          "items": [],
+          "attributes": {
+            "startLine": 170,
+            "endLine": 170,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 170,
+          "endLine": 170
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "ver",
+          "attributes": {
+            "startLine": 170,
+            "endLine": 170
+          }
+        },
+        "default": {
+          "nodeType": "Expr_ConstFetch",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "false"
+            ],
+            "attributes": {
+              "startLine": 170,
+              "endLine": 170
+            }
+          },
+          "attributes": {
+            "startLine": 170,
+            "endLine": 170
+          }
+        },
+        "attributes": {
+          "startLine": 170,
+          "endLine": 170
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "media",
+          "attributes": {
+            "startLine": 170,
+            "endLine": 170
+          }
+        },
+        "default": {
+          "nodeType": "Scalar_String",
+          "value": "all",
+          "attributes": {
+            "startLine": 170,
+            "endLine": 170,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 170,
+          "endLine": 170
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "_wp_scripts_maybe_doing_it_wrong"
+            ],
+            "attributes": {
+              "startLine": 171,
+              "endLine": 171
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_MagicConst_Function",
+                "attributes": {
+                  "startLine": 171,
+                  "endLine": 171
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 171,
+                "endLine": 171
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 171,
+            "endLine": 171
+          }
+        },
+        "attributes": {
+          "startLine": 171,
+          "endLine": 171
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "wp_styles",
+            "attributes": {
+              "startLine": 173,
+              "endLine": 173
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "wp_styles"
+              ],
+              "attributes": {
+                "startLine": 173,
+                "endLine": 173
+              }
+            },
+            "args": [],
+            "attributes": {
+              "startLine": 173,
+              "endLine": 173
+            }
+          },
+          "attributes": {
+            "startLine": 173,
+            "endLine": 173
+          }
+        },
+        "attributes": {
+          "startLine": 173,
+          "endLine": 173
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_Variable",
+          "name": "src",
+          "attributes": {
+            "startLine": 175,
+            "endLine": 175
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "_handle",
+                "attributes": {
+                  "startLine": 176,
+                  "endLine": 176
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "explode"
+                  ],
+                  "attributes": {
+                    "startLine": 176,
+                    "endLine": 176
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "?",
+                      "attributes": {
+                        "startLine": 176,
+                        "endLine": 176,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 176,
+                      "endLine": 176
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "handle",
+                      "attributes": {
+                        "startLine": 176,
+                        "endLine": 176
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 176,
+                      "endLine": 176
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 176,
+                  "endLine": 176
+                }
+              },
+              "attributes": {
+                "startLine": 176,
+                "endLine": 176
+              }
+            },
+            "attributes": {
+              "startLine": 176,
+              "endLine": 176
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_MethodCall",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "wp_styles",
+                "attributes": {
+                  "startLine": 177,
+                  "endLine": 177
+                }
+              },
+              "name": {
+                "nodeType": "Identifier",
+                "name": "add",
+                "attributes": {
+                  "startLine": 177,
+                  "endLine": 177
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_ArrayDimFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "_handle",
+                      "attributes": {
+                        "startLine": 177,
+                        "endLine": 177
+                      }
+                    },
+                    "dim": {
+                      "nodeType": "Scalar_LNumber",
+                      "value": 0,
+                      "attributes": {
+                        "startLine": 177,
+                        "endLine": 177,
+                        "kind": 10
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 177,
+                      "endLine": 177
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 177,
+                    "endLine": 177
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "src",
+                    "attributes": {
+                      "startLine": 177,
+                      "endLine": 177
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 177,
+                    "endLine": 177
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "deps",
+                    "attributes": {
+                      "startLine": 177,
+                      "endLine": 177
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 177,
+                    "endLine": 177
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "ver",
+                    "attributes": {
+                      "startLine": 177,
+                      "endLine": 177
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 177,
+                    "endLine": 177
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "media",
+                    "attributes": {
+                      "startLine": 177,
+                      "endLine": 177
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 177,
+                    "endLine": 177
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 177,
+                "endLine": 177
+              }
+            },
+            "attributes": {
+              "startLine": 177,
+              "endLine": 177
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 175,
+          "endLine": 178
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_MethodCall",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "wp_styles",
+            "attributes": {
+              "startLine": 179,
+              "endLine": 179
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "enqueue",
+            "attributes": {
+              "startLine": 179,
+              "endLine": 179
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "handle",
+                "attributes": {
+                  "startLine": 179,
+                  "endLine": 179
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 179,
+                "endLine": 179
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 179,
+            "endLine": 179
+          }
+        },
+        "attributes": {
+          "startLine": 179,
+          "endLine": 179
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 170,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Enqueue a CSS stylesheet.\n *\n * Registers the style if source provided (does NOT overwrite) and enqueues.\n *\n * @see WP_Dependencies::add()\n * @see WP_Dependencies::enqueue()\n * @link https://www.w3.org/TR/CSS2/media.html#media-types List of CSS media types.\n *\n * @since 2.6.0\n *\n * @param string           $handle Name of the stylesheet. Should be unique.\n * @param string           $src    Full URL of the stylesheet, or path of the stylesheet relative to the WordPress root directory.\n *                                 Default empty.\n * @param string[]         $deps   Optional. An array of registered stylesheet handles this stylesheet depends on. Default empty array.\n * @param string|bool|null $ver    Optional. String specifying stylesheet version number, if it has one, which is added to the URL\n *                                 as a query string for cache busting purposes. If version is set to false, a version\n *                                 number is automatically added equal to current installed WordPress version.\n *                                 If set to null, no version is added.\n * @param string           $media  Optional. The media for which this stylesheet has been defined.\n *                                 Default 'all'. Accepts media types like 'all', 'print' and 'screen', or media queries like\n *                                 '(orientation: portrait)' and '(max-width: 640px)'.\n */",
+          "line": 147,
+          "filePos": 4676,
+          "tokenPos": 430,
+          "endLine": 169,
+          "endFilePos": 6105,
+          "endTokenPos": 430
+        }
+      ],
+      "endLine": 180
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "wp_dequeue_style",
+      "attributes": {
+        "startLine": 191,
+        "endLine": 191
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "handle",
+          "attributes": {
+            "startLine": 191,
+            "endLine": 191
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 191,
+          "endLine": 191
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "_wp_scripts_maybe_doing_it_wrong"
+            ],
+            "attributes": {
+              "startLine": 192,
+              "endLine": 192
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_MagicConst_Function",
+                "attributes": {
+                  "startLine": 192,
+                  "endLine": 192
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 192,
+                "endLine": 192
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 192,
+            "endLine": 192
+          }
+        },
+        "attributes": {
+          "startLine": 192,
+          "endLine": 192
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_MethodCall",
+          "var": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "wp_styles"
+              ],
+              "attributes": {
+                "startLine": 194,
+                "endLine": 194
+              }
+            },
+            "args": [],
+            "attributes": {
+              "startLine": 194,
+              "endLine": 194
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "dequeue",
+            "attributes": {
+              "startLine": 194,
+              "endLine": 194
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "handle",
+                "attributes": {
+                  "startLine": 194,
+                  "endLine": 194
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 194,
+                "endLine": 194
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 194,
+            "endLine": 194
+          }
+        },
+        "attributes": {
+          "startLine": 194,
+          "endLine": 194
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 191,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Remove a previously enqueued CSS stylesheet.\n *\n * @see WP_Dependencies::dequeue()\n *\n * @since 3.1.0\n *\n * @param string $handle Name of the stylesheet to be removed.\n */",
+          "line": 182,
+          "filePos": 6437,
+          "tokenPos": 554,
+          "endLine": 190,
+          "endFilePos": 6614,
+          "endTokenPos": 554
+        }
+      ],
+      "endLine": 195
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "wp_style_is",
+      "attributes": {
+        "startLine": 207,
+        "endLine": 207
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "handle",
+          "attributes": {
+            "startLine": 207,
+            "endLine": 207
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 207,
+          "endLine": 207
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "list",
+          "attributes": {
+            "startLine": 207,
+            "endLine": 207
+          }
+        },
+        "default": {
+          "nodeType": "Scalar_String",
+          "value": "enqueued",
+          "attributes": {
+            "startLine": 207,
+            "endLine": 207,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 207,
+          "endLine": 207
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "_wp_scripts_maybe_doing_it_wrong"
+            ],
+            "attributes": {
+              "startLine": 208,
+              "endLine": 208
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_MagicConst_Function",
+                "attributes": {
+                  "startLine": 208,
+                  "endLine": 208
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 208,
+                "endLine": 208
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 208,
+            "endLine": 208
+          }
+        },
+        "attributes": {
+          "startLine": 208,
+          "endLine": 208
+        }
+      },
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_Cast_Bool",
+          "expr": {
+            "nodeType": "Expr_MethodCall",
+            "var": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "wp_styles"
+                ],
+                "attributes": {
+                  "startLine": 210,
+                  "endLine": 210
+                }
+              },
+              "args": [],
+              "attributes": {
+                "startLine": 210,
+                "endLine": 210
+              }
+            },
+            "name": {
+              "nodeType": "Identifier",
+              "name": "query",
+              "attributes": {
+                "startLine": 210,
+                "endLine": 210
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "handle",
+                  "attributes": {
+                    "startLine": 210,
+                    "endLine": 210
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 210,
+                  "endLine": 210
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "list",
+                  "attributes": {
+                    "startLine": 210,
+                    "endLine": 210
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 210,
+                  "endLine": 210
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 210,
+              "endLine": 210
+            }
+          },
+          "attributes": {
+            "startLine": 210,
+            "endLine": 210
+          }
+        },
+        "attributes": {
+          "startLine": 210,
+          "endLine": 210
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 207,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Check whether a CSS stylesheet has been added to the queue.\n *\n * @since 2.8.0\n *\n * @param string $handle Name of the stylesheet.\n * @param string $list   Optional. Status of the stylesheet to check. Default 'enqueued'.\n *                       Accepts 'enqueued', 'registered', 'queue', 'to_do', and 'done'.\n * @return bool Whether style is queued.\n */",
+          "line": 197,
+          "filePos": 6744,
+          "tokenPos": 589,
+          "endLine": 206,
+          "endFilePos": 7104,
+          "endTokenPos": 589
+        }
+      ],
+      "endLine": 211
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "wp_style_add_data",
+      "attributes": {
+        "startLine": 235,
+        "endLine": 235
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "handle",
+          "attributes": {
+            "startLine": 235,
+            "endLine": 235
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 235,
+          "endLine": 235
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "key",
+          "attributes": {
+            "startLine": 235,
+            "endLine": 235
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 235,
+          "endLine": 235
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "value",
+          "attributes": {
+            "startLine": 235,
+            "endLine": 235
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 235,
+          "endLine": 235
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_MethodCall",
+          "var": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "wp_styles"
+              ],
+              "attributes": {
+                "startLine": 236,
+                "endLine": 236
+              }
+            },
+            "args": [],
+            "attributes": {
+              "startLine": 236,
+              "endLine": 236
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "add_data",
+            "attributes": {
+              "startLine": 236,
+              "endLine": 236
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "handle",
+                "attributes": {
+                  "startLine": 236,
+                  "endLine": 236
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 236,
+                "endLine": 236
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "key",
+                "attributes": {
+                  "startLine": 236,
+                  "endLine": 236
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 236,
+                "endLine": 236
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "value",
+                "attributes": {
+                  "startLine": 236,
+                  "endLine": 236
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 236,
+                "endLine": 236
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 236,
+            "endLine": 236
+          }
+        },
+        "attributes": {
+          "startLine": 236,
+          "endLine": 236
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 235,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Add metadata to a CSS stylesheet.\n *\n * Works only if the stylesheet has already been added.\n *\n * Possible values for $key and $value:\n * 'conditional' string      Comments for IE 6, lte IE 7 etc.\n * 'rtl'         bool|string To declare an RTL stylesheet.\n * 'suffix'      string      Optional suffix, used in combination with RTL.\n * 'alt'         bool        For rel=\"alternate stylesheet\".\n * 'title'       string      For preferred/alternate stylesheets.\n *\n * @see WP_Dependencies::add_data()\n *\n * @since 3.6.0\n *\n * @param string $handle Name of the stylesheet.\n * @param string $key    Name of data point for which we're storing a value.\n *                       Accepts 'conditional', 'rtl' and 'suffix', 'alt' and 'title'.\n * @param mixed  $value  String containing the CSS data to be added.\n * @return bool True on success, false on failure.\n */",
+          "line": 213,
+          "filePos": 7268,
+          "tokenPos": 638,
+          "endLine": 234,
+          "endFilePos": 8131,
+          "endTokenPos": 638
+        }
+      ],
+      "endLine": 237
+    }
+  }
+]

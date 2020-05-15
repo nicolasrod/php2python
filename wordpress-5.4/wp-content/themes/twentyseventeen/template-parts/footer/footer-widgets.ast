@@ -1,0 +1,431 @@
+[
+  {
+    "nodeType": "Stmt_Nop",
+    "attributes": {
+      "startLine": 11,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Displays footer widgets if assigned\n *\n * @package WordPress\n * @subpackage Twenty_Seventeen\n * @since Twenty Seventeen 1.0\n * @version 1.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 9,
+          "endFilePos": 155,
+          "endTokenPos": 1
+        }
+      ],
+      "endLine": 12
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\n",
+    "attributes": {
+      "startLine": 12,
+      "hasLeadingNewline": true,
+      "endLine": 13
+    }
+  },
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_BinaryOp_BooleanOr",
+      "left": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "is_active_sidebar"
+          ],
+          "attributes": {
+            "startLine": 14,
+            "endLine": 14
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "sidebar-2",
+              "attributes": {
+                "startLine": 14,
+                "endLine": 14,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 14,
+              "endLine": 14
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 14,
+          "endLine": 14
+        }
+      },
+      "right": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "is_active_sidebar"
+          ],
+          "attributes": {
+            "startLine": 15,
+            "endLine": 15
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "sidebar-3",
+              "attributes": {
+                "startLine": 15,
+                "endLine": 15,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 15,
+              "endLine": 15
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 15,
+          "endLine": 15
+        }
+      },
+      "attributes": {
+        "startLine": 14,
+        "endLine": 15
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "\n\t<aside class=\"widget-area\" role=\"complementary\" aria-label=\"",
+        "attributes": {
+          "startLine": 17,
+          "hasLeadingNewline": true,
+          "endLine": 18
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "esc_attr_e"
+            ],
+            "attributes": {
+              "startLine": 18,
+              "endLine": 18
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "Footer",
+                "attributes": {
+                  "startLine": 18,
+                  "endLine": 18,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 18,
+                "endLine": 18
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "twentyseventeen",
+                "attributes": {
+                  "startLine": 18,
+                  "endLine": 18,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 18,
+                "endLine": 18
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 18,
+            "endLine": 18
+          }
+        },
+        "attributes": {
+          "startLine": 18,
+          "endLine": 18
+        }
+      },
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "\">\n\t\t",
+        "attributes": {
+          "startLine": 18,
+          "hasLeadingNewline": false,
+          "endLine": 19
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "is_active_sidebar"
+            ],
+            "attributes": {
+              "startLine": 20,
+              "endLine": 20
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "sidebar-2",
+                "attributes": {
+                  "startLine": 20,
+                  "endLine": 20,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 20,
+                "endLine": 20
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 20,
+            "endLine": 20
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_InlineHTML",
+            "value": "\t\t\t<div class=\"widget-column footer-widget-1\">\n\t\t\t\t",
+            "attributes": {
+              "startLine": 22,
+              "hasLeadingNewline": true,
+              "endLine": 23
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "dynamic_sidebar"
+                ],
+                "attributes": {
+                  "startLine": 23,
+                  "endLine": 23
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "sidebar-2",
+                    "attributes": {
+                      "startLine": 23,
+                      "endLine": 23,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 23,
+                    "endLine": 23
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 23,
+                "endLine": 23
+              }
+            },
+            "attributes": {
+              "startLine": 23,
+              "endLine": 23
+            }
+          },
+          {
+            "nodeType": "Stmt_InlineHTML",
+            "value": "\t\t\t</div>\n\t\t\t",
+            "attributes": {
+              "startLine": 24,
+              "hasLeadingNewline": true,
+              "endLine": 25
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 20,
+          "endLine": 26
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "is_active_sidebar"
+            ],
+            "attributes": {
+              "startLine": 27,
+              "endLine": 27
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "sidebar-3",
+                "attributes": {
+                  "startLine": 27,
+                  "endLine": 27,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 27,
+                "endLine": 27
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 27,
+            "endLine": 27
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_InlineHTML",
+            "value": "\t\t\t<div class=\"widget-column footer-widget-2\">\n\t\t\t\t",
+            "attributes": {
+              "startLine": 29,
+              "hasLeadingNewline": true,
+              "endLine": 30
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "dynamic_sidebar"
+                ],
+                "attributes": {
+                  "startLine": 30,
+                  "endLine": 30
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "sidebar-3",
+                    "attributes": {
+                      "startLine": 30,
+                      "endLine": 30,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 30,
+                    "endLine": 30
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 30,
+                "endLine": 30
+              }
+            },
+            "attributes": {
+              "startLine": 30,
+              "endLine": 30
+            }
+          },
+          {
+            "nodeType": "Stmt_InlineHTML",
+            "value": "\t\t\t</div>\n\t\t",
+            "attributes": {
+              "startLine": 31,
+              "hasLeadingNewline": true,
+              "endLine": 32
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 27,
+          "endLine": 32
+        }
+      },
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "\t</aside><!-- .widget-area -->\n\n",
+        "attributes": {
+          "startLine": 33,
+          "hasLeadingNewline": true,
+          "endLine": 35
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 14,
+      "endLine": 35
+    }
+  }
+]

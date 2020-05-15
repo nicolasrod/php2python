@@ -1,0 +1,926 @@
+[
+  {
+    "nodeType": "Stmt_Class",
+    "flags": 0,
+    "extends": {
+      "nodeType": "Name",
+      "parts": [
+        "WP_Customize_Cropped_Image_Control"
+      ],
+      "attributes": {
+        "startLine": 19,
+        "endLine": 19
+      }
+    },
+    "implements": [],
+    "name": {
+      "nodeType": "Identifier",
+      "name": "WP_Customize_Site_Icon_Control",
+      "attributes": {
+        "startLine": 19,
+        "endLine": 19
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "type",
+              "attributes": {
+                "startLine": 27,
+                "endLine": 27
+              }
+            },
+            "default": {
+              "nodeType": "Scalar_String",
+              "value": "site_icon",
+              "attributes": {
+                "startLine": 27,
+                "endLine": 27,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 27,
+              "endLine": 27
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 27,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Control type.\n\t *\n\t * @since 4.3.0\n\t * @var string\n\t */",
+              "line": 21,
+              "filePos": 387,
+              "tokenPos": 15,
+              "endLine": 26,
+              "endFilePos": 449,
+              "endTokenPos": 15
+            }
+          ],
+          "endLine": 27
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "__construct",
+          "attributes": {
+            "startLine": 42,
+            "endLine": 42
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "manager",
+              "attributes": {
+                "startLine": 42,
+                "endLine": 42
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 42,
+              "endLine": 42
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "id",
+              "attributes": {
+                "startLine": 42,
+                "endLine": 42
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 42,
+              "endLine": 42
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "args",
+              "attributes": {
+                "startLine": 42,
+                "endLine": 42
+              }
+            },
+            "default": {
+              "nodeType": "Expr_Array",
+              "items": [],
+              "attributes": {
+                "startLine": 42,
+                "endLine": 42,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 42,
+              "endLine": 42
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_StaticCall",
+              "class": {
+                "nodeType": "Name",
+                "parts": [
+                  "parent"
+                ],
+                "attributes": {
+                  "startLine": 43,
+                  "endLine": 43
+                }
+              },
+              "name": {
+                "nodeType": "Identifier",
+                "name": "__construct",
+                "attributes": {
+                  "startLine": 43,
+                  "endLine": 43
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "manager",
+                    "attributes": {
+                      "startLine": 43,
+                      "endLine": 43
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 43,
+                    "endLine": 43
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "id",
+                    "attributes": {
+                      "startLine": 43,
+                      "endLine": 43
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 43,
+                    "endLine": 43
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "args",
+                    "attributes": {
+                      "startLine": 43,
+                      "endLine": 43
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 43,
+                    "endLine": 43
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 43,
+                "endLine": 43
+              }
+            },
+            "attributes": {
+              "startLine": 43,
+              "endLine": 43
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "add_action"
+                ],
+                "attributes": {
+                  "startLine": 44,
+                  "endLine": 44
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "customize_controls_print_styles",
+                    "attributes": {
+                      "startLine": 44,
+                      "endLine": 44,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 44,
+                    "endLine": 44
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "wp_site_icon",
+                    "attributes": {
+                      "startLine": 44,
+                      "endLine": 44,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 44,
+                    "endLine": 44
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_LNumber",
+                    "value": 99,
+                    "attributes": {
+                      "startLine": 44,
+                      "endLine": 44,
+                      "kind": 10
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 44,
+                    "endLine": 44
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 44,
+                "endLine": 44
+              }
+            },
+            "attributes": {
+              "startLine": 44,
+              "endLine": 44
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 42,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Constructor.\n\t *\n\t * @since 4.3.0\n\t *\n\t * @see WP_Customize_Control::__construct()\n\t *\n\t * @param WP_Customize_Manager $manager Customizer bootstrap instance.\n\t * @param string               $id      Control ID.\n\t * @param array                $args    Optional. Arguments to override class property defaults.\n\t *                                      See WP_Customize_Control::__construct() for information\n\t *                                      on accepted arguments. Default empty array.\n\t */",
+              "line": 29,
+              "filePos": 482,
+              "tokenPos": 26,
+              "endLine": 41,
+              "endFilePos": 985,
+              "endTokenPos": 26
+            }
+          ],
+          "endLine": 45
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "content_template",
+          "attributes": {
+            "startLine": 52,
+            "endLine": 52
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_InlineHTML",
+            "value": "\t\t<# if ( data.label ) { #>\n\t\t\t<span class=\"customize-control-title\">{{ data.label }}</span>\n\t\t<# } #>\n\t\t<# if ( data.description ) { #>\n\t\t\t<span class=\"description customize-control-description\">{{{ data.description }}}</span>\n\t\t<# } #>\n\n\t\t<# if ( data.attachment && data.attachment.id ) { #>\n\t\t\t<div class=\"attachment-media-view\">\n\t\t\t\t<# if ( data.attachment.sizes ) { #>\n\t\t\t\t\t<div class=\"site-icon-preview wp-clearfix\">\n\t\t\t\t\t\t<div class=\"favicon-preview\">\n\t\t\t\t\t\t\t<img src=\"",
+            "attributes": {
+              "startLine": 54,
+              "hasLeadingNewline": true,
+              "endLine": 66
+            }
+          },
+          {
+            "nodeType": "Stmt_Echo",
+            "exprs": [
+              {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "esc_url"
+                  ],
+                  "attributes": {
+                    "startLine": 66,
+                    "endLine": 66
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_FuncCall",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "admin_url"
+                        ],
+                        "attributes": {
+                          "startLine": 66,
+                          "endLine": 66
+                        }
+                      },
+                      "args": [
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Expr_BinaryOp_Concat",
+                            "left": {
+                              "nodeType": "Scalar_String",
+                              "value": "images/",
+                              "attributes": {
+                                "startLine": 66,
+                                "endLine": 66,
+                                "kind": 1
+                              }
+                            },
+                            "right": {
+                              "nodeType": "Expr_Ternary",
+                              "cond": {
+                                "nodeType": "Expr_FuncCall",
+                                "name": {
+                                  "nodeType": "Name",
+                                  "parts": [
+                                    "is_rtl"
+                                  ],
+                                  "attributes": {
+                                    "startLine": 66,
+                                    "endLine": 66
+                                  }
+                                },
+                                "args": [],
+                                "attributes": {
+                                  "startLine": 66,
+                                  "endLine": 66
+                                }
+                              },
+                              "if": {
+                                "nodeType": "Scalar_String",
+                                "value": "browser-rtl.png",
+                                "attributes": {
+                                  "startLine": 66,
+                                  "endLine": 66,
+                                  "kind": 1
+                                }
+                              },
+                              "else": {
+                                "nodeType": "Scalar_String",
+                                "value": "browser.png",
+                                "attributes": {
+                                  "startLine": 66,
+                                  "endLine": 66,
+                                  "kind": 1
+                                }
+                              },
+                              "attributes": {
+                                "startLine": 66,
+                                "endLine": 66
+                              }
+                            },
+                            "attributes": {
+                              "startLine": 66,
+                              "endLine": 66
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 66,
+                            "endLine": 66
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 66,
+                        "endLine": 66
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 66,
+                      "endLine": 66
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 66,
+                  "endLine": 66
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 66,
+              "endLine": 66
+            }
+          },
+          {
+            "nodeType": "Stmt_InlineHTML",
+            "value": "\" class=\"browser-preview\" width=\"182\" alt=\"\" />\n\n\t\t\t\t\t\t\t<div class=\"favicon\">\n\t\t\t\t\t\t\t\t<img src=\"{{ data.attachment.sizes.full ? data.attachment.sizes.full.url : data.attachment.url }}\" alt=\"",
+            "attributes": {
+              "startLine": 66,
+              "hasLeadingNewline": false,
+              "endLine": 69
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "esc_attr_e"
+                ],
+                "attributes": {
+                  "startLine": 69,
+                  "endLine": 69
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "Preview as a browser icon",
+                    "attributes": {
+                      "startLine": 69,
+                      "endLine": 69,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 69,
+                    "endLine": 69
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 69,
+                "endLine": 69
+              }
+            },
+            "attributes": {
+              "startLine": 69,
+              "endLine": 69
+            }
+          },
+          {
+            "nodeType": "Stmt_InlineHTML",
+            "value": "\"/>\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<span class=\"browser-title\" aria-hidden=\"true\"><# print( '",
+            "attributes": {
+              "startLine": 69,
+              "hasLeadingNewline": false,
+              "endLine": 71
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "bloginfo"
+                ],
+                "attributes": {
+                  "startLine": 71,
+                  "endLine": 71
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "name",
+                    "attributes": {
+                      "startLine": 71,
+                      "endLine": 71,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 71,
+                    "endLine": 71
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 71,
+                "endLine": 71
+              }
+            },
+            "attributes": {
+              "startLine": 71,
+              "endLine": 71
+            }
+          },
+          {
+            "nodeType": "Stmt_InlineHTML",
+            "value": "' ) #></span>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<img class=\"app-icon-preview\" src=\"{{ data.attachment.sizes.full ? data.attachment.sizes.full.url : data.attachment.url }}\" alt=\"",
+            "attributes": {
+              "startLine": 71,
+              "hasLeadingNewline": false,
+              "endLine": 73
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "esc_attr_e"
+                ],
+                "attributes": {
+                  "startLine": 73,
+                  "endLine": 73
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "Preview as an app icon",
+                    "attributes": {
+                      "startLine": 73,
+                      "endLine": 73,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 73,
+                    "endLine": 73
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 73,
+                "endLine": 73
+              }
+            },
+            "attributes": {
+              "startLine": 73,
+              "endLine": 73
+            }
+          },
+          {
+            "nodeType": "Stmt_InlineHTML",
+            "value": "\"/>\n\t\t\t\t\t</div>\n\t\t\t\t<# } #>\n\t\t\t\t<div class=\"actions\">\n\t\t\t\t\t<# if ( data.canUpload ) { #>\n\t\t\t\t\t\t<button type=\"button\" class=\"button remove-button\">",
+            "attributes": {
+              "startLine": 73,
+              "hasLeadingNewline": false,
+              "endLine": 78
+            }
+          },
+          {
+            "nodeType": "Stmt_Echo",
+            "exprs": [
+              {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_PropertyFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "this",
+                    "attributes": {
+                      "startLine": 78,
+                      "endLine": 78
+                    }
+                  },
+                  "name": {
+                    "nodeType": "Identifier",
+                    "name": "button_labels",
+                    "attributes": {
+                      "startLine": 78,
+                      "endLine": 78
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 78,
+                    "endLine": 78
+                  }
+                },
+                "dim": {
+                  "nodeType": "Scalar_String",
+                  "value": "remove",
+                  "attributes": {
+                    "startLine": 78,
+                    "endLine": 78,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 78,
+                  "endLine": 78
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 78,
+              "endLine": 78
+            }
+          },
+          {
+            "nodeType": "Stmt_InlineHTML",
+            "value": "</button>\n\t\t\t\t\t\t<button type=\"button\" class=\"button upload-button\">",
+            "attributes": {
+              "startLine": 78,
+              "hasLeadingNewline": false,
+              "endLine": 79
+            }
+          },
+          {
+            "nodeType": "Stmt_Echo",
+            "exprs": [
+              {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_PropertyFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "this",
+                    "attributes": {
+                      "startLine": 79,
+                      "endLine": 79
+                    }
+                  },
+                  "name": {
+                    "nodeType": "Identifier",
+                    "name": "button_labels",
+                    "attributes": {
+                      "startLine": 79,
+                      "endLine": 79
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 79,
+                    "endLine": 79
+                  }
+                },
+                "dim": {
+                  "nodeType": "Scalar_String",
+                  "value": "change",
+                  "attributes": {
+                    "startLine": 79,
+                    "endLine": 79,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 79,
+                  "endLine": 79
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 79,
+              "endLine": 79
+            }
+          },
+          {
+            "nodeType": "Stmt_InlineHTML",
+            "value": "</button>\n\t\t\t\t\t<# } #>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t<# } else { #>\n\t\t\t<div class=\"attachment-media-view\">\n\t\t\t\t<# if ( data.canUpload ) { #>\n\t\t\t\t\t<button type=\"button\" class=\"upload-button button-add-media\">",
+            "attributes": {
+              "startLine": 79,
+              "hasLeadingNewline": false,
+              "endLine": 86
+            }
+          },
+          {
+            "nodeType": "Stmt_Echo",
+            "exprs": [
+              {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_PropertyFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "this",
+                    "attributes": {
+                      "startLine": 86,
+                      "endLine": 86
+                    }
+                  },
+                  "name": {
+                    "nodeType": "Identifier",
+                    "name": "button_labels",
+                    "attributes": {
+                      "startLine": 86,
+                      "endLine": 86
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 86,
+                    "endLine": 86
+                  }
+                },
+                "dim": {
+                  "nodeType": "Scalar_String",
+                  "value": "site_icon",
+                  "attributes": {
+                    "startLine": 86,
+                    "endLine": 86,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 86,
+                  "endLine": 86
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 86,
+              "endLine": 86
+            }
+          },
+          {
+            "nodeType": "Stmt_InlineHTML",
+            "value": "</button>\n\t\t\t\t<# } #>\n\t\t\t\t<div class=\"actions\">\n\t\t\t\t\t<# if ( data.defaultAttachment ) { #>\n\t\t\t\t\t\t<button type=\"button\" class=\"button default-button\">",
+            "attributes": {
+              "startLine": 86,
+              "hasLeadingNewline": false,
+              "endLine": 90
+            }
+          },
+          {
+            "nodeType": "Stmt_Echo",
+            "exprs": [
+              {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_PropertyFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "this",
+                    "attributes": {
+                      "startLine": 90,
+                      "endLine": 90
+                    }
+                  },
+                  "name": {
+                    "nodeType": "Identifier",
+                    "name": "button_labels",
+                    "attributes": {
+                      "startLine": 90,
+                      "endLine": 90
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 90,
+                    "endLine": 90
+                  }
+                },
+                "dim": {
+                  "nodeType": "Scalar_String",
+                  "value": "default",
+                  "attributes": {
+                    "startLine": 90,
+                    "endLine": 90,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 90,
+                  "endLine": 90
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 90,
+              "endLine": 90
+            }
+          },
+          {
+            "nodeType": "Stmt_InlineHTML",
+            "value": "</button>\n\t\t\t\t\t<# } #>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t<# } #>\n\t\t",
+            "attributes": {
+              "startLine": 90,
+              "hasLeadingNewline": false,
+              "endLine": 95
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 52,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Renders a JS template for the content of the site icon control.\n\t *\n\t * @since 4.5.0\n\t */",
+              "line": 47,
+              "filePos": 1175,
+              "tokenPos": 85,
+              "endLine": 51,
+              "endFilePos": 1271,
+              "endTokenPos": 85
+            }
+          ],
+          "endLine": 96
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 19,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Customize API: WP_Customize_Site_Icon_Control class\n *\n * @package WordPress\n * @subpackage Customize\n * @since 4.4.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 8,
+          "endFilePos": 133,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Customize Site Icon control class.\n *\n * Used only for custom functionality in JavaScript.\n *\n * @since 4.3.0\n *\n * @see WP_Customize_Cropped_Image_Control\n */",
+          "line": 10,
+          "filePos": 136,
+          "tokenPos": 3,
+          "endLine": 18,
+          "endFilePos": 301,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 97
+    }
+  }
+]

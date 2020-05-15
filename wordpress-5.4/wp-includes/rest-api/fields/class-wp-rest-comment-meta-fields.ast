@@ -1,0 +1,200 @@
+[
+  {
+    "nodeType": "Stmt_Class",
+    "flags": 0,
+    "extends": {
+      "nodeType": "Name",
+      "parts": [
+        "WP_REST_Meta_Fields"
+      ],
+      "attributes": {
+        "startLine": 17,
+        "endLine": 17
+      }
+    },
+    "implements": [],
+    "name": {
+      "nodeType": "Identifier",
+      "name": "WP_REST_Comment_Meta_Fields",
+      "attributes": {
+        "startLine": 17,
+        "endLine": 17
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 2,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "get_meta_type",
+          "attributes": {
+            "startLine": 26,
+            "endLine": 26
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Scalar_String",
+              "value": "comment",
+              "attributes": {
+                "startLine": 27,
+                "endLine": 27,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 27,
+              "endLine": 27
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 26,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Retrieves the object type for comment meta.\n\t *\n\t * @since 4.7.0\n\t *\n\t * @return string The meta type.\n\t */",
+              "line": 19,
+              "filePos": 306,
+              "tokenPos": 15,
+              "endLine": 25,
+              "endFilePos": 420,
+              "endTokenPos": 15
+            }
+          ],
+          "endLine": 28
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 2,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "get_meta_subtype",
+          "attributes": {
+            "startLine": 37,
+            "endLine": 37
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Scalar_String",
+              "value": "comment",
+              "attributes": {
+                "startLine": 38,
+                "endLine": 38,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 38,
+              "endLine": 38
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 37,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Retrieves the object meta subtype.\n\t *\n\t * @since 4.9.8\n\t *\n\t * @return string 'comment' There are no subtypes.\n\t */",
+              "line": 30,
+              "filePos": 485,
+              "tokenPos": 34,
+              "endLine": 36,
+              "endFilePos": 608,
+              "endTokenPos": 34
+            }
+          ],
+          "endLine": 39
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "get_rest_field_type",
+          "attributes": {
+            "startLine": 48,
+            "endLine": 48
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Scalar_String",
+              "value": "comment",
+              "attributes": {
+                "startLine": 49,
+                "endLine": 49,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 49,
+              "endLine": 49
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 48,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Retrieves the type for register_rest_field() in the context of comments.\n\t *\n\t * @since 4.7.0\n\t *\n\t * @return string The REST field type.\n\t */",
+              "line": 41,
+              "filePos": 676,
+              "tokenPos": 53,
+              "endLine": 47,
+              "endFilePos": 825,
+              "endTokenPos": 53
+            }
+          ],
+          "endLine": 50
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 17,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * REST API: WP_REST_Comment_Meta_Fields class\n *\n * @package WordPress\n * @subpackage REST_API\n * @since 4.7.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 8,
+          "endFilePos": 124,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Core class to manage comment meta via the REST API.\n *\n * @since 4.7.0\n *\n * @see WP_REST_Meta_Fields\n */",
+          "line": 10,
+          "filePos": 127,
+          "tokenPos": 3,
+          "endLine": 16,
+          "endFilePos": 238,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 51
+    }
+  }
+]

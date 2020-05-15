@@ -1,0 +1,174 @@
+[
+  {
+    "nodeType": "Stmt_Class",
+    "flags": 0,
+    "extends": {
+      "nodeType": "Name",
+      "parts": [
+        "WP_Customize_Control"
+      ],
+      "attributes": {
+        "startLine": 17,
+        "endLine": 17
+      }
+    },
+    "implements": [],
+    "name": {
+      "nodeType": "Identifier",
+      "name": "WP_Customize_Nav_Menu_Name_Control",
+      "attributes": {
+        "startLine": 17,
+        "endLine": 17
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "type",
+              "attributes": {
+                "startLine": 25,
+                "endLine": 25
+              }
+            },
+            "default": {
+              "nodeType": "Scalar_String",
+              "value": "nav_menu_name",
+              "attributes": {
+                "startLine": 25,
+                "endLine": 25,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 25,
+              "endLine": 25
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 25,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Type of control, used by JS.\n\t *\n\t * @since 4.3.0\n\t * @var string\n\t */",
+              "line": 19,
+              "filePos": 340,
+              "tokenPos": 15,
+              "endLine": 24,
+              "endFilePos": 417,
+              "endTokenPos": 15
+            }
+          ],
+          "endLine": 25
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 2,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "render_content",
+          "attributes": {
+            "startLine": 32,
+            "endLine": 32
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [],
+        "attributes": {
+          "startLine": 32,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * No-op since we're using JS template.\n\t *\n\t * @since 4.3.0\n\t */",
+              "line": 27,
+              "filePos": 454,
+              "tokenPos": 26,
+              "endLine": 31,
+              "endFilePos": 523,
+              "endTokenPos": 26
+            }
+          ],
+          "endLine": 32
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 2,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "content_template",
+          "attributes": {
+            "startLine": 39,
+            "endLine": 39
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_InlineHTML",
+            "value": "\t\t<label>\n\t\t\t<# if ( data.label ) { #>\n\t\t\t\t<span class=\"customize-control-title\">{{ data.label }}</span>\n\t\t\t<# } #>\n\t\t\t<input type=\"text\" class=\"menu-name-field live-update-section-title\"\n\t\t\t\t<# if ( data.description ) { #>\n\t\t\t\t\taria-describedby=\"{{ data.section }}-description\"\n\t\t\t\t<# } #>\n\t\t\t\t/>\n\t\t</label>\n\t\t<# if ( data.description ) { #>\n\t\t\t<p id=\"{{ data.section }}-description\">{{ data.description }}</p>\n\t\t<# } #>\n\t\t",
+            "attributes": {
+              "startLine": 41,
+              "hasLeadingNewline": true,
+              "endLine": 54
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 39,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Render the Underscore template for this control.\n\t *\n\t * @since 4.3.0\n\t */",
+              "line": 34,
+              "filePos": 567,
+              "tokenPos": 39,
+              "endLine": 38,
+              "endFilePos": 648,
+              "endTokenPos": 39
+            }
+          ],
+          "endLine": 55
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 17,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Customize API: WP_Customize_Nav_Menu_Name_Control class\n *\n * @package WordPress\n * @subpackage Customize\n * @since 4.4.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 8,
+          "endFilePos": 137,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Customize control to represent the name field for a given menu.\n *\n * @since 4.3.0\n *\n * @see WP_Customize_Control\n */",
+          "line": 10,
+          "filePos": 140,
+          "tokenPos": 3,
+          "endLine": 16,
+          "endFilePos": 264,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 56
+    }
+  }
+]

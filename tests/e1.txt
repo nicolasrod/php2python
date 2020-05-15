@@ -1,0 +1,147 @@
+[
+    {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+            "nodeType": "Expr_Assign",
+            "var": {
+                "nodeType": "Expr_Variable",
+                "name": "a",
+                "attributes": {
+                    "startLine": 3,
+                    "endLine": 3
+                }
+            },
+            "expr": {
+                "nodeType": "Scalar_LNumber",
+                "value": 1,
+                "attributes": {
+                    "startLine": 3,
+                    "endLine": 3,
+                    "kind": 10
+                }
+            },
+            "attributes": {
+                "startLine": 3,
+                "endLine": 3
+            }
+        },
+        "attributes": {
+            "startLine": 3,
+            "endLine": 3
+        }
+    },
+    {
+        "nodeType": "Stmt_If",
+        "cond": {
+            "nodeType": "Expr_BinaryOp_Greater",
+            "left": {
+                "nodeType": "Expr_Assign",
+                "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "b",
+                    "attributes": {
+                        "startLine": 5,
+                        "endLine": 5
+                    }
+                },
+                "expr": {
+                    "nodeType": "Expr_BinaryOp_Plus",
+                    "left": {
+                        "nodeType": "Expr_Variable",
+                        "name": "a",
+                        "attributes": {
+                            "startLine": 5,
+                            "endLine": 5
+                        }
+                    },
+                    "right": {
+                        "nodeType": "Scalar_LNumber",
+                        "value": 1,
+                        "attributes": {
+                            "startLine": 5,
+                            "endLine": 5,
+                            "kind": 10
+                        }
+                    },
+                    "attributes": {
+                        "startLine": 5,
+                        "endLine": 5
+                    }
+                },
+                "attributes": {
+                    "startLine": 5,
+                    "endLine": 5
+                }
+            },
+            "right": {
+                "nodeType": "Scalar_LNumber",
+                "value": 11,
+                "attributes": {
+                    "startLine": 5,
+                    "endLine": 5,
+                    "kind": 10
+                }
+            },
+            "attributes": {
+                "startLine": 5,
+                "endLine": 5
+            }
+        },
+        "stmts": [
+            {
+                "nodeType": "Stmt_Echo",
+                "exprs": [
+                    {
+                        "nodeType": "Expr_PostInc",
+                        "var": {
+                            "nodeType": "Expr_Variable",
+                            "name": "b",
+                            "attributes": {
+                                "startLine": 6,
+                                "endLine": 6
+                            }
+                        },
+                        "attributes": {
+                            "startLine": 6,
+                            "endLine": 6
+                        }
+                    }
+                ],
+                "attributes": {
+                    "startLine": 6,
+                    "endLine": 6
+                }
+            },
+            {
+                "nodeType": "Stmt_Echo",
+                "exprs": [
+                    {
+                        "nodeType": "Expr_PreInc",
+                        "var": {
+                            "nodeType": "Expr_Variable",
+                            "name": "a",
+                            "attributes": {
+                                "startLine": 7,
+                                "endLine": 7
+                            }
+                        },
+                        "attributes": {
+                            "startLine": 7,
+                            "endLine": 7
+                        }
+                    }
+                ],
+                "attributes": {
+                    "startLine": 7,
+                    "endLine": 7
+                }
+            }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+            "startLine": 5,
+            "endLine": 8
+        }
+    }
+]

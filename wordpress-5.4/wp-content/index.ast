@@ -1,0 +1,25 @@
+[
+  {
+    "nodeType": "Stmt_Nop",
+    "attributes": {
+      "comments": [
+        {
+          "nodeType": "Comment",
+          "text": "// Silence is golden.\n",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 3,
+          "endFilePos": 27,
+          "endTokenPos": 1
+        }
+      ],
+      "startLine": 3,
+      "endLine": 3,
+      "startFilePos": 28,
+      "endFilePos": 27,
+      "startTokenPos": 2,
+      "endTokenPos": 1
+    }
+  }
+]

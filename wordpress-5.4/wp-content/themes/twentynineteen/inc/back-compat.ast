@@ -1,0 +1,1198 @@
+[
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "twentynineteen_switch_theme",
+      "attributes": {
+        "startLine": 21,
+        "endLine": 21
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "switch_theme"
+            ],
+            "attributes": {
+              "startLine": 22,
+              "endLine": 22
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_ConstFetch",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "WP_DEFAULT_THEME"
+                  ],
+                  "attributes": {
+                    "startLine": 22,
+                    "endLine": 22
+                  }
+                },
+                "attributes": {
+                  "startLine": 22,
+                  "endLine": 22
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 22,
+                "endLine": 22
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 22,
+            "endLine": 22
+          }
+        },
+        "attributes": {
+          "startLine": 22,
+          "endLine": 22
+        }
+      },
+      {
+        "nodeType": "Stmt_Unset",
+        "vars": [
+          {
+            "nodeType": "Expr_ArrayDimFetch",
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "_GET",
+              "attributes": {
+                "startLine": 23,
+                "endLine": 23
+              }
+            },
+            "dim": {
+              "nodeType": "Scalar_String",
+              "value": "activated",
+              "attributes": {
+                "startLine": 23,
+                "endLine": 23,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 23,
+              "endLine": 23
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 23,
+          "endLine": 23
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "add_action"
+            ],
+            "attributes": {
+              "startLine": 24,
+              "endLine": 24
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "admin_notices",
+                "attributes": {
+                  "startLine": 24,
+                  "endLine": 24,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 24,
+                "endLine": 24
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "twentynineteen_upgrade_notice",
+                "attributes": {
+                  "startLine": 24,
+                  "endLine": 24,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 24,
+                "endLine": 24
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 24,
+            "endLine": 24
+          }
+        },
+        "attributes": {
+          "startLine": 24,
+          "endLine": 24
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 21,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Twenty Nineteen back compat functionality\n *\n * Prevents Twenty Nineteen from running on WordPress versions prior to 4.7,\n * since this theme is not meant to be backward compatible beyond that and\n * relies on many newer functions and markup changes introduced in 4.7.\n *\n * @package WordPress\n * @subpackage Twenty_Nineteen\n * @since Twenty Nineteen 1.0.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 12,
+          "endFilePos": 372,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Prevent switching to Twenty Nineteen on old versions of WordPress.\n *\n * Switches to the default theme.\n *\n * @since Twenty Nineteen 1.0.0\n */",
+          "line": 14,
+          "filePos": 375,
+          "tokenPos": 3,
+          "endLine": 20,
+          "endFilePos": 523,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 25
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "add_action"
+        ],
+        "attributes": {
+          "startLine": 26,
+          "endLine": 26
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "after_switch_theme",
+            "attributes": {
+              "startLine": 26,
+              "endLine": 26,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 26,
+            "endLine": 26
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "twentynineteen_switch_theme",
+            "attributes": {
+              "startLine": 26,
+              "endLine": 26,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 26,
+            "endLine": 26
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 26,
+        "endLine": 26
+      }
+    },
+    "attributes": {
+      "startLine": 26,
+      "endLine": 26
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "twentynineteen_upgrade_notice",
+      "attributes": {
+        "startLine": 38,
+        "endLine": 38
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "message",
+            "attributes": {
+              "startLine": 40,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "/* translators: %s: WordPress version. */",
+                  "line": 39,
+                  "filePos": 1079,
+                  "tokenPos": 66,
+                  "endLine": 39,
+                  "endFilePos": 1119,
+                  "endTokenPos": 66
+                }
+              ],
+              "endLine": 40
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "sprintf"
+              ],
+              "attributes": {
+                "startLine": 40,
+                "endLine": 40
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_FuncCall",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "__"
+                    ],
+                    "attributes": {
+                      "startLine": 40,
+                      "endLine": 40
+                    }
+                  },
+                  "args": [
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Scalar_String",
+                        "value": "Twenty Nineteen requires at least WordPress version 4.7. You are running version %s. Please upgrade and try again.",
+                        "attributes": {
+                          "startLine": 40,
+                          "endLine": 40,
+                          "kind": 1
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 40,
+                        "endLine": 40
+                      }
+                    },
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Scalar_String",
+                        "value": "twentynineteen",
+                        "attributes": {
+                          "startLine": 40,
+                          "endLine": 40,
+                          "kind": 1
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 40,
+                        "endLine": 40
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 40,
+                    "endLine": 40
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 40,
+                  "endLine": 40
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_ArrayDimFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "GLOBALS",
+                    "attributes": {
+                      "startLine": 40,
+                      "endLine": 40
+                    }
+                  },
+                  "dim": {
+                    "nodeType": "Scalar_String",
+                    "value": "wp_version",
+                    "attributes": {
+                      "startLine": 40,
+                      "endLine": 40,
+                      "kind": 1
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 40,
+                    "endLine": 40
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 40,
+                  "endLine": 40
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 40,
+              "endLine": 40
+            }
+          },
+          "attributes": {
+            "startLine": 40,
+            "comments": [
+              {
+                "nodeType": "Comment",
+                "text": "/* translators: %s: WordPress version. */",
+                "line": 39,
+                "filePos": 1079,
+                "tokenPos": 66,
+                "endLine": 39,
+                "endFilePos": 1119,
+                "endTokenPos": 66
+              }
+            ],
+            "endLine": 40
+          }
+        },
+        "attributes": {
+          "startLine": 40,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "/* translators: %s: WordPress version. */",
+              "line": 39,
+              "filePos": 1079,
+              "tokenPos": 66,
+              "endLine": 39,
+              "endFilePos": 1119,
+              "endTokenPos": 66
+            }
+          ],
+          "endLine": 40
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "printf"
+            ],
+            "attributes": {
+              "startLine": 41,
+              "endLine": 41
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "<div class=\"error\"><p>%s</p></div>",
+                "attributes": {
+                  "startLine": 41,
+                  "endLine": 41,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 41,
+                "endLine": 41
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "message",
+                "attributes": {
+                  "startLine": 41,
+                  "endLine": 41
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 41,
+                "endLine": 41
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 41,
+            "endLine": 41
+          }
+        },
+        "attributes": {
+          "startLine": 41,
+          "endLine": 41
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 38,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Adds a message for unsuccessful theme switch.\n *\n * Prints an update nag after an unsuccessful attempt to switch to\n * Twenty Nineteen on WordPress versions prior to 4.7.\n *\n * @since Twenty Nineteen 1.0.0\n *\n * @global string $wp_version WordPress version.\n */",
+          "line": 28,
+          "filePos": 766,
+          "tokenPos": 56,
+          "endLine": 37,
+          "endFilePos": 1033,
+          "endTokenPos": 56
+        }
+      ],
+      "endLine": 42
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "twentynineteen_customize",
+      "attributes": {
+        "startLine": 51,
+        "endLine": 51
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "wp_die"
+            ],
+            "attributes": {
+              "startLine": 52,
+              "endLine": 52
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "sprintf"
+                  ],
+                  "attributes": {
+                    "startLine": 53,
+                    "endLine": 53
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_FuncCall",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "__"
+                        ],
+                        "attributes": {
+                          "startLine": 55,
+                          "comments": [
+                            {
+                              "nodeType": "Comment",
+                              "text": "/* translators: %s: WordPress version. */",
+                              "line": 54,
+                              "filePos": 1609,
+                              "tokenPos": 123,
+                              "endLine": 54,
+                              "endFilePos": 1649,
+                              "endTokenPos": 123
+                            }
+                          ],
+                          "endLine": 55
+                        }
+                      },
+                      "args": [
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Scalar_String",
+                            "value": "Twenty Nineteen requires at least WordPress version 4.7. You are running version %s. Please upgrade and try again.",
+                            "attributes": {
+                              "startLine": 55,
+                              "endLine": 55,
+                              "kind": 1
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 55,
+                            "endLine": 55
+                          }
+                        },
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Scalar_String",
+                            "value": "twentynineteen",
+                            "attributes": {
+                              "startLine": 55,
+                              "endLine": 55,
+                              "kind": 1
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 55,
+                            "endLine": 55
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 55,
+                        "comments": [
+                          {
+                            "nodeType": "Comment",
+                            "text": "/* translators: %s: WordPress version. */",
+                            "line": 54,
+                            "filePos": 1609,
+                            "tokenPos": 123,
+                            "endLine": 54,
+                            "endFilePos": 1649,
+                            "endTokenPos": 123
+                          }
+                        ],
+                        "endLine": 55
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 55,
+                      "comments": [
+                        {
+                          "nodeType": "Comment",
+                          "text": "/* translators: %s: WordPress version. */",
+                          "line": 54,
+                          "filePos": 1609,
+                          "tokenPos": 123,
+                          "endLine": 54,
+                          "endFilePos": 1649,
+                          "endTokenPos": 123
+                        }
+                      ],
+                      "endLine": 55
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_ArrayDimFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "GLOBALS",
+                        "attributes": {
+                          "startLine": 56,
+                          "endLine": 56
+                        }
+                      },
+                      "dim": {
+                        "nodeType": "Scalar_String",
+                        "value": "wp_version",
+                        "attributes": {
+                          "startLine": 56,
+                          "endLine": 56,
+                          "kind": 1
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 56,
+                        "endLine": 56
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 56,
+                      "endLine": 56
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 53,
+                  "endLine": 57
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 53,
+                "endLine": 57
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "",
+                "attributes": {
+                  "startLine": 58,
+                  "endLine": 58,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 58,
+                "endLine": 58
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Array",
+                "items": [
+                  {
+                    "nodeType": "Expr_ArrayItem",
+                    "key": {
+                      "nodeType": "Scalar_String",
+                      "value": "back_link",
+                      "attributes": {
+                        "startLine": 60,
+                        "endLine": 60,
+                        "kind": 1
+                      }
+                    },
+                    "value": {
+                      "nodeType": "Expr_ConstFetch",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "true"
+                        ],
+                        "attributes": {
+                          "startLine": 60,
+                          "endLine": 60
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 60,
+                        "endLine": 60
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 60,
+                      "endLine": 60
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 59,
+                  "endLine": 61,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 59,
+                "endLine": 61
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 52,
+            "endLine": 62
+          }
+        },
+        "attributes": {
+          "startLine": 52,
+          "endLine": 62
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 51,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Prevents the Customizer from being loaded on WordPress versions prior to 4.7.\n *\n * @since Twenty Nineteen 1.0.0\n *\n * @global string $wp_version WordPress version.\n */",
+          "line": 44,
+          "filePos": 1372,
+          "tokenPos": 107,
+          "endLine": 50,
+          "endFilePos": 1546,
+          "endTokenPos": 107
+        }
+      ],
+      "endLine": 63
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "add_action"
+        ],
+        "attributes": {
+          "startLine": 64,
+          "endLine": 64
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "load-customize.php",
+            "attributes": {
+              "startLine": 64,
+              "endLine": 64,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 64,
+            "endLine": 64
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "twentynineteen_customize",
+            "attributes": {
+              "startLine": 64,
+              "endLine": 64,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 64,
+            "endLine": 64
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 64,
+        "endLine": 64
+      }
+    },
+    "attributes": {
+      "startLine": 64,
+      "endLine": 64
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "twentynineteen_preview",
+      "attributes": {
+        "startLine": 73,
+        "endLine": 73
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_Isset",
+          "vars": [
+            {
+              "nodeType": "Expr_ArrayDimFetch",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "_GET",
+                "attributes": {
+                  "startLine": 74,
+                  "endLine": 74
+                }
+              },
+              "dim": {
+                "nodeType": "Scalar_String",
+                "value": "preview",
+                "attributes": {
+                  "startLine": 74,
+                  "endLine": 74,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 74,
+                "endLine": 74
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 74,
+            "endLine": 74
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "wp_die"
+                ],
+                "attributes": {
+                  "startLine": 76,
+                  "comments": [
+                    {
+                      "nodeType": "Comment",
+                      "text": "/* translators: %s: WordPress version. */",
+                      "line": 75,
+                      "filePos": 2194,
+                      "tokenPos": 203,
+                      "endLine": 75,
+                      "endFilePos": 2234,
+                      "endTokenPos": 203
+                    }
+                  ],
+                  "endLine": 76
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "sprintf"
+                      ],
+                      "attributes": {
+                        "startLine": 76,
+                        "endLine": 76
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_FuncCall",
+                          "name": {
+                            "nodeType": "Name",
+                            "parts": [
+                              "__"
+                            ],
+                            "attributes": {
+                              "startLine": 76,
+                              "endLine": 76
+                            }
+                          },
+                          "args": [
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Scalar_String",
+                                "value": "Twenty Nineteen requires at least WordPress version 4.7. You are running version %s. Please upgrade and try again.",
+                                "attributes": {
+                                  "startLine": 76,
+                                  "endLine": 76,
+                                  "kind": 1
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 76,
+                                "endLine": 76
+                              }
+                            },
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Scalar_String",
+                                "value": "twentynineteen",
+                                "attributes": {
+                                  "startLine": 76,
+                                  "endLine": 76,
+                                  "kind": 1
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 76,
+                                "endLine": 76
+                              }
+                            }
+                          ],
+                          "attributes": {
+                            "startLine": 76,
+                            "endLine": 76
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 76,
+                          "endLine": 76
+                        }
+                      },
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_ArrayDimFetch",
+                          "var": {
+                            "nodeType": "Expr_Variable",
+                            "name": "GLOBALS",
+                            "attributes": {
+                              "startLine": 76,
+                              "endLine": 76
+                            }
+                          },
+                          "dim": {
+                            "nodeType": "Scalar_String",
+                            "value": "wp_version",
+                            "attributes": {
+                              "startLine": 76,
+                              "endLine": 76,
+                              "kind": 1
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 76,
+                            "endLine": 76
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 76,
+                          "endLine": 76
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 76,
+                      "endLine": 76
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 76,
+                    "endLine": 76
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 76,
+                "comments": [
+                  {
+                    "nodeType": "Comment",
+                    "text": "/* translators: %s: WordPress version. */",
+                    "line": 75,
+                    "filePos": 2194,
+                    "tokenPos": 203,
+                    "endLine": 75,
+                    "endFilePos": 2234,
+                    "endTokenPos": 203
+                  }
+                ],
+                "endLine": 76
+              }
+            },
+            "attributes": {
+              "startLine": 76,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "/* translators: %s: WordPress version. */",
+                  "line": 75,
+                  "filePos": 2194,
+                  "tokenPos": 203,
+                  "endLine": 75,
+                  "endFilePos": 2234,
+                  "endTokenPos": 203
+                }
+              ],
+              "endLine": 76
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 74,
+          "endLine": 77
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 73,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Prevents the Theme Preview from being loaded on WordPress versions prior to 4.7.\n *\n * @since Twenty Nineteen 1.0.0\n *\n * @global string $wp_version WordPress version.\n */",
+          "line": 66,
+          "filePos": 1941,
+          "tokenPos": 175,
+          "endLine": 72,
+          "endFilePos": 2118,
+          "endTokenPos": 175
+        }
+      ],
+      "endLine": 78
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "add_action"
+        ],
+        "attributes": {
+          "startLine": 79,
+          "endLine": 79
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "template_redirect",
+            "attributes": {
+              "startLine": 79,
+              "endLine": 79,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 79,
+            "endLine": 79
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "twentynineteen_preview",
+            "attributes": {
+              "startLine": 79,
+              "endLine": 79,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 79,
+            "endLine": 79
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 79,
+        "endLine": 79
+      }
+    },
+    "attributes": {
+      "startLine": 79,
+      "endLine": 79
+    }
+  }
+]

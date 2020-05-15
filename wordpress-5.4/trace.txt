@@ -1,0 +1,644 @@
+ --- modulename: index, funcname: <module>
+index.py(4): if "__PHP2PY_LOADED__" not in globals():
+index.py(5):     import cgi
+ --- modulename: utils, funcname: <module>
+utils.py(5): """Miscellaneous utilities."""
+utils.py(8):     'collapse_rfc2231_value',
+utils.py(9):     'decode_params',
+utils.py(10):     'decode_rfc2231',
+utils.py(11):     'encode_rfc2231',
+utils.py(12):     'formataddr',
+utils.py(13):     'formatdate',
+utils.py(14):     'format_datetime',
+utils.py(15):     'getaddresses',
+utils.py(16):     'make_msgid',
+utils.py(17):     'mktime_tz',
+utils.py(18):     'parseaddr',
+utils.py(19):     'parsedate',
+utils.py(20):     'parsedate_tz',
+utils.py(21):     'parsedate_to_datetime',
+utils.py(22):     'unquote',
+utils.py(25): import os
+utils.py(26): import re
+utils.py(27): import time
+utils.py(28): import random
+utils.py(29): import socket
+utils.py(30): import datetime
+utils.py(31): import urllib.parse
+utils.py(33): from email._parseaddr import quote
+utils.py(34): from email._parseaddr import AddressList as _AddressList
+utils.py(35): from email._parseaddr import mktime_tz
+utils.py(37): from email._parseaddr import parsedate, parsedate_tz, _parsedate_tz
+utils.py(40): from email.charset import Charset
+utils.py(42): COMMASPACE = ', '
+utils.py(43): EMPTYSTRING = ''
+utils.py(44): UEMPTYSTRING = ''
+utils.py(45): CRLF = '\r\n'
+utils.py(46): TICK = "'"
+utils.py(48): specialsre = re.compile(r'[][\\()<>@,:;".]')
+utils.py(49): escapesre = re.compile(r'[\\"]')
+utils.py(51): def _has_surrogates(s):
+utils.py(64): def _sanitize(string):
+utils.py(76): def formataddr(pair, charset='utf-8'):
+utils.py(110): def getaddresses(fieldvalues):
+utils.py(117): def _format_timetuple_and_zone(timetuple, zone):
+utils.py(126): def formatdate(timeval=None, localtime=False, usegmt=False):
+utils.py(155): def format_datetime(dt, usegmt=False):
+utils.py(174): def make_msgid(idstring=None, domain=None):
+utils.py(197): def parsedate_to_datetime(data):
+utils.py(205): def parseaddr(addr):
+utils.py(219): def unquote(str):
+utils.py(231): def decode_rfc2231(s):
+utils.py(239): def encode_rfc2231(s, charset=None, language=None):
+utils.py(254): rfc2231_continuation = re.compile(r'^(?P<name>\w+)\*((?P<num>[0-9]+)\*?)?$',
+utils.py(255):     re.ASCII)
+utils.py(257): def decode_params(params):
+utils.py(314):                            fallback_charset='us-ascii'):
+utils.py(339): def localtime(dt=None, isdst=-1):
+index.py(6):     import os
+index.py(7):     import os.path
+index.py(8):     import copy
+index.py(9):     import sys
+index.py(11):     from goto import with_goto
+index.py(13):     with open(os.getenv("PHP2PY_COMMONS", "_commons.py")) as f:
+index.py(14):         exec(compile(f.read(), "<string>", 'exec'))
+ --- modulename: index, funcname: <module>
+<string>(3): <string>(4): <string>(5): <string>(6): <string>(7): <string>(8): <string>(9): <string>(11): <string>(12): <string>(14): <string>(15): <string>(16): <string>(17): <string>(19): <string>(28): <string>(31): <string>(38): <string>(66):  --- modulename: index, funcname: Array
+<string>(66): <string>(67): <string>(77): <string>(82): <string>(91): <string>(95): <string>(98): <string>(101): <string>(108): <string>(112): <string>(114): <string>(115): <string>(117):  --- modulename: index, funcname: __init__
+<string>(68): <string>(69): <string>(71): <string>(72): <string>(75): <string>(71): <string>(118):  --- modulename: index, funcname: __init__
+<string>(68): <string>(69): <string>(71): <string>(72): <string>(73): <string>(71): <string>(120):  --- modulename: index, funcname: __setitem__
+<string>(83): <string>(84): <string>(121):  --- modulename: index, funcname: __setitem__
+<string>(83): <string>(84): <string>(122):  --- modulename: index, funcname: __setitem__
+<string>(83): <string>(84): <string>(123):  --- modulename: index, funcname: __setitem__
+<string>(83): <string>(84): <string>(124):  --- modulename: index, funcname: __setitem__
+<string>(83): <string>(84): <string>(125): <string>(127): <string>(129):  --- modulename: index, funcname: __init__
+<string>(68): <string>(69): <string>(71): <string>(130):  --- modulename: index, funcname: __init__
+<string>(68): <string>(69): <string>(71): <string>(72): <string>(73): <string>(71): <string>(131):  --- modulename: index, funcname: __init__
+<string>(68): <string>(69): <string>(71): <string>(132):  --- modulename: index, funcname: __init__
+<string>(68): <string>(69): <string>(71): <string>(136): <string>(137): <string>(138): <string>(139): <string>(141): <string>(142): <string>(143): <string>(144): <string>(145): <string>(146): <string>(147): <string>(148): <string>(149): <string>(150): <string>(151): <string>(152): <string>(153): <string>(154): <string>(155): <string>(156): <string>(157): <string>(158): <string>(159): <string>(160): <string>(161): <string>(162): <string>(163): <string>(164): <string>(165): <string>(166): <string>(167): <string>(168): <string>(169): <string>(170): <string>(171): <string>(172): <string>(173): <string>(174): <string>(175): <string>(176): <string>(177): <string>(178): <string>(179): <string>(180): <string>(181): <string>(182): <string>(183): <string>(184): <string>(185): <string>(186): <string>(187): <string>(188): <string>(189): <string>(190): <string>(191): <string>(192): <string>(193): <string>(194): <string>(223):  --- modulename: index, funcname: Switch
+<string>(223): <string>(224): <string>(228): <string>(232): <string>(241): <string>(247): <string>(254): <string>(257): <string>(260): <string>(264): <string>(281): <string>(285): <string>(289): <string>(293): <string>(297): <string>(300): <string>(302): <string>(305): <string>(308): <string>(311): <string>(314): <string>(317): <string>(320): <string>(323): <string>(326): <string>(329): <string>(332): <string>(335): <string>(338): <string>(341): <string>(344): <string>(347): <string>(350): <string>(353): <string>(356): <string>(366): <string>(369): <string>(372): <string>(375): <string>(378): <string>(381): <string>(384): <string>(387): <string>(390): <string>(393): <string>(396): <string>(399): <string>(402): <string>(405): <string>(408): <string>(411): <string>(414): <string>(417): <string>(420): <string>(423): <string>(426): <string>(429): <string>(432): <string>(435): <string>(438): <string>(441): <string>(454): <string>(457): <string>(460): <string>(463): <string>(466): <string>(469): <string>(472): <string>(475): <string>(478): <string>(481): <string>(484): <string>(487): <string>(490): <string>(493): <string>(496): <string>(499): <string>(502): <string>(505): <string>(508): <string>(511): <string>(514): <string>(517): <string>(520): <string>(523): <string>(526): <string>(529): <string>(532): <string>(535): <string>(538): <string>(541): <string>(544): <string>(547): <string>(550): <string>(553): <string>(556): <string>(559): <string>(562): <string>(565): <string>(568): <string>(571): <string>(574): <string>(577): <string>(580): <string>(583): <string>(586): <string>(589): <string>(592): <string>(595): <string>(598): <string>(601): <string>(604): <string>(607): <string>(610): <string>(613): <string>(616): <string>(619): <string>(622): <string>(625): <string>(628): <string>(632): <string>(635): <string>(638): <string>(641): <string>(644): <string>(647): <string>(650): <string>(653): <string>(656): <string>(659): <string>(663): <string>(666): <string>(669): <string>(672): <string>(675): <string>(678): <string>(681): <string>(684): <string>(687): <string>(690): <string>(693): <string>(696): <string>(699): <string>(702): <string>(705): <string>(708): <string>(711): <string>(714): <string>(717): <string>(720): <string>(723): <string>(726): <string>(729): <string>(732): <string>(735): <string>(738): <string>(741): <string>(744): <string>(747): <string>(750): <string>(753): <string>(756): <string>(759): <string>(762): <string>(765): <string>(768): <string>(771): <string>(774): <string>(777): <string>(780): <string>(783): <string>(786): <string>(789): <string>(792): <string>(795): <string>(798): <string>(801): <string>(804): <string>(807): <string>(810): <string>(813): <string>(816): <string>(819): <string>(822): <string>(825): <string>(828): <string>(831): <string>(834): <string>(837): <string>(840): <string>(843): <string>(846): <string>(849): <string>(852): <string>(855): <string>(858): <string>(861): <string>(864): <string>(867):  --- modulename: index, funcname: gmdate
+<string>(298):  --- modulename: index, funcname: gmdate
+<string>(298):  --- modulename: index, funcname: gmdate
+<string>(298):  --- modulename: index, funcname: gmdate
+<string>(298):  --- modulename: index, funcname: gmdate
+<string>(298):  --- modulename: index, funcname: gmdate
+<string>(298): <string>(870): <string>(873): <string>(876): <string>(879): <string>(882): <string>(885): <string>(888): <string>(891): <string>(894): <string>(897): <string>(900): <string>(903): <string>(906): <string>(909): <string>(912): <string>(915): <string>(918): <string>(921): <string>(933): <string>(937): <string>(940): <string>(943): <string>(946): <string>(949): <string>(952): <string>(955): <string>(958): <string>(961): <string>(964): <string>(965): <string>(968): <string>(971): <string>(974): <string>(977): <string>(980): <string>(983): <string>(986): <string>(989): <string>(992): <string>(995): <string>(998): <string>(1001): <string>(1004): <string>(1007): <string>(1010): <string>(1013): <string>(1016): <string>(1019): <string>(1022): <string>(1025): <string>(1028): <string>(1031): <string>(1034): <string>(1037): <string>(1040): <string>(1043): <string>(1056): <string>(1059): <string>(1062): <string>(1065): <string>(1078): <string>(1081): <string>(1084): <string>(1087): <string>(1090): <string>(1093): <string>(1096): <string>(1099): <string>(1102): <string>(1105): <string>(1108): <string>(1111): <string>(1114): <string>(1117): <string>(1120): <string>(1123): <string>(1126): <string>(1129): <string>(1132): <string>(1135): <string>(1138): <string>(1141): <string>(1144): <string>(1147): <string>(1150): <string>(1153): <string>(1156): <string>(1159): <string>(1162): <string>(1165): <string>(1168): <string>(1171): <string>(1174): <string>(1177): <string>(1180): <string>(1183): <string>(1186): <string>(1189): <string>(1192): <string>(1195): <string>(1198): <string>(1201): <string>(1204): <string>(1207): <string>(1210): <string>(1213): <string>(1216): <string>(1219): <string>(1222): <string>(1225): <string>(1228): <string>(1231): <string>(1234): <string>(1237): <string>(1240): <string>(1243): <string>(1246): <string>(1249): <string>(1252): <string>(1255): <string>(1258): <string>(1261): <string>(1264):  --- modulename: index, funcname: gmdate
+<string>(298):  --- modulename: index, funcname: gmdate
+<string>(298):  --- modulename: index, funcname: gmdate
+<string>(298):  --- modulename: index, funcname: gmdate
+<string>(298):  --- modulename: index, funcname: gmdate
+<string>(298):  --- modulename: index, funcname: gmdate
+<string>(298): <string>(1267): <string>(1270): <string>(1273): <string>(1276): <string>(1279): <string>(1282): <string>(1285): <string>(1288): <string>(1291): <string>(1294): <string>(1297): <string>(1298): <string>(1299): <string>(1300): <string>(1301): <string>(1302): <string>(1303): <string>(1304): <string>(1305): <string>(1306): <string>(1308): <string>(1311): <string>(1314): <string>(1317): <string>(1320): <string>(1323): <string>(1326): <string>(1329): <string>(1332): <string>(1335): <string>(1338): <string>(1341): <string>(1344): <string>(1347): <string>(1350): <string>(1353): <string>(1356): <string>(1359): <string>(1362): <string>(1365): <string>(1368): <string>(1370): <string>(1373): <string>(1375): <string>(1378): <string>(1381): <string>(1384): <string>(1387): <string>(1390): <string>(1393): <string>(1396): <string>(1400): <string>(1403): <string>(1406): <string>(1409): <string>(1412): <string>(1415): <string>(1418): <string>(1421): <string>(1424): <string>(1427): <string>(1430): <string>(1433): <string>(1436): <string>(1439): <string>(1442): <string>(1445): <string>(1448): <string>(1451): <string>(1454): <string>(1457): <string>(1460): <string>(1463): <string>(1466): <string>(1469): <string>(1472): <string>(1475): <string>(1478): <string>(1481): <string>(1484): <string>(1487): <string>(1490): <string>(1493): <string>(1496): <string>(1499): <string>(1502): <string>(1505): <string>(1508): <string>(1511): <string>(1514): <string>(1517): <string>(1520): <string>(1523): <string>(1526): <string>(1529): <string>(1532): <string>(1535): <string>(1538): <string>(1541): <string>(1544): <string>(1547): <string>(1550): <string>(1553): <string>(1556): <string>(1559): <string>(1562): <string>(1565): <string>(1568): <string>(1571): <string>(1574): <string>(1577): <string>(1580): <string>(1583): <string>(1586): <string>(1589): <string>(1592): <string>(1595): <string>(1598): <string>(1601): <string>(1604): <string>(1607): <string>(1610): <string>(1613): <string>(1616): <string>(1619): <string>(1622): <string>(1625): <string>(1628): <string>(1631): <string>(1634): <string>(1637): <string>(1640): <string>(1643): <string>(1646): <string>(1649): <string>(1652): <string>(1655): <string>(1658): <string>(1661): <string>(1664): <string>(1667): <string>(1670): <string>(1673): <string>(1676): <string>(1679): <string>(1682): <string>(1685): <string>(1688): <string>(1691): <string>(1694): <string>(1697): <string>(1700): <string>(1703): <string>(1706): <string>(1709): <string>(1712): <string>(1715): <string>(1718): <string>(1721): <string>(1724): <string>(1727): <string>(1732): <string>(1742): <string>(1745): <string>(1748): <string>(1751): <string>(1754): <string>(1757): <string>(1760): <string>(1763): <string>(1766): <string>(1769): <string>(1772): <string>(1775): <string>(1778): <string>(1781): <string>(1784): <string>(1787): <string>(1790): <string>(1793): <string>(1796): <string>(1799): <string>(1802): <string>(1805): <string>(1808): <string>(1811): <string>(1814): <string>(1817): <string>(1820): <string>(1823): <string>(1826): <string>(1829): <string>(1832): <string>(1835): <string>(1838): <string>(1841): <string>(1844): <string>(1847): <string>(1850): <string>(1853): <string>(1856): <string>(1859): <string>(1862): <string>(1865): <string>(1871): <string>(1874): <string>(1877): <string>(1880): <string>(1883): <string>(1886): <string>(1889): <string>(1892): <string>(1895): <string>(1898): <string>(1901): <string>(1902): <string>(1904): <string>(1907): <string>(1909): <string>(1911): <string>(1916): <string>(1919): <string>(1922): <string>(1925): <string>(1928): <string>(1931): <string>(1934): <string>(1937): <string>(1940): <string>(1943): <string>(1946): <string>(1949): <string>(1952): <string>(1955): <string>(1958): <string>(1961): <string>(1964): <string>(1967): <string>(1970): <string>(1973): <string>(1976): <string>(1979): <string>(1982): <string>(1985): <string>(1988): <string>(1991): <string>(1994): <string>(1997): <string>(2000): <string>(2003): <string>(2006): <string>(2009): <string>(2012): <string>(2015): <string>(2018): <string>(2021): <string>(2024): <string>(2027): <string>(2030): <string>(2033): <string>(2036): <string>(2039): <string>(2042): <string>(2045): <string>(2048): <string>(2051): <string>(2054): <string>(2055):  --- modulename: index, funcname: <listcomp>
+<string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): <string>(2055): index.py(17):     globals()["__PHP2PY_LOADED__"] = True
+index.py(28): php_define("WP_USE_THEMES",True)
+ --- modulename: index, funcname: php_define
+<string>(255): index.py(32): php_include_file(__DIR__ + "/wp-blog-header.php")
+ --- modulename: index, funcname: php_include_file
+<string>(41):  --- modulename: index, funcname: fix_ext
+<string>(32): <string>(34): <string>(35): <string>(43): <string>(44): <string>(46): <string>(47): <string>(49): <string>(50): <string>(56):  --- modulename: index, funcname: <module>
+wp-blog-header.py(4): if "__PHP2PY_LOADED__" not in globals():
+wp-blog-header.py(24): if (not (php_isset(lambda : wp_did_header_))):
+ --- modulename: index, funcname: php_isset
+<string>(248): <string>(249):  --- modulename: index, funcname: <lambda>
+wp-blog-header.py(24): if (not (php_isset(lambda : wp_did_header_))):
+<string>(251): <string>(252): wp-blog-header.py(25):     wp_did_header_ = True
+wp-blog-header.py(26):     php_include_file(__DIR__ + "/wp-load.php")
+ --- modulename: index, funcname: php_include_file
+<string>(41):  --- modulename: index, funcname: fix_ext
+<string>(32): <string>(34): <string>(35): <string>(43): <string>(44): <string>(46): <string>(47): <string>(49): <string>(50): <string>(56):  --- modulename: index, funcname: <module>
+wp-load.py(4): if "__PHP2PY_LOADED__" not in globals():
+wp-load.py(24): if (not php_defined("ABSPATH")):
+ --- modulename: index, funcname: php_defined
+<string>(258): wp-load.py(25):     php_define("ABSPATH",__DIR__ + "/")
+ --- modulename: index, funcname: php_define
+<string>(255): wp-load.py(30): php_error_reporting(E_CORE_ERROR | E_CORE_WARNING | E_COMPILE_ERROR | E_ERROR | E_WARNING | E_PARSE | E_USER_ERROR | E_USER_WARNING | E_RECOVERABLE_ERROR)
+ --- modulename: index, funcname: php_error_reporting
+<string>(608): wp-load.py(43): if php_file_exists(ABSPATH + "wp-config.php"):
+ --- modulename: index, funcname: php_file_exists
+<string>(657):  --- modulename: index, funcname: fix_ext
+<string>(32): <string>(34): <string>(35): wp-load.py(46):     php_include_file(ABSPATH + "wp-config.php")
+ --- modulename: index, funcname: php_include_file
+<string>(41):  --- modulename: index, funcname: fix_ext
+<string>(32): <string>(34): <string>(35): <string>(43): <string>(44): <string>(46): <string>(47): <string>(49): <string>(50): <string>(56):  --- modulename: index, funcname: <module>
+wp-config.py(4): if "__PHP2PY_LOADED__" not in globals():
+wp-config.py(24): php_define("DB_NAME","database_name_here")
+ --- modulename: index, funcname: php_define
+<string>(255): wp-config.py(28): php_define("DB_USER","username_here")
+ --- modulename: index, funcname: php_define
+<string>(255): wp-config.py(32): php_define("DB_PASSWORD","password_here")
+ --- modulename: index, funcname: php_define
+<string>(255): wp-config.py(36): php_define("DB_HOST","localhost")
+ --- modulename: index, funcname: php_define
+<string>(255): wp-config.py(40): php_define("DB_CHARSET","utf8")
+ --- modulename: index, funcname: php_define
+<string>(255): wp-config.py(44): php_define("DB_COLLATE","")
+ --- modulename: index, funcname: php_define
+<string>(255): wp-config.py(56): php_define("AUTH_KEY","put your unique phrase here")
+ --- modulename: index, funcname: php_define
+<string>(255): wp-config.py(58): php_define("SECURE_AUTH_KEY","put your unique phrase here")
+ --- modulename: index, funcname: php_define
+<string>(255): wp-config.py(60): php_define("LOGGED_IN_KEY","put your unique phrase here")
+ --- modulename: index, funcname: php_define
+<string>(255): wp-config.py(62): php_define("NONCE_KEY","put your unique phrase here")
+ --- modulename: index, funcname: php_define
+<string>(255): wp-config.py(64): php_define("AUTH_SALT","put your unique phrase here")
+ --- modulename: index, funcname: php_define
+<string>(255): wp-config.py(66): php_define("SECURE_AUTH_SALT","put your unique phrase here")
+ --- modulename: index, funcname: php_define
+<string>(255): wp-config.py(68): php_define("LOGGED_IN_SALT","put your unique phrase here")
+ --- modulename: index, funcname: php_define
+<string>(255): wp-config.py(70): php_define("NONCE_SALT","put your unique phrase here")
+ --- modulename: index, funcname: php_define
+<string>(255): wp-config.py(80): table_prefix_ = "wp_"
+wp-config.py(95): php_define("WP_DEBUG",False)
+ --- modulename: index, funcname: php_define
+<string>(255): wp-config.py(100): if (not php_defined("ABSPATH")):
+ --- modulename: index, funcname: php_defined
+<string>(258): wp-config.py(108): php_include_file(ABSPATH + "wp-settings.php")
+ --- modulename: index, funcname: php_include_file
+<string>(41):  --- modulename: index, funcname: fix_ext
+<string>(32): <string>(34): <string>(35): <string>(43): <string>(44): <string>(46): <string>(47): <string>(49): <string>(50): <string>(56):  --- modulename: index, funcname: <module>
+wp-settings.py(4): if "__PHP2PY_LOADED__" not in globals():
+wp-settings.py(22): php_define("WPINC","wp-includes")
+ --- modulename: index, funcname: php_define
+<string>(255): wp-settings.py(26): if "wp_version_" not in globals():
+wp-settings.py(27):     globals()["wp_version_"] = None
+wp-settings.py(31): if "wp_db_version_" not in globals():
+wp-settings.py(32):     globals()["wp_db_version_"] = None
+wp-settings.py(36): if "tinymce_version_" not in globals():
+wp-settings.py(37):     globals()["tinymce_version_"] = None
+wp-settings.py(41): if "required_php_version_" not in globals():
+wp-settings.py(42):     globals()["required_php_version_"] = None
+wp-settings.py(46): if "required_mysql_version_" not in globals():
+wp-settings.py(47):     globals()["required_mysql_version_"] = None
+wp-settings.py(51): if "wp_local_package_" not in globals():
+wp-settings.py(52):     globals()["wp_local_package_"] = None
+wp-settings.py(55): php_include_file(ABSPATH + WPINC + "/version.php")
+ --- modulename: index, funcname: php_include_file
+<string>(41):  --- modulename: index, funcname: fix_ext
+<string>(32): <string>(34): <string>(35): <string>(43): <string>(44): <string>(46): <string>(47): <string>(49): <string>(50): <string>(56):  --- modulename: index, funcname: <module>
+version.py(4): if "__PHP2PY_LOADED__" not in globals():
+version.py(22): wp_version_ = "5.4"
+version.py(24): wp_db_version_ = 47018
+version.py(26): tinymce_version_ = "4960-20190918"
+version.py(28): required_php_version_ = "5.6.20"
+version.py(30): required_mysql_version_ = "5.0"
+<string>(61): wp-settings.py(57): php_include_file(ABSPATH + WPINC + "/load.php")
+ --- modulename: index, funcname: php_include_file
+<string>(41):  --- modulename: index, funcname: fix_ext
+<string>(32): <string>(34): <string>(35): <string>(43): <string>(44): <string>(46): <string>(47): <string>(49): <string>(50): <string>(56):  --- modulename: index, funcname: <module>
+load.py(4): if "__PHP2PY_LOADED__" not in globals():
+load.py(24): def wp_get_server_protocol(*args):
+load.py(40): def wp_unregister_GLOBALS(*args):
+load.py(74): def wp_fix_server_vars(*args):
+load.py(155): def wp_check_php_mysql_versions(*args):
+load.py(196): def wp_favicon_request(*args):
+load.py(227): def wp_maintenance(*args):
+load.py(275): def timer_start(*args):
+load.py(289): def timer_stop(display_ = 0, precision_ = 3, *args):
+load.py(317): def wp_debug_mode(*args):
+load.py(386): def wp_set_lang_dir(*args):
+load.py(428): def require_wp_db(*args):
+load.py(473): def wp_set_wpdb_vars(*args):
+load.py(506): def wp_using_ext_object_cache(using_ = None, *args):
+load.py(527): def wp_start_object_cache(*args):
+load.py(610): def wp_not_installed(*args):
+load.py(637): def wp_get_mu_plugins(*args):
+load.py(694): def wp_get_active_and_valid_plugins(*args):
+load.py(745): def wp_skip_paused_plugins(plugins_ = None, *args):
+load.py(785): def wp_get_active_and_valid_themes(*args):
+load.py(840): def wp_skip_paused_themes(themes_ = None, *args):
+load.py(879): def wp_is_recovery_mode(*args):
+load.py(895): def is_protected_endpoint(*args):
+load.py(941): def is_protected_ajax_action(*args):
+load.py(975): def wp_set_internal_encoding(*args):
+load.py(997): def wp_magic_quotes(*args):
+load.py(1024): def shutdown_action_hook(*args):
+load.py(1048): def wp_clone(object_ = None, *args):
+load.py(1056): def is_admin(*args):
+load.py(1090): def is_blog_admin(*args):
+load.py(1127): def is_network_admin(*args):
+load.py(1161): def is_user_admin(*args):
+load.py(1188): def is_multisite(*args):
+load.py(1222): def get_current_blog_id(*args):
+load.py(1235): def get_current_network_id(*args):
+load.py(1278): def wp_load_translations_early(*args):
+load.py(1426): def wp_installing(is_installing_ = None, *args):
+load.py(1463): def is_ssl(*args):
+load.py(1509): def wp_convert_hr_to_bytes(value_ = None, *args):
+load.py(1546): def wp_is_ini_value_changeable(setting_ = None, *args):
+load.py(1553): def wp_doing_ajax(*args):
+load.py(1569): def wp_using_themes(*args):
+load.py(1593): def wp_doing_cron(*args):
+load.py(1620): def is_wp_error(thing_ = None, *args):
+load.py(1637): def wp_is_file_mod_allowed(context_ = None, *args):
+load.py(1660): def wp_start_scraping_edited_file_errors(*args):
+load.py(1702): def wp_finalize_scraping_edited_file_errors(scrape_key_ = None, *args):
+load.py(1720): def wp_is_json_request(*args):
+load.py(1752): def wp_is_jsonp_request(*args):
+load.py(1796): def wp_is_xml_request(*args):
+<string>(61): wp-settings.py(61): wp_check_php_mysql_versions()
+ --- modulename: index, funcname: wp_check_php_mysql_versions
+load.py(158):     if "required_php_version_" not in globals():
+load.py(163):     if "wp_version_" not in globals():
+load.py(166):     php_version_ = php_phpversion()
+ --- modulename: index, funcname: php_phpversion
+<string>(1373): load.py(169):     if php_version_compare(required_php_version_,php_version_,">"):
+ --- modulename: index, funcname: php_version_compare
+<string>(1989): load.py(181):     if (not php_extension_loaded("mysql")) and (not php_extension_loaded("mysqli")) and (not php_extension_loaded("mysqlnd")) and (not php_file_exists(WP_CONTENT_DIR + "/db.php")):
+ --- modulename: index, funcname: php_extension_loaded
+<string>(629): <string>(630): wp-settings.py(65): php_include_file(ABSPATH + WPINC + "/class-wp-paused-extensions-storage.php")
+ --- modulename: index, funcname: php_include_file
+<string>(41):  --- modulename: index, funcname: fix_ext
+<string>(32): <string>(34): <string>(35): <string>(43): <string>(44): <string>(46): <string>(47): <string>(49): <string>(50): <string>(56):  --- modulename: index, funcname: <module>
+class-wp-paused-extensions-storage.py(4): if "__PHP2PY_LOADED__" not in globals():
+class-wp-paused-extensions-storage.py(22): class WP_Paused_Extensions_Storage():
+ --- modulename: index, funcname: WP_Paused_Extensions_Storage
+class-wp-paused-extensions-storage.py(22): class WP_Paused_Extensions_Storage():
+class-wp-paused-extensions-storage.py(23):     type_ = Array()
+ --- modulename: index, funcname: __init__
+<string>(68): <string>(69): <string>(71): class-wp-paused-extensions-storage.py(27):     def __init__(self, extension_type_ = None):
+class-wp-paused-extensions-storage.py(34):     def set(self, extension_ = None, error_ = None):
+class-wp-paused-extensions-storage.py(69):     def delete(self, extension_ = None):
+class-wp-paused-extensions-storage.py(119):     def get(self, extension_ = None):
+class-wp-paused-extensions-storage.py(144):     def get_all(self):
+class-wp-paused-extensions-storage.py(170):     def delete_all(self):
+class-wp-paused-extensions-storage.py(205):     def is_api_loaded(self):
+class-wp-paused-extensions-storage.py(213):     def get_option_name(self):
+<string>(61): wp-settings.py(67): php_include_file(ABSPATH + WPINC + "/class-wp-fatal-error-handler.php")
+ --- modulename: index, funcname: php_include_file
+<string>(41):  --- modulename: index, funcname: fix_ext
+<string>(32): <string>(34): <string>(35): <string>(43): <string>(44): <string>(46): <string>(47): <string>(49): <string>(50): <string>(56):  --- modulename: index, funcname: <module>
+class-wp-fatal-error-handler.py(4): if "__PHP2PY_LOADED__" not in globals():
+class-wp-fatal-error-handler.py(22): class WP_Fatal_Error_Handler():
+ --- modulename: index, funcname: WP_Fatal_Error_Handler
+class-wp-fatal-error-handler.py(22): class WP_Fatal_Error_Handler():
+class-wp-fatal-error-handler.py(26):     def handle(self):
+class-wp-fatal-error-handler.py(77):     def detect_error(self):
+class-wp-fatal-error-handler.py(102):     def should_handle_error(self, error_ = None):
+class-wp-fatal-error-handler.py(119):     def display_error_template(self, error_ = None, handled_ = None):
+class-wp-fatal-error-handler.py(142):     def display_default_error_template(self, error_ = None, handled_ = None):
+<string>(61): wp-settings.py(69): php_include_file(ABSPATH + WPINC + "/class-wp-recovery-mode-cookie-service.php")
+ --- modulename: index, funcname: php_include_file
+<string>(41):  --- modulename: index, funcname: fix_ext
+<string>(32): <string>(34): <string>(35): <string>(43): <string>(44): <string>(46): <string>(47): <string>(49): <string>(50): <string>(56):  --- modulename: index, funcname: <module>
+class-wp-recovery-mode-cookie-service.py(4): if "__PHP2PY_LOADED__" not in globals():
+class-wp-recovery-mode-cookie-service.py(22): class WP_Recovery_Mode_Cookie_Service():
+ --- modulename: index, funcname: WP_Recovery_Mode_Cookie_Service
+class-wp-recovery-mode-cookie-service.py(22): class WP_Recovery_Mode_Cookie_Service():
+class-wp-recovery-mode-cookie-service.py(26):     def is_cookie_set(self):
+class-wp-recovery-mode-cookie-service.py(34):     def set_cookie(self):
+class-wp-recovery-mode-cookie-service.py(51):     def clear_cookie(self):
+class-wp-recovery-mode-cookie-service.py(59):     def validate_cookie(self, cookie_ = ""):
+class-wp-recovery-mode-cookie-service.py(119):     def get_session_id_from_cookie(self, cookie_ = ""):
+class-wp-recovery-mode-cookie-service.py(152):     def parse_cookie(self, cookie_ = None):
+class-wp-recovery-mode-cookie-service.py(170):     def generate_cookie(self):
+class-wp-recovery-mode-cookie-service.py(180):     def recovery_mode_hash(self, data_ = None):
+<string>(61): wp-settings.py(71): php_include_file(ABSPATH + WPINC + "/class-wp-recovery-mode-key-service.php")
+ --- modulename: index, funcname: php_include_file
+<string>(41):  --- modulename: index, funcname: fix_ext
+<string>(32): <string>(34): <string>(35): <string>(43): <string>(44): <string>(46): <string>(47): <string>(49): <string>(50): <string>(56):  --- modulename: index, funcname: <module>
+class-wp-recovery-mode-key-service.py(4): if "__PHP2PY_LOADED__" not in globals():
+class-wp-recovery-mode-key-service.py(22): class WP_Recovery_Mode_Key_Service():
+ --- modulename: index, funcname: WP_Recovery_Mode_Key_Service
+class-wp-recovery-mode-key-service.py(22): class WP_Recovery_Mode_Key_Service():
+class-wp-recovery-mode-key-service.py(23):     option_name_ = "recovery_keys"
+class-wp-recovery-mode-key-service.py(27):     def generate_recovery_mode_token(self):
+class-wp-recovery-mode-key-service.py(35):     def generate_and_store_recovery_mode_key(self, token_ = None):
+class-wp-recovery-mode-key-service.py(62):     def validate_recovery_mode_key(self, token_ = None, key_ = None, ttl_ = None):
+class-wp-recovery-mode-key-service.py(105):     def clean_expired_keys(self, ttl_ = None):
+class-wp-recovery-mode-key-service.py(123):     def remove_key(self, token_ = None):
+class-wp-recovery-mode-key-service.py(140):     def get_keys(self):
+class-wp-recovery-mode-key-service.py(148):     def update_keys(self, keys_ = None):
+<string>(61): wp-settings.py(73): php_include_file(ABSPATH + WPINC + "/class-wp-recovery-mode-link-service.php")
+ --- modulename: index, funcname: php_include_file
+<string>(41):  --- modulename: index, funcname: fix_ext
+<string>(32): <string>(34): <string>(35): <string>(43): <string>(44): <string>(46): <string>(47): <string>(49): <string>(50): <string>(56):  --- modulename: index, funcname: <module>
+class-wp-recovery-mode-link-service.py(4): if "__PHP2PY_LOADED__" not in globals():
+class-wp-recovery-mode-link-service.py(22): class WP_Recovery_Mode_Link_Service():
+ --- modulename: index, funcname: WP_Recovery_Mode_Link_Service
+class-wp-recovery-mode-link-service.py(22): class WP_Recovery_Mode_Link_Service():
+class-wp-recovery-mode-link-service.py(23):     LOGIN_ACTION_ENTER = "enter_recovery_mode" #@ const! # const
+class-wp-recovery-mode-link-service.py(24):     LOGIN_ACTION_ENTERED = "entered_recovery_mode" #@ const! # const
+class-wp-recovery-mode-link-service.py(25):     key_service_ = Array()
+ --- modulename: index, funcname: __init__
+<string>(68): <string>(69): <string>(71): class-wp-recovery-mode-link-service.py(26):     cookie_service_ = Array()
+ --- modulename: index, funcname: __init__
+<string>(68): <string>(69): <string>(71): class-wp-recovery-mode-link-service.py(30):     def __init__(self, cookie_service_ = None, key_service_ = None):
+class-wp-recovery-mode-link-service.py(38):     def generate_url(self):
+class-wp-recovery-mode-link-service.py(48):     def handle_begin_link(self, ttl_ = None):
+class-wp-recovery-mode-link-service.py(89):     def get_recovery_mode_begin_url(self, token_ = None, key_ = None):
+<string>(61): wp-settings.py(75): php_include_file(ABSPATH + WPINC + "/class-wp-recovery-mode-email-service.php")
+ --- modulename: index, funcname: php_include_file
+<string>(41):  --- modulename: index, funcname: fix_ext
+<string>(32): <string>(34): <string>(35): <string>(43): <string>(44): <string>(46): <string>(47): <string>(49): <string>(50): <string>(56):  --- modulename: index, funcname: <module>
+class-wp-recovery-mode-email-service.py(4): if "__PHP2PY_LOADED__" not in globals():
+class-wp-recovery-mode-email-service.py(22): class WP_Recovery_Mode_Email_Service():
+ --- modulename: index, funcname: WP_Recovery_Mode_Email_Service
+class-wp-recovery-mode-email-service.py(22): class WP_Recovery_Mode_Email_Service():
+class-wp-recovery-mode-email-service.py(23):     RATE_LIMIT_OPTION = "recovery_mode_email_last_sent" #@ const! # const
+class-wp-recovery-mode-email-service.py(24):     link_service_ = Array()
+ --- modulename: index, funcname: __init__
+<string>(68): <string>(69): <string>(71): class-wp-recovery-mode-email-service.py(28):     def __init__(self, link_service_ = None):
+class-wp-recovery-mode-email-service.py(35):     def maybe_send_recovery_mode_email(self, rate_limit_ = None, error_ = None, extension_ = None):
+class-wp-recovery-mode-email-service.py(70):     def clear_rate_limit(self):
+class-wp-recovery-mode-email-service.py(78):     def send_recovery_mode_email(self, rate_limit_ = None, error_ = None, extension_ = None):
+class-wp-recovery-mode-email-service.py(151):     def get_recovery_mode_email_address(self):
+class-wp-recovery-mode-email-service.py(167):     def get_cause(self, extension_ = None):
+class-wp-recovery-mode-email-service.py(194):     def get_plugin(self, extension_ = None):
+class-wp-recovery-mode-email-service.py(229):     def get_debug(self, extension_ = None):
+<string>(61): wp-settings.py(77): php_include_file(ABSPATH + WPINC + "/class-wp-recovery-mode.php")
+ --- modulename: index, funcname: php_include_file
+<string>(41):  --- modulename: index, funcname: fix_ext
+<string>(32): <string>(34): <string>(35): <string>(43): <string>(44): <string>(46): <string>(47): <string>(49): <string>(50): <string>(56):  --- modulename: index, funcname: <module>
+class-wp-recovery-mode.py(4): if "__PHP2PY_LOADED__" not in globals():
+class-wp-recovery-mode.py(22): class WP_Recovery_Mode():
+ --- modulename: index, funcname: WP_Recovery_Mode
+class-wp-recovery-mode.py(22): class WP_Recovery_Mode():
+class-wp-recovery-mode.py(23):     EXIT_ACTION = "exit_recovery_mode" #@ const! # const
+class-wp-recovery-mode.py(24):     cookie_service_ = Array()
+ --- modulename: index, funcname: __init__
+<string>(68): <string>(69): <string>(71): class-wp-recovery-mode.py(25):     key_service_ = Array()
+ --- modulename: index, funcname: __init__
+<string>(68): <string>(69): <string>(71): class-wp-recovery-mode.py(26):     link_service_ = Array()
+ --- modulename: index, funcname: __init__
+<string>(68): <string>(69): <string>(71): class-wp-recovery-mode.py(27):     email_service_ = Array()
+ --- modulename: index, funcname: __init__
+<string>(68): <string>(69): <string>(71): class-wp-recovery-mode.py(28):     is_initialized_ = False
+class-wp-recovery-mode.py(29):     is_active_ = False
+class-wp-recovery-mode.py(30):     session_id_ = ""
+class-wp-recovery-mode.py(34):     def __init__(self):
+class-wp-recovery-mode.py(44):     def initialize(self):
+class-wp-recovery-mode.py(81):     def is_active(self):
+class-wp-recovery-mode.py(89):     def get_session_id(self):
+class-wp-recovery-mode.py(97):     def is_initialized(self):
+class-wp-recovery-mode.py(105):     def handle_error(self, error_ = None):
+class-wp-recovery-mode.py(168):     def exit_recovery_mode(self):
+class-wp-recovery-mode.py(188):     def handle_exit_recovery_mode(self):
+class-wp-recovery-mode.py(234):     def clean_expired_keys(self):
+class-wp-recovery-mode.py(241):     def handle_cookie(self):
+class-wp-recovery-mode.py(277):     def get_email_rate_limit(self):
+class-wp-recovery-mode.py(285):     def get_link_ttl(self):
+class-wp-recovery-mode.py(296):     def get_extension_for_error(self, error_ = None):
+class-wp-recovery-mode.py(359):     def is_network_plugin(self, extension_ = None):
+class-wp-recovery-mode.py(395):     def store_error(self, error_ = None):
+class-wp-recovery-mode.py(435):     def redirect_protected(self):
+<string>(61): wp-settings.py(79): php_include_file(ABSPATH + WPINC + "/error-protection.php")
+ --- modulename: index, funcname: php_include_file
+<string>(41):  --- modulename: index, funcname: fix_ext
+<string>(32): <string>(34): <string>(35): <string>(43): <string>(44): <string>(46): <string>(47): <string>(49): <string>(50): <string>(56):  --- modulename: index, funcname: <module>
+error-protection.py(4): if "__PHP2PY_LOADED__" not in globals():
+error-protection.py(24): def wp_paused_plugins(*args):
+error-protection.py(40): def wp_paused_themes(*args):
+error-protection.py(56): def wp_get_extension_error_description(error_ = None, *args):
+error-protection.py(85): def wp_register_fatal_error_handler(*args):
+error-protection.py(115): def wp_is_fatal_error_handler_enabled(*args):
+error-protection.py(124): def wp_recovery_mode(*args):
+<string>(61): wp-settings.py(81): php_include_file(ABSPATH + WPINC + "/default-constants.php")
+ --- modulename: index, funcname: php_include_file
+<string>(41):  --- modulename: index, funcname: fix_ext
+<string>(32): <string>(34): <string>(35): <string>(43): <string>(44): <string>(46): <string>(47): <string>(49): <string>(50): <string>(56):  --- modulename: index, funcname: <module>
+default-constants.py(4): if "__PHP2PY_LOADED__" not in globals():
+default-constants.py(24): def wp_initial_constants(*args):
+default-constants.py(168): def wp_plugin_directory_constants(*args):
+default-constants.py(237): def wp_cookie_constants(*args):
+default-constants.py(346): def wp_ssl_constants(*args):
+default-constants.py(383): def wp_functionality_constants(*args):
+default-constants.py(417): def wp_templating_constants(*args):
+<string>(61): wp-settings.py(83): php_include_file(ABSPATH + WPINC + "/plugin.php")
+ --- modulename: index, funcname: php_include_file
+<string>(41):  --- modulename: index, funcname: fix_ext
+<string>(32): <string>(34): <string>(35): <string>(43): <string>(44): <string>(46): <string>(47): <string>(49): <string>(50): <string>(56):  --- modulename: index, funcname: <module>
+plugin.py(4): if "__PHP2PY_LOADED__" not in globals():
+plugin.py(22): php_include_file(__DIR__ + "/class-wp-hook.php")
+ --- modulename: index, funcname: php_include_file
+<string>(41):  --- modulename: index, funcname: fix_ext
+<string>(32): <string>(34): <string>(35): <string>(43): <string>(44): <string>(46): <string>(47): <string>(49): <string>(50): <string>(56):  --- modulename: index, funcname: <module>
+class-wp-hook.py(4): if "__PHP2PY_LOADED__" not in globals():
+class-wp-hook.py(22): class WP_Hook():
+ --- modulename: index, funcname: WP_Hook
+class-wp-hook.py(22): class WP_Hook():
+class-wp-hook.py(23):     callbacks_ = Array()
+ --- modulename: index, funcname: __init__
+<string>(68): <string>(69): <string>(71): class-wp-hook.py(24):     iterations_ = Array()
+ --- modulename: index, funcname: __init__
+<string>(68): <string>(69): <string>(71): class-wp-hook.py(25):     current_priority_ = Array()
+ --- modulename: index, funcname: __init__
+<string>(68): <string>(69): <string>(71): class-wp-hook.py(26):     nesting_level_ = 0
+class-wp-hook.py(27):     doing_action_ = False
+class-wp-hook.py(31):     def add_filter(self, tag_ = None, function_to_add_ = None, priority_ = None, accepted_args_ = None):
+class-wp-hook.py(54):     def resort_active_iterations(self, new_priority_ = False, priority_existed_ = False):
+class-wp-hook.py(132):     def remove_filter(self, tag_ = None, function_to_remove_ = None, priority_ = None):
+class-wp-hook.py(163):     def has_filter(self, tag_ = "", function_to_check_ = False):
+class-wp-hook.py(207):     def has_filters(self):
+class-wp-hook.py(226):     def remove_all_filters(self, priority_ = False):
+class-wp-hook.py(256):     def apply_filters(self, value_ = None, args_ = None):
+class-wp-hook.py(307):     def do_action(self, args_ = None):
+class-wp-hook.py(322):     def do_all_hook(self, args_ = None):
+class-wp-hook.py(344):     def current_priority(self):
+class-wp-hook.py(358):     @classmethod
+class-wp-hook.py(360):     def build_preinitialized_hooks(self, filters_ = None):
+class-wp-hook.py(391):     def offsetExists(self, offset_ = None):
+class-wp-hook.py(399):     def offsetGet(self, offset_ = None):
+class-wp-hook.py(407):     def offsetSet(self, offset_ = None, value_ = None):
+class-wp-hook.py(421):     def offsetUnset(self, offset_ = None):
+class-wp-hook.py(438):     def current(self):
+class-wp-hook.py(446):     def next(self):
+class-wp-hook.py(454):     def key(self):
+class-wp-hook.py(462):     def valid(self):
+class-wp-hook.py(470):     def rewind(self):
+<string>(61): plugin.py(26): if "wp_filter_" not in globals():
+plugin.py(27):     globals()["wp_filter_"] = None
+plugin.py(31): if "wp_actions_" not in globals():
+plugin.py(32):     globals()["wp_actions_"] = None
+plugin.py(36): if "wp_current_filter_" not in globals():
+plugin.py(37):     globals()["wp_current_filter_"] = None
+plugin.py(42): if wp_filter_:
+plugin.py(46):     wp_filter_ = Array()
+ --- modulename: index, funcname: __init__
+<string>(68): <string>(69): <string>(71): plugin.py(51): if (not (php_isset(lambda : wp_actions_))):
+ --- modulename: index, funcname: php_isset
+<string>(248): <string>(249):  --- modulename: index, funcname: <lambda>
+plugin.py(51): if (not (php_isset(lambda : wp_actions_))):
+<string>(250): plugin.py(52):     wp_actions_ = Array()
+ --- modulename: index, funcname: __init__
+<string>(68): <string>(69): <string>(71): plugin.py(59): if (not (php_isset(lambda : wp_current_filter_))):
+ --- modulename: index, funcname: php_isset
+<string>(248): <string>(249):  --- modulename: index, funcname: <lambda>
+plugin.py(59): if (not (php_isset(lambda : wp_current_filter_))):
+<string>(250): plugin.py(60):     wp_current_filter_ = Array()
+ --- modulename: index, funcname: __init__
+<string>(68): <string>(69): <string>(71): plugin.py(67): def add_filter(tag_ = None, function_to_add_ = None, priority_ = 10, accepted_args_ = 1, *args):
+plugin.py(88): def has_filter(tag_ = None, function_to_check_ = False, *args):
+plugin.py(109): def apply_filters(tag_ = None, value_ = None, *args):
+plugin.py(161): def apply_filters_ref_array(tag_ = None, args_ = None, *args):
+plugin.py(212): def remove_filter(tag_ = None, function_to_remove_ = None, priority_ = 10, *args):
+plugin.py(240): def remove_all_filters(tag_ = None, priority_ = False, *args):
+plugin.py(267): def current_filter(*args):
+plugin.py(280): def current_action(*args):
+plugin.py(288): def doing_filter(filter_ = None, *args):
+plugin.py(309): def doing_action(action_ = None, *args):
+plugin.py(317): def add_action(tag_ = None, function_to_add_ = None, priority_ = 10, accepted_args_ = 1, *args):
+plugin.py(325): def do_action(tag_ = None, *arg_):
+plugin.py(396): def did_action(tag_ = None, *args):
+plugin.py(417): def do_action_ref_array(tag_ = None, args_ = None, *args):
+plugin.py(479): def has_action(tag_ = None, function_to_check_ = False, *args):
+plugin.py(502): def remove_action(tag_ = None, function_to_remove_ = None, priority_ = 10, *args):
+plugin.py(510): def remove_all_actions(tag_ = None, priority_ = False, *args):
+plugin.py(518): def apply_filters_deprecated(tag_ = None, args_ = None, version_ = None, replacement_ = None, message_ = None, *args):
+plugin.py(535): def do_action_deprecated(tag_ = None, args_ = None, version_ = None, replacement_ = None, message_ = None, *args):
+plugin.py(553): def plugin_basename(file_ = None, *args):
+plugin.py(604): def wp_register_plugin_realpath(file_ = None, *args):
+plugin.py(644): def plugin_dir_path(file_ = None, *args):
+plugin.py(661): def plugin_dir_url(file_ = None, *args):
+plugin.py(669): def register_activation_hook(file_ = None, function_ = None, *args):
+plugin.py(677): def register_deactivation_hook(file_ = None, function_ = None, *args):
+plugin.py(712): def register_uninstall_hook(file_ = None, callback_ = None, *args):
+plugin.py(756): def _wp_call_all_hook(args_ = None, *args):
+plugin.py(768): def _wp_filter_build_unique_id(tag_ = None, function_ = None, priority_ = None, *args):
+<string>(61): wp-settings.py(95): if "blog_id_" not in globals():
+wp-settings.py(96):     globals()["blog_id_"] = None
+wp-settings.py(101): wp_initial_constants()
+ --- modulename: index, funcname: wp_initial_constants
+default-constants.py(27):     if "blog_id_" not in globals():
+default-constants.py(30):     php_define("KB_IN_BYTES",1024)
+ --- modulename: index, funcname: php_define
+<string>(255): default-constants.py(31):     php_define("MB_IN_BYTES",1024 * KB_IN_BYTES)
+ --- modulename: index, funcname: php_define
+<string>(255): default-constants.py(32):     php_define("GB_IN_BYTES",1024 * MB_IN_BYTES)
+ --- modulename: index, funcname: php_define
+<string>(255): default-constants.py(33):     php_define("TB_IN_BYTES",1024 * GB_IN_BYTES)
+ --- modulename: index, funcname: php_define
+<string>(255): default-constants.py(36):     if (not php_defined("WP_START_TIMESTAMP")):
+ --- modulename: index, funcname: php_defined
+<string>(258): default-constants.py(37):         php_define("WP_START_TIMESTAMP",php_microtime(True))
+ --- modulename: index, funcname: php_microtime
+<string>(1253):  --- modulename: index, funcname: php_define
+<string>(255): default-constants.py(41):     current_limit_ = php_ini_get("memory_limit")
+ --- modulename: index, funcname: php_ini_get
+<string>(1066): <string>(1067): <string>(1068): <string>(1069): <string>(1070): <string>(1071): <string>(1072): <string>(1074): <string>(1075): default-constants.py(42):     current_limit_int_ = wp_convert_hr_to_bytes(current_limit_)
+ --- modulename: index, funcname: wp_convert_hr_to_bytes
+load.py(1510):     value_ = php_strtolower(php_trim(value_))
+ --- modulename: index, funcname: php_trim
+<string>(1941):  --- modulename: index, funcname: php_strtolower
+<string>(1901): load.py(1511):     bytes_ = int(value_)
+load.py(1514):     if False != php_strpos(value_,"g"):
+ --- modulename: index, funcname: php_strpos
+<string>(1866): <string>(1867): <string>(1868): load.py(1516):     elif False != php_strpos(value_,"m"):
+ --- modulename: index, funcname: php_strpos
+<string>(1866): <string>(1867): <string>(1868): load.py(1519):     elif False != php_strpos(value_,"k"):
+ --- modulename: index, funcname: php_strpos
+<string>(1866): <string>(1867): <string>(1868): load.py(1527):     return php_min(bytes_,PHP_INT_MAX)
+ --- modulename: index, funcname: php_min
+<string>(1259): default-constants.py(45):     if (not php_defined("WP_MEMORY_LIMIT")):
+ --- modulename: index, funcname: php_defined
+<string>(258): default-constants.py(48):         if False == wp_is_ini_value_changeable("memory_limit"):
+ --- modulename: index, funcname: wp_is_ini_value_changeable
+load.py(1547):     return False
+default-constants.py(49):             php_define("WP_MEMORY_LIMIT",current_limit_)
+ --- modulename: index, funcname: php_define
+<string>(255): default-constants.py(61):     if (not php_defined("WP_MAX_MEMORY_LIMIT")):
+ --- modulename: index, funcname: php_defined
+<string>(258): default-constants.py(64):         if False == wp_is_ini_value_changeable("memory_limit"):
+ --- modulename: index, funcname: wp_is_ini_value_changeable
+load.py(1547):     return False
+default-constants.py(65):             php_define("WP_MAX_MEMORY_LIMIT",current_limit_)
+ --- modulename: index, funcname: php_define
+<string>(255): default-constants.py(75):     wp_limit_int_ = wp_convert_hr_to_bytes(WP_MEMORY_LIMIT)
+ --- modulename: index, funcname: wp_convert_hr_to_bytes
+load.py(1510):     value_ = php_strtolower(php_trim(value_))
+ --- modulename: index, funcname: php_trim
+<string>(1941):  --- modulename: index, funcname: php_strtolower
+<string>(1901): load.py(1511):     bytes_ = int(value_)
+load.py(1514):     if False != php_strpos(value_,"g"):
+ --- modulename: index, funcname: php_strpos
+<string>(1866): <string>(1867): <string>(1868): load.py(1516):     elif False != php_strpos(value_,"m"):
+ --- modulename: index, funcname: php_strpos
+<string>(1866): <string>(1867): <string>(1868): load.py(1519):     elif False != php_strpos(value_,"k"):
+ --- modulename: index, funcname: php_strpos
+<string>(1866): <string>(1867): <string>(1868): load.py(1527):     return php_min(bytes_,PHP_INT_MAX)
+ --- modulename: index, funcname: php_min
+<string>(1259): default-constants.py(78):     if -1 != current_limit_int_ and -1 == wp_limit_int_ or wp_limit_int_ > current_limit_int_:
+default-constants.py(85):     if (not (php_isset(lambda : blog_id_))):
+ --- modulename: index, funcname: php_isset
+<string>(248): <string>(249):  --- modulename: index, funcname: <lambda>
+default-constants.py(85):     if (not (php_isset(lambda : blog_id_))):
+<string>(250): default-constants.py(86):         blog_id_ = 1
+default-constants.py(92):     if (not php_defined("WP_CONTENT_DIR")):
+ --- modulename: index, funcname: php_defined
+<string>(258): default-constants.py(93):         php_define("WP_CONTENT_DIR",ABSPATH + "wp-content")
+ --- modulename: index, funcname: php_define
+<string>(255): default-constants.py(100):     if (not php_defined("WP_DEBUG")):
+ --- modulename: index, funcname: php_defined
+<string>(258): default-constants.py(107):     if (not php_defined("WP_DEBUG_DISPLAY")):
+ --- modulename: index, funcname: php_defined
+<string>(258): default-constants.py(108):         php_define("WP_DEBUG_DISPLAY",True)
+ --- modulename: index, funcname: php_define
+<string>(255): default-constants.py(114):     if (not php_defined("WP_DEBUG_LOG")):
+ --- modulename: index, funcname: php_defined
+<string>(258): default-constants.py(115):         php_define("WP_DEBUG_LOG",False)
+ --- modulename: index, funcname: php_define
+<string>(255): default-constants.py(121):     if (not php_defined("WP_CACHE")):
+ --- modulename: index, funcname: php_defined
+<string>(258): default-constants.py(122):         php_define("WP_CACHE",False)
+ --- modulename: index, funcname: php_define
+<string>(255): default-constants.py(128):     if (not php_defined("SCRIPT_DEBUG")):
+ --- modulename: index, funcname: php_defined
+<string>(258): default-constants.py(131):         if (not php_empty(PHP_GLOBALS["wp_version"])):
+ --- modulename: index, funcname: <lambda>
+<string>(114):  --- modulename: index, funcname: __init__
+<string>(68): <string>(69): <string>(71):  --- modulename: index, funcname: php_empty
+<string>(20): <string>(23): <string>(25):  --- modulename: index, funcname: __len__
+<string>(109): default-constants.py(135):             develop_src_ = False
+default-constants.py(137):         php_define("SCRIPT_DEBUG",develop_src_)
+ --- modulename: index, funcname: php_define
+<string>(255): default-constants.py(143):     if (not php_defined("MEDIA_TRASH")):
+ --- modulename: index, funcname: php_defined
+<string>(258): default-constants.py(144):         php_define("MEDIA_TRASH",False)
+ --- modulename: index, funcname: php_define
+<string>(255): default-constants.py(150):     if (not php_defined("SHORTINIT")):
+ --- modulename: index, funcname: php_defined
+<string>(258): default-constants.py(151):         php_define("SHORTINIT",False)
+ --- modulename: index, funcname: php_define
+<string>(255): default-constants.py(155):     php_define("WP_FEATURE_BETTER_PASSWORDS",True)
+ --- modulename: index, funcname: php_define
+<string>(255): default-constants.py(156):     php_define("MINUTE_IN_SECONDS",60)
+ --- modulename: index, funcname: php_define
+<string>(255): default-constants.py(157):     php_define("HOUR_IN_SECONDS",60 * MINUTE_IN_SECONDS)
+ --- modulename: index, funcname: php_define
+<string>(255): default-constants.py(158):     php_define("DAY_IN_SECONDS",24 * HOUR_IN_SECONDS)
+ --- modulename: index, funcname: php_define
+<string>(255): default-constants.py(159):     php_define("WEEK_IN_SECONDS",7 * DAY_IN_SECONDS)
+ --- modulename: index, funcname: php_define
+<string>(255): default-constants.py(160):     php_define("MONTH_IN_SECONDS",30 * DAY_IN_SECONDS)
+ --- modulename: index, funcname: php_define
+<string>(255): default-constants.py(161):     php_define("YEAR_IN_SECONDS",365 * DAY_IN_SECONDS)
+ --- modulename: index, funcname: php_define
+<string>(255): default-constants.py(162):     pass
+wp-settings.py(105): wp_register_fatal_error_handler()
+ --- modulename: index, funcname: wp_register_fatal_error_handler
+error-protection.py(88):     if (not wp_is_fatal_error_handler_enabled()):
+ --- modulename: index, funcname: wp_is_fatal_error_handler_enabled
+error-protection.py(116):     enabled_ = (not php_defined("WP_DISABLE_FATAL_ERROR_HANDLER")) or (not WP_DISABLE_FATAL_ERROR_HANDLER)
+ --- modulename: index, funcname: php_defined
+<string>(258): error-protection.py(118):     return apply_filters("wp_fatal_error_handler_enabled",enabled_)
+ --- modulename: index, funcname: apply_filters
+plugin.py(112):     if "wp_filter_" not in globals():
+plugin.py(117):     if "wp_current_filter_" not in globals():
+plugin.py(120):     args_ = php_func_get_args()
+ --- modulename: index, funcname: php_func_get_args
+<string>(796): plugin.py(123):     if (php_isset(lambda : wp_filter_["all"])):
+ --- modulename: index, funcname: php_isset
+<string>(248): <string>(249):  --- modulename: index, funcname: <lambda>
+plugin.py(123):     if (php_isset(lambda : wp_filter_["all"])):
+ --- modulename: index, funcname: __getitem__
+<string>(78): <string>(79):  --- modulename: index, funcname: __init__
+<string>(68): <string>(69): <string>(71): <string>(250): plugin.py(124):         wp_current_filter_[-1] = tag_
+ --- modulename: index, funcname: __setitem__
+<string>(83): <string>(86): <string>(89): plugin.py(125):         _wp_call_all_hook(args_)
+ --- modulename: index, funcname: _wp_call_all_hook
+plugin.py(759):     if "wp_filter_" not in globals():
+plugin.py(762):     wp_filter_["all"].do_all_hook(args_)
+ --- modulename: index, funcname: __getitem__
+<string>(78): <string>(79):  --- modulename: index, funcname: __init__
+<string>(68): <string>(69): <string>(71): <string>(57): <string>(61): <string>(57): <string>(61): <string>(57): <string>(61): <string>(57): <string>(61): 

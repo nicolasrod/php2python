@@ -1,0 +1,994 @@
+[
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "class_exists"
+        ],
+        "attributes": {
+          "startLine": 3,
+          "endLine": 3
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "ParagonIE_Sodium_Core_Curve25519_Ge_P1p1",
+            "attributes": {
+              "startLine": 3,
+              "endLine": 3,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 3,
+            "endLine": 3
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "false"
+              ],
+              "attributes": {
+                "startLine": 3,
+                "endLine": 3
+              }
+            },
+            "attributes": {
+              "startLine": 3,
+              "endLine": 3
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 3,
+            "endLine": 3
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 3,
+        "endLine": 3
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": null,
+        "attributes": {
+          "startLine": 4,
+          "endLine": 4
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 3,
+      "endLine": 5
+    }
+  },
+  {
+    "nodeType": "Stmt_Class",
+    "flags": 0,
+    "extends": null,
+    "implements": [],
+    "name": {
+      "nodeType": "Identifier",
+      "name": "ParagonIE_Sodium_Core_Curve25519_Ge_P1p1",
+      "attributes": {
+        "startLine": 9,
+        "endLine": 9
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "X",
+              "attributes": {
+                "startLine": 14,
+                "endLine": 14
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 14,
+              "endLine": 14
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 14,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n     * @var ParagonIE_Sodium_Core_Curve25519_Fe\n     */",
+              "line": 11,
+              "filePos": 203,
+              "tokenPos": 29,
+              "endLine": 13,
+              "endFilePos": 261,
+              "endTokenPos": 29
+            }
+          ],
+          "endLine": 14
+        }
+      },
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "Y",
+              "attributes": {
+                "startLine": 19,
+                "endLine": 19
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 19,
+              "endLine": 19
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 19,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n     * @var ParagonIE_Sodium_Core_Curve25519_Fe\n     */",
+              "line": 16,
+              "filePos": 283,
+              "tokenPos": 36,
+              "endLine": 18,
+              "endFilePos": 341,
+              "endTokenPos": 36
+            }
+          ],
+          "endLine": 19
+        }
+      },
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "Z",
+              "attributes": {
+                "startLine": 24,
+                "endLine": 24
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 24,
+              "endLine": 24
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 24,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n     * @var ParagonIE_Sodium_Core_Curve25519_Fe\n     */",
+              "line": 21,
+              "filePos": 363,
+              "tokenPos": 43,
+              "endLine": 23,
+              "endFilePos": 421,
+              "endTokenPos": 43
+            }
+          ],
+          "endLine": 24
+        }
+      },
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "T",
+              "attributes": {
+                "startLine": 29,
+                "endLine": 29
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 29,
+              "endLine": 29
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 29,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n     * @var ParagonIE_Sodium_Core_Curve25519_Fe\n     */",
+              "line": 26,
+              "filePos": 443,
+              "tokenPos": 50,
+              "endLine": 28,
+              "endFilePos": 501,
+              "endTokenPos": 50
+            }
+          ],
+          "endLine": 29
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "__construct",
+          "attributes": {
+            "startLine": 41,
+            "endLine": 41
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": {
+              "nodeType": "Name",
+              "parts": [
+                "ParagonIE_Sodium_Core_Curve25519_Fe"
+              ],
+              "attributes": {
+                "startLine": 42,
+                "endLine": 42
+              }
+            },
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "x",
+              "attributes": {
+                "startLine": 42,
+                "endLine": 42
+              }
+            },
+            "default": {
+              "nodeType": "Expr_ConstFetch",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "null"
+                ],
+                "attributes": {
+                  "startLine": 42,
+                  "endLine": 42
+                }
+              },
+              "attributes": {
+                "startLine": 42,
+                "endLine": 42
+              }
+            },
+            "attributes": {
+              "startLine": 42,
+              "endLine": 42
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": {
+              "nodeType": "Name",
+              "parts": [
+                "ParagonIE_Sodium_Core_Curve25519_Fe"
+              ],
+              "attributes": {
+                "startLine": 43,
+                "endLine": 43
+              }
+            },
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "y",
+              "attributes": {
+                "startLine": 43,
+                "endLine": 43
+              }
+            },
+            "default": {
+              "nodeType": "Expr_ConstFetch",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "null"
+                ],
+                "attributes": {
+                  "startLine": 43,
+                  "endLine": 43
+                }
+              },
+              "attributes": {
+                "startLine": 43,
+                "endLine": 43
+              }
+            },
+            "attributes": {
+              "startLine": 43,
+              "endLine": 43
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": {
+              "nodeType": "Name",
+              "parts": [
+                "ParagonIE_Sodium_Core_Curve25519_Fe"
+              ],
+              "attributes": {
+                "startLine": 44,
+                "endLine": 44
+              }
+            },
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "z",
+              "attributes": {
+                "startLine": 44,
+                "endLine": 44
+              }
+            },
+            "default": {
+              "nodeType": "Expr_ConstFetch",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "null"
+                ],
+                "attributes": {
+                  "startLine": 44,
+                  "endLine": 44
+                }
+              },
+              "attributes": {
+                "startLine": 44,
+                "endLine": 44
+              }
+            },
+            "attributes": {
+              "startLine": 44,
+              "endLine": 44
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": {
+              "nodeType": "Name",
+              "parts": [
+                "ParagonIE_Sodium_Core_Curve25519_Fe"
+              ],
+              "attributes": {
+                "startLine": 45,
+                "endLine": 45
+              }
+            },
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "t",
+              "attributes": {
+                "startLine": 45,
+                "endLine": 45
+              }
+            },
+            "default": {
+              "nodeType": "Expr_ConstFetch",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "null"
+                ],
+                "attributes": {
+                  "startLine": 45,
+                  "endLine": 45
+                }
+              },
+              "attributes": {
+                "startLine": 45,
+                "endLine": 45
+              }
+            },
+            "attributes": {
+              "startLine": 45,
+              "endLine": 45
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BinaryOp_Identical",
+              "left": {
+                "nodeType": "Expr_Variable",
+                "name": "x",
+                "attributes": {
+                  "startLine": 47,
+                  "endLine": 47
+                }
+              },
+              "right": {
+                "nodeType": "Expr_ConstFetch",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "null"
+                  ],
+                  "attributes": {
+                    "startLine": 47,
+                    "endLine": 47
+                  }
+                },
+                "attributes": {
+                  "startLine": 47,
+                  "endLine": 47
+                }
+              },
+              "attributes": {
+                "startLine": 47,
+                "endLine": 47
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "x",
+                    "attributes": {
+                      "startLine": 48,
+                      "endLine": 48
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_New",
+                    "class": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "ParagonIE_Sodium_Core_Curve25519_Fe"
+                      ],
+                      "attributes": {
+                        "startLine": 48,
+                        "endLine": 48
+                      }
+                    },
+                    "args": [],
+                    "attributes": {
+                      "startLine": 48,
+                      "endLine": 48
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 48,
+                    "endLine": 48
+                  }
+                },
+                "attributes": {
+                  "startLine": 48,
+                  "endLine": 48
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 47,
+              "endLine": 49
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_PropertyFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "this",
+                  "attributes": {
+                    "startLine": 50,
+                    "endLine": 50
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "X",
+                  "attributes": {
+                    "startLine": 50,
+                    "endLine": 50
+                  }
+                },
+                "attributes": {
+                  "startLine": 50,
+                  "endLine": 50
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Variable",
+                "name": "x",
+                "attributes": {
+                  "startLine": 50,
+                  "endLine": 50
+                }
+              },
+              "attributes": {
+                "startLine": 50,
+                "endLine": 50
+              }
+            },
+            "attributes": {
+              "startLine": 50,
+              "endLine": 50
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BinaryOp_Identical",
+              "left": {
+                "nodeType": "Expr_Variable",
+                "name": "y",
+                "attributes": {
+                  "startLine": 51,
+                  "endLine": 51
+                }
+              },
+              "right": {
+                "nodeType": "Expr_ConstFetch",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "null"
+                  ],
+                  "attributes": {
+                    "startLine": 51,
+                    "endLine": 51
+                  }
+                },
+                "attributes": {
+                  "startLine": 51,
+                  "endLine": 51
+                }
+              },
+              "attributes": {
+                "startLine": 51,
+                "endLine": 51
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "y",
+                    "attributes": {
+                      "startLine": 52,
+                      "endLine": 52
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_New",
+                    "class": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "ParagonIE_Sodium_Core_Curve25519_Fe"
+                      ],
+                      "attributes": {
+                        "startLine": 52,
+                        "endLine": 52
+                      }
+                    },
+                    "args": [],
+                    "attributes": {
+                      "startLine": 52,
+                      "endLine": 52
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 52,
+                    "endLine": 52
+                  }
+                },
+                "attributes": {
+                  "startLine": 52,
+                  "endLine": 52
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 51,
+              "endLine": 53
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_PropertyFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "this",
+                  "attributes": {
+                    "startLine": 54,
+                    "endLine": 54
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "Y",
+                  "attributes": {
+                    "startLine": 54,
+                    "endLine": 54
+                  }
+                },
+                "attributes": {
+                  "startLine": 54,
+                  "endLine": 54
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Variable",
+                "name": "y",
+                "attributes": {
+                  "startLine": 54,
+                  "endLine": 54
+                }
+              },
+              "attributes": {
+                "startLine": 54,
+                "endLine": 54
+              }
+            },
+            "attributes": {
+              "startLine": 54,
+              "endLine": 54
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BinaryOp_Identical",
+              "left": {
+                "nodeType": "Expr_Variable",
+                "name": "z",
+                "attributes": {
+                  "startLine": 55,
+                  "endLine": 55
+                }
+              },
+              "right": {
+                "nodeType": "Expr_ConstFetch",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "null"
+                  ],
+                  "attributes": {
+                    "startLine": 55,
+                    "endLine": 55
+                  }
+                },
+                "attributes": {
+                  "startLine": 55,
+                  "endLine": 55
+                }
+              },
+              "attributes": {
+                "startLine": 55,
+                "endLine": 55
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "z",
+                    "attributes": {
+                      "startLine": 56,
+                      "endLine": 56
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_New",
+                    "class": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "ParagonIE_Sodium_Core_Curve25519_Fe"
+                      ],
+                      "attributes": {
+                        "startLine": 56,
+                        "endLine": 56
+                      }
+                    },
+                    "args": [],
+                    "attributes": {
+                      "startLine": 56,
+                      "endLine": 56
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 56,
+                    "endLine": 56
+                  }
+                },
+                "attributes": {
+                  "startLine": 56,
+                  "endLine": 56
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 55,
+              "endLine": 57
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_PropertyFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "this",
+                  "attributes": {
+                    "startLine": 58,
+                    "endLine": 58
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "Z",
+                  "attributes": {
+                    "startLine": 58,
+                    "endLine": 58
+                  }
+                },
+                "attributes": {
+                  "startLine": 58,
+                  "endLine": 58
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Variable",
+                "name": "z",
+                "attributes": {
+                  "startLine": 58,
+                  "endLine": 58
+                }
+              },
+              "attributes": {
+                "startLine": 58,
+                "endLine": 58
+              }
+            },
+            "attributes": {
+              "startLine": 58,
+              "endLine": 58
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BinaryOp_Identical",
+              "left": {
+                "nodeType": "Expr_Variable",
+                "name": "t",
+                "attributes": {
+                  "startLine": 59,
+                  "endLine": 59
+                }
+              },
+              "right": {
+                "nodeType": "Expr_ConstFetch",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "null"
+                  ],
+                  "attributes": {
+                    "startLine": 59,
+                    "endLine": 59
+                  }
+                },
+                "attributes": {
+                  "startLine": 59,
+                  "endLine": 59
+                }
+              },
+              "attributes": {
+                "startLine": 59,
+                "endLine": 59
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "t",
+                    "attributes": {
+                      "startLine": 60,
+                      "endLine": 60
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_New",
+                    "class": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "ParagonIE_Sodium_Core_Curve25519_Fe"
+                      ],
+                      "attributes": {
+                        "startLine": 60,
+                        "endLine": 60
+                      }
+                    },
+                    "args": [],
+                    "attributes": {
+                      "startLine": 60,
+                      "endLine": 60
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 60,
+                    "endLine": 60
+                  }
+                },
+                "attributes": {
+                  "startLine": 60,
+                  "endLine": 60
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 59,
+              "endLine": 61
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_PropertyFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "this",
+                  "attributes": {
+                    "startLine": 62,
+                    "endLine": 62
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "T",
+                  "attributes": {
+                    "startLine": 62,
+                    "endLine": 62
+                  }
+                },
+                "attributes": {
+                  "startLine": 62,
+                  "endLine": 62
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Variable",
+                "name": "t",
+                "attributes": {
+                  "startLine": 62,
+                  "endLine": 62
+                }
+              },
+              "attributes": {
+                "startLine": 62,
+                "endLine": 62
+              }
+            },
+            "attributes": {
+              "startLine": 62,
+              "endLine": 62
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 41,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n     * ParagonIE_Sodium_Core_Curve25519_Ge_P1p1 constructor.\n     *\n     * @internal You should not use this directly from another application\n     *\n     * @param ParagonIE_Sodium_Core_Curve25519_Fe|null $x\n     * @param ParagonIE_Sodium_Core_Curve25519_Fe|null $y\n     * @param ParagonIE_Sodium_Core_Curve25519_Fe|null $z\n     * @param ParagonIE_Sodium_Core_Curve25519_Fe|null $t\n     */",
+              "line": 31,
+              "filePos": 523,
+              "tokenPos": 57,
+              "endLine": 40,
+              "endFilePos": 915,
+              "endTokenPos": 57
+            }
+          ],
+          "endLine": 63
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 9,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Class ParagonIE_Sodium_Core_Curve25519_Ge_P1p1\n */",
+          "line": 6,
+          "filePos": 92,
+          "tokenPos": 21,
+          "endLine": 8,
+          "endFilePos": 148,
+          "endTokenPos": 21
+        }
+      ],
+      "endLine": 64
+    }
+  }
+]

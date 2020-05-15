@@ -1,0 +1,1389 @@
+[
+  {
+    "nodeType": "Stmt_Class",
+    "flags": 0,
+    "extends": null,
+    "implements": [],
+    "name": {
+      "nodeType": "Identifier",
+      "name": "WP_Widget_Factory",
+      "attributes": {
+        "startLine": 16,
+        "endLine": 16
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "widgets",
+              "attributes": {
+                "startLine": 24,
+                "endLine": 24
+              }
+            },
+            "default": {
+              "nodeType": "Expr_Array",
+              "items": [],
+              "attributes": {
+                "startLine": 24,
+                "endLine": 24,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 24,
+              "endLine": 24
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 24,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Widgets array.\n\t *\n\t * @since 2.8.0\n\t * @var array\n\t */",
+              "line": 18,
+              "filePos": 304,
+              "tokenPos": 11,
+              "endLine": 23,
+              "endFilePos": 366,
+              "endTokenPos": 11
+            }
+          ],
+          "endLine": 24
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "__construct",
+          "attributes": {
+            "startLine": 31,
+            "endLine": 31
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "add_action"
+                ],
+                "attributes": {
+                  "startLine": 32,
+                  "endLine": 32
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "widgets_init",
+                    "attributes": {
+                      "startLine": 32,
+                      "endLine": 32,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 32,
+                    "endLine": 32
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Array",
+                    "items": [
+                      {
+                        "nodeType": "Expr_ArrayItem",
+                        "key": null,
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "this",
+                          "attributes": {
+                            "startLine": 32,
+                            "endLine": 32
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 32,
+                          "endLine": 32
+                        }
+                      },
+                      {
+                        "nodeType": "Expr_ArrayItem",
+                        "key": null,
+                        "value": {
+                          "nodeType": "Scalar_String",
+                          "value": "_register_widgets",
+                          "attributes": {
+                            "startLine": 32,
+                            "endLine": 32,
+                            "kind": 1
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 32,
+                          "endLine": 32
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 32,
+                      "endLine": 32,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 32,
+                    "endLine": 32
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_LNumber",
+                    "value": 100,
+                    "attributes": {
+                      "startLine": 32,
+                      "endLine": 32,
+                      "kind": 10
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 32,
+                    "endLine": 32
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 32,
+                "endLine": 32
+              }
+            },
+            "attributes": {
+              "startLine": 32,
+              "endLine": 32
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 31,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * PHP5 constructor.\n\t *\n\t * @since 4.3.0\n\t */",
+              "line": 26,
+              "filePos": 398,
+              "tokenPos": 24,
+              "endLine": 30,
+              "endFilePos": 448,
+              "endTokenPos": 24
+            }
+          ],
+          "endLine": 33
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "WP_Widget_Factory",
+          "attributes": {
+            "startLine": 43,
+            "endLine": 43
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "_deprecated_constructor"
+                ],
+                "attributes": {
+                  "startLine": 44,
+                  "endLine": 44
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "WP_Widget_Factory",
+                    "attributes": {
+                      "startLine": 44,
+                      "endLine": 44,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 44,
+                    "endLine": 44
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "4.3.0",
+                    "attributes": {
+                      "startLine": 44,
+                      "endLine": 44,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 44,
+                    "endLine": 44
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 44,
+                "endLine": 44
+              }
+            },
+            "attributes": {
+              "startLine": 44,
+              "endLine": 44
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_StaticCall",
+              "class": {
+                "nodeType": "Name",
+                "parts": [
+                  "self"
+                ],
+                "attributes": {
+                  "startLine": 45,
+                  "endLine": 45
+                }
+              },
+              "name": {
+                "nodeType": "Identifier",
+                "name": "__construct",
+                "attributes": {
+                  "startLine": 45,
+                  "endLine": 45
+                }
+              },
+              "args": [],
+              "attributes": {
+                "startLine": 45,
+                "endLine": 45
+              }
+            },
+            "attributes": {
+              "startLine": 45,
+              "endLine": 45
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 43,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * PHP4 constructor.\n\t *\n\t * @since 2.8.0\n\t * @deprecated 4.3.0 Use __construct() instead.\n\t *\n\t * @see WP_Widget_Factory::__construct()\n\t */",
+              "line": 35,
+              "filePos": 562,
+              "tokenPos": 60,
+              "endLine": 42,
+              "endFilePos": 707,
+              "endTokenPos": 60
+            }
+          ],
+          "endLine": 46
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "register",
+          "attributes": {
+            "startLine": 57,
+            "endLine": 57
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "widget",
+              "attributes": {
+                "startLine": 57,
+                "endLine": 57
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 57,
+              "endLine": 57
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_Instanceof",
+              "expr": {
+                "nodeType": "Expr_Variable",
+                "name": "widget",
+                "attributes": {
+                  "startLine": 58,
+                  "endLine": 58
+                }
+              },
+              "class": {
+                "nodeType": "Name",
+                "parts": [
+                  "WP_Widget"
+                ],
+                "attributes": {
+                  "startLine": 58,
+                  "endLine": 58
+                }
+              },
+              "attributes": {
+                "startLine": 58,
+                "endLine": 58
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_ArrayDimFetch",
+                    "var": {
+                      "nodeType": "Expr_PropertyFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "this",
+                        "attributes": {
+                          "startLine": 59,
+                          "endLine": 59
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "widgets",
+                        "attributes": {
+                          "startLine": 59,
+                          "endLine": 59
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 59,
+                        "endLine": 59
+                      }
+                    },
+                    "dim": {
+                      "nodeType": "Expr_FuncCall",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "spl_object_hash"
+                        ],
+                        "attributes": {
+                          "startLine": 59,
+                          "endLine": 59
+                        }
+                      },
+                      "args": [
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Expr_Variable",
+                            "name": "widget",
+                            "attributes": {
+                              "startLine": 59,
+                              "endLine": 59
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 59,
+                            "endLine": 59
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 59,
+                        "endLine": 59
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 59,
+                      "endLine": 59
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_Variable",
+                    "name": "widget",
+                    "attributes": {
+                      "startLine": 59,
+                      "endLine": 59
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 59,
+                    "endLine": 59
+                  }
+                },
+                "attributes": {
+                  "startLine": 59,
+                  "endLine": 59
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": {
+              "nodeType": "Stmt_Else",
+              "stmts": [
+                {
+                  "nodeType": "Stmt_Expression",
+                  "expr": {
+                    "nodeType": "Expr_Assign",
+                    "var": {
+                      "nodeType": "Expr_ArrayDimFetch",
+                      "var": {
+                        "nodeType": "Expr_PropertyFetch",
+                        "var": {
+                          "nodeType": "Expr_Variable",
+                          "name": "this",
+                          "attributes": {
+                            "startLine": 61,
+                            "endLine": 61
+                          }
+                        },
+                        "name": {
+                          "nodeType": "Identifier",
+                          "name": "widgets",
+                          "attributes": {
+                            "startLine": 61,
+                            "endLine": 61
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 61,
+                          "endLine": 61
+                        }
+                      },
+                      "dim": {
+                        "nodeType": "Expr_Variable",
+                        "name": "widget",
+                        "attributes": {
+                          "startLine": 61,
+                          "endLine": 61
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 61,
+                        "endLine": 61
+                      }
+                    },
+                    "expr": {
+                      "nodeType": "Expr_New",
+                      "class": {
+                        "nodeType": "Expr_Variable",
+                        "name": "widget",
+                        "attributes": {
+                          "startLine": 61,
+                          "endLine": 61
+                        }
+                      },
+                      "args": [],
+                      "attributes": {
+                        "startLine": 61,
+                        "endLine": 61
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 61,
+                      "endLine": 61
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 61,
+                    "endLine": 61
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 60,
+                "endLine": 62
+              }
+            },
+            "attributes": {
+              "startLine": 58,
+              "endLine": 62
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 57,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Registers a widget subclass.\n\t *\n\t * @since 2.8.0\n\t * @since 4.6.0 Updated the `$widget` parameter to also accept a WP_Widget instance object\n\t *              instead of simply a `WP_Widget` subclass name.\n\t *\n\t * @param string|WP_Widget $widget Either the name of a `WP_Widget` subclass or an instance of a `WP_Widget` subclass.\n\t */",
+              "line": 48,
+              "filePos": 835,
+              "tokenPos": 92,
+              "endLine": 56,
+              "endFilePos": 1176,
+              "endTokenPos": 92
+            }
+          ],
+          "endLine": 63
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "unregister",
+          "attributes": {
+            "startLine": 74,
+            "endLine": 74
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "widget",
+              "attributes": {
+                "startLine": 74,
+                "endLine": 74
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 74,
+              "endLine": 74
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_Instanceof",
+              "expr": {
+                "nodeType": "Expr_Variable",
+                "name": "widget",
+                "attributes": {
+                  "startLine": 75,
+                  "endLine": 75
+                }
+              },
+              "class": {
+                "nodeType": "Name",
+                "parts": [
+                  "WP_Widget"
+                ],
+                "attributes": {
+                  "startLine": 75,
+                  "endLine": 75
+                }
+              },
+              "attributes": {
+                "startLine": 75,
+                "endLine": 75
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Unset",
+                "vars": [
+                  {
+                    "nodeType": "Expr_ArrayDimFetch",
+                    "var": {
+                      "nodeType": "Expr_PropertyFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "this",
+                        "attributes": {
+                          "startLine": 76,
+                          "endLine": 76
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "widgets",
+                        "attributes": {
+                          "startLine": 76,
+                          "endLine": 76
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 76,
+                        "endLine": 76
+                      }
+                    },
+                    "dim": {
+                      "nodeType": "Expr_FuncCall",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "spl_object_hash"
+                        ],
+                        "attributes": {
+                          "startLine": 76,
+                          "endLine": 76
+                        }
+                      },
+                      "args": [
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Expr_Variable",
+                            "name": "widget",
+                            "attributes": {
+                              "startLine": 76,
+                              "endLine": 76
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 76,
+                            "endLine": 76
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 76,
+                        "endLine": 76
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 76,
+                      "endLine": 76
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 76,
+                  "endLine": 76
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": {
+              "nodeType": "Stmt_Else",
+              "stmts": [
+                {
+                  "nodeType": "Stmt_Unset",
+                  "vars": [
+                    {
+                      "nodeType": "Expr_ArrayDimFetch",
+                      "var": {
+                        "nodeType": "Expr_PropertyFetch",
+                        "var": {
+                          "nodeType": "Expr_Variable",
+                          "name": "this",
+                          "attributes": {
+                            "startLine": 78,
+                            "endLine": 78
+                          }
+                        },
+                        "name": {
+                          "nodeType": "Identifier",
+                          "name": "widgets",
+                          "attributes": {
+                            "startLine": 78,
+                            "endLine": 78
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 78,
+                          "endLine": 78
+                        }
+                      },
+                      "dim": {
+                        "nodeType": "Expr_Variable",
+                        "name": "widget",
+                        "attributes": {
+                          "startLine": 78,
+                          "endLine": 78
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 78,
+                        "endLine": 78
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 78,
+                    "endLine": 78
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 77,
+                "endLine": 79
+              }
+            },
+            "attributes": {
+              "startLine": 75,
+              "endLine": 79
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 74,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Un-registers a widget subclass.\n\t *\n\t * @since 2.8.0\n\t * @since 4.6.0 Updated the `$widget` parameter to also accept a WP_Widget instance object\n\t *              instead of simply a `WP_Widget` subclass name.\n\t *\n\t * @param string|WP_Widget $widget Either the name of a `WP_Widget` subclass or an instance of a `WP_Widget` subclass.\n\t */",
+              "line": 65,
+              "filePos": 1382,
+              "tokenPos": 168,
+              "endLine": 73,
+              "endFilePos": 1726,
+              "endTokenPos": 168
+            }
+          ],
+          "endLine": 80
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "_register_widgets",
+          "attributes": {
+            "startLine": 89,
+            "endLine": 89
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Global",
+            "vars": [
+              {
+                "nodeType": "Expr_Variable",
+                "name": "wp_registered_widgets",
+                "attributes": {
+                  "startLine": 90,
+                  "endLine": 90
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 90,
+              "endLine": 90
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "keys",
+                "attributes": {
+                  "startLine": 91,
+                  "endLine": 91
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "array_keys"
+                  ],
+                  "attributes": {
+                    "startLine": 91,
+                    "endLine": 91
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_PropertyFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "this",
+                        "attributes": {
+                          "startLine": 91,
+                          "endLine": 91
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "widgets",
+                        "attributes": {
+                          "startLine": 91,
+                          "endLine": 91
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 91,
+                        "endLine": 91
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 91,
+                      "endLine": 91
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 91,
+                  "endLine": 91
+                }
+              },
+              "attributes": {
+                "startLine": 91,
+                "endLine": 91
+              }
+            },
+            "attributes": {
+              "startLine": 91,
+              "endLine": 91
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "registered",
+                "attributes": {
+                  "startLine": 92,
+                  "endLine": 92
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "array_keys"
+                  ],
+                  "attributes": {
+                    "startLine": 92,
+                    "endLine": 92
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "wp_registered_widgets",
+                      "attributes": {
+                        "startLine": 92,
+                        "endLine": 92
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 92,
+                      "endLine": 92
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 92,
+                  "endLine": 92
+                }
+              },
+              "attributes": {
+                "startLine": 92,
+                "endLine": 92
+              }
+            },
+            "attributes": {
+              "startLine": 92,
+              "endLine": 92
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "registered",
+                "attributes": {
+                  "startLine": 93,
+                  "endLine": 93
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "array_map"
+                  ],
+                  "attributes": {
+                    "startLine": 93,
+                    "endLine": 93
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "_get_widget_id_base",
+                      "attributes": {
+                        "startLine": 93,
+                        "endLine": 93,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 93,
+                      "endLine": 93
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "registered",
+                      "attributes": {
+                        "startLine": 93,
+                        "endLine": 93
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 93,
+                      "endLine": 93
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 93,
+                  "endLine": 93
+                }
+              },
+              "attributes": {
+                "startLine": 93,
+                "endLine": 93
+              }
+            },
+            "attributes": {
+              "startLine": 93,
+              "endLine": 93
+            }
+          },
+          {
+            "nodeType": "Stmt_Foreach",
+            "expr": {
+              "nodeType": "Expr_Variable",
+              "name": "keys",
+              "attributes": {
+                "startLine": 95,
+                "endLine": 95
+              }
+            },
+            "keyVar": null,
+            "byRef": false,
+            "valueVar": {
+              "nodeType": "Expr_Variable",
+              "name": "key",
+              "attributes": {
+                "startLine": 95,
+                "endLine": 95
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_If",
+                "cond": {
+                  "nodeType": "Expr_FuncCall",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "in_array"
+                    ],
+                    "attributes": {
+                      "startLine": 97,
+                      "endLine": 97
+                    }
+                  },
+                  "args": [
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Expr_PropertyFetch",
+                        "var": {
+                          "nodeType": "Expr_ArrayDimFetch",
+                          "var": {
+                            "nodeType": "Expr_PropertyFetch",
+                            "var": {
+                              "nodeType": "Expr_Variable",
+                              "name": "this",
+                              "attributes": {
+                                "startLine": 97,
+                                "endLine": 97
+                              }
+                            },
+                            "name": {
+                              "nodeType": "Identifier",
+                              "name": "widgets",
+                              "attributes": {
+                                "startLine": 97,
+                                "endLine": 97
+                              }
+                            },
+                            "attributes": {
+                              "startLine": 97,
+                              "endLine": 97
+                            }
+                          },
+                          "dim": {
+                            "nodeType": "Expr_Variable",
+                            "name": "key",
+                            "attributes": {
+                              "startLine": 97,
+                              "endLine": 97
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 97,
+                            "endLine": 97
+                          }
+                        },
+                        "name": {
+                          "nodeType": "Identifier",
+                          "name": "id_base",
+                          "attributes": {
+                            "startLine": 97,
+                            "endLine": 97
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 97,
+                          "endLine": 97
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 97,
+                        "endLine": 97
+                      }
+                    },
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Expr_Variable",
+                        "name": "registered",
+                        "attributes": {
+                          "startLine": 97,
+                          "endLine": 97
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 97,
+                        "endLine": 97
+                      }
+                    },
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Expr_ConstFetch",
+                        "name": {
+                          "nodeType": "Name",
+                          "parts": [
+                            "true"
+                          ],
+                          "attributes": {
+                            "startLine": 97,
+                            "endLine": 97
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 97,
+                          "endLine": 97
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 97,
+                        "endLine": 97
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 97,
+                    "endLine": 97
+                  }
+                },
+                "stmts": [
+                  {
+                    "nodeType": "Stmt_Unset",
+                    "vars": [
+                      {
+                        "nodeType": "Expr_ArrayDimFetch",
+                        "var": {
+                          "nodeType": "Expr_PropertyFetch",
+                          "var": {
+                            "nodeType": "Expr_Variable",
+                            "name": "this",
+                            "attributes": {
+                              "startLine": 98,
+                              "endLine": 98
+                            }
+                          },
+                          "name": {
+                            "nodeType": "Identifier",
+                            "name": "widgets",
+                            "attributes": {
+                              "startLine": 98,
+                              "endLine": 98
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 98,
+                            "endLine": 98
+                          }
+                        },
+                        "dim": {
+                          "nodeType": "Expr_Variable",
+                          "name": "key",
+                          "attributes": {
+                            "startLine": 98,
+                            "endLine": 98
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 98,
+                          "endLine": 98
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 98,
+                      "endLine": 98
+                    }
+                  },
+                  {
+                    "nodeType": "Stmt_Continue",
+                    "num": null,
+                    "attributes": {
+                      "startLine": 99,
+                      "endLine": 99
+                    }
+                  }
+                ],
+                "elseifs": [],
+                "else": null,
+                "attributes": {
+                  "startLine": 97,
+                  "comments": [
+                    {
+                      "nodeType": "Comment",
+                      "text": "// Don't register new widget if old widget with the same id is already registered.\n",
+                      "line": 96,
+                      "filePos": 2356,
+                      "tokenPos": 314,
+                      "endLine": 97,
+                      "endFilePos": 2438,
+                      "endTokenPos": 314
+                    }
+                  ],
+                  "endLine": 100
+                }
+              },
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_MethodCall",
+                  "var": {
+                    "nodeType": "Expr_ArrayDimFetch",
+                    "var": {
+                      "nodeType": "Expr_PropertyFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "this",
+                        "attributes": {
+                          "startLine": 102,
+                          "endLine": 102
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "widgets",
+                        "attributes": {
+                          "startLine": 102,
+                          "endLine": 102
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 102,
+                        "endLine": 102
+                      }
+                    },
+                    "dim": {
+                      "nodeType": "Expr_Variable",
+                      "name": "key",
+                      "attributes": {
+                        "startLine": 102,
+                        "endLine": 102
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 102,
+                      "endLine": 102
+                    }
+                  },
+                  "name": {
+                    "nodeType": "Identifier",
+                    "name": "_register",
+                    "attributes": {
+                      "startLine": 102,
+                      "endLine": 102
+                    }
+                  },
+                  "args": [],
+                  "attributes": {
+                    "startLine": 102,
+                    "endLine": 102
+                  }
+                },
+                "attributes": {
+                  "startLine": 102,
+                  "endLine": 102
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 95,
+              "endLine": 103
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 89,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Serves as a utility method for adding widgets to the registered widgets global.\n\t *\n\t * @since 2.8.0\n\t *\n\t * @global array $wp_registered_widgets\n\t */",
+              "line": 82,
+              "filePos": 1926,
+              "tokenPos": 242,
+              "endLine": 88,
+              "endFilePos": 2083,
+              "endTokenPos": 242
+            }
+          ],
+          "endLine": 104
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 16,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Widget API: WP_Widget_Factory class\n *\n * @package WordPress\n * @subpackage Widgets\n * @since 4.4.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 8,
+          "endFilePos": 115,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Singleton that registers and instantiates WP_Widget classes.\n *\n * @since 2.8.0\n * @since 4.4.0 Moved to its own file from wp-includes/widgets.php\n */",
+          "line": 10,
+          "filePos": 118,
+          "tokenPos": 3,
+          "endLine": 15,
+          "endFilePos": 274,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 105
+    }
+  }
+]

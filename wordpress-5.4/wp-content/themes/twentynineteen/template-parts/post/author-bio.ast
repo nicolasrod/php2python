@@ -1,0 +1,503 @@
+[
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_Cast_Bool",
+      "expr": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "get_the_author_meta"
+          ],
+          "attributes": {
+            "startLine": 10,
+            "endLine": 10
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "description",
+              "attributes": {
+                "startLine": 10,
+                "endLine": 10,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 10,
+              "endLine": 10
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 10,
+          "endLine": 10
+        }
+      },
+      "attributes": {
+        "startLine": 10,
+        "endLine": 10
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "<div class=\"author-bio\">\n\t<h2 class=\"author-title\">\n\t\t<span class=\"author-heading\">\n\t\t\t",
+        "attributes": {
+          "startLine": 11,
+          "hasLeadingNewline": true,
+          "endLine": 14
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "printf"
+            ],
+            "attributes": {
+              "startLine": 15,
+              "endLine": 15
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "__"
+                  ],
+                  "attributes": {
+                    "startLine": 17,
+                    "comments": [
+                      {
+                        "nodeType": "Comment",
+                        "text": "/* translators: %s: Post author. */",
+                        "line": 16,
+                        "filePos": 308,
+                        "tokenPos": 27,
+                        "endLine": 16,
+                        "endFilePos": 342,
+                        "endTokenPos": 27
+                      }
+                    ],
+                    "endLine": 17
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "Published by %s",
+                      "attributes": {
+                        "startLine": 17,
+                        "endLine": 17,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 17,
+                      "endLine": 17
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "twentynineteen",
+                      "attributes": {
+                        "startLine": 17,
+                        "endLine": 17,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 17,
+                      "endLine": 17
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 17,
+                  "comments": [
+                    {
+                      "nodeType": "Comment",
+                      "text": "/* translators: %s: Post author. */",
+                      "line": 16,
+                      "filePos": 308,
+                      "tokenPos": 27,
+                      "endLine": 16,
+                      "endFilePos": 342,
+                      "endTokenPos": 27
+                    }
+                  ],
+                  "endLine": 17
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 17,
+                "comments": [
+                  {
+                    "nodeType": "Comment",
+                    "text": "/* translators: %s: Post author. */",
+                    "line": 16,
+                    "filePos": 308,
+                    "tokenPos": 27,
+                    "endLine": 16,
+                    "endFilePos": 342,
+                    "endTokenPos": 27
+                  }
+                ],
+                "endLine": 17
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "esc_html"
+                  ],
+                  "attributes": {
+                    "startLine": 18,
+                    "endLine": 18
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_FuncCall",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "get_the_author"
+                        ],
+                        "attributes": {
+                          "startLine": 18,
+                          "endLine": 18
+                        }
+                      },
+                      "args": [],
+                      "attributes": {
+                        "startLine": 18,
+                        "endLine": 18
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 18,
+                      "endLine": 18
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 18,
+                  "endLine": 18
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 18,
+                "endLine": 18
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 15,
+            "endLine": 19
+          }
+        },
+        "attributes": {
+          "startLine": 15,
+          "endLine": 19
+        }
+      },
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "\t\t</span>\n\t</h2>\n\t<p class=\"author-description\">\n\t\t",
+        "attributes": {
+          "startLine": 21,
+          "hasLeadingNewline": true,
+          "endLine": 24
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "the_author_meta"
+            ],
+            "attributes": {
+              "startLine": 24,
+              "endLine": 24
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "description",
+                "attributes": {
+                  "startLine": 24,
+                  "endLine": 24,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 24,
+                "endLine": 24
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 24,
+            "endLine": 24
+          }
+        },
+        "attributes": {
+          "startLine": 24,
+          "endLine": 24
+        }
+      },
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "\t\t<a class=\"author-link\" href=\"",
+        "attributes": {
+          "startLine": 25,
+          "hasLeadingNewline": true,
+          "endLine": 25
+        }
+      },
+      {
+        "nodeType": "Stmt_Echo",
+        "exprs": [
+          {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "esc_url"
+              ],
+              "attributes": {
+                "startLine": 25,
+                "endLine": 25
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_FuncCall",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "get_author_posts_url"
+                    ],
+                    "attributes": {
+                      "startLine": 25,
+                      "endLine": 25
+                    }
+                  },
+                  "args": [
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Expr_FuncCall",
+                        "name": {
+                          "nodeType": "Name",
+                          "parts": [
+                            "get_the_author_meta"
+                          ],
+                          "attributes": {
+                            "startLine": 25,
+                            "endLine": 25
+                          }
+                        },
+                        "args": [
+                          {
+                            "nodeType": "Arg",
+                            "value": {
+                              "nodeType": "Scalar_String",
+                              "value": "ID",
+                              "attributes": {
+                                "startLine": 25,
+                                "endLine": 25,
+                                "kind": 1
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 25,
+                              "endLine": 25
+                            }
+                          }
+                        ],
+                        "attributes": {
+                          "startLine": 25,
+                          "endLine": 25
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 25,
+                        "endLine": 25
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 25,
+                    "endLine": 25
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 25,
+                  "endLine": 25
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 25,
+              "endLine": 25
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 25,
+          "endLine": 25
+        }
+      },
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "\" rel=\"author\">\n\t\t\t",
+        "attributes": {
+          "startLine": 25,
+          "hasLeadingNewline": false,
+          "endLine": 26
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "_e"
+            ],
+            "attributes": {
+              "startLine": 26,
+              "endLine": 26
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "View more posts",
+                "attributes": {
+                  "startLine": 26,
+                  "endLine": 26,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 26,
+                "endLine": 26
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "twentynineteen",
+                "attributes": {
+                  "startLine": 26,
+                  "endLine": 26,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 26,
+                "endLine": 26
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 26,
+            "endLine": 26
+          }
+        },
+        "attributes": {
+          "startLine": 26,
+          "endLine": 26
+        }
+      },
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "\t\t</a>\n\t</p><!-- .author-description -->\n</div><!-- .author-bio -->\n",
+        "attributes": {
+          "startLine": 27,
+          "hasLeadingNewline": true,
+          "endLine": 30
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 10,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * The template for displaying Author info\n *\n * @package WordPress\n * @subpackage Twenty_Nineteen\n * @since Twenty Nineteen 1.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 8,
+          "endFilePos": 141,
+          "endTokenPos": 1
+        }
+      ],
+      "endLine": 30
+    }
+  }
+]

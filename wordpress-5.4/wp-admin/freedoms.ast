@@ -1,0 +1,2236 @@
+[
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Scalar_MagicConst_Dir",
+          "attributes": {
+            "startLine": 10,
+            "endLine": 10
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/admin.php",
+          "attributes": {
+            "startLine": 10,
+            "endLine": 10,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 10,
+          "endLine": 10
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 10,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/**\n * Your Rights administration panel.\n *\n * @package WordPress\n * @subpackage Administration\n */",
+            "line": 2,
+            "filePos": 6,
+            "tokenPos": 1,
+            "endLine": 7,
+            "endFilePos": 104,
+            "endTokenPos": 1
+          },
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** WordPress Administration Bootstrap */",
+            "line": 9,
+            "filePos": 107,
+            "tokenPos": 3,
+            "endLine": 9,
+            "endFilePos": 147,
+            "endTokenPos": 3
+          }
+        ],
+        "endLine": 10
+      }
+    },
+    "attributes": {
+      "startLine": 10,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Your Rights administration panel.\n *\n * @package WordPress\n * @subpackage Administration\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 7,
+          "endFilePos": 104,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** WordPress Administration Bootstrap */",
+          "line": 9,
+          "filePos": 107,
+          "tokenPos": 3,
+          "endLine": 9,
+          "endFilePos": 147,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 10
+    }
+  },
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_Isset",
+      "vars": [
+        {
+          "nodeType": "Expr_ArrayDimFetch",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "_GET",
+            "attributes": {
+              "startLine": 13,
+              "endLine": 13
+            }
+          },
+          "dim": {
+            "nodeType": "Scalar_String",
+            "value": "privacy-notice",
+            "attributes": {
+              "startLine": 13,
+              "endLine": 13,
+              "kind": 1
+            }
+          },
+          "attributes": {
+            "startLine": 13,
+            "endLine": 13
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 13,
+        "endLine": 13
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "wp_redirect"
+            ],
+            "attributes": {
+              "startLine": 14,
+              "endLine": 14
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "admin_url"
+                  ],
+                  "attributes": {
+                    "startLine": 14,
+                    "endLine": 14
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "privacy.php",
+                      "attributes": {
+                        "startLine": 14,
+                        "endLine": 14,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 14,
+                      "endLine": 14
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 14,
+                  "endLine": 14
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 14,
+                "endLine": 14
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_LNumber",
+                "value": 301,
+                "attributes": {
+                  "startLine": 14,
+                  "endLine": 14,
+                  "kind": 10
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 14,
+                "endLine": 14
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 14,
+            "endLine": 14
+          }
+        },
+        "attributes": {
+          "startLine": 14,
+          "endLine": 14
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Exit",
+          "expr": null,
+          "attributes": {
+            "startLine": 15,
+            "endLine": 15,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 15,
+          "endLine": 15
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 13,
+      "comments": [
+        {
+          "nodeType": "Comment",
+          "text": "// This file was used to also display the Privacy tab on the About screen from 4.9.6 until 5.3.0.\n",
+          "line": 12,
+          "filePos": 187,
+          "tokenPos": 14,
+          "endLine": 13,
+          "endFilePos": 284,
+          "endTokenPos": 14
+        }
+      ],
+      "endLine": 16
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Assign",
+      "var": {
+        "nodeType": "Expr_Variable",
+        "name": "title",
+        "attributes": {
+          "startLine": 18,
+          "endLine": 18
+        }
+      },
+      "expr": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "__"
+          ],
+          "attributes": {
+            "startLine": 18,
+            "endLine": 18
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "Freedoms",
+              "attributes": {
+                "startLine": 18,
+                "endLine": 18,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 18,
+              "endLine": 18
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 18,
+          "endLine": 18
+        }
+      },
+      "attributes": {
+        "startLine": 18,
+        "endLine": 18
+      }
+    },
+    "attributes": {
+      "startLine": 18,
+      "endLine": 18
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Assign",
+      "var": {
+        "nodeType": "Expr_List",
+        "items": [
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Expr_Variable",
+              "name": "display_version",
+              "attributes": {
+                "startLine": 20,
+                "endLine": 20
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 20,
+              "endLine": 20
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 20,
+          "endLine": 20
+        }
+      },
+      "expr": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "explode"
+          ],
+          "attributes": {
+            "startLine": 20,
+            "endLine": 20
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "-",
+              "attributes": {
+                "startLine": 20,
+                "endLine": 20,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 20,
+              "endLine": 20
+            }
+          },
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "get_bloginfo"
+                ],
+                "attributes": {
+                  "startLine": 20,
+                  "endLine": 20
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "version",
+                    "attributes": {
+                      "startLine": 20,
+                      "endLine": 20,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 20,
+                    "endLine": 20
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 20,
+                "endLine": 20
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 20,
+              "endLine": 20
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 20,
+          "endLine": 20
+        }
+      },
+      "attributes": {
+        "startLine": 20,
+        "endLine": 20
+      }
+    },
+    "attributes": {
+      "startLine": 20,
+      "endLine": 20
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_ConstFetch",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "ABSPATH"
+            ],
+            "attributes": {
+              "startLine": 22,
+              "endLine": 22
+            }
+          },
+          "attributes": {
+            "startLine": 22,
+            "endLine": 22
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "wp-admin/admin-header.php",
+          "attributes": {
+            "startLine": 22,
+            "endLine": 22,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 22,
+          "endLine": 22
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 22,
+        "endLine": 22
+      }
+    },
+    "attributes": {
+      "startLine": 22,
+      "endLine": 22
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "<div class=\"wrap about__container\">\n\n\t<div class=\"about__header\">\n\t\t<div class=\"about__header-title\">\n\t\t\t<p>\n\t\t\t\t",
+    "attributes": {
+      "startLine": 24,
+      "hasLeadingNewline": true,
+      "endLine": 29
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 29,
+          "endLine": 29
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "WordPress",
+            "attributes": {
+              "startLine": 29,
+              "endLine": 29,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 29,
+            "endLine": 29
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 29,
+        "endLine": 29
+      }
+    },
+    "attributes": {
+      "startLine": 29,
+      "endLine": 29
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\t\t\t\t<span>",
+    "attributes": {
+      "startLine": 30,
+      "hasLeadingNewline": true,
+      "endLine": 30
+    }
+  },
+  {
+    "nodeType": "Stmt_Echo",
+    "exprs": [
+      {
+        "nodeType": "Expr_Variable",
+        "name": "display_version",
+        "attributes": {
+          "startLine": 30,
+          "endLine": 30
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 30,
+      "endLine": 30
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</span>\n\t\t\t</p>\n\t\t</div>\n\n\t\t<div class=\"about__header-text\">\n\t\t\t<p>\n\t\t\t\t",
+    "attributes": {
+      "startLine": 30,
+      "hasLeadingNewline": false,
+      "endLine": 36
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 36,
+          "endLine": 36
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Building more with blocks, faster and easier.",
+            "attributes": {
+              "startLine": 36,
+              "endLine": 36,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 36,
+            "endLine": 36
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 36,
+        "endLine": 36
+      }
+    },
+    "attributes": {
+      "startLine": 36,
+      "endLine": 36
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\t\t\t</p>\n\t\t</div>\n\n\t\t<nav class=\"about__header-navigation nav-tab-wrapper wp-clearfix\" aria-label=\"",
+    "attributes": {
+      "startLine": 37,
+      "hasLeadingNewline": true,
+      "endLine": 40
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "esc_attr_e"
+        ],
+        "attributes": {
+          "startLine": 40,
+          "endLine": 40
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Secondary menu",
+            "attributes": {
+              "startLine": 40,
+              "endLine": 40,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 40,
+            "endLine": 40
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 40,
+        "endLine": 40
+      }
+    },
+    "attributes": {
+      "startLine": 40,
+      "endLine": 40
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\">\n\t\t\t<a href=\"about.php\" class=\"nav-tab\">",
+    "attributes": {
+      "startLine": 40,
+      "hasLeadingNewline": false,
+      "endLine": 41
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 41,
+          "endLine": 41
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "What&#8217;s New",
+            "attributes": {
+              "startLine": 41,
+              "endLine": 41,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 41,
+            "endLine": 41
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 41,
+        "endLine": 41
+      }
+    },
+    "attributes": {
+      "startLine": 41,
+      "endLine": 41
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</a>\n\t\t\t<a href=\"credits.php\" class=\"nav-tab\">",
+    "attributes": {
+      "startLine": 41,
+      "hasLeadingNewline": false,
+      "endLine": 42
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 42,
+          "endLine": 42
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Credits",
+            "attributes": {
+              "startLine": 42,
+              "endLine": 42,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 42,
+            "endLine": 42
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 42,
+        "endLine": 42
+      }
+    },
+    "attributes": {
+      "startLine": 42,
+      "endLine": 42
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</a>\n\t\t\t<a href=\"freedoms.php\" class=\"nav-tab nav-tab-active\" aria-current=\"page\">",
+    "attributes": {
+      "startLine": 42,
+      "hasLeadingNewline": false,
+      "endLine": 43
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 43,
+          "endLine": 43
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Freedoms",
+            "attributes": {
+              "startLine": 43,
+              "endLine": 43,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 43,
+            "endLine": 43
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 43,
+        "endLine": 43
+      }
+    },
+    "attributes": {
+      "startLine": 43,
+      "endLine": 43
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</a>\n\t\t\t<a href=\"privacy.php\" class=\"nav-tab\">",
+    "attributes": {
+      "startLine": 43,
+      "hasLeadingNewline": false,
+      "endLine": 44
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 44,
+          "endLine": 44
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Privacy",
+            "attributes": {
+              "startLine": 44,
+              "endLine": 44,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 44,
+            "endLine": 44
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 44,
+        "endLine": 44
+      }
+    },
+    "attributes": {
+      "startLine": 44,
+      "endLine": 44
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</a>\n\t\t</nav>\n\t</div>\n\n\t<div class=\"about__section has-subtle-background-color is-feature\">\n\t\t<h1>",
+    "attributes": {
+      "startLine": 44,
+      "hasLeadingNewline": false,
+      "endLine": 49
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 49,
+          "endLine": 49
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Freedoms",
+            "attributes": {
+              "startLine": 49,
+              "endLine": 49,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 49,
+            "endLine": 49
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 49,
+        "endLine": 49
+      }
+    },
+    "attributes": {
+      "startLine": 49,
+      "endLine": 49
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</h1>\n\n\t\t<p class=\"about-description\">\n\t\t",
+    "attributes": {
+      "startLine": 49,
+      "hasLeadingNewline": false,
+      "endLine": 52
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "printf"
+        ],
+        "attributes": {
+          "startLine": 53,
+          "endLine": 53
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "__"
+              ],
+              "attributes": {
+                "startLine": 55,
+                "comments": [
+                  {
+                    "nodeType": "Comment",
+                    "text": "/* translators: %s: https://wordpress.org/about/license/ */",
+                    "line": 54,
+                    "filePos": 1506,
+                    "tokenPos": 203,
+                    "endLine": 54,
+                    "endFilePos": 1564,
+                    "endTokenPos": 203
+                  }
+                ],
+                "endLine": 55
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "WordPress is Free and open source software, built by a distributed community of mostly volunteer developers from around the world. WordPress comes with some awesome, worldview-changing rights courtesy of its <a href=\"%s\">license</a>, the GPL.",
+                  "attributes": {
+                    "startLine": 55,
+                    "endLine": 55,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 55,
+                  "endLine": 55
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 55,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "/* translators: %s: https://wordpress.org/about/license/ */",
+                  "line": 54,
+                  "filePos": 1506,
+                  "tokenPos": 203,
+                  "endLine": 54,
+                  "endFilePos": 1564,
+                  "endTokenPos": 203
+                }
+              ],
+              "endLine": 55
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 55,
+            "comments": [
+              {
+                "nodeType": "Comment",
+                "text": "/* translators: %s: https://wordpress.org/about/license/ */",
+                "line": 54,
+                "filePos": 1506,
+                "tokenPos": 203,
+                "endLine": 54,
+                "endFilePos": 1564,
+                "endTokenPos": 203
+              }
+            ],
+            "endLine": 55
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "__"
+              ],
+              "attributes": {
+                "startLine": 56,
+                "endLine": 56
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "https://wordpress.org/about/license/",
+                  "attributes": {
+                    "startLine": 56,
+                    "endLine": 56,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 56,
+                  "endLine": 56
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 56,
+              "endLine": 56
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 56,
+            "endLine": 56
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 53,
+        "endLine": 57
+      }
+    },
+    "attributes": {
+      "startLine": 53,
+      "endLine": 57
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\t\t</p>\n\t</div>\n\n\t<hr />\n\n\t<div class=\"about__section has-4-columns\">\n\t\t<div class=\"column\">\n\t\t\t<div class=\"freedoms-image\"></div>\n\t\t\t<h3>",
+    "attributes": {
+      "startLine": 59,
+      "hasLeadingNewline": true,
+      "endLine": 67
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 67,
+          "endLine": 67
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "The 1st Freedom",
+            "attributes": {
+              "startLine": 67,
+              "endLine": 67,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 67,
+            "endLine": 67
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 67,
+        "endLine": 67
+      }
+    },
+    "attributes": {
+      "startLine": 67,
+      "endLine": 67
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</h3>\n\t\t\t<p>",
+    "attributes": {
+      "startLine": 67,
+      "hasLeadingNewline": false,
+      "endLine": 68
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 68,
+          "endLine": 68
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "To run the program for any purpose.",
+            "attributes": {
+              "startLine": 68,
+              "endLine": 68,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 68,
+            "endLine": 68
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 68,
+        "endLine": 68
+      }
+    },
+    "attributes": {
+      "startLine": 68,
+      "endLine": 68
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</p>\n\t\t</div>\n\t\t<div class=\"column\">\n\t\t\t<div class=\"freedoms-image\"></div>\n\t\t\t<h3>",
+    "attributes": {
+      "startLine": 68,
+      "hasLeadingNewline": false,
+      "endLine": 72
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 72,
+          "endLine": 72
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "The 2nd Freedom",
+            "attributes": {
+              "startLine": 72,
+              "endLine": 72,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 72,
+            "endLine": 72
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 72,
+        "endLine": 72
+      }
+    },
+    "attributes": {
+      "startLine": 72,
+      "endLine": 72
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</h3>\n\t\t\t<p>",
+    "attributes": {
+      "startLine": 72,
+      "hasLeadingNewline": false,
+      "endLine": 73
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 73,
+          "endLine": 73
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "To study how the program works and change it to make it do what you wish.",
+            "attributes": {
+              "startLine": 73,
+              "endLine": 73,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 73,
+            "endLine": 73
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 73,
+        "endLine": 73
+      }
+    },
+    "attributes": {
+      "startLine": 73,
+      "endLine": 73
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</p>\n\t\t</div>\n\t\t<div class=\"column\">\n\t\t\t<div class=\"freedoms-image\"></div>\n\t\t\t<h3>",
+    "attributes": {
+      "startLine": 73,
+      "hasLeadingNewline": false,
+      "endLine": 77
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 77,
+          "endLine": 77
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "The 3rd Freedom",
+            "attributes": {
+              "startLine": 77,
+              "endLine": 77,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 77,
+            "endLine": 77
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 77,
+        "endLine": 77
+      }
+    },
+    "attributes": {
+      "startLine": 77,
+      "endLine": 77
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</h3>\n\t\t\t<p>",
+    "attributes": {
+      "startLine": 77,
+      "hasLeadingNewline": false,
+      "endLine": 78
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 78,
+          "endLine": 78
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "To redistribute.",
+            "attributes": {
+              "startLine": 78,
+              "endLine": 78,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 78,
+            "endLine": 78
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 78,
+        "endLine": 78
+      }
+    },
+    "attributes": {
+      "startLine": 78,
+      "endLine": 78
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</p>\n\t\t</div>\n\t\t<div class=\"column\">\n\t\t\t<div class=\"freedoms-image\"></div>\n\t\t\t<h3>",
+    "attributes": {
+      "startLine": 78,
+      "hasLeadingNewline": false,
+      "endLine": 82
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 82,
+          "endLine": 82
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "The 4th Freedom",
+            "attributes": {
+              "startLine": 82,
+              "endLine": 82,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 82,
+            "endLine": 82
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 82,
+        "endLine": 82
+      }
+    },
+    "attributes": {
+      "startLine": 82,
+      "endLine": 82
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</h3>\n\t\t\t<p>",
+    "attributes": {
+      "startLine": 82,
+      "hasLeadingNewline": false,
+      "endLine": 83
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 83,
+          "endLine": 83
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "To distribute copies of your modified versions to others.",
+            "attributes": {
+              "startLine": 83,
+              "endLine": 83,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 83,
+            "endLine": 83
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 83,
+        "endLine": 83
+      }
+    },
+    "attributes": {
+      "startLine": 83,
+      "endLine": 83
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</p>\n\t\t</div>\n\t</div>\n\n\t<hr />\n\n\t<div class=\"about__section\">\n\t\t<div class=\"column\">\n\t\t\t<p>\n\t\t\t",
+    "attributes": {
+      "startLine": 83,
+      "hasLeadingNewline": false,
+      "endLine": 92
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "printf"
+        ],
+        "attributes": {
+          "startLine": 93,
+          "endLine": 93
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "__"
+              ],
+              "attributes": {
+                "startLine": 95,
+                "comments": [
+                  {
+                    "nodeType": "Comment",
+                    "text": "/* translators: %s: https://wordpressfoundation.org/trademark-policy/ */",
+                    "line": 94,
+                    "filePos": 2811,
+                    "tokenPos": 318,
+                    "endLine": 94,
+                    "endFilePos": 2882,
+                    "endTokenPos": 318
+                  }
+                ],
+                "endLine": 95
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "WordPress grows when people like you tell their friends about it, and the thousands of businesses and services that are built on and around WordPress share that fact with their users. We&#8217;re flattered every time someone spreads the good word, just make sure to <a href=\"%s\">check out our trademark guidelines</a> first.",
+                  "attributes": {
+                    "startLine": 95,
+                    "endLine": 95,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 95,
+                  "endLine": 95
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 95,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "/* translators: %s: https://wordpressfoundation.org/trademark-policy/ */",
+                  "line": 94,
+                  "filePos": 2811,
+                  "tokenPos": 318,
+                  "endLine": 94,
+                  "endFilePos": 2882,
+                  "endTokenPos": 318
+                }
+              ],
+              "endLine": 95
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 95,
+            "comments": [
+              {
+                "nodeType": "Comment",
+                "text": "/* translators: %s: https://wordpressfoundation.org/trademark-policy/ */",
+                "line": 94,
+                "filePos": 2811,
+                "tokenPos": 318,
+                "endLine": 94,
+                "endFilePos": 2882,
+                "endTokenPos": 318
+              }
+            ],
+            "endLine": 95
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "https://wordpressfoundation.org/trademark-policy/",
+            "attributes": {
+              "startLine": 96,
+              "endLine": 96,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 96,
+            "endLine": 96
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 93,
+        "endLine": 97
+      }
+    },
+    "attributes": {
+      "startLine": 93,
+      "endLine": 97
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\t\t\t</p>\n\n\t\t\t<p>\n\t\t\t",
+    "attributes": {
+      "startLine": 99,
+      "hasLeadingNewline": true,
+      "endLine": 102
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Assign",
+      "var": {
+        "nodeType": "Expr_Variable",
+        "name": "plugins_url",
+        "attributes": {
+          "startLine": 103,
+          "endLine": 103
+        }
+      },
+      "expr": {
+        "nodeType": "Expr_Ternary",
+        "cond": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "current_user_can"
+            ],
+            "attributes": {
+              "startLine": 103,
+              "endLine": 103
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "activate_plugins",
+                "attributes": {
+                  "startLine": 103,
+                  "endLine": 103,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 103,
+                "endLine": 103
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 103,
+            "endLine": 103
+          }
+        },
+        "if": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "admin_url"
+            ],
+            "attributes": {
+              "startLine": 103,
+              "endLine": 103
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "plugins.php",
+                "attributes": {
+                  "startLine": 103,
+                  "endLine": 103,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 103,
+                "endLine": 103
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 103,
+            "endLine": 103
+          }
+        },
+        "else": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "__"
+            ],
+            "attributes": {
+              "startLine": 103,
+              "endLine": 103
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "https://wordpress.org/plugins/",
+                "attributes": {
+                  "startLine": 103,
+                  "endLine": 103,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 103,
+                "endLine": 103
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 103,
+            "endLine": 103
+          }
+        },
+        "attributes": {
+          "startLine": 103,
+          "endLine": 103
+        }
+      },
+      "attributes": {
+        "startLine": 103,
+        "endLine": 103
+      }
+    },
+    "attributes": {
+      "startLine": 103,
+      "endLine": 103
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Assign",
+      "var": {
+        "nodeType": "Expr_Variable",
+        "name": "themes_url",
+        "attributes": {
+          "startLine": 104,
+          "endLine": 104
+        }
+      },
+      "expr": {
+        "nodeType": "Expr_Ternary",
+        "cond": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "current_user_can"
+            ],
+            "attributes": {
+              "startLine": 104,
+              "endLine": 104
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "switch_themes",
+                "attributes": {
+                  "startLine": 104,
+                  "endLine": 104,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 104,
+                "endLine": 104
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 104,
+            "endLine": 104
+          }
+        },
+        "if": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "admin_url"
+            ],
+            "attributes": {
+              "startLine": 104,
+              "endLine": 104
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "themes.php",
+                "attributes": {
+                  "startLine": 104,
+                  "endLine": 104,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 104,
+                "endLine": 104
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 104,
+            "endLine": 104
+          }
+        },
+        "else": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "__"
+            ],
+            "attributes": {
+              "startLine": 104,
+              "endLine": 104
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "https://wordpress.org/themes/",
+                "attributes": {
+                  "startLine": 104,
+                  "endLine": 104,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 104,
+                "endLine": 104
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 104,
+            "endLine": 104
+          }
+        },
+        "attributes": {
+          "startLine": 104,
+          "endLine": 104
+        }
+      },
+      "attributes": {
+        "startLine": 104,
+        "endLine": 104
+      }
+    },
+    "attributes": {
+      "startLine": 104,
+      "endLine": 104
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "printf"
+        ],
+        "attributes": {
+          "startLine": 105,
+          "endLine": 105
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "__"
+              ],
+              "attributes": {
+                "startLine": 107,
+                "comments": [
+                  {
+                    "nodeType": "Comment",
+                    "text": "/* translators: 1: URL to Plugins screen, 2: URL to Themes screen, 3: https://wordpress.org/about/license/ */",
+                    "line": 106,
+                    "filePos": 3581,
+                    "tokenPos": 400,
+                    "endLine": 106,
+                    "endFilePos": 3689,
+                    "endTokenPos": 400
+                  }
+                ],
+                "endLine": 107
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "Every plugin and theme in WordPress.org&#8217;s directory is 100%% GPL or a similarly free and compatible license, so you can feel safe finding <a href=\"%1$s\">plugins</a> and <a href=\"%2$s\">themes</a> there. If you get a plugin or theme from another source, make sure to <a href=\"%3$s\">ask them if it&#8217;s GPL</a> first. If they don&#8217;t respect the WordPress license, we don&#8217;t recommend them.",
+                  "attributes": {
+                    "startLine": 107,
+                    "endLine": 107,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 107,
+                  "endLine": 107
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 107,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "/* translators: 1: URL to Plugins screen, 2: URL to Themes screen, 3: https://wordpress.org/about/license/ */",
+                  "line": 106,
+                  "filePos": 3581,
+                  "tokenPos": 400,
+                  "endLine": 106,
+                  "endFilePos": 3689,
+                  "endTokenPos": 400
+                }
+              ],
+              "endLine": 107
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 107,
+            "comments": [
+              {
+                "nodeType": "Comment",
+                "text": "/* translators: 1: URL to Plugins screen, 2: URL to Themes screen, 3: https://wordpress.org/about/license/ */",
+                "line": 106,
+                "filePos": 3581,
+                "tokenPos": 400,
+                "endLine": 106,
+                "endFilePos": 3689,
+                "endTokenPos": 400
+              }
+            ],
+            "endLine": 107
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_Variable",
+            "name": "plugins_url",
+            "attributes": {
+              "startLine": 108,
+              "endLine": 108
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 108,
+            "endLine": 108
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_Variable",
+            "name": "themes_url",
+            "attributes": {
+              "startLine": 109,
+              "endLine": 109
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 109,
+            "endLine": 109
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "__"
+              ],
+              "attributes": {
+                "startLine": 110,
+                "endLine": 110
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "https://wordpress.org/about/license/",
+                  "attributes": {
+                    "startLine": 110,
+                    "endLine": 110,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 110,
+                  "endLine": 110
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 110,
+              "endLine": 110
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 110,
+            "endLine": 110
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 105,
+        "endLine": 111
+      }
+    },
+    "attributes": {
+      "startLine": 105,
+      "endLine": 111
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\t\t\t</p>\n\n\t\t\t<p>",
+    "attributes": {
+      "startLine": 113,
+      "hasLeadingNewline": true,
+      "endLine": 115
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 115,
+          "endLine": 115
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Don&#8217;t you wish all software came with these freedoms? So do we! For more information, check out the <a href=\"https://www.fsf.org/\">Free Software Foundation</a>.",
+            "attributes": {
+              "startLine": 115,
+              "endLine": 115,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 115,
+            "endLine": 115
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 115,
+        "endLine": 115
+      }
+    },
+    "attributes": {
+      "startLine": 115,
+      "endLine": 115
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</p>\n\t\t</div>\n\t</div>\n\n</div>\n",
+    "attributes": {
+      "startLine": 115,
+      "hasLeadingNewline": false,
+      "endLine": 120
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_ConstFetch",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "ABSPATH"
+            ],
+            "attributes": {
+              "startLine": 120,
+              "endLine": 120
+            }
+          },
+          "attributes": {
+            "startLine": 120,
+            "endLine": 120
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "wp-admin/admin-footer.php",
+          "attributes": {
+            "startLine": 120,
+            "endLine": 120,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 120,
+          "endLine": 120
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 120,
+        "endLine": 120
+      }
+    },
+    "attributes": {
+      "startLine": 120,
+      "endLine": 120
+    }
+  }
+]

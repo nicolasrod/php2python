@@ -1,0 +1,1365 @@
+[
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_BooleanNot",
+      "expr": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "function_exists"
+          ],
+          "attributes": {
+            "startLine": 10,
+            "endLine": 10
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "twentytwenty_the_theme_svg",
+              "attributes": {
+                "startLine": 10,
+                "endLine": 10,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 10,
+              "endLine": 10
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 10,
+          "endLine": 10
+        }
+      },
+      "attributes": {
+        "startLine": 10,
+        "endLine": 10
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Function",
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "twentytwenty_the_theme_svg",
+          "attributes": {
+            "startLine": 19,
+            "endLine": 19
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "svg_name",
+              "attributes": {
+                "startLine": 19,
+                "endLine": 19
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 19,
+              "endLine": 19
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "group",
+              "attributes": {
+                "startLine": 19,
+                "endLine": 19
+              }
+            },
+            "default": {
+              "nodeType": "Scalar_String",
+              "value": "ui",
+              "attributes": {
+                "startLine": 19,
+                "endLine": 19,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 19,
+              "endLine": 19
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "color",
+              "attributes": {
+                "startLine": 19,
+                "endLine": 19
+              }
+            },
+            "default": {
+              "nodeType": "Scalar_String",
+              "value": "",
+              "attributes": {
+                "startLine": 19,
+                "endLine": 19,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 19,
+              "endLine": 19
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Echo",
+            "exprs": [
+              {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "twentytwenty_get_theme_svg"
+                  ],
+                  "attributes": {
+                    "startLine": 20,
+                    "endLine": 20
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "svg_name",
+                      "attributes": {
+                        "startLine": 20,
+                        "endLine": 20
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 20,
+                      "endLine": 20
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "group",
+                      "attributes": {
+                        "startLine": 20,
+                        "endLine": 20
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 20,
+                      "endLine": 20
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "color",
+                      "attributes": {
+                        "startLine": 20,
+                        "endLine": 20
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 20,
+                      "endLine": 20
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 20,
+                  "endLine": 20
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 20,
+              "endLine": 20
+            }
+          },
+          {
+            "nodeType": "Stmt_Nop",
+            "attributes": {
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped in twentytwenty_get_theme_svg().\n",
+                  "line": 20,
+                  "filePos": 613,
+                  "tokenPos": 63,
+                  "endLine": 21,
+                  "endFilePos": 721,
+                  "endTokenPos": 63
+                }
+              ],
+              "startLine": 21,
+              "endLine": 21,
+              "startFilePos": 722,
+              "endFilePos": 721,
+              "startTokenPos": 64,
+              "endTokenPos": 63
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 19,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Output and Get Theme SVG.\n\t * Output and get the SVG markup for an icon in the TwentyTwenty_SVG_Icons class.\n\t *\n\t * @param string $svg_name The name of the icon.\n\t * @param string $group The group the icon belongs to.\n\t * @param string $color Color code.\n\t */",
+              "line": 11,
+              "filePos": 200,
+              "tokenPos": 20,
+              "endLine": 18,
+              "endFilePos": 467,
+              "endTokenPos": 20
+            }
+          ],
+          "endLine": 21
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 10,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Twenty Twenty SVG Icon helper functions\n *\n * @package WordPress\n * @subpackage Twenty_Twenty\n * @since Twenty Twenty 1.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 8,
+          "endFilePos": 137,
+          "endTokenPos": 1
+        }
+      ],
+      "endLine": 22
+    }
+  },
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_BooleanNot",
+      "expr": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "function_exists"
+          ],
+          "attributes": {
+            "startLine": 24,
+            "endLine": 24
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "twentytwenty_get_theme_svg",
+              "attributes": {
+                "startLine": 24,
+                "endLine": 24,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 24,
+              "endLine": 24
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 24,
+          "endLine": 24
+        }
+      },
+      "attributes": {
+        "startLine": 24,
+        "endLine": 24
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Function",
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "twentytwenty_get_theme_svg",
+          "attributes": {
+            "startLine": 33,
+            "endLine": 33
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "svg_name",
+              "attributes": {
+                "startLine": 33,
+                "endLine": 33
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 33,
+              "endLine": 33
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "group",
+              "attributes": {
+                "startLine": 33,
+                "endLine": 33
+              }
+            },
+            "default": {
+              "nodeType": "Scalar_String",
+              "value": "ui",
+              "attributes": {
+                "startLine": 33,
+                "endLine": 33,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 33,
+              "endLine": 33
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "color",
+              "attributes": {
+                "startLine": 33,
+                "endLine": 33
+              }
+            },
+            "default": {
+              "nodeType": "Scalar_String",
+              "value": "",
+              "attributes": {
+                "startLine": 33,
+                "endLine": 33,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 33,
+              "endLine": 33
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "svg",
+                "attributes": {
+                  "startLine": 36,
+                  "comments": [
+                    {
+                      "nodeType": "Comment",
+                      "text": "// Make sure that only our allowed tags and attributes are included.\n",
+                      "line": 35,
+                      "filePos": 1068,
+                      "tokenPos": 113,
+                      "endLine": 36,
+                      "endFilePos": 1136,
+                      "endTokenPos": 113
+                    }
+                  ],
+                  "endLine": 36
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "wp_kses"
+                  ],
+                  "attributes": {
+                    "startLine": 36,
+                    "endLine": 36
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_StaticCall",
+                      "class": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "TwentyTwenty_SVG_Icons"
+                        ],
+                        "attributes": {
+                          "startLine": 37,
+                          "endLine": 37
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "get_svg",
+                        "attributes": {
+                          "startLine": 37,
+                          "endLine": 37
+                        }
+                      },
+                      "args": [
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Expr_Variable",
+                            "name": "svg_name",
+                            "attributes": {
+                              "startLine": 37,
+                              "endLine": 37
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 37,
+                            "endLine": 37
+                          }
+                        },
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Expr_Variable",
+                            "name": "group",
+                            "attributes": {
+                              "startLine": 37,
+                              "endLine": 37
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 37,
+                            "endLine": 37
+                          }
+                        },
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Expr_Variable",
+                            "name": "color",
+                            "attributes": {
+                              "startLine": 37,
+                              "endLine": 37
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 37,
+                            "endLine": 37
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 37,
+                        "endLine": 37
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 37,
+                      "endLine": 37
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Array",
+                      "items": [
+                        {
+                          "nodeType": "Expr_ArrayItem",
+                          "key": {
+                            "nodeType": "Scalar_String",
+                            "value": "svg",
+                            "attributes": {
+                              "startLine": 39,
+                              "endLine": 39,
+                              "kind": 1
+                            }
+                          },
+                          "value": {
+                            "nodeType": "Expr_Array",
+                            "items": [
+                              {
+                                "nodeType": "Expr_ArrayItem",
+                                "key": {
+                                  "nodeType": "Scalar_String",
+                                  "value": "class",
+                                  "attributes": {
+                                    "startLine": 40,
+                                    "endLine": 40,
+                                    "kind": 1
+                                  }
+                                },
+                                "value": {
+                                  "nodeType": "Expr_ConstFetch",
+                                  "name": {
+                                    "nodeType": "Name",
+                                    "parts": [
+                                      "true"
+                                    ],
+                                    "attributes": {
+                                      "startLine": 40,
+                                      "endLine": 40
+                                    }
+                                  },
+                                  "attributes": {
+                                    "startLine": 40,
+                                    "endLine": 40
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 40,
+                                  "endLine": 40
+                                }
+                              },
+                              {
+                                "nodeType": "Expr_ArrayItem",
+                                "key": {
+                                  "nodeType": "Scalar_String",
+                                  "value": "xmlns",
+                                  "attributes": {
+                                    "startLine": 41,
+                                    "endLine": 41,
+                                    "kind": 1
+                                  }
+                                },
+                                "value": {
+                                  "nodeType": "Expr_ConstFetch",
+                                  "name": {
+                                    "nodeType": "Name",
+                                    "parts": [
+                                      "true"
+                                    ],
+                                    "attributes": {
+                                      "startLine": 41,
+                                      "endLine": 41
+                                    }
+                                  },
+                                  "attributes": {
+                                    "startLine": 41,
+                                    "endLine": 41
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 41,
+                                  "endLine": 41
+                                }
+                              },
+                              {
+                                "nodeType": "Expr_ArrayItem",
+                                "key": {
+                                  "nodeType": "Scalar_String",
+                                  "value": "width",
+                                  "attributes": {
+                                    "startLine": 42,
+                                    "endLine": 42,
+                                    "kind": 1
+                                  }
+                                },
+                                "value": {
+                                  "nodeType": "Expr_ConstFetch",
+                                  "name": {
+                                    "nodeType": "Name",
+                                    "parts": [
+                                      "true"
+                                    ],
+                                    "attributes": {
+                                      "startLine": 42,
+                                      "endLine": 42
+                                    }
+                                  },
+                                  "attributes": {
+                                    "startLine": 42,
+                                    "endLine": 42
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 42,
+                                  "endLine": 42
+                                }
+                              },
+                              {
+                                "nodeType": "Expr_ArrayItem",
+                                "key": {
+                                  "nodeType": "Scalar_String",
+                                  "value": "height",
+                                  "attributes": {
+                                    "startLine": 43,
+                                    "endLine": 43,
+                                    "kind": 1
+                                  }
+                                },
+                                "value": {
+                                  "nodeType": "Expr_ConstFetch",
+                                  "name": {
+                                    "nodeType": "Name",
+                                    "parts": [
+                                      "true"
+                                    ],
+                                    "attributes": {
+                                      "startLine": 43,
+                                      "endLine": 43
+                                    }
+                                  },
+                                  "attributes": {
+                                    "startLine": 43,
+                                    "endLine": 43
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 43,
+                                  "endLine": 43
+                                }
+                              },
+                              {
+                                "nodeType": "Expr_ArrayItem",
+                                "key": {
+                                  "nodeType": "Scalar_String",
+                                  "value": "viewbox",
+                                  "attributes": {
+                                    "startLine": 44,
+                                    "endLine": 44,
+                                    "kind": 1
+                                  }
+                                },
+                                "value": {
+                                  "nodeType": "Expr_ConstFetch",
+                                  "name": {
+                                    "nodeType": "Name",
+                                    "parts": [
+                                      "true"
+                                    ],
+                                    "attributes": {
+                                      "startLine": 44,
+                                      "endLine": 44
+                                    }
+                                  },
+                                  "attributes": {
+                                    "startLine": 44,
+                                    "endLine": 44
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 44,
+                                  "endLine": 44
+                                }
+                              },
+                              {
+                                "nodeType": "Expr_ArrayItem",
+                                "key": {
+                                  "nodeType": "Scalar_String",
+                                  "value": "aria-hidden",
+                                  "attributes": {
+                                    "startLine": 45,
+                                    "endLine": 45,
+                                    "kind": 1
+                                  }
+                                },
+                                "value": {
+                                  "nodeType": "Expr_ConstFetch",
+                                  "name": {
+                                    "nodeType": "Name",
+                                    "parts": [
+                                      "true"
+                                    ],
+                                    "attributes": {
+                                      "startLine": 45,
+                                      "endLine": 45
+                                    }
+                                  },
+                                  "attributes": {
+                                    "startLine": 45,
+                                    "endLine": 45
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 45,
+                                  "endLine": 45
+                                }
+                              },
+                              {
+                                "nodeType": "Expr_ArrayItem",
+                                "key": {
+                                  "nodeType": "Scalar_String",
+                                  "value": "role",
+                                  "attributes": {
+                                    "startLine": 46,
+                                    "endLine": 46,
+                                    "kind": 1
+                                  }
+                                },
+                                "value": {
+                                  "nodeType": "Expr_ConstFetch",
+                                  "name": {
+                                    "nodeType": "Name",
+                                    "parts": [
+                                      "true"
+                                    ],
+                                    "attributes": {
+                                      "startLine": 46,
+                                      "endLine": 46
+                                    }
+                                  },
+                                  "attributes": {
+                                    "startLine": 46,
+                                    "endLine": 46
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 46,
+                                  "endLine": 46
+                                }
+                              },
+                              {
+                                "nodeType": "Expr_ArrayItem",
+                                "key": {
+                                  "nodeType": "Scalar_String",
+                                  "value": "focusable",
+                                  "attributes": {
+                                    "startLine": 47,
+                                    "endLine": 47,
+                                    "kind": 1
+                                  }
+                                },
+                                "value": {
+                                  "nodeType": "Expr_ConstFetch",
+                                  "name": {
+                                    "nodeType": "Name",
+                                    "parts": [
+                                      "true"
+                                    ],
+                                    "attributes": {
+                                      "startLine": 47,
+                                      "endLine": 47
+                                    }
+                                  },
+                                  "attributes": {
+                                    "startLine": 47,
+                                    "endLine": 47
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 47,
+                                  "endLine": 47
+                                }
+                              }
+                            ],
+                            "attributes": {
+                              "startLine": 39,
+                              "endLine": 48,
+                              "kind": 1
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 39,
+                            "endLine": 48
+                          }
+                        },
+                        {
+                          "nodeType": "Expr_ArrayItem",
+                          "key": {
+                            "nodeType": "Scalar_String",
+                            "value": "path",
+                            "attributes": {
+                              "startLine": 49,
+                              "endLine": 49,
+                              "kind": 1
+                            }
+                          },
+                          "value": {
+                            "nodeType": "Expr_Array",
+                            "items": [
+                              {
+                                "nodeType": "Expr_ArrayItem",
+                                "key": {
+                                  "nodeType": "Scalar_String",
+                                  "value": "fill",
+                                  "attributes": {
+                                    "startLine": 50,
+                                    "endLine": 50,
+                                    "kind": 1
+                                  }
+                                },
+                                "value": {
+                                  "nodeType": "Expr_ConstFetch",
+                                  "name": {
+                                    "nodeType": "Name",
+                                    "parts": [
+                                      "true"
+                                    ],
+                                    "attributes": {
+                                      "startLine": 50,
+                                      "endLine": 50
+                                    }
+                                  },
+                                  "attributes": {
+                                    "startLine": 50,
+                                    "endLine": 50
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 50,
+                                  "endLine": 50
+                                }
+                              },
+                              {
+                                "nodeType": "Expr_ArrayItem",
+                                "key": {
+                                  "nodeType": "Scalar_String",
+                                  "value": "fill-rule",
+                                  "attributes": {
+                                    "startLine": 51,
+                                    "endLine": 51,
+                                    "kind": 1
+                                  }
+                                },
+                                "value": {
+                                  "nodeType": "Expr_ConstFetch",
+                                  "name": {
+                                    "nodeType": "Name",
+                                    "parts": [
+                                      "true"
+                                    ],
+                                    "attributes": {
+                                      "startLine": 51,
+                                      "endLine": 51
+                                    }
+                                  },
+                                  "attributes": {
+                                    "startLine": 51,
+                                    "endLine": 51
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 51,
+                                  "endLine": 51
+                                }
+                              },
+                              {
+                                "nodeType": "Expr_ArrayItem",
+                                "key": {
+                                  "nodeType": "Scalar_String",
+                                  "value": "d",
+                                  "attributes": {
+                                    "startLine": 52,
+                                    "endLine": 52,
+                                    "kind": 1
+                                  }
+                                },
+                                "value": {
+                                  "nodeType": "Expr_ConstFetch",
+                                  "name": {
+                                    "nodeType": "Name",
+                                    "parts": [
+                                      "true"
+                                    ],
+                                    "attributes": {
+                                      "startLine": 52,
+                                      "endLine": 52
+                                    }
+                                  },
+                                  "attributes": {
+                                    "startLine": 52,
+                                    "endLine": 52
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 52,
+                                  "endLine": 52
+                                }
+                              },
+                              {
+                                "nodeType": "Expr_ArrayItem",
+                                "key": {
+                                  "nodeType": "Scalar_String",
+                                  "value": "transform",
+                                  "attributes": {
+                                    "startLine": 53,
+                                    "endLine": 53,
+                                    "kind": 1
+                                  }
+                                },
+                                "value": {
+                                  "nodeType": "Expr_ConstFetch",
+                                  "name": {
+                                    "nodeType": "Name",
+                                    "parts": [
+                                      "true"
+                                    ],
+                                    "attributes": {
+                                      "startLine": 53,
+                                      "endLine": 53
+                                    }
+                                  },
+                                  "attributes": {
+                                    "startLine": 53,
+                                    "endLine": 53
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 53,
+                                  "endLine": 53
+                                }
+                              }
+                            ],
+                            "attributes": {
+                              "startLine": 49,
+                              "endLine": 54,
+                              "kind": 1
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 49,
+                            "endLine": 54
+                          }
+                        },
+                        {
+                          "nodeType": "Expr_ArrayItem",
+                          "key": {
+                            "nodeType": "Scalar_String",
+                            "value": "polygon",
+                            "attributes": {
+                              "startLine": 55,
+                              "endLine": 55,
+                              "kind": 1
+                            }
+                          },
+                          "value": {
+                            "nodeType": "Expr_Array",
+                            "items": [
+                              {
+                                "nodeType": "Expr_ArrayItem",
+                                "key": {
+                                  "nodeType": "Scalar_String",
+                                  "value": "fill",
+                                  "attributes": {
+                                    "startLine": 56,
+                                    "endLine": 56,
+                                    "kind": 1
+                                  }
+                                },
+                                "value": {
+                                  "nodeType": "Expr_ConstFetch",
+                                  "name": {
+                                    "nodeType": "Name",
+                                    "parts": [
+                                      "true"
+                                    ],
+                                    "attributes": {
+                                      "startLine": 56,
+                                      "endLine": 56
+                                    }
+                                  },
+                                  "attributes": {
+                                    "startLine": 56,
+                                    "endLine": 56
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 56,
+                                  "endLine": 56
+                                }
+                              },
+                              {
+                                "nodeType": "Expr_ArrayItem",
+                                "key": {
+                                  "nodeType": "Scalar_String",
+                                  "value": "fill-rule",
+                                  "attributes": {
+                                    "startLine": 57,
+                                    "endLine": 57,
+                                    "kind": 1
+                                  }
+                                },
+                                "value": {
+                                  "nodeType": "Expr_ConstFetch",
+                                  "name": {
+                                    "nodeType": "Name",
+                                    "parts": [
+                                      "true"
+                                    ],
+                                    "attributes": {
+                                      "startLine": 57,
+                                      "endLine": 57
+                                    }
+                                  },
+                                  "attributes": {
+                                    "startLine": 57,
+                                    "endLine": 57
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 57,
+                                  "endLine": 57
+                                }
+                              },
+                              {
+                                "nodeType": "Expr_ArrayItem",
+                                "key": {
+                                  "nodeType": "Scalar_String",
+                                  "value": "points",
+                                  "attributes": {
+                                    "startLine": 58,
+                                    "endLine": 58,
+                                    "kind": 1
+                                  }
+                                },
+                                "value": {
+                                  "nodeType": "Expr_ConstFetch",
+                                  "name": {
+                                    "nodeType": "Name",
+                                    "parts": [
+                                      "true"
+                                    ],
+                                    "attributes": {
+                                      "startLine": 58,
+                                      "endLine": 58
+                                    }
+                                  },
+                                  "attributes": {
+                                    "startLine": 58,
+                                    "endLine": 58
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 58,
+                                  "endLine": 58
+                                }
+                              },
+                              {
+                                "nodeType": "Expr_ArrayItem",
+                                "key": {
+                                  "nodeType": "Scalar_String",
+                                  "value": "transform",
+                                  "attributes": {
+                                    "startLine": 59,
+                                    "endLine": 59,
+                                    "kind": 1
+                                  }
+                                },
+                                "value": {
+                                  "nodeType": "Expr_ConstFetch",
+                                  "name": {
+                                    "nodeType": "Name",
+                                    "parts": [
+                                      "true"
+                                    ],
+                                    "attributes": {
+                                      "startLine": 59,
+                                      "endLine": 59
+                                    }
+                                  },
+                                  "attributes": {
+                                    "startLine": 59,
+                                    "endLine": 59
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 59,
+                                  "endLine": 59
+                                }
+                              },
+                              {
+                                "nodeType": "Expr_ArrayItem",
+                                "key": {
+                                  "nodeType": "Scalar_String",
+                                  "value": "focusable",
+                                  "attributes": {
+                                    "startLine": 60,
+                                    "endLine": 60,
+                                    "kind": 1
+                                  }
+                                },
+                                "value": {
+                                  "nodeType": "Expr_ConstFetch",
+                                  "name": {
+                                    "nodeType": "Name",
+                                    "parts": [
+                                      "true"
+                                    ],
+                                    "attributes": {
+                                      "startLine": 60,
+                                      "endLine": 60
+                                    }
+                                  },
+                                  "attributes": {
+                                    "startLine": 60,
+                                    "endLine": 60
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 60,
+                                  "endLine": 60
+                                }
+                              }
+                            ],
+                            "attributes": {
+                              "startLine": 55,
+                              "endLine": 61,
+                              "kind": 1
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 55,
+                            "endLine": 61
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 38,
+                        "endLine": 62,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 38,
+                      "endLine": 62
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 36,
+                  "endLine": 63
+                }
+              },
+              "attributes": {
+                "startLine": 36,
+                "comments": [
+                  {
+                    "nodeType": "Comment",
+                    "text": "// Make sure that only our allowed tags and attributes are included.\n",
+                    "line": 35,
+                    "filePos": 1068,
+                    "tokenPos": 113,
+                    "endLine": 36,
+                    "endFilePos": 1136,
+                    "endTokenPos": 113
+                  }
+                ],
+                "endLine": 63
+              }
+            },
+            "attributes": {
+              "startLine": 36,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// Make sure that only our allowed tags and attributes are included.\n",
+                  "line": 35,
+                  "filePos": 1068,
+                  "tokenPos": 113,
+                  "endLine": 36,
+                  "endFilePos": 1136,
+                  "endTokenPos": 113
+                }
+              ],
+              "endLine": 63
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BooleanNot",
+              "expr": {
+                "nodeType": "Expr_Variable",
+                "name": "svg",
+                "attributes": {
+                  "startLine": 65,
+                  "endLine": 65
+                }
+              },
+              "attributes": {
+                "startLine": 65,
+                "endLine": 65
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Return",
+                "expr": {
+                  "nodeType": "Expr_ConstFetch",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "false"
+                    ],
+                    "attributes": {
+                      "startLine": 66,
+                      "endLine": 66
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 66,
+                    "endLine": 66
+                  }
+                },
+                "attributes": {
+                  "startLine": 66,
+                  "endLine": 66
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 65,
+              "endLine": 67
+            }
+          },
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_Variable",
+              "name": "svg",
+              "attributes": {
+                "startLine": 68,
+                "endLine": 68
+              }
+            },
+            "attributes": {
+              "startLine": 68,
+              "endLine": 68
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 33,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Get information about the SVG icon.\n\t *\n\t * @param string $svg_name The name of the icon.\n\t * @param string $group The group the icon belongs to.\n\t * @param string $color Color code.\n\t */",
+              "line": 26,
+              "filePos": 789,
+              "tokenPos": 86,
+              "endLine": 32,
+              "endFilePos": 983,
+              "endTokenPos": 86
+            }
+          ],
+          "endLine": 69
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 24,
+      "endLine": 70
+    }
+  }
+]

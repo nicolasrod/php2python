@@ -1,0 +1,1843 @@
+[
+  {
+    "nodeType": "Stmt_Class",
+    "flags": 0,
+    "extends": {
+      "nodeType": "Name",
+      "parts": [
+        "WP_Upgrader_Skin"
+      ],
+      "attributes": {
+        "startLine": 18,
+        "endLine": 18
+      }
+    },
+    "implements": [],
+    "name": {
+      "nodeType": "Identifier",
+      "name": "Language_Pack_Upgrader_Skin",
+      "attributes": {
+        "startLine": 18,
+        "endLine": 18
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "language_update",
+              "attributes": {
+                "startLine": 19,
+                "endLine": 19
+              }
+            },
+            "default": {
+              "nodeType": "Expr_ConstFetch",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "null"
+                ],
+                "attributes": {
+                  "startLine": 19,
+                  "endLine": 19
+                }
+              },
+              "attributes": {
+                "startLine": 19,
+                "endLine": 19
+              }
+            },
+            "attributes": {
+              "startLine": 19,
+              "endLine": 19
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 19,
+          "endLine": 19
+        }
+      },
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "done_header",
+              "attributes": {
+                "startLine": 20,
+                "endLine": 20
+              }
+            },
+            "default": {
+              "nodeType": "Expr_ConstFetch",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "false"
+                ],
+                "attributes": {
+                  "startLine": 20,
+                  "endLine": 20
+                }
+              },
+              "attributes": {
+                "startLine": 20,
+                "endLine": 20
+              }
+            },
+            "attributes": {
+              "startLine": 20,
+              "endLine": 20
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 20,
+          "endLine": 20
+        }
+      },
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "done_footer",
+              "attributes": {
+                "startLine": 21,
+                "endLine": 21
+              }
+            },
+            "default": {
+              "nodeType": "Expr_ConstFetch",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "false"
+                ],
+                "attributes": {
+                  "startLine": 21,
+                  "endLine": 21
+                }
+              },
+              "attributes": {
+                "startLine": 21,
+                "endLine": 21
+              }
+            },
+            "attributes": {
+              "startLine": 21,
+              "endLine": 21
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 21,
+          "endLine": 21
+        }
+      },
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "display_footer_actions",
+              "attributes": {
+                "startLine": 22,
+                "endLine": 22
+              }
+            },
+            "default": {
+              "nodeType": "Expr_ConstFetch",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "true"
+                ],
+                "attributes": {
+                  "startLine": 22,
+                  "endLine": 22
+                }
+              },
+              "attributes": {
+                "startLine": 22,
+                "endLine": 22
+              }
+            },
+            "attributes": {
+              "startLine": 22,
+              "endLine": 22
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 22,
+          "endLine": 22
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "__construct",
+          "attributes": {
+            "startLine": 27,
+            "endLine": 27
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "args",
+              "attributes": {
+                "startLine": 27,
+                "endLine": 27
+              }
+            },
+            "default": {
+              "nodeType": "Expr_Array",
+              "items": [],
+              "attributes": {
+                "startLine": 27,
+                "endLine": 27,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 27,
+              "endLine": 27
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "defaults",
+                "attributes": {
+                  "startLine": 28,
+                  "endLine": 28
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Array",
+                "items": [
+                  {
+                    "nodeType": "Expr_ArrayItem",
+                    "key": {
+                      "nodeType": "Scalar_String",
+                      "value": "url",
+                      "attributes": {
+                        "startLine": 29,
+                        "endLine": 29,
+                        "kind": 1
+                      }
+                    },
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "",
+                      "attributes": {
+                        "startLine": 29,
+                        "endLine": 29,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 29,
+                      "endLine": 29
+                    }
+                  },
+                  {
+                    "nodeType": "Expr_ArrayItem",
+                    "key": {
+                      "nodeType": "Scalar_String",
+                      "value": "nonce",
+                      "attributes": {
+                        "startLine": 30,
+                        "endLine": 30,
+                        "kind": 1
+                      }
+                    },
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "",
+                      "attributes": {
+                        "startLine": 30,
+                        "endLine": 30,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 30,
+                      "endLine": 30
+                    }
+                  },
+                  {
+                    "nodeType": "Expr_ArrayItem",
+                    "key": {
+                      "nodeType": "Scalar_String",
+                      "value": "title",
+                      "attributes": {
+                        "startLine": 31,
+                        "endLine": 31,
+                        "kind": 1
+                      }
+                    },
+                    "value": {
+                      "nodeType": "Expr_FuncCall",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "__"
+                        ],
+                        "attributes": {
+                          "startLine": 31,
+                          "endLine": 31
+                        }
+                      },
+                      "args": [
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Scalar_String",
+                            "value": "Update Translations",
+                            "attributes": {
+                              "startLine": 31,
+                              "endLine": 31,
+                              "kind": 1
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 31,
+                            "endLine": 31
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 31,
+                        "endLine": 31
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 31,
+                      "endLine": 31
+                    }
+                  },
+                  {
+                    "nodeType": "Expr_ArrayItem",
+                    "key": {
+                      "nodeType": "Scalar_String",
+                      "value": "skip_header_footer",
+                      "attributes": {
+                        "startLine": 32,
+                        "endLine": 32,
+                        "kind": 1
+                      }
+                    },
+                    "value": {
+                      "nodeType": "Expr_ConstFetch",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "false"
+                        ],
+                        "attributes": {
+                          "startLine": 32,
+                          "endLine": 32
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 32,
+                        "endLine": 32
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 32,
+                      "endLine": 32
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 28,
+                  "endLine": 33,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 28,
+                "endLine": 33
+              }
+            },
+            "attributes": {
+              "startLine": 28,
+              "endLine": 33
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "args",
+                "attributes": {
+                  "startLine": 34,
+                  "endLine": 34
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "wp_parse_args"
+                  ],
+                  "attributes": {
+                    "startLine": 34,
+                    "endLine": 34
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "args",
+                      "attributes": {
+                        "startLine": 34,
+                        "endLine": 34
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 34,
+                      "endLine": 34
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "defaults",
+                      "attributes": {
+                        "startLine": 34,
+                        "endLine": 34
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 34,
+                      "endLine": 34
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 34,
+                  "endLine": 34
+                }
+              },
+              "attributes": {
+                "startLine": 34,
+                "endLine": 34
+              }
+            },
+            "attributes": {
+              "startLine": 34,
+              "endLine": 34
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_ArrayDimFetch",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "args",
+                "attributes": {
+                  "startLine": 35,
+                  "endLine": 35
+                }
+              },
+              "dim": {
+                "nodeType": "Scalar_String",
+                "value": "skip_header_footer",
+                "attributes": {
+                  "startLine": 35,
+                  "endLine": 35,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 35,
+                "endLine": 35
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_PropertyFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "this",
+                      "attributes": {
+                        "startLine": 36,
+                        "endLine": 36
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "done_header",
+                      "attributes": {
+                        "startLine": 36,
+                        "endLine": 36
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 36,
+                      "endLine": 36
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_ConstFetch",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "true"
+                      ],
+                      "attributes": {
+                        "startLine": 36,
+                        "endLine": 36
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 36,
+                      "endLine": 36
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 36,
+                    "endLine": 36
+                  }
+                },
+                "attributes": {
+                  "startLine": 36,
+                  "endLine": 36
+                }
+              },
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_PropertyFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "this",
+                      "attributes": {
+                        "startLine": 37,
+                        "endLine": 37
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "done_footer",
+                      "attributes": {
+                        "startLine": 37,
+                        "endLine": 37
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 37,
+                      "endLine": 37
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_ConstFetch",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "true"
+                      ],
+                      "attributes": {
+                        "startLine": 37,
+                        "endLine": 37
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 37,
+                      "endLine": 37
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 37,
+                    "endLine": 37
+                  }
+                },
+                "attributes": {
+                  "startLine": 37,
+                  "endLine": 37
+                }
+              },
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_PropertyFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "this",
+                      "attributes": {
+                        "startLine": 38,
+                        "endLine": 38
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "display_footer_actions",
+                      "attributes": {
+                        "startLine": 38,
+                        "endLine": 38
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 38,
+                      "endLine": 38
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_ConstFetch",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "false"
+                      ],
+                      "attributes": {
+                        "startLine": 38,
+                        "endLine": 38
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 38,
+                      "endLine": 38
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 38,
+                    "endLine": 38
+                  }
+                },
+                "attributes": {
+                  "startLine": 38,
+                  "endLine": 38
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 35,
+              "endLine": 39
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_StaticCall",
+              "class": {
+                "nodeType": "Name",
+                "parts": [
+                  "parent"
+                ],
+                "attributes": {
+                  "startLine": 40,
+                  "endLine": 40
+                }
+              },
+              "name": {
+                "nodeType": "Identifier",
+                "name": "__construct",
+                "attributes": {
+                  "startLine": 40,
+                  "endLine": 40
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "args",
+                    "attributes": {
+                      "startLine": 40,
+                      "endLine": 40
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 40,
+                    "endLine": 40
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 40,
+                "endLine": 40
+              }
+            },
+            "attributes": {
+              "startLine": 40,
+              "endLine": 40
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 27,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * @param array $args\n\t */",
+              "line": 24,
+              "filePos": 566,
+              "tokenPos": 51,
+              "endLine": 26,
+              "endFilePos": 596,
+              "endTokenPos": 51
+            }
+          ],
+          "endLine": 41
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "before",
+          "attributes": {
+            "startLine": 45,
+            "endLine": 45
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "name",
+                "attributes": {
+                  "startLine": 46,
+                  "endLine": 46
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_MethodCall",
+                "var": {
+                  "nodeType": "Expr_PropertyFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "this",
+                    "attributes": {
+                      "startLine": 46,
+                      "endLine": 46
+                    }
+                  },
+                  "name": {
+                    "nodeType": "Identifier",
+                    "name": "upgrader",
+                    "attributes": {
+                      "startLine": 46,
+                      "endLine": 46
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 46,
+                    "endLine": 46
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "get_name_for_update",
+                  "attributes": {
+                    "startLine": 46,
+                    "endLine": 46
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_PropertyFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "this",
+                        "attributes": {
+                          "startLine": 46,
+                          "endLine": 46
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "language_update",
+                        "attributes": {
+                          "startLine": 46,
+                          "endLine": 46
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 46,
+                        "endLine": 46
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 46,
+                      "endLine": 46
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 46,
+                  "endLine": 46
+                }
+              },
+              "attributes": {
+                "startLine": 46,
+                "endLine": 46
+              }
+            },
+            "attributes": {
+              "startLine": 46,
+              "endLine": 46
+            }
+          },
+          {
+            "nodeType": "Stmt_Echo",
+            "exprs": [
+              {
+                "nodeType": "Scalar_String",
+                "value": "<div class=\"update-messages lp-show-latest\">",
+                "attributes": {
+                  "startLine": 48,
+                  "endLine": 48,
+                  "kind": 1
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 48,
+              "endLine": 48
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "printf"
+                ],
+                "attributes": {
+                  "startLine": 51,
+                  "comments": [
+                    {
+                      "nodeType": "Comment",
+                      "text": "/* translators: 1: Project name (plugin, theme, or WordPress), 2: Language. */",
+                      "line": 50,
+                      "filePos": 1249,
+                      "tokenPos": 219,
+                      "endLine": 50,
+                      "endFilePos": 1326,
+                      "endTokenPos": 219
+                    }
+                  ],
+                  "endLine": 51
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_BinaryOp_Concat",
+                    "left": {
+                      "nodeType": "Expr_BinaryOp_Concat",
+                      "left": {
+                        "nodeType": "Scalar_String",
+                        "value": "<h2>",
+                        "attributes": {
+                          "startLine": 51,
+                          "endLine": 51,
+                          "kind": 1
+                        }
+                      },
+                      "right": {
+                        "nodeType": "Expr_FuncCall",
+                        "name": {
+                          "nodeType": "Name",
+                          "parts": [
+                            "__"
+                          ],
+                          "attributes": {
+                            "startLine": 51,
+                            "endLine": 51
+                          }
+                        },
+                        "args": [
+                          {
+                            "nodeType": "Arg",
+                            "value": {
+                              "nodeType": "Scalar_String",
+                              "value": "Updating translations for %1$s (%2$s)&#8230;",
+                              "attributes": {
+                                "startLine": 51,
+                                "endLine": 51,
+                                "kind": 1
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 51,
+                              "endLine": 51
+                            }
+                          }
+                        ],
+                        "attributes": {
+                          "startLine": 51,
+                          "endLine": 51
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 51,
+                        "endLine": 51
+                      }
+                    },
+                    "right": {
+                      "nodeType": "Scalar_String",
+                      "value": "</h2>",
+                      "attributes": {
+                        "startLine": 51,
+                        "endLine": 51,
+                        "kind": 1
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 51,
+                      "endLine": 51
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 51,
+                    "endLine": 51
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "name",
+                    "attributes": {
+                      "startLine": 51,
+                      "endLine": 51
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 51,
+                    "endLine": 51
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_PropertyFetch",
+                    "var": {
+                      "nodeType": "Expr_PropertyFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "this",
+                        "attributes": {
+                          "startLine": 51,
+                          "endLine": 51
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "language_update",
+                        "attributes": {
+                          "startLine": 51,
+                          "endLine": 51
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 51,
+                        "endLine": 51
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "language",
+                      "attributes": {
+                        "startLine": 51,
+                        "endLine": 51
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 51,
+                      "endLine": 51
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 51,
+                    "endLine": 51
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 51,
+                "comments": [
+                  {
+                    "nodeType": "Comment",
+                    "text": "/* translators: 1: Project name (plugin, theme, or WordPress), 2: Language. */",
+                    "line": 50,
+                    "filePos": 1249,
+                    "tokenPos": 219,
+                    "endLine": 50,
+                    "endFilePos": 1326,
+                    "endTokenPos": 219
+                  }
+                ],
+                "endLine": 51
+              }
+            },
+            "attributes": {
+              "startLine": 51,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "/* translators: 1: Project name (plugin, theme, or WordPress), 2: Language. */",
+                  "line": 50,
+                  "filePos": 1249,
+                  "tokenPos": 219,
+                  "endLine": 50,
+                  "endFilePos": 1326,
+                  "endTokenPos": 219
+                }
+              ],
+              "endLine": 51
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 45,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t */",
+              "line": 43,
+              "filePos": 1079,
+              "tokenPos": 184,
+              "endLine": 44,
+              "endFilePos": 1086,
+              "endTokenPos": 184
+            }
+          ],
+          "endLine": 52
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "error",
+          "attributes": {
+            "startLine": 57,
+            "endLine": 57
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "error",
+              "attributes": {
+                "startLine": 57,
+                "endLine": 57
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 57,
+              "endLine": 57
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Echo",
+            "exprs": [
+              {
+                "nodeType": "Scalar_String",
+                "value": "<div class=\"lp-error\">",
+                "attributes": {
+                  "startLine": 58,
+                  "endLine": 58,
+                  "kind": 1
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 58,
+              "endLine": 58
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_StaticCall",
+              "class": {
+                "nodeType": "Name",
+                "parts": [
+                  "parent"
+                ],
+                "attributes": {
+                  "startLine": 59,
+                  "endLine": 59
+                }
+              },
+              "name": {
+                "nodeType": "Identifier",
+                "name": "error",
+                "attributes": {
+                  "startLine": 59,
+                  "endLine": 59
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "error",
+                    "attributes": {
+                      "startLine": 59,
+                      "endLine": 59
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 59,
+                    "endLine": 59
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 59,
+                "endLine": 59
+              }
+            },
+            "attributes": {
+              "startLine": 59,
+              "endLine": 59
+            }
+          },
+          {
+            "nodeType": "Stmt_Echo",
+            "exprs": [
+              {
+                "nodeType": "Scalar_String",
+                "value": "</div>",
+                "attributes": {
+                  "startLine": 60,
+                  "endLine": 60,
+                  "kind": 1
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 60,
+              "endLine": 60
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 57,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * @param string|WP_Error $error\n\t */",
+              "line": 54,
+              "filePos": 1459,
+              "tokenPos": 254,
+              "endLine": 56,
+              "endFilePos": 1500,
+              "endTokenPos": 254
+            }
+          ],
+          "endLine": 61
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "after",
+          "attributes": {
+            "startLine": 65,
+            "endLine": 65
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Echo",
+            "exprs": [
+              {
+                "nodeType": "Scalar_String",
+                "value": "</div>",
+                "attributes": {
+                  "startLine": 66,
+                  "endLine": 66,
+                  "kind": 1
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 66,
+              "endLine": 66
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 65,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t */",
+              "line": 63,
+              "filePos": 1619,
+              "tokenPos": 291,
+              "endLine": 64,
+              "endFilePos": 1626,
+              "endTokenPos": 291
+            }
+          ],
+          "endLine": 67
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "bulk_footer",
+          "attributes": {
+            "startLine": 71,
+            "endLine": 71
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_MethodCall",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "this",
+                "attributes": {
+                  "startLine": 72,
+                  "endLine": 72
+                }
+              },
+              "name": {
+                "nodeType": "Identifier",
+                "name": "decrement_update_count",
+                "attributes": {
+                  "startLine": 72,
+                  "endLine": 72
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "translation",
+                    "attributes": {
+                      "startLine": 72,
+                      "endLine": 72,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 72,
+                    "endLine": 72
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 72,
+                "endLine": 72
+              }
+            },
+            "attributes": {
+              "startLine": 72,
+              "endLine": 72
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "update_actions",
+                "attributes": {
+                  "startLine": 74,
+                  "endLine": 74
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Array",
+                "items": [
+                  {
+                    "nodeType": "Expr_ArrayItem",
+                    "key": {
+                      "nodeType": "Scalar_String",
+                      "value": "updates_page",
+                      "attributes": {
+                        "startLine": 75,
+                        "endLine": 75,
+                        "kind": 1
+                      }
+                    },
+                    "value": {
+                      "nodeType": "Expr_FuncCall",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "sprintf"
+                        ],
+                        "attributes": {
+                          "startLine": 75,
+                          "endLine": 75
+                        }
+                      },
+                      "args": [
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Scalar_String",
+                            "value": "<a href=\"%s\" target=\"_parent\">%s</a>",
+                            "attributes": {
+                              "startLine": 76,
+                              "endLine": 76,
+                              "kind": 1
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 76,
+                            "endLine": 76
+                          }
+                        },
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Expr_FuncCall",
+                            "name": {
+                              "nodeType": "Name",
+                              "parts": [
+                                "self_admin_url"
+                              ],
+                              "attributes": {
+                                "startLine": 77,
+                                "endLine": 77
+                              }
+                            },
+                            "args": [
+                              {
+                                "nodeType": "Arg",
+                                "value": {
+                                  "nodeType": "Scalar_String",
+                                  "value": "update-core.php",
+                                  "attributes": {
+                                    "startLine": 77,
+                                    "endLine": 77,
+                                    "kind": 1
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 77,
+                                  "endLine": 77
+                                }
+                              }
+                            ],
+                            "attributes": {
+                              "startLine": 77,
+                              "endLine": 77
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 77,
+                            "endLine": 77
+                          }
+                        },
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Expr_FuncCall",
+                            "name": {
+                              "nodeType": "Name",
+                              "parts": [
+                                "__"
+                              ],
+                              "attributes": {
+                                "startLine": 78,
+                                "endLine": 78
+                              }
+                            },
+                            "args": [
+                              {
+                                "nodeType": "Arg",
+                                "value": {
+                                  "nodeType": "Scalar_String",
+                                  "value": "Return to WordPress Updates page",
+                                  "attributes": {
+                                    "startLine": 78,
+                                    "endLine": 78,
+                                    "kind": 1
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 78,
+                                  "endLine": 78
+                                }
+                              }
+                            ],
+                            "attributes": {
+                              "startLine": 78,
+                              "endLine": 78
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 78,
+                            "endLine": 78
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 75,
+                        "endLine": 79
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 75,
+                      "endLine": 79
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 74,
+                  "endLine": 80,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 74,
+                "endLine": 80
+              }
+            },
+            "attributes": {
+              "startLine": 74,
+              "endLine": 80
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "update_actions",
+                "attributes": {
+                  "startLine": 89,
+                  "comments": [
+                    {
+                      "nodeType": "Comment_Doc",
+                      "text": "/**\n\t\t * Filters the list of action links available following a translations update.\n\t\t *\n\t\t * @since 3.7.0\n\t\t *\n\t\t * @param string[] $update_actions Array of translations update links.\n\t\t */",
+                      "line": 82,
+                      "filePos": 1971,
+                      "tokenPos": 370,
+                      "endLine": 88,
+                      "endFilePos": 2161,
+                      "endTokenPos": 370
+                    }
+                  ],
+                  "endLine": 89
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "apply_filters"
+                  ],
+                  "attributes": {
+                    "startLine": 89,
+                    "endLine": 89
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "update_translations_complete_actions",
+                      "attributes": {
+                        "startLine": 89,
+                        "endLine": 89,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 89,
+                      "endLine": 89
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "update_actions",
+                      "attributes": {
+                        "startLine": 89,
+                        "endLine": 89
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 89,
+                      "endLine": 89
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 89,
+                  "endLine": 89
+                }
+              },
+              "attributes": {
+                "startLine": 89,
+                "comments": [
+                  {
+                    "nodeType": "Comment_Doc",
+                    "text": "/**\n\t\t * Filters the list of action links available following a translations update.\n\t\t *\n\t\t * @since 3.7.0\n\t\t *\n\t\t * @param string[] $update_actions Array of translations update links.\n\t\t */",
+                    "line": 82,
+                    "filePos": 1971,
+                    "tokenPos": 370,
+                    "endLine": 88,
+                    "endFilePos": 2161,
+                    "endTokenPos": 370
+                  }
+                ],
+                "endLine": 89
+              }
+            },
+            "attributes": {
+              "startLine": 89,
+              "comments": [
+                {
+                  "nodeType": "Comment_Doc",
+                  "text": "/**\n\t\t * Filters the list of action links available following a translations update.\n\t\t *\n\t\t * @since 3.7.0\n\t\t *\n\t\t * @param string[] $update_actions Array of translations update links.\n\t\t */",
+                  "line": 82,
+                  "filePos": 1971,
+                  "tokenPos": 370,
+                  "endLine": 88,
+                  "endFilePos": 2161,
+                  "endTokenPos": 370
+                }
+              ],
+              "endLine": 89
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BinaryOp_BooleanAnd",
+              "left": {
+                "nodeType": "Expr_Variable",
+                "name": "update_actions",
+                "attributes": {
+                  "startLine": 91,
+                  "endLine": 91
+                }
+              },
+              "right": {
+                "nodeType": "Expr_PropertyFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "this",
+                  "attributes": {
+                    "startLine": 91,
+                    "endLine": 91
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "display_footer_actions",
+                  "attributes": {
+                    "startLine": 91,
+                    "endLine": 91
+                  }
+                },
+                "attributes": {
+                  "startLine": 91,
+                  "endLine": 91
+                }
+              },
+              "attributes": {
+                "startLine": 91,
+                "endLine": 91
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_MethodCall",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "this",
+                    "attributes": {
+                      "startLine": 92,
+                      "endLine": 92
+                    }
+                  },
+                  "name": {
+                    "nodeType": "Identifier",
+                    "name": "feedback",
+                    "attributes": {
+                      "startLine": 92,
+                      "endLine": 92
+                    }
+                  },
+                  "args": [
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Expr_FuncCall",
+                        "name": {
+                          "nodeType": "Name",
+                          "parts": [
+                            "implode"
+                          ],
+                          "attributes": {
+                            "startLine": 92,
+                            "endLine": 92
+                          }
+                        },
+                        "args": [
+                          {
+                            "nodeType": "Arg",
+                            "value": {
+                              "nodeType": "Scalar_String",
+                              "value": " | ",
+                              "attributes": {
+                                "startLine": 92,
+                                "endLine": 92,
+                                "kind": 1
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 92,
+                              "endLine": 92
+                            }
+                          },
+                          {
+                            "nodeType": "Arg",
+                            "value": {
+                              "nodeType": "Expr_Variable",
+                              "name": "update_actions",
+                              "attributes": {
+                                "startLine": 92,
+                                "endLine": 92
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 92,
+                              "endLine": 92
+                            }
+                          }
+                        ],
+                        "attributes": {
+                          "startLine": 92,
+                          "endLine": 92
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 92,
+                        "endLine": 92
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 92,
+                    "endLine": 92
+                  }
+                },
+                "attributes": {
+                  "startLine": 92,
+                  "endLine": 92
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 91,
+              "endLine": 93
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 71,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t */",
+              "line": 69,
+              "filePos": 1677,
+              "tokenPos": 310,
+              "endLine": 70,
+              "endFilePos": 1684,
+              "endTokenPos": 310
+            }
+          ],
+          "endLine": 94
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 18,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Upgrader API: Language_Pack_Upgrader_Skin class\n *\n * @package WordPress\n * @subpackage Upgrader\n * @since 4.6.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 8,
+          "endFilePos": 128,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Translation Upgrader Skin for WordPress Translation Upgrades.\n *\n * @since 3.7.0\n * @since 4.6.0 Moved to its own file from wp-admin/includes/class-wp-upgrader-skins.php.\n *\n * @see WP_Upgrader_Skin\n */",
+          "line": 10,
+          "filePos": 131,
+          "tokenPos": 3,
+          "endLine": 17,
+          "endFilePos": 339,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 95
+    }
+  }
+]

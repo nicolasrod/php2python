@@ -1,0 +1,1610 @@
+[
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "define"
+        ],
+        "attributes": {
+          "startLine": 23,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\r\n * The base configuration for WordPress\r\n *\r\n * The wp-config.php creation script uses this file during the\r\n * installation. You don't have to use the web site, you can\r\n * copy this file to \"wp-config.php\" and fill in the values.\r\n *\r\n * This file contains the following configurations:\r\n *\r\n * * MySQL settings\r\n * * Secret keys\r\n * * Database table prefix\r\n * * ABSPATH\r\n *\r\n * @link https://wordpress.org/support/article/editing-wp-config-php/\r\n *\r\n * @package WordPress\r\n */",
+              "line": 2,
+              "filePos": 7,
+              "tokenPos": 1,
+              "endLine": 19,
+              "endFilePos": 491,
+              "endTokenPos": 1
+            },
+            {
+              "nodeType": "Comment",
+              "text": "// ** MySQL settings - You can get this info from your web host ** //\r\n",
+              "line": 21,
+              "filePos": 496,
+              "tokenPos": 3,
+              "endLine": 22,
+              "endFilePos": 566,
+              "endTokenPos": 3
+            },
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/** The name of the database for WordPress */",
+              "line": 22,
+              "filePos": 567,
+              "tokenPos": 4,
+              "endLine": 22,
+              "endFilePos": 611,
+              "endTokenPos": 4
+            }
+          ],
+          "endLine": 23
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "DB_NAME",
+            "attributes": {
+              "startLine": 23,
+              "endLine": 23,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 23,
+            "endLine": 23
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "database_name_here",
+            "attributes": {
+              "startLine": 23,
+              "endLine": 23,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 23,
+            "endLine": 23
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 23,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/**\r\n * The base configuration for WordPress\r\n *\r\n * The wp-config.php creation script uses this file during the\r\n * installation. You don't have to use the web site, you can\r\n * copy this file to \"wp-config.php\" and fill in the values.\r\n *\r\n * This file contains the following configurations:\r\n *\r\n * * MySQL settings\r\n * * Secret keys\r\n * * Database table prefix\r\n * * ABSPATH\r\n *\r\n * @link https://wordpress.org/support/article/editing-wp-config-php/\r\n *\r\n * @package WordPress\r\n */",
+            "line": 2,
+            "filePos": 7,
+            "tokenPos": 1,
+            "endLine": 19,
+            "endFilePos": 491,
+            "endTokenPos": 1
+          },
+          {
+            "nodeType": "Comment",
+            "text": "// ** MySQL settings - You can get this info from your web host ** //\r\n",
+            "line": 21,
+            "filePos": 496,
+            "tokenPos": 3,
+            "endLine": 22,
+            "endFilePos": 566,
+            "endTokenPos": 3
+          },
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** The name of the database for WordPress */",
+            "line": 22,
+            "filePos": 567,
+            "tokenPos": 4,
+            "endLine": 22,
+            "endFilePos": 611,
+            "endTokenPos": 4
+          }
+        ],
+        "endLine": 23
+      }
+    },
+    "attributes": {
+      "startLine": 23,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\r\n * The base configuration for WordPress\r\n *\r\n * The wp-config.php creation script uses this file during the\r\n * installation. You don't have to use the web site, you can\r\n * copy this file to \"wp-config.php\" and fill in the values.\r\n *\r\n * This file contains the following configurations:\r\n *\r\n * * MySQL settings\r\n * * Secret keys\r\n * * Database table prefix\r\n * * ABSPATH\r\n *\r\n * @link https://wordpress.org/support/article/editing-wp-config-php/\r\n *\r\n * @package WordPress\r\n */",
+          "line": 2,
+          "filePos": 7,
+          "tokenPos": 1,
+          "endLine": 19,
+          "endFilePos": 491,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment",
+          "text": "// ** MySQL settings - You can get this info from your web host ** //\r\n",
+          "line": 21,
+          "filePos": 496,
+          "tokenPos": 3,
+          "endLine": 22,
+          "endFilePos": 566,
+          "endTokenPos": 3
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** The name of the database for WordPress */",
+          "line": 22,
+          "filePos": 567,
+          "tokenPos": 4,
+          "endLine": 22,
+          "endFilePos": 611,
+          "endTokenPos": 4
+        }
+      ],
+      "endLine": 23
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "define"
+        ],
+        "attributes": {
+          "startLine": 26,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/** MySQL database username */",
+              "line": 25,
+              "filePos": 660,
+              "tokenPos": 17,
+              "endLine": 25,
+              "endFilePos": 689,
+              "endTokenPos": 17
+            }
+          ],
+          "endLine": 26
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "DB_USER",
+            "attributes": {
+              "startLine": 26,
+              "endLine": 26,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 26,
+            "endLine": 26
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "username_here",
+            "attributes": {
+              "startLine": 26,
+              "endLine": 26,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 26,
+            "endLine": 26
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 26,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** MySQL database username */",
+            "line": 25,
+            "filePos": 660,
+            "tokenPos": 17,
+            "endLine": 25,
+            "endFilePos": 689,
+            "endTokenPos": 17
+          }
+        ],
+        "endLine": 26
+      }
+    },
+    "attributes": {
+      "startLine": 26,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** MySQL database username */",
+          "line": 25,
+          "filePos": 660,
+          "tokenPos": 17,
+          "endLine": 25,
+          "endFilePos": 689,
+          "endTokenPos": 17
+        }
+      ],
+      "endLine": 26
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "define"
+        ],
+        "attributes": {
+          "startLine": 29,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/** MySQL database password */",
+              "line": 28,
+              "filePos": 733,
+              "tokenPos": 30,
+              "endLine": 28,
+              "endFilePos": 762,
+              "endTokenPos": 30
+            }
+          ],
+          "endLine": 29
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "DB_PASSWORD",
+            "attributes": {
+              "startLine": 29,
+              "endLine": 29,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 29,
+            "endLine": 29
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "password_here",
+            "attributes": {
+              "startLine": 29,
+              "endLine": 29,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 29,
+            "endLine": 29
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 29,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** MySQL database password */",
+            "line": 28,
+            "filePos": 733,
+            "tokenPos": 30,
+            "endLine": 28,
+            "endFilePos": 762,
+            "endTokenPos": 30
+          }
+        ],
+        "endLine": 29
+      }
+    },
+    "attributes": {
+      "startLine": 29,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** MySQL database password */",
+          "line": 28,
+          "filePos": 733,
+          "tokenPos": 30,
+          "endLine": 28,
+          "endFilePos": 762,
+          "endTokenPos": 30
+        }
+      ],
+      "endLine": 29
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "define"
+        ],
+        "attributes": {
+          "startLine": 32,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/** MySQL hostname */",
+              "line": 31,
+              "filePos": 810,
+              "tokenPos": 43,
+              "endLine": 31,
+              "endFilePos": 830,
+              "endTokenPos": 43
+            }
+          ],
+          "endLine": 32
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "DB_HOST",
+            "attributes": {
+              "startLine": 32,
+              "endLine": 32,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 32,
+            "endLine": 32
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "localhost",
+            "attributes": {
+              "startLine": 32,
+              "endLine": 32,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 32,
+            "endLine": 32
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 32,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** MySQL hostname */",
+            "line": 31,
+            "filePos": 810,
+            "tokenPos": 43,
+            "endLine": 31,
+            "endFilePos": 830,
+            "endTokenPos": 43
+          }
+        ],
+        "endLine": 32
+      }
+    },
+    "attributes": {
+      "startLine": 32,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** MySQL hostname */",
+          "line": 31,
+          "filePos": 810,
+          "tokenPos": 43,
+          "endLine": 31,
+          "endFilePos": 830,
+          "endTokenPos": 43
+        }
+      ],
+      "endLine": 32
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "define"
+        ],
+        "attributes": {
+          "startLine": 35,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/** Database Charset to use in creating database tables. */",
+              "line": 34,
+              "filePos": 870,
+              "tokenPos": 56,
+              "endLine": 34,
+              "endFilePos": 928,
+              "endTokenPos": 56
+            }
+          ],
+          "endLine": 35
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "DB_CHARSET",
+            "attributes": {
+              "startLine": 35,
+              "endLine": 35,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 35,
+            "endLine": 35
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "utf8",
+            "attributes": {
+              "startLine": 35,
+              "endLine": 35,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 35,
+            "endLine": 35
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 35,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** Database Charset to use in creating database tables. */",
+            "line": 34,
+            "filePos": 870,
+            "tokenPos": 56,
+            "endLine": 34,
+            "endFilePos": 928,
+            "endTokenPos": 56
+          }
+        ],
+        "endLine": 35
+      }
+    },
+    "attributes": {
+      "startLine": 35,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** Database Charset to use in creating database tables. */",
+          "line": 34,
+          "filePos": 870,
+          "tokenPos": 56,
+          "endLine": 34,
+          "endFilePos": 928,
+          "endTokenPos": 56
+        }
+      ],
+      "endLine": 35
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "define"
+        ],
+        "attributes": {
+          "startLine": 38,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/** The Database Collate type. Don't change this if in doubt. */",
+              "line": 37,
+              "filePos": 966,
+              "tokenPos": 69,
+              "endLine": 37,
+              "endFilePos": 1029,
+              "endTokenPos": 69
+            }
+          ],
+          "endLine": 38
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "DB_COLLATE",
+            "attributes": {
+              "startLine": 38,
+              "endLine": 38,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 38,
+            "endLine": 38
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "",
+            "attributes": {
+              "startLine": 38,
+              "endLine": 38,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 38,
+            "endLine": 38
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 38,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** The Database Collate type. Don't change this if in doubt. */",
+            "line": 37,
+            "filePos": 966,
+            "tokenPos": 69,
+            "endLine": 37,
+            "endFilePos": 1029,
+            "endTokenPos": 69
+          }
+        ],
+        "endLine": 38
+      }
+    },
+    "attributes": {
+      "startLine": 38,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** The Database Collate type. Don't change this if in doubt. */",
+          "line": 37,
+          "filePos": 966,
+          "tokenPos": 69,
+          "endLine": 37,
+          "endFilePos": 1029,
+          "endTokenPos": 69
+        }
+      ],
+      "endLine": 38
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "define"
+        ],
+        "attributes": {
+          "startLine": 49,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "/**#@+\r\n * Authentication Unique Keys and Salts.\r\n *\r\n * Change these to different unique phrases!\r\n * You can generate these using the {@link https://api.wordpress.org/secret-key/1.1/salt/ WordPress.org secret-key service}\r\n * You can change these at any point in time to invalidate all existing cookies. This will force all users to have to log in again.\r\n *\r\n * @since 2.6.0\r\n */",
+              "line": 40,
+              "filePos": 1063,
+              "tokenPos": 82,
+              "endLine": 48,
+              "endFilePos": 1444,
+              "endTokenPos": 82
+            }
+          ],
+          "endLine": 49
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "AUTH_KEY",
+            "attributes": {
+              "startLine": 49,
+              "endLine": 49,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 49,
+            "endLine": 49
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "put your unique phrase here",
+            "attributes": {
+              "startLine": 49,
+              "endLine": 49,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 49,
+            "endLine": 49
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 49,
+        "comments": [
+          {
+            "nodeType": "Comment",
+            "text": "/**#@+\r\n * Authentication Unique Keys and Salts.\r\n *\r\n * Change these to different unique phrases!\r\n * You can generate these using the {@link https://api.wordpress.org/secret-key/1.1/salt/ WordPress.org secret-key service}\r\n * You can change these at any point in time to invalidate all existing cookies. This will force all users to have to log in again.\r\n *\r\n * @since 2.6.0\r\n */",
+            "line": 40,
+            "filePos": 1063,
+            "tokenPos": 82,
+            "endLine": 48,
+            "endFilePos": 1444,
+            "endTokenPos": 82
+          }
+        ],
+        "endLine": 49
+      }
+    },
+    "attributes": {
+      "startLine": 49,
+      "comments": [
+        {
+          "nodeType": "Comment",
+          "text": "/**#@+\r\n * Authentication Unique Keys and Salts.\r\n *\r\n * Change these to different unique phrases!\r\n * You can generate these using the {@link https://api.wordpress.org/secret-key/1.1/salt/ WordPress.org secret-key service}\r\n * You can change these at any point in time to invalidate all existing cookies. This will force all users to have to log in again.\r\n *\r\n * @since 2.6.0\r\n */",
+          "line": 40,
+          "filePos": 1063,
+          "tokenPos": 82,
+          "endLine": 48,
+          "endFilePos": 1444,
+          "endTokenPos": 82
+        }
+      ],
+      "endLine": 49
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "define"
+        ],
+        "attributes": {
+          "startLine": 50,
+          "endLine": 50
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "SECURE_AUTH_KEY",
+            "attributes": {
+              "startLine": 50,
+              "endLine": 50,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 50,
+            "endLine": 50
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "put your unique phrase here",
+            "attributes": {
+              "startLine": 50,
+              "endLine": 50,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 50,
+            "endLine": 50
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 50,
+        "endLine": 50
+      }
+    },
+    "attributes": {
+      "startLine": 50,
+      "endLine": 50
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "define"
+        ],
+        "attributes": {
+          "startLine": 51,
+          "endLine": 51
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "LOGGED_IN_KEY",
+            "attributes": {
+              "startLine": 51,
+              "endLine": 51,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 51,
+            "endLine": 51
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "put your unique phrase here",
+            "attributes": {
+              "startLine": 51,
+              "endLine": 51,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 51,
+            "endLine": 51
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 51,
+        "endLine": 51
+      }
+    },
+    "attributes": {
+      "startLine": 51,
+      "endLine": 51
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "define"
+        ],
+        "attributes": {
+          "startLine": 52,
+          "endLine": 52
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "NONCE_KEY",
+            "attributes": {
+              "startLine": 52,
+              "endLine": 52,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 52,
+            "endLine": 52
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "put your unique phrase here",
+            "attributes": {
+              "startLine": 52,
+              "endLine": 52,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 52,
+            "endLine": 52
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 52,
+        "endLine": 52
+      }
+    },
+    "attributes": {
+      "startLine": 52,
+      "endLine": 52
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "define"
+        ],
+        "attributes": {
+          "startLine": 53,
+          "endLine": 53
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "AUTH_SALT",
+            "attributes": {
+              "startLine": 53,
+              "endLine": 53,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 53,
+            "endLine": 53
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "put your unique phrase here",
+            "attributes": {
+              "startLine": 53,
+              "endLine": 53,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 53,
+            "endLine": 53
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 53,
+        "endLine": 53
+      }
+    },
+    "attributes": {
+      "startLine": 53,
+      "endLine": 53
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "define"
+        ],
+        "attributes": {
+          "startLine": 54,
+          "endLine": 54
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "SECURE_AUTH_SALT",
+            "attributes": {
+              "startLine": 54,
+              "endLine": 54,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 54,
+            "endLine": 54
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "put your unique phrase here",
+            "attributes": {
+              "startLine": 54,
+              "endLine": 54,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 54,
+            "endLine": 54
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 54,
+        "endLine": 54
+      }
+    },
+    "attributes": {
+      "startLine": 54,
+      "endLine": 54
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "define"
+        ],
+        "attributes": {
+          "startLine": 55,
+          "endLine": 55
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "LOGGED_IN_SALT",
+            "attributes": {
+              "startLine": 55,
+              "endLine": 55,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 55,
+            "endLine": 55
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "put your unique phrase here",
+            "attributes": {
+              "startLine": 55,
+              "endLine": 55,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 55,
+            "endLine": 55
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 55,
+        "endLine": 55
+      }
+    },
+    "attributes": {
+      "startLine": 55,
+      "endLine": 55
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "define"
+        ],
+        "attributes": {
+          "startLine": 56,
+          "endLine": 56
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "NONCE_SALT",
+            "attributes": {
+              "startLine": 56,
+              "endLine": 56,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 56,
+            "endLine": 56
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "put your unique phrase here",
+            "attributes": {
+              "startLine": 56,
+              "endLine": 56,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 56,
+            "endLine": 56
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 56,
+        "endLine": 56
+      }
+    },
+    "attributes": {
+      "startLine": 56,
+      "endLine": 56
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Assign",
+      "var": {
+        "nodeType": "Expr_Variable",
+        "name": "table_prefix",
+        "attributes": {
+          "startLine": 66,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "/**#@-*/",
+              "line": 58,
+              "filePos": 1945,
+              "tokenPos": 172,
+              "endLine": 58,
+              "endFilePos": 1952,
+              "endTokenPos": 172
+            },
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\r\n * WordPress Database Table prefix.\r\n *\r\n * You can have multiple installations in one database if you give each\r\n * a unique prefix. Only numbers, letters, and underscores please!\r\n */",
+              "line": 60,
+              "filePos": 1957,
+              "tokenPos": 174,
+              "endLine": 65,
+              "endFilePos": 2146,
+              "endTokenPos": 174
+            }
+          ],
+          "endLine": 66
+        }
+      },
+      "expr": {
+        "nodeType": "Scalar_String",
+        "value": "wp_",
+        "attributes": {
+          "startLine": 66,
+          "endLine": 66,
+          "kind": 1
+        }
+      },
+      "attributes": {
+        "startLine": 66,
+        "comments": [
+          {
+            "nodeType": "Comment",
+            "text": "/**#@-*/",
+            "line": 58,
+            "filePos": 1945,
+            "tokenPos": 172,
+            "endLine": 58,
+            "endFilePos": 1952,
+            "endTokenPos": 172
+          },
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/**\r\n * WordPress Database Table prefix.\r\n *\r\n * You can have multiple installations in one database if you give each\r\n * a unique prefix. Only numbers, letters, and underscores please!\r\n */",
+            "line": 60,
+            "filePos": 1957,
+            "tokenPos": 174,
+            "endLine": 65,
+            "endFilePos": 2146,
+            "endTokenPos": 174
+          }
+        ],
+        "endLine": 66
+      }
+    },
+    "attributes": {
+      "startLine": 66,
+      "comments": [
+        {
+          "nodeType": "Comment",
+          "text": "/**#@-*/",
+          "line": 58,
+          "filePos": 1945,
+          "tokenPos": 172,
+          "endLine": 58,
+          "endFilePos": 1952,
+          "endTokenPos": 172
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\r\n * WordPress Database Table prefix.\r\n *\r\n * You can have multiple installations in one database if you give each\r\n * a unique prefix. Only numbers, letters, and underscores please!\r\n */",
+          "line": 60,
+          "filePos": 1957,
+          "tokenPos": 174,
+          "endLine": 65,
+          "endFilePos": 2146,
+          "endTokenPos": 174
+        }
+      ],
+      "endLine": 66
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "define"
+        ],
+        "attributes": {
+          "startLine": 80,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\r\n * For developers: WordPress debugging mode.\r\n *\r\n * Change this to true to enable the display of notices during development.\r\n * It is strongly recommended that plugin and theme developers use WP_DEBUG\r\n * in their development environments.\r\n *\r\n * For information on other constants that can be used for debugging,\r\n * visit the documentation.\r\n *\r\n * @link https://wordpress.org/support/article/debugging-in-wordpress/\r\n */",
+              "line": 68,
+              "filePos": 2175,
+              "tokenPos": 183,
+              "endLine": 79,
+              "endFilePos": 2605,
+              "endTokenPos": 183
+            }
+          ],
+          "endLine": 80
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "WP_DEBUG",
+            "attributes": {
+              "startLine": 80,
+              "endLine": 80,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 80,
+            "endLine": 80
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "false"
+              ],
+              "attributes": {
+                "startLine": 80,
+                "endLine": 80
+              }
+            },
+            "attributes": {
+              "startLine": 80,
+              "endLine": 80
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 80,
+            "endLine": 80
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 80,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/**\r\n * For developers: WordPress debugging mode.\r\n *\r\n * Change this to true to enable the display of notices during development.\r\n * It is strongly recommended that plugin and theme developers use WP_DEBUG\r\n * in their development environments.\r\n *\r\n * For information on other constants that can be used for debugging,\r\n * visit the documentation.\r\n *\r\n * @link https://wordpress.org/support/article/debugging-in-wordpress/\r\n */",
+            "line": 68,
+            "filePos": 2175,
+            "tokenPos": 183,
+            "endLine": 79,
+            "endFilePos": 2605,
+            "endTokenPos": 183
+          }
+        ],
+        "endLine": 80
+      }
+    },
+    "attributes": {
+      "startLine": 80,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\r\n * For developers: WordPress debugging mode.\r\n *\r\n * Change this to true to enable the display of notices during development.\r\n * It is strongly recommended that plugin and theme developers use WP_DEBUG\r\n * in their development environments.\r\n *\r\n * For information on other constants that can be used for debugging,\r\n * visit the documentation.\r\n *\r\n * @link https://wordpress.org/support/article/debugging-in-wordpress/\r\n */",
+          "line": 68,
+          "filePos": 2175,
+          "tokenPos": 183,
+          "endLine": 79,
+          "endFilePos": 2605,
+          "endTokenPos": 183
+        }
+      ],
+      "endLine": 80
+    }
+  },
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_BooleanNot",
+      "expr": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "defined"
+          ],
+          "attributes": {
+            "startLine": 85,
+            "endLine": 85
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "ABSPATH",
+              "attributes": {
+                "startLine": 85,
+                "endLine": 85,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 85,
+              "endLine": 85
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 85,
+          "endLine": 85
+        }
+      },
+      "attributes": {
+        "startLine": 85,
+        "endLine": 85
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "define"
+            ],
+            "attributes": {
+              "startLine": 86,
+              "endLine": 86
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "ABSPATH",
+                "attributes": {
+                  "startLine": 86,
+                  "endLine": 86,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 86,
+                "endLine": 86
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_BinaryOp_Concat",
+                "left": {
+                  "nodeType": "Scalar_MagicConst_Dir",
+                  "attributes": {
+                    "startLine": 86,
+                    "endLine": 86
+                  }
+                },
+                "right": {
+                  "nodeType": "Scalar_String",
+                  "value": "/",
+                  "attributes": {
+                    "startLine": 86,
+                    "endLine": 86,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 86,
+                  "endLine": 86
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 86,
+                "endLine": 86
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 86,
+            "endLine": 86
+          }
+        },
+        "attributes": {
+          "startLine": 86,
+          "endLine": 86
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 85,
+      "comments": [
+        {
+          "nodeType": "Comment",
+          "text": "/* That's all, stop editing! Happy publishing. */",
+          "line": 82,
+          "filePos": 2640,
+          "tokenPos": 196,
+          "endLine": 82,
+          "endFilePos": 2688,
+          "endTokenPos": 196
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** Absolute path to the WordPress directory. */",
+          "line": 84,
+          "filePos": 2693,
+          "tokenPos": 198,
+          "endLine": 84,
+          "endFilePos": 2740,
+          "endTokenPos": 198
+        }
+      ],
+      "endLine": 87
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_ConstFetch",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "ABSPATH"
+            ],
+            "attributes": {
+              "startLine": 90,
+              "endLine": 90
+            }
+          },
+          "attributes": {
+            "startLine": 90,
+            "endLine": 90
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "wp-settings.php",
+          "attributes": {
+            "startLine": 90,
+            "endLine": 90,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 90,
+          "endLine": 90
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 90,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** Sets up WordPress vars and included files. */",
+            "line": 89,
+            "filePos": 2819,
+            "tokenPos": 234,
+            "endLine": 89,
+            "endFilePos": 2867,
+            "endTokenPos": 234
+          }
+        ],
+        "endLine": 90
+      }
+    },
+    "attributes": {
+      "startLine": 90,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** Sets up WordPress vars and included files. */",
+          "line": 89,
+          "filePos": 2819,
+          "tokenPos": 234,
+          "endLine": 89,
+          "endFilePos": 2867,
+          "endTokenPos": 234
+        }
+      ],
+      "endLine": 90
+    }
+  }
+]

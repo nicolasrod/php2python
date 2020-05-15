@@ -1,0 +1,30 @@
+[
+  {
+    "nodeType": "Stmt_Class",
+    "flags": 0,
+    "extends": {
+      "nodeType": "Name",
+      "parts": [
+        "Requests_Exception"
+      ],
+      "attributes": {
+        "startLine": 3,
+        "endLine": 3
+      }
+    },
+    "implements": [],
+    "name": {
+      "nodeType": "Identifier",
+      "name": "Requests_Exception_Transport",
+      "attributes": {
+        "startLine": 3,
+        "endLine": 3
+      }
+    },
+    "stmts": [],
+    "attributes": {
+      "startLine": 3,
+      "endLine": 5
+    }
+  }
+]

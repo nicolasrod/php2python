@@ -1,0 +1,1092 @@
+[
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_BooleanNot",
+      "expr": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "defined"
+          ],
+          "attributes": {
+            "startLine": 12,
+            "endLine": 12
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "WP_ADMIN",
+              "attributes": {
+                "startLine": 12,
+                "endLine": 12,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 12,
+              "endLine": 12
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 12,
+          "endLine": 12
+        }
+      },
+      "attributes": {
+        "startLine": 12,
+        "endLine": 12
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "define"
+            ],
+            "attributes": {
+              "startLine": 13,
+              "endLine": 13
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "WP_ADMIN",
+                "attributes": {
+                  "startLine": 13,
+                  "endLine": 13,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 13,
+                "endLine": 13
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_ConstFetch",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "true"
+                  ],
+                  "attributes": {
+                    "startLine": 13,
+                    "endLine": 13
+                  }
+                },
+                "attributes": {
+                  "startLine": 13,
+                  "endLine": 13
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 13,
+                "endLine": 13
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 13,
+            "endLine": 13
+          }
+        },
+        "attributes": {
+          "startLine": 13,
+          "endLine": 13
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 12,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * WordPress Generic Request (POST/GET) Handler\n *\n * Intended for form submission handling in themes and plugins.\n *\n * @package WordPress\n * @subpackage Administration\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 9,
+          "endFilePos": 182,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** We are located in WordPress Administration Screens */",
+          "line": 11,
+          "filePos": 185,
+          "tokenPos": 3,
+          "endLine": 11,
+          "endFilePos": 241,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 14
+    }
+  },
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "defined"
+        ],
+        "attributes": {
+          "startLine": 16,
+          "endLine": 16
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "ABSPATH",
+            "attributes": {
+              "startLine": 16,
+              "endLine": 16,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 16,
+            "endLine": 16
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 16,
+        "endLine": 16
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Include",
+          "expr": {
+            "nodeType": "Expr_BinaryOp_Concat",
+            "left": {
+              "nodeType": "Expr_ConstFetch",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "ABSPATH"
+                ],
+                "attributes": {
+                  "startLine": 17,
+                  "endLine": 17
+                }
+              },
+              "attributes": {
+                "startLine": 17,
+                "endLine": 17
+              }
+            },
+            "right": {
+              "nodeType": "Scalar_String",
+              "value": "wp-load.php",
+              "attributes": {
+                "startLine": 17,
+                "endLine": 17,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 17,
+              "endLine": 17
+            }
+          },
+          "type": 4,
+          "attributes": {
+            "startLine": 17,
+            "endLine": 17
+          }
+        },
+        "attributes": {
+          "startLine": 17,
+          "endLine": 17
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": {
+      "nodeType": "Stmt_Else",
+      "stmts": [
+        {
+          "nodeType": "Stmt_Expression",
+          "expr": {
+            "nodeType": "Expr_Include",
+            "expr": {
+              "nodeType": "Expr_BinaryOp_Concat",
+              "left": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "dirname"
+                  ],
+                  "attributes": {
+                    "startLine": 19,
+                    "endLine": 19
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_MagicConst_Dir",
+                      "attributes": {
+                        "startLine": 19,
+                        "endLine": 19
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 19,
+                      "endLine": 19
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 19,
+                  "endLine": 19
+                }
+              },
+              "right": {
+                "nodeType": "Scalar_String",
+                "value": "/wp-load.php",
+                "attributes": {
+                  "startLine": 19,
+                  "endLine": 19,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 19,
+                "endLine": 19
+              }
+            },
+            "type": 4,
+            "attributes": {
+              "startLine": 19,
+              "endLine": 19
+            }
+          },
+          "attributes": {
+            "startLine": 19,
+            "endLine": 19
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 18,
+        "endLine": 20
+      }
+    },
+    "attributes": {
+      "startLine": 16,
+      "endLine": 20
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "send_origin_headers"
+        ],
+        "attributes": {
+          "startLine": 23,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/** Allow for cross-domain requests (from the front end). */",
+              "line": 22,
+              "filePos": 440,
+              "tokenPos": 81,
+              "endLine": 22,
+              "endFilePos": 499,
+              "endTokenPos": 81
+            }
+          ],
+          "endLine": 23
+        }
+      },
+      "args": [],
+      "attributes": {
+        "startLine": 23,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** Allow for cross-domain requests (from the front end). */",
+            "line": 22,
+            "filePos": 440,
+            "tokenPos": 81,
+            "endLine": 22,
+            "endFilePos": 499,
+            "endTokenPos": 81
+          }
+        ],
+        "endLine": 23
+      }
+    },
+    "attributes": {
+      "startLine": 23,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** Allow for cross-domain requests (from the front end). */",
+          "line": 22,
+          "filePos": 440,
+          "tokenPos": 81,
+          "endLine": 22,
+          "endFilePos": 499,
+          "endTokenPos": 81
+        }
+      ],
+      "endLine": 23
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_ConstFetch",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "ABSPATH"
+            ],
+            "attributes": {
+              "startLine": 25,
+              "endLine": 25
+            }
+          },
+          "attributes": {
+            "startLine": 25,
+            "endLine": 25
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "wp-admin/includes/admin.php",
+          "attributes": {
+            "startLine": 25,
+            "endLine": 25,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 25,
+          "endLine": 25
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 25,
+        "endLine": 25
+      }
+    },
+    "attributes": {
+      "startLine": 25,
+      "endLine": 25
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "nocache_headers"
+        ],
+        "attributes": {
+          "startLine": 27,
+          "endLine": 27
+        }
+      },
+      "args": [],
+      "attributes": {
+        "startLine": 27,
+        "endLine": 27
+      }
+    },
+    "attributes": {
+      "startLine": 27,
+      "endLine": 27
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "do_action"
+        ],
+        "attributes": {
+          "startLine": 30,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/** This action is documented in wp-admin/admin.php */",
+              "line": 29,
+              "filePos": 600,
+              "tokenPos": 102,
+              "endLine": 29,
+              "endFilePos": 653,
+              "endTokenPos": 102
+            }
+          ],
+          "endLine": 30
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "admin_init",
+            "attributes": {
+              "startLine": 30,
+              "endLine": 30,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 30,
+            "endLine": 30
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 30,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** This action is documented in wp-admin/admin.php */",
+            "line": 29,
+            "filePos": 600,
+            "tokenPos": 102,
+            "endLine": 29,
+            "endFilePos": 653,
+            "endTokenPos": 102
+          }
+        ],
+        "endLine": 30
+      }
+    },
+    "attributes": {
+      "startLine": 30,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** This action is documented in wp-admin/admin.php */",
+          "line": 29,
+          "filePos": 600,
+          "tokenPos": 102,
+          "endLine": 29,
+          "endFilePos": 653,
+          "endTokenPos": 102
+        }
+      ],
+      "endLine": 30
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Assign",
+      "var": {
+        "nodeType": "Expr_Variable",
+        "name": "action",
+        "attributes": {
+          "startLine": 32,
+          "endLine": 32
+        }
+      },
+      "expr": {
+        "nodeType": "Expr_Ternary",
+        "cond": {
+          "nodeType": "Expr_Empty",
+          "expr": {
+            "nodeType": "Expr_ArrayDimFetch",
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "_REQUEST",
+              "attributes": {
+                "startLine": 32,
+                "endLine": 32
+              }
+            },
+            "dim": {
+              "nodeType": "Scalar_String",
+              "value": "action",
+              "attributes": {
+                "startLine": 32,
+                "endLine": 32,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 32,
+              "endLine": 32
+            }
+          },
+          "attributes": {
+            "startLine": 32,
+            "endLine": 32
+          }
+        },
+        "if": {
+          "nodeType": "Scalar_String",
+          "value": "",
+          "attributes": {
+            "startLine": 32,
+            "endLine": 32,
+            "kind": 1
+          }
+        },
+        "else": {
+          "nodeType": "Expr_ArrayDimFetch",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "_REQUEST",
+            "attributes": {
+              "startLine": 32,
+              "endLine": 32
+            }
+          },
+          "dim": {
+            "nodeType": "Scalar_String",
+            "value": "action",
+            "attributes": {
+              "startLine": 32,
+              "endLine": 32,
+              "kind": 1
+            }
+          },
+          "attributes": {
+            "startLine": 32,
+            "endLine": 32
+          }
+        },
+        "attributes": {
+          "startLine": 32,
+          "endLine": 32
+        }
+      },
+      "attributes": {
+        "startLine": 32,
+        "endLine": 32
+      }
+    },
+    "attributes": {
+      "startLine": 32,
+      "endLine": 32
+    }
+  },
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_BooleanNot",
+      "expr": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "is_user_logged_in"
+          ],
+          "attributes": {
+            "startLine": 34,
+            "endLine": 34
+          }
+        },
+        "args": [],
+        "attributes": {
+          "startLine": 34,
+          "endLine": 34
+        }
+      },
+      "attributes": {
+        "startLine": 34,
+        "endLine": 34
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_Empty",
+          "expr": {
+            "nodeType": "Expr_Variable",
+            "name": "action",
+            "attributes": {
+              "startLine": 35,
+              "endLine": 35
+            }
+          },
+          "attributes": {
+            "startLine": 35,
+            "endLine": 35
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "do_action"
+                ],
+                "attributes": {
+                  "startLine": 41,
+                  "comments": [
+                    {
+                      "nodeType": "Comment_Doc",
+                      "text": "/**\n\t\t * Fires on a non-authenticated admin post request where no action is supplied.\n\t\t *\n\t\t * @since 2.6.0\n\t\t */",
+                      "line": 36,
+                      "filePos": 811,
+                      "tokenPos": 167,
+                      "endLine": 40,
+                      "endFilePos": 924,
+                      "endTokenPos": 167
+                    }
+                  ],
+                  "endLine": 41
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "admin_post_nopriv",
+                    "attributes": {
+                      "startLine": 41,
+                      "endLine": 41,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 41,
+                    "endLine": 41
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 41,
+                "comments": [
+                  {
+                    "nodeType": "Comment_Doc",
+                    "text": "/**\n\t\t * Fires on a non-authenticated admin post request where no action is supplied.\n\t\t *\n\t\t * @since 2.6.0\n\t\t */",
+                    "line": 36,
+                    "filePos": 811,
+                    "tokenPos": 167,
+                    "endLine": 40,
+                    "endFilePos": 924,
+                    "endTokenPos": 167
+                  }
+                ],
+                "endLine": 41
+              }
+            },
+            "attributes": {
+              "startLine": 41,
+              "comments": [
+                {
+                  "nodeType": "Comment_Doc",
+                  "text": "/**\n\t\t * Fires on a non-authenticated admin post request where no action is supplied.\n\t\t *\n\t\t * @since 2.6.0\n\t\t */",
+                  "line": 36,
+                  "filePos": 811,
+                  "tokenPos": 167,
+                  "endLine": 40,
+                  "endFilePos": 924,
+                  "endTokenPos": 167
+                }
+              ],
+              "endLine": 41
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": {
+          "nodeType": "Stmt_Else",
+          "stmts": [
+            {
+              "nodeType": "Stmt_Expression",
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "do_action"
+                  ],
+                  "attributes": {
+                    "startLine": 51,
+                    "comments": [
+                      {
+                        "nodeType": "Comment_Doc",
+                        "text": "/**\n\t\t * Fires on a non-authenticated admin post request for the given action.\n\t\t *\n\t\t * The dynamic portion of the hook name, `$action`, refers to the given\n\t\t * request action.\n\t\t *\n\t\t * @since 2.6.0\n\t\t */",
+                        "line": 43,
+                        "filePos": 974,
+                        "tokenPos": 183,
+                        "endLine": 50,
+                        "endFilePos": 1180,
+                        "endTokenPos": 183
+                      }
+                    ],
+                    "endLine": 51
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_Encapsed",
+                      "parts": [
+                        {
+                          "nodeType": "Scalar_EncapsedStringPart",
+                          "value": "admin_post_nopriv_",
+                          "attributes": {
+                            "startLine": 51,
+                            "endLine": 51
+                          }
+                        },
+                        {
+                          "nodeType": "Expr_Variable",
+                          "name": "action",
+                          "attributes": {
+                            "startLine": 51,
+                            "endLine": 51
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 51,
+                        "endLine": 51,
+                        "kind": 2
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 51,
+                      "endLine": 51
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 51,
+                  "comments": [
+                    {
+                      "nodeType": "Comment_Doc",
+                      "text": "/**\n\t\t * Fires on a non-authenticated admin post request for the given action.\n\t\t *\n\t\t * The dynamic portion of the hook name, `$action`, refers to the given\n\t\t * request action.\n\t\t *\n\t\t * @since 2.6.0\n\t\t */",
+                      "line": 43,
+                      "filePos": 974,
+                      "tokenPos": 183,
+                      "endLine": 50,
+                      "endFilePos": 1180,
+                      "endTokenPos": 183
+                    }
+                  ],
+                  "endLine": 51
+                }
+              },
+              "attributes": {
+                "startLine": 51,
+                "comments": [
+                  {
+                    "nodeType": "Comment_Doc",
+                    "text": "/**\n\t\t * Fires on a non-authenticated admin post request for the given action.\n\t\t *\n\t\t * The dynamic portion of the hook name, `$action`, refers to the given\n\t\t * request action.\n\t\t *\n\t\t * @since 2.6.0\n\t\t */",
+                    "line": 43,
+                    "filePos": 974,
+                    "tokenPos": 183,
+                    "endLine": 50,
+                    "endFilePos": 1180,
+                    "endTokenPos": 183
+                  }
+                ],
+                "endLine": 51
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 42,
+            "endLine": 52
+          }
+        },
+        "attributes": {
+          "startLine": 35,
+          "endLine": 52
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": {
+      "nodeType": "Stmt_Else",
+      "stmts": [
+        {
+          "nodeType": "Stmt_If",
+          "cond": {
+            "nodeType": "Expr_Empty",
+            "expr": {
+              "nodeType": "Expr_Variable",
+              "name": "action",
+              "attributes": {
+                "startLine": 54,
+                "endLine": 54
+              }
+            },
+            "attributes": {
+              "startLine": 54,
+              "endLine": 54
+            }
+          },
+          "stmts": [
+            {
+              "nodeType": "Stmt_Expression",
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "do_action"
+                  ],
+                  "attributes": {
+                    "startLine": 60,
+                    "comments": [
+                      {
+                        "nodeType": "Comment_Doc",
+                        "text": "/**\n\t\t * Fires on an authenticated admin post request where no action is supplied.\n\t\t *\n\t\t * @since 2.6.0\n\t\t */",
+                        "line": 55,
+                        "filePos": 1269,
+                        "tokenPos": 221,
+                        "endLine": 59,
+                        "endFilePos": 1379,
+                        "endTokenPos": 221
+                      }
+                    ],
+                    "endLine": 60
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "admin_post",
+                      "attributes": {
+                        "startLine": 60,
+                        "endLine": 60,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 60,
+                      "endLine": 60
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 60,
+                  "comments": [
+                    {
+                      "nodeType": "Comment_Doc",
+                      "text": "/**\n\t\t * Fires on an authenticated admin post request where no action is supplied.\n\t\t *\n\t\t * @since 2.6.0\n\t\t */",
+                      "line": 55,
+                      "filePos": 1269,
+                      "tokenPos": 221,
+                      "endLine": 59,
+                      "endFilePos": 1379,
+                      "endTokenPos": 221
+                    }
+                  ],
+                  "endLine": 60
+                }
+              },
+              "attributes": {
+                "startLine": 60,
+                "comments": [
+                  {
+                    "nodeType": "Comment_Doc",
+                    "text": "/**\n\t\t * Fires on an authenticated admin post request where no action is supplied.\n\t\t *\n\t\t * @since 2.6.0\n\t\t */",
+                    "line": 55,
+                    "filePos": 1269,
+                    "tokenPos": 221,
+                    "endLine": 59,
+                    "endFilePos": 1379,
+                    "endTokenPos": 221
+                  }
+                ],
+                "endLine": 60
+              }
+            }
+          ],
+          "elseifs": [],
+          "else": {
+            "nodeType": "Stmt_Else",
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_FuncCall",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "do_action"
+                    ],
+                    "attributes": {
+                      "startLine": 70,
+                      "comments": [
+                        {
+                          "nodeType": "Comment_Doc",
+                          "text": "/**\n\t\t * Fires on an authenticated admin post request for the given action.\n\t\t *\n\t\t * The dynamic portion of the hook name, `$action`, refers to the given\n\t\t * request action.\n\t\t *\n\t\t * @since 2.6.0\n\t\t */",
+                          "line": 62,
+                          "filePos": 1422,
+                          "tokenPos": 237,
+                          "endLine": 69,
+                          "endFilePos": 1625,
+                          "endTokenPos": 237
+                        }
+                      ],
+                      "endLine": 70
+                    }
+                  },
+                  "args": [
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Scalar_Encapsed",
+                        "parts": [
+                          {
+                            "nodeType": "Scalar_EncapsedStringPart",
+                            "value": "admin_post_",
+                            "attributes": {
+                              "startLine": 70,
+                              "endLine": 70
+                            }
+                          },
+                          {
+                            "nodeType": "Expr_Variable",
+                            "name": "action",
+                            "attributes": {
+                              "startLine": 70,
+                              "endLine": 70
+                            }
+                          }
+                        ],
+                        "attributes": {
+                          "startLine": 70,
+                          "endLine": 70,
+                          "kind": 2
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 70,
+                        "endLine": 70
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 70,
+                    "comments": [
+                      {
+                        "nodeType": "Comment_Doc",
+                        "text": "/**\n\t\t * Fires on an authenticated admin post request for the given action.\n\t\t *\n\t\t * The dynamic portion of the hook name, `$action`, refers to the given\n\t\t * request action.\n\t\t *\n\t\t * @since 2.6.0\n\t\t */",
+                        "line": 62,
+                        "filePos": 1422,
+                        "tokenPos": 237,
+                        "endLine": 69,
+                        "endFilePos": 1625,
+                        "endTokenPos": 237
+                      }
+                    ],
+                    "endLine": 70
+                  }
+                },
+                "attributes": {
+                  "startLine": 70,
+                  "comments": [
+                    {
+                      "nodeType": "Comment_Doc",
+                      "text": "/**\n\t\t * Fires on an authenticated admin post request for the given action.\n\t\t *\n\t\t * The dynamic portion of the hook name, `$action`, refers to the given\n\t\t * request action.\n\t\t *\n\t\t * @since 2.6.0\n\t\t */",
+                      "line": 62,
+                      "filePos": 1422,
+                      "tokenPos": 237,
+                      "endLine": 69,
+                      "endFilePos": 1625,
+                      "endTokenPos": 237
+                    }
+                  ],
+                  "endLine": 70
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 61,
+              "endLine": 71
+            }
+          },
+          "attributes": {
+            "startLine": 54,
+            "endLine": 71
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 53,
+        "endLine": 72
+      }
+    },
+    "attributes": {
+      "startLine": 34,
+      "endLine": 72
+    }
+  }
+]

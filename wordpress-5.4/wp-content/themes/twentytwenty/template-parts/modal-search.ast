@@ -1,0 +1,281 @@
+[
+  {
+    "nodeType": "Stmt_Nop",
+    "attributes": {
+      "startLine": 10,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Displays the search icon and modal\n *\n * @package WordPress\n * @subpackage Twenty_Twenty\n * @since Twenty Twenty 1.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 8,
+          "endFilePos": 132,
+          "endTokenPos": 1
+        }
+      ],
+      "endLine": 11
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "<div class=\"search-modal cover-modal header-footer-group\" data-modal-target-string=\".search-modal\">\n\n\t<div class=\"search-modal-inner modal-inner\">\n\n\t\t<div class=\"section-inner\">\n\n\t\t\t",
+    "attributes": {
+      "startLine": 11,
+      "hasLeadingNewline": true,
+      "endLine": 17
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "get_search_form"
+        ],
+        "attributes": {
+          "startLine": 18,
+          "endLine": 18
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_Array",
+            "items": [
+              {
+                "nodeType": "Expr_ArrayItem",
+                "key": {
+                  "nodeType": "Scalar_String",
+                  "value": "label",
+                  "attributes": {
+                    "startLine": 20,
+                    "endLine": 20,
+                    "kind": 1
+                  }
+                },
+                "value": {
+                  "nodeType": "Expr_FuncCall",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "__"
+                    ],
+                    "attributes": {
+                      "startLine": 20,
+                      "endLine": 20
+                    }
+                  },
+                  "args": [
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Scalar_String",
+                        "value": "Search for:",
+                        "attributes": {
+                          "startLine": 20,
+                          "endLine": 20,
+                          "kind": 1
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 20,
+                        "endLine": 20
+                      }
+                    },
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Scalar_String",
+                        "value": "twentytwenty",
+                        "attributes": {
+                          "startLine": 20,
+                          "endLine": 20,
+                          "kind": 1
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 20,
+                        "endLine": 20
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 20,
+                    "endLine": 20
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 20,
+                  "endLine": 20
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 19,
+              "endLine": 21,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 19,
+            "endLine": 21
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 18,
+        "endLine": 22
+      }
+    },
+    "attributes": {
+      "startLine": 18,
+      "endLine": 22
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\n\t\t\t<button class=\"toggle search-untoggle close-search-toggle fill-children-current-color\" data-toggle-target=\".search-modal\" data-toggle-body-class=\"showing-search-modal\" data-set-focus=\".search-modal .search-field\" aria-expanded=\"false\">\n\t\t\t\t<span class=\"screen-reader-text\">",
+    "attributes": {
+      "startLine": 24,
+      "hasLeadingNewline": true,
+      "endLine": 26
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 26,
+          "endLine": 26
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Close search",
+            "attributes": {
+              "startLine": 26,
+              "endLine": 26,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 26,
+            "endLine": 26
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "twentytwenty",
+            "attributes": {
+              "startLine": 26,
+              "endLine": 26,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 26,
+            "endLine": 26
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 26,
+        "endLine": 26
+      }
+    },
+    "attributes": {
+      "startLine": 26,
+      "endLine": 26
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</span>\n\t\t\t\t",
+    "attributes": {
+      "startLine": 26,
+      "hasLeadingNewline": false,
+      "endLine": 27
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "twentytwenty_the_theme_svg"
+        ],
+        "attributes": {
+          "startLine": 27,
+          "endLine": 27
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "cross",
+            "attributes": {
+              "startLine": 27,
+              "endLine": 27,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 27,
+            "endLine": 27
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 27,
+        "endLine": 27
+      }
+    },
+    "attributes": {
+      "startLine": 27,
+      "endLine": 27
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\t\t\t</button><!-- .search-toggle -->\n\n\t\t</div><!-- .section-inner -->\n\n\t</div><!-- .search-modal-inner -->\n\n</div><!-- .menu-modal -->\n",
+    "attributes": {
+      "startLine": 28,
+      "hasLeadingNewline": true,
+      "endLine": 35
+    }
+  }
+]

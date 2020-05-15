@@ -1,0 +1,4890 @@
+[
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "comment_exists",
+      "attributes": {
+        "startLine": 27,
+        "endLine": 27
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "comment_author",
+          "attributes": {
+            "startLine": 27,
+            "endLine": 27
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 27,
+          "endLine": 27
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "comment_date",
+          "attributes": {
+            "startLine": 27,
+            "endLine": 27
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 27,
+          "endLine": 27
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "timezone",
+          "attributes": {
+            "startLine": 27,
+            "endLine": 27
+          }
+        },
+        "default": {
+          "nodeType": "Scalar_String",
+          "value": "blog",
+          "attributes": {
+            "startLine": 27,
+            "endLine": 27,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 27,
+          "endLine": 27
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Global",
+        "vars": [
+          {
+            "nodeType": "Expr_Variable",
+            "name": "wpdb",
+            "attributes": {
+              "startLine": 28,
+              "endLine": 28
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 28,
+          "endLine": 28
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "date_field",
+            "attributes": {
+              "startLine": 30,
+              "endLine": 30
+            }
+          },
+          "expr": {
+            "nodeType": "Scalar_String",
+            "value": "comment_date",
+            "attributes": {
+              "startLine": 30,
+              "endLine": 30,
+              "kind": 1
+            }
+          },
+          "attributes": {
+            "startLine": 30,
+            "endLine": 30
+          }
+        },
+        "attributes": {
+          "startLine": 30,
+          "endLine": 30
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BinaryOp_Identical",
+          "left": {
+            "nodeType": "Scalar_String",
+            "value": "gmt",
+            "attributes": {
+              "startLine": 31,
+              "endLine": 31,
+              "kind": 1
+            }
+          },
+          "right": {
+            "nodeType": "Expr_Variable",
+            "name": "timezone",
+            "attributes": {
+              "startLine": 31,
+              "endLine": 31
+            }
+          },
+          "attributes": {
+            "startLine": 31,
+            "endLine": 31
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "date_field",
+                "attributes": {
+                  "startLine": 32,
+                  "endLine": 32
+                }
+              },
+              "expr": {
+                "nodeType": "Scalar_String",
+                "value": "comment_date_gmt",
+                "attributes": {
+                  "startLine": 32,
+                  "endLine": 32,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 32,
+                "endLine": 32
+              }
+            },
+            "attributes": {
+              "startLine": 32,
+              "endLine": 32
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 31,
+          "endLine": 33
+        }
+      },
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_MethodCall",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "wpdb",
+            "attributes": {
+              "startLine": 35,
+              "endLine": 35
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "get_var",
+            "attributes": {
+              "startLine": 35,
+              "endLine": 35
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_MethodCall",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "wpdb",
+                  "attributes": {
+                    "startLine": 36,
+                    "endLine": 36
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "prepare",
+                  "attributes": {
+                    "startLine": 36,
+                    "endLine": 36
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_Encapsed",
+                      "parts": [
+                        {
+                          "nodeType": "Scalar_EncapsedStringPart",
+                          "value": "SELECT comment_post_ID FROM ",
+                          "attributes": {
+                            "startLine": 37,
+                            "endLine": 37
+                          }
+                        },
+                        {
+                          "nodeType": "Expr_PropertyFetch",
+                          "var": {
+                            "nodeType": "Expr_Variable",
+                            "name": "wpdb",
+                            "attributes": {
+                              "startLine": 37,
+                              "endLine": 37
+                            }
+                          },
+                          "name": {
+                            "nodeType": "Identifier",
+                            "name": "comments",
+                            "attributes": {
+                              "startLine": 37,
+                              "endLine": 37
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 37,
+                            "endLine": 37
+                          }
+                        },
+                        {
+                          "nodeType": "Scalar_EncapsedStringPart",
+                          "value": "\n\t\t\tWHERE comment_author = %s AND ",
+                          "attributes": {
+                            "startLine": 37,
+                            "endLine": 38
+                          }
+                        },
+                        {
+                          "nodeType": "Expr_Variable",
+                          "name": "date_field",
+                          "attributes": {
+                            "startLine": 38,
+                            "endLine": 38
+                          }
+                        },
+                        {
+                          "nodeType": "Scalar_EncapsedStringPart",
+                          "value": " = %s",
+                          "attributes": {
+                            "startLine": 38,
+                            "endLine": 38
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 37,
+                        "endLine": 38,
+                        "kind": 2
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 37,
+                      "endLine": 38
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_FuncCall",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "stripslashes"
+                        ],
+                        "attributes": {
+                          "startLine": 39,
+                          "endLine": 39
+                        }
+                      },
+                      "args": [
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Expr_Variable",
+                            "name": "comment_author",
+                            "attributes": {
+                              "startLine": 39,
+                              "endLine": 39
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 39,
+                            "endLine": 39
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 39,
+                        "endLine": 39
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 39,
+                      "endLine": 39
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_FuncCall",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "stripslashes"
+                        ],
+                        "attributes": {
+                          "startLine": 40,
+                          "endLine": 40
+                        }
+                      },
+                      "args": [
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Expr_Variable",
+                            "name": "comment_date",
+                            "attributes": {
+                              "startLine": 40,
+                              "endLine": 40
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 40,
+                            "endLine": 40
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 40,
+                        "endLine": 40
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 40,
+                      "endLine": 40
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 36,
+                  "endLine": 41
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 36,
+                "endLine": 41
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 35,
+            "endLine": 42
+          }
+        },
+        "attributes": {
+          "startLine": 35,
+          "endLine": 42
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 27,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * WordPress Comment Administration API.\n *\n * @package WordPress\n * @subpackage Administration\n * @since 2.3.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 8,
+          "endFilePos": 124,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Determine if a comment exists based on author and date.\n *\n * For best performance, use `$timezone = 'gmt'`, which queries a field that is properly indexed. The default value\n * for `$timezone` is 'blog' for legacy reasons.\n *\n * @since 2.0.0\n * @since 4.4.0 Added the `$timezone` parameter.\n *\n * @global wpdb $wpdb WordPress database abstraction object.\n *\n * @param string $comment_author Author of the comment.\n * @param string $comment_date   Date of the comment.\n * @param string $timezone       Timezone. Accepts 'blog' or 'gmt'. Default 'blog'.\n *\n * @return mixed Comment post ID on success.\n */",
+          "line": 10,
+          "filePos": 127,
+          "tokenPos": 3,
+          "endLine": 26,
+          "endFilePos": 737,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 43
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "edit_comment",
+      "attributes": {
+        "startLine": 50,
+        "endLine": 50
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BooleanNot",
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "current_user_can"
+              ],
+              "attributes": {
+                "startLine": 51,
+                "endLine": 51
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "edit_comment",
+                  "attributes": {
+                    "startLine": 51,
+                    "endLine": 51,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 51,
+                  "endLine": 51
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Cast_Int",
+                  "expr": {
+                    "nodeType": "Expr_ArrayDimFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "_POST",
+                      "attributes": {
+                        "startLine": 51,
+                        "endLine": 51
+                      }
+                    },
+                    "dim": {
+                      "nodeType": "Scalar_String",
+                      "value": "comment_ID",
+                      "attributes": {
+                        "startLine": 51,
+                        "endLine": 51,
+                        "kind": 1
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 51,
+                      "endLine": 51
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 51,
+                    "endLine": 51
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 51,
+                  "endLine": 51
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 51,
+              "endLine": 51
+            }
+          },
+          "attributes": {
+            "startLine": 51,
+            "endLine": 51
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "wp_die"
+                ],
+                "attributes": {
+                  "startLine": 52,
+                  "endLine": 52
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "__"
+                      ],
+                      "attributes": {
+                        "startLine": 52,
+                        "endLine": 52
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Scalar_String",
+                          "value": "Sorry, you are not allowed to edit comments on this post.",
+                          "attributes": {
+                            "startLine": 52,
+                            "endLine": 52,
+                            "kind": 1
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 52,
+                          "endLine": 52
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 52,
+                      "endLine": 52
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 52,
+                    "endLine": 52
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 52,
+                "endLine": 52
+              }
+            },
+            "attributes": {
+              "startLine": 52,
+              "endLine": 52
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 51,
+          "endLine": 53
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_Isset",
+          "vars": [
+            {
+              "nodeType": "Expr_ArrayDimFetch",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "_POST",
+                "attributes": {
+                  "startLine": 55,
+                  "endLine": 55
+                }
+              },
+              "dim": {
+                "nodeType": "Scalar_String",
+                "value": "newcomment_author",
+                "attributes": {
+                  "startLine": 55,
+                  "endLine": 55,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 55,
+                "endLine": 55
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 55,
+            "endLine": 55
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "_POST",
+                  "attributes": {
+                    "startLine": 56,
+                    "endLine": 56
+                  }
+                },
+                "dim": {
+                  "nodeType": "Scalar_String",
+                  "value": "comment_author",
+                  "attributes": {
+                    "startLine": 56,
+                    "endLine": 56,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 56,
+                  "endLine": 56
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "_POST",
+                  "attributes": {
+                    "startLine": 56,
+                    "endLine": 56
+                  }
+                },
+                "dim": {
+                  "nodeType": "Scalar_String",
+                  "value": "newcomment_author",
+                  "attributes": {
+                    "startLine": 56,
+                    "endLine": 56,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 56,
+                  "endLine": 56
+                }
+              },
+              "attributes": {
+                "startLine": 56,
+                "endLine": 56
+              }
+            },
+            "attributes": {
+              "startLine": 56,
+              "endLine": 56
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 55,
+          "endLine": 57
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_Isset",
+          "vars": [
+            {
+              "nodeType": "Expr_ArrayDimFetch",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "_POST",
+                "attributes": {
+                  "startLine": 58,
+                  "endLine": 58
+                }
+              },
+              "dim": {
+                "nodeType": "Scalar_String",
+                "value": "newcomment_author_email",
+                "attributes": {
+                  "startLine": 58,
+                  "endLine": 58,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 58,
+                "endLine": 58
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 58,
+            "endLine": 58
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "_POST",
+                  "attributes": {
+                    "startLine": 59,
+                    "endLine": 59
+                  }
+                },
+                "dim": {
+                  "nodeType": "Scalar_String",
+                  "value": "comment_author_email",
+                  "attributes": {
+                    "startLine": 59,
+                    "endLine": 59,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 59,
+                  "endLine": 59
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "_POST",
+                  "attributes": {
+                    "startLine": 59,
+                    "endLine": 59
+                  }
+                },
+                "dim": {
+                  "nodeType": "Scalar_String",
+                  "value": "newcomment_author_email",
+                  "attributes": {
+                    "startLine": 59,
+                    "endLine": 59,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 59,
+                  "endLine": 59
+                }
+              },
+              "attributes": {
+                "startLine": 59,
+                "endLine": 59
+              }
+            },
+            "attributes": {
+              "startLine": 59,
+              "endLine": 59
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 58,
+          "endLine": 60
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_Isset",
+          "vars": [
+            {
+              "nodeType": "Expr_ArrayDimFetch",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "_POST",
+                "attributes": {
+                  "startLine": 61,
+                  "endLine": 61
+                }
+              },
+              "dim": {
+                "nodeType": "Scalar_String",
+                "value": "newcomment_author_url",
+                "attributes": {
+                  "startLine": 61,
+                  "endLine": 61,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 61,
+                "endLine": 61
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 61,
+            "endLine": 61
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "_POST",
+                  "attributes": {
+                    "startLine": 62,
+                    "endLine": 62
+                  }
+                },
+                "dim": {
+                  "nodeType": "Scalar_String",
+                  "value": "comment_author_url",
+                  "attributes": {
+                    "startLine": 62,
+                    "endLine": 62,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 62,
+                  "endLine": 62
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "_POST",
+                  "attributes": {
+                    "startLine": 62,
+                    "endLine": 62
+                  }
+                },
+                "dim": {
+                  "nodeType": "Scalar_String",
+                  "value": "newcomment_author_url",
+                  "attributes": {
+                    "startLine": 62,
+                    "endLine": 62,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 62,
+                  "endLine": 62
+                }
+              },
+              "attributes": {
+                "startLine": 62,
+                "endLine": 62
+              }
+            },
+            "attributes": {
+              "startLine": 62,
+              "endLine": 62
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 61,
+          "endLine": 63
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_Isset",
+          "vars": [
+            {
+              "nodeType": "Expr_ArrayDimFetch",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "_POST",
+                "attributes": {
+                  "startLine": 64,
+                  "endLine": 64
+                }
+              },
+              "dim": {
+                "nodeType": "Scalar_String",
+                "value": "comment_status",
+                "attributes": {
+                  "startLine": 64,
+                  "endLine": 64,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 64,
+                "endLine": 64
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 64,
+            "endLine": 64
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "_POST",
+                  "attributes": {
+                    "startLine": 65,
+                    "endLine": 65
+                  }
+                },
+                "dim": {
+                  "nodeType": "Scalar_String",
+                  "value": "comment_approved",
+                  "attributes": {
+                    "startLine": 65,
+                    "endLine": 65,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 65,
+                  "endLine": 65
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "_POST",
+                  "attributes": {
+                    "startLine": 65,
+                    "endLine": 65
+                  }
+                },
+                "dim": {
+                  "nodeType": "Scalar_String",
+                  "value": "comment_status",
+                  "attributes": {
+                    "startLine": 65,
+                    "endLine": 65,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 65,
+                  "endLine": 65
+                }
+              },
+              "attributes": {
+                "startLine": 65,
+                "endLine": 65
+              }
+            },
+            "attributes": {
+              "startLine": 65,
+              "endLine": 65
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 64,
+          "endLine": 66
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_Isset",
+          "vars": [
+            {
+              "nodeType": "Expr_ArrayDimFetch",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "_POST",
+                "attributes": {
+                  "startLine": 67,
+                  "endLine": 67
+                }
+              },
+              "dim": {
+                "nodeType": "Scalar_String",
+                "value": "content",
+                "attributes": {
+                  "startLine": 67,
+                  "endLine": 67,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 67,
+                "endLine": 67
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 67,
+            "endLine": 67
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "_POST",
+                  "attributes": {
+                    "startLine": 68,
+                    "endLine": 68
+                  }
+                },
+                "dim": {
+                  "nodeType": "Scalar_String",
+                  "value": "comment_content",
+                  "attributes": {
+                    "startLine": 68,
+                    "endLine": 68,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 68,
+                  "endLine": 68
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "_POST",
+                  "attributes": {
+                    "startLine": 68,
+                    "endLine": 68
+                  }
+                },
+                "dim": {
+                  "nodeType": "Scalar_String",
+                  "value": "content",
+                  "attributes": {
+                    "startLine": 68,
+                    "endLine": 68,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 68,
+                  "endLine": 68
+                }
+              },
+              "attributes": {
+                "startLine": 68,
+                "endLine": 68
+              }
+            },
+            "attributes": {
+              "startLine": 68,
+              "endLine": 68
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 67,
+          "endLine": 69
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_Isset",
+          "vars": [
+            {
+              "nodeType": "Expr_ArrayDimFetch",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "_POST",
+                "attributes": {
+                  "startLine": 70,
+                  "endLine": 70
+                }
+              },
+              "dim": {
+                "nodeType": "Scalar_String",
+                "value": "comment_ID",
+                "attributes": {
+                  "startLine": 70,
+                  "endLine": 70,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 70,
+                "endLine": 70
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 70,
+            "endLine": 70
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "_POST",
+                  "attributes": {
+                    "startLine": 71,
+                    "endLine": 71
+                  }
+                },
+                "dim": {
+                  "nodeType": "Scalar_String",
+                  "value": "comment_ID",
+                  "attributes": {
+                    "startLine": 71,
+                    "endLine": 71,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 71,
+                  "endLine": 71
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Cast_Int",
+                "expr": {
+                  "nodeType": "Expr_ArrayDimFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "_POST",
+                    "attributes": {
+                      "startLine": 71,
+                      "endLine": 71
+                    }
+                  },
+                  "dim": {
+                    "nodeType": "Scalar_String",
+                    "value": "comment_ID",
+                    "attributes": {
+                      "startLine": 71,
+                      "endLine": 71,
+                      "kind": 1
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 71,
+                    "endLine": 71
+                  }
+                },
+                "attributes": {
+                  "startLine": 71,
+                  "endLine": 71
+                }
+              },
+              "attributes": {
+                "startLine": 71,
+                "endLine": 71
+              }
+            },
+            "attributes": {
+              "startLine": 71,
+              "endLine": 71
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 70,
+          "endLine": 72
+        }
+      },
+      {
+        "nodeType": "Stmt_Foreach",
+        "expr": {
+          "nodeType": "Expr_Array",
+          "items": [
+            {
+              "nodeType": "Expr_ArrayItem",
+              "key": null,
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "aa",
+                "attributes": {
+                  "startLine": 74,
+                  "endLine": 74,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 74,
+                "endLine": 74
+              }
+            },
+            {
+              "nodeType": "Expr_ArrayItem",
+              "key": null,
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "mm",
+                "attributes": {
+                  "startLine": 74,
+                  "endLine": 74,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 74,
+                "endLine": 74
+              }
+            },
+            {
+              "nodeType": "Expr_ArrayItem",
+              "key": null,
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "jj",
+                "attributes": {
+                  "startLine": 74,
+                  "endLine": 74,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 74,
+                "endLine": 74
+              }
+            },
+            {
+              "nodeType": "Expr_ArrayItem",
+              "key": null,
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "hh",
+                "attributes": {
+                  "startLine": 74,
+                  "endLine": 74,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 74,
+                "endLine": 74
+              }
+            },
+            {
+              "nodeType": "Expr_ArrayItem",
+              "key": null,
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "mn",
+                "attributes": {
+                  "startLine": 74,
+                  "endLine": 74,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 74,
+                "endLine": 74
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 74,
+            "endLine": 74,
+            "kind": 1
+          }
+        },
+        "keyVar": null,
+        "byRef": false,
+        "valueVar": {
+          "nodeType": "Expr_Variable",
+          "name": "timeunit",
+          "attributes": {
+            "startLine": 74,
+            "endLine": 74
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BinaryOp_BooleanAnd",
+              "left": {
+                "nodeType": "Expr_BooleanNot",
+                "expr": {
+                  "nodeType": "Expr_Empty",
+                  "expr": {
+                    "nodeType": "Expr_ArrayDimFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "_POST",
+                      "attributes": {
+                        "startLine": 75,
+                        "endLine": 75
+                      }
+                    },
+                    "dim": {
+                      "nodeType": "Expr_BinaryOp_Concat",
+                      "left": {
+                        "nodeType": "Scalar_String",
+                        "value": "hidden_",
+                        "attributes": {
+                          "startLine": 75,
+                          "endLine": 75,
+                          "kind": 1
+                        }
+                      },
+                      "right": {
+                        "nodeType": "Expr_Variable",
+                        "name": "timeunit",
+                        "attributes": {
+                          "startLine": 75,
+                          "endLine": 75
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 75,
+                        "endLine": 75
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 75,
+                      "endLine": 75
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 75,
+                    "endLine": 75
+                  }
+                },
+                "attributes": {
+                  "startLine": 75,
+                  "endLine": 75
+                }
+              },
+              "right": {
+                "nodeType": "Expr_BinaryOp_NotEqual",
+                "left": {
+                  "nodeType": "Expr_ArrayDimFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "_POST",
+                    "attributes": {
+                      "startLine": 75,
+                      "endLine": 75
+                    }
+                  },
+                  "dim": {
+                    "nodeType": "Expr_BinaryOp_Concat",
+                    "left": {
+                      "nodeType": "Scalar_String",
+                      "value": "hidden_",
+                      "attributes": {
+                        "startLine": 75,
+                        "endLine": 75,
+                        "kind": 1
+                      }
+                    },
+                    "right": {
+                      "nodeType": "Expr_Variable",
+                      "name": "timeunit",
+                      "attributes": {
+                        "startLine": 75,
+                        "endLine": 75
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 75,
+                      "endLine": 75
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 75,
+                    "endLine": 75
+                  }
+                },
+                "right": {
+                  "nodeType": "Expr_ArrayDimFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "_POST",
+                    "attributes": {
+                      "startLine": 75,
+                      "endLine": 75
+                    }
+                  },
+                  "dim": {
+                    "nodeType": "Expr_Variable",
+                    "name": "timeunit",
+                    "attributes": {
+                      "startLine": 75,
+                      "endLine": 75
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 75,
+                    "endLine": 75
+                  }
+                },
+                "attributes": {
+                  "startLine": 75,
+                  "endLine": 75
+                }
+              },
+              "attributes": {
+                "startLine": 75,
+                "endLine": 75
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_ArrayDimFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "_POST",
+                      "attributes": {
+                        "startLine": 76,
+                        "endLine": 76
+                      }
+                    },
+                    "dim": {
+                      "nodeType": "Scalar_String",
+                      "value": "edit_date",
+                      "attributes": {
+                        "startLine": 76,
+                        "endLine": 76,
+                        "kind": 1
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 76,
+                      "endLine": 76
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Scalar_String",
+                    "value": "1",
+                    "attributes": {
+                      "startLine": 76,
+                      "endLine": 76,
+                      "kind": 1
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 76,
+                    "endLine": 76
+                  }
+                },
+                "attributes": {
+                  "startLine": 76,
+                  "endLine": 76
+                }
+              },
+              {
+                "nodeType": "Stmt_Break",
+                "num": null,
+                "attributes": {
+                  "startLine": 77,
+                  "endLine": 77
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 75,
+              "endLine": 78
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 74,
+          "endLine": 79
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BooleanNot",
+          "expr": {
+            "nodeType": "Expr_Empty",
+            "expr": {
+              "nodeType": "Expr_ArrayDimFetch",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "_POST",
+                "attributes": {
+                  "startLine": 81,
+                  "endLine": 81
+                }
+              },
+              "dim": {
+                "nodeType": "Scalar_String",
+                "value": "edit_date",
+                "attributes": {
+                  "startLine": 81,
+                  "endLine": 81,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 81,
+                "endLine": 81
+              }
+            },
+            "attributes": {
+              "startLine": 81,
+              "endLine": 81
+            }
+          },
+          "attributes": {
+            "startLine": 81,
+            "endLine": 81
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "aa",
+                "attributes": {
+                  "startLine": 82,
+                  "endLine": 82
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "_POST",
+                  "attributes": {
+                    "startLine": 82,
+                    "endLine": 82
+                  }
+                },
+                "dim": {
+                  "nodeType": "Scalar_String",
+                  "value": "aa",
+                  "attributes": {
+                    "startLine": 82,
+                    "endLine": 82,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 82,
+                  "endLine": 82
+                }
+              },
+              "attributes": {
+                "startLine": 82,
+                "endLine": 82
+              }
+            },
+            "attributes": {
+              "startLine": 82,
+              "endLine": 82
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "mm",
+                "attributes": {
+                  "startLine": 83,
+                  "endLine": 83
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "_POST",
+                  "attributes": {
+                    "startLine": 83,
+                    "endLine": 83
+                  }
+                },
+                "dim": {
+                  "nodeType": "Scalar_String",
+                  "value": "mm",
+                  "attributes": {
+                    "startLine": 83,
+                    "endLine": 83,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 83,
+                  "endLine": 83
+                }
+              },
+              "attributes": {
+                "startLine": 83,
+                "endLine": 83
+              }
+            },
+            "attributes": {
+              "startLine": 83,
+              "endLine": 83
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "jj",
+                "attributes": {
+                  "startLine": 84,
+                  "endLine": 84
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "_POST",
+                  "attributes": {
+                    "startLine": 84,
+                    "endLine": 84
+                  }
+                },
+                "dim": {
+                  "nodeType": "Scalar_String",
+                  "value": "jj",
+                  "attributes": {
+                    "startLine": 84,
+                    "endLine": 84,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 84,
+                  "endLine": 84
+                }
+              },
+              "attributes": {
+                "startLine": 84,
+                "endLine": 84
+              }
+            },
+            "attributes": {
+              "startLine": 84,
+              "endLine": 84
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "hh",
+                "attributes": {
+                  "startLine": 85,
+                  "endLine": 85
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "_POST",
+                  "attributes": {
+                    "startLine": 85,
+                    "endLine": 85
+                  }
+                },
+                "dim": {
+                  "nodeType": "Scalar_String",
+                  "value": "hh",
+                  "attributes": {
+                    "startLine": 85,
+                    "endLine": 85,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 85,
+                  "endLine": 85
+                }
+              },
+              "attributes": {
+                "startLine": 85,
+                "endLine": 85
+              }
+            },
+            "attributes": {
+              "startLine": 85,
+              "endLine": 85
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "mn",
+                "attributes": {
+                  "startLine": 86,
+                  "endLine": 86
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "_POST",
+                  "attributes": {
+                    "startLine": 86,
+                    "endLine": 86
+                  }
+                },
+                "dim": {
+                  "nodeType": "Scalar_String",
+                  "value": "mn",
+                  "attributes": {
+                    "startLine": 86,
+                    "endLine": 86,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 86,
+                  "endLine": 86
+                }
+              },
+              "attributes": {
+                "startLine": 86,
+                "endLine": 86
+              }
+            },
+            "attributes": {
+              "startLine": 86,
+              "endLine": 86
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "ss",
+                "attributes": {
+                  "startLine": 87,
+                  "endLine": 87
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "_POST",
+                  "attributes": {
+                    "startLine": 87,
+                    "endLine": 87
+                  }
+                },
+                "dim": {
+                  "nodeType": "Scalar_String",
+                  "value": "ss",
+                  "attributes": {
+                    "startLine": 87,
+                    "endLine": 87,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 87,
+                  "endLine": 87
+                }
+              },
+              "attributes": {
+                "startLine": 87,
+                "endLine": 87
+              }
+            },
+            "attributes": {
+              "startLine": 87,
+              "endLine": 87
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "jj",
+                "attributes": {
+                  "startLine": 88,
+                  "endLine": 88
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Ternary",
+                "cond": {
+                  "nodeType": "Expr_BinaryOp_Greater",
+                  "left": {
+                    "nodeType": "Expr_Variable",
+                    "name": "jj",
+                    "attributes": {
+                      "startLine": 88,
+                      "endLine": 88
+                    }
+                  },
+                  "right": {
+                    "nodeType": "Scalar_LNumber",
+                    "value": 31,
+                    "attributes": {
+                      "startLine": 88,
+                      "endLine": 88,
+                      "kind": 10
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 88,
+                    "endLine": 88
+                  }
+                },
+                "if": {
+                  "nodeType": "Scalar_LNumber",
+                  "value": 31,
+                  "attributes": {
+                    "startLine": 88,
+                    "endLine": 88,
+                    "kind": 10
+                  }
+                },
+                "else": {
+                  "nodeType": "Expr_Variable",
+                  "name": "jj",
+                  "attributes": {
+                    "startLine": 88,
+                    "endLine": 88
+                  }
+                },
+                "attributes": {
+                  "startLine": 88,
+                  "endLine": 88
+                }
+              },
+              "attributes": {
+                "startLine": 88,
+                "endLine": 88
+              }
+            },
+            "attributes": {
+              "startLine": 88,
+              "endLine": 88
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "hh",
+                "attributes": {
+                  "startLine": 89,
+                  "endLine": 89
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Ternary",
+                "cond": {
+                  "nodeType": "Expr_BinaryOp_Greater",
+                  "left": {
+                    "nodeType": "Expr_Variable",
+                    "name": "hh",
+                    "attributes": {
+                      "startLine": 89,
+                      "endLine": 89
+                    }
+                  },
+                  "right": {
+                    "nodeType": "Scalar_LNumber",
+                    "value": 23,
+                    "attributes": {
+                      "startLine": 89,
+                      "endLine": 89,
+                      "kind": 10
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 89,
+                    "endLine": 89
+                  }
+                },
+                "if": {
+                  "nodeType": "Expr_BinaryOp_Minus",
+                  "left": {
+                    "nodeType": "Expr_Variable",
+                    "name": "hh",
+                    "attributes": {
+                      "startLine": 89,
+                      "endLine": 89
+                    }
+                  },
+                  "right": {
+                    "nodeType": "Scalar_LNumber",
+                    "value": 24,
+                    "attributes": {
+                      "startLine": 89,
+                      "endLine": 89,
+                      "kind": 10
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 89,
+                    "endLine": 89
+                  }
+                },
+                "else": {
+                  "nodeType": "Expr_Variable",
+                  "name": "hh",
+                  "attributes": {
+                    "startLine": 89,
+                    "endLine": 89
+                  }
+                },
+                "attributes": {
+                  "startLine": 89,
+                  "endLine": 89
+                }
+              },
+              "attributes": {
+                "startLine": 89,
+                "endLine": 89
+              }
+            },
+            "attributes": {
+              "startLine": 89,
+              "endLine": 89
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "mn",
+                "attributes": {
+                  "startLine": 90,
+                  "endLine": 90
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Ternary",
+                "cond": {
+                  "nodeType": "Expr_BinaryOp_Greater",
+                  "left": {
+                    "nodeType": "Expr_Variable",
+                    "name": "mn",
+                    "attributes": {
+                      "startLine": 90,
+                      "endLine": 90
+                    }
+                  },
+                  "right": {
+                    "nodeType": "Scalar_LNumber",
+                    "value": 59,
+                    "attributes": {
+                      "startLine": 90,
+                      "endLine": 90,
+                      "kind": 10
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 90,
+                    "endLine": 90
+                  }
+                },
+                "if": {
+                  "nodeType": "Expr_BinaryOp_Minus",
+                  "left": {
+                    "nodeType": "Expr_Variable",
+                    "name": "mn",
+                    "attributes": {
+                      "startLine": 90,
+                      "endLine": 90
+                    }
+                  },
+                  "right": {
+                    "nodeType": "Scalar_LNumber",
+                    "value": 60,
+                    "attributes": {
+                      "startLine": 90,
+                      "endLine": 90,
+                      "kind": 10
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 90,
+                    "endLine": 90
+                  }
+                },
+                "else": {
+                  "nodeType": "Expr_Variable",
+                  "name": "mn",
+                  "attributes": {
+                    "startLine": 90,
+                    "endLine": 90
+                  }
+                },
+                "attributes": {
+                  "startLine": 90,
+                  "endLine": 90
+                }
+              },
+              "attributes": {
+                "startLine": 90,
+                "endLine": 90
+              }
+            },
+            "attributes": {
+              "startLine": 90,
+              "endLine": 90
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "ss",
+                "attributes": {
+                  "startLine": 91,
+                  "endLine": 91
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Ternary",
+                "cond": {
+                  "nodeType": "Expr_BinaryOp_Greater",
+                  "left": {
+                    "nodeType": "Expr_Variable",
+                    "name": "ss",
+                    "attributes": {
+                      "startLine": 91,
+                      "endLine": 91
+                    }
+                  },
+                  "right": {
+                    "nodeType": "Scalar_LNumber",
+                    "value": 59,
+                    "attributes": {
+                      "startLine": 91,
+                      "endLine": 91,
+                      "kind": 10
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 91,
+                    "endLine": 91
+                  }
+                },
+                "if": {
+                  "nodeType": "Expr_BinaryOp_Minus",
+                  "left": {
+                    "nodeType": "Expr_Variable",
+                    "name": "ss",
+                    "attributes": {
+                      "startLine": 91,
+                      "endLine": 91
+                    }
+                  },
+                  "right": {
+                    "nodeType": "Scalar_LNumber",
+                    "value": 60,
+                    "attributes": {
+                      "startLine": 91,
+                      "endLine": 91,
+                      "kind": 10
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 91,
+                    "endLine": 91
+                  }
+                },
+                "else": {
+                  "nodeType": "Expr_Variable",
+                  "name": "ss",
+                  "attributes": {
+                    "startLine": 91,
+                    "endLine": 91
+                  }
+                },
+                "attributes": {
+                  "startLine": 91,
+                  "endLine": 91
+                }
+              },
+              "attributes": {
+                "startLine": 91,
+                "endLine": 91
+              }
+            },
+            "attributes": {
+              "startLine": 91,
+              "endLine": 91
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "_POST",
+                  "attributes": {
+                    "startLine": 93,
+                    "endLine": 93
+                  }
+                },
+                "dim": {
+                  "nodeType": "Scalar_String",
+                  "value": "comment_date",
+                  "attributes": {
+                    "startLine": 93,
+                    "endLine": 93,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 93,
+                  "endLine": 93
+                }
+              },
+              "expr": {
+                "nodeType": "Scalar_Encapsed",
+                "parts": [
+                  {
+                    "nodeType": "Expr_Variable",
+                    "name": "aa",
+                    "attributes": {
+                      "startLine": 93,
+                      "endLine": 93
+                    }
+                  },
+                  {
+                    "nodeType": "Scalar_EncapsedStringPart",
+                    "value": "-",
+                    "attributes": {
+                      "startLine": 93,
+                      "endLine": 93
+                    }
+                  },
+                  {
+                    "nodeType": "Expr_Variable",
+                    "name": "mm",
+                    "attributes": {
+                      "startLine": 93,
+                      "endLine": 93
+                    }
+                  },
+                  {
+                    "nodeType": "Scalar_EncapsedStringPart",
+                    "value": "-",
+                    "attributes": {
+                      "startLine": 93,
+                      "endLine": 93
+                    }
+                  },
+                  {
+                    "nodeType": "Expr_Variable",
+                    "name": "jj",
+                    "attributes": {
+                      "startLine": 93,
+                      "endLine": 93
+                    }
+                  },
+                  {
+                    "nodeType": "Scalar_EncapsedStringPart",
+                    "value": " ",
+                    "attributes": {
+                      "startLine": 93,
+                      "endLine": 93
+                    }
+                  },
+                  {
+                    "nodeType": "Expr_Variable",
+                    "name": "hh",
+                    "attributes": {
+                      "startLine": 93,
+                      "endLine": 93
+                    }
+                  },
+                  {
+                    "nodeType": "Scalar_EncapsedStringPart",
+                    "value": ":",
+                    "attributes": {
+                      "startLine": 93,
+                      "endLine": 93
+                    }
+                  },
+                  {
+                    "nodeType": "Expr_Variable",
+                    "name": "mn",
+                    "attributes": {
+                      "startLine": 93,
+                      "endLine": 93
+                    }
+                  },
+                  {
+                    "nodeType": "Scalar_EncapsedStringPart",
+                    "value": ":",
+                    "attributes": {
+                      "startLine": 93,
+                      "endLine": 93
+                    }
+                  },
+                  {
+                    "nodeType": "Expr_Variable",
+                    "name": "ss",
+                    "attributes": {
+                      "startLine": 93,
+                      "endLine": 93
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 93,
+                  "endLine": 93,
+                  "kind": 2
+                }
+              },
+              "attributes": {
+                "startLine": 93,
+                "endLine": 93
+              }
+            },
+            "attributes": {
+              "startLine": 93,
+              "endLine": 93
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 81,
+          "endLine": 94
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "wp_update_comment"
+            ],
+            "attributes": {
+              "startLine": 96,
+              "endLine": 96
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "_POST",
+                "attributes": {
+                  "startLine": 96,
+                  "endLine": 96
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 96,
+                "endLine": 96
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 96,
+            "endLine": 96
+          }
+        },
+        "attributes": {
+          "startLine": 96,
+          "endLine": 96
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 50,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Update a comment with values provided in $_POST.\n *\n * @since 2.0.0\n */",
+          "line": 45,
+          "filePos": 1158,
+          "tokenPos": 106,
+          "endLine": 49,
+          "endFilePos": 1235,
+          "endTokenPos": 106
+        }
+      ],
+      "endLine": 97
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "get_comment_to_edit",
+      "attributes": {
+        "startLine": 107,
+        "endLine": 107
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "id",
+          "attributes": {
+            "startLine": 107,
+            "endLine": 107
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 107,
+          "endLine": 107
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "comment",
+            "attributes": {
+              "startLine": 108,
+              "endLine": 108
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "get_comment"
+              ],
+              "attributes": {
+                "startLine": 108,
+                "endLine": 108
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "id",
+                  "attributes": {
+                    "startLine": 108,
+                    "endLine": 108
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 108,
+                  "endLine": 108
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 108,
+              "endLine": 108
+            }
+          },
+          "attributes": {
+            "startLine": 108,
+            "endLine": 108
+          }
+        },
+        "attributes": {
+          "startLine": 108,
+          "endLine": 108
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BooleanNot",
+          "expr": {
+            "nodeType": "Expr_Variable",
+            "name": "comment",
+            "attributes": {
+              "startLine": 109,
+              "endLine": 109
+            }
+          },
+          "attributes": {
+            "startLine": 109,
+            "endLine": 109
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_ConstFetch",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "false"
+                ],
+                "attributes": {
+                  "startLine": 110,
+                  "endLine": 110
+                }
+              },
+              "attributes": {
+                "startLine": 110,
+                "endLine": 110
+              }
+            },
+            "attributes": {
+              "startLine": 110,
+              "endLine": 110
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 109,
+          "endLine": 111
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_PropertyFetch",
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "comment",
+              "attributes": {
+                "startLine": 113,
+                "endLine": 113
+              }
+            },
+            "name": {
+              "nodeType": "Identifier",
+              "name": "comment_ID",
+              "attributes": {
+                "startLine": 113,
+                "endLine": 113
+              }
+            },
+            "attributes": {
+              "startLine": 113,
+              "endLine": 113
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_Cast_Int",
+            "expr": {
+              "nodeType": "Expr_PropertyFetch",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "comment",
+                "attributes": {
+                  "startLine": 113,
+                  "endLine": 113
+                }
+              },
+              "name": {
+                "nodeType": "Identifier",
+                "name": "comment_ID",
+                "attributes": {
+                  "startLine": 113,
+                  "endLine": 113
+                }
+              },
+              "attributes": {
+                "startLine": 113,
+                "endLine": 113
+              }
+            },
+            "attributes": {
+              "startLine": 113,
+              "endLine": 113
+            }
+          },
+          "attributes": {
+            "startLine": 113,
+            "endLine": 113
+          }
+        },
+        "attributes": {
+          "startLine": 113,
+          "endLine": 113
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_PropertyFetch",
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "comment",
+              "attributes": {
+                "startLine": 114,
+                "endLine": 114
+              }
+            },
+            "name": {
+              "nodeType": "Identifier",
+              "name": "comment_post_ID",
+              "attributes": {
+                "startLine": 114,
+                "endLine": 114
+              }
+            },
+            "attributes": {
+              "startLine": 114,
+              "endLine": 114
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_Cast_Int",
+            "expr": {
+              "nodeType": "Expr_PropertyFetch",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "comment",
+                "attributes": {
+                  "startLine": 114,
+                  "endLine": 114
+                }
+              },
+              "name": {
+                "nodeType": "Identifier",
+                "name": "comment_post_ID",
+                "attributes": {
+                  "startLine": 114,
+                  "endLine": 114
+                }
+              },
+              "attributes": {
+                "startLine": 114,
+                "endLine": 114
+              }
+            },
+            "attributes": {
+              "startLine": 114,
+              "endLine": 114
+            }
+          },
+          "attributes": {
+            "startLine": 114,
+            "endLine": 114
+          }
+        },
+        "attributes": {
+          "startLine": 114,
+          "endLine": 114
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_PropertyFetch",
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "comment",
+              "attributes": {
+                "startLine": 116,
+                "endLine": 116
+              }
+            },
+            "name": {
+              "nodeType": "Identifier",
+              "name": "comment_content",
+              "attributes": {
+                "startLine": 116,
+                "endLine": 116
+              }
+            },
+            "attributes": {
+              "startLine": 116,
+              "endLine": 116
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "format_to_edit"
+              ],
+              "attributes": {
+                "startLine": 116,
+                "endLine": 116
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_PropertyFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "comment",
+                    "attributes": {
+                      "startLine": 116,
+                      "endLine": 116
+                    }
+                  },
+                  "name": {
+                    "nodeType": "Identifier",
+                    "name": "comment_content",
+                    "attributes": {
+                      "startLine": 116,
+                      "endLine": 116
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 116,
+                    "endLine": 116
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 116,
+                  "endLine": 116
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 116,
+              "endLine": 116
+            }
+          },
+          "attributes": {
+            "startLine": 116,
+            "endLine": 116
+          }
+        },
+        "attributes": {
+          "startLine": 116,
+          "endLine": 116
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_PropertyFetch",
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "comment",
+              "attributes": {
+                "startLine": 124,
+                "comments": [
+                  {
+                    "nodeType": "Comment_Doc",
+                    "text": "/**\n\t * Filters the comment content before editing.\n\t *\n\t * @since 2.0.0\n\t *\n\t * @param string $comment->comment_content Comment content.\n\t */",
+                    "line": 117,
+                    "filePos": 3203,
+                    "tokenPos": 756,
+                    "endLine": 123,
+                    "endFilePos": 3344,
+                    "endTokenPos": 756
+                  }
+                ],
+                "endLine": 124
+              }
+            },
+            "name": {
+              "nodeType": "Identifier",
+              "name": "comment_content",
+              "attributes": {
+                "startLine": 124,
+                "endLine": 124
+              }
+            },
+            "attributes": {
+              "startLine": 124,
+              "comments": [
+                {
+                  "nodeType": "Comment_Doc",
+                  "text": "/**\n\t * Filters the comment content before editing.\n\t *\n\t * @since 2.0.0\n\t *\n\t * @param string $comment->comment_content Comment content.\n\t */",
+                  "line": 117,
+                  "filePos": 3203,
+                  "tokenPos": 756,
+                  "endLine": 123,
+                  "endFilePos": 3344,
+                  "endTokenPos": 756
+                }
+              ],
+              "endLine": 124
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "apply_filters"
+              ],
+              "attributes": {
+                "startLine": 124,
+                "endLine": 124
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "comment_edit_pre",
+                  "attributes": {
+                    "startLine": 124,
+                    "endLine": 124,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 124,
+                  "endLine": 124
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_PropertyFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "comment",
+                    "attributes": {
+                      "startLine": 124,
+                      "endLine": 124
+                    }
+                  },
+                  "name": {
+                    "nodeType": "Identifier",
+                    "name": "comment_content",
+                    "attributes": {
+                      "startLine": 124,
+                      "endLine": 124
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 124,
+                    "endLine": 124
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 124,
+                  "endLine": 124
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 124,
+              "endLine": 124
+            }
+          },
+          "attributes": {
+            "startLine": 124,
+            "comments": [
+              {
+                "nodeType": "Comment_Doc",
+                "text": "/**\n\t * Filters the comment content before editing.\n\t *\n\t * @since 2.0.0\n\t *\n\t * @param string $comment->comment_content Comment content.\n\t */",
+                "line": 117,
+                "filePos": 3203,
+                "tokenPos": 756,
+                "endLine": 123,
+                "endFilePos": 3344,
+                "endTokenPos": 756
+              }
+            ],
+            "endLine": 124
+          }
+        },
+        "attributes": {
+          "startLine": 124,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Filters the comment content before editing.\n\t *\n\t * @since 2.0.0\n\t *\n\t * @param string $comment->comment_content Comment content.\n\t */",
+              "line": 117,
+              "filePos": 3203,
+              "tokenPos": 756,
+              "endLine": 123,
+              "endFilePos": 3344,
+              "endTokenPos": 756
+            }
+          ],
+          "endLine": 124
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_PropertyFetch",
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "comment",
+              "attributes": {
+                "startLine": 126,
+                "endLine": 126
+              }
+            },
+            "name": {
+              "nodeType": "Identifier",
+              "name": "comment_author",
+              "attributes": {
+                "startLine": 126,
+                "endLine": 126
+              }
+            },
+            "attributes": {
+              "startLine": 126,
+              "endLine": 126
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "format_to_edit"
+              ],
+              "attributes": {
+                "startLine": 126,
+                "endLine": 126
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_PropertyFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "comment",
+                    "attributes": {
+                      "startLine": 126,
+                      "endLine": 126
+                    }
+                  },
+                  "name": {
+                    "nodeType": "Identifier",
+                    "name": "comment_author",
+                    "attributes": {
+                      "startLine": 126,
+                      "endLine": 126
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 126,
+                    "endLine": 126
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 126,
+                  "endLine": 126
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 126,
+              "endLine": 126
+            }
+          },
+          "attributes": {
+            "startLine": 126,
+            "endLine": 126
+          }
+        },
+        "attributes": {
+          "startLine": 126,
+          "endLine": 126
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_PropertyFetch",
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "comment",
+              "attributes": {
+                "startLine": 127,
+                "endLine": 127
+              }
+            },
+            "name": {
+              "nodeType": "Identifier",
+              "name": "comment_author_email",
+              "attributes": {
+                "startLine": 127,
+                "endLine": 127
+              }
+            },
+            "attributes": {
+              "startLine": 127,
+              "endLine": 127
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "format_to_edit"
+              ],
+              "attributes": {
+                "startLine": 127,
+                "endLine": 127
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_PropertyFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "comment",
+                    "attributes": {
+                      "startLine": 127,
+                      "endLine": 127
+                    }
+                  },
+                  "name": {
+                    "nodeType": "Identifier",
+                    "name": "comment_author_email",
+                    "attributes": {
+                      "startLine": 127,
+                      "endLine": 127
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 127,
+                    "endLine": 127
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 127,
+                  "endLine": 127
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 127,
+              "endLine": 127
+            }
+          },
+          "attributes": {
+            "startLine": 127,
+            "endLine": 127
+          }
+        },
+        "attributes": {
+          "startLine": 127,
+          "endLine": 127
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_PropertyFetch",
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "comment",
+              "attributes": {
+                "startLine": 128,
+                "endLine": 128
+              }
+            },
+            "name": {
+              "nodeType": "Identifier",
+              "name": "comment_author_url",
+              "attributes": {
+                "startLine": 128,
+                "endLine": 128
+              }
+            },
+            "attributes": {
+              "startLine": 128,
+              "endLine": 128
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "format_to_edit"
+              ],
+              "attributes": {
+                "startLine": 128,
+                "endLine": 128
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_PropertyFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "comment",
+                    "attributes": {
+                      "startLine": 128,
+                      "endLine": 128
+                    }
+                  },
+                  "name": {
+                    "nodeType": "Identifier",
+                    "name": "comment_author_url",
+                    "attributes": {
+                      "startLine": 128,
+                      "endLine": 128
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 128,
+                    "endLine": 128
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 128,
+                  "endLine": 128
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 128,
+              "endLine": 128
+            }
+          },
+          "attributes": {
+            "startLine": 128,
+            "endLine": 128
+          }
+        },
+        "attributes": {
+          "startLine": 128,
+          "endLine": 128
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_PropertyFetch",
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "comment",
+              "attributes": {
+                "startLine": 129,
+                "endLine": 129
+              }
+            },
+            "name": {
+              "nodeType": "Identifier",
+              "name": "comment_author_url",
+              "attributes": {
+                "startLine": 129,
+                "endLine": 129
+              }
+            },
+            "attributes": {
+              "startLine": 129,
+              "endLine": 129
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "esc_url"
+              ],
+              "attributes": {
+                "startLine": 129,
+                "endLine": 129
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_PropertyFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "comment",
+                    "attributes": {
+                      "startLine": 129,
+                      "endLine": 129
+                    }
+                  },
+                  "name": {
+                    "nodeType": "Identifier",
+                    "name": "comment_author_url",
+                    "attributes": {
+                      "startLine": 129,
+                      "endLine": 129
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 129,
+                    "endLine": 129
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 129,
+                  "endLine": 129
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 129,
+              "endLine": 129
+            }
+          },
+          "attributes": {
+            "startLine": 129,
+            "endLine": 129
+          }
+        },
+        "attributes": {
+          "startLine": 129,
+          "endLine": 129
+        }
+      },
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_Variable",
+          "name": "comment",
+          "attributes": {
+            "startLine": 131,
+            "endLine": 131
+          }
+        },
+        "attributes": {
+          "startLine": 131,
+          "endLine": 131
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 107,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Returns a WP_Comment object based on comment ID.\n *\n * @since 2.0.0\n *\n * @param int $id ID of comment to retrieve.\n * @return WP_Comment|false Comment if found. False on failure.\n */",
+          "line": 99,
+          "filePos": 2706,
+          "tokenPos": 670,
+          "endLine": 106,
+          "endFilePos": 2895,
+          "endTokenPos": 670
+        }
+      ],
+      "endLine": 132
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "get_pending_comments_num",
+      "attributes": {
+        "startLine": 144,
+        "endLine": 144
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "post_id",
+          "attributes": {
+            "startLine": 144,
+            "endLine": 144
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 144,
+          "endLine": 144
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Global",
+        "vars": [
+          {
+            "nodeType": "Expr_Variable",
+            "name": "wpdb",
+            "attributes": {
+              "startLine": 145,
+              "endLine": 145
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 145,
+          "endLine": 145
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "single",
+            "attributes": {
+              "startLine": 147,
+              "endLine": 147
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "false"
+              ],
+              "attributes": {
+                "startLine": 147,
+                "endLine": 147
+              }
+            },
+            "attributes": {
+              "startLine": 147,
+              "endLine": 147
+            }
+          },
+          "attributes": {
+            "startLine": 147,
+            "endLine": 147
+          }
+        },
+        "attributes": {
+          "startLine": 147,
+          "endLine": 147
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BooleanNot",
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "is_array"
+              ],
+              "attributes": {
+                "startLine": 148,
+                "endLine": 148
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "post_id",
+                  "attributes": {
+                    "startLine": 148,
+                    "endLine": 148
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 148,
+                  "endLine": 148
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 148,
+              "endLine": 148
+            }
+          },
+          "attributes": {
+            "startLine": 148,
+            "endLine": 148
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "post_id_array",
+                "attributes": {
+                  "startLine": 149,
+                  "endLine": 149
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Cast_Array",
+                "expr": {
+                  "nodeType": "Expr_Variable",
+                  "name": "post_id",
+                  "attributes": {
+                    "startLine": 149,
+                    "endLine": 149
+                  }
+                },
+                "attributes": {
+                  "startLine": 149,
+                  "endLine": 149
+                }
+              },
+              "attributes": {
+                "startLine": 149,
+                "endLine": 149
+              }
+            },
+            "attributes": {
+              "startLine": 149,
+              "endLine": 149
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "single",
+                "attributes": {
+                  "startLine": 150,
+                  "endLine": 150
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_ConstFetch",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "true"
+                  ],
+                  "attributes": {
+                    "startLine": 150,
+                    "endLine": 150
+                  }
+                },
+                "attributes": {
+                  "startLine": 150,
+                  "endLine": 150
+                }
+              },
+              "attributes": {
+                "startLine": 150,
+                "endLine": 150
+              }
+            },
+            "attributes": {
+              "startLine": 150,
+              "endLine": 150
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": {
+          "nodeType": "Stmt_Else",
+          "stmts": [
+            {
+              "nodeType": "Stmt_Expression",
+              "expr": {
+                "nodeType": "Expr_Assign",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "post_id_array",
+                  "attributes": {
+                    "startLine": 152,
+                    "endLine": 152
+                  }
+                },
+                "expr": {
+                  "nodeType": "Expr_Variable",
+                  "name": "post_id",
+                  "attributes": {
+                    "startLine": 152,
+                    "endLine": 152
+                  }
+                },
+                "attributes": {
+                  "startLine": 152,
+                  "endLine": 152
+                }
+              },
+              "attributes": {
+                "startLine": 152,
+                "endLine": 152
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 151,
+            "endLine": 153
+          }
+        },
+        "attributes": {
+          "startLine": 148,
+          "endLine": 153
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "post_id_array",
+            "attributes": {
+              "startLine": 154,
+              "endLine": 154
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "array_map"
+              ],
+              "attributes": {
+                "startLine": 154,
+                "endLine": 154
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "intval",
+                  "attributes": {
+                    "startLine": 154,
+                    "endLine": 154,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 154,
+                  "endLine": 154
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "post_id_array",
+                  "attributes": {
+                    "startLine": 154,
+                    "endLine": 154
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 154,
+                  "endLine": 154
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 154,
+              "endLine": 154
+            }
+          },
+          "attributes": {
+            "startLine": 154,
+            "endLine": 154
+          }
+        },
+        "attributes": {
+          "startLine": 154,
+          "endLine": 154
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "post_id_in",
+            "attributes": {
+              "startLine": 155,
+              "endLine": 155
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_BinaryOp_Concat",
+            "left": {
+              "nodeType": "Expr_BinaryOp_Concat",
+              "left": {
+                "nodeType": "Scalar_String",
+                "value": "'",
+                "attributes": {
+                  "startLine": 155,
+                  "endLine": 155,
+                  "kind": 2
+                }
+              },
+              "right": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "implode"
+                  ],
+                  "attributes": {
+                    "startLine": 155,
+                    "endLine": 155
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "', '",
+                      "attributes": {
+                        "startLine": 155,
+                        "endLine": 155,
+                        "kind": 2
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 155,
+                      "endLine": 155
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "post_id_array",
+                      "attributes": {
+                        "startLine": 155,
+                        "endLine": 155
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 155,
+                      "endLine": 155
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 155,
+                  "endLine": 155
+                }
+              },
+              "attributes": {
+                "startLine": 155,
+                "endLine": 155
+              }
+            },
+            "right": {
+              "nodeType": "Scalar_String",
+              "value": "'",
+              "attributes": {
+                "startLine": 155,
+                "endLine": 155,
+                "kind": 2
+              }
+            },
+            "attributes": {
+              "startLine": 155,
+              "endLine": 155
+            }
+          },
+          "attributes": {
+            "startLine": 155,
+            "endLine": 155
+          }
+        },
+        "attributes": {
+          "startLine": 155,
+          "endLine": 155
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "pending",
+            "attributes": {
+              "startLine": 157,
+              "endLine": 157
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_MethodCall",
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "wpdb",
+              "attributes": {
+                "startLine": 157,
+                "endLine": 157
+              }
+            },
+            "name": {
+              "nodeType": "Identifier",
+              "name": "get_results",
+              "attributes": {
+                "startLine": 157,
+                "endLine": 157
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_Encapsed",
+                  "parts": [
+                    {
+                      "nodeType": "Scalar_EncapsedStringPart",
+                      "value": "SELECT comment_post_ID, COUNT(comment_ID) as num_comments FROM ",
+                      "attributes": {
+                        "startLine": 157,
+                        "endLine": 157
+                      }
+                    },
+                    {
+                      "nodeType": "Expr_PropertyFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "wpdb",
+                        "attributes": {
+                          "startLine": 157,
+                          "endLine": 157
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "comments",
+                        "attributes": {
+                          "startLine": 157,
+                          "endLine": 157
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 157,
+                        "endLine": 157
+                      }
+                    },
+                    {
+                      "nodeType": "Scalar_EncapsedStringPart",
+                      "value": " WHERE comment_post_ID IN ( ",
+                      "attributes": {
+                        "startLine": 157,
+                        "endLine": 157
+                      }
+                    },
+                    {
+                      "nodeType": "Expr_Variable",
+                      "name": "post_id_in",
+                      "attributes": {
+                        "startLine": 157,
+                        "endLine": 157
+                      }
+                    },
+                    {
+                      "nodeType": "Scalar_EncapsedStringPart",
+                      "value": " ) AND comment_approved = '0' GROUP BY comment_post_ID",
+                      "attributes": {
+                        "startLine": 157,
+                        "endLine": 157
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 157,
+                    "endLine": 157,
+                    "kind": 2
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 157,
+                  "endLine": 157
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_ConstFetch",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "ARRAY_A"
+                    ],
+                    "attributes": {
+                      "startLine": 157,
+                      "endLine": 157
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 157,
+                    "endLine": 157
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 157,
+                  "endLine": 157
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 157,
+              "endLine": 157
+            }
+          },
+          "attributes": {
+            "startLine": 157,
+            "endLine": 157
+          }
+        },
+        "attributes": {
+          "startLine": 157,
+          "endLine": 157
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_Variable",
+          "name": "single",
+          "attributes": {
+            "startLine": 159,
+            "endLine": 159
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_Empty",
+              "expr": {
+                "nodeType": "Expr_Variable",
+                "name": "pending",
+                "attributes": {
+                  "startLine": 160,
+                  "endLine": 160
+                }
+              },
+              "attributes": {
+                "startLine": 160,
+                "endLine": 160
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Return",
+                "expr": {
+                  "nodeType": "Scalar_LNumber",
+                  "value": 0,
+                  "attributes": {
+                    "startLine": 161,
+                    "endLine": 161,
+                    "kind": 10
+                  }
+                },
+                "attributes": {
+                  "startLine": 161,
+                  "endLine": 161
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": {
+              "nodeType": "Stmt_Else",
+              "stmts": [
+                {
+                  "nodeType": "Stmt_Return",
+                  "expr": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "absint"
+                      ],
+                      "attributes": {
+                        "startLine": 163,
+                        "endLine": 163
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_ArrayDimFetch",
+                          "var": {
+                            "nodeType": "Expr_ArrayDimFetch",
+                            "var": {
+                              "nodeType": "Expr_Variable",
+                              "name": "pending",
+                              "attributes": {
+                                "startLine": 163,
+                                "endLine": 163
+                              }
+                            },
+                            "dim": {
+                              "nodeType": "Scalar_LNumber",
+                              "value": 0,
+                              "attributes": {
+                                "startLine": 163,
+                                "endLine": 163,
+                                "kind": 10
+                              }
+                            },
+                            "attributes": {
+                              "startLine": 163,
+                              "endLine": 163
+                            }
+                          },
+                          "dim": {
+                            "nodeType": "Scalar_String",
+                            "value": "num_comments",
+                            "attributes": {
+                              "startLine": 163,
+                              "endLine": 163,
+                              "kind": 1
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 163,
+                            "endLine": 163
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 163,
+                          "endLine": 163
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 163,
+                      "endLine": 163
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 163,
+                    "endLine": 163
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 162,
+                "endLine": 164
+              }
+            },
+            "attributes": {
+              "startLine": 160,
+              "endLine": 164
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 159,
+          "endLine": 165
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "pending_keyed",
+            "attributes": {
+              "startLine": 167,
+              "endLine": 167
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_Array",
+            "items": [],
+            "attributes": {
+              "startLine": 167,
+              "endLine": 167,
+              "kind": 1
+            }
+          },
+          "attributes": {
+            "startLine": 167,
+            "endLine": 167
+          }
+        },
+        "attributes": {
+          "startLine": 167,
+          "endLine": 167
+        }
+      },
+      {
+        "nodeType": "Stmt_Foreach",
+        "expr": {
+          "nodeType": "Expr_Variable",
+          "name": "post_id_array",
+          "attributes": {
+            "startLine": 170,
+            "endLine": 170
+          }
+        },
+        "keyVar": null,
+        "byRef": false,
+        "valueVar": {
+          "nodeType": "Expr_Variable",
+          "name": "id",
+          "attributes": {
+            "startLine": 170,
+            "endLine": 170
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "pending_keyed",
+                  "attributes": {
+                    "startLine": 171,
+                    "endLine": 171
+                  }
+                },
+                "dim": {
+                  "nodeType": "Expr_Variable",
+                  "name": "id",
+                  "attributes": {
+                    "startLine": 171,
+                    "endLine": 171
+                  }
+                },
+                "attributes": {
+                  "startLine": 171,
+                  "endLine": 171
+                }
+              },
+              "expr": {
+                "nodeType": "Scalar_LNumber",
+                "value": 0,
+                "attributes": {
+                  "startLine": 171,
+                  "endLine": 171,
+                  "kind": 10
+                }
+              },
+              "attributes": {
+                "startLine": 171,
+                "endLine": 171
+              }
+            },
+            "attributes": {
+              "startLine": 171,
+              "endLine": 171
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 170,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "// Default to zero pending for all posts in request.\n",
+              "line": 169,
+              "filePos": 4839,
+              "tokenPos": 1049,
+              "endLine": 170,
+              "endFilePos": 4891,
+              "endTokenPos": 1049
+            }
+          ],
+          "endLine": 172
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BooleanNot",
+          "expr": {
+            "nodeType": "Expr_Empty",
+            "expr": {
+              "nodeType": "Expr_Variable",
+              "name": "pending",
+              "attributes": {
+                "startLine": 174,
+                "endLine": 174
+              }
+            },
+            "attributes": {
+              "startLine": 174,
+              "endLine": 174
+            }
+          },
+          "attributes": {
+            "startLine": 174,
+            "endLine": 174
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Foreach",
+            "expr": {
+              "nodeType": "Expr_Variable",
+              "name": "pending",
+              "attributes": {
+                "startLine": 175,
+                "endLine": 175
+              }
+            },
+            "keyVar": null,
+            "byRef": false,
+            "valueVar": {
+              "nodeType": "Expr_Variable",
+              "name": "pend",
+              "attributes": {
+                "startLine": 175,
+                "endLine": 175
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_ArrayDimFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "pending_keyed",
+                      "attributes": {
+                        "startLine": 176,
+                        "endLine": 176
+                      }
+                    },
+                    "dim": {
+                      "nodeType": "Expr_ArrayDimFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "pend",
+                        "attributes": {
+                          "startLine": 176,
+                          "endLine": 176
+                        }
+                      },
+                      "dim": {
+                        "nodeType": "Scalar_String",
+                        "value": "comment_post_ID",
+                        "attributes": {
+                          "startLine": 176,
+                          "endLine": 176,
+                          "kind": 1
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 176,
+                        "endLine": 176
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 176,
+                      "endLine": 176
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "absint"
+                      ],
+                      "attributes": {
+                        "startLine": 176,
+                        "endLine": 176
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_ArrayDimFetch",
+                          "var": {
+                            "nodeType": "Expr_Variable",
+                            "name": "pend",
+                            "attributes": {
+                              "startLine": 176,
+                              "endLine": 176
+                            }
+                          },
+                          "dim": {
+                            "nodeType": "Scalar_String",
+                            "value": "num_comments",
+                            "attributes": {
+                              "startLine": 176,
+                              "endLine": 176,
+                              "kind": 1
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 176,
+                            "endLine": 176
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 176,
+                          "endLine": 176
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 176,
+                      "endLine": 176
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 176,
+                    "endLine": 176
+                  }
+                },
+                "attributes": {
+                  "startLine": 176,
+                  "endLine": 176
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 175,
+              "endLine": 177
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 174,
+          "endLine": 178
+        }
+      },
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_Variable",
+          "name": "pending_keyed",
+          "attributes": {
+            "startLine": 180,
+            "endLine": 180
+          }
+        },
+        "attributes": {
+          "startLine": 180,
+          "endLine": 180
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 144,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Get the number of pending comments on a post or posts\n *\n * @since 2.3.0\n *\n * @global wpdb $wpdb WordPress database abstraction object.\n *\n * @param int|array $post_id Either a single Post ID or an array of Post IDs\n * @return int|array Either a single Posts pending comments as an int or an array of ints keyed on the Post IDs\n */",
+          "line": 134,
+          "filePos": 3781,
+          "tokenPos": 848,
+          "endLine": 143,
+          "endFilePos": 4119,
+          "endTokenPos": 848
+        }
+      ],
+      "endLine": 181
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "floated_admin_avatar",
+      "attributes": {
+        "startLine": 191,
+        "endLine": 191
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "name",
+          "attributes": {
+            "startLine": 191,
+            "endLine": 191
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 191,
+          "endLine": 191
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "avatar",
+            "attributes": {
+              "startLine": 192,
+              "endLine": 192
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "get_avatar"
+              ],
+              "attributes": {
+                "startLine": 192,
+                "endLine": 192
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_FuncCall",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "get_comment"
+                    ],
+                    "attributes": {
+                      "startLine": 192,
+                      "endLine": 192
+                    }
+                  },
+                  "args": [],
+                  "attributes": {
+                    "startLine": 192,
+                    "endLine": 192
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 192,
+                  "endLine": 192
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_LNumber",
+                  "value": 32,
+                  "attributes": {
+                    "startLine": 192,
+                    "endLine": 192,
+                    "kind": 10
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 192,
+                  "endLine": 192
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "mystery",
+                  "attributes": {
+                    "startLine": 192,
+                    "endLine": 192,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 192,
+                  "endLine": 192
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 192,
+              "endLine": 192
+            }
+          },
+          "attributes": {
+            "startLine": 192,
+            "endLine": 192
+          }
+        },
+        "attributes": {
+          "startLine": 192,
+          "endLine": 192
+        }
+      },
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Scalar_Encapsed",
+          "parts": [
+            {
+              "nodeType": "Expr_Variable",
+              "name": "avatar",
+              "attributes": {
+                "startLine": 193,
+                "endLine": 193
+              }
+            },
+            {
+              "nodeType": "Scalar_EncapsedStringPart",
+              "value": " ",
+              "attributes": {
+                "startLine": 193,
+                "endLine": 193
+              }
+            },
+            {
+              "nodeType": "Expr_Variable",
+              "name": "name",
+              "attributes": {
+                "startLine": 193,
+                "endLine": 193
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 193,
+            "endLine": 193,
+            "kind": 2
+          }
+        },
+        "attributes": {
+          "startLine": 193,
+          "endLine": 193
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 191,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Add avatars to relevant places in admin, or try to.\n *\n * @since 2.5.0\n *\n * @param string $name User name.\n * @return string Avatar with Admin name.\n */",
+          "line": 183,
+          "filePos": 5142,
+          "tokenPos": 1144,
+          "endLine": 190,
+          "endFilePos": 5301,
+          "endTokenPos": 1144
+        }
+      ],
+      "endLine": 194
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "enqueue_comment_hotkeys_js",
+      "attributes": {
+        "startLine": 199,
+        "endLine": 199
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BinaryOp_Equal",
+          "left": {
+            "nodeType": "Scalar_String",
+            "value": "true",
+            "attributes": {
+              "startLine": 200,
+              "endLine": 200,
+              "kind": 1
+            }
+          },
+          "right": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "get_user_option"
+              ],
+              "attributes": {
+                "startLine": 200,
+                "endLine": 200
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "comment_shortcuts",
+                  "attributes": {
+                    "startLine": 200,
+                    "endLine": 200,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 200,
+                  "endLine": 200
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 200,
+              "endLine": 200
+            }
+          },
+          "attributes": {
+            "startLine": 200,
+            "endLine": 200
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "wp_enqueue_script"
+                ],
+                "attributes": {
+                  "startLine": 201,
+                  "endLine": 201
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "jquery-table-hotkeys",
+                    "attributes": {
+                      "startLine": 201,
+                      "endLine": 201,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 201,
+                    "endLine": 201
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 201,
+                "endLine": 201
+              }
+            },
+            "attributes": {
+              "startLine": 201,
+              "endLine": 201
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 200,
+          "endLine": 202
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 199,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * @since 2.7.0\n */",
+          "line": 196,
+          "filePos": 5427,
+          "tokenPos": 1188,
+          "endLine": 198,
+          "endFilePos": 5449,
+          "endTokenPos": 1188
+        }
+      ],
+      "endLine": 203
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "comment_footer_die",
+      "attributes": {
+        "startLine": 210,
+        "endLine": 210
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "msg",
+          "attributes": {
+            "startLine": 210,
+            "endLine": 210
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 210,
+          "endLine": 210
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Echo",
+        "exprs": [
+          {
+            "nodeType": "Scalar_Encapsed",
+            "parts": [
+              {
+                "nodeType": "Scalar_EncapsedStringPart",
+                "value": "<div class='wrap'><p>",
+                "attributes": {
+                  "startLine": 211,
+                  "endLine": 211
+                }
+              },
+              {
+                "nodeType": "Expr_Variable",
+                "name": "msg",
+                "attributes": {
+                  "startLine": 211,
+                  "endLine": 211
+                }
+              },
+              {
+                "nodeType": "Scalar_EncapsedStringPart",
+                "value": "</p></div>",
+                "attributes": {
+                  "startLine": 211,
+                  "endLine": 211
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 211,
+              "endLine": 211,
+              "kind": 2
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 211,
+          "endLine": 211
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Include",
+          "expr": {
+            "nodeType": "Expr_BinaryOp_Concat",
+            "left": {
+              "nodeType": "Expr_ConstFetch",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "ABSPATH"
+                ],
+                "attributes": {
+                  "startLine": 212,
+                  "endLine": 212
+                }
+              },
+              "attributes": {
+                "startLine": 212,
+                "endLine": 212
+              }
+            },
+            "right": {
+              "nodeType": "Scalar_String",
+              "value": "wp-admin/admin-footer.php",
+              "attributes": {
+                "startLine": 212,
+                "endLine": 212,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 212,
+              "endLine": 212
+            }
+          },
+          "type": 4,
+          "attributes": {
+            "startLine": 212,
+            "endLine": 212
+          }
+        },
+        "attributes": {
+          "startLine": 212,
+          "endLine": 212
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Exit",
+          "expr": null,
+          "attributes": {
+            "startLine": 213,
+            "endLine": 213,
+            "kind": 2
+          }
+        },
+        "attributes": {
+          "startLine": 213,
+          "endLine": 213
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 210,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Display error message at bottom of comments.\n *\n * @param string $msg Error Message. Assumed to contain HTML and be sanitized.\n */",
+          "line": 205,
+          "filePos": 5603,
+          "tokenPos": 1229,
+          "endLine": 209,
+          "endFilePos": 5739,
+          "endTokenPos": 1229
+        }
+      ],
+      "endLine": 214
+    }
+  }
+]

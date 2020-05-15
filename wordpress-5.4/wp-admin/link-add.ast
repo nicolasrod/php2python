@@ -1,0 +1,700 @@
+[
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Scalar_MagicConst_Dir",
+          "attributes": {
+            "startLine": 10,
+            "endLine": 10
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/admin.php",
+          "attributes": {
+            "startLine": 10,
+            "endLine": 10,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 10,
+          "endLine": 10
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 10,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/**\n * Add Link Administration Screen.\n *\n * @package WordPress\n * @subpackage Administration\n */",
+            "line": 2,
+            "filePos": 6,
+            "tokenPos": 1,
+            "endLine": 7,
+            "endFilePos": 102,
+            "endTokenPos": 1
+          },
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** Load WordPress Administration Bootstrap */",
+            "line": 9,
+            "filePos": 105,
+            "tokenPos": 3,
+            "endLine": 9,
+            "endFilePos": 150,
+            "endTokenPos": 3
+          }
+        ],
+        "endLine": 10
+      }
+    },
+    "attributes": {
+      "startLine": 10,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Add Link Administration Screen.\n *\n * @package WordPress\n * @subpackage Administration\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 7,
+          "endFilePos": 102,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** Load WordPress Administration Bootstrap */",
+          "line": 9,
+          "filePos": 105,
+          "tokenPos": 3,
+          "endLine": 9,
+          "endFilePos": 150,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 10
+    }
+  },
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_BooleanNot",
+      "expr": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "current_user_can"
+          ],
+          "attributes": {
+            "startLine": 12,
+            "endLine": 12
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "manage_links",
+              "attributes": {
+                "startLine": 12,
+                "endLine": 12,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 12,
+              "endLine": 12
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 12,
+          "endLine": 12
+        }
+      },
+      "attributes": {
+        "startLine": 12,
+        "endLine": 12
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "wp_die"
+            ],
+            "attributes": {
+              "startLine": 13,
+              "endLine": 13
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "__"
+                  ],
+                  "attributes": {
+                    "startLine": 13,
+                    "endLine": 13
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "Sorry, you are not allowed to add links to this site.",
+                      "attributes": {
+                        "startLine": 13,
+                        "endLine": 13,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 13,
+                      "endLine": 13
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 13,
+                  "endLine": 13
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 13,
+                "endLine": 13
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 13,
+            "endLine": 13
+          }
+        },
+        "attributes": {
+          "startLine": 13,
+          "endLine": 13
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 12,
+      "endLine": 14
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Assign",
+      "var": {
+        "nodeType": "Expr_Variable",
+        "name": "title",
+        "attributes": {
+          "startLine": 16,
+          "endLine": 16
+        }
+      },
+      "expr": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "__"
+          ],
+          "attributes": {
+            "startLine": 16,
+            "endLine": 16
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "Add New Link",
+              "attributes": {
+                "startLine": 16,
+                "endLine": 16,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 16,
+              "endLine": 16
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 16,
+          "endLine": 16
+        }
+      },
+      "attributes": {
+        "startLine": 16,
+        "endLine": 16
+      }
+    },
+    "attributes": {
+      "startLine": 16,
+      "endLine": 16
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Assign",
+      "var": {
+        "nodeType": "Expr_Variable",
+        "name": "parent_file",
+        "attributes": {
+          "startLine": 17,
+          "endLine": 17
+        }
+      },
+      "expr": {
+        "nodeType": "Scalar_String",
+        "value": "link-manager.php",
+        "attributes": {
+          "startLine": 17,
+          "endLine": 17,
+          "kind": 1
+        }
+      },
+      "attributes": {
+        "startLine": 17,
+        "endLine": 17
+      }
+    },
+    "attributes": {
+      "startLine": 17,
+      "endLine": 17
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "wp_reset_vars"
+        ],
+        "attributes": {
+          "startLine": 19,
+          "endLine": 19
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_Array",
+            "items": [
+              {
+                "nodeType": "Expr_ArrayItem",
+                "key": null,
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "action",
+                  "attributes": {
+                    "startLine": 19,
+                    "endLine": 19,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 19,
+                  "endLine": 19
+                }
+              },
+              {
+                "nodeType": "Expr_ArrayItem",
+                "key": null,
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "cat_id",
+                  "attributes": {
+                    "startLine": 19,
+                    "endLine": 19,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 19,
+                  "endLine": 19
+                }
+              },
+              {
+                "nodeType": "Expr_ArrayItem",
+                "key": null,
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "link_id",
+                  "attributes": {
+                    "startLine": 19,
+                    "endLine": 19,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 19,
+                  "endLine": 19
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 19,
+              "endLine": 19,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 19,
+            "endLine": 19
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 19,
+        "endLine": 19
+      }
+    },
+    "attributes": {
+      "startLine": 19,
+      "endLine": 19
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "wp_enqueue_script"
+        ],
+        "attributes": {
+          "startLine": 21,
+          "endLine": 21
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "link",
+            "attributes": {
+              "startLine": 21,
+              "endLine": 21,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 21,
+            "endLine": 21
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 21,
+        "endLine": 21
+      }
+    },
+    "attributes": {
+      "startLine": 21,
+      "endLine": 21
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "wp_enqueue_script"
+        ],
+        "attributes": {
+          "startLine": 22,
+          "endLine": 22
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "xfn",
+            "attributes": {
+              "startLine": 22,
+              "endLine": 22,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 22,
+            "endLine": 22
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 22,
+        "endLine": 22
+      }
+    },
+    "attributes": {
+      "startLine": 22,
+      "endLine": 22
+    }
+  },
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "wp_is_mobile"
+        ],
+        "attributes": {
+          "startLine": 24,
+          "endLine": 24
+        }
+      },
+      "args": [],
+      "attributes": {
+        "startLine": 24,
+        "endLine": 24
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "wp_enqueue_script"
+            ],
+            "attributes": {
+              "startLine": 25,
+              "endLine": 25
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "jquery-touch-punch",
+                "attributes": {
+                  "startLine": 25,
+                  "endLine": 25,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 25,
+                "endLine": 25
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 25,
+            "endLine": 25
+          }
+        },
+        "attributes": {
+          "startLine": 25,
+          "endLine": 25
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 24,
+      "endLine": 26
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Assign",
+      "var": {
+        "nodeType": "Expr_Variable",
+        "name": "link",
+        "attributes": {
+          "startLine": 28,
+          "endLine": 28
+        }
+      },
+      "expr": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "get_default_link_to_edit"
+          ],
+          "attributes": {
+            "startLine": 28,
+            "endLine": 28
+          }
+        },
+        "args": [],
+        "attributes": {
+          "startLine": 28,
+          "endLine": 28
+        }
+      },
+      "attributes": {
+        "startLine": 28,
+        "endLine": 28
+      }
+    },
+    "attributes": {
+      "startLine": 28,
+      "endLine": 28
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_ConstFetch",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "ABSPATH"
+            ],
+            "attributes": {
+              "startLine": 29,
+              "endLine": 29
+            }
+          },
+          "attributes": {
+            "startLine": 29,
+            "endLine": 29
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "wp-admin/edit-link-form.php",
+          "attributes": {
+            "startLine": 29,
+            "endLine": 29,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 29,
+          "endLine": 29
+        }
+      },
+      "type": 3,
+      "attributes": {
+        "startLine": 29,
+        "endLine": 29
+      }
+    },
+    "attributes": {
+      "startLine": 29,
+      "endLine": 29
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_ConstFetch",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "ABSPATH"
+            ],
+            "attributes": {
+              "startLine": 31,
+              "endLine": 31
+            }
+          },
+          "attributes": {
+            "startLine": 31,
+            "endLine": 31
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "wp-admin/admin-footer.php",
+          "attributes": {
+            "startLine": 31,
+            "endLine": 31,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 31,
+          "endLine": 31
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 31,
+        "endLine": 31
+      }
+    },
+    "attributes": {
+      "startLine": 31,
+      "endLine": 31
+    }
+  }
+]

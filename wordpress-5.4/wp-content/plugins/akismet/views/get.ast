@@ -1,0 +1,472 @@
+[
+  {
+    "nodeType": "Stmt_Nop",
+    "attributes": {
+      "startLine": 6,
+      "comments": [
+        {
+          "nodeType": "Comment",
+          "text": "//phpcs:disable VariableAnalysis\n",
+          "line": 3,
+          "filePos": 7,
+          "tokenPos": 2,
+          "endLine": 4,
+          "endFilePos": 39,
+          "endTokenPos": 2
+        },
+        {
+          "nodeType": "Comment",
+          "text": "// There are \"undefined\" variables here because they're defined in the code that includes this file as a template.\n",
+          "line": 4,
+          "filePos": 40,
+          "tokenPos": 3,
+          "endLine": 5,
+          "endFilePos": 154,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 7
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "<form name=\"akismet_activate\" action=\"https://akismet.com/get/\" method=\"POST\" target=\"_blank\">\n\t<input type=\"hidden\" name=\"passback_url\" value=\"",
+    "attributes": {
+      "startLine": 7,
+      "hasLeadingNewline": true,
+      "endLine": 8
+    }
+  },
+  {
+    "nodeType": "Stmt_Echo",
+    "exprs": [
+      {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "esc_url"
+          ],
+          "attributes": {
+            "startLine": 8,
+            "endLine": 8
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Expr_StaticCall",
+              "class": {
+                "nodeType": "Name",
+                "parts": [
+                  "Akismet_Admin"
+                ],
+                "attributes": {
+                  "startLine": 8,
+                  "endLine": 8
+                }
+              },
+              "name": {
+                "nodeType": "Identifier",
+                "name": "get_page_url",
+                "attributes": {
+                  "startLine": 8,
+                  "endLine": 8
+                }
+              },
+              "args": [],
+              "attributes": {
+                "startLine": 8,
+                "endLine": 8
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 8,
+              "endLine": 8
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 8,
+          "endLine": 8
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 8,
+      "endLine": 8
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\"/>\n\t<input type=\"hidden\" name=\"blog\" value=\"",
+    "attributes": {
+      "startLine": 8,
+      "hasLeadingNewline": false,
+      "endLine": 9
+    }
+  },
+  {
+    "nodeType": "Stmt_Echo",
+    "exprs": [
+      {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "esc_url"
+          ],
+          "attributes": {
+            "startLine": 9,
+            "endLine": 9
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "get_option"
+                ],
+                "attributes": {
+                  "startLine": 9,
+                  "endLine": 9
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "home",
+                    "attributes": {
+                      "startLine": 9,
+                      "endLine": 9,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 9,
+                    "endLine": 9
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 9,
+                "endLine": 9
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 9,
+              "endLine": 9
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 9,
+          "endLine": 9
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 9,
+      "endLine": 9
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\"/>\n\t<input type=\"hidden\" name=\"redirect\" value=\"",
+    "attributes": {
+      "startLine": 9,
+      "hasLeadingNewline": false,
+      "endLine": 10
+    }
+  },
+  {
+    "nodeType": "Stmt_Echo",
+    "exprs": [
+      {
+        "nodeType": "Expr_Ternary",
+        "cond": {
+          "nodeType": "Expr_Isset",
+          "vars": [
+            {
+              "nodeType": "Expr_Variable",
+              "name": "redirect",
+              "attributes": {
+                "startLine": 10,
+                "endLine": 10
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 10,
+            "endLine": 10
+          }
+        },
+        "if": {
+          "nodeType": "Expr_Variable",
+          "name": "redirect",
+          "attributes": {
+            "startLine": 10,
+            "endLine": 10
+          }
+        },
+        "else": {
+          "nodeType": "Scalar_String",
+          "value": "plugin-signup",
+          "attributes": {
+            "startLine": 10,
+            "endLine": 10,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 10,
+          "endLine": 10
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 10,
+      "endLine": 10
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\"/>\n\t<input type=\"submit\" class=\"",
+    "attributes": {
+      "startLine": 10,
+      "hasLeadingNewline": false,
+      "endLine": 11
+    }
+  },
+  {
+    "nodeType": "Stmt_Echo",
+    "exprs": [
+      {
+        "nodeType": "Expr_Ternary",
+        "cond": {
+          "nodeType": "Expr_BinaryOp_BooleanAnd",
+          "left": {
+            "nodeType": "Expr_Isset",
+            "vars": [
+              {
+                "nodeType": "Expr_Variable",
+                "name": "classes",
+                "attributes": {
+                  "startLine": 11,
+                  "endLine": 11
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 11,
+              "endLine": 11
+            }
+          },
+          "right": {
+            "nodeType": "Expr_BinaryOp_Greater",
+            "left": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "count"
+                ],
+                "attributes": {
+                  "startLine": 11,
+                  "endLine": 11
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "classes",
+                    "attributes": {
+                      "startLine": 11,
+                      "endLine": 11
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 11,
+                    "endLine": 11
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 11,
+                "endLine": 11
+              }
+            },
+            "right": {
+              "nodeType": "Scalar_LNumber",
+              "value": 0,
+              "attributes": {
+                "startLine": 11,
+                "endLine": 11,
+                "kind": 10
+              }
+            },
+            "attributes": {
+              "startLine": 11,
+              "endLine": 11
+            }
+          },
+          "attributes": {
+            "startLine": 11,
+            "endLine": 11
+          }
+        },
+        "if": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "implode"
+            ],
+            "attributes": {
+              "startLine": 11,
+              "endLine": 11
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": " ",
+                "attributes": {
+                  "startLine": 11,
+                  "endLine": 11,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 11,
+                "endLine": 11
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "classes",
+                "attributes": {
+                  "startLine": 11,
+                  "endLine": 11
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 11,
+                "endLine": 11
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 11,
+            "endLine": 11
+          }
+        },
+        "else": {
+          "nodeType": "Scalar_String",
+          "value": "akismet-button",
+          "attributes": {
+            "startLine": 11,
+            "endLine": 11,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 11,
+          "endLine": 11
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 11,
+      "endLine": 11
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\" value=\"",
+    "attributes": {
+      "startLine": 11,
+      "hasLeadingNewline": false,
+      "endLine": 11
+    }
+  },
+  {
+    "nodeType": "Stmt_Echo",
+    "exprs": [
+      {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "esc_attr"
+          ],
+          "attributes": {
+            "startLine": 11,
+            "endLine": 11
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Expr_Variable",
+              "name": "text",
+              "attributes": {
+                "startLine": 11,
+                "endLine": 11
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 11,
+              "endLine": 11
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 11,
+          "endLine": 11
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 11,
+      "endLine": 11
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\"/>\n</form>",
+    "attributes": {
+      "startLine": 11,
+      "hasLeadingNewline": false,
+      "endLine": 12
+    }
+  }
+]

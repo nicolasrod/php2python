@@ -1,0 +1,746 @@
+[
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_BinaryOp_Concat",
+          "left": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "ABSPATH"
+              ],
+              "attributes": {
+                "startLine": 42,
+                "endLine": 42
+              }
+            },
+            "attributes": {
+              "startLine": 42,
+              "endLine": 42
+            }
+          },
+          "right": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "WPINC"
+              ],
+              "attributes": {
+                "startLine": 42,
+                "endLine": 42
+              }
+            },
+            "attributes": {
+              "startLine": 42,
+              "endLine": 42
+            }
+          },
+          "attributes": {
+            "startLine": 42,
+            "endLine": 42
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/IXR/class-IXR-server.php",
+          "attributes": {
+            "startLine": 42,
+            "endLine": 42,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 42,
+          "endLine": 42
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 42,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/**\n * IXR - The Incutio XML-RPC Library\n *\n * Copyright (c) 2010, Incutio Ltd.\n * All rights reserved.\n *\n * Redistribution and use in source and binary forms, with or without\n * modification, are permitted provided that the following conditions are met:\n *\n *  - Redistributions of source code must retain the above copyright notice,\n *    this list of conditions and the following disclaimer.\n *  - Redistributions in binary form must reproduce the above copyright\n *    notice, this list of conditions and the following disclaimer in the\n *    documentation and/or other materials provided with the distribution.\n *  - Neither the name of Incutio Ltd. nor the names of its contributors\n *    may be used to endorse or promote products derived from this software\n *    without specific prior written permission.\n *\n * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS\n * IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,\n * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR\n * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR\n * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,\n * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,\n * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR\n * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY\n * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE\n * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n *\n * @package IXR\n * @since 1.5.0\n *\n * @copyright  Incutio Ltd 2010 (http://www.incutio.com)\n * @version    1.7.4 7th September 2010\n * @author     Simon Willison\n * @link       http://scripts.incutio.com/xmlrpc/ Site/manual\n * @license    http://www.opensource.org/licenses/bsd-license.php BSD\n */",
+            "line": 2,
+            "filePos": 6,
+            "tokenPos": 1,
+            "endLine": 40,
+            "endFilePos": 1912,
+            "endTokenPos": 1
+          }
+        ],
+        "endLine": 42
+      }
+    },
+    "attributes": {
+      "startLine": 42,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * IXR - The Incutio XML-RPC Library\n *\n * Copyright (c) 2010, Incutio Ltd.\n * All rights reserved.\n *\n * Redistribution and use in source and binary forms, with or without\n * modification, are permitted provided that the following conditions are met:\n *\n *  - Redistributions of source code must retain the above copyright notice,\n *    this list of conditions and the following disclaimer.\n *  - Redistributions in binary form must reproduce the above copyright\n *    notice, this list of conditions and the following disclaimer in the\n *    documentation and/or other materials provided with the distribution.\n *  - Neither the name of Incutio Ltd. nor the names of its contributors\n *    may be used to endorse or promote products derived from this software\n *    without specific prior written permission.\n *\n * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS\n * IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,\n * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR\n * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR\n * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,\n * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,\n * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR\n * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY\n * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE\n * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n *\n * @package IXR\n * @since 1.5.0\n *\n * @copyright  Incutio Ltd 2010 (http://www.incutio.com)\n * @version    1.7.4 7th September 2010\n * @author     Simon Willison\n * @link       http://scripts.incutio.com/xmlrpc/ Site/manual\n * @license    http://www.opensource.org/licenses/bsd-license.php BSD\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 40,
+          "endFilePos": 1912,
+          "endTokenPos": 1
+        }
+      ],
+      "endLine": 42
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_BinaryOp_Concat",
+          "left": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "ABSPATH"
+              ],
+              "attributes": {
+                "startLine": 44,
+                "endLine": 44
+              }
+            },
+            "attributes": {
+              "startLine": 44,
+              "endLine": 44
+            }
+          },
+          "right": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "WPINC"
+              ],
+              "attributes": {
+                "startLine": 44,
+                "endLine": 44
+              }
+            },
+            "attributes": {
+              "startLine": 44,
+              "endLine": 44
+            }
+          },
+          "attributes": {
+            "startLine": 44,
+            "endLine": 44
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/IXR/class-IXR-base64.php",
+          "attributes": {
+            "startLine": 44,
+            "endLine": 44,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 44,
+          "endLine": 44
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 44,
+        "endLine": 44
+      }
+    },
+    "attributes": {
+      "startLine": 44,
+      "endLine": 44
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_BinaryOp_Concat",
+          "left": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "ABSPATH"
+              ],
+              "attributes": {
+                "startLine": 46,
+                "endLine": 46
+              }
+            },
+            "attributes": {
+              "startLine": 46,
+              "endLine": 46
+            }
+          },
+          "right": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "WPINC"
+              ],
+              "attributes": {
+                "startLine": 46,
+                "endLine": 46
+              }
+            },
+            "attributes": {
+              "startLine": 46,
+              "endLine": 46
+            }
+          },
+          "attributes": {
+            "startLine": 46,
+            "endLine": 46
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/IXR/class-IXR-client.php",
+          "attributes": {
+            "startLine": 46,
+            "endLine": 46,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 46,
+          "endLine": 46
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 46,
+        "endLine": 46
+      }
+    },
+    "attributes": {
+      "startLine": 46,
+      "endLine": 46
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_BinaryOp_Concat",
+          "left": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "ABSPATH"
+              ],
+              "attributes": {
+                "startLine": 48,
+                "endLine": 48
+              }
+            },
+            "attributes": {
+              "startLine": 48,
+              "endLine": 48
+            }
+          },
+          "right": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "WPINC"
+              ],
+              "attributes": {
+                "startLine": 48,
+                "endLine": 48
+              }
+            },
+            "attributes": {
+              "startLine": 48,
+              "endLine": 48
+            }
+          },
+          "attributes": {
+            "startLine": 48,
+            "endLine": 48
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/IXR/class-IXR-clientmulticall.php",
+          "attributes": {
+            "startLine": 48,
+            "endLine": 48,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 48,
+          "endLine": 48
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 48,
+        "endLine": 48
+      }
+    },
+    "attributes": {
+      "startLine": 48,
+      "endLine": 48
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_BinaryOp_Concat",
+          "left": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "ABSPATH"
+              ],
+              "attributes": {
+                "startLine": 50,
+                "endLine": 50
+              }
+            },
+            "attributes": {
+              "startLine": 50,
+              "endLine": 50
+            }
+          },
+          "right": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "WPINC"
+              ],
+              "attributes": {
+                "startLine": 50,
+                "endLine": 50
+              }
+            },
+            "attributes": {
+              "startLine": 50,
+              "endLine": 50
+            }
+          },
+          "attributes": {
+            "startLine": 50,
+            "endLine": 50
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/IXR/class-IXR-date.php",
+          "attributes": {
+            "startLine": 50,
+            "endLine": 50,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 50,
+          "endLine": 50
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 50,
+        "endLine": 50
+      }
+    },
+    "attributes": {
+      "startLine": 50,
+      "endLine": 50
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_BinaryOp_Concat",
+          "left": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "ABSPATH"
+              ],
+              "attributes": {
+                "startLine": 52,
+                "endLine": 52
+              }
+            },
+            "attributes": {
+              "startLine": 52,
+              "endLine": 52
+            }
+          },
+          "right": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "WPINC"
+              ],
+              "attributes": {
+                "startLine": 52,
+                "endLine": 52
+              }
+            },
+            "attributes": {
+              "startLine": 52,
+              "endLine": 52
+            }
+          },
+          "attributes": {
+            "startLine": 52,
+            "endLine": 52
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/IXR/class-IXR-error.php",
+          "attributes": {
+            "startLine": 52,
+            "endLine": 52,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 52,
+          "endLine": 52
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 52,
+        "endLine": 52
+      }
+    },
+    "attributes": {
+      "startLine": 52,
+      "endLine": 52
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_BinaryOp_Concat",
+          "left": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "ABSPATH"
+              ],
+              "attributes": {
+                "startLine": 54,
+                "endLine": 54
+              }
+            },
+            "attributes": {
+              "startLine": 54,
+              "endLine": 54
+            }
+          },
+          "right": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "WPINC"
+              ],
+              "attributes": {
+                "startLine": 54,
+                "endLine": 54
+              }
+            },
+            "attributes": {
+              "startLine": 54,
+              "endLine": 54
+            }
+          },
+          "attributes": {
+            "startLine": 54,
+            "endLine": 54
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/IXR/class-IXR-introspectionserver.php",
+          "attributes": {
+            "startLine": 54,
+            "endLine": 54,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 54,
+          "endLine": 54
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 54,
+        "endLine": 54
+      }
+    },
+    "attributes": {
+      "startLine": 54,
+      "endLine": 54
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_BinaryOp_Concat",
+          "left": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "ABSPATH"
+              ],
+              "attributes": {
+                "startLine": 56,
+                "endLine": 56
+              }
+            },
+            "attributes": {
+              "startLine": 56,
+              "endLine": 56
+            }
+          },
+          "right": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "WPINC"
+              ],
+              "attributes": {
+                "startLine": 56,
+                "endLine": 56
+              }
+            },
+            "attributes": {
+              "startLine": 56,
+              "endLine": 56
+            }
+          },
+          "attributes": {
+            "startLine": 56,
+            "endLine": 56
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/IXR/class-IXR-message.php",
+          "attributes": {
+            "startLine": 56,
+            "endLine": 56,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 56,
+          "endLine": 56
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 56,
+        "endLine": 56
+      }
+    },
+    "attributes": {
+      "startLine": 56,
+      "endLine": 56
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_BinaryOp_Concat",
+          "left": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "ABSPATH"
+              ],
+              "attributes": {
+                "startLine": 58,
+                "endLine": 58
+              }
+            },
+            "attributes": {
+              "startLine": 58,
+              "endLine": 58
+            }
+          },
+          "right": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "WPINC"
+              ],
+              "attributes": {
+                "startLine": 58,
+                "endLine": 58
+              }
+            },
+            "attributes": {
+              "startLine": 58,
+              "endLine": 58
+            }
+          },
+          "attributes": {
+            "startLine": 58,
+            "endLine": 58
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/IXR/class-IXR-request.php",
+          "attributes": {
+            "startLine": 58,
+            "endLine": 58,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 58,
+          "endLine": 58
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 58,
+        "endLine": 58
+      }
+    },
+    "attributes": {
+      "startLine": 58,
+      "endLine": 58
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_BinaryOp_Concat",
+          "left": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "ABSPATH"
+              ],
+              "attributes": {
+                "startLine": 60,
+                "endLine": 60
+              }
+            },
+            "attributes": {
+              "startLine": 60,
+              "endLine": 60
+            }
+          },
+          "right": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "WPINC"
+              ],
+              "attributes": {
+                "startLine": 60,
+                "endLine": 60
+              }
+            },
+            "attributes": {
+              "startLine": 60,
+              "endLine": 60
+            }
+          },
+          "attributes": {
+            "startLine": 60,
+            "endLine": 60
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/IXR/class-IXR-value.php",
+          "attributes": {
+            "startLine": 60,
+            "endLine": 60,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 60,
+          "endLine": 60
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 60,
+        "endLine": 60
+      }
+    },
+    "attributes": {
+      "startLine": 60,
+      "endLine": 60
+    }
+  }
+]

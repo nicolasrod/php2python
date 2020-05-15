@@ -1,0 +1,2119 @@
+[
+  {
+    "nodeType": "Stmt_Nop",
+    "attributes": {
+      "startLine": 12,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Contains the post embed content template part\n *\n * When a post is embedded in an iframe, this file is used to create the content template part\n * output if the active theme does not include an embed-content.php template.\n *\n * @package WordPress\n * @subpackage Theme_Compat\n * @since 4.5.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 11,
+          "endFilePos": 306,
+          "endTokenPos": 1
+        }
+      ],
+      "endLine": 13
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\t<div ",
+    "attributes": {
+      "startLine": 13,
+      "hasLeadingNewline": true,
+      "endLine": 13
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "post_class"
+        ],
+        "attributes": {
+          "startLine": 13,
+          "endLine": 13
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "wp-embed",
+            "attributes": {
+              "startLine": 13,
+              "endLine": 13,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 13,
+            "endLine": 13
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 13,
+        "endLine": 13
+      }
+    },
+    "attributes": {
+      "startLine": 13,
+      "endLine": 13
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": ">\n\t\t",
+    "attributes": {
+      "startLine": 13,
+      "hasLeadingNewline": false,
+      "endLine": 14
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Assign",
+      "var": {
+        "nodeType": "Expr_Variable",
+        "name": "thumbnail_id",
+        "attributes": {
+          "startLine": 15,
+          "endLine": 15
+        }
+      },
+      "expr": {
+        "nodeType": "Scalar_LNumber",
+        "value": 0,
+        "attributes": {
+          "startLine": 15,
+          "endLine": 15,
+          "kind": 10
+        }
+      },
+      "attributes": {
+        "startLine": 15,
+        "endLine": 15
+      }
+    },
+    "attributes": {
+      "startLine": 15,
+      "endLine": 15
+    }
+  },
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "has_post_thumbnail"
+        ],
+        "attributes": {
+          "startLine": 17,
+          "endLine": 17
+        }
+      },
+      "args": [],
+      "attributes": {
+        "startLine": 17,
+        "endLine": 17
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "thumbnail_id",
+            "attributes": {
+              "startLine": 18,
+              "endLine": 18
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "get_post_thumbnail_id"
+              ],
+              "attributes": {
+                "startLine": 18,
+                "endLine": 18
+              }
+            },
+            "args": [],
+            "attributes": {
+              "startLine": 18,
+              "endLine": 18
+            }
+          },
+          "attributes": {
+            "startLine": 18,
+            "endLine": 18
+          }
+        },
+        "attributes": {
+          "startLine": 18,
+          "endLine": 18
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 17,
+      "endLine": 19
+    }
+  },
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_BinaryOp_BooleanAnd",
+      "left": {
+        "nodeType": "Expr_BinaryOp_Identical",
+        "left": {
+          "nodeType": "Scalar_String",
+          "value": "attachment",
+          "attributes": {
+            "startLine": 21,
+            "endLine": 21,
+            "kind": 1
+          }
+        },
+        "right": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "get_post_type"
+            ],
+            "attributes": {
+              "startLine": 21,
+              "endLine": 21
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 21,
+            "endLine": 21
+          }
+        },
+        "attributes": {
+          "startLine": 21,
+          "endLine": 21
+        }
+      },
+      "right": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "wp_attachment_is_image"
+          ],
+          "attributes": {
+            "startLine": 21,
+            "endLine": 21
+          }
+        },
+        "args": [],
+        "attributes": {
+          "startLine": 21,
+          "endLine": 21
+        }
+      },
+      "attributes": {
+        "startLine": 21,
+        "endLine": 21
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "thumbnail_id",
+            "attributes": {
+              "startLine": 22,
+              "endLine": 22
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "get_the_ID"
+              ],
+              "attributes": {
+                "startLine": 22,
+                "endLine": 22
+              }
+            },
+            "args": [],
+            "attributes": {
+              "startLine": 22,
+              "endLine": 22
+            }
+          },
+          "attributes": {
+            "startLine": 22,
+            "endLine": 22
+          }
+        },
+        "attributes": {
+          "startLine": 22,
+          "endLine": 22
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 21,
+      "endLine": 23
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Assign",
+      "var": {
+        "nodeType": "Expr_Variable",
+        "name": "thumbnail_id",
+        "attributes": {
+          "startLine": 32,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t\t * Filters the thumbnail image ID for use in the embed template.\n\t\t *\n\t\t * @since 4.9.0\n\t\t *\n\t\t * @param int $thumbnail_id Attachment ID.\n\t\t */",
+              "line": 25,
+              "filePos": 576,
+              "tokenPos": 81,
+              "endLine": 31,
+              "endFilePos": 724,
+              "endTokenPos": 81
+            }
+          ],
+          "endLine": 32
+        }
+      },
+      "expr": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "apply_filters"
+          ],
+          "attributes": {
+            "startLine": 32,
+            "endLine": 32
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "embed_thumbnail_id",
+              "attributes": {
+                "startLine": 32,
+                "endLine": 32,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 32,
+              "endLine": 32
+            }
+          },
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Expr_Variable",
+              "name": "thumbnail_id",
+              "attributes": {
+                "startLine": 32,
+                "endLine": 32
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 32,
+              "endLine": 32
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 32,
+          "endLine": 32
+        }
+      },
+      "attributes": {
+        "startLine": 32,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/**\n\t\t * Filters the thumbnail image ID for use in the embed template.\n\t\t *\n\t\t * @since 4.9.0\n\t\t *\n\t\t * @param int $thumbnail_id Attachment ID.\n\t\t */",
+            "line": 25,
+            "filePos": 576,
+            "tokenPos": 81,
+            "endLine": 31,
+            "endFilePos": 724,
+            "endTokenPos": 81
+          }
+        ],
+        "endLine": 32
+      }
+    },
+    "attributes": {
+      "startLine": 32,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n\t\t * Filters the thumbnail image ID for use in the embed template.\n\t\t *\n\t\t * @since 4.9.0\n\t\t *\n\t\t * @param int $thumbnail_id Attachment ID.\n\t\t */",
+          "line": 25,
+          "filePos": 576,
+          "tokenPos": 81,
+          "endLine": 31,
+          "endFilePos": 724,
+          "endTokenPos": 81
+        }
+      ],
+      "endLine": 32
+    }
+  },
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_Variable",
+      "name": "thumbnail_id",
+      "attributes": {
+        "startLine": 34,
+        "endLine": 34
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "aspect_ratio",
+            "attributes": {
+              "startLine": 35,
+              "endLine": 35
+            }
+          },
+          "expr": {
+            "nodeType": "Scalar_LNumber",
+            "value": 1,
+            "attributes": {
+              "startLine": 35,
+              "endLine": 35,
+              "kind": 10
+            }
+          },
+          "attributes": {
+            "startLine": 35,
+            "endLine": 35
+          }
+        },
+        "attributes": {
+          "startLine": 35,
+          "endLine": 35
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "measurements",
+            "attributes": {
+              "startLine": 36,
+              "endLine": 36
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_Array",
+            "items": [
+              {
+                "nodeType": "Expr_ArrayItem",
+                "key": null,
+                "value": {
+                  "nodeType": "Scalar_LNumber",
+                  "value": 1,
+                  "attributes": {
+                    "startLine": 36,
+                    "endLine": 36,
+                    "kind": 10
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 36,
+                  "endLine": 36
+                }
+              },
+              {
+                "nodeType": "Expr_ArrayItem",
+                "key": null,
+                "value": {
+                  "nodeType": "Scalar_LNumber",
+                  "value": 1,
+                  "attributes": {
+                    "startLine": 36,
+                    "endLine": 36,
+                    "kind": 10
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 36,
+                  "endLine": 36
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 36,
+              "endLine": 36,
+              "kind": 1
+            }
+          },
+          "attributes": {
+            "startLine": 36,
+            "endLine": 36
+          }
+        },
+        "attributes": {
+          "startLine": 36,
+          "endLine": 36
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "image_size",
+            "attributes": {
+              "startLine": 37,
+              "endLine": 37
+            }
+          },
+          "expr": {
+            "nodeType": "Scalar_String",
+            "value": "full",
+            "attributes": {
+              "startLine": 37,
+              "endLine": 37,
+              "kind": 1
+            }
+          },
+          "attributes": {
+            "startLine": 37,
+            "endLine": 37
+          }
+        },
+        "attributes": {
+          "startLine": 37,
+          "endLine": 37
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "meta",
+            "attributes": {
+              "startLine": 39,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// Fallback.\n",
+                  "line": 37,
+                  "filePos": 907,
+                  "tokenPos": 137,
+                  "endLine": 38,
+                  "endFilePos": 919,
+                  "endTokenPos": 137
+                }
+              ],
+              "endLine": 39
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "wp_get_attachment_metadata"
+              ],
+              "attributes": {
+                "startLine": 39,
+                "endLine": 39
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "thumbnail_id",
+                  "attributes": {
+                    "startLine": 39,
+                    "endLine": 39
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 39,
+                  "endLine": 39
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 39,
+              "endLine": 39
+            }
+          },
+          "attributes": {
+            "startLine": 39,
+            "comments": [
+              {
+                "nodeType": "Comment",
+                "text": "// Fallback.\n",
+                "line": 37,
+                "filePos": 907,
+                "tokenPos": 137,
+                "endLine": 38,
+                "endFilePos": 919,
+                "endTokenPos": 137
+              }
+            ],
+            "endLine": 39
+          }
+        },
+        "attributes": {
+          "startLine": 39,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "// Fallback.\n",
+              "line": 37,
+              "filePos": 907,
+              "tokenPos": 137,
+              "endLine": 38,
+              "endFilePos": 919,
+              "endTokenPos": 137
+            }
+          ],
+          "endLine": 39
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BooleanNot",
+          "expr": {
+            "nodeType": "Expr_Empty",
+            "expr": {
+              "nodeType": "Expr_ArrayDimFetch",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "meta",
+                "attributes": {
+                  "startLine": 40,
+                  "endLine": 40
+                }
+              },
+              "dim": {
+                "nodeType": "Scalar_String",
+                "value": "sizes",
+                "attributes": {
+                  "startLine": 40,
+                  "endLine": 40,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 40,
+                "endLine": 40
+              }
+            },
+            "attributes": {
+              "startLine": 40,
+              "endLine": 40
+            }
+          },
+          "attributes": {
+            "startLine": 40,
+            "endLine": 40
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Foreach",
+            "expr": {
+              "nodeType": "Expr_ArrayDimFetch",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "meta",
+                "attributes": {
+                  "startLine": 41,
+                  "endLine": 41
+                }
+              },
+              "dim": {
+                "nodeType": "Scalar_String",
+                "value": "sizes",
+                "attributes": {
+                  "startLine": 41,
+                  "endLine": 41,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 41,
+                "endLine": 41
+              }
+            },
+            "keyVar": {
+              "nodeType": "Expr_Variable",
+              "name": "size",
+              "attributes": {
+                "startLine": 41,
+                "endLine": 41
+              }
+            },
+            "byRef": false,
+            "valueVar": {
+              "nodeType": "Expr_Variable",
+              "name": "data",
+              "attributes": {
+                "startLine": 41,
+                "endLine": 41
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_If",
+                "cond": {
+                  "nodeType": "Expr_BinaryOp_BooleanAnd",
+                  "left": {
+                    "nodeType": "Expr_BinaryOp_Greater",
+                    "left": {
+                      "nodeType": "Expr_ArrayDimFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "data",
+                        "attributes": {
+                          "startLine": 42,
+                          "endLine": 42
+                        }
+                      },
+                      "dim": {
+                        "nodeType": "Scalar_String",
+                        "value": "height",
+                        "attributes": {
+                          "startLine": 42,
+                          "endLine": 42,
+                          "kind": 1
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 42,
+                        "endLine": 42
+                      }
+                    },
+                    "right": {
+                      "nodeType": "Scalar_LNumber",
+                      "value": 0,
+                      "attributes": {
+                        "startLine": 42,
+                        "endLine": 42,
+                        "kind": 10
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 42,
+                      "endLine": 42
+                    }
+                  },
+                  "right": {
+                    "nodeType": "Expr_BinaryOp_Greater",
+                    "left": {
+                      "nodeType": "Expr_BinaryOp_Div",
+                      "left": {
+                        "nodeType": "Expr_ArrayDimFetch",
+                        "var": {
+                          "nodeType": "Expr_Variable",
+                          "name": "data",
+                          "attributes": {
+                            "startLine": 42,
+                            "endLine": 42
+                          }
+                        },
+                        "dim": {
+                          "nodeType": "Scalar_String",
+                          "value": "width",
+                          "attributes": {
+                            "startLine": 42,
+                            "endLine": 42,
+                            "kind": 1
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 42,
+                          "endLine": 42
+                        }
+                      },
+                      "right": {
+                        "nodeType": "Expr_ArrayDimFetch",
+                        "var": {
+                          "nodeType": "Expr_Variable",
+                          "name": "data",
+                          "attributes": {
+                            "startLine": 42,
+                            "endLine": 42
+                          }
+                        },
+                        "dim": {
+                          "nodeType": "Scalar_String",
+                          "value": "height",
+                          "attributes": {
+                            "startLine": 42,
+                            "endLine": 42,
+                            "kind": 1
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 42,
+                          "endLine": 42
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 42,
+                        "endLine": 42
+                      }
+                    },
+                    "right": {
+                      "nodeType": "Expr_Variable",
+                      "name": "aspect_ratio",
+                      "attributes": {
+                        "startLine": 42,
+                        "endLine": 42
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 42,
+                      "endLine": 42
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 42,
+                    "endLine": 42
+                  }
+                },
+                "stmts": [
+                  {
+                    "nodeType": "Stmt_Expression",
+                    "expr": {
+                      "nodeType": "Expr_Assign",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "aspect_ratio",
+                        "attributes": {
+                          "startLine": 43,
+                          "endLine": 43
+                        }
+                      },
+                      "expr": {
+                        "nodeType": "Expr_BinaryOp_Div",
+                        "left": {
+                          "nodeType": "Expr_ArrayDimFetch",
+                          "var": {
+                            "nodeType": "Expr_Variable",
+                            "name": "data",
+                            "attributes": {
+                              "startLine": 43,
+                              "endLine": 43
+                            }
+                          },
+                          "dim": {
+                            "nodeType": "Scalar_String",
+                            "value": "width",
+                            "attributes": {
+                              "startLine": 43,
+                              "endLine": 43,
+                              "kind": 1
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 43,
+                            "endLine": 43
+                          }
+                        },
+                        "right": {
+                          "nodeType": "Expr_ArrayDimFetch",
+                          "var": {
+                            "nodeType": "Expr_Variable",
+                            "name": "data",
+                            "attributes": {
+                              "startLine": 43,
+                              "endLine": 43
+                            }
+                          },
+                          "dim": {
+                            "nodeType": "Scalar_String",
+                            "value": "height",
+                            "attributes": {
+                              "startLine": 43,
+                              "endLine": 43,
+                              "kind": 1
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 43,
+                            "endLine": 43
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 43,
+                          "endLine": 43
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 43,
+                        "endLine": 43
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 43,
+                      "endLine": 43
+                    }
+                  },
+                  {
+                    "nodeType": "Stmt_Expression",
+                    "expr": {
+                      "nodeType": "Expr_Assign",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "measurements",
+                        "attributes": {
+                          "startLine": 44,
+                          "endLine": 44
+                        }
+                      },
+                      "expr": {
+                        "nodeType": "Expr_Array",
+                        "items": [
+                          {
+                            "nodeType": "Expr_ArrayItem",
+                            "key": null,
+                            "value": {
+                              "nodeType": "Expr_ArrayDimFetch",
+                              "var": {
+                                "nodeType": "Expr_Variable",
+                                "name": "data",
+                                "attributes": {
+                                  "startLine": 44,
+                                  "endLine": 44
+                                }
+                              },
+                              "dim": {
+                                "nodeType": "Scalar_String",
+                                "value": "width",
+                                "attributes": {
+                                  "startLine": 44,
+                                  "endLine": 44,
+                                  "kind": 1
+                                }
+                              },
+                              "attributes": {
+                                "startLine": 44,
+                                "endLine": 44
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 44,
+                              "endLine": 44
+                            }
+                          },
+                          {
+                            "nodeType": "Expr_ArrayItem",
+                            "key": null,
+                            "value": {
+                              "nodeType": "Expr_ArrayDimFetch",
+                              "var": {
+                                "nodeType": "Expr_Variable",
+                                "name": "data",
+                                "attributes": {
+                                  "startLine": 44,
+                                  "endLine": 44
+                                }
+                              },
+                              "dim": {
+                                "nodeType": "Scalar_String",
+                                "value": "height",
+                                "attributes": {
+                                  "startLine": 44,
+                                  "endLine": 44,
+                                  "kind": 1
+                                }
+                              },
+                              "attributes": {
+                                "startLine": 44,
+                                "endLine": 44
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 44,
+                              "endLine": 44
+                            }
+                          }
+                        ],
+                        "attributes": {
+                          "startLine": 44,
+                          "endLine": 44,
+                          "kind": 1
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 44,
+                        "endLine": 44
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 44,
+                      "endLine": 44
+                    }
+                  },
+                  {
+                    "nodeType": "Stmt_Expression",
+                    "expr": {
+                      "nodeType": "Expr_Assign",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "image_size",
+                        "attributes": {
+                          "startLine": 45,
+                          "endLine": 45
+                        }
+                      },
+                      "expr": {
+                        "nodeType": "Expr_Variable",
+                        "name": "size",
+                        "attributes": {
+                          "startLine": 45,
+                          "endLine": 45
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 45,
+                        "endLine": 45
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 45,
+                      "endLine": 45
+                    }
+                  }
+                ],
+                "elseifs": [],
+                "else": null,
+                "attributes": {
+                  "startLine": 42,
+                  "endLine": 46
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 41,
+              "endLine": 47
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 40,
+          "endLine": 48
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "image_size",
+            "attributes": {
+              "startLine": 59,
+              "comments": [
+                {
+                  "nodeType": "Comment_Doc",
+                  "text": "/**\n\t\t\t * Filters the thumbnail image size for use in the embed template.\n\t\t\t *\n\t\t\t * @since 4.4.0\n\t\t\t * @since 4.5.0 Added `$thumbnail_id` parameter.\n\t\t\t *\n\t\t\t * @param string $image_size   Thumbnail image size.\n\t\t\t * @param int    $thumbnail_id Attachment ID.\n\t\t\t */",
+                  "line": 50,
+                  "filePos": 1323,
+                  "tokenPos": 278,
+                  "endLine": 58,
+                  "endFilePos": 1590,
+                  "endTokenPos": 278
+                }
+              ],
+              "endLine": 59
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "apply_filters"
+              ],
+              "attributes": {
+                "startLine": 59,
+                "endLine": 59
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "embed_thumbnail_image_size",
+                  "attributes": {
+                    "startLine": 59,
+                    "endLine": 59,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 59,
+                  "endLine": 59
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "image_size",
+                  "attributes": {
+                    "startLine": 59,
+                    "endLine": 59
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 59,
+                  "endLine": 59
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "thumbnail_id",
+                  "attributes": {
+                    "startLine": 59,
+                    "endLine": 59
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 59,
+                  "endLine": 59
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 59,
+              "endLine": 59
+            }
+          },
+          "attributes": {
+            "startLine": 59,
+            "comments": [
+              {
+                "nodeType": "Comment_Doc",
+                "text": "/**\n\t\t\t * Filters the thumbnail image size for use in the embed template.\n\t\t\t *\n\t\t\t * @since 4.4.0\n\t\t\t * @since 4.5.0 Added `$thumbnail_id` parameter.\n\t\t\t *\n\t\t\t * @param string $image_size   Thumbnail image size.\n\t\t\t * @param int    $thumbnail_id Attachment ID.\n\t\t\t */",
+                "line": 50,
+                "filePos": 1323,
+                "tokenPos": 278,
+                "endLine": 58,
+                "endFilePos": 1590,
+                "endTokenPos": 278
+              }
+            ],
+            "endLine": 59
+          }
+        },
+        "attributes": {
+          "startLine": 59,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t\t\t * Filters the thumbnail image size for use in the embed template.\n\t\t\t *\n\t\t\t * @since 4.4.0\n\t\t\t * @since 4.5.0 Added `$thumbnail_id` parameter.\n\t\t\t *\n\t\t\t * @param string $image_size   Thumbnail image size.\n\t\t\t * @param int    $thumbnail_id Attachment ID.\n\t\t\t */",
+              "line": 50,
+              "filePos": 1323,
+              "tokenPos": 278,
+              "endLine": 58,
+              "endFilePos": 1590,
+              "endTokenPos": 278
+            }
+          ],
+          "endLine": 59
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "shape",
+            "attributes": {
+              "startLine": 61,
+              "endLine": 61
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_Ternary",
+            "cond": {
+              "nodeType": "Expr_BinaryOp_GreaterOrEqual",
+              "left": {
+                "nodeType": "Expr_BinaryOp_Div",
+                "left": {
+                  "nodeType": "Expr_ArrayDimFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "measurements",
+                    "attributes": {
+                      "startLine": 61,
+                      "endLine": 61
+                    }
+                  },
+                  "dim": {
+                    "nodeType": "Scalar_LNumber",
+                    "value": 0,
+                    "attributes": {
+                      "startLine": 61,
+                      "endLine": 61,
+                      "kind": 10
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 61,
+                    "endLine": 61
+                  }
+                },
+                "right": {
+                  "nodeType": "Expr_ArrayDimFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "measurements",
+                    "attributes": {
+                      "startLine": 61,
+                      "endLine": 61
+                    }
+                  },
+                  "dim": {
+                    "nodeType": "Scalar_LNumber",
+                    "value": 1,
+                    "attributes": {
+                      "startLine": 61,
+                      "endLine": 61,
+                      "kind": 10
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 61,
+                    "endLine": 61
+                  }
+                },
+                "attributes": {
+                  "startLine": 61,
+                  "endLine": 61
+                }
+              },
+              "right": {
+                "nodeType": "Scalar_DNumber",
+                "value": 1.75,
+                "attributes": {
+                  "startLine": 61,
+                  "endLine": 61
+                }
+              },
+              "attributes": {
+                "startLine": 61,
+                "endLine": 61
+              }
+            },
+            "if": {
+              "nodeType": "Scalar_String",
+              "value": "rectangular",
+              "attributes": {
+                "startLine": 61,
+                "endLine": 61,
+                "kind": 1
+              }
+            },
+            "else": {
+              "nodeType": "Scalar_String",
+              "value": "square",
+              "attributes": {
+                "startLine": 61,
+                "endLine": 61,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 61,
+              "endLine": 61
+            }
+          },
+          "attributes": {
+            "startLine": 61,
+            "endLine": 61
+          }
+        },
+        "attributes": {
+          "startLine": 61,
+          "endLine": 61
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "shape",
+            "attributes": {
+              "startLine": 75,
+              "comments": [
+                {
+                  "nodeType": "Comment_Doc",
+                  "text": "/**\n\t\t\t * Filters the thumbnail shape for use in the embed template.\n\t\t\t *\n\t\t\t * Rectangular images are shown above the title while square images\n\t\t\t * are shown next to the content.\n\t\t\t *\n\t\t\t * @since 4.4.0\n\t\t\t * @since 4.5.0 Added `$thumbnail_id` parameter.\n\t\t\t *\n\t\t\t * @param string $shape        Thumbnail image shape. Either 'rectangular' or 'square'.\n\t\t\t * @param int    $thumbnail_id Attachment ID.\n\t\t\t */",
+                  "line": 63,
+                  "filePos": 1773,
+                  "tokenPos": 327,
+                  "endLine": 74,
+                  "endFilePos": 2184,
+                  "endTokenPos": 327
+                }
+              ],
+              "endLine": 75
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "apply_filters"
+              ],
+              "attributes": {
+                "startLine": 75,
+                "endLine": 75
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "embed_thumbnail_image_shape",
+                  "attributes": {
+                    "startLine": 75,
+                    "endLine": 75,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 75,
+                  "endLine": 75
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "shape",
+                  "attributes": {
+                    "startLine": 75,
+                    "endLine": 75
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 75,
+                  "endLine": 75
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "thumbnail_id",
+                  "attributes": {
+                    "startLine": 75,
+                    "endLine": 75
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 75,
+                  "endLine": 75
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 75,
+              "endLine": 75
+            }
+          },
+          "attributes": {
+            "startLine": 75,
+            "comments": [
+              {
+                "nodeType": "Comment_Doc",
+                "text": "/**\n\t\t\t * Filters the thumbnail shape for use in the embed template.\n\t\t\t *\n\t\t\t * Rectangular images are shown above the title while square images\n\t\t\t * are shown next to the content.\n\t\t\t *\n\t\t\t * @since 4.4.0\n\t\t\t * @since 4.5.0 Added `$thumbnail_id` parameter.\n\t\t\t *\n\t\t\t * @param string $shape        Thumbnail image shape. Either 'rectangular' or 'square'.\n\t\t\t * @param int    $thumbnail_id Attachment ID.\n\t\t\t */",
+                "line": 63,
+                "filePos": 1773,
+                "tokenPos": 327,
+                "endLine": 74,
+                "endFilePos": 2184,
+                "endTokenPos": 327
+              }
+            ],
+            "endLine": 75
+          }
+        },
+        "attributes": {
+          "startLine": 75,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t\t\t * Filters the thumbnail shape for use in the embed template.\n\t\t\t *\n\t\t\t * Rectangular images are shown above the title while square images\n\t\t\t * are shown next to the content.\n\t\t\t *\n\t\t\t * @since 4.4.0\n\t\t\t * @since 4.5.0 Added `$thumbnail_id` parameter.\n\t\t\t *\n\t\t\t * @param string $shape        Thumbnail image shape. Either 'rectangular' or 'square'.\n\t\t\t * @param int    $thumbnail_id Attachment ID.\n\t\t\t */",
+              "line": 63,
+              "filePos": 1773,
+              "tokenPos": 327,
+              "endLine": 74,
+              "endFilePos": 2184,
+              "endTokenPos": 327
+            }
+          ],
+          "endLine": 75
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 34,
+      "endLine": 76
+    }
+  },
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_BinaryOp_BooleanAnd",
+      "left": {
+        "nodeType": "Expr_Variable",
+        "name": "thumbnail_id",
+        "attributes": {
+          "startLine": 78,
+          "endLine": 78
+        }
+      },
+      "right": {
+        "nodeType": "Expr_BinaryOp_Identical",
+        "left": {
+          "nodeType": "Scalar_String",
+          "value": "rectangular",
+          "attributes": {
+            "startLine": 78,
+            "endLine": 78,
+            "kind": 1
+          }
+        },
+        "right": {
+          "nodeType": "Expr_Variable",
+          "name": "shape",
+          "attributes": {
+            "startLine": 78,
+            "endLine": 78
+          }
+        },
+        "attributes": {
+          "startLine": 78,
+          "endLine": 78
+        }
+      },
+      "attributes": {
+        "startLine": 78,
+        "endLine": 78
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "\t\t\t<div class=\"wp-embed-featured-image rectangular\">\n\t\t\t\t<a href=\"",
+        "attributes": {
+          "startLine": 80,
+          "hasLeadingNewline": true,
+          "endLine": 81
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "the_permalink"
+            ],
+            "attributes": {
+              "startLine": 81,
+              "endLine": 81
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 81,
+            "endLine": 81
+          }
+        },
+        "attributes": {
+          "startLine": 81,
+          "endLine": 81
+        }
+      },
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "\" target=\"_top\">\n\t\t\t\t\t",
+        "attributes": {
+          "startLine": 81,
+          "hasLeadingNewline": false,
+          "endLine": 82
+        }
+      },
+      {
+        "nodeType": "Stmt_Echo",
+        "exprs": [
+          {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "wp_get_attachment_image"
+              ],
+              "attributes": {
+                "startLine": 82,
+                "endLine": 82
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "thumbnail_id",
+                  "attributes": {
+                    "startLine": 82,
+                    "endLine": 82
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 82,
+                  "endLine": 82
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "image_size",
+                  "attributes": {
+                    "startLine": 82,
+                    "endLine": 82
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 82,
+                  "endLine": 82
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 82,
+              "endLine": 82
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 82,
+          "endLine": 82
+        }
+      },
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "\t\t\t\t</a>\n\t\t\t</div>\n\t\t",
+        "attributes": {
+          "startLine": 83,
+          "hasLeadingNewline": true,
+          "endLine": 85
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 78,
+      "endLine": 85
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\n\t\t<p class=\"wp-embed-heading\">\n\t\t\t<a href=\"",
+    "attributes": {
+      "startLine": 86,
+      "hasLeadingNewline": true,
+      "endLine": 88
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "the_permalink"
+        ],
+        "attributes": {
+          "startLine": 88,
+          "endLine": 88
+        }
+      },
+      "args": [],
+      "attributes": {
+        "startLine": 88,
+        "endLine": 88
+      }
+    },
+    "attributes": {
+      "startLine": 88,
+      "endLine": 88
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\" target=\"_top\">\n\t\t\t\t",
+    "attributes": {
+      "startLine": 88,
+      "hasLeadingNewline": false,
+      "endLine": 89
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "the_title"
+        ],
+        "attributes": {
+          "startLine": 89,
+          "endLine": 89
+        }
+      },
+      "args": [],
+      "attributes": {
+        "startLine": 89,
+        "endLine": 89
+      }
+    },
+    "attributes": {
+      "startLine": 89,
+      "endLine": 89
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\t\t\t</a>\n\t\t</p>\n\n\t\t",
+    "attributes": {
+      "startLine": 90,
+      "hasLeadingNewline": true,
+      "endLine": 93
+    }
+  },
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_BinaryOp_BooleanAnd",
+      "left": {
+        "nodeType": "Expr_Variable",
+        "name": "thumbnail_id",
+        "attributes": {
+          "startLine": 93,
+          "endLine": 93
+        }
+      },
+      "right": {
+        "nodeType": "Expr_BinaryOp_Identical",
+        "left": {
+          "nodeType": "Scalar_String",
+          "value": "square",
+          "attributes": {
+            "startLine": 93,
+            "endLine": 93,
+            "kind": 1
+          }
+        },
+        "right": {
+          "nodeType": "Expr_Variable",
+          "name": "shape",
+          "attributes": {
+            "startLine": 93,
+            "endLine": 93
+          }
+        },
+        "attributes": {
+          "startLine": 93,
+          "endLine": 93
+        }
+      },
+      "attributes": {
+        "startLine": 93,
+        "endLine": 93
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "\t\t\t<div class=\"wp-embed-featured-image square\">\n\t\t\t\t<a href=\"",
+        "attributes": {
+          "startLine": 94,
+          "hasLeadingNewline": true,
+          "endLine": 95
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "the_permalink"
+            ],
+            "attributes": {
+              "startLine": 95,
+              "endLine": 95
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 95,
+            "endLine": 95
+          }
+        },
+        "attributes": {
+          "startLine": 95,
+          "endLine": 95
+        }
+      },
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "\" target=\"_top\">\n\t\t\t\t\t",
+        "attributes": {
+          "startLine": 95,
+          "hasLeadingNewline": false,
+          "endLine": 96
+        }
+      },
+      {
+        "nodeType": "Stmt_Echo",
+        "exprs": [
+          {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "wp_get_attachment_image"
+              ],
+              "attributes": {
+                "startLine": 96,
+                "endLine": 96
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "thumbnail_id",
+                  "attributes": {
+                    "startLine": 96,
+                    "endLine": 96
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 96,
+                  "endLine": 96
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "image_size",
+                  "attributes": {
+                    "startLine": 96,
+                    "endLine": 96
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 96,
+                  "endLine": 96
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 96,
+              "endLine": 96
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 96,
+          "endLine": 96
+        }
+      },
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "\t\t\t\t</a>\n\t\t\t</div>\n\t\t",
+        "attributes": {
+          "startLine": 97,
+          "hasLeadingNewline": true,
+          "endLine": 99
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 93,
+      "endLine": 99
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\n\t\t<div class=\"wp-embed-excerpt\">",
+    "attributes": {
+      "startLine": 100,
+      "hasLeadingNewline": true,
+      "endLine": 101
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "the_excerpt_embed"
+        ],
+        "attributes": {
+          "startLine": 101,
+          "endLine": 101
+        }
+      },
+      "args": [],
+      "attributes": {
+        "startLine": 101,
+        "endLine": 101
+      }
+    },
+    "attributes": {
+      "startLine": 101,
+      "endLine": 101
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</div>\n\n\t\t",
+    "attributes": {
+      "startLine": 101,
+      "hasLeadingNewline": false,
+      "endLine": 103
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "do_action"
+        ],
+        "attributes": {
+          "startLine": 109,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t\t * Prints additional content after the embed excerpt.\n\t\t *\n\t\t * @since 4.4.0\n\t\t */",
+              "line": 104,
+              "filePos": 3031,
+              "tokenPos": 476,
+              "endLine": 108,
+              "endFilePos": 3118,
+              "endTokenPos": 476
+            }
+          ],
+          "endLine": 109
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "embed_content",
+            "attributes": {
+              "startLine": 109,
+              "endLine": 109,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 109,
+            "endLine": 109
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 109,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/**\n\t\t * Prints additional content after the embed excerpt.\n\t\t *\n\t\t * @since 4.4.0\n\t\t */",
+            "line": 104,
+            "filePos": 3031,
+            "tokenPos": 476,
+            "endLine": 108,
+            "endFilePos": 3118,
+            "endTokenPos": 476
+          }
+        ],
+        "endLine": 109
+      }
+    },
+    "attributes": {
+      "startLine": 109,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n\t\t * Prints additional content after the embed excerpt.\n\t\t *\n\t\t * @since 4.4.0\n\t\t */",
+          "line": 104,
+          "filePos": 3031,
+          "tokenPos": 476,
+          "endLine": 108,
+          "endFilePos": 3118,
+          "endTokenPos": 476
+        }
+      ],
+      "endLine": 109
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\n\t\t<div class=\"wp-embed-footer\">\n\t\t\t",
+    "attributes": {
+      "startLine": 111,
+      "hasLeadingNewline": true,
+      "endLine": 113
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "the_embed_site_title"
+        ],
+        "attributes": {
+          "startLine": 113,
+          "endLine": 113
+        }
+      },
+      "args": [],
+      "attributes": {
+        "startLine": 113,
+        "endLine": 113
+      }
+    },
+    "attributes": {
+      "startLine": 113,
+      "endLine": 113
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\n\t\t\t<div class=\"wp-embed-meta\">\n\t\t\t\t",
+    "attributes": {
+      "startLine": 114,
+      "hasLeadingNewline": true,
+      "endLine": 116
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "do_action"
+        ],
+        "attributes": {
+          "startLine": 122,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t\t\t\t * Prints additional meta content in the embed template.\n\t\t\t\t *\n\t\t\t\t * @since 4.4.0\n\t\t\t\t */",
+              "line": 117,
+              "filePos": 3272,
+              "tokenPos": 498,
+              "endLine": 121,
+              "endFilePos": 3370,
+              "endTokenPos": 498
+            }
+          ],
+          "endLine": 122
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "embed_content_meta",
+            "attributes": {
+              "startLine": 122,
+              "endLine": 122,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 122,
+            "endLine": 122
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 122,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/**\n\t\t\t\t * Prints additional meta content in the embed template.\n\t\t\t\t *\n\t\t\t\t * @since 4.4.0\n\t\t\t\t */",
+            "line": 117,
+            "filePos": 3272,
+            "tokenPos": 498,
+            "endLine": 121,
+            "endFilePos": 3370,
+            "endTokenPos": 498
+          }
+        ],
+        "endLine": 122
+      }
+    },
+    "attributes": {
+      "startLine": 122,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n\t\t\t\t * Prints additional meta content in the embed template.\n\t\t\t\t *\n\t\t\t\t * @since 4.4.0\n\t\t\t\t */",
+          "line": 117,
+          "filePos": 3272,
+          "tokenPos": 498,
+          "endLine": 121,
+          "endFilePos": 3370,
+          "endTokenPos": 498
+        }
+      ],
+      "endLine": 122
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\t\t\t</div>\n\t\t</div>\n\t</div>\n",
+    "attributes": {
+      "startLine": 124,
+      "hasLeadingNewline": true,
+      "endLine": 127
+    }
+  }
+]

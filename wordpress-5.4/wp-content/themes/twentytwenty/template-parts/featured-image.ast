@@ -1,0 +1,395 @@
+[
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_BinaryOp_BooleanAnd",
+      "left": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "has_post_thumbnail"
+          ],
+          "attributes": {
+            "startLine": 10,
+            "endLine": 10
+          }
+        },
+        "args": [],
+        "attributes": {
+          "startLine": 10,
+          "endLine": 10
+        }
+      },
+      "right": {
+        "nodeType": "Expr_BooleanNot",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "post_password_required"
+            ],
+            "attributes": {
+              "startLine": 10,
+              "endLine": 10
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 10,
+            "endLine": 10
+          }
+        },
+        "attributes": {
+          "startLine": 10,
+          "endLine": 10
+        }
+      },
+      "attributes": {
+        "startLine": 10,
+        "endLine": 10
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "featured_media_inner_classes",
+            "attributes": {
+              "startLine": 12,
+              "endLine": 12
+            }
+          },
+          "expr": {
+            "nodeType": "Scalar_String",
+            "value": "",
+            "attributes": {
+              "startLine": 12,
+              "endLine": 12,
+              "kind": 1
+            }
+          },
+          "attributes": {
+            "startLine": 12,
+            "endLine": 12
+          }
+        },
+        "attributes": {
+          "startLine": 12,
+          "endLine": 12
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BooleanNot",
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "is_singular"
+              ],
+              "attributes": {
+                "startLine": 15,
+                "endLine": 15
+              }
+            },
+            "args": [],
+            "attributes": {
+              "startLine": 15,
+              "endLine": 15
+            }
+          },
+          "attributes": {
+            "startLine": 15,
+            "endLine": 15
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_AssignOp_Concat",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "featured_media_inner_classes",
+                "attributes": {
+                  "startLine": 16,
+                  "endLine": 16
+                }
+              },
+              "expr": {
+                "nodeType": "Scalar_String",
+                "value": " medium",
+                "attributes": {
+                  "startLine": 16,
+                  "endLine": 16,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 16,
+                "endLine": 16
+              }
+            },
+            "attributes": {
+              "startLine": 16,
+              "endLine": 16
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 15,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "// Make the featured media thinner on archive pages.\n",
+              "line": 14,
+              "filePos": 228,
+              "tokenPos": 30,
+              "endLine": 15,
+              "endFilePos": 280,
+              "endTokenPos": 30
+            }
+          ],
+          "endLine": 17
+        }
+      },
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "\n\t<figure class=\"featured-media\">\n\n\t\t<div class=\"featured-media-inner section-inner",
+        "attributes": {
+          "startLine": 19,
+          "hasLeadingNewline": true,
+          "endLine": 22
+        }
+      },
+      {
+        "nodeType": "Stmt_Echo",
+        "exprs": [
+          {
+            "nodeType": "Expr_Variable",
+            "name": "featured_media_inner_classes",
+            "attributes": {
+              "startLine": 22,
+              "endLine": 22
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 22,
+          "endLine": 22
+        }
+      },
+      {
+        "nodeType": "Stmt_Nop",
+        "attributes": {
+          "startLine": 22,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static output ",
+              "line": 22,
+              "filePos": 485,
+              "tokenPos": 63,
+              "endLine": 22,
+              "endFilePos": 566,
+              "endTokenPos": 63
+            }
+          ],
+          "endLine": 22
+        }
+      },
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "\">\n\n\t\t\t",
+        "attributes": {
+          "startLine": 22,
+          "hasLeadingNewline": false,
+          "endLine": 24
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "the_post_thumbnail"
+            ],
+            "attributes": {
+              "startLine": 25,
+              "endLine": 25
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 25,
+            "endLine": 25
+          }
+        },
+        "attributes": {
+          "startLine": 25,
+          "endLine": 25
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "caption",
+            "attributes": {
+              "startLine": 27,
+              "endLine": 27
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "get_the_post_thumbnail_caption"
+              ],
+              "attributes": {
+                "startLine": 27,
+                "endLine": 27
+              }
+            },
+            "args": [],
+            "attributes": {
+              "startLine": 27,
+              "endLine": 27
+            }
+          },
+          "attributes": {
+            "startLine": 27,
+            "endLine": 27
+          }
+        },
+        "attributes": {
+          "startLine": 27,
+          "endLine": 27
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_Variable",
+          "name": "caption",
+          "attributes": {
+            "startLine": 29,
+            "endLine": 29
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_InlineHTML",
+            "value": "\n\t\t\t\t<figcaption class=\"wp-caption-text\">",
+            "attributes": {
+              "startLine": 31,
+              "hasLeadingNewline": true,
+              "endLine": 32
+            }
+          },
+          {
+            "nodeType": "Stmt_Echo",
+            "exprs": [
+              {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "esc_html"
+                  ],
+                  "attributes": {
+                    "startLine": 32,
+                    "endLine": 32
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "caption",
+                      "attributes": {
+                        "startLine": 32,
+                        "endLine": 32
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 32,
+                      "endLine": 32
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 32,
+                  "endLine": 32
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 32,
+              "endLine": 32
+            }
+          },
+          {
+            "nodeType": "Stmt_InlineHTML",
+            "value": "</figcaption>\n\n\t\t\t\t",
+            "attributes": {
+              "startLine": 32,
+              "hasLeadingNewline": false,
+              "endLine": 34
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 29,
+          "endLine": 35
+        }
+      },
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "\n\t\t</div><!-- .featured-media-inner -->\n\n\t</figure><!-- .featured-media -->\n\n\t",
+        "attributes": {
+          "startLine": 37,
+          "hasLeadingNewline": true,
+          "endLine": 42
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 10,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Displays the featured image\n *\n * @package WordPress\n * @subpackage Twenty_Twenty\n * @since Twenty Twenty 1.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 8,
+          "endFilePos": 125,
+          "endTokenPos": 1
+        }
+      ],
+      "endLine": 43
+    }
+  }
+]

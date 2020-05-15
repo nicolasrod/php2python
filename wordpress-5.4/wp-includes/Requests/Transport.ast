@@ -1,0 +1,278 @@
+[
+  {
+    "nodeType": "Stmt_Interface",
+    "extends": [],
+    "name": {
+      "nodeType": "Identifier",
+      "name": "Requests_Transport",
+      "attributes": {
+        "startLine": 15,
+        "endLine": 15
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "request",
+          "attributes": {
+            "startLine": 25,
+            "endLine": 25
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "url",
+              "attributes": {
+                "startLine": 25,
+                "endLine": 25
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 25,
+              "endLine": 25
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "headers",
+              "attributes": {
+                "startLine": 25,
+                "endLine": 25
+              }
+            },
+            "default": {
+              "nodeType": "Expr_Array",
+              "items": [],
+              "attributes": {
+                "startLine": 25,
+                "endLine": 25,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 25,
+              "endLine": 25
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "data",
+              "attributes": {
+                "startLine": 25,
+                "endLine": 25
+              }
+            },
+            "default": {
+              "nodeType": "Expr_Array",
+              "items": [],
+              "attributes": {
+                "startLine": 25,
+                "endLine": 25,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 25,
+              "endLine": 25
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "options",
+              "attributes": {
+                "startLine": 25,
+                "endLine": 25
+              }
+            },
+            "default": {
+              "nodeType": "Expr_Array",
+              "items": [],
+              "attributes": {
+                "startLine": 25,
+                "endLine": 25,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 25,
+              "endLine": 25
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": null,
+        "attributes": {
+          "startLine": 25,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Perform a request\n\t *\n\t * @param string $url URL to request\n\t * @param array $headers Associative array of request headers\n\t * @param string|array $data Data to send either as the POST body, or as parameters in the URL for a GET/HEAD\n\t * @param array $options Request options, see {@see Requests::response()} for documentation\n\t * @return string Raw HTTP result\n\t */",
+              "line": 16,
+              "filePos": 199,
+              "tokenPos": 11,
+              "endLine": 24,
+              "endFilePos": 572,
+              "endTokenPos": 11
+            }
+          ],
+          "endLine": 25
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "request_multiple",
+          "attributes": {
+            "startLine": 34,
+            "endLine": 34
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "requests",
+              "attributes": {
+                "startLine": 34,
+                "endLine": 34
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 34,
+              "endLine": 34
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "options",
+              "attributes": {
+                "startLine": 34,
+                "endLine": 34
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 34,
+              "endLine": 34
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": null,
+        "attributes": {
+          "startLine": 34,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Send multiple requests simultaneously\n\t *\n\t * @param array $requests Request data (array of 'url', 'headers', 'data', 'options') as per {@see Requests_Transport::request}\n\t * @param array $options Global options, see {@see Requests::response()} for documentation\n\t * @return array Array of Requests_Response objects (may contain Requests_Exception or string responses as well)\n\t */",
+              "line": 27,
+              "filePos": 665,
+              "tokenPos": 50,
+              "endLine": 33,
+              "endFilePos": 1053,
+              "endTokenPos": 50
+            }
+          ],
+          "endLine": 34
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 9,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "test",
+          "attributes": {
+            "startLine": 40,
+            "endLine": 40
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": null,
+        "attributes": {
+          "startLine": 40,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Self-test whether the transport can be used\n\t * @return bool\n\t */",
+              "line": 36,
+              "filePos": 1113,
+              "tokenPos": 65,
+              "endLine": 39,
+              "endFilePos": 1185,
+              "endTokenPos": 65
+            }
+          ],
+          "endLine": 40
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 15,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Base HTTP transport\n *\n * @package Requests\n * @subpackage Transport\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 7,
+          "endFilePos": 84,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Base HTTP transport\n *\n * @package Requests\n * @subpackage Transport\n */",
+          "line": 9,
+          "filePos": 87,
+          "tokenPos": 3,
+          "endLine": 14,
+          "endFilePos": 165,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 41
+    }
+  }
+]

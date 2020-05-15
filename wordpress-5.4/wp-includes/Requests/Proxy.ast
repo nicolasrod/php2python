@@ -1,0 +1,103 @@
+[
+  {
+    "nodeType": "Stmt_Interface",
+    "extends": [],
+    "name": {
+      "nodeType": "Identifier",
+      "name": "Requests_Proxy",
+      "attributes": {
+        "startLine": 23,
+        "endLine": 23
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "register",
+          "attributes": {
+            "startLine": 34,
+            "endLine": 34
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": {
+              "nodeType": "Name",
+              "parts": [
+                "Requests_Hooks"
+              ],
+              "attributes": {
+                "startLine": 34,
+                "endLine": 34
+              }
+            },
+            "byRef": true,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "hooks",
+              "attributes": {
+                "startLine": 34,
+                "endLine": 34
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 34,
+              "endLine": 34
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": null,
+        "attributes": {
+          "startLine": 34,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Register hooks as needed\n\t *\n\t * This method is called in {@see Requests::request} when the user has set\n\t * an instance as the 'auth' option. Use this callback to register all the\n\t * hooks you'll need.\n\t *\n\t * @see Requests_Hooks::register\n\t * @param Requests_Hooks $hooks Hook system\n\t */",
+              "line": 24,
+              "filePos": 461,
+              "tokenPos": 11,
+              "endLine": 33,
+              "endFilePos": 759,
+              "endTokenPos": 11
+            }
+          ],
+          "endLine": 34
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 23,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Proxy connection interface\n *\n * @package Requests\n * @subpackage Proxy\n * @since 1.6\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 8,
+          "endFilePos": 101,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Proxy connection interface\n *\n * Implement this interface to handle proxy settings and authentication\n *\n * Parameters should be passed via the constructor where possible, as this\n * makes it much easier for users to use your provider.\n *\n * @see Requests_Hooks\n * @package Requests\n * @subpackage Proxy\n * @since 1.6\n */",
+          "line": 10,
+          "filePos": 104,
+          "tokenPos": 3,
+          "endLine": 22,
+          "endFilePos": 431,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 35
+    }
+  }
+]

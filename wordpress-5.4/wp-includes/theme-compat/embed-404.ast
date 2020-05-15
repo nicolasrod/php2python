@@ -1,0 +1,498 @@
+[
+  {
+    "nodeType": "Stmt_Nop",
+    "attributes": {
+      "startLine": 12,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Contains the post embed content template part\n *\n * When a post is embedded in an iframe, this file is used to create the content template part\n * output if the active theme does not include an embed-404.php template.\n *\n * @package WordPress\n * @subpackage Theme_Compat\n * @since 4.5.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 11,
+          "endFilePos": 302,
+          "endTokenPos": 1
+        }
+      ],
+      "endLine": 13
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "<div class=\"wp-embed\">\n\t<p class=\"wp-embed-heading\">",
+    "attributes": {
+      "startLine": 13,
+      "hasLeadingNewline": true,
+      "endLine": 14
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 14,
+          "endLine": 14
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Oops! That embed can&#8217;t be found.",
+            "attributes": {
+              "startLine": 14,
+              "endLine": 14,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 14,
+            "endLine": 14
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 14,
+        "endLine": 14
+      }
+    },
+    "attributes": {
+      "startLine": 14,
+      "endLine": 14
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</p>\n\n\t<div class=\"wp-embed-excerpt\">\n\t\t<p>\n\t\t\t",
+    "attributes": {
+      "startLine": 14,
+      "hasLeadingNewline": false,
+      "endLine": 18
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "printf"
+        ],
+        "attributes": {
+          "startLine": 19,
+          "endLine": 19
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "__"
+              ],
+              "attributes": {
+                "startLine": 21,
+                "comments": [
+                  {
+                    "nodeType": "Comment",
+                    "text": "/* translators: %s: A link to the embedded site. */",
+                    "line": 20,
+                    "filePos": 483,
+                    "tokenPos": 21,
+                    "endLine": 20,
+                    "endFilePos": 533,
+                    "endTokenPos": 21
+                  }
+                ],
+                "endLine": 21
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "It looks like nothing was found at this location. Maybe try visiting %s directly?",
+                  "attributes": {
+                    "startLine": 21,
+                    "endLine": 21,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 21,
+                  "endLine": 21
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 21,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "/* translators: %s: A link to the embedded site. */",
+                  "line": 20,
+                  "filePos": 483,
+                  "tokenPos": 21,
+                  "endLine": 20,
+                  "endFilePos": 533,
+                  "endTokenPos": 21
+                }
+              ],
+              "endLine": 21
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 21,
+            "comments": [
+              {
+                "nodeType": "Comment",
+                "text": "/* translators: %s: A link to the embedded site. */",
+                "line": 20,
+                "filePos": 483,
+                "tokenPos": 21,
+                "endLine": 20,
+                "endFilePos": 533,
+                "endTokenPos": 21
+              }
+            ],
+            "endLine": 21
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_BinaryOp_Concat",
+            "left": {
+              "nodeType": "Expr_BinaryOp_Concat",
+              "left": {
+                "nodeType": "Expr_BinaryOp_Concat",
+                "left": {
+                  "nodeType": "Expr_BinaryOp_Concat",
+                  "left": {
+                    "nodeType": "Scalar_String",
+                    "value": "<strong><a href=\"",
+                    "attributes": {
+                      "startLine": 22,
+                      "endLine": 22,
+                      "kind": 1
+                    }
+                  },
+                  "right": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "esc_url"
+                      ],
+                      "attributes": {
+                        "startLine": 22,
+                        "endLine": 22
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_FuncCall",
+                          "name": {
+                            "nodeType": "Name",
+                            "parts": [
+                              "home_url"
+                            ],
+                            "attributes": {
+                              "startLine": 22,
+                              "endLine": 22
+                            }
+                          },
+                          "args": [],
+                          "attributes": {
+                            "startLine": 22,
+                            "endLine": 22
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 22,
+                          "endLine": 22
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 22,
+                      "endLine": 22
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 22,
+                    "endLine": 22
+                  }
+                },
+                "right": {
+                  "nodeType": "Scalar_String",
+                  "value": "\">",
+                  "attributes": {
+                    "startLine": 22,
+                    "endLine": 22,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 22,
+                  "endLine": 22
+                }
+              },
+              "right": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "esc_html"
+                  ],
+                  "attributes": {
+                    "startLine": 22,
+                    "endLine": 22
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_FuncCall",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "get_bloginfo"
+                        ],
+                        "attributes": {
+                          "startLine": 22,
+                          "endLine": 22
+                        }
+                      },
+                      "args": [
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Scalar_String",
+                            "value": "name",
+                            "attributes": {
+                              "startLine": 22,
+                              "endLine": 22,
+                              "kind": 1
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 22,
+                            "endLine": 22
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 22,
+                        "endLine": 22
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 22,
+                      "endLine": 22
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 22,
+                  "endLine": 22
+                }
+              },
+              "attributes": {
+                "startLine": 22,
+                "endLine": 22
+              }
+            },
+            "right": {
+              "nodeType": "Scalar_String",
+              "value": "</a></strong>",
+              "attributes": {
+                "startLine": 22,
+                "endLine": 22,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 22,
+              "endLine": 22
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 22,
+            "endLine": 22
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 19,
+        "endLine": 23
+      }
+    },
+    "attributes": {
+      "startLine": 19,
+      "endLine": 23
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\t\t</p>\n\t</div>\n\n\t",
+    "attributes": {
+      "startLine": 25,
+      "hasLeadingNewline": true,
+      "endLine": 28
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "do_action"
+        ],
+        "attributes": {
+          "startLine": 30,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/** This filter is documented in wp-includes/theme-compat/embed-content.php */",
+              "line": 29,
+              "filePos": 776,
+              "tokenPos": 73,
+              "endLine": 29,
+              "endFilePos": 853,
+              "endTokenPos": 73
+            }
+          ],
+          "endLine": 30
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "embed_content",
+            "attributes": {
+              "startLine": 30,
+              "endLine": 30,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 30,
+            "endLine": 30
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 30,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** This filter is documented in wp-includes/theme-compat/embed-content.php */",
+            "line": 29,
+            "filePos": 776,
+            "tokenPos": 73,
+            "endLine": 29,
+            "endFilePos": 853,
+            "endTokenPos": 73
+          }
+        ],
+        "endLine": 30
+      }
+    },
+    "attributes": {
+      "startLine": 30,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** This filter is documented in wp-includes/theme-compat/embed-content.php */",
+          "line": 29,
+          "filePos": 776,
+          "tokenPos": 73,
+          "endLine": 29,
+          "endFilePos": 853,
+          "endTokenPos": 73
+        }
+      ],
+      "endLine": 30
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\n\t<div class=\"wp-embed-footer\">\n\t\t",
+    "attributes": {
+      "startLine": 32,
+      "hasLeadingNewline": true,
+      "endLine": 34
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "the_embed_site_title"
+        ],
+        "attributes": {
+          "startLine": 34,
+          "endLine": 34
+        }
+      },
+      "args": [],
+      "attributes": {
+        "startLine": 34,
+        "endLine": 34
+      }
+    },
+    "attributes": {
+      "startLine": 34,
+      "endLine": 34
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\t</div>\n</div>\n",
+    "attributes": {
+      "startLine": 35,
+      "hasLeadingNewline": true,
+      "endLine": 37
+    }
+  }
+]

@@ -1,0 +1,1834 @@
+[
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "header"
+        ],
+        "attributes": {
+          "startLine": 8,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n * RSS 1 RDF Feed Template for displaying RSS 1 Posts feed.\n *\n * @package WordPress\n */",
+              "line": 2,
+              "filePos": 6,
+              "tokenPos": 1,
+              "endLine": 6,
+              "endFilePos": 97,
+              "endTokenPos": 1
+            }
+          ],
+          "endLine": 8
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_BinaryOp_Concat",
+            "left": {
+              "nodeType": "Expr_BinaryOp_Concat",
+              "left": {
+                "nodeType": "Expr_BinaryOp_Concat",
+                "left": {
+                  "nodeType": "Scalar_String",
+                  "value": "Content-Type: ",
+                  "attributes": {
+                    "startLine": 8,
+                    "endLine": 8,
+                    "kind": 1
+                  }
+                },
+                "right": {
+                  "nodeType": "Expr_FuncCall",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "feed_content_type"
+                    ],
+                    "attributes": {
+                      "startLine": 8,
+                      "endLine": 8
+                    }
+                  },
+                  "args": [
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Scalar_String",
+                        "value": "rdf",
+                        "attributes": {
+                          "startLine": 8,
+                          "endLine": 8,
+                          "kind": 1
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 8,
+                        "endLine": 8
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 8,
+                    "endLine": 8
+                  }
+                },
+                "attributes": {
+                  "startLine": 8,
+                  "endLine": 8
+                }
+              },
+              "right": {
+                "nodeType": "Scalar_String",
+                "value": "; charset=",
+                "attributes": {
+                  "startLine": 8,
+                  "endLine": 8,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 8,
+                "endLine": 8
+              }
+            },
+            "right": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "get_option"
+                ],
+                "attributes": {
+                  "startLine": 8,
+                  "endLine": 8
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "blog_charset",
+                    "attributes": {
+                      "startLine": 8,
+                      "endLine": 8,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 8,
+                    "endLine": 8
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 8,
+                "endLine": 8
+              }
+            },
+            "attributes": {
+              "startLine": 8,
+              "endLine": 8
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 8,
+            "endLine": 8
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "true"
+              ],
+              "attributes": {
+                "startLine": 8,
+                "endLine": 8
+              }
+            },
+            "attributes": {
+              "startLine": 8,
+              "endLine": 8
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 8,
+            "endLine": 8
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 8,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/**\n * RSS 1 RDF Feed Template for displaying RSS 1 Posts feed.\n *\n * @package WordPress\n */",
+            "line": 2,
+            "filePos": 6,
+            "tokenPos": 1,
+            "endLine": 6,
+            "endFilePos": 97,
+            "endTokenPos": 1
+          }
+        ],
+        "endLine": 8
+      }
+    },
+    "attributes": {
+      "startLine": 8,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * RSS 1 RDF Feed Template for displaying RSS 1 Posts feed.\n *\n * @package WordPress\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 6,
+          "endFilePos": 97,
+          "endTokenPos": 1
+        }
+      ],
+      "endLine": 8
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Assign",
+      "var": {
+        "nodeType": "Expr_Variable",
+        "name": "more",
+        "attributes": {
+          "startLine": 9,
+          "endLine": 9
+        }
+      },
+      "expr": {
+        "nodeType": "Scalar_LNumber",
+        "value": 1,
+        "attributes": {
+          "startLine": 9,
+          "endLine": 9,
+          "kind": 10
+        }
+      },
+      "attributes": {
+        "startLine": 9,
+        "endLine": 9
+      }
+    },
+    "attributes": {
+      "startLine": 9,
+      "endLine": 9
+    }
+  },
+  {
+    "nodeType": "Stmt_Echo",
+    "exprs": [
+      {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_BinaryOp_Concat",
+          "left": {
+            "nodeType": "Expr_BinaryOp_Concat",
+            "left": {
+              "nodeType": "Scalar_String",
+              "value": "<?xml version=\"1.0\" encoding=\"",
+              "attributes": {
+                "startLine": 11,
+                "endLine": 11,
+                "kind": 1
+              }
+            },
+            "right": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "get_option"
+                ],
+                "attributes": {
+                  "startLine": 11,
+                  "endLine": 11
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "blog_charset",
+                    "attributes": {
+                      "startLine": 11,
+                      "endLine": 11,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 11,
+                    "endLine": 11
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 11,
+                "endLine": 11
+              }
+            },
+            "attributes": {
+              "startLine": 11,
+              "endLine": 11
+            }
+          },
+          "right": {
+            "nodeType": "Scalar_String",
+            "value": "\"?",
+            "attributes": {
+              "startLine": 11,
+              "endLine": 11,
+              "kind": 1
+            }
+          },
+          "attributes": {
+            "startLine": 11,
+            "endLine": 11
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": ">",
+          "attributes": {
+            "startLine": 11,
+            "endLine": 11,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 11,
+          "endLine": 11
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 11,
+      "endLine": 11
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "do_action"
+        ],
+        "attributes": {
+          "startLine": 14,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/** This action is documented in wp-includes/feed-rss2.php */",
+              "line": 13,
+              "filePos": 305,
+              "tokenPos": 65,
+              "endLine": 13,
+              "endFilePos": 365,
+              "endTokenPos": 65
+            }
+          ],
+          "endLine": 14
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "rss_tag_pre",
+            "attributes": {
+              "startLine": 14,
+              "endLine": 14,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 14,
+            "endLine": 14
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "rdf",
+            "attributes": {
+              "startLine": 14,
+              "endLine": 14,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 14,
+            "endLine": 14
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 14,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** This action is documented in wp-includes/feed-rss2.php */",
+            "line": 13,
+            "filePos": 305,
+            "tokenPos": 65,
+            "endLine": 13,
+            "endFilePos": 365,
+            "endTokenPos": 65
+          }
+        ],
+        "endLine": 14
+      }
+    },
+    "attributes": {
+      "startLine": 14,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** This action is documented in wp-includes/feed-rss2.php */",
+          "line": 13,
+          "filePos": 305,
+          "tokenPos": 65,
+          "endLine": 13,
+          "endFilePos": 365,
+          "endTokenPos": 65
+        }
+      ],
+      "endLine": 14
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "<rdf:RDF\n\txmlns=\"http://purl.org/rss/1.0/\"\n\txmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n\txmlns:dc=\"http://purl.org/dc/elements/1.1/\"\n\txmlns:sy=\"http://purl.org/rss/1.0/modules/syndication/\"\n\txmlns:admin=\"http://webns.net/mvcb/\"\n\txmlns:content=\"http://purl.org/rss/1.0/modules/content/\"\n\t",
+    "attributes": {
+      "startLine": 16,
+      "hasLeadingNewline": true,
+      "endLine": 23
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "do_action"
+        ],
+        "attributes": {
+          "startLine": 29,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Fires at the end of the feed root to add namespaces.\n\t *\n\t * @since 2.0.0\n\t */",
+              "line": 24,
+              "filePos": 711,
+              "tokenPos": 82,
+              "endLine": 28,
+              "endFilePos": 796,
+              "endTokenPos": 82
+            }
+          ],
+          "endLine": 29
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "rdf_ns",
+            "attributes": {
+              "startLine": 29,
+              "endLine": 29,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 29,
+            "endLine": 29
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 29,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/**\n\t * Fires at the end of the feed root to add namespaces.\n\t *\n\t * @since 2.0.0\n\t */",
+            "line": 24,
+            "filePos": 711,
+            "tokenPos": 82,
+            "endLine": 28,
+            "endFilePos": 796,
+            "endTokenPos": 82
+          }
+        ],
+        "endLine": 29
+      }
+    },
+    "attributes": {
+      "startLine": 29,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n\t * Fires at the end of the feed root to add namespaces.\n\t *\n\t * @since 2.0.0\n\t */",
+          "line": 24,
+          "filePos": 711,
+          "tokenPos": 82,
+          "endLine": 28,
+          "endFilePos": 796,
+          "endTokenPos": 82
+        }
+      ],
+      "endLine": 29
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": ">\n<channel rdf:about=\"",
+    "attributes": {
+      "startLine": 31,
+      "hasLeadingNewline": true,
+      "endLine": 32
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "bloginfo_rss"
+        ],
+        "attributes": {
+          "startLine": 32,
+          "endLine": 32
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "url",
+            "attributes": {
+              "startLine": 32,
+              "endLine": 32,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 32,
+            "endLine": 32
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 32,
+        "endLine": 32
+      }
+    },
+    "attributes": {
+      "startLine": 32,
+      "endLine": 32
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\">\n\t<title>",
+    "attributes": {
+      "startLine": 32,
+      "hasLeadingNewline": false,
+      "endLine": 33
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "wp_title_rss"
+        ],
+        "attributes": {
+          "startLine": 33,
+          "endLine": 33
+        }
+      },
+      "args": [],
+      "attributes": {
+        "startLine": 33,
+        "endLine": 33
+      }
+    },
+    "attributes": {
+      "startLine": 33,
+      "endLine": 33
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</title>\n\t<link>",
+    "attributes": {
+      "startLine": 33,
+      "hasLeadingNewline": false,
+      "endLine": 34
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "bloginfo_rss"
+        ],
+        "attributes": {
+          "startLine": 34,
+          "endLine": 34
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "url",
+            "attributes": {
+              "startLine": 34,
+              "endLine": 34,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 34,
+            "endLine": 34
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 34,
+        "endLine": 34
+      }
+    },
+    "attributes": {
+      "startLine": 34,
+      "endLine": 34
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</link>\n\t<description>",
+    "attributes": {
+      "startLine": 34,
+      "hasLeadingNewline": false,
+      "endLine": 35
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "bloginfo_rss"
+        ],
+        "attributes": {
+          "startLine": 35,
+          "endLine": 35
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "description",
+            "attributes": {
+              "startLine": 35,
+              "endLine": 35,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 35,
+            "endLine": 35
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 35,
+        "endLine": 35
+      }
+    },
+    "attributes": {
+      "startLine": 35,
+      "endLine": 35
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</description>\n\t<dc:date>",
+    "attributes": {
+      "startLine": 35,
+      "hasLeadingNewline": false,
+      "endLine": 36
+    }
+  },
+  {
+    "nodeType": "Stmt_Echo",
+    "exprs": [
+      {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "get_feed_build_date"
+          ],
+          "attributes": {
+            "startLine": 36,
+            "endLine": 36
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "Y-m-d\\TH:i:s\\Z",
+              "attributes": {
+                "startLine": 36,
+                "endLine": 36,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 36,
+              "endLine": 36
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 36,
+          "endLine": 36
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 36,
+      "endLine": 36
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\t</dc:date>\n\t<sy:updatePeriod>\n\t",
+    "attributes": {
+      "startLine": 36,
+      "hasLeadingNewline": false,
+      "endLine": 38
+    }
+  },
+  {
+    "nodeType": "Stmt_Echo",
+    "exprs": [
+      {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "apply_filters"
+          ],
+          "attributes": {
+            "startLine": 40,
+            "endLine": 40
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "rss_update_period",
+              "attributes": {
+                "startLine": 40,
+                "endLine": 40,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 40,
+              "endLine": 40
+            }
+          },
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "hourly",
+              "attributes": {
+                "startLine": 40,
+                "endLine": 40,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 40,
+              "endLine": 40
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 40,
+          "endLine": 40
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 40,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** This filter is documented in wp-includes/feed-rss2.php */",
+          "line": 39,
+          "filePos": 1141,
+          "tokenPos": 150,
+          "endLine": 39,
+          "endFilePos": 1201,
+          "endTokenPos": 150
+        }
+      ],
+      "endLine": 40
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\t</sy:updatePeriod>\n\t<sy:updateFrequency>\n\t",
+    "attributes": {
+      "startLine": 42,
+      "hasLeadingNewline": true,
+      "endLine": 44
+    }
+  },
+  {
+    "nodeType": "Stmt_Echo",
+    "exprs": [
+      {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "apply_filters"
+          ],
+          "attributes": {
+            "startLine": 46,
+            "endLine": 46
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "rss_update_frequency",
+              "attributes": {
+                "startLine": 46,
+                "endLine": 46,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 46,
+              "endLine": 46
+            }
+          },
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "1",
+              "attributes": {
+                "startLine": 46,
+                "endLine": 46,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 46,
+              "endLine": 46
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 46,
+          "endLine": 46
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 46,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** This filter is documented in wp-includes/feed-rss2.php */",
+          "line": 45,
+          "filePos": 1313,
+          "tokenPos": 169,
+          "endLine": 45,
+          "endFilePos": 1373,
+          "endTokenPos": 169
+        }
+      ],
+      "endLine": 46
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\t</sy:updateFrequency>\n\t<sy:updateBase>2000-01-01T12:00+00:00</sy:updateBase>\n\t",
+    "attributes": {
+      "startLine": 48,
+      "hasLeadingNewline": true,
+      "endLine": 50
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "do_action"
+        ],
+        "attributes": {
+          "startLine": 56,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Fires at the end of the RDF feed header.\n\t *\n\t * @since 2.0.0\n\t */",
+              "line": 51,
+              "filePos": 1518,
+              "tokenPos": 188,
+              "endLine": 55,
+              "endFilePos": 1591,
+              "endTokenPos": 188
+            }
+          ],
+          "endLine": 56
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "rdf_header",
+            "attributes": {
+              "startLine": 56,
+              "endLine": 56,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 56,
+            "endLine": 56
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 56,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/**\n\t * Fires at the end of the RDF feed header.\n\t *\n\t * @since 2.0.0\n\t */",
+            "line": 51,
+            "filePos": 1518,
+            "tokenPos": 188,
+            "endLine": 55,
+            "endFilePos": 1591,
+            "endTokenPos": 188
+          }
+        ],
+        "endLine": 56
+      }
+    },
+    "attributes": {
+      "startLine": 56,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n\t * Fires at the end of the RDF feed header.\n\t *\n\t * @since 2.0.0\n\t */",
+          "line": 51,
+          "filePos": 1518,
+          "tokenPos": 188,
+          "endLine": 55,
+          "endFilePos": 1591,
+          "endTokenPos": 188
+        }
+      ],
+      "endLine": 56
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\t<items>\n\t\t<rdf:Seq>\n\t\t",
+    "attributes": {
+      "startLine": 58,
+      "hasLeadingNewline": true,
+      "endLine": 60
+    }
+  },
+  {
+    "nodeType": "Stmt_While",
+    "cond": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "have_posts"
+        ],
+        "attributes": {
+          "startLine": 61,
+          "endLine": 61
+        }
+      },
+      "args": [],
+      "attributes": {
+        "startLine": 61,
+        "endLine": 61
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "the_post"
+            ],
+            "attributes": {
+              "startLine": 62,
+              "endLine": 62
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 62,
+            "endLine": 62
+          }
+        },
+        "attributes": {
+          "startLine": 62,
+          "endLine": 62
+        }
+      },
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "\t\t\t<rdf:li rdf:resource=\"",
+        "attributes": {
+          "startLine": 64,
+          "hasLeadingNewline": true,
+          "endLine": 64
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "the_permalink_rss"
+            ],
+            "attributes": {
+              "startLine": 64,
+              "endLine": 64
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 64,
+            "endLine": 64
+          }
+        },
+        "attributes": {
+          "startLine": 64,
+          "endLine": 64
+        }
+      },
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "\"/>\n\t\t",
+        "attributes": {
+          "startLine": 64,
+          "hasLeadingNewline": false,
+          "endLine": 65
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 61,
+      "endLine": 65
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\t\t</rdf:Seq>\n\t</items>\n</channel>\n",
+    "attributes": {
+      "startLine": 66,
+      "hasLeadingNewline": true,
+      "endLine": 69
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "rewind_posts"
+        ],
+        "attributes": {
+          "startLine": 70,
+          "endLine": 70
+        }
+      },
+      "args": [],
+      "attributes": {
+        "startLine": 70,
+        "endLine": 70
+      }
+    },
+    "attributes": {
+      "startLine": 70,
+      "endLine": 70
+    }
+  },
+  {
+    "nodeType": "Stmt_While",
+    "cond": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "have_posts"
+        ],
+        "attributes": {
+          "startLine": 71,
+          "endLine": 71
+        }
+      },
+      "args": [],
+      "attributes": {
+        "startLine": 71,
+        "endLine": 71
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "the_post"
+            ],
+            "attributes": {
+              "startLine": 72,
+              "endLine": 72
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 72,
+            "endLine": 72
+          }
+        },
+        "attributes": {
+          "startLine": 72,
+          "endLine": 72
+        }
+      },
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "<item rdf:about=\"",
+        "attributes": {
+          "startLine": 74,
+          "hasLeadingNewline": true,
+          "endLine": 74
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "the_permalink_rss"
+            ],
+            "attributes": {
+              "startLine": 74,
+              "endLine": 74
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 74,
+            "endLine": 74
+          }
+        },
+        "attributes": {
+          "startLine": 74,
+          "endLine": 74
+        }
+      },
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "\">\n\t<title>",
+        "attributes": {
+          "startLine": 74,
+          "hasLeadingNewline": false,
+          "endLine": 75
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "the_title_rss"
+            ],
+            "attributes": {
+              "startLine": 75,
+              "endLine": 75
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 75,
+            "endLine": 75
+          }
+        },
+        "attributes": {
+          "startLine": 75,
+          "endLine": 75
+        }
+      },
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "</title>\n\t<link>",
+        "attributes": {
+          "startLine": 75,
+          "hasLeadingNewline": false,
+          "endLine": 76
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "the_permalink_rss"
+            ],
+            "attributes": {
+              "startLine": 76,
+              "endLine": 76
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 76,
+            "endLine": 76
+          }
+        },
+        "attributes": {
+          "startLine": 76,
+          "endLine": 76
+        }
+      },
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "</link>\n\n\t<dc:creator><![CDATA[",
+        "attributes": {
+          "startLine": 76,
+          "hasLeadingNewline": false,
+          "endLine": 78
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "the_author"
+            ],
+            "attributes": {
+              "startLine": 78,
+              "endLine": 78
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 78,
+            "endLine": 78
+          }
+        },
+        "attributes": {
+          "startLine": 78,
+          "endLine": 78
+        }
+      },
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "]]></dc:creator>\n\t<dc:date>",
+        "attributes": {
+          "startLine": 78,
+          "hasLeadingNewline": false,
+          "endLine": 79
+        }
+      },
+      {
+        "nodeType": "Stmt_Echo",
+        "exprs": [
+          {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "mysql2date"
+              ],
+              "attributes": {
+                "startLine": 79,
+                "endLine": 79
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "Y-m-d\\TH:i:s\\Z",
+                  "attributes": {
+                    "startLine": 79,
+                    "endLine": 79,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 79,
+                  "endLine": 79
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_PropertyFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "post",
+                    "attributes": {
+                      "startLine": 79,
+                      "endLine": 79
+                    }
+                  },
+                  "name": {
+                    "nodeType": "Identifier",
+                    "name": "post_date_gmt",
+                    "attributes": {
+                      "startLine": 79,
+                      "endLine": 79
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 79,
+                    "endLine": 79
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 79,
+                  "endLine": 79
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_ConstFetch",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "false"
+                    ],
+                    "attributes": {
+                      "startLine": 79,
+                      "endLine": 79
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 79,
+                    "endLine": 79
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 79,
+                  "endLine": 79
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 79,
+              "endLine": 79
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 79,
+          "endLine": 79
+        }
+      },
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "</dc:date>\n\t",
+        "attributes": {
+          "startLine": 79,
+          "hasLeadingNewline": false,
+          "endLine": 80
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "the_category_rss"
+            ],
+            "attributes": {
+              "startLine": 80,
+              "endLine": 80
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "rdf",
+                "attributes": {
+                  "startLine": 80,
+                  "endLine": 80,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 80,
+                "endLine": 80
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 80,
+            "endLine": 80
+          }
+        },
+        "attributes": {
+          "startLine": 80,
+          "endLine": 80
+        }
+      },
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "\n\t",
+        "attributes": {
+          "startLine": 81,
+          "hasLeadingNewline": true,
+          "endLine": 82
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "get_option"
+            ],
+            "attributes": {
+              "startLine": 82,
+              "endLine": 82
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "rss_use_excerpt",
+                "attributes": {
+                  "startLine": 82,
+                  "endLine": 82,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 82,
+                "endLine": 82
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 82,
+            "endLine": 82
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_InlineHTML",
+            "value": "\t\t<description><![CDATA[",
+            "attributes": {
+              "startLine": 83,
+              "hasLeadingNewline": true,
+              "endLine": 83
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "the_excerpt_rss"
+                ],
+                "attributes": {
+                  "startLine": 83,
+                  "endLine": 83
+                }
+              },
+              "args": [],
+              "attributes": {
+                "startLine": 83,
+                "endLine": 83
+              }
+            },
+            "attributes": {
+              "startLine": 83,
+              "endLine": 83
+            }
+          },
+          {
+            "nodeType": "Stmt_InlineHTML",
+            "value": "]]></description>\n\t",
+            "attributes": {
+              "startLine": 83,
+              "hasLeadingNewline": false,
+              "endLine": 84
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": {
+          "nodeType": "Stmt_Else",
+          "stmts": [
+            {
+              "nodeType": "Stmt_InlineHTML",
+              "value": "\t\t<description><![CDATA[",
+              "attributes": {
+                "startLine": 85,
+                "hasLeadingNewline": true,
+                "endLine": 85
+              }
+            },
+            {
+              "nodeType": "Stmt_Expression",
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "the_excerpt_rss"
+                  ],
+                  "attributes": {
+                    "startLine": 85,
+                    "endLine": 85
+                  }
+                },
+                "args": [],
+                "attributes": {
+                  "startLine": 85,
+                  "endLine": 85
+                }
+              },
+              "attributes": {
+                "startLine": 85,
+                "endLine": 85
+              }
+            },
+            {
+              "nodeType": "Stmt_InlineHTML",
+              "value": "]]></description>\n\t\t<content:encoded><![CDATA[",
+              "attributes": {
+                "startLine": 85,
+                "hasLeadingNewline": false,
+                "endLine": 86
+              }
+            },
+            {
+              "nodeType": "Stmt_Expression",
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "the_content_feed"
+                  ],
+                  "attributes": {
+                    "startLine": 86,
+                    "endLine": 86
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "rdf",
+                      "attributes": {
+                        "startLine": 86,
+                        "endLine": 86,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 86,
+                      "endLine": 86
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 86,
+                  "endLine": 86
+                }
+              },
+              "attributes": {
+                "startLine": 86,
+                "endLine": 86
+              }
+            },
+            {
+              "nodeType": "Stmt_InlineHTML",
+              "value": "]]></content:encoded>\n\t",
+              "attributes": {
+                "startLine": 86,
+                "hasLeadingNewline": false,
+                "endLine": 87
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 84,
+            "endLine": 87
+          }
+        },
+        "attributes": {
+          "startLine": 82,
+          "endLine": 87
+        }
+      },
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "\n\t",
+        "attributes": {
+          "startLine": 88,
+          "hasLeadingNewline": true,
+          "endLine": 89
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "do_action"
+            ],
+            "attributes": {
+              "startLine": 95,
+              "comments": [
+                {
+                  "nodeType": "Comment_Doc",
+                  "text": "/**\n\t * Fires at the end of each RDF feed item.\n\t *\n\t * @since 2.0.0\n\t */",
+                  "line": 90,
+                  "filePos": 2526,
+                  "tokenPos": 384,
+                  "endLine": 94,
+                  "endFilePos": 2598,
+                  "endTokenPos": 384
+                }
+              ],
+              "endLine": 95
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "rdf_item",
+                "attributes": {
+                  "startLine": 95,
+                  "endLine": 95,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 95,
+                "endLine": 95
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 95,
+            "comments": [
+              {
+                "nodeType": "Comment_Doc",
+                "text": "/**\n\t * Fires at the end of each RDF feed item.\n\t *\n\t * @since 2.0.0\n\t */",
+                "line": 90,
+                "filePos": 2526,
+                "tokenPos": 384,
+                "endLine": 94,
+                "endFilePos": 2598,
+                "endTokenPos": 384
+              }
+            ],
+            "endLine": 95
+          }
+        },
+        "attributes": {
+          "startLine": 95,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Fires at the end of each RDF feed item.\n\t *\n\t * @since 2.0.0\n\t */",
+              "line": 90,
+              "filePos": 2526,
+              "tokenPos": 384,
+              "endLine": 94,
+              "endFilePos": 2598,
+              "endTokenPos": 384
+            }
+          ],
+          "endLine": 95
+        }
+      },
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "</item>\n",
+        "attributes": {
+          "startLine": 97,
+          "hasLeadingNewline": true,
+          "endLine": 98
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 71,
+      "endLine": 98
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</rdf:RDF>\n",
+    "attributes": {
+      "startLine": 99,
+      "hasLeadingNewline": true,
+      "endLine": 100
+    }
+  }
+]

@@ -1,0 +1,629 @@
+[
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_deprecated_file"
+        ],
+        "attributes": {
+          "startLine": 11,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n * Customize API: WP_Customize_New_Menu_Control class\n *\n * @package WordPress\n * @subpackage Customize\n * @since 4.4.0\n * @deprecated 4.9.0 This file is no longer used as of the menu creation UX introduced in #40104.\n */",
+              "line": 2,
+              "filePos": 6,
+              "tokenPos": 1,
+              "endLine": 9,
+              "endFilePos": 230,
+              "endTokenPos": 1
+            }
+          ],
+          "endLine": 11
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "basename"
+              ],
+              "attributes": {
+                "startLine": 11,
+                "endLine": 11
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_MagicConst_File",
+                  "attributes": {
+                    "startLine": 11,
+                    "endLine": 11
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 11,
+                  "endLine": 11
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 11,
+              "endLine": 11
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 11,
+            "endLine": 11
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "4.9.0",
+            "attributes": {
+              "startLine": 11,
+              "endLine": 11,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 11,
+            "endLine": 11
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 11,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/**\n * Customize API: WP_Customize_New_Menu_Control class\n *\n * @package WordPress\n * @subpackage Customize\n * @since 4.4.0\n * @deprecated 4.9.0 This file is no longer used as of the menu creation UX introduced in #40104.\n */",
+            "line": 2,
+            "filePos": 6,
+            "tokenPos": 1,
+            "endLine": 9,
+            "endFilePos": 230,
+            "endTokenPos": 1
+          }
+        ],
+        "endLine": 11
+      }
+    },
+    "attributes": {
+      "startLine": 11,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Customize API: WP_Customize_New_Menu_Control class\n *\n * @package WordPress\n * @subpackage Customize\n * @since 4.4.0\n * @deprecated 4.9.0 This file is no longer used as of the menu creation UX introduced in #40104.\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 9,
+          "endFilePos": 230,
+          "endTokenPos": 1
+        }
+      ],
+      "endLine": 11
+    }
+  },
+  {
+    "nodeType": "Stmt_Class",
+    "flags": 0,
+    "extends": {
+      "nodeType": "Name",
+      "parts": [
+        "WP_Customize_Control"
+      ],
+      "attributes": {
+        "startLine": 21,
+        "endLine": 21
+      }
+    },
+    "implements": [],
+    "name": {
+      "nodeType": "Identifier",
+      "name": "WP_Customize_New_Menu_Control",
+      "attributes": {
+        "startLine": 21,
+        "endLine": 21
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "type",
+              "attributes": {
+                "startLine": 29,
+                "endLine": 29
+              }
+            },
+            "default": {
+              "nodeType": "Scalar_String",
+              "value": "new_menu",
+              "attributes": {
+                "startLine": 29,
+                "endLine": 29,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 29,
+              "endLine": 29
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 29,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Control type.\n\t *\n\t * @since 4.3.0\n\t * @var string\n\t */",
+              "line": 23,
+              "filePos": 554,
+              "tokenPos": 31,
+              "endLine": 28,
+              "endFilePos": 616,
+              "endTokenPos": 31
+            }
+          ],
+          "endLine": 29
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "__construct",
+          "attributes": {
+            "startLine": 45,
+            "endLine": 45
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": {
+              "nodeType": "Name",
+              "parts": [
+                "WP_Customize_Manager"
+              ],
+              "attributes": {
+                "startLine": 45,
+                "endLine": 45
+              }
+            },
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "manager",
+              "attributes": {
+                "startLine": 45,
+                "endLine": 45
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 45,
+              "endLine": 45
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "id",
+              "attributes": {
+                "startLine": 45,
+                "endLine": 45
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 45,
+              "endLine": 45
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": {
+              "nodeType": "Identifier",
+              "name": "array",
+              "attributes": {
+                "startLine": 45,
+                "endLine": 45
+              }
+            },
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "args",
+              "attributes": {
+                "startLine": 45,
+                "endLine": 45
+              }
+            },
+            "default": {
+              "nodeType": "Expr_Array",
+              "items": [],
+              "attributes": {
+                "startLine": 45,
+                "endLine": 45,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 45,
+              "endLine": 45
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "_deprecated_function"
+                ],
+                "attributes": {
+                  "startLine": 46,
+                  "endLine": 46
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_MagicConst_Method",
+                    "attributes": {
+                      "startLine": 46,
+                      "endLine": 46
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 46,
+                    "endLine": 46
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "4.9.0",
+                    "attributes": {
+                      "startLine": 46,
+                      "endLine": 46,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 46,
+                    "endLine": 46
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 46,
+                "endLine": 46
+              }
+            },
+            "attributes": {
+              "startLine": 46,
+              "endLine": 46
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_StaticCall",
+              "class": {
+                "nodeType": "Name",
+                "parts": [
+                  "parent"
+                ],
+                "attributes": {
+                  "startLine": 47,
+                  "endLine": 47
+                }
+              },
+              "name": {
+                "nodeType": "Identifier",
+                "name": "__construct",
+                "attributes": {
+                  "startLine": 47,
+                  "endLine": 47
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "manager",
+                    "attributes": {
+                      "startLine": 47,
+                      "endLine": 47
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 47,
+                    "endLine": 47
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "id",
+                    "attributes": {
+                      "startLine": 47,
+                      "endLine": 47
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 47,
+                    "endLine": 47
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "args",
+                    "attributes": {
+                      "startLine": 47,
+                      "endLine": 47
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 47,
+                    "endLine": 47
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 47,
+                "endLine": 47
+              }
+            },
+            "attributes": {
+              "startLine": 47,
+              "endLine": 47
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 45,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Constructor.\n\t *\n\t * @since 4.9.0\n\t * @deprecated 4.9.0\n\t *\n\t * @see WP_Customize_Control::__construct()\n\t *\n\t * @param WP_Customize_Manager $manager Customizer bootstrap instance.\n\t * @param string               $id      The control ID.\n\t * @param array                $args    Optional. Arguments to override class property defaults.\n\t *                                      See WP_Customize_Control::__construct() for information\n\t *                                      on accepted arguments. Default empty array.\n\t */",
+              "line": 31,
+              "filePos": 648,
+              "tokenPos": 42,
+              "endLine": 44,
+              "endFilePos": 1177,
+              "endTokenPos": 42
+            }
+          ],
+          "endLine": 48
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "render_content",
+          "attributes": {
+            "startLine": 56,
+            "endLine": 56
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "_deprecated_function"
+                ],
+                "attributes": {
+                  "startLine": 57,
+                  "endLine": 57
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_MagicConst_Method",
+                    "attributes": {
+                      "startLine": 57,
+                      "endLine": 57
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 57,
+                    "endLine": 57
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "4.9.0",
+                    "attributes": {
+                      "startLine": 57,
+                      "endLine": 57,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 57,
+                    "endLine": 57
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 57,
+                "endLine": 57
+              }
+            },
+            "attributes": {
+              "startLine": 57,
+              "endLine": 57
+            }
+          },
+          {
+            "nodeType": "Stmt_InlineHTML",
+            "value": "\t\t<button type=\"button\" class=\"button button-primary\" id=\"create-new-menu-submit\">",
+            "attributes": {
+              "startLine": 59,
+              "hasLeadingNewline": true,
+              "endLine": 59
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "_e"
+                ],
+                "attributes": {
+                  "startLine": 59,
+                  "endLine": 59
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "Create Menu",
+                    "attributes": {
+                      "startLine": 59,
+                      "endLine": 59,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 59,
+                    "endLine": 59
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 59,
+                "endLine": 59
+              }
+            },
+            "attributes": {
+              "startLine": 59,
+              "endLine": 59
+            }
+          },
+          {
+            "nodeType": "Stmt_InlineHTML",
+            "value": "</button>\n\t\t<span class=\"spinner\"></span>\n\t\t",
+            "attributes": {
+              "startLine": 59,
+              "hasLeadingNewline": false,
+              "endLine": 61
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 56,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Render the control's content.\n\t *\n\t * @since 4.3.0\n\t * @deprecated 4.9.0\n\t */",
+              "line": 50,
+              "filePos": 1370,
+              "tokenPos": 102,
+              "endLine": 55,
+              "endFilePos": 1454,
+              "endTokenPos": 102
+            }
+          ],
+          "endLine": 62
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 21,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Customize control class for new menus.\n *\n * @since 4.3.0\n * @deprecated 4.9.0 This class is no longer used as of the menu creation UX introduced in #40104.\n *\n * @see WP_Customize_Control\n */",
+          "line": 13,
+          "filePos": 285,
+          "tokenPos": 19,
+          "endLine": 20,
+          "endFilePos": 483,
+          "endTokenPos": 19
+        }
+      ],
+      "endLine": 63
+    }
+  }
+]

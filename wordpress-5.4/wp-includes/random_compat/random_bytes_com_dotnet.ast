@@ -1,0 +1,947 @@
+[
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_BooleanNot",
+      "expr": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "is_callable"
+          ],
+          "attributes": {
+            "startLine": 29,
+            "endLine": 29
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "random_bytes",
+              "attributes": {
+                "startLine": 29,
+                "endLine": 29,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 29,
+              "endLine": 29
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 29,
+          "endLine": 29
+        }
+      },
+      "attributes": {
+        "startLine": 29,
+        "endLine": 29
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Function",
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "random_bytes",
+          "attributes": {
+            "startLine": 41,
+            "endLine": 41
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "bytes",
+              "attributes": {
+                "startLine": 41,
+                "endLine": 41
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 41,
+              "endLine": 41
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_TryCatch",
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "bytes",
+                    "attributes": {
+                      "startLine": 44,
+                      "endLine": 44
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "RandomCompat_intval"
+                      ],
+                      "attributes": {
+                        "startLine": 44,
+                        "endLine": 44
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "bytes",
+                          "attributes": {
+                            "startLine": 44,
+                            "endLine": 44
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 44,
+                          "endLine": 44
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 44,
+                      "endLine": 44
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 44,
+                    "endLine": 44
+                  }
+                },
+                "attributes": {
+                  "startLine": 44,
+                  "endLine": 44
+                }
+              }
+            ],
+            "catches": [
+              {
+                "nodeType": "Stmt_Catch",
+                "types": [
+                  {
+                    "nodeType": "Name",
+                    "parts": [
+                      "TypeError"
+                    ],
+                    "attributes": {
+                      "startLine": 45,
+                      "endLine": 45
+                    }
+                  }
+                ],
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "ex",
+                  "attributes": {
+                    "startLine": 45,
+                    "endLine": 45
+                  }
+                },
+                "stmts": [
+                  {
+                    "nodeType": "Stmt_Throw",
+                    "expr": {
+                      "nodeType": "Expr_New",
+                      "class": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "TypeError"
+                        ],
+                        "attributes": {
+                          "startLine": 46,
+                          "endLine": 46
+                        }
+                      },
+                      "args": [
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Scalar_String",
+                            "value": "random_bytes(): $bytes must be an integer",
+                            "attributes": {
+                              "startLine": 47,
+                              "endLine": 47,
+                              "kind": 1
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 47,
+                            "endLine": 47
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 46,
+                        "endLine": 48
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 46,
+                      "endLine": 48
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 45,
+                  "endLine": 49
+                }
+              }
+            ],
+            "finally": null,
+            "attributes": {
+              "startLine": 43,
+              "endLine": 49
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BinaryOp_Smaller",
+              "left": {
+                "nodeType": "Expr_Variable",
+                "name": "bytes",
+                "attributes": {
+                  "startLine": 51,
+                  "endLine": 51
+                }
+              },
+              "right": {
+                "nodeType": "Scalar_LNumber",
+                "value": 1,
+                "attributes": {
+                  "startLine": 51,
+                  "endLine": 51,
+                  "kind": 10
+                }
+              },
+              "attributes": {
+                "startLine": 51,
+                "endLine": 51
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Throw",
+                "expr": {
+                  "nodeType": "Expr_New",
+                  "class": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "Error"
+                    ],
+                    "attributes": {
+                      "startLine": 52,
+                      "endLine": 52
+                    }
+                  },
+                  "args": [
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Scalar_String",
+                        "value": "Length must be greater than 0",
+                        "attributes": {
+                          "startLine": 53,
+                          "endLine": 53,
+                          "kind": 1
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 53,
+                        "endLine": 53
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 52,
+                    "endLine": 54
+                  }
+                },
+                "attributes": {
+                  "startLine": 52,
+                  "endLine": 54
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 51,
+              "endLine": 55
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "buf",
+                "attributes": {
+                  "startLine": 57,
+                  "endLine": 57
+                }
+              },
+              "expr": {
+                "nodeType": "Scalar_String",
+                "value": "",
+                "attributes": {
+                  "startLine": 57,
+                  "endLine": 57,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 57,
+                "endLine": 57
+              }
+            },
+            "attributes": {
+              "startLine": 57,
+              "endLine": 57
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BooleanNot",
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "class_exists"
+                  ],
+                  "attributes": {
+                    "startLine": 58,
+                    "endLine": 58
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "COM",
+                      "attributes": {
+                        "startLine": 58,
+                        "endLine": 58,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 58,
+                      "endLine": 58
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 58,
+                  "endLine": 58
+                }
+              },
+              "attributes": {
+                "startLine": 58,
+                "endLine": 58
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Throw",
+                "expr": {
+                  "nodeType": "Expr_New",
+                  "class": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "Error"
+                    ],
+                    "attributes": {
+                      "startLine": 59,
+                      "endLine": 59
+                    }
+                  },
+                  "args": [
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Scalar_String",
+                        "value": "COM does not exist",
+                        "attributes": {
+                          "startLine": 60,
+                          "endLine": 60,
+                          "kind": 1
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 60,
+                        "endLine": 60
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 59,
+                    "endLine": 61
+                  }
+                },
+                "attributes": {
+                  "startLine": 59,
+                  "endLine": 61
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 58,
+              "endLine": 62
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "util",
+                "attributes": {
+                  "startLine": 63,
+                  "endLine": 63
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_New",
+                "class": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "COM"
+                  ],
+                  "attributes": {
+                    "startLine": 63,
+                    "endLine": 63
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "CAPICOM.Utilities.1",
+                      "attributes": {
+                        "startLine": 63,
+                        "endLine": 63,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 63,
+                      "endLine": 63
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 63,
+                  "endLine": 63
+                }
+              },
+              "attributes": {
+                "startLine": 63,
+                "endLine": 63
+              }
+            },
+            "attributes": {
+              "startLine": 63,
+              "endLine": 63
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "execCount",
+                "attributes": {
+                  "startLine": 64,
+                  "endLine": 64
+                }
+              },
+              "expr": {
+                "nodeType": "Scalar_LNumber",
+                "value": 0,
+                "attributes": {
+                  "startLine": 64,
+                  "endLine": 64,
+                  "kind": 10
+                }
+              },
+              "attributes": {
+                "startLine": 64,
+                "endLine": 64
+              }
+            },
+            "attributes": {
+              "startLine": 64,
+              "endLine": 64
+            }
+          },
+          {
+            "nodeType": "Stmt_Do",
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_AssignOp_Concat",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "buf",
+                    "attributes": {
+                      "startLine": 71,
+                      "endLine": 71
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "base64_decode"
+                      ],
+                      "attributes": {
+                        "startLine": 71,
+                        "endLine": 71
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_MethodCall",
+                          "var": {
+                            "nodeType": "Expr_Variable",
+                            "name": "util",
+                            "attributes": {
+                              "startLine": 71,
+                              "endLine": 71
+                            }
+                          },
+                          "name": {
+                            "nodeType": "Identifier",
+                            "name": "GetRandom",
+                            "attributes": {
+                              "startLine": 71,
+                              "endLine": 71
+                            }
+                          },
+                          "args": [
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Expr_Variable",
+                                "name": "bytes",
+                                "attributes": {
+                                  "startLine": 71,
+                                  "endLine": 71
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 71,
+                                "endLine": 71
+                              }
+                            },
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Scalar_LNumber",
+                                "value": 0,
+                                "attributes": {
+                                  "startLine": 71,
+                                  "endLine": 71,
+                                  "kind": 10
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 71,
+                                "endLine": 71
+                              }
+                            }
+                          ],
+                          "attributes": {
+                            "startLine": 71,
+                            "endLine": 71
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 71,
+                          "endLine": 71
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 71,
+                      "endLine": 71
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 71,
+                    "endLine": 71
+                  }
+                },
+                "attributes": {
+                  "startLine": 71,
+                  "endLine": 71
+                }
+              },
+              {
+                "nodeType": "Stmt_If",
+                "cond": {
+                  "nodeType": "Expr_BinaryOp_GreaterOrEqual",
+                  "left": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "RandomCompat_strlen"
+                      ],
+                      "attributes": {
+                        "startLine": 72,
+                        "endLine": 72
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "buf",
+                          "attributes": {
+                            "startLine": 72,
+                            "endLine": 72
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 72,
+                          "endLine": 72
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 72,
+                      "endLine": 72
+                    }
+                  },
+                  "right": {
+                    "nodeType": "Expr_Variable",
+                    "name": "bytes",
+                    "attributes": {
+                      "startLine": 72,
+                      "endLine": 72
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 72,
+                    "endLine": 72
+                  }
+                },
+                "stmts": [
+                  {
+                    "nodeType": "Stmt_Return",
+                    "expr": {
+                      "nodeType": "Expr_FuncCall",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "RandomCompat_substr"
+                        ],
+                        "attributes": {
+                          "startLine": 76,
+                          "endLine": 76
+                        }
+                      },
+                      "args": [
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Expr_Variable",
+                            "name": "buf",
+                            "attributes": {
+                              "startLine": 76,
+                              "endLine": 76
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 76,
+                            "endLine": 76
+                          }
+                        },
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Scalar_LNumber",
+                            "value": 0,
+                            "attributes": {
+                              "startLine": 76,
+                              "endLine": 76,
+                              "kind": 10
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 76,
+                            "endLine": 76
+                          }
+                        },
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Expr_Variable",
+                            "name": "bytes",
+                            "attributes": {
+                              "startLine": 76,
+                              "endLine": 76
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 76,
+                            "endLine": 76
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 76,
+                        "endLine": 76
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 76,
+                      "comments": [
+                        {
+                          "nodeType": "Comment_Doc",
+                          "text": "/**\n                 * Return our random entropy buffer here:\n                 */",
+                          "line": 73,
+                          "filePos": 2507,
+                          "tokenPos": 183,
+                          "endLine": 75,
+                          "endFilePos": 2587,
+                          "endTokenPos": 183
+                        }
+                      ],
+                      "endLine": 76
+                    }
+                  }
+                ],
+                "elseifs": [],
+                "else": null,
+                "attributes": {
+                  "startLine": 72,
+                  "endLine": 77
+                }
+              },
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_PreInc",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "execCount",
+                    "attributes": {
+                      "startLine": 78,
+                      "endLine": 78
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 78,
+                    "endLine": 78
+                  }
+                },
+                "attributes": {
+                  "startLine": 78,
+                  "endLine": 78
+                }
+              }
+            ],
+            "cond": {
+              "nodeType": "Expr_BinaryOp_Smaller",
+              "left": {
+                "nodeType": "Expr_Variable",
+                "name": "execCount",
+                "attributes": {
+                  "startLine": 79,
+                  "endLine": 79
+                }
+              },
+              "right": {
+                "nodeType": "Expr_Variable",
+                "name": "bytes",
+                "attributes": {
+                  "startLine": 79,
+                  "endLine": 79
+                }
+              },
+              "attributes": {
+                "startLine": 79,
+                "endLine": 79
+              }
+            },
+            "attributes": {
+              "startLine": 70,
+              "comments": [
+                {
+                  "nodeType": "Comment_Doc",
+                  "text": "/**\n         * Let's not let it loop forever. If we run N times and fail to\n         * get N bytes of random data, then CAPICOM has failed us.\n         */",
+                  "line": 66,
+                  "filePos": 2204,
+                  "tokenPos": 144,
+                  "endLine": 69,
+                  "endFilePos": 2357,
+                  "endTokenPos": 144
+                }
+              ],
+              "endLine": 79
+            }
+          },
+          {
+            "nodeType": "Stmt_Throw",
+            "expr": {
+              "nodeType": "Expr_New",
+              "class": {
+                "nodeType": "Name",
+                "parts": [
+                  "Exception"
+                ],
+                "attributes": {
+                  "startLine": 84,
+                  "endLine": 84
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "Could not gather sufficient random data",
+                    "attributes": {
+                      "startLine": 85,
+                      "endLine": 85,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 85,
+                    "endLine": 85
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 84,
+                "endLine": 86
+              }
+            },
+            "attributes": {
+              "startLine": 84,
+              "comments": [
+                {
+                  "nodeType": "Comment_Doc",
+                  "text": "/**\n         * If we reach here, PHP has failed us.\n         */",
+                  "line": 81,
+                  "filePos": 2738,
+                  "tokenPos": 218,
+                  "endLine": 83,
+                  "endFilePos": 2800,
+                  "endTokenPos": 218
+                }
+              ],
+              "endLine": 86
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 41,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n     * Windows with PHP < 5.3.0 will not have the function\n     * openssl_random_pseudo_bytes() available, so let's use\n     * CAPICOM to work around this deficiency.\n     *\n     * @param int $bytes\n     *\n     * @throws Exception\n     *\n     * @return string\n     */",
+              "line": 30,
+              "filePos": 1319,
+              "tokenPos": 15,
+              "endLine": 40,
+              "endFilePos": 1589,
+              "endTokenPos": 15
+            }
+          ],
+          "endLine": 87
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 29,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Random_* Compatibility Library \n * for using the new PHP 7 random_* API in PHP 5 projects\n * \n * The MIT License (MIT)\n * \n * Copyright (c) 2015 - 2017 Paragon Initiative Enterprises\n * \n * Permission is hereby granted, free of charge, to any person obtaining a copy\n * of this software and associated documentation files (the \"Software\"), to deal\n * in the Software without restriction, including without limitation the rights\n * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n * copies of the Software, and to permit persons to whom the Software is\n * furnished to do so, subject to the following conditions:\n * \n * The above copyright notice and this permission notice shall be included in\n * all copies or substantial portions of the Software.\n * \n * THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n * SOFTWARE.\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 27,
+          "endFilePos": 1276,
+          "endTokenPos": 1
+        }
+      ],
+      "endLine": 88
+    }
+  }
+]

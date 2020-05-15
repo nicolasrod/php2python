@@ -1,0 +1,4381 @@
+[
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "define"
+        ],
+        "attributes": {
+          "startLine": 16,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n * WordPress Ajax Process Execution\n *\n * @package WordPress\n * @subpackage Administration\n *\n * @link https://codex.wordpress.org/AJAX_in_Plugins\n */",
+              "line": 2,
+              "filePos": 6,
+              "tokenPos": 1,
+              "endLine": 9,
+              "endFilePos": 159,
+              "endTokenPos": 1
+            },
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n * Executing Ajax process.\n *\n * @since 2.1.0\n */",
+              "line": 11,
+              "filePos": 162,
+              "tokenPos": 3,
+              "endLine": 15,
+              "endFilePos": 214,
+              "endTokenPos": 3
+            }
+          ],
+          "endLine": 16
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "DOING_AJAX",
+            "attributes": {
+              "startLine": 16,
+              "endLine": 16,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 16,
+            "endLine": 16
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "true"
+              ],
+              "attributes": {
+                "startLine": 16,
+                "endLine": 16
+              }
+            },
+            "attributes": {
+              "startLine": 16,
+              "endLine": 16
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 16,
+            "endLine": 16
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 16,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/**\n * WordPress Ajax Process Execution\n *\n * @package WordPress\n * @subpackage Administration\n *\n * @link https://codex.wordpress.org/AJAX_in_Plugins\n */",
+            "line": 2,
+            "filePos": 6,
+            "tokenPos": 1,
+            "endLine": 9,
+            "endFilePos": 159,
+            "endTokenPos": 1
+          },
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/**\n * Executing Ajax process.\n *\n * @since 2.1.0\n */",
+            "line": 11,
+            "filePos": 162,
+            "tokenPos": 3,
+            "endLine": 15,
+            "endFilePos": 214,
+            "endTokenPos": 3
+          }
+        ],
+        "endLine": 16
+      }
+    },
+    "attributes": {
+      "startLine": 16,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * WordPress Ajax Process Execution\n *\n * @package WordPress\n * @subpackage Administration\n *\n * @link https://codex.wordpress.org/AJAX_in_Plugins\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 9,
+          "endFilePos": 159,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Executing Ajax process.\n *\n * @since 2.1.0\n */",
+          "line": 11,
+          "filePos": 162,
+          "tokenPos": 3,
+          "endLine": 15,
+          "endFilePos": 214,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 16
+    }
+  },
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_BooleanNot",
+      "expr": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "defined"
+          ],
+          "attributes": {
+            "startLine": 17,
+            "endLine": 17
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "WP_ADMIN",
+              "attributes": {
+                "startLine": 17,
+                "endLine": 17,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 17,
+              "endLine": 17
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 17,
+          "endLine": 17
+        }
+      },
+      "attributes": {
+        "startLine": 17,
+        "endLine": 17
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "define"
+            ],
+            "attributes": {
+              "startLine": 18,
+              "endLine": 18
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "WP_ADMIN",
+                "attributes": {
+                  "startLine": 18,
+                  "endLine": 18,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 18,
+                "endLine": 18
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_ConstFetch",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "true"
+                  ],
+                  "attributes": {
+                    "startLine": 18,
+                    "endLine": 18
+                  }
+                },
+                "attributes": {
+                  "startLine": 18,
+                  "endLine": 18
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 18,
+                "endLine": 18
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 18,
+            "endLine": 18
+          }
+        },
+        "attributes": {
+          "startLine": 18,
+          "endLine": 18
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 17,
+      "endLine": 19
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "dirname"
+            ],
+            "attributes": {
+              "startLine": 22,
+              "endLine": 22
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_MagicConst_Dir",
+                "attributes": {
+                  "startLine": 22,
+                  "endLine": 22
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 22,
+                "endLine": 22
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 22,
+            "endLine": 22
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/wp-load.php",
+          "attributes": {
+            "startLine": 22,
+            "endLine": 22,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 22,
+          "endLine": 22
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 22,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** Load WordPress Bootstrap */",
+            "line": 21,
+            "filePos": 311,
+            "tokenPos": 46,
+            "endLine": 21,
+            "endFilePos": 341,
+            "endTokenPos": 46
+          }
+        ],
+        "endLine": 22
+      }
+    },
+    "attributes": {
+      "startLine": 22,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** Load WordPress Bootstrap */",
+          "line": 21,
+          "filePos": 311,
+          "tokenPos": 46,
+          "endLine": 21,
+          "endFilePos": 341,
+          "endTokenPos": 46
+        }
+      ],
+      "endLine": 22
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "send_origin_headers"
+        ],
+        "attributes": {
+          "startLine": 25,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/** Allow for cross-domain requests (from the front end). */",
+              "line": 24,
+              "filePos": 394,
+              "tokenPos": 62,
+              "endLine": 24,
+              "endFilePos": 453,
+              "endTokenPos": 62
+            }
+          ],
+          "endLine": 25
+        }
+      },
+      "args": [],
+      "attributes": {
+        "startLine": 25,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** Allow for cross-domain requests (from the front end). */",
+            "line": 24,
+            "filePos": 394,
+            "tokenPos": 62,
+            "endLine": 24,
+            "endFilePos": 453,
+            "endTokenPos": 62
+          }
+        ],
+        "endLine": 25
+      }
+    },
+    "attributes": {
+      "startLine": 25,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** Allow for cross-domain requests (from the front end). */",
+          "line": 24,
+          "filePos": 394,
+          "tokenPos": 62,
+          "endLine": 24,
+          "endFilePos": 453,
+          "endTokenPos": 62
+        }
+      ],
+      "endLine": 25
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "header"
+        ],
+        "attributes": {
+          "startLine": 27,
+          "endLine": 27
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_BinaryOp_Concat",
+            "left": {
+              "nodeType": "Scalar_String",
+              "value": "Content-Type: text/html; charset=",
+              "attributes": {
+                "startLine": 27,
+                "endLine": 27,
+                "kind": 1
+              }
+            },
+            "right": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "get_option"
+                ],
+                "attributes": {
+                  "startLine": 27,
+                  "endLine": 27
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "blog_charset",
+                    "attributes": {
+                      "startLine": 27,
+                      "endLine": 27,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 27,
+                    "endLine": 27
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 27,
+                "endLine": 27
+              }
+            },
+            "attributes": {
+              "startLine": 27,
+              "endLine": 27
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 27,
+            "endLine": 27
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 27,
+        "endLine": 27
+      }
+    },
+    "attributes": {
+      "startLine": 27,
+      "endLine": 27
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "header"
+        ],
+        "attributes": {
+          "startLine": 28,
+          "endLine": 28
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "X-Robots-Tag: noindex",
+            "attributes": {
+              "startLine": 28,
+              "endLine": 28,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 28,
+            "endLine": 28
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 28,
+        "endLine": 28
+      }
+    },
+    "attributes": {
+      "startLine": 28,
+      "endLine": 28
+    }
+  },
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_Empty",
+      "expr": {
+        "nodeType": "Expr_ArrayDimFetch",
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "_REQUEST",
+          "attributes": {
+            "startLine": 31,
+            "endLine": 31
+          }
+        },
+        "dim": {
+          "nodeType": "Scalar_String",
+          "value": "action",
+          "attributes": {
+            "startLine": 31,
+            "endLine": 31,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 31,
+          "endLine": 31
+        }
+      },
+      "attributes": {
+        "startLine": 31,
+        "endLine": 31
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "wp_die"
+            ],
+            "attributes": {
+              "startLine": 32,
+              "endLine": 32
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "0",
+                "attributes": {
+                  "startLine": 32,
+                  "endLine": 32,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 32,
+                "endLine": 32
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_LNumber",
+                "value": 400,
+                "attributes": {
+                  "startLine": 32,
+                  "endLine": 32,
+                  "kind": 10
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 32,
+                "endLine": 32
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 32,
+            "endLine": 32
+          }
+        },
+        "attributes": {
+          "startLine": 32,
+          "endLine": 32
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 31,
+      "comments": [
+        {
+          "nodeType": "Comment",
+          "text": "// Require an action parameter.\n",
+          "line": 30,
+          "filePos": 593,
+          "tokenPos": 94,
+          "endLine": 31,
+          "endFilePos": 624,
+          "endTokenPos": 94
+        }
+      ],
+      "endLine": 33
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_ConstFetch",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "ABSPATH"
+            ],
+            "attributes": {
+              "startLine": 36,
+              "endLine": 36
+            }
+          },
+          "attributes": {
+            "startLine": 36,
+            "endLine": 36
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "wp-admin/includes/admin.php",
+          "attributes": {
+            "startLine": 36,
+            "endLine": 36,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 36,
+          "endLine": 36
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 36,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** Load WordPress Administration APIs */",
+            "line": 35,
+            "filePos": 687,
+            "tokenPos": 126,
+            "endLine": 35,
+            "endFilePos": 727,
+            "endTokenPos": 126
+          }
+        ],
+        "endLine": 36
+      }
+    },
+    "attributes": {
+      "startLine": 36,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** Load WordPress Administration APIs */",
+          "line": 35,
+          "filePos": 687,
+          "tokenPos": 126,
+          "endLine": 35,
+          "endFilePos": 727,
+          "endTokenPos": 126
+        }
+      ],
+      "endLine": 36
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_ConstFetch",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "ABSPATH"
+            ],
+            "attributes": {
+              "startLine": 39,
+              "endLine": 39
+            }
+          },
+          "attributes": {
+            "startLine": 39,
+            "endLine": 39
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "wp-admin/includes/ajax-actions.php",
+          "attributes": {
+            "startLine": 39,
+            "endLine": 39,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 39,
+          "endLine": 39
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 39,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** Load Ajax Handlers for WordPress Core */",
+            "line": 38,
+            "filePos": 784,
+            "tokenPos": 137,
+            "endLine": 38,
+            "endFilePos": 827,
+            "endTokenPos": 137
+          }
+        ],
+        "endLine": 39
+      }
+    },
+    "attributes": {
+      "startLine": 39,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** Load Ajax Handlers for WordPress Core */",
+          "line": 38,
+          "filePos": 784,
+          "tokenPos": 137,
+          "endLine": 38,
+          "endFilePos": 827,
+          "endTokenPos": 137
+        }
+      ],
+      "endLine": 39
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "send_nosniff_header"
+        ],
+        "attributes": {
+          "startLine": 41,
+          "endLine": 41
+        }
+      },
+      "args": [],
+      "attributes": {
+        "startLine": 41,
+        "endLine": 41
+      }
+    },
+    "attributes": {
+      "startLine": 41,
+      "endLine": 41
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "nocache_headers"
+        ],
+        "attributes": {
+          "startLine": 42,
+          "endLine": 42
+        }
+      },
+      "args": [],
+      "attributes": {
+        "startLine": 42,
+        "endLine": 42
+      }
+    },
+    "attributes": {
+      "startLine": 42,
+      "endLine": 42
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "do_action"
+        ],
+        "attributes": {
+          "startLine": 45,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/** This action is documented in wp-admin/admin.php */",
+              "line": 44,
+              "filePos": 934,
+              "tokenPos": 158,
+              "endLine": 44,
+              "endFilePos": 987,
+              "endTokenPos": 158
+            }
+          ],
+          "endLine": 45
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "admin_init",
+            "attributes": {
+              "startLine": 45,
+              "endLine": 45,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 45,
+            "endLine": 45
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 45,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** This action is documented in wp-admin/admin.php */",
+            "line": 44,
+            "filePos": 934,
+            "tokenPos": 158,
+            "endLine": 44,
+            "endFilePos": 987,
+            "endTokenPos": 158
+          }
+        ],
+        "endLine": 45
+      }
+    },
+    "attributes": {
+      "startLine": 45,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** This action is documented in wp-admin/admin.php */",
+          "line": 44,
+          "filePos": 934,
+          "tokenPos": 158,
+          "endLine": 44,
+          "endFilePos": 987,
+          "endTokenPos": 158
+        }
+      ],
+      "endLine": 45
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Assign",
+      "var": {
+        "nodeType": "Expr_Variable",
+        "name": "core_actions_get",
+        "attributes": {
+          "startLine": 47,
+          "endLine": 47
+        }
+      },
+      "expr": {
+        "nodeType": "Expr_Array",
+        "items": [
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "fetch-list",
+              "attributes": {
+                "startLine": 48,
+                "endLine": 48,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 48,
+              "endLine": 48
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "ajax-tag-search",
+              "attributes": {
+                "startLine": 49,
+                "endLine": 49,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 49,
+              "endLine": 49
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "wp-compression-test",
+              "attributes": {
+                "startLine": 50,
+                "endLine": 50,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 50,
+              "endLine": 50
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "imgedit-preview",
+              "attributes": {
+                "startLine": 51,
+                "endLine": 51,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 51,
+              "endLine": 51
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "oembed-cache",
+              "attributes": {
+                "startLine": 52,
+                "endLine": 52,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 52,
+              "endLine": 52
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "autocomplete-user",
+              "attributes": {
+                "startLine": 53,
+                "endLine": 53,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 53,
+              "endLine": 53
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "dashboard-widgets",
+              "attributes": {
+                "startLine": 54,
+                "endLine": 54,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 54,
+              "endLine": 54
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "logged-in",
+              "attributes": {
+                "startLine": 55,
+                "endLine": 55,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 55,
+              "endLine": 55
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "rest-nonce",
+              "attributes": {
+                "startLine": 56,
+                "endLine": 56,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 56,
+              "endLine": 56
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 47,
+          "endLine": 57,
+          "kind": 1
+        }
+      },
+      "attributes": {
+        "startLine": 47,
+        "endLine": 57
+      }
+    },
+    "attributes": {
+      "startLine": 47,
+      "endLine": 57
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Assign",
+      "var": {
+        "nodeType": "Expr_Variable",
+        "name": "core_actions_post",
+        "attributes": {
+          "startLine": 59,
+          "endLine": 59
+        }
+      },
+      "expr": {
+        "nodeType": "Expr_Array",
+        "items": [
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "oembed-cache",
+              "attributes": {
+                "startLine": 60,
+                "endLine": 60,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 60,
+              "endLine": 60
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "image-editor",
+              "attributes": {
+                "startLine": 61,
+                "endLine": 61,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 61,
+              "endLine": 61
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "delete-comment",
+              "attributes": {
+                "startLine": 62,
+                "endLine": 62,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 62,
+              "endLine": 62
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "delete-tag",
+              "attributes": {
+                "startLine": 63,
+                "endLine": 63,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 63,
+              "endLine": 63
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "delete-link",
+              "attributes": {
+                "startLine": 64,
+                "endLine": 64,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 64,
+              "endLine": 64
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "delete-meta",
+              "attributes": {
+                "startLine": 65,
+                "endLine": 65,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 65,
+              "endLine": 65
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "delete-post",
+              "attributes": {
+                "startLine": 66,
+                "endLine": 66,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 66,
+              "endLine": 66
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "trash-post",
+              "attributes": {
+                "startLine": 67,
+                "endLine": 67,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 67,
+              "endLine": 67
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "untrash-post",
+              "attributes": {
+                "startLine": 68,
+                "endLine": 68,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 68,
+              "endLine": 68
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "delete-page",
+              "attributes": {
+                "startLine": 69,
+                "endLine": 69,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 69,
+              "endLine": 69
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "dim-comment",
+              "attributes": {
+                "startLine": 70,
+                "endLine": 70,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 70,
+              "endLine": 70
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "add-link-category",
+              "attributes": {
+                "startLine": 71,
+                "endLine": 71,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 71,
+              "endLine": 71
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "add-tag",
+              "attributes": {
+                "startLine": 72,
+                "endLine": 72,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 72,
+              "endLine": 72
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "get-tagcloud",
+              "attributes": {
+                "startLine": 73,
+                "endLine": 73,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 73,
+              "endLine": 73
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "get-comments",
+              "attributes": {
+                "startLine": 74,
+                "endLine": 74,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 74,
+              "endLine": 74
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "replyto-comment",
+              "attributes": {
+                "startLine": 75,
+                "endLine": 75,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 75,
+              "endLine": 75
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "edit-comment",
+              "attributes": {
+                "startLine": 76,
+                "endLine": 76,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 76,
+              "endLine": 76
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "add-menu-item",
+              "attributes": {
+                "startLine": 77,
+                "endLine": 77,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 77,
+              "endLine": 77
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "add-meta",
+              "attributes": {
+                "startLine": 78,
+                "endLine": 78,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 78,
+              "endLine": 78
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "add-user",
+              "attributes": {
+                "startLine": 79,
+                "endLine": 79,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 79,
+              "endLine": 79
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "closed-postboxes",
+              "attributes": {
+                "startLine": 80,
+                "endLine": 80,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 80,
+              "endLine": 80
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "hidden-columns",
+              "attributes": {
+                "startLine": 81,
+                "endLine": 81,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 81,
+              "endLine": 81
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "update-welcome-panel",
+              "attributes": {
+                "startLine": 82,
+                "endLine": 82,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 82,
+              "endLine": 82
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "menu-get-metabox",
+              "attributes": {
+                "startLine": 83,
+                "endLine": 83,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 83,
+              "endLine": 83
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "wp-link-ajax",
+              "attributes": {
+                "startLine": 84,
+                "endLine": 84,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 84,
+              "endLine": 84
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "menu-locations-save",
+              "attributes": {
+                "startLine": 85,
+                "endLine": 85,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 85,
+              "endLine": 85
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "menu-quick-search",
+              "attributes": {
+                "startLine": 86,
+                "endLine": 86,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 86,
+              "endLine": 86
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "meta-box-order",
+              "attributes": {
+                "startLine": 87,
+                "endLine": 87,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 87,
+              "endLine": 87
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "get-permalink",
+              "attributes": {
+                "startLine": 88,
+                "endLine": 88,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 88,
+              "endLine": 88
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "sample-permalink",
+              "attributes": {
+                "startLine": 89,
+                "endLine": 89,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 89,
+              "endLine": 89
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "inline-save",
+              "attributes": {
+                "startLine": 90,
+                "endLine": 90,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 90,
+              "endLine": 90
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "inline-save-tax",
+              "attributes": {
+                "startLine": 91,
+                "endLine": 91,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 91,
+              "endLine": 91
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "find_posts",
+              "attributes": {
+                "startLine": 92,
+                "endLine": 92,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 92,
+              "endLine": 92
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "widgets-order",
+              "attributes": {
+                "startLine": 93,
+                "endLine": 93,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 93,
+              "endLine": 93
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "save-widget",
+              "attributes": {
+                "startLine": 94,
+                "endLine": 94,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 94,
+              "endLine": 94
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "delete-inactive-widgets",
+              "attributes": {
+                "startLine": 95,
+                "endLine": 95,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 95,
+              "endLine": 95
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "set-post-thumbnail",
+              "attributes": {
+                "startLine": 96,
+                "endLine": 96,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 96,
+              "endLine": 96
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "date_format",
+              "attributes": {
+                "startLine": 97,
+                "endLine": 97,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 97,
+              "endLine": 97
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "time_format",
+              "attributes": {
+                "startLine": 98,
+                "endLine": 98,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 98,
+              "endLine": 98
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "wp-remove-post-lock",
+              "attributes": {
+                "startLine": 99,
+                "endLine": 99,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 99,
+              "endLine": 99
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "dismiss-wp-pointer",
+              "attributes": {
+                "startLine": 100,
+                "endLine": 100,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 100,
+              "endLine": 100
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "upload-attachment",
+              "attributes": {
+                "startLine": 101,
+                "endLine": 101,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 101,
+              "endLine": 101
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "get-attachment",
+              "attributes": {
+                "startLine": 102,
+                "endLine": 102,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 102,
+              "endLine": 102
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "query-attachments",
+              "attributes": {
+                "startLine": 103,
+                "endLine": 103,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 103,
+              "endLine": 103
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "save-attachment",
+              "attributes": {
+                "startLine": 104,
+                "endLine": 104,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 104,
+              "endLine": 104
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "save-attachment-compat",
+              "attributes": {
+                "startLine": 105,
+                "endLine": 105,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 105,
+              "endLine": 105
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "send-link-to-editor",
+              "attributes": {
+                "startLine": 106,
+                "endLine": 106,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 106,
+              "endLine": 106
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "send-attachment-to-editor",
+              "attributes": {
+                "startLine": 107,
+                "endLine": 107,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 107,
+              "endLine": 107
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "save-attachment-order",
+              "attributes": {
+                "startLine": 108,
+                "endLine": 108,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 108,
+              "endLine": 108
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "media-create-image-subsizes",
+              "attributes": {
+                "startLine": 109,
+                "endLine": 109,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 109,
+              "endLine": 109
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "heartbeat",
+              "attributes": {
+                "startLine": 110,
+                "endLine": 110,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 110,
+              "endLine": 110
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "get-revision-diffs",
+              "attributes": {
+                "startLine": 111,
+                "endLine": 111,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 111,
+              "endLine": 111
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "save-user-color-scheme",
+              "attributes": {
+                "startLine": 112,
+                "endLine": 112,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 112,
+              "endLine": 112
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "update-widget",
+              "attributes": {
+                "startLine": 113,
+                "endLine": 113,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 113,
+              "endLine": 113
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "query-themes",
+              "attributes": {
+                "startLine": 114,
+                "endLine": 114,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 114,
+              "endLine": 114
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "parse-embed",
+              "attributes": {
+                "startLine": 115,
+                "endLine": 115,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 115,
+              "endLine": 115
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "set-attachment-thumbnail",
+              "attributes": {
+                "startLine": 116,
+                "endLine": 116,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 116,
+              "endLine": 116
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "parse-media-shortcode",
+              "attributes": {
+                "startLine": 117,
+                "endLine": 117,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 117,
+              "endLine": 117
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "destroy-sessions",
+              "attributes": {
+                "startLine": 118,
+                "endLine": 118,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 118,
+              "endLine": 118
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "install-plugin",
+              "attributes": {
+                "startLine": 119,
+                "endLine": 119,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 119,
+              "endLine": 119
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "update-plugin",
+              "attributes": {
+                "startLine": 120,
+                "endLine": 120,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 120,
+              "endLine": 120
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "crop-image",
+              "attributes": {
+                "startLine": 121,
+                "endLine": 121,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 121,
+              "endLine": 121
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "generate-password",
+              "attributes": {
+                "startLine": 122,
+                "endLine": 122,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 122,
+              "endLine": 122
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "save-wporg-username",
+              "attributes": {
+                "startLine": 123,
+                "endLine": 123,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 123,
+              "endLine": 123
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "delete-plugin",
+              "attributes": {
+                "startLine": 124,
+                "endLine": 124,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 124,
+              "endLine": 124
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "search-plugins",
+              "attributes": {
+                "startLine": 125,
+                "endLine": 125,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 125,
+              "endLine": 125
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "search-install-plugins",
+              "attributes": {
+                "startLine": 126,
+                "endLine": 126,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 126,
+              "endLine": 126
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "activate-plugin",
+              "attributes": {
+                "startLine": 127,
+                "endLine": 127,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 127,
+              "endLine": 127
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "update-theme",
+              "attributes": {
+                "startLine": 128,
+                "endLine": 128,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 128,
+              "endLine": 128
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "delete-theme",
+              "attributes": {
+                "startLine": 129,
+                "endLine": 129,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 129,
+              "endLine": 129
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "install-theme",
+              "attributes": {
+                "startLine": 130,
+                "endLine": 130,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 130,
+              "endLine": 130
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "get-post-thumbnail-html",
+              "attributes": {
+                "startLine": 131,
+                "endLine": 131,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 131,
+              "endLine": 131
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "get-community-events",
+              "attributes": {
+                "startLine": 132,
+                "endLine": 132,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 132,
+              "endLine": 132
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "edit-theme-plugin-file",
+              "attributes": {
+                "startLine": 133,
+                "endLine": 133,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 133,
+              "endLine": 133
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "wp-privacy-export-personal-data",
+              "attributes": {
+                "startLine": 134,
+                "endLine": 134,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 134,
+              "endLine": 134
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "wp-privacy-erase-personal-data",
+              "attributes": {
+                "startLine": 135,
+                "endLine": 135,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 135,
+              "endLine": 135
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "health-check-site-status-result",
+              "attributes": {
+                "startLine": 136,
+                "endLine": 136,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 136,
+              "endLine": 136
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "health-check-dotorg-communication",
+              "attributes": {
+                "startLine": 137,
+                "endLine": 137,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 137,
+              "endLine": 137
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "health-check-is-in-debug-mode",
+              "attributes": {
+                "startLine": 138,
+                "endLine": 138,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 138,
+              "endLine": 138
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "health-check-background-updates",
+              "attributes": {
+                "startLine": 139,
+                "endLine": 139,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 139,
+              "endLine": 139
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "health-check-loopback-requests",
+              "attributes": {
+                "startLine": 140,
+                "endLine": 140,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 140,
+              "endLine": 140
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "health-check-get-sizes",
+              "attributes": {
+                "startLine": 141,
+                "endLine": 141,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 141,
+              "endLine": 141
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 59,
+          "endLine": 142,
+          "kind": 1
+        }
+      },
+      "attributes": {
+        "startLine": 59,
+        "endLine": 142
+      }
+    },
+    "attributes": {
+      "startLine": 59,
+      "endLine": 142
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Assign",
+      "var": {
+        "nodeType": "Expr_Variable",
+        "name": "core_actions_post_deprecated",
+        "attributes": {
+          "startLine": 145,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "// Deprecated.\n",
+              "line": 144,
+              "filePos": 3004,
+              "tokenPos": 461,
+              "endLine": 145,
+              "endFilePos": 3018,
+              "endTokenPos": 461
+            }
+          ],
+          "endLine": 145
+        }
+      },
+      "expr": {
+        "nodeType": "Expr_Array",
+        "items": [
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "wp-fullscreen-save-post",
+              "attributes": {
+                "startLine": 145,
+                "endLine": 145,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 145,
+              "endLine": 145
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "press-this-save-post",
+              "attributes": {
+                "startLine": 145,
+                "endLine": 145,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 145,
+              "endLine": 145
+            }
+          },
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "press-this-add-category",
+              "attributes": {
+                "startLine": 145,
+                "endLine": 145,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 145,
+              "endLine": 145
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 145,
+          "endLine": 145,
+          "kind": 1
+        }
+      },
+      "attributes": {
+        "startLine": 145,
+        "comments": [
+          {
+            "nodeType": "Comment",
+            "text": "// Deprecated.\n",
+            "line": 144,
+            "filePos": 3004,
+            "tokenPos": 461,
+            "endLine": 145,
+            "endFilePos": 3018,
+            "endTokenPos": 461
+          }
+        ],
+        "endLine": 145
+      }
+    },
+    "attributes": {
+      "startLine": 145,
+      "comments": [
+        {
+          "nodeType": "Comment",
+          "text": "// Deprecated.\n",
+          "line": 144,
+          "filePos": 3004,
+          "tokenPos": 461,
+          "endLine": 145,
+          "endFilePos": 3018,
+          "endTokenPos": 461
+        }
+      ],
+      "endLine": 145
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Assign",
+      "var": {
+        "nodeType": "Expr_Variable",
+        "name": "core_actions_post",
+        "attributes": {
+          "startLine": 146,
+          "endLine": 146
+        }
+      },
+      "expr": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "array_merge"
+          ],
+          "attributes": {
+            "startLine": 146,
+            "endLine": 146
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Expr_Variable",
+              "name": "core_actions_post",
+              "attributes": {
+                "startLine": 146,
+                "endLine": 146
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 146,
+              "endLine": 146
+            }
+          },
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Expr_Variable",
+              "name": "core_actions_post_deprecated",
+              "attributes": {
+                "startLine": 146,
+                "endLine": 146
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 146,
+              "endLine": 146
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 146,
+          "endLine": 146
+        }
+      },
+      "attributes": {
+        "startLine": 146,
+        "endLine": 146
+      }
+    },
+    "attributes": {
+      "startLine": 146,
+      "endLine": 146
+    }
+  },
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_BinaryOp_BooleanAnd",
+      "left": {
+        "nodeType": "Expr_BooleanNot",
+        "expr": {
+          "nodeType": "Expr_Empty",
+          "expr": {
+            "nodeType": "Expr_ArrayDimFetch",
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "_GET",
+              "attributes": {
+                "startLine": 149,
+                "endLine": 149
+              }
+            },
+            "dim": {
+              "nodeType": "Scalar_String",
+              "value": "action",
+              "attributes": {
+                "startLine": 149,
+                "endLine": 149,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 149,
+              "endLine": 149
+            }
+          },
+          "attributes": {
+            "startLine": 149,
+            "endLine": 149
+          }
+        },
+        "attributes": {
+          "startLine": 149,
+          "endLine": 149
+        }
+      },
+      "right": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "in_array"
+          ],
+          "attributes": {
+            "startLine": 149,
+            "endLine": 149
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Expr_ArrayDimFetch",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "_GET",
+                "attributes": {
+                  "startLine": 149,
+                  "endLine": 149
+                }
+              },
+              "dim": {
+                "nodeType": "Scalar_String",
+                "value": "action",
+                "attributes": {
+                  "startLine": 149,
+                  "endLine": 149,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 149,
+                "endLine": 149
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 149,
+              "endLine": 149
+            }
+          },
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Expr_Variable",
+              "name": "core_actions_get",
+              "attributes": {
+                "startLine": 149,
+                "endLine": 149
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 149,
+              "endLine": 149
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 149,
+          "endLine": 149
+        }
+      },
+      "attributes": {
+        "startLine": 149,
+        "endLine": 149
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "add_action"
+            ],
+            "attributes": {
+              "startLine": 150,
+              "endLine": 150
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_BinaryOp_Concat",
+                "left": {
+                  "nodeType": "Scalar_String",
+                  "value": "wp_ajax_",
+                  "attributes": {
+                    "startLine": 150,
+                    "endLine": 150,
+                    "kind": 1
+                  }
+                },
+                "right": {
+                  "nodeType": "Expr_ArrayDimFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "_GET",
+                    "attributes": {
+                      "startLine": 150,
+                      "endLine": 150
+                    }
+                  },
+                  "dim": {
+                    "nodeType": "Scalar_String",
+                    "value": "action",
+                    "attributes": {
+                      "startLine": 150,
+                      "endLine": 150,
+                      "kind": 1
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 150,
+                    "endLine": 150
+                  }
+                },
+                "attributes": {
+                  "startLine": 150,
+                  "endLine": 150
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 150,
+                "endLine": 150
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_BinaryOp_Concat",
+                "left": {
+                  "nodeType": "Scalar_String",
+                  "value": "wp_ajax_",
+                  "attributes": {
+                    "startLine": 150,
+                    "endLine": 150,
+                    "kind": 1
+                  }
+                },
+                "right": {
+                  "nodeType": "Expr_FuncCall",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "str_replace"
+                    ],
+                    "attributes": {
+                      "startLine": 150,
+                      "endLine": 150
+                    }
+                  },
+                  "args": [
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Scalar_String",
+                        "value": "-",
+                        "attributes": {
+                          "startLine": 150,
+                          "endLine": 150,
+                          "kind": 1
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 150,
+                        "endLine": 150
+                      }
+                    },
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Scalar_String",
+                        "value": "_",
+                        "attributes": {
+                          "startLine": 150,
+                          "endLine": 150,
+                          "kind": 1
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 150,
+                        "endLine": 150
+                      }
+                    },
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Expr_ArrayDimFetch",
+                        "var": {
+                          "nodeType": "Expr_Variable",
+                          "name": "_GET",
+                          "attributes": {
+                            "startLine": 150,
+                            "endLine": 150
+                          }
+                        },
+                        "dim": {
+                          "nodeType": "Scalar_String",
+                          "value": "action",
+                          "attributes": {
+                            "startLine": 150,
+                            "endLine": 150,
+                            "kind": 1
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 150,
+                          "endLine": 150
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 150,
+                        "endLine": 150
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 150,
+                    "endLine": 150
+                  }
+                },
+                "attributes": {
+                  "startLine": 150,
+                  "endLine": 150
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 150,
+                "endLine": 150
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_LNumber",
+                "value": 1,
+                "attributes": {
+                  "startLine": 150,
+                  "endLine": 150,
+                  "kind": 10
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 150,
+                "endLine": 150
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 150,
+            "endLine": 150
+          }
+        },
+        "attributes": {
+          "startLine": 150,
+          "endLine": 150
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 149,
+      "comments": [
+        {
+          "nodeType": "Comment",
+          "text": "// Register core Ajax calls.\n",
+          "line": 148,
+          "filePos": 3237,
+          "tokenPos": 495,
+          "endLine": 149,
+          "endFilePos": 3265,
+          "endTokenPos": 495
+        }
+      ],
+      "endLine": 151
+    }
+  },
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_BinaryOp_BooleanAnd",
+      "left": {
+        "nodeType": "Expr_BooleanNot",
+        "expr": {
+          "nodeType": "Expr_Empty",
+          "expr": {
+            "nodeType": "Expr_ArrayDimFetch",
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "_POST",
+              "attributes": {
+                "startLine": 153,
+                "endLine": 153
+              }
+            },
+            "dim": {
+              "nodeType": "Scalar_String",
+              "value": "action",
+              "attributes": {
+                "startLine": 153,
+                "endLine": 153,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 153,
+              "endLine": 153
+            }
+          },
+          "attributes": {
+            "startLine": 153,
+            "endLine": 153
+          }
+        },
+        "attributes": {
+          "startLine": 153,
+          "endLine": 153
+        }
+      },
+      "right": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "in_array"
+          ],
+          "attributes": {
+            "startLine": 153,
+            "endLine": 153
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Expr_ArrayDimFetch",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "_POST",
+                "attributes": {
+                  "startLine": 153,
+                  "endLine": 153
+                }
+              },
+              "dim": {
+                "nodeType": "Scalar_String",
+                "value": "action",
+                "attributes": {
+                  "startLine": 153,
+                  "endLine": 153,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 153,
+                "endLine": 153
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 153,
+              "endLine": 153
+            }
+          },
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Expr_Variable",
+              "name": "core_actions_post",
+              "attributes": {
+                "startLine": 153,
+                "endLine": 153
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 153,
+              "endLine": 153
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 153,
+          "endLine": 153
+        }
+      },
+      "attributes": {
+        "startLine": 153,
+        "endLine": 153
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "add_action"
+            ],
+            "attributes": {
+              "startLine": 154,
+              "endLine": 154
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_BinaryOp_Concat",
+                "left": {
+                  "nodeType": "Scalar_String",
+                  "value": "wp_ajax_",
+                  "attributes": {
+                    "startLine": 154,
+                    "endLine": 154,
+                    "kind": 1
+                  }
+                },
+                "right": {
+                  "nodeType": "Expr_ArrayDimFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "_POST",
+                    "attributes": {
+                      "startLine": 154,
+                      "endLine": 154
+                    }
+                  },
+                  "dim": {
+                    "nodeType": "Scalar_String",
+                    "value": "action",
+                    "attributes": {
+                      "startLine": 154,
+                      "endLine": 154,
+                      "kind": 1
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 154,
+                    "endLine": 154
+                  }
+                },
+                "attributes": {
+                  "startLine": 154,
+                  "endLine": 154
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 154,
+                "endLine": 154
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_BinaryOp_Concat",
+                "left": {
+                  "nodeType": "Scalar_String",
+                  "value": "wp_ajax_",
+                  "attributes": {
+                    "startLine": 154,
+                    "endLine": 154,
+                    "kind": 1
+                  }
+                },
+                "right": {
+                  "nodeType": "Expr_FuncCall",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "str_replace"
+                    ],
+                    "attributes": {
+                      "startLine": 154,
+                      "endLine": 154
+                    }
+                  },
+                  "args": [
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Scalar_String",
+                        "value": "-",
+                        "attributes": {
+                          "startLine": 154,
+                          "endLine": 154,
+                          "kind": 1
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 154,
+                        "endLine": 154
+                      }
+                    },
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Scalar_String",
+                        "value": "_",
+                        "attributes": {
+                          "startLine": 154,
+                          "endLine": 154,
+                          "kind": 1
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 154,
+                        "endLine": 154
+                      }
+                    },
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Expr_ArrayDimFetch",
+                        "var": {
+                          "nodeType": "Expr_Variable",
+                          "name": "_POST",
+                          "attributes": {
+                            "startLine": 154,
+                            "endLine": 154
+                          }
+                        },
+                        "dim": {
+                          "nodeType": "Scalar_String",
+                          "value": "action",
+                          "attributes": {
+                            "startLine": 154,
+                            "endLine": 154,
+                            "kind": 1
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 154,
+                          "endLine": 154
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 154,
+                        "endLine": 154
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 154,
+                    "endLine": 154
+                  }
+                },
+                "attributes": {
+                  "startLine": 154,
+                  "endLine": 154
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 154,
+                "endLine": 154
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_LNumber",
+                "value": 1,
+                "attributes": {
+                  "startLine": 154,
+                  "endLine": 154,
+                  "kind": 10
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 154,
+                "endLine": 154
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 154,
+            "endLine": 154
+          }
+        },
+        "attributes": {
+          "startLine": 154,
+          "endLine": 154
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 153,
+      "endLine": 155
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "add_action"
+        ],
+        "attributes": {
+          "startLine": 157,
+          "endLine": 157
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "wp_ajax_nopriv_heartbeat",
+            "attributes": {
+              "startLine": 157,
+              "endLine": 157,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 157,
+            "endLine": 157
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "wp_ajax_nopriv_heartbeat",
+            "attributes": {
+              "startLine": 157,
+              "endLine": 157,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 157,
+            "endLine": 157
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_LNumber",
+            "value": 1,
+            "attributes": {
+              "startLine": 157,
+              "endLine": 157,
+              "kind": 10
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 157,
+            "endLine": 157
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 157,
+        "endLine": 157
+      }
+    },
+    "attributes": {
+      "startLine": 157,
+      "endLine": 157
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Assign",
+      "var": {
+        "nodeType": "Expr_Variable",
+        "name": "action",
+        "attributes": {
+          "startLine": 159,
+          "endLine": 159
+        }
+      },
+      "expr": {
+        "nodeType": "Expr_Ternary",
+        "cond": {
+          "nodeType": "Expr_Isset",
+          "vars": [
+            {
+              "nodeType": "Expr_ArrayDimFetch",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "_REQUEST",
+                "attributes": {
+                  "startLine": 159,
+                  "endLine": 159
+                }
+              },
+              "dim": {
+                "nodeType": "Scalar_String",
+                "value": "action",
+                "attributes": {
+                  "startLine": 159,
+                  "endLine": 159,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 159,
+                "endLine": 159
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 159,
+            "endLine": 159
+          }
+        },
+        "if": {
+          "nodeType": "Expr_ArrayDimFetch",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "_REQUEST",
+            "attributes": {
+              "startLine": 159,
+              "endLine": 159
+            }
+          },
+          "dim": {
+            "nodeType": "Scalar_String",
+            "value": "action",
+            "attributes": {
+              "startLine": 159,
+              "endLine": 159,
+              "kind": 1
+            }
+          },
+          "attributes": {
+            "startLine": 159,
+            "endLine": 159
+          }
+        },
+        "else": {
+          "nodeType": "Scalar_String",
+          "value": "",
+          "attributes": {
+            "startLine": 159,
+            "endLine": 159,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 159,
+          "endLine": 159
+        }
+      },
+      "attributes": {
+        "startLine": 159,
+        "endLine": 159
+      }
+    },
+    "attributes": {
+      "startLine": 159,
+      "endLine": 159
+    }
+  },
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "is_user_logged_in"
+        ],
+        "attributes": {
+          "startLine": 161,
+          "endLine": 161
+        }
+      },
+      "args": [],
+      "attributes": {
+        "startLine": 161,
+        "endLine": 161
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BooleanNot",
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "has_action"
+              ],
+              "attributes": {
+                "startLine": 163,
+                "endLine": 163
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_Encapsed",
+                  "parts": [
+                    {
+                      "nodeType": "Scalar_EncapsedStringPart",
+                      "value": "wp_ajax_",
+                      "attributes": {
+                        "startLine": 163,
+                        "endLine": 163
+                      }
+                    },
+                    {
+                      "nodeType": "Expr_Variable",
+                      "name": "action",
+                      "attributes": {
+                        "startLine": 163,
+                        "endLine": 163
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 163,
+                    "endLine": 163,
+                    "kind": 2
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 163,
+                  "endLine": 163
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 163,
+              "endLine": 163
+            }
+          },
+          "attributes": {
+            "startLine": 163,
+            "endLine": 163
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "wp_die"
+                ],
+                "attributes": {
+                  "startLine": 164,
+                  "endLine": 164
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "0",
+                    "attributes": {
+                      "startLine": 164,
+                      "endLine": 164,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 164,
+                    "endLine": 164
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_LNumber",
+                    "value": 400,
+                    "attributes": {
+                      "startLine": 164,
+                      "endLine": 164,
+                      "kind": 10
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 164,
+                    "endLine": 164
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 164,
+                "endLine": 164
+              }
+            },
+            "attributes": {
+              "startLine": 164,
+              "endLine": 164
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 163,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "// If no action is registered, return a Bad Request response.\n",
+              "line": 162,
+              "filePos": 3831,
+              "tokenPos": 704,
+              "endLine": 163,
+              "endFilePos": 3892,
+              "endTokenPos": 704
+            }
+          ],
+          "endLine": 165
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "do_action"
+            ],
+            "attributes": {
+              "startLine": 175,
+              "comments": [
+                {
+                  "nodeType": "Comment_Doc",
+                  "text": "/**\n\t * Fires authenticated Ajax actions for logged-in users.\n\t *\n\t * The dynamic portion of the hook name, `$action`, refers\n\t * to the name of the Ajax action callback being fired.\n\t *\n\t * @since 2.1.0\n\t */",
+                  "line": 167,
+                  "filePos": 3966,
+                  "tokenPos": 741,
+                  "endLine": 174,
+                  "endFilePos": 4173,
+                  "endTokenPos": 741
+                }
+              ],
+              "endLine": 175
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_Encapsed",
+                "parts": [
+                  {
+                    "nodeType": "Scalar_EncapsedStringPart",
+                    "value": "wp_ajax_",
+                    "attributes": {
+                      "startLine": 175,
+                      "endLine": 175
+                    }
+                  },
+                  {
+                    "nodeType": "Expr_Variable",
+                    "name": "action",
+                    "attributes": {
+                      "startLine": 175,
+                      "endLine": 175
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 175,
+                  "endLine": 175,
+                  "kind": 2
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 175,
+                "endLine": 175
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 175,
+            "comments": [
+              {
+                "nodeType": "Comment_Doc",
+                "text": "/**\n\t * Fires authenticated Ajax actions for logged-in users.\n\t *\n\t * The dynamic portion of the hook name, `$action`, refers\n\t * to the name of the Ajax action callback being fired.\n\t *\n\t * @since 2.1.0\n\t */",
+                "line": 167,
+                "filePos": 3966,
+                "tokenPos": 741,
+                "endLine": 174,
+                "endFilePos": 4173,
+                "endTokenPos": 741
+              }
+            ],
+            "endLine": 175
+          }
+        },
+        "attributes": {
+          "startLine": 175,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Fires authenticated Ajax actions for logged-in users.\n\t *\n\t * The dynamic portion of the hook name, `$action`, refers\n\t * to the name of the Ajax action callback being fired.\n\t *\n\t * @since 2.1.0\n\t */",
+              "line": 167,
+              "filePos": 3966,
+              "tokenPos": 741,
+              "endLine": 174,
+              "endFilePos": 4173,
+              "endTokenPos": 741
+            }
+          ],
+          "endLine": 175
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": {
+      "nodeType": "Stmt_Else",
+      "stmts": [
+        {
+          "nodeType": "Stmt_If",
+          "cond": {
+            "nodeType": "Expr_BooleanNot",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "has_action"
+                ],
+                "attributes": {
+                  "startLine": 178,
+                  "endLine": 178
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_Encapsed",
+                    "parts": [
+                      {
+                        "nodeType": "Scalar_EncapsedStringPart",
+                        "value": "wp_ajax_nopriv_",
+                        "attributes": {
+                          "startLine": 178,
+                          "endLine": 178
+                        }
+                      },
+                      {
+                        "nodeType": "Expr_Variable",
+                        "name": "action",
+                        "attributes": {
+                          "startLine": 178,
+                          "endLine": 178
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 178,
+                      "endLine": 178,
+                      "kind": 2
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 178,
+                    "endLine": 178
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 178,
+                "endLine": 178
+              }
+            },
+            "attributes": {
+              "startLine": 178,
+              "endLine": 178
+            }
+          },
+          "stmts": [
+            {
+              "nodeType": "Stmt_Expression",
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "wp_die"
+                  ],
+                  "attributes": {
+                    "startLine": 179,
+                    "endLine": 179
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "0",
+                      "attributes": {
+                        "startLine": 179,
+                        "endLine": 179,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 179,
+                      "endLine": 179
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_LNumber",
+                      "value": 400,
+                      "attributes": {
+                        "startLine": 179,
+                        "endLine": 179,
+                        "kind": 10
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 179,
+                      "endLine": 179
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 179,
+                  "endLine": 179
+                }
+              },
+              "attributes": {
+                "startLine": 179,
+                "endLine": 179
+              }
+            }
+          ],
+          "elseifs": [],
+          "else": null,
+          "attributes": {
+            "startLine": 178,
+            "comments": [
+              {
+                "nodeType": "Comment",
+                "text": "// If no action is registered, return a Bad Request response.\n",
+                "line": 177,
+                "filePos": 4220,
+                "tokenPos": 762,
+                "endLine": 178,
+                "endFilePos": 4281,
+                "endTokenPos": 762
+              }
+            ],
+            "endLine": 180
+          }
+        },
+        {
+          "nodeType": "Stmt_Expression",
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "do_action"
+              ],
+              "attributes": {
+                "startLine": 190,
+                "comments": [
+                  {
+                    "nodeType": "Comment_Doc",
+                    "text": "/**\n\t * Fires non-authenticated Ajax actions for logged-out users.\n\t *\n\t * The dynamic portion of the hook name, `$action`, refers\n\t * to the name of the Ajax action callback being fired.\n\t *\n\t * @since 2.8.0\n\t */",
+                    "line": 182,
+                    "filePos": 4362,
+                    "tokenPos": 799,
+                    "endLine": 189,
+                    "endFilePos": 4574,
+                    "endTokenPos": 799
+                  }
+                ],
+                "endLine": 190
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_Encapsed",
+                  "parts": [
+                    {
+                      "nodeType": "Scalar_EncapsedStringPart",
+                      "value": "wp_ajax_nopriv_",
+                      "attributes": {
+                        "startLine": 190,
+                        "endLine": 190
+                      }
+                    },
+                    {
+                      "nodeType": "Expr_Variable",
+                      "name": "action",
+                      "attributes": {
+                        "startLine": 190,
+                        "endLine": 190
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 190,
+                    "endLine": 190,
+                    "kind": 2
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 190,
+                  "endLine": 190
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 190,
+              "comments": [
+                {
+                  "nodeType": "Comment_Doc",
+                  "text": "/**\n\t * Fires non-authenticated Ajax actions for logged-out users.\n\t *\n\t * The dynamic portion of the hook name, `$action`, refers\n\t * to the name of the Ajax action callback being fired.\n\t *\n\t * @since 2.8.0\n\t */",
+                  "line": 182,
+                  "filePos": 4362,
+                  "tokenPos": 799,
+                  "endLine": 189,
+                  "endFilePos": 4574,
+                  "endTokenPos": 799
+                }
+              ],
+              "endLine": 190
+            }
+          },
+          "attributes": {
+            "startLine": 190,
+            "comments": [
+              {
+                "nodeType": "Comment_Doc",
+                "text": "/**\n\t * Fires non-authenticated Ajax actions for logged-out users.\n\t *\n\t * The dynamic portion of the hook name, `$action`, refers\n\t * to the name of the Ajax action callback being fired.\n\t *\n\t * @since 2.8.0\n\t */",
+                "line": 182,
+                "filePos": 4362,
+                "tokenPos": 799,
+                "endLine": 189,
+                "endFilePos": 4574,
+                "endTokenPos": 799
+              }
+            ],
+            "endLine": 190
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 176,
+        "endLine": 191
+      }
+    },
+    "attributes": {
+      "startLine": 161,
+      "endLine": 191
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "wp_die"
+        ],
+        "attributes": {
+          "startLine": 193,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "// Default status.\n",
+              "line": 192,
+              "filePos": 4620,
+              "tokenPos": 816,
+              "endLine": 193,
+              "endFilePos": 4638,
+              "endTokenPos": 816
+            }
+          ],
+          "endLine": 193
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "0",
+            "attributes": {
+              "startLine": 193,
+              "endLine": 193,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 193,
+            "endLine": 193
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 193,
+        "comments": [
+          {
+            "nodeType": "Comment",
+            "text": "// Default status.\n",
+            "line": 192,
+            "filePos": 4620,
+            "tokenPos": 816,
+            "endLine": 193,
+            "endFilePos": 4638,
+            "endTokenPos": 816
+          }
+        ],
+        "endLine": 193
+      }
+    },
+    "attributes": {
+      "startLine": 193,
+      "comments": [
+        {
+          "nodeType": "Comment",
+          "text": "// Default status.\n",
+          "line": 192,
+          "filePos": 4620,
+          "tokenPos": 816,
+          "endLine": 193,
+          "endFilePos": 4638,
+          "endTokenPos": 816
+        }
+      ],
+      "endLine": 193
+    }
+  }
+]

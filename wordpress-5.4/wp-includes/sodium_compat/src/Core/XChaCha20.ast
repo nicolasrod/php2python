@@ -1,0 +1,2481 @@
+[
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "class_exists"
+        ],
+        "attributes": {
+          "startLine": 3,
+          "endLine": 3
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "ParagonIE_Sodium_Core_XChaCha20",
+            "attributes": {
+              "startLine": 3,
+              "endLine": 3,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 3,
+            "endLine": 3
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "false"
+              ],
+              "attributes": {
+                "startLine": 3,
+                "endLine": 3
+              }
+            },
+            "attributes": {
+              "startLine": 3,
+              "endLine": 3
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 3,
+            "endLine": 3
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 3,
+        "endLine": 3
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": null,
+        "attributes": {
+          "startLine": 4,
+          "endLine": 4
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 3,
+      "endLine": 5
+    }
+  },
+  {
+    "nodeType": "Stmt_Class",
+    "flags": 0,
+    "extends": {
+      "nodeType": "Name",
+      "parts": [
+        "ParagonIE_Sodium_Core_HChaCha20"
+      ],
+      "attributes": {
+        "startLine": 10,
+        "endLine": 10
+      }
+    },
+    "implements": [],
+    "name": {
+      "nodeType": "Identifier",
+      "name": "ParagonIE_Sodium_Core_XChaCha20",
+      "attributes": {
+        "startLine": 10,
+        "endLine": 10
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 9,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "stream",
+          "attributes": {
+            "startLine": 22,
+            "endLine": 22
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "len",
+              "attributes": {
+                "startLine": 22,
+                "endLine": 22
+              }
+            },
+            "default": {
+              "nodeType": "Scalar_LNumber",
+              "value": 64,
+              "attributes": {
+                "startLine": 22,
+                "endLine": 22,
+                "kind": 10
+              }
+            },
+            "attributes": {
+              "startLine": 22,
+              "endLine": 22
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "nonce",
+              "attributes": {
+                "startLine": 22,
+                "endLine": 22
+              }
+            },
+            "default": {
+              "nodeType": "Scalar_String",
+              "value": "",
+              "attributes": {
+                "startLine": 22,
+                "endLine": 22,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 22,
+              "endLine": 22
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "key",
+              "attributes": {
+                "startLine": 22,
+                "endLine": 22
+              }
+            },
+            "default": {
+              "nodeType": "Scalar_String",
+              "value": "",
+              "attributes": {
+                "startLine": 22,
+                "endLine": 22,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 22,
+              "endLine": 22
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BinaryOp_NotIdentical",
+              "left": {
+                "nodeType": "Expr_StaticCall",
+                "class": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "self"
+                  ],
+                  "attributes": {
+                    "startLine": 24,
+                    "endLine": 24
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "strlen",
+                  "attributes": {
+                    "startLine": 24,
+                    "endLine": 24
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "nonce",
+                      "attributes": {
+                        "startLine": 24,
+                        "endLine": 24
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 24,
+                      "endLine": 24
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 24,
+                  "endLine": 24
+                }
+              },
+              "right": {
+                "nodeType": "Scalar_LNumber",
+                "value": 24,
+                "attributes": {
+                  "startLine": 24,
+                  "endLine": 24,
+                  "kind": 10
+                }
+              },
+              "attributes": {
+                "startLine": 24,
+                "endLine": 24
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Throw",
+                "expr": {
+                  "nodeType": "Expr_New",
+                  "class": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "SodiumException"
+                    ],
+                    "attributes": {
+                      "startLine": 25,
+                      "endLine": 25
+                    }
+                  },
+                  "args": [
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Scalar_String",
+                        "value": "Nonce must be 24 bytes long",
+                        "attributes": {
+                          "startLine": 25,
+                          "endLine": 25,
+                          "kind": 1
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 25,
+                        "endLine": 25
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 25,
+                    "endLine": 25
+                  }
+                },
+                "attributes": {
+                  "startLine": 25,
+                  "endLine": 25
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 24,
+              "endLine": 26
+            }
+          },
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_StaticCall",
+              "class": {
+                "nodeType": "Name",
+                "parts": [
+                  "self"
+                ],
+                "attributes": {
+                  "startLine": 27,
+                  "endLine": 27
+                }
+              },
+              "name": {
+                "nodeType": "Identifier",
+                "name": "encryptBytes",
+                "attributes": {
+                  "startLine": 27,
+                  "endLine": 27
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_New",
+                    "class": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "ParagonIE_Sodium_Core_ChaCha20_Ctx"
+                      ],
+                      "attributes": {
+                        "startLine": 28,
+                        "endLine": 28
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_StaticCall",
+                          "class": {
+                            "nodeType": "Name",
+                            "parts": [
+                              "self"
+                            ],
+                            "attributes": {
+                              "startLine": 29,
+                              "endLine": 29
+                            }
+                          },
+                          "name": {
+                            "nodeType": "Identifier",
+                            "name": "hChaCha20",
+                            "attributes": {
+                              "startLine": 29,
+                              "endLine": 29
+                            }
+                          },
+                          "args": [
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Expr_StaticCall",
+                                "class": {
+                                  "nodeType": "Name",
+                                  "parts": [
+                                    "self"
+                                  ],
+                                  "attributes": {
+                                    "startLine": 30,
+                                    "endLine": 30
+                                  }
+                                },
+                                "name": {
+                                  "nodeType": "Identifier",
+                                  "name": "substr",
+                                  "attributes": {
+                                    "startLine": 30,
+                                    "endLine": 30
+                                  }
+                                },
+                                "args": [
+                                  {
+                                    "nodeType": "Arg",
+                                    "value": {
+                                      "nodeType": "Expr_Variable",
+                                      "name": "nonce",
+                                      "attributes": {
+                                        "startLine": 30,
+                                        "endLine": 30
+                                      }
+                                    },
+                                    "byRef": false,
+                                    "unpack": false,
+                                    "attributes": {
+                                      "startLine": 30,
+                                      "endLine": 30
+                                    }
+                                  },
+                                  {
+                                    "nodeType": "Arg",
+                                    "value": {
+                                      "nodeType": "Scalar_LNumber",
+                                      "value": 0,
+                                      "attributes": {
+                                        "startLine": 30,
+                                        "endLine": 30,
+                                        "kind": 10
+                                      }
+                                    },
+                                    "byRef": false,
+                                    "unpack": false,
+                                    "attributes": {
+                                      "startLine": 30,
+                                      "endLine": 30
+                                    }
+                                  },
+                                  {
+                                    "nodeType": "Arg",
+                                    "value": {
+                                      "nodeType": "Scalar_LNumber",
+                                      "value": 16,
+                                      "attributes": {
+                                        "startLine": 30,
+                                        "endLine": 30,
+                                        "kind": 10
+                                      }
+                                    },
+                                    "byRef": false,
+                                    "unpack": false,
+                                    "attributes": {
+                                      "startLine": 30,
+                                      "endLine": 30
+                                    }
+                                  }
+                                ],
+                                "attributes": {
+                                  "startLine": 30,
+                                  "endLine": 30
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 30,
+                                "endLine": 30
+                              }
+                            },
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Expr_Variable",
+                                "name": "key",
+                                "attributes": {
+                                  "startLine": 31,
+                                  "endLine": 31
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 31,
+                                "endLine": 31
+                              }
+                            }
+                          ],
+                          "attributes": {
+                            "startLine": 29,
+                            "endLine": 32
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 29,
+                          "endLine": 32
+                        }
+                      },
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_StaticCall",
+                          "class": {
+                            "nodeType": "Name",
+                            "parts": [
+                              "self"
+                            ],
+                            "attributes": {
+                              "startLine": 33,
+                              "endLine": 33
+                            }
+                          },
+                          "name": {
+                            "nodeType": "Identifier",
+                            "name": "substr",
+                            "attributes": {
+                              "startLine": 33,
+                              "endLine": 33
+                            }
+                          },
+                          "args": [
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Expr_Variable",
+                                "name": "nonce",
+                                "attributes": {
+                                  "startLine": 33,
+                                  "endLine": 33
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 33,
+                                "endLine": 33
+                              }
+                            },
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Scalar_LNumber",
+                                "value": 16,
+                                "attributes": {
+                                  "startLine": 33,
+                                  "endLine": 33,
+                                  "kind": 10
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 33,
+                                "endLine": 33
+                              }
+                            },
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Scalar_LNumber",
+                                "value": 8,
+                                "attributes": {
+                                  "startLine": 33,
+                                  "endLine": 33,
+                                  "kind": 10
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 33,
+                                "endLine": 33
+                              }
+                            }
+                          ],
+                          "attributes": {
+                            "startLine": 33,
+                            "endLine": 33
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 33,
+                          "endLine": 33
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 28,
+                      "endLine": 34
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 28,
+                    "endLine": 34
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "str_repeat"
+                      ],
+                      "attributes": {
+                        "startLine": 35,
+                        "endLine": 35
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Scalar_String",
+                          "value": "\u0000",
+                          "attributes": {
+                            "startLine": 35,
+                            "endLine": 35,
+                            "kind": 2
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 35,
+                          "endLine": 35
+                        }
+                      },
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "len",
+                          "attributes": {
+                            "startLine": 35,
+                            "endLine": 35
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 35,
+                          "endLine": 35
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 35,
+                      "endLine": 35
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 35,
+                    "endLine": 35
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 27,
+                "endLine": 36
+              }
+            },
+            "attributes": {
+              "startLine": 27,
+              "endLine": 36
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 22,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n     * @internal You should not use this directly from another application\n     *\n     * @param int $len\n     * @param string $nonce\n     * @param string $key\n     * @return string\n     * @throws SodiumException\n     * @throws TypeError\n     */",
+              "line": 12,
+              "filePos": 217,
+              "tokenPos": 33,
+              "endLine": 21,
+              "endFilePos": 464,
+              "endTokenPos": 33
+            }
+          ],
+          "endLine": 37
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 9,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "ietfStream",
+          "attributes": {
+            "startLine": 49,
+            "endLine": 49
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "len",
+              "attributes": {
+                "startLine": 49,
+                "endLine": 49
+              }
+            },
+            "default": {
+              "nodeType": "Scalar_LNumber",
+              "value": 64,
+              "attributes": {
+                "startLine": 49,
+                "endLine": 49,
+                "kind": 10
+              }
+            },
+            "attributes": {
+              "startLine": 49,
+              "endLine": 49
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "nonce",
+              "attributes": {
+                "startLine": 49,
+                "endLine": 49
+              }
+            },
+            "default": {
+              "nodeType": "Scalar_String",
+              "value": "",
+              "attributes": {
+                "startLine": 49,
+                "endLine": 49,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 49,
+              "endLine": 49
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "key",
+              "attributes": {
+                "startLine": 49,
+                "endLine": 49
+              }
+            },
+            "default": {
+              "nodeType": "Scalar_String",
+              "value": "",
+              "attributes": {
+                "startLine": 49,
+                "endLine": 49,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 49,
+              "endLine": 49
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BinaryOp_NotIdentical",
+              "left": {
+                "nodeType": "Expr_StaticCall",
+                "class": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "self"
+                  ],
+                  "attributes": {
+                    "startLine": 51,
+                    "endLine": 51
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "strlen",
+                  "attributes": {
+                    "startLine": 51,
+                    "endLine": 51
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "nonce",
+                      "attributes": {
+                        "startLine": 51,
+                        "endLine": 51
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 51,
+                      "endLine": 51
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 51,
+                  "endLine": 51
+                }
+              },
+              "right": {
+                "nodeType": "Scalar_LNumber",
+                "value": 24,
+                "attributes": {
+                  "startLine": 51,
+                  "endLine": 51,
+                  "kind": 10
+                }
+              },
+              "attributes": {
+                "startLine": 51,
+                "endLine": 51
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Throw",
+                "expr": {
+                  "nodeType": "Expr_New",
+                  "class": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "SodiumException"
+                    ],
+                    "attributes": {
+                      "startLine": 52,
+                      "endLine": 52
+                    }
+                  },
+                  "args": [
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Scalar_String",
+                        "value": "Nonce must be 24 bytes long",
+                        "attributes": {
+                          "startLine": 52,
+                          "endLine": 52,
+                          "kind": 1
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 52,
+                        "endLine": 52
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 52,
+                    "endLine": 52
+                  }
+                },
+                "attributes": {
+                  "startLine": 52,
+                  "endLine": 52
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 51,
+              "endLine": 53
+            }
+          },
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_StaticCall",
+              "class": {
+                "nodeType": "Name",
+                "parts": [
+                  "self"
+                ],
+                "attributes": {
+                  "startLine": 54,
+                  "endLine": 54
+                }
+              },
+              "name": {
+                "nodeType": "Identifier",
+                "name": "encryptBytes",
+                "attributes": {
+                  "startLine": 54,
+                  "endLine": 54
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_New",
+                    "class": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "ParagonIE_Sodium_Core_ChaCha20_IetfCtx"
+                      ],
+                      "attributes": {
+                        "startLine": 55,
+                        "endLine": 55
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_StaticCall",
+                          "class": {
+                            "nodeType": "Name",
+                            "parts": [
+                              "self"
+                            ],
+                            "attributes": {
+                              "startLine": 56,
+                              "endLine": 56
+                            }
+                          },
+                          "name": {
+                            "nodeType": "Identifier",
+                            "name": "hChaCha20",
+                            "attributes": {
+                              "startLine": 56,
+                              "endLine": 56
+                            }
+                          },
+                          "args": [
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Expr_StaticCall",
+                                "class": {
+                                  "nodeType": "Name",
+                                  "parts": [
+                                    "self"
+                                  ],
+                                  "attributes": {
+                                    "startLine": 57,
+                                    "endLine": 57
+                                  }
+                                },
+                                "name": {
+                                  "nodeType": "Identifier",
+                                  "name": "substr",
+                                  "attributes": {
+                                    "startLine": 57,
+                                    "endLine": 57
+                                  }
+                                },
+                                "args": [
+                                  {
+                                    "nodeType": "Arg",
+                                    "value": {
+                                      "nodeType": "Expr_Variable",
+                                      "name": "nonce",
+                                      "attributes": {
+                                        "startLine": 57,
+                                        "endLine": 57
+                                      }
+                                    },
+                                    "byRef": false,
+                                    "unpack": false,
+                                    "attributes": {
+                                      "startLine": 57,
+                                      "endLine": 57
+                                    }
+                                  },
+                                  {
+                                    "nodeType": "Arg",
+                                    "value": {
+                                      "nodeType": "Scalar_LNumber",
+                                      "value": 0,
+                                      "attributes": {
+                                        "startLine": 57,
+                                        "endLine": 57,
+                                        "kind": 10
+                                      }
+                                    },
+                                    "byRef": false,
+                                    "unpack": false,
+                                    "attributes": {
+                                      "startLine": 57,
+                                      "endLine": 57
+                                    }
+                                  },
+                                  {
+                                    "nodeType": "Arg",
+                                    "value": {
+                                      "nodeType": "Scalar_LNumber",
+                                      "value": 16,
+                                      "attributes": {
+                                        "startLine": 57,
+                                        "endLine": 57,
+                                        "kind": 10
+                                      }
+                                    },
+                                    "byRef": false,
+                                    "unpack": false,
+                                    "attributes": {
+                                      "startLine": 57,
+                                      "endLine": 57
+                                    }
+                                  }
+                                ],
+                                "attributes": {
+                                  "startLine": 57,
+                                  "endLine": 57
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 57,
+                                "endLine": 57
+                              }
+                            },
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Expr_Variable",
+                                "name": "key",
+                                "attributes": {
+                                  "startLine": 58,
+                                  "endLine": 58
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 58,
+                                "endLine": 58
+                              }
+                            }
+                          ],
+                          "attributes": {
+                            "startLine": 56,
+                            "endLine": 59
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 56,
+                          "endLine": 59
+                        }
+                      },
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_BinaryOp_Concat",
+                          "left": {
+                            "nodeType": "Scalar_String",
+                            "value": "\u0000\u0000\u0000\u0000",
+                            "attributes": {
+                              "startLine": 60,
+                              "endLine": 60,
+                              "kind": 2
+                            }
+                          },
+                          "right": {
+                            "nodeType": "Expr_StaticCall",
+                            "class": {
+                              "nodeType": "Name",
+                              "parts": [
+                                "self"
+                              ],
+                              "attributes": {
+                                "startLine": 60,
+                                "endLine": 60
+                              }
+                            },
+                            "name": {
+                              "nodeType": "Identifier",
+                              "name": "substr",
+                              "attributes": {
+                                "startLine": 60,
+                                "endLine": 60
+                              }
+                            },
+                            "args": [
+                              {
+                                "nodeType": "Arg",
+                                "value": {
+                                  "nodeType": "Expr_Variable",
+                                  "name": "nonce",
+                                  "attributes": {
+                                    "startLine": 60,
+                                    "endLine": 60
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 60,
+                                  "endLine": 60
+                                }
+                              },
+                              {
+                                "nodeType": "Arg",
+                                "value": {
+                                  "nodeType": "Scalar_LNumber",
+                                  "value": 16,
+                                  "attributes": {
+                                    "startLine": 60,
+                                    "endLine": 60,
+                                    "kind": 10
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 60,
+                                  "endLine": 60
+                                }
+                              },
+                              {
+                                "nodeType": "Arg",
+                                "value": {
+                                  "nodeType": "Scalar_LNumber",
+                                  "value": 8,
+                                  "attributes": {
+                                    "startLine": 60,
+                                    "endLine": 60,
+                                    "kind": 10
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 60,
+                                  "endLine": 60
+                                }
+                              }
+                            ],
+                            "attributes": {
+                              "startLine": 60,
+                              "endLine": 60
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 60,
+                            "endLine": 60
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 60,
+                          "endLine": 60
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 55,
+                      "endLine": 61
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 55,
+                    "endLine": 61
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "str_repeat"
+                      ],
+                      "attributes": {
+                        "startLine": 62,
+                        "endLine": 62
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Scalar_String",
+                          "value": "\u0000",
+                          "attributes": {
+                            "startLine": 62,
+                            "endLine": 62,
+                            "kind": 2
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 62,
+                          "endLine": 62
+                        }
+                      },
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "len",
+                          "attributes": {
+                            "startLine": 62,
+                            "endLine": 62
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 62,
+                          "endLine": 62
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 62,
+                      "endLine": 62
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 62,
+                    "endLine": 62
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 54,
+                "endLine": 63
+              }
+            },
+            "attributes": {
+              "startLine": 54,
+              "endLine": 63
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 49,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n     * @internal You should not use this directly from another application\n     *\n     * @param int $len\n     * @param string $nonce\n     * @param string $key\n     * @return string\n     * @throws SodiumException\n     * @throws TypeError\n     */",
+              "line": 39,
+              "filePos": 995,
+              "tokenPos": 160,
+              "endLine": 48,
+              "endFilePos": 1242,
+              "endTokenPos": 160
+            }
+          ],
+          "endLine": 64
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 9,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "streamXorIc",
+          "attributes": {
+            "startLine": 77,
+            "endLine": 77
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "message",
+              "attributes": {
+                "startLine": 77,
+                "endLine": 77
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 77,
+              "endLine": 77
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "nonce",
+              "attributes": {
+                "startLine": 77,
+                "endLine": 77
+              }
+            },
+            "default": {
+              "nodeType": "Scalar_String",
+              "value": "",
+              "attributes": {
+                "startLine": 77,
+                "endLine": 77,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 77,
+              "endLine": 77
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "key",
+              "attributes": {
+                "startLine": 77,
+                "endLine": 77
+              }
+            },
+            "default": {
+              "nodeType": "Scalar_String",
+              "value": "",
+              "attributes": {
+                "startLine": 77,
+                "endLine": 77,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 77,
+              "endLine": 77
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "ic",
+              "attributes": {
+                "startLine": 77,
+                "endLine": 77
+              }
+            },
+            "default": {
+              "nodeType": "Scalar_String",
+              "value": "",
+              "attributes": {
+                "startLine": 77,
+                "endLine": 77,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 77,
+              "endLine": 77
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BinaryOp_NotIdentical",
+              "left": {
+                "nodeType": "Expr_StaticCall",
+                "class": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "self"
+                  ],
+                  "attributes": {
+                    "startLine": 79,
+                    "endLine": 79
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "strlen",
+                  "attributes": {
+                    "startLine": 79,
+                    "endLine": 79
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "nonce",
+                      "attributes": {
+                        "startLine": 79,
+                        "endLine": 79
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 79,
+                      "endLine": 79
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 79,
+                  "endLine": 79
+                }
+              },
+              "right": {
+                "nodeType": "Scalar_LNumber",
+                "value": 24,
+                "attributes": {
+                  "startLine": 79,
+                  "endLine": 79,
+                  "kind": 10
+                }
+              },
+              "attributes": {
+                "startLine": 79,
+                "endLine": 79
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Throw",
+                "expr": {
+                  "nodeType": "Expr_New",
+                  "class": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "SodiumException"
+                    ],
+                    "attributes": {
+                      "startLine": 80,
+                      "endLine": 80
+                    }
+                  },
+                  "args": [
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Scalar_String",
+                        "value": "Nonce must be 24 bytes long",
+                        "attributes": {
+                          "startLine": 80,
+                          "endLine": 80,
+                          "kind": 1
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 80,
+                        "endLine": 80
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 80,
+                    "endLine": 80
+                  }
+                },
+                "attributes": {
+                  "startLine": 80,
+                  "endLine": 80
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 79,
+              "endLine": 81
+            }
+          },
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_StaticCall",
+              "class": {
+                "nodeType": "Name",
+                "parts": [
+                  "self"
+                ],
+                "attributes": {
+                  "startLine": 82,
+                  "endLine": 82
+                }
+              },
+              "name": {
+                "nodeType": "Identifier",
+                "name": "encryptBytes",
+                "attributes": {
+                  "startLine": 82,
+                  "endLine": 82
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_New",
+                    "class": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "ParagonIE_Sodium_Core_ChaCha20_Ctx"
+                      ],
+                      "attributes": {
+                        "startLine": 83,
+                        "endLine": 83
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_StaticCall",
+                          "class": {
+                            "nodeType": "Name",
+                            "parts": [
+                              "self"
+                            ],
+                            "attributes": {
+                              "startLine": 84,
+                              "endLine": 84
+                            }
+                          },
+                          "name": {
+                            "nodeType": "Identifier",
+                            "name": "hChaCha20",
+                            "attributes": {
+                              "startLine": 84,
+                              "endLine": 84
+                            }
+                          },
+                          "args": [
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Expr_StaticCall",
+                                "class": {
+                                  "nodeType": "Name",
+                                  "parts": [
+                                    "self"
+                                  ],
+                                  "attributes": {
+                                    "startLine": 84,
+                                    "endLine": 84
+                                  }
+                                },
+                                "name": {
+                                  "nodeType": "Identifier",
+                                  "name": "substr",
+                                  "attributes": {
+                                    "startLine": 84,
+                                    "endLine": 84
+                                  }
+                                },
+                                "args": [
+                                  {
+                                    "nodeType": "Arg",
+                                    "value": {
+                                      "nodeType": "Expr_Variable",
+                                      "name": "nonce",
+                                      "attributes": {
+                                        "startLine": 84,
+                                        "endLine": 84
+                                      }
+                                    },
+                                    "byRef": false,
+                                    "unpack": false,
+                                    "attributes": {
+                                      "startLine": 84,
+                                      "endLine": 84
+                                    }
+                                  },
+                                  {
+                                    "nodeType": "Arg",
+                                    "value": {
+                                      "nodeType": "Scalar_LNumber",
+                                      "value": 0,
+                                      "attributes": {
+                                        "startLine": 84,
+                                        "endLine": 84,
+                                        "kind": 10
+                                      }
+                                    },
+                                    "byRef": false,
+                                    "unpack": false,
+                                    "attributes": {
+                                      "startLine": 84,
+                                      "endLine": 84
+                                    }
+                                  },
+                                  {
+                                    "nodeType": "Arg",
+                                    "value": {
+                                      "nodeType": "Scalar_LNumber",
+                                      "value": 16,
+                                      "attributes": {
+                                        "startLine": 84,
+                                        "endLine": 84,
+                                        "kind": 10
+                                      }
+                                    },
+                                    "byRef": false,
+                                    "unpack": false,
+                                    "attributes": {
+                                      "startLine": 84,
+                                      "endLine": 84
+                                    }
+                                  }
+                                ],
+                                "attributes": {
+                                  "startLine": 84,
+                                  "endLine": 84
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 84,
+                                "endLine": 84
+                              }
+                            },
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Expr_Variable",
+                                "name": "key",
+                                "attributes": {
+                                  "startLine": 84,
+                                  "endLine": 84
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 84,
+                                "endLine": 84
+                              }
+                            }
+                          ],
+                          "attributes": {
+                            "startLine": 84,
+                            "endLine": 84
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 84,
+                          "endLine": 84
+                        }
+                      },
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_StaticCall",
+                          "class": {
+                            "nodeType": "Name",
+                            "parts": [
+                              "self"
+                            ],
+                            "attributes": {
+                              "startLine": 85,
+                              "endLine": 85
+                            }
+                          },
+                          "name": {
+                            "nodeType": "Identifier",
+                            "name": "substr",
+                            "attributes": {
+                              "startLine": 85,
+                              "endLine": 85
+                            }
+                          },
+                          "args": [
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Expr_Variable",
+                                "name": "nonce",
+                                "attributes": {
+                                  "startLine": 85,
+                                  "endLine": 85
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 85,
+                                "endLine": 85
+                              }
+                            },
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Scalar_LNumber",
+                                "value": 16,
+                                "attributes": {
+                                  "startLine": 85,
+                                  "endLine": 85,
+                                  "kind": 10
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 85,
+                                "endLine": 85
+                              }
+                            },
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Scalar_LNumber",
+                                "value": 8,
+                                "attributes": {
+                                  "startLine": 85,
+                                  "endLine": 85,
+                                  "kind": 10
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 85,
+                                "endLine": 85
+                              }
+                            }
+                          ],
+                          "attributes": {
+                            "startLine": 85,
+                            "endLine": 85
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 85,
+                          "endLine": 85
+                        }
+                      },
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "ic",
+                          "attributes": {
+                            "startLine": 86,
+                            "endLine": 86
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 86,
+                          "endLine": 86
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 83,
+                      "endLine": 87
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 83,
+                    "endLine": 87
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "message",
+                    "attributes": {
+                      "startLine": 88,
+                      "endLine": 88
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 88,
+                    "endLine": 88
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 82,
+                "endLine": 89
+              }
+            },
+            "attributes": {
+              "startLine": 82,
+              "endLine": 89
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 77,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n     * @internal You should not use this directly from another application\n     *\n     * @param string $message\n     * @param string $nonce\n     * @param string $key\n     * @param string $ic\n     * @return string\n     * @throws SodiumException\n     * @throws TypeError\n     */",
+              "line": 66,
+              "filePos": 1802,
+              "tokenPos": 291,
+              "endLine": 76,
+              "endFilePos": 2081,
+              "endTokenPos": 291
+            }
+          ],
+          "endLine": 90
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 9,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "ietfStreamXorIc",
+          "attributes": {
+            "startLine": 103,
+            "endLine": 103
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "message",
+              "attributes": {
+                "startLine": 103,
+                "endLine": 103
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 103,
+              "endLine": 103
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "nonce",
+              "attributes": {
+                "startLine": 103,
+                "endLine": 103
+              }
+            },
+            "default": {
+              "nodeType": "Scalar_String",
+              "value": "",
+              "attributes": {
+                "startLine": 103,
+                "endLine": 103,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 103,
+              "endLine": 103
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "key",
+              "attributes": {
+                "startLine": 103,
+                "endLine": 103
+              }
+            },
+            "default": {
+              "nodeType": "Scalar_String",
+              "value": "",
+              "attributes": {
+                "startLine": 103,
+                "endLine": 103,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 103,
+              "endLine": 103
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "ic",
+              "attributes": {
+                "startLine": 103,
+                "endLine": 103
+              }
+            },
+            "default": {
+              "nodeType": "Scalar_String",
+              "value": "",
+              "attributes": {
+                "startLine": 103,
+                "endLine": 103,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 103,
+              "endLine": 103
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BinaryOp_NotIdentical",
+              "left": {
+                "nodeType": "Expr_StaticCall",
+                "class": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "self"
+                  ],
+                  "attributes": {
+                    "startLine": 105,
+                    "endLine": 105
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "strlen",
+                  "attributes": {
+                    "startLine": 105,
+                    "endLine": 105
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "nonce",
+                      "attributes": {
+                        "startLine": 105,
+                        "endLine": 105
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 105,
+                      "endLine": 105
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 105,
+                  "endLine": 105
+                }
+              },
+              "right": {
+                "nodeType": "Scalar_LNumber",
+                "value": 24,
+                "attributes": {
+                  "startLine": 105,
+                  "endLine": 105,
+                  "kind": 10
+                }
+              },
+              "attributes": {
+                "startLine": 105,
+                "endLine": 105
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Throw",
+                "expr": {
+                  "nodeType": "Expr_New",
+                  "class": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "SodiumException"
+                    ],
+                    "attributes": {
+                      "startLine": 106,
+                      "endLine": 106
+                    }
+                  },
+                  "args": [
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Scalar_String",
+                        "value": "Nonce must be 24 bytes long",
+                        "attributes": {
+                          "startLine": 106,
+                          "endLine": 106,
+                          "kind": 1
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 106,
+                        "endLine": 106
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 106,
+                    "endLine": 106
+                  }
+                },
+                "attributes": {
+                  "startLine": 106,
+                  "endLine": 106
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 105,
+              "endLine": 107
+            }
+          },
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_StaticCall",
+              "class": {
+                "nodeType": "Name",
+                "parts": [
+                  "self"
+                ],
+                "attributes": {
+                  "startLine": 108,
+                  "endLine": 108
+                }
+              },
+              "name": {
+                "nodeType": "Identifier",
+                "name": "encryptBytes",
+                "attributes": {
+                  "startLine": 108,
+                  "endLine": 108
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_New",
+                    "class": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "ParagonIE_Sodium_Core_ChaCha20_IetfCtx"
+                      ],
+                      "attributes": {
+                        "startLine": 109,
+                        "endLine": 109
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_StaticCall",
+                          "class": {
+                            "nodeType": "Name",
+                            "parts": [
+                              "self"
+                            ],
+                            "attributes": {
+                              "startLine": 110,
+                              "endLine": 110
+                            }
+                          },
+                          "name": {
+                            "nodeType": "Identifier",
+                            "name": "hChaCha20",
+                            "attributes": {
+                              "startLine": 110,
+                              "endLine": 110
+                            }
+                          },
+                          "args": [
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Expr_StaticCall",
+                                "class": {
+                                  "nodeType": "Name",
+                                  "parts": [
+                                    "self"
+                                  ],
+                                  "attributes": {
+                                    "startLine": 110,
+                                    "endLine": 110
+                                  }
+                                },
+                                "name": {
+                                  "nodeType": "Identifier",
+                                  "name": "substr",
+                                  "attributes": {
+                                    "startLine": 110,
+                                    "endLine": 110
+                                  }
+                                },
+                                "args": [
+                                  {
+                                    "nodeType": "Arg",
+                                    "value": {
+                                      "nodeType": "Expr_Variable",
+                                      "name": "nonce",
+                                      "attributes": {
+                                        "startLine": 110,
+                                        "endLine": 110
+                                      }
+                                    },
+                                    "byRef": false,
+                                    "unpack": false,
+                                    "attributes": {
+                                      "startLine": 110,
+                                      "endLine": 110
+                                    }
+                                  },
+                                  {
+                                    "nodeType": "Arg",
+                                    "value": {
+                                      "nodeType": "Scalar_LNumber",
+                                      "value": 0,
+                                      "attributes": {
+                                        "startLine": 110,
+                                        "endLine": 110,
+                                        "kind": 10
+                                      }
+                                    },
+                                    "byRef": false,
+                                    "unpack": false,
+                                    "attributes": {
+                                      "startLine": 110,
+                                      "endLine": 110
+                                    }
+                                  },
+                                  {
+                                    "nodeType": "Arg",
+                                    "value": {
+                                      "nodeType": "Scalar_LNumber",
+                                      "value": 16,
+                                      "attributes": {
+                                        "startLine": 110,
+                                        "endLine": 110,
+                                        "kind": 10
+                                      }
+                                    },
+                                    "byRef": false,
+                                    "unpack": false,
+                                    "attributes": {
+                                      "startLine": 110,
+                                      "endLine": 110
+                                    }
+                                  }
+                                ],
+                                "attributes": {
+                                  "startLine": 110,
+                                  "endLine": 110
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 110,
+                                "endLine": 110
+                              }
+                            },
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Expr_Variable",
+                                "name": "key",
+                                "attributes": {
+                                  "startLine": 110,
+                                  "endLine": 110
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 110,
+                                "endLine": 110
+                              }
+                            }
+                          ],
+                          "attributes": {
+                            "startLine": 110,
+                            "endLine": 110
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 110,
+                          "endLine": 110
+                        }
+                      },
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_BinaryOp_Concat",
+                          "left": {
+                            "nodeType": "Scalar_String",
+                            "value": "\u0000\u0000\u0000\u0000",
+                            "attributes": {
+                              "startLine": 111,
+                              "endLine": 111,
+                              "kind": 2
+                            }
+                          },
+                          "right": {
+                            "nodeType": "Expr_StaticCall",
+                            "class": {
+                              "nodeType": "Name",
+                              "parts": [
+                                "self"
+                              ],
+                              "attributes": {
+                                "startLine": 111,
+                                "endLine": 111
+                              }
+                            },
+                            "name": {
+                              "nodeType": "Identifier",
+                              "name": "substr",
+                              "attributes": {
+                                "startLine": 111,
+                                "endLine": 111
+                              }
+                            },
+                            "args": [
+                              {
+                                "nodeType": "Arg",
+                                "value": {
+                                  "nodeType": "Expr_Variable",
+                                  "name": "nonce",
+                                  "attributes": {
+                                    "startLine": 111,
+                                    "endLine": 111
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 111,
+                                  "endLine": 111
+                                }
+                              },
+                              {
+                                "nodeType": "Arg",
+                                "value": {
+                                  "nodeType": "Scalar_LNumber",
+                                  "value": 16,
+                                  "attributes": {
+                                    "startLine": 111,
+                                    "endLine": 111,
+                                    "kind": 10
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 111,
+                                  "endLine": 111
+                                }
+                              },
+                              {
+                                "nodeType": "Arg",
+                                "value": {
+                                  "nodeType": "Scalar_LNumber",
+                                  "value": 8,
+                                  "attributes": {
+                                    "startLine": 111,
+                                    "endLine": 111,
+                                    "kind": 10
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 111,
+                                  "endLine": 111
+                                }
+                              }
+                            ],
+                            "attributes": {
+                              "startLine": 111,
+                              "endLine": 111
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 111,
+                            "endLine": 111
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 111,
+                          "endLine": 111
+                        }
+                      },
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "ic",
+                          "attributes": {
+                            "startLine": 112,
+                            "endLine": 112
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 112,
+                          "endLine": 112
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 109,
+                      "endLine": 113
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 109,
+                    "endLine": 113
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "message",
+                    "attributes": {
+                      "startLine": 114,
+                      "endLine": 114
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 114,
+                    "endLine": 114
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 108,
+                "endLine": 115
+              }
+            },
+            "attributes": {
+              "startLine": 108,
+              "endLine": 115
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 103,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n     * @internal You should not use this directly from another application\n     *\n     * @param string $message\n     * @param string $nonce\n     * @param string $key\n     * @param string $ic\n     * @return string\n     * @throws SodiumException\n     * @throws TypeError\n     */",
+              "line": 92,
+              "filePos": 2573,
+              "tokenPos": 416,
+              "endLine": 102,
+              "endFilePos": 2852,
+              "endTokenPos": 416
+            }
+          ],
+          "endLine": 116
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 10,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Class ParagonIE_Sodium_Core_XChaCha20\n */",
+          "line": 7,
+          "filePos": 84,
+          "tokenPos": 21,
+          "endLine": 9,
+          "endFilePos": 131,
+          "endTokenPos": 21
+        }
+      ],
+      "endLine": 117
+    }
+  }
+]

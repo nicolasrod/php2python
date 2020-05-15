@@ -1,0 +1,213 @@
+[
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "<div class=\"akismet-box\">\n\t<h2>",
+    "attributes": {
+      "startLine": 1,
+      "hasLeadingNewline": true,
+      "endLine": 2
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "esc_html_e"
+        ],
+        "attributes": {
+          "startLine": 2,
+          "endLine": 2
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Manual Configuration",
+            "attributes": {
+              "startLine": 2,
+              "endLine": 2,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 2,
+            "endLine": 2
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "akismet",
+            "attributes": {
+              "startLine": 2,
+              "endLine": 2,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 2,
+            "endLine": 2
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 2,
+        "endLine": 2
+      }
+    },
+    "attributes": {
+      "startLine": 2,
+      "endLine": 2
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</h2>\n\t<p>\n\t\t",
+    "attributes": {
+      "startLine": 2,
+      "hasLeadingNewline": false,
+      "endLine": 4
+    }
+  },
+  {
+    "nodeType": "Stmt_Echo",
+    "exprs": [
+      {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "sprintf"
+          ],
+          "attributes": {
+            "startLine": 7,
+            "endLine": 7
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "esc_html__"
+                ],
+                "attributes": {
+                  "startLine": 7,
+                  "endLine": 7
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "An Akismet API key has been defined in the %s file for this site.",
+                    "attributes": {
+                      "startLine": 7,
+                      "endLine": 7,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 7,
+                    "endLine": 7
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "akismet",
+                    "attributes": {
+                      "startLine": 7,
+                      "endLine": 7,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 7,
+                    "endLine": 7
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 7,
+                "endLine": 7
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 7,
+              "endLine": 7
+            }
+          },
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "<code>wp-config.php</code>",
+              "attributes": {
+                "startLine": 7,
+                "endLine": 7,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 7,
+              "endLine": 7
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 7,
+          "endLine": 7
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 7,
+      "comments": [
+        {
+          "nodeType": "Comment",
+          "text": "/* translators: %s is the wp-config.php file */",
+          "line": 6,
+          "filePos": 110,
+          "tokenPos": 17,
+          "endLine": 6,
+          "endFilePos": 156,
+          "endTokenPos": 17
+        }
+      ],
+      "endLine": 7
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\t</p>\n</div>",
+    "attributes": {
+      "startLine": 10,
+      "hasLeadingNewline": true,
+      "endLine": 11
+    }
+  }
+]

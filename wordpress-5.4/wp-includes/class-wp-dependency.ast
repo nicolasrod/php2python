@@ -1,0 +1,1292 @@
+[
+  {
+    "nodeType": "Stmt_Class",
+    "flags": 0,
+    "extends": null,
+    "implements": [],
+    "name": {
+      "nodeType": "Identifier",
+      "name": "_WP_Dependency",
+      "attributes": {
+        "startLine": 19,
+        "endLine": 19
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "handle",
+              "attributes": {
+                "startLine": 26,
+                "endLine": 26
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 26,
+              "endLine": 26
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 26,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * The handle name.\n\t *\n\t * @since 2.6.0\n\t * @var null\n\t */",
+              "line": 20,
+              "filePos": 284,
+              "tokenPos": 11,
+              "endLine": 25,
+              "endFilePos": 347,
+              "endTokenPos": 11
+            }
+          ],
+          "endLine": 26
+        }
+      },
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "src",
+              "attributes": {
+                "startLine": 34,
+                "endLine": 34
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 34,
+              "endLine": 34
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 34,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * The handle source.\n\t *\n\t * @since 2.6.0\n\t * @var null\n\t */",
+              "line": 28,
+              "filePos": 368,
+              "tokenPos": 18,
+              "endLine": 33,
+              "endFilePos": 433,
+              "endTokenPos": 18
+            }
+          ],
+          "endLine": 34
+        }
+      },
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "deps",
+              "attributes": {
+                "startLine": 42,
+                "endLine": 42
+              }
+            },
+            "default": {
+              "nodeType": "Expr_Array",
+              "items": [],
+              "attributes": {
+                "startLine": 42,
+                "endLine": 42,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 42,
+              "endLine": 42
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 42,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * An array of handle dependencies.\n\t *\n\t * @since 2.6.0\n\t * @var string[]\n\t */",
+              "line": 36,
+              "filePos": 451,
+              "tokenPos": 25,
+              "endLine": 41,
+              "endFilePos": 534,
+              "endTokenPos": 25
+            }
+          ],
+          "endLine": 42
+        }
+      },
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "ver",
+              "attributes": {
+                "startLine": 52,
+                "endLine": 52
+              }
+            },
+            "default": {
+              "nodeType": "Expr_ConstFetch",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "false"
+                ],
+                "attributes": {
+                  "startLine": 52,
+                  "endLine": 52
+                }
+              },
+              "attributes": {
+                "startLine": 52,
+                "endLine": 52
+              }
+            },
+            "attributes": {
+              "startLine": 52,
+              "endLine": 52
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 52,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * The handle version.\n\t *\n\t * Used for cache-busting.\n\t *\n\t * @since 2.6.0\n\t * @var bool|string\n\t */",
+              "line": 44,
+              "filePos": 563,
+              "tokenPos": 38,
+              "endLine": 51,
+              "endFilePos": 668,
+              "endTokenPos": 38
+            }
+          ],
+          "endLine": 52
+        }
+      },
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "args",
+              "attributes": {
+                "startLine": 60,
+                "endLine": 60
+              }
+            },
+            "default": {
+              "nodeType": "Expr_ConstFetch",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "null"
+                ],
+                "attributes": {
+                  "startLine": 60,
+                  "endLine": 60
+                }
+              },
+              "attributes": {
+                "startLine": 60,
+                "endLine": 60
+              }
+            },
+            "attributes": {
+              "startLine": 60,
+              "endLine": 60
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 60,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Additional arguments for the handle.\n\t *\n\t * @since 2.6.0\n\t * @var null\n\t */",
+              "line": 54,
+              "filePos": 694,
+              "tokenPos": 49,
+              "endLine": 59,
+              "endFilePos": 777,
+              "endTokenPos": 49
+            }
+          ],
+          "endLine": 60
+        }
+      },
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "extra",
+              "attributes": {
+                "startLine": 68,
+                "endLine": 68
+              }
+            },
+            "default": {
+              "nodeType": "Expr_Array",
+              "items": [],
+              "attributes": {
+                "startLine": 68,
+                "endLine": 68,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 68,
+              "endLine": 68
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 68,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "// Custom property, such as $in_footer or $media.\n",
+              "line": 60,
+              "filePos": 802,
+              "tokenPos": 60,
+              "endLine": 61,
+              "endFilePos": 851,
+              "endTokenPos": 60
+            },
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Extra data to supply to the handle.\n\t *\n\t * @since 2.6.0\n\t * @var array\n\t */",
+              "line": 62,
+              "filePos": 854,
+              "tokenPos": 62,
+              "endLine": 67,
+              "endFilePos": 937,
+              "endTokenPos": 62
+            }
+          ],
+          "endLine": 68
+        }
+      },
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "textdomain",
+              "attributes": {
+                "startLine": 76,
+                "endLine": 76
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 76,
+              "endLine": 76
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 76,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Translation textdomain set for this dependency.\n\t *\n\t * @since 5.0.0\n\t * @var string\n\t */",
+              "line": 70,
+              "filePos": 967,
+              "tokenPos": 75,
+              "endLine": 75,
+              "endFilePos": 1063,
+              "endTokenPos": 75
+            }
+          ],
+          "endLine": 76
+        }
+      },
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "translations_path",
+              "attributes": {
+                "startLine": 84,
+                "endLine": 84
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 84,
+              "endLine": 84
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 84,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Translation path set for this dependency.\n\t *\n\t * @since 5.0.0\n\t * @var string\n\t */",
+              "line": 78,
+              "filePos": 1088,
+              "tokenPos": 82,
+              "endLine": 83,
+              "endFilePos": 1178,
+              "endTokenPos": 82
+            }
+          ],
+          "endLine": 84
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "__construct",
+          "attributes": {
+            "startLine": 95,
+            "endLine": 95
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": true,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "args",
+              "attributes": {
+                "startLine": 95,
+                "endLine": 95
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 95,
+              "endLine": 95
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_List",
+                "items": [
+                  {
+                    "nodeType": "Expr_ArrayItem",
+                    "key": null,
+                    "value": {
+                      "nodeType": "Expr_PropertyFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "this",
+                        "attributes": {
+                          "startLine": 96,
+                          "endLine": 96
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "handle",
+                        "attributes": {
+                          "startLine": 96,
+                          "endLine": 96
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 96,
+                        "endLine": 96
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 96,
+                      "endLine": 96
+                    }
+                  },
+                  {
+                    "nodeType": "Expr_ArrayItem",
+                    "key": null,
+                    "value": {
+                      "nodeType": "Expr_PropertyFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "this",
+                        "attributes": {
+                          "startLine": 96,
+                          "endLine": 96
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "src",
+                        "attributes": {
+                          "startLine": 96,
+                          "endLine": 96
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 96,
+                        "endLine": 96
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 96,
+                      "endLine": 96
+                    }
+                  },
+                  {
+                    "nodeType": "Expr_ArrayItem",
+                    "key": null,
+                    "value": {
+                      "nodeType": "Expr_PropertyFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "this",
+                        "attributes": {
+                          "startLine": 96,
+                          "endLine": 96
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "deps",
+                        "attributes": {
+                          "startLine": 96,
+                          "endLine": 96
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 96,
+                        "endLine": 96
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 96,
+                      "endLine": 96
+                    }
+                  },
+                  {
+                    "nodeType": "Expr_ArrayItem",
+                    "key": null,
+                    "value": {
+                      "nodeType": "Expr_PropertyFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "this",
+                        "attributes": {
+                          "startLine": 96,
+                          "endLine": 96
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "ver",
+                        "attributes": {
+                          "startLine": 96,
+                          "endLine": 96
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 96,
+                        "endLine": 96
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 96,
+                      "endLine": 96
+                    }
+                  },
+                  {
+                    "nodeType": "Expr_ArrayItem",
+                    "key": null,
+                    "value": {
+                      "nodeType": "Expr_PropertyFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "this",
+                        "attributes": {
+                          "startLine": 96,
+                          "endLine": 96
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "args",
+                        "attributes": {
+                          "startLine": 96,
+                          "endLine": 96
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 96,
+                        "endLine": 96
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 96,
+                      "endLine": 96
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 96,
+                  "endLine": 96
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Variable",
+                "name": "args",
+                "attributes": {
+                  "startLine": 96,
+                  "endLine": 96
+                }
+              },
+              "attributes": {
+                "startLine": 96,
+                "endLine": 96
+              }
+            },
+            "attributes": {
+              "startLine": 96,
+              "endLine": 96
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BooleanNot",
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "is_array"
+                  ],
+                  "attributes": {
+                    "startLine": 97,
+                    "endLine": 97
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_PropertyFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "this",
+                        "attributes": {
+                          "startLine": 97,
+                          "endLine": 97
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "deps",
+                        "attributes": {
+                          "startLine": 97,
+                          "endLine": 97
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 97,
+                        "endLine": 97
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 97,
+                      "endLine": 97
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 97,
+                  "endLine": 97
+                }
+              },
+              "attributes": {
+                "startLine": 97,
+                "endLine": 97
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_PropertyFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "this",
+                      "attributes": {
+                        "startLine": 98,
+                        "endLine": 98
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "deps",
+                      "attributes": {
+                        "startLine": 98,
+                        "endLine": 98
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 98,
+                      "endLine": 98
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_Array",
+                    "items": [],
+                    "attributes": {
+                      "startLine": 98,
+                      "endLine": 98,
+                      "kind": 1
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 98,
+                    "endLine": 98
+                  }
+                },
+                "attributes": {
+                  "startLine": 98,
+                  "endLine": 98
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 97,
+              "endLine": 99
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 95,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Setup dependencies.\n\t *\n\t * @since 2.6.0\n\t * @since 5.3.0 Formalized the existing `...$args` parameter by adding it\n\t *              to the function signature.\n\t *\n\t * @param ...$args Dependency information.\n\t */",
+              "line": 86,
+              "filePos": 1210,
+              "tokenPos": 89,
+              "endLine": 94,
+              "endFilePos": 1429,
+              "endTokenPos": 89
+            }
+          ],
+          "endLine": 100
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "add_data",
+          "attributes": {
+            "startLine": 111,
+            "endLine": 111
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "name",
+              "attributes": {
+                "startLine": 111,
+                "endLine": 111
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 111,
+              "endLine": 111
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "data",
+              "attributes": {
+                "startLine": 111,
+                "endLine": 111
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 111,
+              "endLine": 111
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BooleanNot",
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "is_scalar"
+                  ],
+                  "attributes": {
+                    "startLine": 112,
+                    "endLine": 112
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "name",
+                      "attributes": {
+                        "startLine": 112,
+                        "endLine": 112
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 112,
+                      "endLine": 112
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 112,
+                  "endLine": 112
+                }
+              },
+              "attributes": {
+                "startLine": 112,
+                "endLine": 112
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Return",
+                "expr": {
+                  "nodeType": "Expr_ConstFetch",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "false"
+                    ],
+                    "attributes": {
+                      "startLine": 113,
+                      "endLine": 113
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 113,
+                    "endLine": 113
+                  }
+                },
+                "attributes": {
+                  "startLine": 113,
+                  "endLine": 113
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 112,
+              "endLine": 114
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_PropertyFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "this",
+                    "attributes": {
+                      "startLine": 115,
+                      "endLine": 115
+                    }
+                  },
+                  "name": {
+                    "nodeType": "Identifier",
+                    "name": "extra",
+                    "attributes": {
+                      "startLine": 115,
+                      "endLine": 115
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 115,
+                    "endLine": 115
+                  }
+                },
+                "dim": {
+                  "nodeType": "Expr_Variable",
+                  "name": "name",
+                  "attributes": {
+                    "startLine": 115,
+                    "endLine": 115
+                  }
+                },
+                "attributes": {
+                  "startLine": 115,
+                  "endLine": 115
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Variable",
+                "name": "data",
+                "attributes": {
+                  "startLine": 115,
+                  "endLine": 115
+                }
+              },
+              "attributes": {
+                "startLine": 115,
+                "endLine": 115
+              }
+            },
+            "attributes": {
+              "startLine": 115,
+              "endLine": 115
+            }
+          },
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_ConstFetch",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "true"
+                ],
+                "attributes": {
+                  "startLine": 116,
+                  "endLine": 116
+                }
+              },
+              "attributes": {
+                "startLine": 116,
+                "endLine": 116
+              }
+            },
+            "attributes": {
+              "startLine": 116,
+              "endLine": 116
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 111,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Add handle data.\n\t *\n\t * @since 2.6.0\n\t *\n\t * @param string $name The data key to add.\n\t * @param mixed  $data The data value to add.\n\t * @return bool False if not scalar, true otherwise.\n\t */",
+              "line": 102,
+              "filePos": 1629,
+              "tokenPos": 173,
+              "endLine": 110,
+              "endFilePos": 1828,
+              "endTokenPos": 173
+            }
+          ],
+          "endLine": 117
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "set_translations",
+          "attributes": {
+            "startLine": 128,
+            "endLine": 128
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "domain",
+              "attributes": {
+                "startLine": 128,
+                "endLine": 128
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 128,
+              "endLine": 128
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "path",
+              "attributes": {
+                "startLine": 128,
+                "endLine": 128
+              }
+            },
+            "default": {
+              "nodeType": "Expr_ConstFetch",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "null"
+                ],
+                "attributes": {
+                  "startLine": 128,
+                  "endLine": 128
+                }
+              },
+              "attributes": {
+                "startLine": 128,
+                "endLine": 128
+              }
+            },
+            "attributes": {
+              "startLine": 128,
+              "endLine": 128
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BooleanNot",
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "is_string"
+                  ],
+                  "attributes": {
+                    "startLine": 129,
+                    "endLine": 129
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "domain",
+                      "attributes": {
+                        "startLine": 129,
+                        "endLine": 129
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 129,
+                      "endLine": 129
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 129,
+                  "endLine": 129
+                }
+              },
+              "attributes": {
+                "startLine": 129,
+                "endLine": 129
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Return",
+                "expr": {
+                  "nodeType": "Expr_ConstFetch",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "false"
+                    ],
+                    "attributes": {
+                      "startLine": 130,
+                      "endLine": 130
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 130,
+                    "endLine": 130
+                  }
+                },
+                "attributes": {
+                  "startLine": 130,
+                  "endLine": 130
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 129,
+              "endLine": 131
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_PropertyFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "this",
+                  "attributes": {
+                    "startLine": 132,
+                    "endLine": 132
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "textdomain",
+                  "attributes": {
+                    "startLine": 132,
+                    "endLine": 132
+                  }
+                },
+                "attributes": {
+                  "startLine": 132,
+                  "endLine": 132
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Variable",
+                "name": "domain",
+                "attributes": {
+                  "startLine": 132,
+                  "endLine": 132
+                }
+              },
+              "attributes": {
+                "startLine": 132,
+                "endLine": 132
+              }
+            },
+            "attributes": {
+              "startLine": 132,
+              "endLine": 132
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_PropertyFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "this",
+                  "attributes": {
+                    "startLine": 133,
+                    "endLine": 133
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "translations_path",
+                  "attributes": {
+                    "startLine": 133,
+                    "endLine": 133
+                  }
+                },
+                "attributes": {
+                  "startLine": 133,
+                  "endLine": 133
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Variable",
+                "name": "path",
+                "attributes": {
+                  "startLine": 133,
+                  "endLine": 133
+                }
+              },
+              "attributes": {
+                "startLine": 133,
+                "endLine": 133
+              }
+            },
+            "attributes": {
+              "startLine": 133,
+              "endLine": 133
+            }
+          },
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_ConstFetch",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "true"
+                ],
+                "attributes": {
+                  "startLine": 134,
+                  "endLine": 134
+                }
+              },
+              "attributes": {
+                "startLine": 134,
+                "endLine": 134
+              }
+            },
+            "attributes": {
+              "startLine": 134,
+              "endLine": 134
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 128,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Sets the translation domain for this dependency.\n\t *\n\t * @since 5.0.0\n\t *\n\t * @param string $domain The translation textdomain.\n\t * @param string $path   Optional. The full file path to the directory containing translation files.\n\t * @return bool False if $domain is not a string, true otherwise.\n\t */",
+              "line": 119,
+              "filePos": 1980,
+              "tokenPos": 236,
+              "endLine": 127,
+              "endFilePos": 2288,
+              "endTokenPos": 236
+            }
+          ],
+          "endLine": 135
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 19,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Dependencies API: _WP_Dependency class\n *\n * @since 4.7.0\n *\n * @package WordPress\n * @subpackage Dependencies\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 9,
+          "endFilePos": 126,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Class _WP_Dependency\n *\n * Helper class to register a handle and associated data.\n *\n * @access private\n * @since 2.6.0\n */",
+          "line": 11,
+          "filePos": 129,
+          "tokenPos": 3,
+          "endLine": 18,
+          "endFilePos": 258,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 136
+    }
+  }
+]

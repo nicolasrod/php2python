@@ -1,0 +1,4465 @@
+[
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Scalar_MagicConst_Dir",
+          "attributes": {
+            "startLine": 10,
+            "endLine": 10
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/admin.php",
+          "attributes": {
+            "startLine": 10,
+            "endLine": 10,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 10,
+          "endLine": 10
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 10,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/**\n * About This Version administration panel.\n *\n * @package WordPress\n * @subpackage Administration\n */",
+            "line": 2,
+            "filePos": 6,
+            "tokenPos": 1,
+            "endLine": 7,
+            "endFilePos": 111,
+            "endTokenPos": 1
+          },
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** WordPress Administration Bootstrap */",
+            "line": 9,
+            "filePos": 114,
+            "tokenPos": 3,
+            "endLine": 9,
+            "endFilePos": 154,
+            "endTokenPos": 3
+          }
+        ],
+        "endLine": 10
+      }
+    },
+    "attributes": {
+      "startLine": 10,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * About This Version administration panel.\n *\n * @package WordPress\n * @subpackage Administration\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 7,
+          "endFilePos": 111,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** WordPress Administration Bootstrap */",
+          "line": 9,
+          "filePos": 114,
+          "tokenPos": 3,
+          "endLine": 9,
+          "endFilePos": 154,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 10
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Assign",
+      "var": {
+        "nodeType": "Expr_Variable",
+        "name": "title",
+        "attributes": {
+          "startLine": 13,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "/* translators: Page title of the About WordPress page in the admin. */",
+              "line": 12,
+              "filePos": 194,
+              "tokenPos": 14,
+              "endLine": 12,
+              "endFilePos": 264,
+              "endTokenPos": 14
+            }
+          ],
+          "endLine": 13
+        }
+      },
+      "expr": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "_x"
+          ],
+          "attributes": {
+            "startLine": 13,
+            "endLine": 13
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "About",
+              "attributes": {
+                "startLine": 13,
+                "endLine": 13,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 13,
+              "endLine": 13
+            }
+          },
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "page title",
+              "attributes": {
+                "startLine": 13,
+                "endLine": 13,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 13,
+              "endLine": 13
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 13,
+          "endLine": 13
+        }
+      },
+      "attributes": {
+        "startLine": 13,
+        "comments": [
+          {
+            "nodeType": "Comment",
+            "text": "/* translators: Page title of the About WordPress page in the admin. */",
+            "line": 12,
+            "filePos": 194,
+            "tokenPos": 14,
+            "endLine": 12,
+            "endFilePos": 264,
+            "endTokenPos": 14
+          }
+        ],
+        "endLine": 13
+      }
+    },
+    "attributes": {
+      "startLine": 13,
+      "comments": [
+        {
+          "nodeType": "Comment",
+          "text": "/* translators: Page title of the About WordPress page in the admin. */",
+          "line": 12,
+          "filePos": 194,
+          "tokenPos": 14,
+          "endLine": 12,
+          "endFilePos": 264,
+          "endTokenPos": 14
+        }
+      ],
+      "endLine": 13
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Assign",
+      "var": {
+        "nodeType": "Expr_List",
+        "items": [
+          {
+            "nodeType": "Expr_ArrayItem",
+            "key": null,
+            "value": {
+              "nodeType": "Expr_Variable",
+              "name": "display_version",
+              "attributes": {
+                "startLine": 15,
+                "endLine": 15
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 15,
+              "endLine": 15
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 15,
+          "endLine": 15
+        }
+      },
+      "expr": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "explode"
+          ],
+          "attributes": {
+            "startLine": 15,
+            "endLine": 15
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "-",
+              "attributes": {
+                "startLine": 15,
+                "endLine": 15,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 15,
+              "endLine": 15
+            }
+          },
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "get_bloginfo"
+                ],
+                "attributes": {
+                  "startLine": 15,
+                  "endLine": 15
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "version",
+                    "attributes": {
+                      "startLine": 15,
+                      "endLine": 15,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 15,
+                    "endLine": 15
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 15,
+                "endLine": 15
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 15,
+              "endLine": 15
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 15,
+          "endLine": 15
+        }
+      },
+      "attributes": {
+        "startLine": 15,
+        "endLine": 15
+      }
+    },
+    "attributes": {
+      "startLine": 15,
+      "endLine": 15
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_ConstFetch",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "ABSPATH"
+            ],
+            "attributes": {
+              "startLine": 17,
+              "endLine": 17
+            }
+          },
+          "attributes": {
+            "startLine": 17,
+            "endLine": 17
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "wp-admin/admin-header.php",
+          "attributes": {
+            "startLine": 17,
+            "endLine": 17,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 17,
+          "endLine": 17
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 17,
+        "endLine": 17
+      }
+    },
+    "attributes": {
+      "startLine": 17,
+      "endLine": 17
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\t<div class=\"wrap about__container\">\n\n\t\t<div class=\"about__header\">\n\t\t\t<div class=\"about__header-title\">\n\t\t\t\t<p>\n\t\t\t\t\t",
+    "attributes": {
+      "startLine": 19,
+      "hasLeadingNewline": true,
+      "endLine": 24
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 24,
+          "endLine": 24
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "WordPress",
+            "attributes": {
+              "startLine": 24,
+              "endLine": 24,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 24,
+            "endLine": 24
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 24,
+        "endLine": 24
+      }
+    },
+    "attributes": {
+      "startLine": 24,
+      "endLine": 24
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\t\t\t\t\t<span>",
+    "attributes": {
+      "startLine": 25,
+      "hasLeadingNewline": true,
+      "endLine": 25
+    }
+  },
+  {
+    "nodeType": "Stmt_Echo",
+    "exprs": [
+      {
+        "nodeType": "Expr_Variable",
+        "name": "display_version",
+        "attributes": {
+          "startLine": 25,
+          "endLine": 25
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 25,
+      "endLine": 25
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</span>\n\t\t\t\t</p>\n\t\t\t</div>\n\n\t\t\t<div class=\"about__header-text\">\n\t\t\t\t<p>\n\t\t\t\t\t",
+    "attributes": {
+      "startLine": 25,
+      "hasLeadingNewline": false,
+      "endLine": 31
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 31,
+          "endLine": 31
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Building more with blocks, faster and easier.",
+            "attributes": {
+              "startLine": 31,
+              "endLine": 31,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 31,
+            "endLine": 31
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 31,
+        "endLine": 31
+      }
+    },
+    "attributes": {
+      "startLine": 31,
+      "endLine": 31
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\t\t\t\t</p>\n\t\t\t</div>\n\n\t\t\t<nav class=\"about__header-navigation nav-tab-wrapper wp-clearfix\" aria-label=\"",
+    "attributes": {
+      "startLine": 32,
+      "hasLeadingNewline": true,
+      "endLine": 35
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "esc_attr_e"
+        ],
+        "attributes": {
+          "startLine": 35,
+          "endLine": 35
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Secondary menu",
+            "attributes": {
+              "startLine": 35,
+              "endLine": 35,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 35,
+            "endLine": 35
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 35,
+        "endLine": 35
+      }
+    },
+    "attributes": {
+      "startLine": 35,
+      "endLine": 35
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\">\n\t\t\t\t<a href=\"about.php\" class=\"nav-tab nav-tab-active\" aria-current=\"page\">",
+    "attributes": {
+      "startLine": 35,
+      "hasLeadingNewline": false,
+      "endLine": 36
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 36,
+          "endLine": 36
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "What&#8217;s New",
+            "attributes": {
+              "startLine": 36,
+              "endLine": 36,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 36,
+            "endLine": 36
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 36,
+        "endLine": 36
+      }
+    },
+    "attributes": {
+      "startLine": 36,
+      "endLine": 36
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</a>\n\t\t\t\t<a href=\"credits.php\" class=\"nav-tab\">",
+    "attributes": {
+      "startLine": 36,
+      "hasLeadingNewline": false,
+      "endLine": 37
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 37,
+          "endLine": 37
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Credits",
+            "attributes": {
+              "startLine": 37,
+              "endLine": 37,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 37,
+            "endLine": 37
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 37,
+        "endLine": 37
+      }
+    },
+    "attributes": {
+      "startLine": 37,
+      "endLine": 37
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</a>\n\t\t\t\t<a href=\"freedoms.php\" class=\"nav-tab\">",
+    "attributes": {
+      "startLine": 37,
+      "hasLeadingNewline": false,
+      "endLine": 38
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 38,
+          "endLine": 38
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Freedoms",
+            "attributes": {
+              "startLine": 38,
+              "endLine": 38,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 38,
+            "endLine": 38
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 38,
+        "endLine": 38
+      }
+    },
+    "attributes": {
+      "startLine": 38,
+      "endLine": 38
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</a>\n\t\t\t\t<a href=\"privacy.php\" class=\"nav-tab\">",
+    "attributes": {
+      "startLine": 38,
+      "hasLeadingNewline": false,
+      "endLine": 39
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 39,
+          "endLine": 39
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Privacy",
+            "attributes": {
+              "startLine": 39,
+              "endLine": 39,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 39,
+            "endLine": 39
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 39,
+        "endLine": 39
+      }
+    },
+    "attributes": {
+      "startLine": 39,
+      "endLine": 39
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</a>\n\t\t\t</nav>\n\t\t</div>\n\n\t\t<div class=\"about__section is-feature has-accent-background-color\">\n\t\t\t<h1>",
+    "attributes": {
+      "startLine": 39,
+      "hasLeadingNewline": false,
+      "endLine": 44
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 44,
+          "endLine": 44
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Say hello to more and better.",
+            "attributes": {
+              "startLine": 44,
+              "endLine": 44,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 44,
+            "endLine": 44
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 44,
+        "endLine": 44
+      }
+    },
+    "attributes": {
+      "startLine": 44,
+      "endLine": 44
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</h1>\n\n\t\t\t<p>",
+    "attributes": {
+      "startLine": 44,
+      "hasLeadingNewline": false,
+      "endLine": 46
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 46,
+          "endLine": 46
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "More ways to make your pages come alive. With easier ways to get it all done and looking better than ever&mdash;and boosts in speed you can feel.",
+            "attributes": {
+              "startLine": 46,
+              "endLine": 46,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 46,
+            "endLine": 46
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 46,
+        "endLine": 46
+      }
+    },
+    "attributes": {
+      "startLine": 46,
+      "endLine": 46
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</p>\n\t\t</div>\n\n\t\t<hr />\n\n\t\t<div class=\"about__section has-2-columns has-subtle-background-color\">\n\t\t\t<h2 class=\"is-section-header\">\n\t\t\t\t",
+    "attributes": {
+      "startLine": 46,
+      "hasLeadingNewline": false,
+      "endLine": 53
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "printf"
+        ],
+        "attributes": {
+          "startLine": 54,
+          "endLine": 54
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "__"
+              ],
+              "attributes": {
+                "startLine": 56,
+                "comments": [
+                  {
+                    "nodeType": "Comment",
+                    "text": "/* translators: %s: The current WordPress version number. */",
+                    "line": 55,
+                    "filePos": 1715,
+                    "tokenPos": 179,
+                    "endLine": 55,
+                    "endFilePos": 1774,
+                    "endTokenPos": 179
+                  }
+                ],
+                "endLine": 56
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "Welcome to WordPress %s.",
+                  "attributes": {
+                    "startLine": 56,
+                    "endLine": 56,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 56,
+                  "endLine": 56
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 56,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "/* translators: %s: The current WordPress version number. */",
+                  "line": 55,
+                  "filePos": 1715,
+                  "tokenPos": 179,
+                  "endLine": 55,
+                  "endFilePos": 1774,
+                  "endTokenPos": 179
+                }
+              ],
+              "endLine": 56
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 56,
+            "comments": [
+              {
+                "nodeType": "Comment",
+                "text": "/* translators: %s: The current WordPress version number. */",
+                "line": 55,
+                "filePos": 1715,
+                "tokenPos": 179,
+                "endLine": 55,
+                "endFilePos": 1774,
+                "endTokenPos": 179
+              }
+            ],
+            "endLine": 56
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_Variable",
+            "name": "display_version",
+            "attributes": {
+              "startLine": 57,
+              "endLine": 57
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 57,
+            "endLine": 57
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 54,
+        "endLine": 58
+      }
+    },
+    "attributes": {
+      "startLine": 54,
+      "endLine": 58
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\t\t\t</h2>\n\t\t\t<div class=\"column\">\n\t\t\t\t<p>\n\t\t\t\t\t",
+    "attributes": {
+      "startLine": 60,
+      "hasLeadingNewline": true,
+      "endLine": 63
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 63,
+          "endLine": 63
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Every major release adds more to the block editor.",
+            "attributes": {
+              "startLine": 63,
+              "endLine": 63,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 63,
+            "endLine": 63
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 63,
+        "endLine": 63
+      }
+    },
+    "attributes": {
+      "startLine": 63,
+      "endLine": 63
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\t\t\t\t</p>\n\t\t\t\t<p>\n\t\t\t\t\t",
+    "attributes": {
+      "startLine": 64,
+      "hasLeadingNewline": true,
+      "endLine": 66
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 66,
+          "endLine": 66
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "More ways to make posts and pages come alive with your best images.",
+            "attributes": {
+              "startLine": 66,
+              "endLine": 66,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 66,
+            "endLine": 66
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 66,
+        "endLine": 66
+      }
+    },
+    "attributes": {
+      "startLine": 66,
+      "endLine": 66
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\t\t\t\t\t",
+    "attributes": {
+      "startLine": 67,
+      "hasLeadingNewline": true,
+      "endLine": 67
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 67,
+          "endLine": 67
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "More ways to bring your visitors in, and keep them engaged, with the richness of embedded media from the web&#8217;s top services.",
+            "attributes": {
+              "startLine": 67,
+              "endLine": 67,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 67,
+            "endLine": 67
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 67,
+        "endLine": 67
+      }
+    },
+    "attributes": {
+      "startLine": 67,
+      "endLine": 67
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\t\t\t\t</p>\n\t\t\t</div>\n\t\t\t<div class=\"column\">\n\t\t\t\t<p>\n\t\t\t\t\t",
+    "attributes": {
+      "startLine": 68,
+      "hasLeadingNewline": true,
+      "endLine": 72
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 72,
+          "endLine": 72
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "More ways to make your vision real, and put blocks in the perfect place&mdash;even if a particular kind of block is new to you. More efficient processes.",
+            "attributes": {
+              "startLine": 72,
+              "endLine": 72,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 72,
+            "endLine": 72
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 72,
+        "endLine": 72
+      }
+    },
+    "attributes": {
+      "startLine": 72,
+      "endLine": 72
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\t\t\t\t</p>\n\t\t\t\t<p>\n\t\t\t\t\t",
+    "attributes": {
+      "startLine": 73,
+      "hasLeadingNewline": true,
+      "endLine": 75
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 75,
+          "endLine": 75
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "And more speed everywhere, so as you build sections or galleries, or just type in a line of prose, you can feel how much faster your work flows.",
+            "attributes": {
+              "startLine": 75,
+              "endLine": 75,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 75,
+            "endLine": 75
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 75,
+        "endLine": 75
+      }
+    },
+    "attributes": {
+      "startLine": 75,
+      "endLine": 75
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\t\t\t\t</p>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<hr />\n\n\t\t<div class=\"about__section has-2-columns\">\n\t\t\t<div class=\"column is-edge-to-edge\">\n\t\t\t\t<div class=\"about__image aligncenter\">\n\t\t\t\t\t<img src=\"data:image/svg+xml;charset=utf8,%3Csvg width='500' height='500' viewbox='0 0 500 500' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23F3F4F5' d='M0 0h500v500H0z'/%3E%3Cpath d='M346.7 37.645s100.5-2.8 102.6 0c2.1 2.8 0 124.999 0 124.999l-106.9 2.8 4.3-127.8z' fill='%232CA8EB'/%3E%3Cpath d='M343.5 185.844s100.5-1.9 102.6 0c2.1 1.9 1.1 125.9 4.3 127.8 3.2 1.9-100.5 1.9-104.8 2.8-4.3.9-2.1-130.6-2.1-130.6z' fill='%237CAED2'/%3E%3Cpath d='M195.6 186.744s102.7 2.8 106.9 2.8c4.2 0 7.4 120.4 4.2 122.2-3.2 1.9-106.9 2.8-106.9 2.8s2.1-126.9-4.2-127.8z' fill='%2381A4D4'/%3E%3Cpath d='M152.8 192.344s2.1 124.1 4.3 126.9c2.1 2.7-109.1 1.8-109.1 1.8v-128.7h104.8z' fill='%235DC3D8'/%3E%3Cpath d='M152 464.544H56v-119.8l101-1.7s-8.9 118-5 121.5z' fill='%230574E2'/%3E%3Cpath d='M195 35.844h101.6s-8.6 119.4 0 125c8.6 5.6-101.6 3.7-101.6 3.7v-128.7z' fill='%23216BCE'/%3E%3Cpath d='M302.3 463.844s-102.9 2.8-105.1 0c-2.2-2.8 0-125 0-125l109.5-2.8-4.4 127.8z' fill='%231C99D1'/%3E%3Cpath d='M346.2 464.544s-2.1-124.1-4.3-126.9c-2.1-2.8 109.1-1.9 109.1-1.9v128.7H346.2v.1z' fill='%231B44DD'/%3E%3Cpath d='M50.2 35.844s100.5-1.9 102.6 0c2.1 1.9 1.1 125.9 4.3 127.8 3.2 1.9-100.5 1.9-104.8 2.8-4.3.9-2.1-130.6-2.1-130.6z' fill='%231B36BC'/%3E%3C/svg%3E\" alt=\"\" />\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"column is-vertically-aligned-center\">\n\t\t\t\t<h2>",
+    "attributes": {
+      "startLine": 76,
+      "hasLeadingNewline": true,
+      "endLine": 89
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 89,
+          "endLine": 89
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Two new blocks. And better blocks overall.",
+            "attributes": {
+              "startLine": 89,
+              "endLine": 89,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 89,
+            "endLine": 89
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 89,
+        "endLine": 89
+      }
+    },
+    "attributes": {
+      "startLine": 89,
+      "endLine": 89
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</h2>\n\t\t\t\t<ul>\n\t\t\t\t\t<li>",
+    "attributes": {
+      "startLine": 89,
+      "hasLeadingNewline": false,
+      "endLine": 91
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 91,
+          "endLine": 91
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Two brand-new blocks: Social Icons and Buttons make adding interactive features fast and easy.",
+            "attributes": {
+              "startLine": 91,
+              "endLine": 91,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 91,
+            "endLine": 91
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 91,
+        "endLine": 91
+      }
+    },
+    "attributes": {
+      "startLine": 91,
+      "endLine": 91
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</li>\n\t\t\t\t\t<li>",
+    "attributes": {
+      "startLine": 91,
+      "hasLeadingNewline": false,
+      "endLine": 92
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 92,
+          "endLine": 92
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "New ways with color: Gradients in the Buttons and Cover block, toolbar access to color options in Rich Text blocks, and for the first time, color options in the Group and Columns blocks.",
+            "attributes": {
+              "startLine": 92,
+              "endLine": 92,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 92,
+            "endLine": 92
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 92,
+        "endLine": 92
+      }
+    },
+    "attributes": {
+      "startLine": 92,
+      "endLine": 92
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</li>\n\t\t\t\t\t<li>",
+    "attributes": {
+      "startLine": 92,
+      "hasLeadingNewline": false,
+      "endLine": 93
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 93,
+          "endLine": 93
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Guess a whole lot less! Version 5.4 streamlines the whole process for placing and replacing multimedia in every block. Now it works the same way in almost every block!",
+            "attributes": {
+              "startLine": 93,
+              "endLine": 93,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 93,
+            "endLine": 93
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 93,
+        "endLine": 93
+      }
+    },
+    "attributes": {
+      "startLine": 93,
+      "endLine": 93
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</li>\n\t\t\t\t\t<li>",
+    "attributes": {
+      "startLine": 93,
+      "hasLeadingNewline": false,
+      "endLine": 94
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 94,
+          "endLine": 94
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "And if you&#8217;ve ever thought your image in the Media+Text block should link to something else&mdash;perhaps a picture of a brochure should download that brochure as a document? Well, now it can.",
+            "attributes": {
+              "startLine": 94,
+              "endLine": 94,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 94,
+            "endLine": 94
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 94,
+        "endLine": 94
+      }
+    },
+    "attributes": {
+      "startLine": 94,
+      "endLine": 94
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</li>\n\t\t\t\t</ul>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"about__section has-2-columns\">\n\t\t\t<div class=\"column is-vertically-aligned-center\">\n\t\t\t\t<h2>",
+    "attributes": {
+      "startLine": 94,
+      "hasLeadingNewline": false,
+      "endLine": 101
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 101,
+          "endLine": 101
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Cleaner UI, clearer navigation\u00e2\u0080\u0094and easier tabbing!",
+            "attributes": {
+              "startLine": 101,
+              "endLine": 101,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 101,
+            "endLine": 101
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 101,
+        "endLine": 101
+      }
+    },
+    "attributes": {
+      "startLine": 101,
+      "endLine": 101
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</h2>\n\t\t\t\t<ul>\n\t\t\t\t\t<li>",
+    "attributes": {
+      "startLine": 101,
+      "hasLeadingNewline": false,
+      "endLine": 103
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 103,
+          "endLine": 103
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Clearer block navigation with block breadcrumbs. And easier selection once you get there.",
+            "attributes": {
+              "startLine": 103,
+              "endLine": 103,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 103,
+            "endLine": 103
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 103,
+        "endLine": 103
+      }
+    },
+    "attributes": {
+      "startLine": 103,
+      "endLine": 103
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</li>\n\t\t\t\t\t<li>",
+    "attributes": {
+      "startLine": 103,
+      "hasLeadingNewline": false,
+      "endLine": 104
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 104,
+          "endLine": 104
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "For when you need to navigate with the keyboard, better tabbing and focus. Plus, you can tab over to the sidebar of nearly any block.",
+            "attributes": {
+              "startLine": 104,
+              "endLine": 104,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 104,
+            "endLine": 104
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 104,
+        "endLine": 104
+      }
+    },
+    "attributes": {
+      "startLine": 104,
+      "endLine": 104
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</li>\n\t\t\t\t\t<li>",
+    "attributes": {
+      "startLine": 104,
+      "hasLeadingNewline": false,
+      "endLine": 105
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 105,
+          "endLine": 105
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Speed! 14% faster loading of the editor, 51% faster time-to-type!",
+            "attributes": {
+              "startLine": 105,
+              "endLine": 105,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 105,
+            "endLine": 105
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 105,
+        "endLine": 105
+      }
+    },
+    "attributes": {
+      "startLine": 105,
+      "endLine": 105
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</li>\n\t\t\t\t\t<li>",
+    "attributes": {
+      "startLine": 105,
+      "hasLeadingNewline": false,
+      "endLine": 106
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 106,
+          "endLine": 106
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Tips are gone. In their place, a Welcome Guide window you can bring up when you need it&mdash;and only when you need it&mdash;again and again.",
+            "attributes": {
+              "startLine": 106,
+              "endLine": 106,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 106,
+            "endLine": 106
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 106,
+        "endLine": 106
+      }
+    },
+    "attributes": {
+      "startLine": 106,
+      "endLine": 106
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</li>\n\t\t\t\t\t<li>",
+    "attributes": {
+      "startLine": 106,
+      "hasLeadingNewline": false,
+      "endLine": 107
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 107,
+          "endLine": 107
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Know at a glance whether you&#8217;re in a block&#8217;s Edit or Navigation mode. Or, if you have restricted vision, your screen reader will tell you which mode you&#8217;re in.",
+            "attributes": {
+              "startLine": 107,
+              "endLine": 107,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 107,
+            "endLine": 107
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 107,
+        "endLine": 107
+      }
+    },
+    "attributes": {
+      "startLine": 107,
+      "endLine": 107
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</li>\n\t\t\t\t</ul>\n\t\t\t\t<p>",
+    "attributes": {
+      "startLine": 107,
+      "hasLeadingNewline": false,
+      "endLine": 109
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 109,
+          "endLine": 109
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Of course, if you want to work with the very latest tools and features, install the <a href=\"https://wordpress.org/plugins/gutenberg/\">Gutenberg plugin</a>. You&#8217;ll get to be the first to use new and exciting features in the block editor, before anyone else has seen them!",
+            "attributes": {
+              "startLine": 109,
+              "endLine": 109,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 109,
+            "endLine": 109
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 109,
+        "endLine": 109
+      }
+    },
+    "attributes": {
+      "startLine": 109,
+      "endLine": 109
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</p>\n\t\t\t</div>\n\t\t\t<div class=\"column is-edge-to-edge\">\n\t\t\t\t<div class=\"about__image aligncenter\">\n\t\t\t\t\t<img src=\"data:image/svg+xml;charset=utf8,%3Csvg width='500' height='500' viewbox='0 0 500 500' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23F3F4F5' d='M0 0h500v500H0z'/%3E%3Cg clip-path='url(%23clip0)'%3E%3Cpath d='M169.6 171.55l-.3 72.3 330.7-1v-72.6l-330.4 1.3z' fill='%230740B3'/%3E%3Cpath d='M291.2 97.85l-1.3-14.8-63.4-.7v76c0 3.6 176.7 4.1 273.5 4.1v-64.5H291.2v-.1z' fill='%230285D7'/%3E%3Cpath d='M500 27.75l-215.5-5.9 5.4 61.2 210.1 2.5v-57.8z' fill='%231730E5'/%3E%3Cpath d='M500 97.85v-12.3l-210.1-2.5 1.3 14.8H500z' fill='%230285D7'/%3E%3Cpath d='M500 97.85v-12.3l-210.1-2.5 1.3 14.8H500z' fill='%231730E5' style='mix-blend-mode:multiply'/%3E%3Cpath d='M255.2 379.75l-1-49.2-229.2.3-2 69.7 477-1.3v-24.3l-244.8 4.8z' fill='%230285D7'/%3E%3Cpath d='M500 424.35v-15l-430.8 1.2-4 51.5 134.6-.5v-34.4c.1-2.8 214.4-2.9 300.2-2.8z' fill='%230878FF'/%3E%3Cpath d='M500 290.05l-246.4 4.3.6 36.2 245.8-.3v-40.2z' fill='%23072CF0'/%3E%3Cpath d='M500 374.95v-44.7l-245.8.3 1 49.2 244.8-4.8z' fill='%230285D7'/%3E%3Cpath d='M500 374.95v-44.7l-245.8.3 1 49.2 244.8-4.8z' fill='%23072CF0' style='mix-blend-mode:multiply'/%3E%3Cpath d='M199.9 461.55v17.6l300.1-2.4v-16.3l-300.1 1.1z' fill='%230285D7'/%3E%3Cpath d='M500 424.35c-85.8-.1-300.1 0-300.1 2.8v34.4l300.1-1.1v-36.1z' fill='%230878FF'/%3E%3Cpath d='M500 424.35c-85.8-.1-300.1 0-300.1 2.8v34.4l300.1-1.1v-36.1z' fill='%230285D7' style='mix-blend-mode:multiply'/%3E%3C/g%3E%3Cdefs%3E%3CclipPath id='clip0'%3E%3Cpath transform='rotate(-90 23 479.15)' fill='%23fff' d='M23 479.15h457.3v477H23z'/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E\" alt=\"\">\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<div class=\"about__section has-2-columns\">\n\t\t\t<div class=\"column is-edge-to-edge\">\n\t\t\t\t<div class=\"about__image aligncenter\">\n\t\t\t\t\t<img src=\"data:image/svg+xml;charset=utf8,%3Csvg width='500' height='500' viewbox='0 0 500 500' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23F3F4F5' d='M0 0h500v500H0z'/%3E%3Cpath d='M31.3 284.4c-2-.1 12.2-250.6 12.2-250.6s94.8 4.4 99.7 5.2c.3 21.8 4.1 250.1 4.1 250.1l-116-4.7z' fill='%231730E5'/%3E%3Cpath d='M346.8 467.4l-11.7-305.9 138.2 2.4-3 304.1-123.5-.6z' fill='%230840B3'/%3E%3Cpath d='M287.7 34.9c2.3 0 5.9 398.5 5.9 398.5s-109.6-2.2-115 .6c-5.4 2.8 10.6-400.5 10.6-400.5l98.5 1.4z' fill='%23018BDE'/%3E%3Cpath d='M372.3 138c32.585 0 59-26.415 59-59s-26.415-59-59-59-59 26.415-59 59 26.415 59 59 59z' fill='%23062EF7'/%3E%3Cpath d='M35.8 315c-12.8 0-24.9 2.9-35.8 8.1v148.7c10.8 5.2 22.9 8.1 35.8 8.1 45.6 0 82.5-36.9 82.5-82.5S81.3 315 35.8 315z' fill='%231C87C0'/%3E%3C/svg%3E\" alt=\"\" />\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t\t<div class=\"column is-vertically-aligned-center\">\n\t\t\t\t<h2>",
+    "attributes": {
+      "startLine": 109,
+      "hasLeadingNewline": false,
+      "endLine": 125
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 125,
+          "endLine": 125
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Your fundamental right: privacy",
+            "attributes": {
+              "startLine": 125,
+              "endLine": 125,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 125,
+            "endLine": 125
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 125,
+        "endLine": 125
+      }
+    },
+    "attributes": {
+      "startLine": 125,
+      "endLine": 125
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</h2>\n\t\t\t\t<p>",
+    "attributes": {
+      "startLine": 125,
+      "hasLeadingNewline": false,
+      "endLine": 126
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 126,
+          "endLine": 126
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "5.4 helps with a variety of privacy issues around the world. So when users and stakeholders ask about regulatory compliance, or how your team handles user data, the answers should be a lot easier to get right.",
+            "attributes": {
+              "startLine": 126,
+              "endLine": 126,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 126,
+            "endLine": 126
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 126,
+        "endLine": 126
+      }
+    },
+    "attributes": {
+      "startLine": 126,
+      "endLine": 126
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</p>\n\t\t\t\t<p>",
+    "attributes": {
+      "startLine": 126,
+      "hasLeadingNewline": false,
+      "endLine": 127
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 127,
+          "endLine": 127
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Take a look:",
+            "attributes": {
+              "startLine": 127,
+              "endLine": 127,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 127,
+            "endLine": 127
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 127,
+        "endLine": 127
+      }
+    },
+    "attributes": {
+      "startLine": 127,
+      "endLine": 127
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</p>\n\t\t\t\t<ul>\n\t\t\t\t\t<li>",
+    "attributes": {
+      "startLine": 127,
+      "hasLeadingNewline": false,
+      "endLine": 129
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 129,
+          "endLine": 129
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Now personal data exports include users session information and users location data from the community events widget. Plus, a table of contents!",
+            "attributes": {
+              "startLine": 129,
+              "endLine": 129,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 129,
+            "endLine": 129
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 129,
+        "endLine": 129
+      }
+    },
+    "attributes": {
+      "startLine": 129,
+      "endLine": 129
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</li>\n\t\t\t\t\t<li>",
+    "attributes": {
+      "startLine": 129,
+      "hasLeadingNewline": false,
+      "endLine": 130
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 130,
+          "endLine": 130
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "See progress as you process export and erasure requests through the privacy tools.",
+            "attributes": {
+              "startLine": 130,
+              "endLine": 130,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 130,
+            "endLine": 130
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 130,
+        "endLine": 130
+      }
+    },
+    "attributes": {
+      "startLine": 130,
+      "endLine": 130
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</li>\n\t\t\t\t\t<li>",
+    "attributes": {
+      "startLine": 130,
+      "hasLeadingNewline": false,
+      "endLine": 131
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 131,
+          "endLine": 131
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Plus, little enhancements throughout give the privacy tools a little cleaner look. Your eyes will thank you!",
+            "attributes": {
+              "startLine": 131,
+              "endLine": 131,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 131,
+            "endLine": 131
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 131,
+        "endLine": 131
+      }
+    },
+    "attributes": {
+      "startLine": 131,
+      "endLine": 131
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</li>\n\t\t\t\t</ul>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<hr />\n\n\t\t<div class=\"about__section \">\n\t\t\t<div class=\"column has-subtle-background-color\">\n\t\t\t\t<h2 class=\"is-section-header\">",
+    "attributes": {
+      "startLine": 131,
+      "hasLeadingNewline": false,
+      "endLine": 140
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 140,
+          "endLine": 140
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Just for developers",
+            "attributes": {
+              "startLine": 140,
+              "endLine": 140,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 140,
+            "endLine": 140
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 140,
+        "endLine": 140
+      }
+    },
+    "attributes": {
+      "startLine": 140,
+      "endLine": 140
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</h2>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<hr class=\"is-small\" />\n\n\t\t<div class=\"about__section\">\n\t\t\t<div class=\"about__image aligncenter\">\n\t\t\t\t<img src=\"data:image/svg+xml;charset=utf8,%3Csvg width='1000' height='500' viewbox='0 0 1000 500' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M761 360.917H428v66.8h333v-66.8z' fill='%230574E2'/%3E%3Cpath d='M921 399.801H592.2v99.7H921v-99.7z' fill='%231C99D1'/%3E%3Cpath d='M288.1 378.963c46.392 0 84-37.496 84-83.749 0-46.253-37.608-83.748-84-83.748s-84 37.495-84 83.748c0 46.253 37.608 83.749 84 83.749z' fill='%230F7DEA'/%3E%3Cpath d='M553.3 191.426H272.5v85.742h280.8v-85.742z' fill='%231730E5'/%3E%3Cpath d='M785 151.545H499.4v77.169H785v-77.169z' fill='%231C99D1'/%3E%3Cpath d='M777.3 284.247c50.258 0 91-40.62 91-90.728 0-50.107-40.742-90.727-91-90.727s-91 40.62-91 90.727c0 50.108 40.742 90.728 91 90.728z' fill='%231826D3'/%3E%3Cpath d='M635 33.898H413v101.695h222V33.898zM1000 303.091H708v76.769h292v-76.769zM366 102.692H0v66.799h366v-66.799z' fill='%230574E2'/%3E%3Cpath d='M275 24.925H96v93.719h179V24.925z' fill='%231C99D1'/%3E%3Cpath d='M861 0H573v66.8h288V0z' fill='%231730E5'/%3E%3Cpath d='M436 440.678c35.346 0 64-28.568 64-63.809 0-35.24-28.654-63.808-64-63.808-35.346 0-64 28.568-64 63.808 0 35.241 28.654 63.809 64 63.809z' fill='%23236FE8'/%3E%3Cpath d='M428 449.651H171.4V500H428v-50.349z' fill='%231C99D1'/%3E%3Cpath d='M318 404.786H77v63.908h241v-63.908z' fill='%231826D3'/%3E%3Cpath d='M818 258.225H600v73.281h218v-73.281zM613 117.647H456v93.719h157v-93.719zM96.1 198.604c18.833 0 34.1-15.221 34.1-33.998 0-18.776-15.267-33.998-34.1-33.998-18.833 0-34.1 15.222-34.1 33.998 0 18.777 15.267 33.998 34.1 33.998z' fill='%231C99D1'/%3E%3C/svg%3E\" alt=\"\">\n\t\t\t</div>\n\t\t</div>\n\n\t\t<hr class=\"is-small\" />\n\n\t\t<div class=\"about__section has-2-columns\">\n\t\t\t<div class=\"column\">\n\t\t\t\t<h3>",
+    "attributes": {
+      "startLine": 140,
+      "hasLeadingNewline": false,
+      "endLine": 156
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 156,
+          "endLine": 156
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Add custom fields to menu items\u00e2\u0080\u0094natively",
+            "attributes": {
+              "startLine": 156,
+              "endLine": 156,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 156,
+            "endLine": 156
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 156,
+        "endLine": 156
+      }
+    },
+    "attributes": {
+      "startLine": 156,
+      "endLine": 156
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</h3>\n\t\t\t\t<p>\n\t\t\t\t\t",
+    "attributes": {
+      "startLine": 156,
+      "hasLeadingNewline": false,
+      "endLine": 158
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 158,
+          "endLine": 158
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Two new actions let you add custom fields to menu items&mdash;without a plugin and without writing custom walkers.",
+            "attributes": {
+              "startLine": 158,
+              "endLine": 158,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 158,
+            "endLine": 158
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 158,
+        "endLine": 158
+      }
+    },
+    "attributes": {
+      "startLine": 158,
+      "endLine": 158
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\t\t\t\t</p>\n\t\t\t\t<p>\n\t\t\t\t\t",
+    "attributes": {
+      "startLine": 159,
+      "hasLeadingNewline": true,
+      "endLine": 161
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "printf"
+        ],
+        "attributes": {
+          "startLine": 162,
+          "endLine": 162
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "__"
+              ],
+              "attributes": {
+                "startLine": 164,
+                "comments": [
+                  {
+                    "nodeType": "Comment",
+                    "text": "/* translators: %s: 'wp_nav_menu_item_custom_fields' action name. */",
+                    "line": 163,
+                    "filePos": 12196,
+                    "tokenPos": 487,
+                    "endLine": 163,
+                    "endFilePos": 12263,
+                    "endTokenPos": 487
+                  }
+                ],
+                "endLine": 164
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "On the Menus admin screen, %s fires just before the move buttons of a nav menu item in the menu editor.",
+                  "attributes": {
+                    "startLine": 164,
+                    "endLine": 164,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 164,
+                  "endLine": 164
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 164,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "/* translators: %s: 'wp_nav_menu_item_custom_fields' action name. */",
+                  "line": 163,
+                  "filePos": 12196,
+                  "tokenPos": 487,
+                  "endLine": 163,
+                  "endFilePos": 12263,
+                  "endTokenPos": 487
+                }
+              ],
+              "endLine": 164
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 164,
+            "comments": [
+              {
+                "nodeType": "Comment",
+                "text": "/* translators: %s: 'wp_nav_menu_item_custom_fields' action name. */",
+                "line": 163,
+                "filePos": 12196,
+                "tokenPos": 487,
+                "endLine": 163,
+                "endFilePos": 12263,
+                "endTokenPos": 487
+              }
+            ],
+            "endLine": 164
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "<code>wp_nav_menu_item_custom_fields</code>",
+            "attributes": {
+              "startLine": 165,
+              "endLine": 165,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 165,
+            "endLine": 165
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 162,
+        "endLine": 166
+      }
+    },
+    "attributes": {
+      "startLine": 162,
+      "endLine": 166
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\t\t\t\t</p>\n\t\t\t\t<p>\n\t\t\t\t\t",
+    "attributes": {
+      "startLine": 168,
+      "hasLeadingNewline": true,
+      "endLine": 170
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "printf"
+        ],
+        "attributes": {
+          "startLine": 171,
+          "endLine": 171
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "__"
+              ],
+              "attributes": {
+                "startLine": 173,
+                "comments": [
+                  {
+                    "nodeType": "Comment",
+                    "text": "/* translators: %s: 'wp_nav_menu_item_custom_fields_customize_template' action name. */",
+                    "line": 172,
+                    "filePos": 12499,
+                    "tokenPos": 509,
+                    "endLine": 172,
+                    "endFilePos": 12585,
+                    "endTokenPos": 509
+                  }
+                ],
+                "endLine": 173
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "In the Customizer, %s fires at the end of the menu-items form-fields template.",
+                  "attributes": {
+                    "startLine": 173,
+                    "endLine": 173,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 173,
+                  "endLine": 173
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 173,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "/* translators: %s: 'wp_nav_menu_item_custom_fields_customize_template' action name. */",
+                  "line": 172,
+                  "filePos": 12499,
+                  "tokenPos": 509,
+                  "endLine": 172,
+                  "endFilePos": 12585,
+                  "endTokenPos": 509
+                }
+              ],
+              "endLine": 173
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 173,
+            "comments": [
+              {
+                "nodeType": "Comment",
+                "text": "/* translators: %s: 'wp_nav_menu_item_custom_fields_customize_template' action name. */",
+                "line": 172,
+                "filePos": 12499,
+                "tokenPos": 509,
+                "endLine": 172,
+                "endFilePos": 12585,
+                "endTokenPos": 509
+              }
+            ],
+            "endLine": 173
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "<code>wp_nav_menu_item_custom_fields_customize_template</code>",
+            "attributes": {
+              "startLine": 174,
+              "endLine": 174,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 174,
+            "endLine": 174
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 171,
+        "endLine": 175
+      }
+    },
+    "attributes": {
+      "startLine": 171,
+      "endLine": 175
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\t\t\t\t</p>\n\t\t\t\t<p>\n\t\t\t\t\t",
+    "attributes": {
+      "startLine": 177,
+      "hasLeadingNewline": true,
+      "endLine": 179
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 179,
+          "endLine": 179
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Check your code and see where these new actions can replace your custom code, and if you&#8217;re concerned about duplication, add a check for the WordPress version.",
+            "attributes": {
+              "startLine": 179,
+              "endLine": 179,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 179,
+            "endLine": 179
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 179,
+        "endLine": 179
+      }
+    },
+    "attributes": {
+      "startLine": 179,
+      "endLine": 179
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\t\t\t\t</p>\n\t\t\t</div>\n\t\t\t<div class=\"column\">\n\t\t\t\t<h3>",
+    "attributes": {
+      "startLine": 180,
+      "hasLeadingNewline": true,
+      "endLine": 183
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 183,
+          "endLine": 183
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Blocks! Simpler styling, new APIs and embeds",
+            "attributes": {
+              "startLine": 183,
+              "endLine": 183,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 183,
+            "endLine": 183
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 183,
+        "endLine": 183
+      }
+    },
+    "attributes": {
+      "startLine": 183,
+      "endLine": 183
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</h3>\n\t\t\t\t<ul>\n\t\t\t\t\t<li>",
+    "attributes": {
+      "startLine": 183,
+      "hasLeadingNewline": false,
+      "endLine": 185
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 185,
+          "endLine": 185
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "<strong>Radically</strong> simpler block styling. Negative margins and default padding are gone! Now you can style blocks the way you need them. And, a refactor got rid of four redundant wrapper divs.",
+            "attributes": {
+              "startLine": 185,
+              "endLine": 185,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 185,
+            "endLine": 185
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 185,
+        "endLine": 185
+      }
+    },
+    "attributes": {
+      "startLine": 185,
+      "endLine": 185
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</li>\n\t\t\t\t\t<li>",
+    "attributes": {
+      "startLine": 185,
+      "hasLeadingNewline": false,
+      "endLine": 186
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 186,
+          "endLine": 186
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "If you build plugins, now you can register collections of your blocks by namespace across categories\u00e2\u0080\u0094a great way to get more brand visibility.",
+            "attributes": {
+              "startLine": 186,
+              "endLine": 186,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 186,
+            "endLine": 186
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 186,
+        "endLine": 186
+      }
+    },
+    "attributes": {
+      "startLine": 186,
+      "endLine": 186
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</li>\n\t\t\t\t\t<li>",
+    "attributes": {
+      "startLine": 186,
+      "hasLeadingNewline": false,
+      "endLine": 187
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 187,
+          "endLine": 187
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Let users do more with two new APIs: block variations and gradients.",
+            "attributes": {
+              "startLine": 187,
+              "endLine": 187,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 187,
+            "endLine": 187
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 187,
+        "endLine": 187
+      }
+    },
+    "attributes": {
+      "startLine": 187,
+      "endLine": 187
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</li>\n\t\t\t\t\t<li>",
+    "attributes": {
+      "startLine": 187,
+      "hasLeadingNewline": false,
+      "endLine": 188
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 188,
+          "endLine": 188
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "In embeds, now the block editor supports TikTok\u00e2\u0080\u0094and CollegeHumor is gone.",
+            "attributes": {
+              "startLine": 188,
+              "endLine": 188,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 188,
+            "endLine": 188
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 188,
+        "endLine": 188
+      }
+    },
+    "attributes": {
+      "startLine": 188,
+      "endLine": 188
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</li>\n\t\t\t\t</ul>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<hr class=\"is-small\" />\n\n\t\t<div class=\"about__section\">\n\t\t\t<div class=\"column\">\n\t\t\t\t<p>\n\t\t\t\t\t",
+    "attributes": {
+      "startLine": 188,
+      "hasLeadingNewline": false,
+      "endLine": 198
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "printf"
+        ],
+        "attributes": {
+          "startLine": 199,
+          "endLine": 199
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "__"
+              ],
+              "attributes": {
+                "startLine": 201,
+                "comments": [
+                  {
+                    "nodeType": "Comment",
+                    "text": "/* translators: %s: WordPress 5.4 Field Guide link. */",
+                    "line": 200,
+                    "filePos": 13871,
+                    "tokenPos": 597,
+                    "endLine": 200,
+                    "endFilePos": 13924,
+                    "endTokenPos": 597
+                  }
+                ],
+                "endLine": 201
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "There&#8217;s lots more for developers to love in WordPress 5.4. To discover more and learn how to make these changes shine on your sites, themes, plugins and more, check the <a href=\"%s\">WordPress 5.4 Field Guide</a>.",
+                  "attributes": {
+                    "startLine": 201,
+                    "endLine": 201,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 201,
+                  "endLine": 201
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 201,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "/* translators: %s: WordPress 5.4 Field Guide link. */",
+                  "line": 200,
+                  "filePos": 13871,
+                  "tokenPos": 597,
+                  "endLine": 200,
+                  "endFilePos": 13924,
+                  "endTokenPos": 597
+                }
+              ],
+              "endLine": 201
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 201,
+            "comments": [
+              {
+                "nodeType": "Comment",
+                "text": "/* translators: %s: WordPress 5.4 Field Guide link. */",
+                "line": 200,
+                "filePos": 13871,
+                "tokenPos": 597,
+                "endLine": 200,
+                "endFilePos": 13924,
+                "endTokenPos": 597
+              }
+            ],
+            "endLine": 201
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "https://make.wordpress.org/core/2020/03/03/wordpress-5-4-field-guide/",
+            "attributes": {
+              "startLine": 202,
+              "endLine": 202,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 202,
+            "endLine": 202
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 199,
+        "endLine": 203
+      }
+    },
+    "attributes": {
+      "startLine": 199,
+      "endLine": 203
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\t\t\t\t</p>\n\t\t\t</div>\n\t\t</div>\n\n\t\t<hr />\n\n\t\t<div class=\"return-to-dashboard\">\n\t\t\t",
+    "attributes": {
+      "startLine": 205,
+      "hasLeadingNewline": true,
+      "endLine": 212
+    }
+  },
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_BinaryOp_BooleanAnd",
+      "left": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "current_user_can"
+          ],
+          "attributes": {
+            "startLine": 212,
+            "endLine": 212
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "update_core",
+              "attributes": {
+                "startLine": 212,
+                "endLine": 212,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 212,
+              "endLine": 212
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 212,
+          "endLine": 212
+        }
+      },
+      "right": {
+        "nodeType": "Expr_Isset",
+        "vars": [
+          {
+            "nodeType": "Expr_ArrayDimFetch",
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "_GET",
+              "attributes": {
+                "startLine": 212,
+                "endLine": 212
+              }
+            },
+            "dim": {
+              "nodeType": "Scalar_String",
+              "value": "updated",
+              "attributes": {
+                "startLine": 212,
+                "endLine": 212,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 212,
+              "endLine": 212
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 212,
+          "endLine": 212
+        }
+      },
+      "attributes": {
+        "startLine": 212,
+        "endLine": 212
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "\t\t\t\t<a href=\"",
+        "attributes": {
+          "startLine": 213,
+          "hasLeadingNewline": true,
+          "endLine": 213
+        }
+      },
+      {
+        "nodeType": "Stmt_Echo",
+        "exprs": [
+          {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "esc_url"
+              ],
+              "attributes": {
+                "startLine": 213,
+                "endLine": 213
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_FuncCall",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "self_admin_url"
+                    ],
+                    "attributes": {
+                      "startLine": 213,
+                      "endLine": 213
+                    }
+                  },
+                  "args": [
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Scalar_String",
+                        "value": "update-core.php",
+                        "attributes": {
+                          "startLine": 213,
+                          "endLine": 213,
+                          "kind": 1
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 213,
+                        "endLine": 213
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 213,
+                    "endLine": 213
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 213,
+                  "endLine": 213
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 213,
+              "endLine": 213
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 213,
+          "endLine": 213
+        }
+      },
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "\">\n\t\t\t\t\t",
+        "attributes": {
+          "startLine": 213,
+          "hasLeadingNewline": false,
+          "endLine": 214
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Ternary",
+          "cond": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "is_multisite"
+              ],
+              "attributes": {
+                "startLine": 214,
+                "endLine": 214
+              }
+            },
+            "args": [],
+            "attributes": {
+              "startLine": 214,
+              "endLine": 214
+            }
+          },
+          "if": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "_e"
+              ],
+              "attributes": {
+                "startLine": 214,
+                "endLine": 214
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "Return to Updates",
+                  "attributes": {
+                    "startLine": 214,
+                    "endLine": 214,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 214,
+                  "endLine": 214
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 214,
+              "endLine": 214
+            }
+          },
+          "else": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "_e"
+              ],
+              "attributes": {
+                "startLine": 214,
+                "endLine": 214
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "Return to Dashboard &rarr; Updates",
+                  "attributes": {
+                    "startLine": 214,
+                    "endLine": 214,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 214,
+                  "endLine": 214
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 214,
+              "endLine": 214
+            }
+          },
+          "attributes": {
+            "startLine": 214,
+            "endLine": 214
+          }
+        },
+        "attributes": {
+          "startLine": 214,
+          "endLine": 214
+        }
+      },
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "\t\t\t\t</a> |\n\t\t\t",
+        "attributes": {
+          "startLine": 215,
+          "hasLeadingNewline": true,
+          "endLine": 216
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 212,
+      "endLine": 216
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\t\t\t<a href=\"",
+    "attributes": {
+      "startLine": 217,
+      "hasLeadingNewline": true,
+      "endLine": 217
+    }
+  },
+  {
+    "nodeType": "Stmt_Echo",
+    "exprs": [
+      {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "esc_url"
+          ],
+          "attributes": {
+            "startLine": 217,
+            "endLine": 217
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "self_admin_url"
+                ],
+                "attributes": {
+                  "startLine": 217,
+                  "endLine": 217
+                }
+              },
+              "args": [],
+              "attributes": {
+                "startLine": 217,
+                "endLine": 217
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 217,
+              "endLine": 217
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 217,
+          "endLine": 217
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 217,
+      "endLine": 217
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\">",
+    "attributes": {
+      "startLine": 217,
+      "hasLeadingNewline": false,
+      "endLine": 217
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Ternary",
+      "cond": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "is_blog_admin"
+          ],
+          "attributes": {
+            "startLine": 217,
+            "endLine": 217
+          }
+        },
+        "args": [],
+        "attributes": {
+          "startLine": 217,
+          "endLine": 217
+        }
+      },
+      "if": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "_e"
+          ],
+          "attributes": {
+            "startLine": 217,
+            "endLine": 217
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "Go to Dashboard &rarr; Home",
+              "attributes": {
+                "startLine": 217,
+                "endLine": 217,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 217,
+              "endLine": 217
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 217,
+          "endLine": 217
+        }
+      },
+      "else": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "_e"
+          ],
+          "attributes": {
+            "startLine": 217,
+            "endLine": 217
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "Go to Dashboard",
+              "attributes": {
+                "startLine": 217,
+                "endLine": 217,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 217,
+              "endLine": 217
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 217,
+          "endLine": 217
+        }
+      },
+      "attributes": {
+        "startLine": 217,
+        "endLine": 217
+      }
+    },
+    "attributes": {
+      "startLine": 217,
+      "endLine": 217
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</a>\n\t\t</div>\n\t</div>\n",
+    "attributes": {
+      "startLine": 217,
+      "hasLeadingNewline": false,
+      "endLine": 220
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_ConstFetch",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "ABSPATH"
+            ],
+            "attributes": {
+              "startLine": 222,
+              "endLine": 222
+            }
+          },
+          "attributes": {
+            "startLine": 222,
+            "endLine": 222
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "wp-admin/admin-footer.php",
+          "attributes": {
+            "startLine": 222,
+            "endLine": 222,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 222,
+          "endLine": 222
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 222,
+        "endLine": 222
+      }
+    },
+    "attributes": {
+      "startLine": 222,
+      "endLine": 222
+    }
+  },
+  {
+    "nodeType": "Stmt_Return",
+    "expr": null,
+    "attributes": {
+      "startLine": 225,
+      "comments": [
+        {
+          "nodeType": "Comment",
+          "text": "// These are strings we may use to describe maintenance/security releases, where we aim for no new strings.\n",
+          "line": 224,
+          "filePos": 14850,
+          "tokenPos": 746,
+          "endLine": 225,
+          "endFilePos": 14957,
+          "endTokenPos": 746
+        }
+      ],
+      "endLine": 225
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "__"
+        ],
+        "attributes": {
+          "startLine": 227,
+          "endLine": 227
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Maintenance Release",
+            "attributes": {
+              "startLine": 227,
+              "endLine": 227,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 227,
+            "endLine": 227
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 227,
+        "endLine": 227
+      }
+    },
+    "attributes": {
+      "startLine": 227,
+      "endLine": 227
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "__"
+        ],
+        "attributes": {
+          "startLine": 228,
+          "endLine": 228
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Maintenance Releases",
+            "attributes": {
+              "startLine": 228,
+              "endLine": 228,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 228,
+            "endLine": 228
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 228,
+        "endLine": 228
+      }
+    },
+    "attributes": {
+      "startLine": 228,
+      "endLine": 228
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "__"
+        ],
+        "attributes": {
+          "startLine": 230,
+          "endLine": 230
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Security Release",
+            "attributes": {
+              "startLine": 230,
+              "endLine": 230,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 230,
+            "endLine": 230
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 230,
+        "endLine": 230
+      }
+    },
+    "attributes": {
+      "startLine": 230,
+      "endLine": 230
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "__"
+        ],
+        "attributes": {
+          "startLine": 231,
+          "endLine": 231
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Security Releases",
+            "attributes": {
+              "startLine": 231,
+              "endLine": 231,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 231,
+            "endLine": 231
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 231,
+        "endLine": 231
+      }
+    },
+    "attributes": {
+      "startLine": 231,
+      "endLine": 231
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "__"
+        ],
+        "attributes": {
+          "startLine": 233,
+          "endLine": 233
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Maintenance and Security Release",
+            "attributes": {
+              "startLine": 233,
+              "endLine": 233,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 233,
+            "endLine": 233
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 233,
+        "endLine": 233
+      }
+    },
+    "attributes": {
+      "startLine": 233,
+      "endLine": 233
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "__"
+        ],
+        "attributes": {
+          "startLine": 234,
+          "endLine": 234
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Maintenance and Security Releases",
+            "attributes": {
+              "startLine": 234,
+              "endLine": 234,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 234,
+            "endLine": 234
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 234,
+        "endLine": 234
+      }
+    },
+    "attributes": {
+      "startLine": 234,
+      "endLine": 234
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "__"
+        ],
+        "attributes": {
+          "startLine": 237,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "/* translators: %s: WordPress version number. */",
+              "line": 236,
+              "filePos": 15167,
+              "tokenPos": 798,
+              "endLine": 236,
+              "endFilePos": 15214,
+              "endTokenPos": 798
+            }
+          ],
+          "endLine": 237
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "<strong>Version %s</strong> addressed one security issue.",
+            "attributes": {
+              "startLine": 237,
+              "endLine": 237,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 237,
+            "endLine": 237
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 237,
+        "comments": [
+          {
+            "nodeType": "Comment",
+            "text": "/* translators: %s: WordPress version number. */",
+            "line": 236,
+            "filePos": 15167,
+            "tokenPos": 798,
+            "endLine": 236,
+            "endFilePos": 15214,
+            "endTokenPos": 798
+          }
+        ],
+        "endLine": 237
+      }
+    },
+    "attributes": {
+      "startLine": 237,
+      "comments": [
+        {
+          "nodeType": "Comment",
+          "text": "/* translators: %s: WordPress version number. */",
+          "line": 236,
+          "filePos": 15167,
+          "tokenPos": 798,
+          "endLine": 236,
+          "endFilePos": 15214,
+          "endTokenPos": 798
+        }
+      ],
+      "endLine": 237
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "__"
+        ],
+        "attributes": {
+          "startLine": 239,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "/* translators: %s: WordPress version number. */",
+              "line": 238,
+              "filePos": 15283,
+              "tokenPos": 808,
+              "endLine": 238,
+              "endFilePos": 15330,
+              "endTokenPos": 808
+            }
+          ],
+          "endLine": 239
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "<strong>Version %s</strong> addressed some security issues.",
+            "attributes": {
+              "startLine": 239,
+              "endLine": 239,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 239,
+            "endLine": 239
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 239,
+        "comments": [
+          {
+            "nodeType": "Comment",
+            "text": "/* translators: %s: WordPress version number. */",
+            "line": 238,
+            "filePos": 15283,
+            "tokenPos": 808,
+            "endLine": 238,
+            "endFilePos": 15330,
+            "endTokenPos": 808
+          }
+        ],
+        "endLine": 239
+      }
+    },
+    "attributes": {
+      "startLine": 239,
+      "comments": [
+        {
+          "nodeType": "Comment",
+          "text": "/* translators: %s: WordPress version number. */",
+          "line": 238,
+          "filePos": 15283,
+          "tokenPos": 808,
+          "endLine": 238,
+          "endFilePos": 15330,
+          "endTokenPos": 808
+        }
+      ],
+      "endLine": 239
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_n_noop"
+        ],
+        "attributes": {
+          "startLine": 242,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "/* translators: 1: WordPress version number, 2: Plural number of bugs. */",
+              "line": 241,
+              "filePos": 15402,
+              "tokenPos": 818,
+              "endLine": 241,
+              "endFilePos": 15474,
+              "endTokenPos": 818
+            }
+          ],
+          "endLine": 242
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "<strong>Version %1$s</strong> addressed %2$s bug.",
+            "attributes": {
+              "startLine": 243,
+              "endLine": 243,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 243,
+            "endLine": 243
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "<strong>Version %1$s</strong> addressed %2$s bugs.",
+            "attributes": {
+              "startLine": 244,
+              "endLine": 244,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 244,
+            "endLine": 244
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 242,
+        "comments": [
+          {
+            "nodeType": "Comment",
+            "text": "/* translators: 1: WordPress version number, 2: Plural number of bugs. */",
+            "line": 241,
+            "filePos": 15402,
+            "tokenPos": 818,
+            "endLine": 241,
+            "endFilePos": 15474,
+            "endTokenPos": 818
+          }
+        ],
+        "endLine": 245
+      }
+    },
+    "attributes": {
+      "startLine": 242,
+      "comments": [
+        {
+          "nodeType": "Comment",
+          "text": "/* translators: 1: WordPress version number, 2: Plural number of bugs. */",
+          "line": 241,
+          "filePos": 15402,
+          "tokenPos": 818,
+          "endLine": 241,
+          "endFilePos": 15474,
+          "endTokenPos": 818
+        }
+      ],
+      "endLine": 245
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_n_noop"
+        ],
+        "attributes": {
+          "startLine": 248,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "/* translators: 1: WordPress version number, 2: Plural number of bugs. Singular security issue. */",
+              "line": 247,
+              "filePos": 15597,
+              "tokenPos": 831,
+              "endLine": 247,
+              "endFilePos": 15694,
+              "endTokenPos": 831
+            }
+          ],
+          "endLine": 248
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "<strong>Version %1$s</strong> addressed a security issue and fixed %2$s bug.",
+            "attributes": {
+              "startLine": 249,
+              "endLine": 249,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 249,
+            "endLine": 249
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "<strong>Version %1$s</strong> addressed a security issue and fixed %2$s bugs.",
+            "attributes": {
+              "startLine": 250,
+              "endLine": 250,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 250,
+            "endLine": 250
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 248,
+        "comments": [
+          {
+            "nodeType": "Comment",
+            "text": "/* translators: 1: WordPress version number, 2: Plural number of bugs. Singular security issue. */",
+            "line": 247,
+            "filePos": 15597,
+            "tokenPos": 831,
+            "endLine": 247,
+            "endFilePos": 15694,
+            "endTokenPos": 831
+          }
+        ],
+        "endLine": 251
+      }
+    },
+    "attributes": {
+      "startLine": 248,
+      "comments": [
+        {
+          "nodeType": "Comment",
+          "text": "/* translators: 1: WordPress version number, 2: Plural number of bugs. Singular security issue. */",
+          "line": 247,
+          "filePos": 15597,
+          "tokenPos": 831,
+          "endLine": 247,
+          "endFilePos": 15694,
+          "endTokenPos": 831
+        }
+      ],
+      "endLine": 251
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_n_noop"
+        ],
+        "attributes": {
+          "startLine": 254,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "/* translators: 1: WordPress version number, 2: Plural number of bugs. More than one security issue. */",
+              "line": 253,
+              "filePos": 15871,
+              "tokenPos": 844,
+              "endLine": 253,
+              "endFilePos": 15973,
+              "endTokenPos": 844
+            }
+          ],
+          "endLine": 254
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "<strong>Version %1$s</strong> addressed some security issues and fixed %2$s bug.",
+            "attributes": {
+              "startLine": 255,
+              "endLine": 255,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 255,
+            "endLine": 255
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "<strong>Version %1$s</strong> addressed some security issues and fixed %2$s bugs.",
+            "attributes": {
+              "startLine": 256,
+              "endLine": 256,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 256,
+            "endLine": 256
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 254,
+        "comments": [
+          {
+            "nodeType": "Comment",
+            "text": "/* translators: 1: WordPress version number, 2: Plural number of bugs. More than one security issue. */",
+            "line": 253,
+            "filePos": 15871,
+            "tokenPos": 844,
+            "endLine": 253,
+            "endFilePos": 15973,
+            "endTokenPos": 844
+          }
+        ],
+        "endLine": 257
+      }
+    },
+    "attributes": {
+      "startLine": 254,
+      "comments": [
+        {
+          "nodeType": "Comment",
+          "text": "/* translators: 1: WordPress version number, 2: Plural number of bugs. More than one security issue. */",
+          "line": 253,
+          "filePos": 15871,
+          "tokenPos": 844,
+          "endLine": 253,
+          "endFilePos": 15973,
+          "endTokenPos": 844
+        }
+      ],
+      "endLine": 257
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "__"
+        ],
+        "attributes": {
+          "startLine": 260,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "/* translators: %s: Documentation URL. */",
+              "line": 259,
+              "filePos": 16158,
+              "tokenPos": 857,
+              "endLine": 259,
+              "endFilePos": 16198,
+              "endTokenPos": 857
+            }
+          ],
+          "endLine": 260
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "For more information, see <a href=\"%s\">the release notes</a>.",
+            "attributes": {
+              "startLine": 260,
+              "endLine": 260,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 260,
+            "endLine": 260
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 260,
+        "comments": [
+          {
+            "nodeType": "Comment",
+            "text": "/* translators: %s: Documentation URL. */",
+            "line": 259,
+            "filePos": 16158,
+            "tokenPos": 857,
+            "endLine": 259,
+            "endFilePos": 16198,
+            "endTokenPos": 857
+          }
+        ],
+        "endLine": 260
+      }
+    },
+    "attributes": {
+      "startLine": 260,
+      "comments": [
+        {
+          "nodeType": "Comment",
+          "text": "/* translators: %s: Documentation URL. */",
+          "line": 259,
+          "filePos": 16158,
+          "tokenPos": 857,
+          "endLine": 259,
+          "endFilePos": 16198,
+          "endTokenPos": 857
+        }
+      ],
+      "endLine": 260
+    }
+  }
+]

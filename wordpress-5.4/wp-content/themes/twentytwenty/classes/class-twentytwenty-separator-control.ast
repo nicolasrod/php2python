@@ -1,0 +1,209 @@
+[
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "class_exists"
+        ],
+        "attributes": {
+          "startLine": 10,
+          "endLine": 10
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "WP_Customize_Control",
+            "attributes": {
+              "startLine": 10,
+              "endLine": 10,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 10,
+            "endLine": 10
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 10,
+        "endLine": 10
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BooleanNot",
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "class_exists"
+              ],
+              "attributes": {
+                "startLine": 12,
+                "endLine": 12
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "TwentyTwenty_Separator_Control",
+                  "attributes": {
+                    "startLine": 12,
+                    "endLine": 12,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 12,
+                  "endLine": 12
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 12,
+              "endLine": 12
+            }
+          },
+          "attributes": {
+            "startLine": 12,
+            "endLine": 12
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Class",
+            "flags": 0,
+            "extends": {
+              "nodeType": "Name",
+              "parts": [
+                "WP_Customize_Control"
+              ],
+              "attributes": {
+                "startLine": 16,
+                "endLine": 16
+              }
+            },
+            "implements": [],
+            "name": {
+              "nodeType": "Identifier",
+              "name": "TwentyTwenty_Separator_Control",
+              "attributes": {
+                "startLine": 16,
+                "endLine": 16
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_ClassMethod",
+                "flags": 1,
+                "byRef": false,
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "render_content",
+                  "attributes": {
+                    "startLine": 20,
+                    "endLine": 20
+                  }
+                },
+                "params": [],
+                "returnType": null,
+                "stmts": [
+                  {
+                    "nodeType": "Stmt_Echo",
+                    "exprs": [
+                      {
+                        "nodeType": "Scalar_String",
+                        "value": "<hr/>",
+                        "attributes": {
+                          "startLine": 21,
+                          "endLine": 21,
+                          "kind": 1
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 21,
+                      "endLine": 21
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 20,
+                  "comments": [
+                    {
+                      "nodeType": "Comment_Doc",
+                      "text": "/**\n\t\t\t * Render the hr.\n\t\t\t */",
+                      "line": 17,
+                      "filePos": 373,
+                      "tokenPos": 47,
+                      "endLine": 19,
+                      "endFilePos": 403,
+                      "endTokenPos": 47
+                    }
+                  ],
+                  "endLine": 22
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 16,
+              "comments": [
+                {
+                  "nodeType": "Comment_Doc",
+                  "text": "/**\n\t\t * Separator Control.\n\t\t */",
+                  "line": 13,
+                  "filePos": 266,
+                  "tokenPos": 35,
+                  "endLine": 15,
+                  "endFilePos": 298,
+                  "endTokenPos": 35
+                }
+              ],
+              "endLine": 24
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 12,
+          "endLine": 25
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 10,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Customizer Separator Control settings for this theme.\n *\n * @package WordPress\n * @subpackage Twenty_Twenty\n * @since Twenty Twenty 1.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 8,
+          "endFilePos": 151,
+          "endTokenPos": 1
+        }
+      ],
+      "endLine": 26
+    }
+  }
+]

@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "/Users/nico/repos/php2py/ast2py.py", line 43, in is_valid_code
+    ast.parse(src.replace('\x00', ''))
+  File "/usr/local/Cellar/python/3.7.7/Frameworks/Python.framework/Versions/3.7/lib/python3.7/ast.py", line 35, in parse
+    return compile(source, filename, mode, PyCF_ONLY_AST)
+  File "<unknown>", line 275
+    while i -= 1:
+             ^
+SyntaxError: invalid syntax

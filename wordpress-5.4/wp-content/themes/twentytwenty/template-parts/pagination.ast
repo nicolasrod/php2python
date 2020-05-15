@@ -1,0 +1,1014 @@
+[
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Assign",
+      "var": {
+        "nodeType": "Expr_Variable",
+        "name": "prev_text",
+        "attributes": {
+          "startLine": 18,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n * A template partial to output pagination for the Twenty Twenty default theme.\n *\n * @link https://developer.wordpress.org/themes/basics/template-files/#template-partials\n *\n * @package WordPress\n * @subpackage Twenty_Twenty\n * @since Twenty Twenty 1.0\n */",
+              "line": 2,
+              "filePos": 6,
+              "tokenPos": 1,
+              "endLine": 10,
+              "endFilePos": 266,
+              "endTokenPos": 1
+            },
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n * Translators:\n * This text contains HTML to allow the text to be shorter on small screens.\n * The text inside the span with the class nav-short will be hidden on small screens.\n */",
+              "line": 12,
+              "filePos": 269,
+              "tokenPos": 3,
+              "endLine": 16,
+              "endFilePos": 454,
+              "endTokenPos": 3
+            }
+          ],
+          "endLine": 18
+        }
+      },
+      "expr": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "sprintf"
+          ],
+          "attributes": {
+            "startLine": 18,
+            "endLine": 18
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "%s <span class=\"nav-prev-text\">%s</span>",
+              "attributes": {
+                "startLine": 19,
+                "endLine": 19,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 19,
+              "endLine": 19
+            }
+          },
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "<span aria-hidden=\"true\">&larr;</span>",
+              "attributes": {
+                "startLine": 20,
+                "endLine": 20,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 20,
+              "endLine": 20
+            }
+          },
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "__"
+                ],
+                "attributes": {
+                  "startLine": 21,
+                  "endLine": 21
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "Newer <span class=\"nav-short\">Posts</span>",
+                    "attributes": {
+                      "startLine": 21,
+                      "endLine": 21,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 21,
+                    "endLine": 21
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "twentytwenty",
+                    "attributes": {
+                      "startLine": 21,
+                      "endLine": 21,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 21,
+                    "endLine": 21
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 21,
+                "endLine": 21
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 21,
+              "endLine": 21
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 18,
+          "endLine": 22
+        }
+      },
+      "attributes": {
+        "startLine": 18,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/**\n * A template partial to output pagination for the Twenty Twenty default theme.\n *\n * @link https://developer.wordpress.org/themes/basics/template-files/#template-partials\n *\n * @package WordPress\n * @subpackage Twenty_Twenty\n * @since Twenty Twenty 1.0\n */",
+            "line": 2,
+            "filePos": 6,
+            "tokenPos": 1,
+            "endLine": 10,
+            "endFilePos": 266,
+            "endTokenPos": 1
+          },
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/**\n * Translators:\n * This text contains HTML to allow the text to be shorter on small screens.\n * The text inside the span with the class nav-short will be hidden on small screens.\n */",
+            "line": 12,
+            "filePos": 269,
+            "tokenPos": 3,
+            "endLine": 16,
+            "endFilePos": 454,
+            "endTokenPos": 3
+          }
+        ],
+        "endLine": 22
+      }
+    },
+    "attributes": {
+      "startLine": 18,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * A template partial to output pagination for the Twenty Twenty default theme.\n *\n * @link https://developer.wordpress.org/themes/basics/template-files/#template-partials\n *\n * @package WordPress\n * @subpackage Twenty_Twenty\n * @since Twenty Twenty 1.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 10,
+          "endFilePos": 266,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Translators:\n * This text contains HTML to allow the text to be shorter on small screens.\n * The text inside the span with the class nav-short will be hidden on small screens.\n */",
+          "line": 12,
+          "filePos": 269,
+          "tokenPos": 3,
+          "endLine": 16,
+          "endFilePos": 454,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 22
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Assign",
+      "var": {
+        "nodeType": "Expr_Variable",
+        "name": "next_text",
+        "attributes": {
+          "startLine": 23,
+          "endLine": 23
+        }
+      },
+      "expr": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "sprintf"
+          ],
+          "attributes": {
+            "startLine": 23,
+            "endLine": 23
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "<span class=\"nav-next-text\">%s</span> %s",
+              "attributes": {
+                "startLine": 24,
+                "endLine": 24,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 24,
+              "endLine": 24
+            }
+          },
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "__"
+                ],
+                "attributes": {
+                  "startLine": 25,
+                  "endLine": 25
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "Older <span class=\"nav-short\">Posts</span>",
+                    "attributes": {
+                      "startLine": 25,
+                      "endLine": 25,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 25,
+                    "endLine": 25
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "twentytwenty",
+                    "attributes": {
+                      "startLine": 25,
+                      "endLine": 25,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 25,
+                    "endLine": 25
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 25,
+                "endLine": 25
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 25,
+              "endLine": 25
+            }
+          },
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "<span aria-hidden=\"true\">&rarr;</span>",
+              "attributes": {
+                "startLine": 26,
+                "endLine": 26,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 26,
+              "endLine": 26
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 23,
+          "endLine": 27
+        }
+      },
+      "attributes": {
+        "startLine": 23,
+        "endLine": 27
+      }
+    },
+    "attributes": {
+      "startLine": 23,
+      "endLine": 27
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Assign",
+      "var": {
+        "nodeType": "Expr_Variable",
+        "name": "posts_pagination",
+        "attributes": {
+          "startLine": 29,
+          "endLine": 29
+        }
+      },
+      "expr": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "get_the_posts_pagination"
+          ],
+          "attributes": {
+            "startLine": 29,
+            "endLine": 29
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Expr_Array",
+              "items": [
+                {
+                  "nodeType": "Expr_ArrayItem",
+                  "key": {
+                    "nodeType": "Scalar_String",
+                    "value": "mid_size",
+                    "attributes": {
+                      "startLine": 31,
+                      "endLine": 31,
+                      "kind": 1
+                    }
+                  },
+                  "value": {
+                    "nodeType": "Scalar_LNumber",
+                    "value": 1,
+                    "attributes": {
+                      "startLine": 31,
+                      "endLine": 31,
+                      "kind": 10
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 31,
+                    "endLine": 31
+                  }
+                },
+                {
+                  "nodeType": "Expr_ArrayItem",
+                  "key": {
+                    "nodeType": "Scalar_String",
+                    "value": "prev_text",
+                    "attributes": {
+                      "startLine": 32,
+                      "endLine": 32,
+                      "kind": 1
+                    }
+                  },
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "prev_text",
+                    "attributes": {
+                      "startLine": 32,
+                      "endLine": 32
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 32,
+                    "endLine": 32
+                  }
+                },
+                {
+                  "nodeType": "Expr_ArrayItem",
+                  "key": {
+                    "nodeType": "Scalar_String",
+                    "value": "next_text",
+                    "attributes": {
+                      "startLine": 33,
+                      "endLine": 33,
+                      "kind": 1
+                    }
+                  },
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "next_text",
+                    "attributes": {
+                      "startLine": 33,
+                      "endLine": 33
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 33,
+                    "endLine": 33
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 30,
+                "endLine": 34,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 30,
+              "endLine": 34
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 29,
+          "endLine": 35
+        }
+      },
+      "attributes": {
+        "startLine": 29,
+        "endLine": 35
+      }
+    },
+    "attributes": {
+      "startLine": 29,
+      "endLine": 35
+    }
+  },
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_BinaryOp_Identical",
+      "left": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "strpos"
+          ],
+          "attributes": {
+            "startLine": 38,
+            "endLine": 38
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Expr_Variable",
+              "name": "posts_pagination",
+              "attributes": {
+                "startLine": 38,
+                "endLine": 38
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 38,
+              "endLine": 38
+            }
+          },
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "prev page-numbers",
+              "attributes": {
+                "startLine": 38,
+                "endLine": 38,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 38,
+              "endLine": 38
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 38,
+          "endLine": 38
+        }
+      },
+      "right": {
+        "nodeType": "Expr_ConstFetch",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "false"
+          ],
+          "attributes": {
+            "startLine": 38,
+            "endLine": 38
+          }
+        },
+        "attributes": {
+          "startLine": 38,
+          "endLine": 38
+        }
+      },
+      "attributes": {
+        "startLine": 38,
+        "endLine": 38
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "posts_pagination",
+            "attributes": {
+              "startLine": 39,
+              "endLine": 39
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "str_replace"
+              ],
+              "attributes": {
+                "startLine": 39,
+                "endLine": 39
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "<div class=\"nav-links\">",
+                  "attributes": {
+                    "startLine": 39,
+                    "endLine": 39,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 39,
+                  "endLine": 39
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_BinaryOp_Concat",
+                  "left": {
+                    "nodeType": "Expr_BinaryOp_Concat",
+                    "left": {
+                      "nodeType": "Scalar_String",
+                      "value": "<div class=\"nav-links\"><span class=\"prev page-numbers placeholder\" aria-hidden=\"true\">",
+                      "attributes": {
+                        "startLine": 39,
+                        "endLine": 39,
+                        "kind": 1
+                      }
+                    },
+                    "right": {
+                      "nodeType": "Expr_Variable",
+                      "name": "prev_text",
+                      "attributes": {
+                        "startLine": 39,
+                        "endLine": 39
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 39,
+                      "endLine": 39
+                    }
+                  },
+                  "right": {
+                    "nodeType": "Scalar_String",
+                    "value": "</span>",
+                    "attributes": {
+                      "startLine": 39,
+                      "endLine": 39,
+                      "kind": 1
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 39,
+                    "endLine": 39
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 39,
+                  "endLine": 39
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "posts_pagination",
+                  "attributes": {
+                    "startLine": 39,
+                    "endLine": 39
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 39,
+                  "endLine": 39
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 39,
+              "endLine": 39
+            }
+          },
+          "attributes": {
+            "startLine": 39,
+            "endLine": 39
+          }
+        },
+        "attributes": {
+          "startLine": 39,
+          "endLine": 39
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 38,
+      "comments": [
+        {
+          "nodeType": "Comment",
+          "text": "// If we're not outputting the previous page link, prepend a placeholder with `visibility: hidden` to take its place.\n",
+          "line": 37,
+          "filePos": 959,
+          "tokenPos": 93,
+          "endLine": 38,
+          "endFilePos": 1076,
+          "endTokenPos": 93
+        }
+      ],
+      "endLine": 40
+    }
+  },
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_BinaryOp_Identical",
+      "left": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "strpos"
+          ],
+          "attributes": {
+            "startLine": 43,
+            "endLine": 43
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Expr_Variable",
+              "name": "posts_pagination",
+              "attributes": {
+                "startLine": 43,
+                "endLine": 43
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 43,
+              "endLine": 43
+            }
+          },
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "next page-numbers",
+              "attributes": {
+                "startLine": 43,
+                "endLine": 43,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 43,
+              "endLine": 43
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 43,
+          "endLine": 43
+        }
+      },
+      "right": {
+        "nodeType": "Expr_ConstFetch",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "false"
+          ],
+          "attributes": {
+            "startLine": 43,
+            "endLine": 43
+          }
+        },
+        "attributes": {
+          "startLine": 43,
+          "endLine": 43
+        }
+      },
+      "attributes": {
+        "startLine": 43,
+        "endLine": 43
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "posts_pagination",
+            "attributes": {
+              "startLine": 44,
+              "endLine": 44
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "str_replace"
+              ],
+              "attributes": {
+                "startLine": 44,
+                "endLine": 44
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "</div>",
+                  "attributes": {
+                    "startLine": 44,
+                    "endLine": 44,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 44,
+                  "endLine": 44
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_BinaryOp_Concat",
+                  "left": {
+                    "nodeType": "Expr_BinaryOp_Concat",
+                    "left": {
+                      "nodeType": "Scalar_String",
+                      "value": "<span class=\"next page-numbers placeholder\" aria-hidden=\"true\">",
+                      "attributes": {
+                        "startLine": 44,
+                        "endLine": 44,
+                        "kind": 1
+                      }
+                    },
+                    "right": {
+                      "nodeType": "Expr_Variable",
+                      "name": "next_text",
+                      "attributes": {
+                        "startLine": 44,
+                        "endLine": 44
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 44,
+                      "endLine": 44
+                    }
+                  },
+                  "right": {
+                    "nodeType": "Scalar_String",
+                    "value": "</span></div>",
+                    "attributes": {
+                      "startLine": 44,
+                      "endLine": 44,
+                      "kind": 1
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 44,
+                    "endLine": 44
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 44,
+                  "endLine": 44
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "posts_pagination",
+                  "attributes": {
+                    "startLine": 44,
+                    "endLine": 44
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 44,
+                  "endLine": 44
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 44,
+              "endLine": 44
+            }
+          },
+          "attributes": {
+            "startLine": 44,
+            "endLine": 44
+          }
+        },
+        "attributes": {
+          "startLine": 44,
+          "endLine": 44
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 43,
+      "comments": [
+        {
+          "nodeType": "Comment",
+          "text": "// If we're not outputting the next page link, append a placeholder with `visibility: hidden` to take its place.\n",
+          "line": 42,
+          "filePos": 1345,
+          "tokenPos": 144,
+          "endLine": 43,
+          "endFilePos": 1457,
+          "endTokenPos": 144
+        }
+      ],
+      "endLine": 45
+    }
+  },
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_Variable",
+      "name": "posts_pagination",
+      "attributes": {
+        "startLine": 47,
+        "endLine": 47
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "\n\t<div class=\"pagination-wrapper section-inner\">\n\n\t\t<hr class=\"styled-separator pagination-separator is-style-wide\" aria-hidden=\"true\" />\n\n\t\t",
+        "attributes": {
+          "startLine": 48,
+          "hasLeadingNewline": true,
+          "endLine": 53
+        }
+      },
+      {
+        "nodeType": "Stmt_Echo",
+        "exprs": [
+          {
+            "nodeType": "Expr_Variable",
+            "name": "posts_pagination",
+            "attributes": {
+              "startLine": 53,
+              "endLine": 53
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 53,
+          "endLine": 53
+        }
+      },
+      {
+        "nodeType": "Stmt_Nop",
+        "attributes": {
+          "startLine": 53,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped during generation. ",
+              "line": 53,
+              "filePos": 1893,
+              "tokenPos": 213,
+              "endLine": 53,
+              "endFilePos": 1995,
+              "endTokenPos": 213
+            }
+          ],
+          "endLine": 54
+        }
+      },
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "\n\t</div><!-- .pagination-wrapper -->\n\n\t",
+        "attributes": {
+          "startLine": 54,
+          "hasLeadingNewline": true,
+          "endLine": 57
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 47,
+      "endLine": 58
+    }
+  }
+]

@@ -1,0 +1,103 @@
+[
+  {
+    "nodeType": "Stmt_Interface",
+    "extends": [],
+    "name": {
+      "nodeType": "Identifier",
+      "name": "Requests_Auth",
+      "attributes": {
+        "startLine": 21,
+        "endLine": 21
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "register",
+          "attributes": {
+            "startLine": 32,
+            "endLine": 32
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": {
+              "nodeType": "Name",
+              "parts": [
+                "Requests_Hooks"
+              ],
+              "attributes": {
+                "startLine": 32,
+                "endLine": 32
+              }
+            },
+            "byRef": true,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "hooks",
+              "attributes": {
+                "startLine": 32,
+                "endLine": 32
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 32,
+              "endLine": 32
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": null,
+        "attributes": {
+          "startLine": 32,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Register hooks as needed\n\t *\n\t * This method is called in {@see Requests::request} when the user has set\n\t * an instance as the 'auth' option. Use this callback to register all the\n\t * hooks you'll need.\n\t *\n\t * @see Requests_Hooks::register\n\t * @param Requests_Hooks $hooks Hook system\n\t */",
+              "line": 22,
+              "filePos": 458,
+              "tokenPos": 11,
+              "endLine": 31,
+              "endFilePos": 756,
+              "endTokenPos": 11
+            }
+          ],
+          "endLine": 32
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 21,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Authentication provider interface\n *\n * @package Requests\n * @subpackage Authentication\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 7,
+          "endFilePos": 103,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Authentication provider interface\n *\n * Implement this interface to act as an authentication provider.\n *\n * Parameters should be passed via the constructor where possible, as this\n * makes it much easier for users to use your provider.\n *\n * @see Requests_Hooks\n * @package Requests\n * @subpackage Authentication\n */",
+          "line": 9,
+          "filePos": 106,
+          "tokenPos": 3,
+          "endLine": 20,
+          "endFilePos": 429,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 33
+    }
+  }
+]

@@ -1,0 +1,897 @@
+[
+  {
+    "nodeType": "Stmt_Class",
+    "flags": 0,
+    "extends": {
+      "nodeType": "Name",
+      "parts": [
+        "IXR_Client"
+      ],
+      "attributes": {
+        "startLine": 8,
+        "endLine": 8
+      }
+    },
+    "implements": [],
+    "name": {
+      "nodeType": "Identifier",
+      "name": "IXR_ClientMulticall",
+      "attributes": {
+        "startLine": 8,
+        "endLine": 8
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 0,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "calls",
+              "attributes": {
+                "startLine": 10,
+                "endLine": 10
+              }
+            },
+            "default": {
+              "nodeType": "Expr_Array",
+              "items": [],
+              "attributes": {
+                "startLine": 10,
+                "endLine": 10,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 10,
+              "endLine": 10
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 10,
+          "endLine": 10
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 0,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "__construct",
+          "attributes": {
+            "startLine": 15,
+            "endLine": 15
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "server",
+              "attributes": {
+                "startLine": 15,
+                "endLine": 15
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 15,
+              "endLine": 15
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "path",
+              "attributes": {
+                "startLine": 15,
+                "endLine": 15
+              }
+            },
+            "default": {
+              "nodeType": "Expr_ConstFetch",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "false"
+                ],
+                "attributes": {
+                  "startLine": 15,
+                  "endLine": 15
+                }
+              },
+              "attributes": {
+                "startLine": 15,
+                "endLine": 15
+              }
+            },
+            "attributes": {
+              "startLine": 15,
+              "endLine": 15
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "port",
+              "attributes": {
+                "startLine": 15,
+                "endLine": 15
+              }
+            },
+            "default": {
+              "nodeType": "Scalar_LNumber",
+              "value": 80,
+              "attributes": {
+                "startLine": 15,
+                "endLine": 15,
+                "kind": 10
+              }
+            },
+            "attributes": {
+              "startLine": 15,
+              "endLine": 15
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_StaticCall",
+              "class": {
+                "nodeType": "Name",
+                "parts": [
+                  "parent"
+                ],
+                "attributes": {
+                  "startLine": 17,
+                  "endLine": 17
+                }
+              },
+              "name": {
+                "nodeType": "Identifier",
+                "name": "IXR_Client",
+                "attributes": {
+                  "startLine": 17,
+                  "endLine": 17
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "server",
+                    "attributes": {
+                      "startLine": 17,
+                      "endLine": 17
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 17,
+                    "endLine": 17
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "path",
+                    "attributes": {
+                      "startLine": 17,
+                      "endLine": 17
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 17,
+                    "endLine": 17
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "port",
+                    "attributes": {
+                      "startLine": 17,
+                      "endLine": 17
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 17,
+                    "endLine": 17
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 17,
+                "endLine": 17
+              }
+            },
+            "attributes": {
+              "startLine": 17,
+              "endLine": 17
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_PropertyFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "this",
+                  "attributes": {
+                    "startLine": 18,
+                    "endLine": 18
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "useragent",
+                  "attributes": {
+                    "startLine": 18,
+                    "endLine": 18
+                  }
+                },
+                "attributes": {
+                  "startLine": 18,
+                  "endLine": 18
+                }
+              },
+              "expr": {
+                "nodeType": "Scalar_String",
+                "value": "The Incutio XML-RPC PHP Library (multicall client)",
+                "attributes": {
+                  "startLine": 18,
+                  "endLine": 18,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 18,
+                "endLine": 18
+              }
+            },
+            "attributes": {
+              "startLine": 18,
+              "endLine": 18
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 15,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * PHP5 constructor.\n\t */",
+              "line": 12,
+              "filePos": 147,
+              "tokenPos": 24,
+              "endLine": 14,
+              "endFilePos": 176,
+              "endTokenPos": 24
+            }
+          ],
+          "endLine": 19
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "IXR_ClientMulticall",
+          "attributes": {
+            "startLine": 24,
+            "endLine": 24
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "server",
+              "attributes": {
+                "startLine": 24,
+                "endLine": 24
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 24,
+              "endLine": 24
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "path",
+              "attributes": {
+                "startLine": 24,
+                "endLine": 24
+              }
+            },
+            "default": {
+              "nodeType": "Expr_ConstFetch",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "false"
+                ],
+                "attributes": {
+                  "startLine": 24,
+                  "endLine": 24
+                }
+              },
+              "attributes": {
+                "startLine": 24,
+                "endLine": 24
+              }
+            },
+            "attributes": {
+              "startLine": 24,
+              "endLine": 24
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "port",
+              "attributes": {
+                "startLine": 24,
+                "endLine": 24
+              }
+            },
+            "default": {
+              "nodeType": "Scalar_LNumber",
+              "value": 80,
+              "attributes": {
+                "startLine": 24,
+                "endLine": 24,
+                "kind": 10
+              }
+            },
+            "attributes": {
+              "startLine": 24,
+              "endLine": 24
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_StaticCall",
+              "class": {
+                "nodeType": "Name",
+                "parts": [
+                  "self"
+                ],
+                "attributes": {
+                  "startLine": 25,
+                  "endLine": 25
+                }
+              },
+              "name": {
+                "nodeType": "Identifier",
+                "name": "__construct",
+                "attributes": {
+                  "startLine": 25,
+                  "endLine": 25
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "server",
+                    "attributes": {
+                      "startLine": 25,
+                      "endLine": 25
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 25,
+                    "endLine": 25
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "path",
+                    "attributes": {
+                      "startLine": 25,
+                      "endLine": 25
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 25,
+                    "endLine": 25
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "port",
+                    "attributes": {
+                      "startLine": 25,
+                      "endLine": 25
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 25,
+                    "endLine": 25
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 25,
+                "endLine": 25
+              }
+            },
+            "attributes": {
+              "startLine": 25,
+              "endLine": 25
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 24,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * PHP4 constructor.\n\t */",
+              "line": 21,
+              "filePos": 387,
+              "tokenPos": 76,
+              "endLine": 23,
+              "endFilePos": 416,
+              "endTokenPos": 76
+            }
+          ],
+          "endLine": 26
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 0,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "addCall",
+          "attributes": {
+            "startLine": 28,
+            "endLine": 28
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "args",
+                "attributes": {
+                  "startLine": 30,
+                  "endLine": 30
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "func_get_args"
+                  ],
+                  "attributes": {
+                    "startLine": 30,
+                    "endLine": 30
+                  }
+                },
+                "args": [],
+                "attributes": {
+                  "startLine": 30,
+                  "endLine": 30
+                }
+              },
+              "attributes": {
+                "startLine": 30,
+                "endLine": 30
+              }
+            },
+            "attributes": {
+              "startLine": 30,
+              "endLine": 30
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "methodName",
+                "attributes": {
+                  "startLine": 31,
+                  "endLine": 31
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "array_shift"
+                  ],
+                  "attributes": {
+                    "startLine": 31,
+                    "endLine": 31
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "args",
+                      "attributes": {
+                        "startLine": 31,
+                        "endLine": 31
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 31,
+                      "endLine": 31
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 31,
+                  "endLine": 31
+                }
+              },
+              "attributes": {
+                "startLine": 31,
+                "endLine": 31
+              }
+            },
+            "attributes": {
+              "startLine": 31,
+              "endLine": 31
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "struct",
+                "attributes": {
+                  "startLine": 32,
+                  "endLine": 32
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Array",
+                "items": [
+                  {
+                    "nodeType": "Expr_ArrayItem",
+                    "key": {
+                      "nodeType": "Scalar_String",
+                      "value": "methodName",
+                      "attributes": {
+                        "startLine": 33,
+                        "endLine": 33,
+                        "kind": 1
+                      }
+                    },
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "methodName",
+                      "attributes": {
+                        "startLine": 33,
+                        "endLine": 33
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 33,
+                      "endLine": 33
+                    }
+                  },
+                  {
+                    "nodeType": "Expr_ArrayItem",
+                    "key": {
+                      "nodeType": "Scalar_String",
+                      "value": "params",
+                      "attributes": {
+                        "startLine": 34,
+                        "endLine": 34,
+                        "kind": 1
+                      }
+                    },
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "args",
+                      "attributes": {
+                        "startLine": 34,
+                        "endLine": 34
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 34,
+                      "endLine": 34
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 32,
+                  "endLine": 35,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 32,
+                "endLine": 35
+              }
+            },
+            "attributes": {
+              "startLine": 32,
+              "endLine": 35
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_PropertyFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "this",
+                    "attributes": {
+                      "startLine": 36,
+                      "endLine": 36
+                    }
+                  },
+                  "name": {
+                    "nodeType": "Identifier",
+                    "name": "calls",
+                    "attributes": {
+                      "startLine": 36,
+                      "endLine": 36
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 36,
+                    "endLine": 36
+                  }
+                },
+                "dim": null,
+                "attributes": {
+                  "startLine": 36,
+                  "endLine": 36
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Variable",
+                "name": "struct",
+                "attributes": {
+                  "startLine": 36,
+                  "endLine": 36
+                }
+              },
+              "attributes": {
+                "startLine": 36,
+                "endLine": 36
+              }
+            },
+            "attributes": {
+              "startLine": 36,
+              "endLine": 36
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 28,
+          "endLine": 37
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 0,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "query",
+          "attributes": {
+            "startLine": 39,
+            "endLine": 39
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_StaticCall",
+              "class": {
+                "nodeType": "Name",
+                "parts": [
+                  "parent"
+                ],
+                "attributes": {
+                  "startLine": 42,
+                  "endLine": 42
+                }
+              },
+              "name": {
+                "nodeType": "Identifier",
+                "name": "query",
+                "attributes": {
+                  "startLine": 42,
+                  "endLine": 42
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "system.multicall",
+                    "attributes": {
+                      "startLine": 42,
+                      "endLine": 42,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 42,
+                    "endLine": 42
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_PropertyFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "this",
+                      "attributes": {
+                        "startLine": 42,
+                        "endLine": 42
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "calls",
+                      "attributes": {
+                        "startLine": 42,
+                        "endLine": 42
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 42,
+                      "endLine": 42
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 42,
+                    "endLine": 42
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 42,
+                "endLine": 42
+              }
+            },
+            "attributes": {
+              "startLine": 42,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// Prepare multicall, then call the parent::query() method\n",
+                  "line": 41,
+                  "filePos": 832,
+                  "tokenPos": 194,
+                  "endLine": 42,
+                  "endFilePos": 890,
+                  "endTokenPos": 194
+                }
+              ],
+              "endLine": 42
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 39,
+          "endLine": 43
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 8,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * IXR_ClientMulticall\n *\n * @package IXR\n * @since 1.5.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 7,
+          "endFilePos": 70,
+          "endTokenPos": 1
+        }
+      ],
+      "endLine": 44
+    }
+  }
+]

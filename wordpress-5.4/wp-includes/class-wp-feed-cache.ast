@@ -1,0 +1,221 @@
+[
+  {
+    "nodeType": "Stmt_Class",
+    "flags": 0,
+    "extends": {
+      "nodeType": "Name",
+      "parts": [
+        "SimplePie_Cache"
+      ],
+      "attributes": {
+        "startLine": 17,
+        "endLine": 17
+      }
+    },
+    "implements": [],
+    "name": {
+      "nodeType": "Identifier",
+      "name": "WP_Feed_Cache",
+      "attributes": {
+        "startLine": 17,
+        "endLine": 17
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "create",
+          "attributes": {
+            "startLine": 29,
+            "endLine": 29
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "location",
+              "attributes": {
+                "startLine": 29,
+                "endLine": 29
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 29,
+              "endLine": 29
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "filename",
+              "attributes": {
+                "startLine": 29,
+                "endLine": 29
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 29,
+              "endLine": 29
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "extension",
+              "attributes": {
+                "startLine": 29,
+                "endLine": 29
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 29,
+              "endLine": 29
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_New",
+              "class": {
+                "nodeType": "Name",
+                "parts": [
+                  "WP_Feed_Cache_Transient"
+                ],
+                "attributes": {
+                  "startLine": 30,
+                  "endLine": 30
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "location",
+                    "attributes": {
+                      "startLine": 30,
+                      "endLine": 30
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 30,
+                    "endLine": 30
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "filename",
+                    "attributes": {
+                      "startLine": 30,
+                      "endLine": 30
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 30,
+                    "endLine": 30
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "extension",
+                    "attributes": {
+                      "startLine": 30,
+                      "endLine": 30
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 30,
+                    "endLine": 30
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 30,
+                "endLine": 30
+              }
+            },
+            "attributes": {
+              "startLine": 30,
+              "endLine": 30
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 29,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Creates a new SimplePie_Cache object.\n\t *\n\t * @since 2.8.0\n\t *\n\t * @param string $location  URL location (scheme is used to determine handler).\n\t * @param string $filename  Unique identifier for cache object.\n\t * @param string $extension 'spi' or 'spc'.\n\t * @return WP_Feed_Cache_Transient Feed cache handler object that uses transients.\n\t */",
+              "line": 19,
+              "filePos": 257,
+              "tokenPos": 15,
+              "endLine": 28,
+              "endFilePos": 606,
+              "endTokenPos": 15
+            }
+          ],
+          "endLine": 31
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 17,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Feed API: WP_Feed_Cache class\n *\n * @package WordPress\n * @subpackage Feed\n * @since 4.7.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 8,
+          "endFilePos": 106,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Core class used to implement a feed cache.\n *\n * @since 2.8.0\n *\n * @see SimplePie_Cache\n */",
+          "line": 10,
+          "filePos": 109,
+          "tokenPos": 3,
+          "endLine": 16,
+          "endFilePos": 207,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 32
+    }
+  }
+]

@@ -1,0 +1,373 @@
+[
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "wp_reset_vars"
+        ],
+        "attributes": {
+          "startLine": 11,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n * WordPress Options Header.\n *\n * Displays updated message, if updated variable is part of the URL query.\n *\n * @package WordPress\n * @subpackage Administration\n */",
+              "line": 2,
+              "filePos": 6,
+              "tokenPos": 1,
+              "endLine": 9,
+              "endFilePos": 174,
+              "endTokenPos": 1
+            }
+          ],
+          "endLine": 11
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_Array",
+            "items": [
+              {
+                "nodeType": "Expr_ArrayItem",
+                "key": null,
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "action",
+                  "attributes": {
+                    "startLine": 11,
+                    "endLine": 11,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 11,
+                  "endLine": 11
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 11,
+              "endLine": 11,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 11,
+            "endLine": 11
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 11,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/**\n * WordPress Options Header.\n *\n * Displays updated message, if updated variable is part of the URL query.\n *\n * @package WordPress\n * @subpackage Administration\n */",
+            "line": 2,
+            "filePos": 6,
+            "tokenPos": 1,
+            "endLine": 9,
+            "endFilePos": 174,
+            "endTokenPos": 1
+          }
+        ],
+        "endLine": 11
+      }
+    },
+    "attributes": {
+      "startLine": 11,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * WordPress Options Header.\n *\n * Displays updated message, if updated variable is part of the URL query.\n *\n * @package WordPress\n * @subpackage Administration\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 9,
+          "endFilePos": 174,
+          "endTokenPos": 1
+        }
+      ],
+      "endLine": 11
+    }
+  },
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_BinaryOp_BooleanAnd",
+      "left": {
+        "nodeType": "Expr_Isset",
+        "vars": [
+          {
+            "nodeType": "Expr_ArrayDimFetch",
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "_GET",
+              "attributes": {
+                "startLine": 13,
+                "endLine": 13
+              }
+            },
+            "dim": {
+              "nodeType": "Scalar_String",
+              "value": "updated",
+              "attributes": {
+                "startLine": 13,
+                "endLine": 13,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 13,
+              "endLine": 13
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 13,
+          "endLine": 13
+        }
+      },
+      "right": {
+        "nodeType": "Expr_Isset",
+        "vars": [
+          {
+            "nodeType": "Expr_ArrayDimFetch",
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "_GET",
+              "attributes": {
+                "startLine": 13,
+                "endLine": 13
+              }
+            },
+            "dim": {
+              "nodeType": "Scalar_String",
+              "value": "page",
+              "attributes": {
+                "startLine": 13,
+                "endLine": 13,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 13,
+              "endLine": 13
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 13,
+          "endLine": 13
+        }
+      },
+      "attributes": {
+        "startLine": 13,
+        "endLine": 13
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "add_settings_error"
+            ],
+            "attributes": {
+              "startLine": 15,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// For back-compat with plugins that don't use the Settings API and just set updated=1 in the redirect.\n",
+                  "line": 14,
+                  "filePos": 276,
+                  "tokenPos": 46,
+                  "endLine": 15,
+                  "endFilePos": 379,
+                  "endTokenPos": 46
+                }
+              ],
+              "endLine": 15
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "general",
+                "attributes": {
+                  "startLine": 15,
+                  "endLine": 15,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 15,
+                "endLine": 15
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "settings_updated",
+                "attributes": {
+                  "startLine": 15,
+                  "endLine": 15,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 15,
+                "endLine": 15
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "__"
+                  ],
+                  "attributes": {
+                    "startLine": 15,
+                    "endLine": 15
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "Settings saved.",
+                      "attributes": {
+                        "startLine": 15,
+                        "endLine": 15,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 15,
+                      "endLine": 15
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 15,
+                  "endLine": 15
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 15,
+                "endLine": 15
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "success",
+                "attributes": {
+                  "startLine": 15,
+                  "endLine": 15,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 15,
+                "endLine": 15
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 15,
+            "comments": [
+              {
+                "nodeType": "Comment",
+                "text": "// For back-compat with plugins that don't use the Settings API and just set updated=1 in the redirect.\n",
+                "line": 14,
+                "filePos": 276,
+                "tokenPos": 46,
+                "endLine": 15,
+                "endFilePos": 379,
+                "endTokenPos": 46
+              }
+            ],
+            "endLine": 15
+          }
+        },
+        "attributes": {
+          "startLine": 15,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "// For back-compat with plugins that don't use the Settings API and just set updated=1 in the redirect.\n",
+              "line": 14,
+              "filePos": 276,
+              "tokenPos": 46,
+              "endLine": 15,
+              "endFilePos": 379,
+              "endTokenPos": 46
+            }
+          ],
+          "endLine": 15
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 13,
+      "endLine": 16
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "settings_errors"
+        ],
+        "attributes": {
+          "startLine": 18,
+          "endLine": 18
+        }
+      },
+      "args": [],
+      "attributes": {
+        "startLine": 18,
+        "endLine": 18
+      }
+    },
+    "attributes": {
+      "startLine": 18,
+      "endLine": 18
+    }
+  }
+]

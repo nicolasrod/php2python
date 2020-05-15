@@ -1,0 +1,330 @@
+[
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "get_header"
+        ],
+        "attributes": {
+          "startLine": 18,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n * The template for displaying all pages\n *\n * This is the template that displays all pages by default.\n * Please note that this is the WordPress construct of pages\n * and that other 'pages' on your WordPress site may use a\n * different template.\n *\n * @link https://developer.wordpress.org/themes/basics/template-hierarchy/\n *\n * @package WordPress\n * @subpackage Twenty_Seventeen\n * @since Twenty Seventeen 1.0\n * @version 1.0\n */",
+              "line": 2,
+              "filePos": 6,
+              "tokenPos": 1,
+              "endLine": 16,
+              "endFilePos": 441,
+              "endTokenPos": 1
+            }
+          ],
+          "endLine": 18
+        }
+      },
+      "args": [],
+      "attributes": {
+        "startLine": 18,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/**\n * The template for displaying all pages\n *\n * This is the template that displays all pages by default.\n * Please note that this is the WordPress construct of pages\n * and that other 'pages' on your WordPress site may use a\n * different template.\n *\n * @link https://developer.wordpress.org/themes/basics/template-hierarchy/\n *\n * @package WordPress\n * @subpackage Twenty_Seventeen\n * @since Twenty Seventeen 1.0\n * @version 1.0\n */",
+            "line": 2,
+            "filePos": 6,
+            "tokenPos": 1,
+            "endLine": 16,
+            "endFilePos": 441,
+            "endTokenPos": 1
+          }
+        ],
+        "endLine": 18
+      }
+    },
+    "attributes": {
+      "startLine": 18,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * The template for displaying all pages\n *\n * This is the template that displays all pages by default.\n * Please note that this is the WordPress construct of pages\n * and that other 'pages' on your WordPress site may use a\n * different template.\n *\n * @link https://developer.wordpress.org/themes/basics/template-hierarchy/\n *\n * @package WordPress\n * @subpackage Twenty_Seventeen\n * @since Twenty Seventeen 1.0\n * @version 1.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 16,
+          "endFilePos": 441,
+          "endTokenPos": 1
+        }
+      ],
+      "endLine": 18
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\n<div class=\"wrap\">\n\t<div id=\"primary\" class=\"content-area\">\n\t\t<main id=\"main\" class=\"site-main\" role=\"main\">\n\n\t\t\t",
+    "attributes": {
+      "startLine": 19,
+      "hasLeadingNewline": true,
+      "endLine": 24
+    }
+  },
+  {
+    "nodeType": "Stmt_While",
+    "cond": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "have_posts"
+        ],
+        "attributes": {
+          "startLine": 25,
+          "endLine": 25
+        }
+      },
+      "args": [],
+      "attributes": {
+        "startLine": 25,
+        "endLine": 25
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "the_post"
+            ],
+            "attributes": {
+              "startLine": 26,
+              "endLine": 26
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 26,
+            "endLine": 26
+          }
+        },
+        "attributes": {
+          "startLine": 26,
+          "endLine": 26
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "get_template_part"
+            ],
+            "attributes": {
+              "startLine": 28,
+              "endLine": 28
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "template-parts/page/content",
+                "attributes": {
+                  "startLine": 28,
+                  "endLine": 28,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 28,
+                "endLine": 28
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "page",
+                "attributes": {
+                  "startLine": 28,
+                  "endLine": 28,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 28,
+                "endLine": 28
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 28,
+            "endLine": 28
+          }
+        },
+        "attributes": {
+          "startLine": 28,
+          "endLine": 28
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BinaryOp_BooleanOr",
+          "left": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "comments_open"
+              ],
+              "attributes": {
+                "startLine": 31,
+                "endLine": 31
+              }
+            },
+            "args": [],
+            "attributes": {
+              "startLine": 31,
+              "endLine": 31
+            }
+          },
+          "right": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "get_comments_number"
+              ],
+              "attributes": {
+                "startLine": 31,
+                "endLine": 31
+              }
+            },
+            "args": [],
+            "attributes": {
+              "startLine": 31,
+              "endLine": 31
+            }
+          },
+          "attributes": {
+            "startLine": 31,
+            "endLine": 31
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "comments_template"
+                ],
+                "attributes": {
+                  "startLine": 32,
+                  "endLine": 32
+                }
+              },
+              "args": [],
+              "attributes": {
+                "startLine": 32,
+                "endLine": 32
+              }
+            },
+            "attributes": {
+              "startLine": 32,
+              "endLine": 32
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 31,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "// If comments are open or we have at least one comment, load up the comment template.\n",
+              "line": 30,
+              "filePos": 695,
+              "tokenPos": 40,
+              "endLine": 31,
+              "endFilePos": 781,
+              "endTokenPos": 40
+            }
+          ],
+          "endLine": 33
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 25,
+      "endLine": 35
+    }
+  },
+  {
+    "nodeType": "Stmt_Nop",
+    "attributes": {
+      "startLine": 36,
+      "comments": [
+        {
+          "nodeType": "Comment",
+          "text": "// End the loop.\n",
+          "line": 35,
+          "filePos": 887,
+          "tokenPos": 71,
+          "endLine": 36,
+          "endFilePos": 903,
+          "endTokenPos": 71
+        }
+      ],
+      "endLine": 37
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\n\t\t</main><!-- #main -->\n\t</div><!-- #primary -->\n</div><!-- .wrap -->\n\n",
+    "attributes": {
+      "startLine": 37,
+      "hasLeadingNewline": true,
+      "endLine": 42
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "get_footer"
+        ],
+        "attributes": {
+          "startLine": 43,
+          "endLine": 43
+        }
+      },
+      "args": [],
+      "attributes": {
+        "startLine": 43,
+        "endLine": 43
+      }
+    },
+    "attributes": {
+      "startLine": 43,
+      "endLine": 43
+    }
+  }
+]

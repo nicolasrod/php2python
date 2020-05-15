@@ -1,0 +1,185 @@
+[
+  {
+    "nodeType": "Stmt_Class",
+    "flags": 32,
+    "extends": {
+      "nodeType": "Name",
+      "parts": [
+        "WP_Customize_Setting"
+      ],
+      "attributes": {
+        "startLine": 17,
+        "endLine": 17
+      }
+    },
+    "implements": [],
+    "name": {
+      "nodeType": "Identifier",
+      "name": "WP_Customize_Background_Image_Setting",
+      "attributes": {
+        "startLine": 17,
+        "endLine": 17
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "id",
+              "attributes": {
+                "startLine": 18,
+                "endLine": 18
+              }
+            },
+            "default": {
+              "nodeType": "Scalar_String",
+              "value": "background_image_thumb",
+              "attributes": {
+                "startLine": 18,
+                "endLine": 18,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 18,
+              "endLine": 18
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 18,
+          "endLine": 18
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "update",
+          "attributes": {
+            "startLine": 25,
+            "endLine": 25
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "value",
+              "attributes": {
+                "startLine": 25,
+                "endLine": 25
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 25,
+              "endLine": 25
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "remove_theme_mod"
+                ],
+                "attributes": {
+                  "startLine": 26,
+                  "endLine": 26
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "background_image_thumb",
+                    "attributes": {
+                      "startLine": 26,
+                      "endLine": 26,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 26,
+                    "endLine": 26
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 26,
+                "endLine": 26
+              }
+            },
+            "attributes": {
+              "startLine": 26,
+              "endLine": 26
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 25,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * @since 3.4.0\n\t *\n\t * @param $value\n\t */",
+              "line": 20,
+              "filePos": 371,
+              "tokenPos": 26,
+              "endLine": 24,
+              "endFilePos": 417,
+              "endTokenPos": 26
+            }
+          ],
+          "endLine": 27
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 17,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Customize API: WP_Customize_Background_Image_Setting class\n *\n * @package WordPress\n * @subpackage Customize\n * @since 4.4.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 8,
+          "endFilePos": 140,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Customizer Background Image Setting class.\n *\n * @since 3.4.0\n *\n * @see WP_Customize_Setting\n */",
+          "line": 10,
+          "filePos": 143,
+          "tokenPos": 3,
+          "endLine": 16,
+          "endFilePos": 246,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 28
+    }
+  }
+]

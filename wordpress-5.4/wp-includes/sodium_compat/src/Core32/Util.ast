@@ -1,0 +1,124 @@
+[
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "class_exists"
+        ],
+        "attributes": {
+          "startLine": 3,
+          "endLine": 3
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "ParagonIE_Sodium_Core32_Util",
+            "attributes": {
+              "startLine": 3,
+              "endLine": 3,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 3,
+            "endLine": 3
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "false"
+              ],
+              "attributes": {
+                "startLine": 3,
+                "endLine": 3
+              }
+            },
+            "attributes": {
+              "startLine": 3,
+              "endLine": 3
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 3,
+            "endLine": 3
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 3,
+        "endLine": 3
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": null,
+        "attributes": {
+          "startLine": 4,
+          "endLine": 4
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 3,
+      "endLine": 5
+    }
+  },
+  {
+    "nodeType": "Stmt_Class",
+    "flags": 16,
+    "extends": {
+      "nodeType": "Name",
+      "parts": [
+        "ParagonIE_Sodium_Core_Util"
+      ],
+      "attributes": {
+        "startLine": 10,
+        "endLine": 10
+      }
+    },
+    "implements": [],
+    "name": {
+      "nodeType": "Identifier",
+      "name": "ParagonIE_Sodium_Core32_Util",
+      "attributes": {
+        "startLine": 10,
+        "endLine": 10
+      }
+    },
+    "stmts": [],
+    "attributes": {
+      "startLine": 10,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Class ParagonIE_Sodium_Core_Util\n */",
+          "line": 7,
+          "filePos": 81,
+          "tokenPos": 21,
+          "endLine": 9,
+          "endFilePos": 123,
+          "endTokenPos": 21
+        }
+      ],
+      "endLine": 13
+    }
+  }
+]

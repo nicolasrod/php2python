@@ -1,0 +1,2739 @@
+[
+  {
+    "nodeType": "Stmt_Class",
+    "flags": 0,
+    "extends": null,
+    "implements": [
+      {
+        "nodeType": "Name",
+        "parts": [
+          "ArrayAccess"
+        ],
+        "attributes": {
+          "startLine": 15,
+          "endLine": 15
+        }
+      },
+      {
+        "nodeType": "Name",
+        "parts": [
+          "IteratorAggregate"
+        ],
+        "attributes": {
+          "startLine": 15,
+          "endLine": 15
+        }
+      }
+    ],
+    "name": {
+      "nodeType": "Identifier",
+      "name": "Requests_Cookie_Jar",
+      "attributes": {
+        "startLine": 15,
+        "endLine": 15
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 2,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "cookies",
+              "attributes": {
+                "startLine": 21,
+                "endLine": 21
+              }
+            },
+            "default": {
+              "nodeType": "Expr_Array",
+              "items": [],
+              "attributes": {
+                "startLine": 21,
+                "endLine": 21,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 21,
+              "endLine": 21
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 21,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Actual item data\n\t *\n\t * @var array\n\t */",
+              "line": 16,
+              "filePos": 236,
+              "tokenPos": 18,
+              "endLine": 20,
+              "endFilePos": 283,
+              "endTokenPos": 18
+            }
+          ],
+          "endLine": 21
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "__construct",
+          "attributes": {
+            "startLine": 28,
+            "endLine": 28
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "cookies",
+              "attributes": {
+                "startLine": 28,
+                "endLine": 28
+              }
+            },
+            "default": {
+              "nodeType": "Expr_Array",
+              "items": [],
+              "attributes": {
+                "startLine": 28,
+                "endLine": 28,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 28,
+              "endLine": 28
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_PropertyFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "this",
+                  "attributes": {
+                    "startLine": 29,
+                    "endLine": 29
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "cookies",
+                  "attributes": {
+                    "startLine": 29,
+                    "endLine": 29
+                  }
+                },
+                "attributes": {
+                  "startLine": 29,
+                  "endLine": 29
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Variable",
+                "name": "cookies",
+                "attributes": {
+                  "startLine": 29,
+                  "endLine": 29
+                }
+              },
+              "attributes": {
+                "startLine": 29,
+                "endLine": 29
+              }
+            },
+            "attributes": {
+              "startLine": 29,
+              "endLine": 29
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 28,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Create a new jar\n\t *\n\t * @param array $cookies Existing cookie values\n\t */",
+              "line": 23,
+              "filePos": 318,
+              "tokenPos": 31,
+              "endLine": 27,
+              "endFilePos": 399,
+              "endTokenPos": 31
+            }
+          ],
+          "endLine": 30
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "normalize_cookie",
+          "attributes": {
+            "startLine": 38,
+            "endLine": 38
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "cookie",
+              "attributes": {
+                "startLine": 38,
+                "endLine": 38
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 38,
+              "endLine": 38
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "key",
+              "attributes": {
+                "startLine": 38,
+                "endLine": 38
+              }
+            },
+            "default": {
+              "nodeType": "Expr_ConstFetch",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "null"
+                ],
+                "attributes": {
+                  "startLine": 38,
+                  "endLine": 38
+                }
+              },
+              "attributes": {
+                "startLine": 38,
+                "endLine": 38
+              }
+            },
+            "attributes": {
+              "startLine": 38,
+              "endLine": 38
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_Instanceof",
+              "expr": {
+                "nodeType": "Expr_Variable",
+                "name": "cookie",
+                "attributes": {
+                  "startLine": 39,
+                  "endLine": 39
+                }
+              },
+              "class": {
+                "nodeType": "Name",
+                "parts": [
+                  "Requests_Cookie"
+                ],
+                "attributes": {
+                  "startLine": 39,
+                  "endLine": 39
+                }
+              },
+              "attributes": {
+                "startLine": 39,
+                "endLine": 39
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Return",
+                "expr": {
+                  "nodeType": "Expr_Variable",
+                  "name": "cookie",
+                  "attributes": {
+                    "startLine": 40,
+                    "endLine": 40
+                  }
+                },
+                "attributes": {
+                  "startLine": 40,
+                  "endLine": 40
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 39,
+              "endLine": 41
+            }
+          },
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_StaticCall",
+              "class": {
+                "nodeType": "Name",
+                "parts": [
+                  "Requests_Cookie"
+                ],
+                "attributes": {
+                  "startLine": 43,
+                  "endLine": 43
+                }
+              },
+              "name": {
+                "nodeType": "Identifier",
+                "name": "parse",
+                "attributes": {
+                  "startLine": 43,
+                  "endLine": 43
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "cookie",
+                    "attributes": {
+                      "startLine": 43,
+                      "endLine": 43
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 43,
+                    "endLine": 43
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "key",
+                    "attributes": {
+                      "startLine": 43,
+                      "endLine": 43
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 43,
+                    "endLine": 43
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 43,
+                "endLine": 43
+              }
+            },
+            "attributes": {
+              "startLine": 43,
+              "endLine": 43
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 38,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Normalise cookie data into a Requests_Cookie\n\t *\n\t * @param string|Requests_Cookie $cookie\n\t * @return Requests_Cookie\n\t */",
+              "line": 32,
+              "filePos": 486,
+              "tokenPos": 61,
+              "endLine": 37,
+              "endFilePos": 616,
+              "endTokenPos": 61
+            }
+          ],
+          "endLine": 44
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "normalizeCookie",
+          "attributes": {
+            "startLine": 53,
+            "endLine": 53
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "cookie",
+              "attributes": {
+                "startLine": 53,
+                "endLine": 53
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 53,
+              "endLine": 53
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "key",
+              "attributes": {
+                "startLine": 53,
+                "endLine": 53
+              }
+            },
+            "default": {
+              "nodeType": "Expr_ConstFetch",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "null"
+                ],
+                "attributes": {
+                  "startLine": 53,
+                  "endLine": 53
+                }
+              },
+              "attributes": {
+                "startLine": 53,
+                "endLine": 53
+              }
+            },
+            "attributes": {
+              "startLine": 53,
+              "endLine": 53
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_MethodCall",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "this",
+                "attributes": {
+                  "startLine": 54,
+                  "endLine": 54
+                }
+              },
+              "name": {
+                "nodeType": "Identifier",
+                "name": "normalize_cookie",
+                "attributes": {
+                  "startLine": 54,
+                  "endLine": 54
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "cookie",
+                    "attributes": {
+                      "startLine": 54,
+                      "endLine": 54
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 54,
+                    "endLine": 54
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "key",
+                    "attributes": {
+                      "startLine": 54,
+                      "endLine": 54
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 54,
+                    "endLine": 54
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 54,
+                "endLine": 54
+              }
+            },
+            "attributes": {
+              "startLine": 54,
+              "endLine": 54
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 53,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Normalise cookie data into a Requests_Cookie\n\t *\n\t * @codeCoverageIgnore\n\t * @deprecated Use {@see Requests_Cookie_Jar::normalize_cookie}\n\t * @return Requests_Cookie\n\t */",
+              "line": 46,
+              "filePos": 797,
+              "tokenPos": 115,
+              "endLine": 52,
+              "endFilePos": 974,
+              "endTokenPos": 115
+            }
+          ],
+          "endLine": 55
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "offsetExists",
+          "attributes": {
+            "startLine": 63,
+            "endLine": 63
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "key",
+              "attributes": {
+                "startLine": 63,
+                "endLine": 63
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 63,
+              "endLine": 63
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_Isset",
+              "vars": [
+                {
+                  "nodeType": "Expr_ArrayDimFetch",
+                  "var": {
+                    "nodeType": "Expr_PropertyFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "this",
+                      "attributes": {
+                        "startLine": 64,
+                        "endLine": 64
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "cookies",
+                      "attributes": {
+                        "startLine": 64,
+                        "endLine": 64
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 64,
+                      "endLine": 64
+                    }
+                  },
+                  "dim": {
+                    "nodeType": "Expr_Variable",
+                    "name": "key",
+                    "attributes": {
+                      "startLine": 64,
+                      "endLine": 64
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 64,
+                    "endLine": 64
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 64,
+                "endLine": 64
+              }
+            },
+            "attributes": {
+              "startLine": 64,
+              "endLine": 64
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 63,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Check if the given item exists\n\t *\n\t * @param string $key Item key\n\t * @return boolean Does the item exist?\n\t */",
+              "line": 57,
+              "filePos": 1087,
+              "tokenPos": 150,
+              "endLine": 62,
+              "endFilePos": 1206,
+              "endTokenPos": 150
+            }
+          ],
+          "endLine": 65
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "offsetGet",
+          "attributes": {
+            "startLine": 73,
+            "endLine": 73
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "key",
+              "attributes": {
+                "startLine": 73,
+                "endLine": 73
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 73,
+              "endLine": 73
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BooleanNot",
+              "expr": {
+                "nodeType": "Expr_Isset",
+                "vars": [
+                  {
+                    "nodeType": "Expr_ArrayDimFetch",
+                    "var": {
+                      "nodeType": "Expr_PropertyFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "this",
+                        "attributes": {
+                          "startLine": 74,
+                          "endLine": 74
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "cookies",
+                        "attributes": {
+                          "startLine": 74,
+                          "endLine": 74
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 74,
+                        "endLine": 74
+                      }
+                    },
+                    "dim": {
+                      "nodeType": "Expr_Variable",
+                      "name": "key",
+                      "attributes": {
+                        "startLine": 74,
+                        "endLine": 74
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 74,
+                      "endLine": 74
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 74,
+                  "endLine": 74
+                }
+              },
+              "attributes": {
+                "startLine": 74,
+                "endLine": 74
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Return",
+                "expr": {
+                  "nodeType": "Expr_ConstFetch",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "null"
+                    ],
+                    "attributes": {
+                      "startLine": 75,
+                      "endLine": 75
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 75,
+                    "endLine": 75
+                  }
+                },
+                "attributes": {
+                  "startLine": 75,
+                  "endLine": 75
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 74,
+              "endLine": 76
+            }
+          },
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_ArrayDimFetch",
+              "var": {
+                "nodeType": "Expr_PropertyFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "this",
+                  "attributes": {
+                    "startLine": 78,
+                    "endLine": 78
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "cookies",
+                  "attributes": {
+                    "startLine": 78,
+                    "endLine": 78
+                  }
+                },
+                "attributes": {
+                  "startLine": 78,
+                  "endLine": 78
+                }
+              },
+              "dim": {
+                "nodeType": "Expr_Variable",
+                "name": "key",
+                "attributes": {
+                  "startLine": 78,
+                  "endLine": 78
+                }
+              },
+              "attributes": {
+                "startLine": 78,
+                "endLine": 78
+              }
+            },
+            "attributes": {
+              "startLine": 78,
+              "endLine": 78
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 73,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Get the value for the item\n\t *\n\t * @param string $key Item key\n\t * @return string Item value\n\t */",
+              "line": 67,
+              "filePos": 1289,
+              "tokenPos": 178,
+              "endLine": 72,
+              "endFilePos": 1393,
+              "endTokenPos": 178
+            }
+          ],
+          "endLine": 79
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "offsetSet",
+          "attributes": {
+            "startLine": 89,
+            "endLine": 89
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "key",
+              "attributes": {
+                "startLine": 89,
+                "endLine": 89
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 89,
+              "endLine": 89
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "value",
+              "attributes": {
+                "startLine": 89,
+                "endLine": 89
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 89,
+              "endLine": 89
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BinaryOp_Identical",
+              "left": {
+                "nodeType": "Expr_Variable",
+                "name": "key",
+                "attributes": {
+                  "startLine": 90,
+                  "endLine": 90
+                }
+              },
+              "right": {
+                "nodeType": "Expr_ConstFetch",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "null"
+                  ],
+                  "attributes": {
+                    "startLine": 90,
+                    "endLine": 90
+                  }
+                },
+                "attributes": {
+                  "startLine": 90,
+                  "endLine": 90
+                }
+              },
+              "attributes": {
+                "startLine": 90,
+                "endLine": 90
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Throw",
+                "expr": {
+                  "nodeType": "Expr_New",
+                  "class": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "Requests_Exception"
+                    ],
+                    "attributes": {
+                      "startLine": 91,
+                      "endLine": 91
+                    }
+                  },
+                  "args": [
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Scalar_String",
+                        "value": "Object is a dictionary, not a list",
+                        "attributes": {
+                          "startLine": 91,
+                          "endLine": 91,
+                          "kind": 1
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 91,
+                        "endLine": 91
+                      }
+                    },
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Scalar_String",
+                        "value": "invalidset",
+                        "attributes": {
+                          "startLine": 91,
+                          "endLine": 91,
+                          "kind": 1
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 91,
+                        "endLine": 91
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 91,
+                    "endLine": 91
+                  }
+                },
+                "attributes": {
+                  "startLine": 91,
+                  "endLine": 91
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 90,
+              "endLine": 92
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_PropertyFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "this",
+                    "attributes": {
+                      "startLine": 94,
+                      "endLine": 94
+                    }
+                  },
+                  "name": {
+                    "nodeType": "Identifier",
+                    "name": "cookies",
+                    "attributes": {
+                      "startLine": 94,
+                      "endLine": 94
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 94,
+                    "endLine": 94
+                  }
+                },
+                "dim": {
+                  "nodeType": "Expr_Variable",
+                  "name": "key",
+                  "attributes": {
+                    "startLine": 94,
+                    "endLine": 94
+                  }
+                },
+                "attributes": {
+                  "startLine": 94,
+                  "endLine": 94
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Variable",
+                "name": "value",
+                "attributes": {
+                  "startLine": 94,
+                  "endLine": 94
+                }
+              },
+              "attributes": {
+                "startLine": 94,
+                "endLine": 94
+              }
+            },
+            "attributes": {
+              "startLine": 94,
+              "endLine": 94
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 89,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Set the given item\n\t *\n\t * @throws Requests_Exception On attempting to use dictionary as list (`invalidset`)\n\t *\n\t * @param string $key Item name\n\t * @param string $value Item value\n\t */",
+              "line": 81,
+              "filePos": 1525,
+              "tokenPos": 227,
+              "endLine": 88,
+              "endFilePos": 1718,
+              "endTokenPos": 227
+            }
+          ],
+          "endLine": 95
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "offsetUnset",
+          "attributes": {
+            "startLine": 102,
+            "endLine": 102
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "key",
+              "attributes": {
+                "startLine": 102,
+                "endLine": 102
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 102,
+              "endLine": 102
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Unset",
+            "vars": [
+              {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_PropertyFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "this",
+                    "attributes": {
+                      "startLine": 103,
+                      "endLine": 103
+                    }
+                  },
+                  "name": {
+                    "nodeType": "Identifier",
+                    "name": "cookies",
+                    "attributes": {
+                      "startLine": 103,
+                      "endLine": 103
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 103,
+                    "endLine": 103
+                  }
+                },
+                "dim": {
+                  "nodeType": "Expr_Variable",
+                  "name": "key",
+                  "attributes": {
+                    "startLine": 103,
+                    "endLine": 103
+                  }
+                },
+                "attributes": {
+                  "startLine": 103,
+                  "endLine": 103
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 103,
+              "endLine": 103
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 102,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Unset the given header\n\t *\n\t * @param string $key\n\t */",
+              "line": 97,
+              "filePos": 1914,
+              "tokenPos": 284,
+              "endLine": 101,
+              "endFilePos": 1975,
+              "endTokenPos": 284
+            }
+          ],
+          "endLine": 104
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "getIterator",
+          "attributes": {
+            "startLine": 111,
+            "endLine": 111
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_New",
+              "class": {
+                "nodeType": "Name",
+                "parts": [
+                  "ArrayIterator"
+                ],
+                "attributes": {
+                  "startLine": 112,
+                  "endLine": 112
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_PropertyFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "this",
+                      "attributes": {
+                        "startLine": 112,
+                        "endLine": 112
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "cookies",
+                      "attributes": {
+                        "startLine": 112,
+                        "endLine": 112
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 112,
+                      "endLine": 112
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 112,
+                    "endLine": 112
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 112,
+                "endLine": 112
+              }
+            },
+            "attributes": {
+              "startLine": 112,
+              "endLine": 112
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 111,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Get an iterator for the data\n\t *\n\t * @return ArrayIterator\n\t */",
+              "line": 106,
+              "filePos": 2050,
+              "tokenPos": 310,
+              "endLine": 110,
+              "endFilePos": 2120,
+              "endTokenPos": 310
+            }
+          ],
+          "endLine": 113
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "register",
+          "attributes": {
+            "startLine": 120,
+            "endLine": 120
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": {
+              "nodeType": "Name",
+              "parts": [
+                "Requests_Hooker"
+              ],
+              "attributes": {
+                "startLine": 120,
+                "endLine": 120
+              }
+            },
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "hooks",
+              "attributes": {
+                "startLine": 120,
+                "endLine": 120
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 120,
+              "endLine": 120
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_MethodCall",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "hooks",
+                "attributes": {
+                  "startLine": 121,
+                  "endLine": 121
+                }
+              },
+              "name": {
+                "nodeType": "Identifier",
+                "name": "register",
+                "attributes": {
+                  "startLine": 121,
+                  "endLine": 121
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "requests.before_request",
+                    "attributes": {
+                      "startLine": 121,
+                      "endLine": 121,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 121,
+                    "endLine": 121
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Array",
+                    "items": [
+                      {
+                        "nodeType": "Expr_ArrayItem",
+                        "key": null,
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "this",
+                          "attributes": {
+                            "startLine": 121,
+                            "endLine": 121
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 121,
+                          "endLine": 121
+                        }
+                      },
+                      {
+                        "nodeType": "Expr_ArrayItem",
+                        "key": null,
+                        "value": {
+                          "nodeType": "Scalar_String",
+                          "value": "before_request",
+                          "attributes": {
+                            "startLine": 121,
+                            "endLine": 121,
+                            "kind": 1
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 121,
+                          "endLine": 121
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 121,
+                      "endLine": 121,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 121,
+                    "endLine": 121
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 121,
+                "endLine": 121
+              }
+            },
+            "attributes": {
+              "startLine": 121,
+              "endLine": 121
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_MethodCall",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "hooks",
+                "attributes": {
+                  "startLine": 122,
+                  "endLine": 122
+                }
+              },
+              "name": {
+                "nodeType": "Identifier",
+                "name": "register",
+                "attributes": {
+                  "startLine": 122,
+                  "endLine": 122
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "requests.before_redirect_check",
+                    "attributes": {
+                      "startLine": 122,
+                      "endLine": 122,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 122,
+                    "endLine": 122
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Array",
+                    "items": [
+                      {
+                        "nodeType": "Expr_ArrayItem",
+                        "key": null,
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "this",
+                          "attributes": {
+                            "startLine": 122,
+                            "endLine": 122
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 122,
+                          "endLine": 122
+                        }
+                      },
+                      {
+                        "nodeType": "Expr_ArrayItem",
+                        "key": null,
+                        "value": {
+                          "nodeType": "Scalar_String",
+                          "value": "before_redirect_check",
+                          "attributes": {
+                            "startLine": 122,
+                            "endLine": 122,
+                            "kind": 1
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 122,
+                          "endLine": 122
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 122,
+                      "endLine": 122,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 122,
+                    "endLine": 122
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 122,
+                "endLine": 122
+              }
+            },
+            "attributes": {
+              "startLine": 122,
+              "endLine": 122
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 120,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Register the cookie handler with the request's hooking system\n\t *\n\t * @param Requests_Hooker $hooks Hooking system\n\t */",
+              "line": 115,
+              "filePos": 2204,
+              "tokenPos": 336,
+              "endLine": 119,
+              "endFilePos": 2330,
+              "endTokenPos": 336
+            }
+          ],
+          "endLine": 123
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "before_request",
+          "attributes": {
+            "startLine": 136,
+            "endLine": 136
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "url",
+              "attributes": {
+                "startLine": 136,
+                "endLine": 136
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 136,
+              "endLine": 136
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": true,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "headers",
+              "attributes": {
+                "startLine": 136,
+                "endLine": 136
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 136,
+              "endLine": 136
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": true,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "data",
+              "attributes": {
+                "startLine": 136,
+                "endLine": 136
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 136,
+              "endLine": 136
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": true,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "type",
+              "attributes": {
+                "startLine": 136,
+                "endLine": 136
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 136,
+              "endLine": 136
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": true,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "options",
+              "attributes": {
+                "startLine": 136,
+                "endLine": 136
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 136,
+              "endLine": 136
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BooleanNot",
+              "expr": {
+                "nodeType": "Expr_Instanceof",
+                "expr": {
+                  "nodeType": "Expr_Variable",
+                  "name": "url",
+                  "attributes": {
+                    "startLine": 137,
+                    "endLine": 137
+                  }
+                },
+                "class": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "Requests_IRI"
+                  ],
+                  "attributes": {
+                    "startLine": 137,
+                    "endLine": 137
+                  }
+                },
+                "attributes": {
+                  "startLine": 137,
+                  "endLine": 137
+                }
+              },
+              "attributes": {
+                "startLine": 137,
+                "endLine": 137
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "url",
+                    "attributes": {
+                      "startLine": 138,
+                      "endLine": 138
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_New",
+                    "class": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "Requests_IRI"
+                      ],
+                      "attributes": {
+                        "startLine": 138,
+                        "endLine": 138
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "url",
+                          "attributes": {
+                            "startLine": 138,
+                            "endLine": 138
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 138,
+                          "endLine": 138
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 138,
+                      "endLine": 138
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 138,
+                    "endLine": 138
+                  }
+                },
+                "attributes": {
+                  "startLine": 138,
+                  "endLine": 138
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 137,
+              "endLine": 139
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BooleanNot",
+              "expr": {
+                "nodeType": "Expr_Empty",
+                "expr": {
+                  "nodeType": "Expr_PropertyFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "this",
+                    "attributes": {
+                      "startLine": 141,
+                      "endLine": 141
+                    }
+                  },
+                  "name": {
+                    "nodeType": "Identifier",
+                    "name": "cookies",
+                    "attributes": {
+                      "startLine": 141,
+                      "endLine": 141
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 141,
+                    "endLine": 141
+                  }
+                },
+                "attributes": {
+                  "startLine": 141,
+                  "endLine": 141
+                }
+              },
+              "attributes": {
+                "startLine": 141,
+                "endLine": 141
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "cookies",
+                    "attributes": {
+                      "startLine": 142,
+                      "endLine": 142
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_Array",
+                    "items": [],
+                    "attributes": {
+                      "startLine": 142,
+                      "endLine": 142,
+                      "kind": 1
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 142,
+                    "endLine": 142
+                  }
+                },
+                "attributes": {
+                  "startLine": 142,
+                  "endLine": 142
+                }
+              },
+              {
+                "nodeType": "Stmt_Foreach",
+                "expr": {
+                  "nodeType": "Expr_PropertyFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "this",
+                    "attributes": {
+                      "startLine": 143,
+                      "endLine": 143
+                    }
+                  },
+                  "name": {
+                    "nodeType": "Identifier",
+                    "name": "cookies",
+                    "attributes": {
+                      "startLine": 143,
+                      "endLine": 143
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 143,
+                    "endLine": 143
+                  }
+                },
+                "keyVar": {
+                  "nodeType": "Expr_Variable",
+                  "name": "key",
+                  "attributes": {
+                    "startLine": 143,
+                    "endLine": 143
+                  }
+                },
+                "byRef": false,
+                "valueVar": {
+                  "nodeType": "Expr_Variable",
+                  "name": "cookie",
+                  "attributes": {
+                    "startLine": 143,
+                    "endLine": 143
+                  }
+                },
+                "stmts": [
+                  {
+                    "nodeType": "Stmt_Expression",
+                    "expr": {
+                      "nodeType": "Expr_Assign",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "cookie",
+                        "attributes": {
+                          "startLine": 144,
+                          "endLine": 144
+                        }
+                      },
+                      "expr": {
+                        "nodeType": "Expr_MethodCall",
+                        "var": {
+                          "nodeType": "Expr_Variable",
+                          "name": "this",
+                          "attributes": {
+                            "startLine": 144,
+                            "endLine": 144
+                          }
+                        },
+                        "name": {
+                          "nodeType": "Identifier",
+                          "name": "normalize_cookie",
+                          "attributes": {
+                            "startLine": 144,
+                            "endLine": 144
+                          }
+                        },
+                        "args": [
+                          {
+                            "nodeType": "Arg",
+                            "value": {
+                              "nodeType": "Expr_Variable",
+                              "name": "cookie",
+                              "attributes": {
+                                "startLine": 144,
+                                "endLine": 144
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 144,
+                              "endLine": 144
+                            }
+                          },
+                          {
+                            "nodeType": "Arg",
+                            "value": {
+                              "nodeType": "Expr_Variable",
+                              "name": "key",
+                              "attributes": {
+                                "startLine": 144,
+                                "endLine": 144
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 144,
+                              "endLine": 144
+                            }
+                          }
+                        ],
+                        "attributes": {
+                          "startLine": 144,
+                          "endLine": 144
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 144,
+                        "endLine": 144
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 144,
+                      "endLine": 144
+                    }
+                  },
+                  {
+                    "nodeType": "Stmt_If",
+                    "cond": {
+                      "nodeType": "Expr_MethodCall",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "cookie",
+                        "attributes": {
+                          "startLine": 147,
+                          "endLine": 147
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "is_expired",
+                        "attributes": {
+                          "startLine": 147,
+                          "endLine": 147
+                        }
+                      },
+                      "args": [],
+                      "attributes": {
+                        "startLine": 147,
+                        "endLine": 147
+                      }
+                    },
+                    "stmts": [
+                      {
+                        "nodeType": "Stmt_Continue",
+                        "num": null,
+                        "attributes": {
+                          "startLine": 148,
+                          "endLine": 148
+                        }
+                      }
+                    ],
+                    "elseifs": [],
+                    "else": null,
+                    "attributes": {
+                      "startLine": 147,
+                      "comments": [
+                        {
+                          "nodeType": "Comment",
+                          "text": "// Skip expired cookies\n",
+                          "line": 146,
+                          "filePos": 3120,
+                          "tokenPos": 499,
+                          "endLine": 147,
+                          "endFilePos": 3143,
+                          "endTokenPos": 499
+                        }
+                      ],
+                      "endLine": 149
+                    }
+                  },
+                  {
+                    "nodeType": "Stmt_If",
+                    "cond": {
+                      "nodeType": "Expr_MethodCall",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "cookie",
+                        "attributes": {
+                          "startLine": 151,
+                          "endLine": 151
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "domain_matches",
+                        "attributes": {
+                          "startLine": 151,
+                          "endLine": 151
+                        }
+                      },
+                      "args": [
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Expr_PropertyFetch",
+                            "var": {
+                              "nodeType": "Expr_Variable",
+                              "name": "url",
+                              "attributes": {
+                                "startLine": 151,
+                                "endLine": 151
+                              }
+                            },
+                            "name": {
+                              "nodeType": "Identifier",
+                              "name": "host",
+                              "attributes": {
+                                "startLine": 151,
+                                "endLine": 151
+                              }
+                            },
+                            "attributes": {
+                              "startLine": 151,
+                              "endLine": 151
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 151,
+                            "endLine": 151
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 151,
+                        "endLine": 151
+                      }
+                    },
+                    "stmts": [
+                      {
+                        "nodeType": "Stmt_Expression",
+                        "expr": {
+                          "nodeType": "Expr_Assign",
+                          "var": {
+                            "nodeType": "Expr_ArrayDimFetch",
+                            "var": {
+                              "nodeType": "Expr_Variable",
+                              "name": "cookies",
+                              "attributes": {
+                                "startLine": 152,
+                                "endLine": 152
+                              }
+                            },
+                            "dim": null,
+                            "attributes": {
+                              "startLine": 152,
+                              "endLine": 152
+                            }
+                          },
+                          "expr": {
+                            "nodeType": "Expr_MethodCall",
+                            "var": {
+                              "nodeType": "Expr_Variable",
+                              "name": "cookie",
+                              "attributes": {
+                                "startLine": 152,
+                                "endLine": 152
+                              }
+                            },
+                            "name": {
+                              "nodeType": "Identifier",
+                              "name": "format_for_header",
+                              "attributes": {
+                                "startLine": 152,
+                                "endLine": 152
+                              }
+                            },
+                            "args": [],
+                            "attributes": {
+                              "startLine": 152,
+                              "endLine": 152
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 152,
+                            "endLine": 152
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 152,
+                          "endLine": 152
+                        }
+                      }
+                    ],
+                    "elseifs": [],
+                    "else": null,
+                    "attributes": {
+                      "startLine": 151,
+                      "endLine": 153
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 143,
+                  "endLine": 154
+                }
+              },
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_ArrayDimFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "headers",
+                      "attributes": {
+                        "startLine": 156,
+                        "endLine": 156
+                      }
+                    },
+                    "dim": {
+                      "nodeType": "Scalar_String",
+                      "value": "Cookie",
+                      "attributes": {
+                        "startLine": 156,
+                        "endLine": 156,
+                        "kind": 1
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 156,
+                      "endLine": 156
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "implode"
+                      ],
+                      "attributes": {
+                        "startLine": 156,
+                        "endLine": 156
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Scalar_String",
+                          "value": "; ",
+                          "attributes": {
+                            "startLine": 156,
+                            "endLine": 156,
+                            "kind": 1
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 156,
+                          "endLine": 156
+                        }
+                      },
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "cookies",
+                          "attributes": {
+                            "startLine": 156,
+                            "endLine": 156
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 156,
+                          "endLine": 156
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 156,
+                      "endLine": 156
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 156,
+                    "endLine": 156
+                  }
+                },
+                "attributes": {
+                  "startLine": 156,
+                  "endLine": 156
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 141,
+              "endLine": 157
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 136,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Add Cookie header to a request if we have any\n\t *\n\t * As per RFC 6265, cookies are separated by '; '\n\t *\n\t * @param string $url\n\t * @param array $headers\n\t * @param array $data\n\t * @param string $type\n\t * @param array $options\n\t */",
+              "line": 125,
+              "filePos": 2561,
+              "tokenPos": 387,
+              "endLine": 135,
+              "endFilePos": 2799,
+              "endTokenPos": 387
+            }
+          ],
+          "endLine": 158
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "before_redirect_check",
+          "attributes": {
+            "startLine": 165,
+            "endLine": 165
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": {
+              "nodeType": "Name",
+              "parts": [
+                "Requests_Response"
+              ],
+              "attributes": {
+                "startLine": 165,
+                "endLine": 165
+              }
+            },
+            "byRef": true,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "return",
+              "attributes": {
+                "startLine": 165,
+                "endLine": 165
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 165,
+              "endLine": 165
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "url",
+                "attributes": {
+                  "startLine": 166,
+                  "endLine": 166
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_PropertyFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "return",
+                  "attributes": {
+                    "startLine": 166,
+                    "endLine": 166
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "url",
+                  "attributes": {
+                    "startLine": 166,
+                    "endLine": 166
+                  }
+                },
+                "attributes": {
+                  "startLine": 166,
+                  "endLine": 166
+                }
+              },
+              "attributes": {
+                "startLine": 166,
+                "endLine": 166
+              }
+            },
+            "attributes": {
+              "startLine": 166,
+              "endLine": 166
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BooleanNot",
+              "expr": {
+                "nodeType": "Expr_Instanceof",
+                "expr": {
+                  "nodeType": "Expr_Variable",
+                  "name": "url",
+                  "attributes": {
+                    "startLine": 167,
+                    "endLine": 167
+                  }
+                },
+                "class": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "Requests_IRI"
+                  ],
+                  "attributes": {
+                    "startLine": 167,
+                    "endLine": 167
+                  }
+                },
+                "attributes": {
+                  "startLine": 167,
+                  "endLine": 167
+                }
+              },
+              "attributes": {
+                "startLine": 167,
+                "endLine": 167
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "url",
+                    "attributes": {
+                      "startLine": 168,
+                      "endLine": 168
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_New",
+                    "class": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "Requests_IRI"
+                      ],
+                      "attributes": {
+                        "startLine": 168,
+                        "endLine": 168
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "url",
+                          "attributes": {
+                            "startLine": 168,
+                            "endLine": 168
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 168,
+                          "endLine": 168
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 168,
+                      "endLine": 168
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 168,
+                    "endLine": 168
+                  }
+                },
+                "attributes": {
+                  "startLine": 168,
+                  "endLine": 168
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 167,
+              "endLine": 169
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "cookies",
+                "attributes": {
+                  "startLine": 171,
+                  "endLine": 171
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_StaticCall",
+                "class": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "Requests_Cookie"
+                  ],
+                  "attributes": {
+                    "startLine": 171,
+                    "endLine": 171
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "parse_from_headers",
+                  "attributes": {
+                    "startLine": 171,
+                    "endLine": 171
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_PropertyFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "return",
+                        "attributes": {
+                          "startLine": 171,
+                          "endLine": 171
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "headers",
+                        "attributes": {
+                          "startLine": 171,
+                          "endLine": 171
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 171,
+                        "endLine": 171
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 171,
+                      "endLine": 171
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "url",
+                      "attributes": {
+                        "startLine": 171,
+                        "endLine": 171
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 171,
+                      "endLine": 171
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 171,
+                  "endLine": 171
+                }
+              },
+              "attributes": {
+                "startLine": 171,
+                "endLine": 171
+              }
+            },
+            "attributes": {
+              "startLine": 171,
+              "endLine": 171
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_PropertyFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "this",
+                  "attributes": {
+                    "startLine": 172,
+                    "endLine": 172
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "cookies",
+                  "attributes": {
+                    "startLine": 172,
+                    "endLine": 172
+                  }
+                },
+                "attributes": {
+                  "startLine": 172,
+                  "endLine": 172
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "array_merge"
+                  ],
+                  "attributes": {
+                    "startLine": 172,
+                    "endLine": 172
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_PropertyFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "this",
+                        "attributes": {
+                          "startLine": 172,
+                          "endLine": 172
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "cookies",
+                        "attributes": {
+                          "startLine": 172,
+                          "endLine": 172
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 172,
+                        "endLine": 172
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 172,
+                      "endLine": 172
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "cookies",
+                      "attributes": {
+                        "startLine": 172,
+                        "endLine": 172
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 172,
+                      "endLine": 172
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 172,
+                  "endLine": 172
+                }
+              },
+              "attributes": {
+                "startLine": 172,
+                "endLine": 172
+              }
+            },
+            "attributes": {
+              "startLine": 172,
+              "endLine": 172
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_PropertyFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "return",
+                  "attributes": {
+                    "startLine": 173,
+                    "endLine": 173
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "cookies",
+                  "attributes": {
+                    "startLine": 173,
+                    "endLine": 173
+                  }
+                },
+                "attributes": {
+                  "startLine": 173,
+                  "endLine": 173
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Variable",
+                "name": "this",
+                "attributes": {
+                  "startLine": 173,
+                  "endLine": 173
+                }
+              },
+              "attributes": {
+                "startLine": 173,
+                "endLine": 173
+              }
+            },
+            "attributes": {
+              "startLine": 173,
+              "endLine": 173
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 165,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Parse all cookies from a response and attach them to the response\n\t *\n\t * @var Requests_Response $response\n\t */",
+              "line": 160,
+              "filePos": 3364,
+              "tokenPos": 570,
+              "endLine": 164,
+              "endFilePos": 3482,
+              "endTokenPos": 570
+            }
+          ],
+          "endLine": 174
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 15,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Cookie holder object\n *\n * @package Requests\n * @subpackage Cookies\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 7,
+          "endFilePos": 83,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Cookie holder object\n *\n * @package Requests\n * @subpackage Cookies\n */",
+          "line": 9,
+          "filePos": 86,
+          "tokenPos": 3,
+          "endLine": 14,
+          "endFilePos": 163,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 175
+    }
+  }
+]

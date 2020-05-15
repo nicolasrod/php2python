@@ -1,0 +1,147 @@
+[
+  {
+    "nodeType": "Stmt_Class",
+    "flags": 0,
+    "extends": {
+      "nodeType": "Name",
+      "parts": [
+        "Requests_Exception_HTTP"
+      ],
+      "attributes": {
+        "startLine": 15,
+        "endLine": 15
+      }
+    },
+    "implements": [],
+    "name": {
+      "nodeType": "Identifier",
+      "name": "Requests_Exception_HTTP_418",
+      "attributes": {
+        "startLine": 15,
+        "endLine": 15
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 2,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "code",
+              "attributes": {
+                "startLine": 21,
+                "endLine": 21
+              }
+            },
+            "default": {
+              "nodeType": "Scalar_LNumber",
+              "value": 418,
+              "attributes": {
+                "startLine": 21,
+                "endLine": 21,
+                "kind": 10
+              }
+            },
+            "attributes": {
+              "startLine": 21,
+              "endLine": 21
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 21,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * HTTP status code\n\t *\n\t * @var integer\n\t */",
+              "line": 16,
+              "filePos": 316,
+              "tokenPos": 15,
+              "endLine": 20,
+              "endFilePos": 365,
+              "endTokenPos": 15
+            }
+          ],
+          "endLine": 21
+        }
+      },
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 2,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "reason",
+              "attributes": {
+                "startLine": 28,
+                "endLine": 28
+              }
+            },
+            "default": {
+              "nodeType": "Scalar_String",
+              "value": "I'm A Teapot",
+              "attributes": {
+                "startLine": 28,
+                "endLine": 28,
+                "kind": 2
+              }
+            },
+            "attributes": {
+              "startLine": 28,
+              "endLine": 28
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 28,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Reason phrase\n\t *\n\t * @var string\n\t */",
+              "line": 23,
+              "filePos": 393,
+              "tokenPos": 26,
+              "endLine": 27,
+              "endFilePos": 438,
+              "endTokenPos": 26
+            }
+          ],
+          "endLine": 28
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 15,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Exception for 418 I'm A Teapot responses\n *\n * @see https://tools.ietf.org/html/rfc2324\n * @package Requests\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 7,
+          "endFilePos": 124,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Exception for 418 I'm A Teapot responses\n *\n * @see https://tools.ietf.org/html/rfc2324\n * @package Requests\n */",
+          "line": 9,
+          "filePos": 127,
+          "tokenPos": 3,
+          "endLine": 14,
+          "endFilePos": 245,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 29
+    }
+  }
+]

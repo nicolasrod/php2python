@@ -1,0 +1,273 @@
+[
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "get_header"
+        ],
+        "attributes": {
+          "startLine": 12,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n * The template for displaying 404 pages (not found)\n *\n * @link https://codex.wordpress.org/Creating_an_Error_404_Page\n *\n * @package WordPress\n * @subpackage Twenty_Nineteen\n * @since Twenty Nineteen 1.0\n */",
+              "line": 2,
+              "filePos": 6,
+              "tokenPos": 1,
+              "endLine": 10,
+              "endFilePos": 218,
+              "endTokenPos": 1
+            }
+          ],
+          "endLine": 12
+        }
+      },
+      "args": [],
+      "attributes": {
+        "startLine": 12,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/**\n * The template for displaying 404 pages (not found)\n *\n * @link https://codex.wordpress.org/Creating_an_Error_404_Page\n *\n * @package WordPress\n * @subpackage Twenty_Nineteen\n * @since Twenty Nineteen 1.0\n */",
+            "line": 2,
+            "filePos": 6,
+            "tokenPos": 1,
+            "endLine": 10,
+            "endFilePos": 218,
+            "endTokenPos": 1
+          }
+        ],
+        "endLine": 12
+      }
+    },
+    "attributes": {
+      "startLine": 12,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * The template for displaying 404 pages (not found)\n *\n * @link https://codex.wordpress.org/Creating_an_Error_404_Page\n *\n * @package WordPress\n * @subpackage Twenty_Nineteen\n * @since Twenty Nineteen 1.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 10,
+          "endFilePos": 218,
+          "endTokenPos": 1
+        }
+      ],
+      "endLine": 12
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\n\t<div id=\"primary\" class=\"content-area\">\n\t\t<main id=\"main\" class=\"site-main\">\n\n\t\t\t<div class=\"error-404 not-found\">\n\t\t\t\t<header class=\"page-header\">\n\t\t\t\t\t<h1 class=\"page-title\">",
+    "attributes": {
+      "startLine": 14,
+      "hasLeadingNewline": true,
+      "endLine": 20
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 20,
+          "endLine": 20
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Oops! That page can&rsquo;t be found.",
+            "attributes": {
+              "startLine": 20,
+              "endLine": 20,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 20,
+            "endLine": 20
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "twentynineteen",
+            "attributes": {
+              "startLine": 20,
+              "endLine": 20,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 20,
+            "endLine": 20
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 20,
+        "endLine": 20
+      }
+    },
+    "attributes": {
+      "startLine": 20,
+      "endLine": 20
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</h1>\n\t\t\t\t</header><!-- .page-header -->\n\n\t\t\t\t<div class=\"page-content\">\n\t\t\t\t\t<p>",
+    "attributes": {
+      "startLine": 20,
+      "hasLeadingNewline": false,
+      "endLine": 24
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_e"
+        ],
+        "attributes": {
+          "startLine": 24,
+          "endLine": 24
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "It looks like nothing was found at this location. Maybe try a search?",
+            "attributes": {
+              "startLine": 24,
+              "endLine": 24,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 24,
+            "endLine": 24
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "twentynineteen",
+            "attributes": {
+              "startLine": 24,
+              "endLine": 24,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 24,
+            "endLine": 24
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 24,
+        "endLine": 24
+      }
+    },
+    "attributes": {
+      "startLine": 24,
+      "endLine": 24
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</p>\n\t\t\t\t\t",
+    "attributes": {
+      "startLine": 24,
+      "hasLeadingNewline": false,
+      "endLine": 25
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "get_search_form"
+        ],
+        "attributes": {
+          "startLine": 25,
+          "endLine": 25
+        }
+      },
+      "args": [],
+      "attributes": {
+        "startLine": 25,
+        "endLine": 25
+      }
+    },
+    "attributes": {
+      "startLine": 25,
+      "endLine": 25
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\t\t\t\t</div><!-- .page-content -->\n\t\t\t</div><!-- .error-404 -->\n\n\t\t</main><!-- #main -->\n\t</div><!-- #primary -->\n\n",
+    "attributes": {
+      "startLine": 26,
+      "hasLeadingNewline": true,
+      "endLine": 32
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "get_footer"
+        ],
+        "attributes": {
+          "startLine": 33,
+          "endLine": 33
+        }
+      },
+      "args": [],
+      "attributes": {
+        "startLine": 33,
+        "endLine": 33
+      }
+    },
+    "attributes": {
+      "startLine": 33,
+      "endLine": 33
+    }
+  }
+]

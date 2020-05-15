@@ -1,0 +1,126 @@
+[
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_deprecated_file"
+        ],
+        "attributes": {
+          "startLine": 11,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n * Locale API\n *\n * @package WordPress\n * @subpackage i18n\n * @since 1.2.0\n * @deprecated 4.7.0\n */",
+              "line": 2,
+              "filePos": 6,
+              "tokenPos": 1,
+              "endLine": 9,
+              "endFilePos": 108,
+              "endTokenPos": 1
+            }
+          ],
+          "endLine": 11
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "basename"
+              ],
+              "attributes": {
+                "startLine": 11,
+                "endLine": 11
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_MagicConst_File",
+                  "attributes": {
+                    "startLine": 11,
+                    "endLine": 11
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 11,
+                  "endLine": 11
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 11,
+              "endLine": 11
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 11,
+            "endLine": 11
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "4.7.0",
+            "attributes": {
+              "startLine": 11,
+              "endLine": 11,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 11,
+            "endLine": 11
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 11,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/**\n * Locale API\n *\n * @package WordPress\n * @subpackage i18n\n * @since 1.2.0\n * @deprecated 4.7.0\n */",
+            "line": 2,
+            "filePos": 6,
+            "tokenPos": 1,
+            "endLine": 9,
+            "endFilePos": 108,
+            "endTokenPos": 1
+          }
+        ],
+        "endLine": 11
+      }
+    },
+    "attributes": {
+      "startLine": 11,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Locale API\n *\n * @package WordPress\n * @subpackage i18n\n * @since 1.2.0\n * @deprecated 4.7.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 9,
+          "endFilePos": 108,
+          "endTokenPos": 1
+        }
+      ],
+      "endLine": 11
+    }
+  }
+]

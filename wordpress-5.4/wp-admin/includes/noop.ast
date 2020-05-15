@@ -1,0 +1,811 @@
+[
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "__",
+      "attributes": {
+        "startLine": 13,
+        "endLine": 13
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [],
+    "attributes": {
+      "startLine": 13,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Noop functions for load-scripts.php and load-styles.php.\n *\n * @package WordPress\n * @subpackage Administration\n * @since 4.4.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 8,
+          "endFilePos": 143,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * @ignore\n */",
+          "line": 10,
+          "filePos": 146,
+          "tokenPos": 3,
+          "endLine": 12,
+          "endFilePos": 163,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 13
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "_x",
+      "attributes": {
+        "startLine": 18,
+        "endLine": 18
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [],
+    "attributes": {
+      "startLine": 18,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * @ignore\n */",
+          "line": 15,
+          "filePos": 183,
+          "tokenPos": 14,
+          "endLine": 17,
+          "endFilePos": 200,
+          "endTokenPos": 14
+        }
+      ],
+      "endLine": 18
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "add_filter",
+      "attributes": {
+        "startLine": 23,
+        "endLine": 23
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [],
+    "attributes": {
+      "startLine": 23,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * @ignore\n */",
+          "line": 20,
+          "filePos": 220,
+          "tokenPos": 25,
+          "endLine": 22,
+          "endFilePos": 237,
+          "endTokenPos": 25
+        }
+      ],
+      "endLine": 23
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "esc_attr",
+      "attributes": {
+        "startLine": 28,
+        "endLine": 28
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [],
+    "attributes": {
+      "startLine": 28,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * @ignore\n */",
+          "line": 25,
+          "filePos": 265,
+          "tokenPos": 36,
+          "endLine": 27,
+          "endFilePos": 282,
+          "endTokenPos": 36
+        }
+      ],
+      "endLine": 28
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "apply_filters",
+      "attributes": {
+        "startLine": 33,
+        "endLine": 33
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [],
+    "attributes": {
+      "startLine": 33,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * @ignore\n */",
+          "line": 30,
+          "filePos": 308,
+          "tokenPos": 47,
+          "endLine": 32,
+          "endFilePos": 325,
+          "endTokenPos": 47
+        }
+      ],
+      "endLine": 33
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "get_option",
+      "attributes": {
+        "startLine": 38,
+        "endLine": 38
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [],
+    "attributes": {
+      "startLine": 38,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * @ignore\n */",
+          "line": 35,
+          "filePos": 356,
+          "tokenPos": 58,
+          "endLine": 37,
+          "endFilePos": 373,
+          "endTokenPos": 58
+        }
+      ],
+      "endLine": 38
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "is_lighttpd_before_150",
+      "attributes": {
+        "startLine": 43,
+        "endLine": 43
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [],
+    "attributes": {
+      "startLine": 43,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * @ignore\n */",
+          "line": 40,
+          "filePos": 401,
+          "tokenPos": 69,
+          "endLine": 42,
+          "endFilePos": 418,
+          "endTokenPos": 69
+        }
+      ],
+      "endLine": 43
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "add_action",
+      "attributes": {
+        "startLine": 48,
+        "endLine": 48
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [],
+    "attributes": {
+      "startLine": 48,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * @ignore\n */",
+          "line": 45,
+          "filePos": 458,
+          "tokenPos": 80,
+          "endLine": 47,
+          "endFilePos": 475,
+          "endTokenPos": 80
+        }
+      ],
+      "endLine": 48
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "did_action",
+      "attributes": {
+        "startLine": 53,
+        "endLine": 53
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [],
+    "attributes": {
+      "startLine": 53,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * @ignore\n */",
+          "line": 50,
+          "filePos": 503,
+          "tokenPos": 91,
+          "endLine": 52,
+          "endFilePos": 520,
+          "endTokenPos": 91
+        }
+      ],
+      "endLine": 53
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "do_action_ref_array",
+      "attributes": {
+        "startLine": 58,
+        "endLine": 58
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [],
+    "attributes": {
+      "startLine": 58,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * @ignore\n */",
+          "line": 55,
+          "filePos": 548,
+          "tokenPos": 102,
+          "endLine": 57,
+          "endFilePos": 565,
+          "endTokenPos": 102
+        }
+      ],
+      "endLine": 58
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "get_bloginfo",
+      "attributes": {
+        "startLine": 63,
+        "endLine": 63
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [],
+    "attributes": {
+      "startLine": 63,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * @ignore\n */",
+          "line": 60,
+          "filePos": 602,
+          "tokenPos": 113,
+          "endLine": 62,
+          "endFilePos": 619,
+          "endTokenPos": 113
+        }
+      ],
+      "endLine": 63
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "is_admin",
+      "attributes": {
+        "startLine": 68,
+        "endLine": 68
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_ConstFetch",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "true"
+            ],
+            "attributes": {
+              "startLine": 69,
+              "endLine": 69
+            }
+          },
+          "attributes": {
+            "startLine": 69,
+            "endLine": 69
+          }
+        },
+        "attributes": {
+          "startLine": 69,
+          "endLine": 69
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 68,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * @ignore\n */",
+          "line": 65,
+          "filePos": 649,
+          "tokenPos": 124,
+          "endLine": 67,
+          "endFilePos": 666,
+          "endTokenPos": 124
+        }
+      ],
+      "endLine": 69
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "site_url",
+      "attributes": {
+        "startLine": 74,
+        "endLine": 74
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [],
+    "attributes": {
+      "startLine": 74,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * @ignore\n */",
+          "line": 71,
+          "filePos": 706,
+          "tokenPos": 140,
+          "endLine": 73,
+          "endFilePos": 723,
+          "endTokenPos": 140
+        }
+      ],
+      "endLine": 74
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "admin_url",
+      "attributes": {
+        "startLine": 79,
+        "endLine": 79
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [],
+    "attributes": {
+      "startLine": 79,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * @ignore\n */",
+          "line": 76,
+          "filePos": 749,
+          "tokenPos": 151,
+          "endLine": 78,
+          "endFilePos": 766,
+          "endTokenPos": 151
+        }
+      ],
+      "endLine": 79
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "home_url",
+      "attributes": {
+        "startLine": 84,
+        "endLine": 84
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [],
+    "attributes": {
+      "startLine": 84,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * @ignore\n */",
+          "line": 81,
+          "filePos": 793,
+          "tokenPos": 162,
+          "endLine": 83,
+          "endFilePos": 810,
+          "endTokenPos": 162
+        }
+      ],
+      "endLine": 84
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "includes_url",
+      "attributes": {
+        "startLine": 89,
+        "endLine": 89
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [],
+    "attributes": {
+      "startLine": 89,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * @ignore\n */",
+          "line": 86,
+          "filePos": 836,
+          "tokenPos": 173,
+          "endLine": 88,
+          "endFilePos": 853,
+          "endTokenPos": 173
+        }
+      ],
+      "endLine": 89
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "wp_guess_url",
+      "attributes": {
+        "startLine": 94,
+        "endLine": 94
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [],
+    "attributes": {
+      "startLine": 94,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * @ignore\n */",
+          "line": 91,
+          "filePos": 883,
+          "tokenPos": 184,
+          "endLine": 93,
+          "endFilePos": 900,
+          "endTokenPos": 184
+        }
+      ],
+      "endLine": 94
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "get_file",
+      "attributes": {
+        "startLine": 96,
+        "endLine": 96
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "path",
+          "attributes": {
+            "startLine": 96,
+            "endLine": 96
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 96,
+          "endLine": 96
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "path",
+            "attributes": {
+              "startLine": 98,
+              "endLine": 98
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "realpath"
+              ],
+              "attributes": {
+                "startLine": 98,
+                "endLine": 98
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "path",
+                  "attributes": {
+                    "startLine": 98,
+                    "endLine": 98
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 98,
+                  "endLine": 98
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 98,
+              "endLine": 98
+            }
+          },
+          "attributes": {
+            "startLine": 98,
+            "endLine": 98
+          }
+        },
+        "attributes": {
+          "startLine": 98,
+          "endLine": 98
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BinaryOp_BooleanOr",
+          "left": {
+            "nodeType": "Expr_BooleanNot",
+            "expr": {
+              "nodeType": "Expr_Variable",
+              "name": "path",
+              "attributes": {
+                "startLine": 100,
+                "endLine": 100
+              }
+            },
+            "attributes": {
+              "startLine": 100,
+              "endLine": 100
+            }
+          },
+          "right": {
+            "nodeType": "Expr_BooleanNot",
+            "expr": {
+              "nodeType": "Expr_ErrorSuppress",
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "is_file"
+                  ],
+                  "attributes": {
+                    "startLine": 100,
+                    "endLine": 100
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "path",
+                      "attributes": {
+                        "startLine": 100,
+                        "endLine": 100
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 100,
+                      "endLine": 100
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 100,
+                  "endLine": 100
+                }
+              },
+              "attributes": {
+                "startLine": 100,
+                "endLine": 100
+              }
+            },
+            "attributes": {
+              "startLine": 100,
+              "endLine": 100
+            }
+          },
+          "attributes": {
+            "startLine": 100,
+            "endLine": 100
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Scalar_String",
+              "value": "",
+              "attributes": {
+                "startLine": 101,
+                "endLine": 101,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 101,
+              "endLine": 101
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 100,
+          "endLine": 102
+        }
+      },
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_ErrorSuppress",
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "file_get_contents"
+              ],
+              "attributes": {
+                "startLine": 104,
+                "endLine": 104
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "path",
+                  "attributes": {
+                    "startLine": 104,
+                    "endLine": 104
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 104,
+                  "endLine": 104
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 104,
+              "endLine": 104
+            }
+          },
+          "attributes": {
+            "startLine": 104,
+            "endLine": 104
+          }
+        },
+        "attributes": {
+          "startLine": 104,
+          "endLine": 104
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 96,
+      "endLine": 105
+    }
+  }
+]

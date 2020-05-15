@@ -1,0 +1,216 @@
+[
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_deprecated_file"
+        ],
+        "attributes": {
+          "startLine": 11,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n * Back-compat placeholder for the base embed template\n *\n * @package WordPress\n * @subpackage oEmbed\n * @since 4.4.0\n * @deprecated 4.5.0 Moved to wp-includes/theme-compat/embed.php\n */",
+              "line": 2,
+              "filePos": 6,
+              "tokenPos": 1,
+              "endLine": 9,
+              "endFilePos": 195,
+              "endTokenPos": 1
+            }
+          ],
+          "endLine": 11
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "basename"
+              ],
+              "attributes": {
+                "startLine": 11,
+                "endLine": 11
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_MagicConst_File",
+                  "attributes": {
+                    "startLine": 11,
+                    "endLine": 11
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 11,
+                  "endLine": 11
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 11,
+              "endLine": 11
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 11,
+            "endLine": 11
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "4.5.0",
+            "attributes": {
+              "startLine": 11,
+              "endLine": 11,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 11,
+            "endLine": 11
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "wp-includes/theme-compat/embed.php",
+            "attributes": {
+              "startLine": 11,
+              "endLine": 11,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 11,
+            "endLine": 11
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 11,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/**\n * Back-compat placeholder for the base embed template\n *\n * @package WordPress\n * @subpackage oEmbed\n * @since 4.4.0\n * @deprecated 4.5.0 Moved to wp-includes/theme-compat/embed.php\n */",
+            "line": 2,
+            "filePos": 6,
+            "tokenPos": 1,
+            "endLine": 9,
+            "endFilePos": 195,
+            "endTokenPos": 1
+          }
+        ],
+        "endLine": 11
+      }
+    },
+    "attributes": {
+      "startLine": 11,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Back-compat placeholder for the base embed template\n *\n * @package WordPress\n * @subpackage oEmbed\n * @since 4.4.0\n * @deprecated 4.5.0 Moved to wp-includes/theme-compat/embed.php\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 9,
+          "endFilePos": 195,
+          "endTokenPos": 1
+        }
+      ],
+      "endLine": 11
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_BinaryOp_Concat",
+          "left": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "ABSPATH"
+              ],
+              "attributes": {
+                "startLine": 13,
+                "endLine": 13
+              }
+            },
+            "attributes": {
+              "startLine": 13,
+              "endLine": 13
+            }
+          },
+          "right": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "WPINC"
+              ],
+              "attributes": {
+                "startLine": 13,
+                "endLine": 13
+              }
+            },
+            "attributes": {
+              "startLine": 13,
+              "endLine": 13
+            }
+          },
+          "attributes": {
+            "startLine": 13,
+            "endLine": 13
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/theme-compat/embed.php",
+          "attributes": {
+            "startLine": 13,
+            "endLine": 13,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 13,
+          "endLine": 13
+        }
+      },
+      "type": 3,
+      "attributes": {
+        "startLine": 13,
+        "endLine": 13
+      }
+    },
+    "attributes": {
+      "startLine": 13,
+      "endLine": 13
+    }
+  }
+]

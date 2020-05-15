@@ -1,0 +1,3228 @@
+[
+  {
+    "nodeType": "Stmt_Class",
+    "flags": 16,
+    "extends": null,
+    "implements": [],
+    "name": {
+      "nodeType": "Identifier",
+      "name": "WP_Session_Tokens",
+      "attributes": {
+        "startLine": 15,
+        "endLine": 15
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 2,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "user_id",
+              "attributes": {
+                "startLine": 23,
+                "endLine": 23
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 23,
+              "endLine": 23
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 23,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * User ID.\n\t *\n\t * @since 4.0.0\n\t * @var int User ID.\n\t */",
+              "line": 17,
+              "filePos": 235,
+              "tokenPos": 13,
+              "endLine": 22,
+              "endFilePos": 298,
+              "endTokenPos": 13
+            }
+          ],
+          "endLine": 23
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 2,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "__construct",
+          "attributes": {
+            "startLine": 32,
+            "endLine": 32
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "user_id",
+              "attributes": {
+                "startLine": 32,
+                "endLine": 32
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 32,
+              "endLine": 32
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_PropertyFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "this",
+                  "attributes": {
+                    "startLine": 33,
+                    "endLine": 33
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "user_id",
+                  "attributes": {
+                    "startLine": 33,
+                    "endLine": 33
+                  }
+                },
+                "attributes": {
+                  "startLine": 33,
+                  "endLine": 33
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Variable",
+                "name": "user_id",
+                "attributes": {
+                  "startLine": 33,
+                  "endLine": 33
+                }
+              },
+              "attributes": {
+                "startLine": 33,
+                "endLine": 33
+              }
+            },
+            "attributes": {
+              "startLine": 33,
+              "endLine": 33
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 32,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Protected constructor. Use the `get_instance()` method to get the instance.\n\t *\n\t * @since 4.0.0\n\t *\n\t * @param int $user_id User whose session to manage.\n\t */",
+              "line": 25,
+              "filePos": 323,
+              "tokenPos": 20,
+              "endLine": 31,
+              "endFilePos": 489,
+              "endTokenPos": 20
+            }
+          ],
+          "endLine": 34
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 41,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "get_instance",
+          "attributes": {
+            "startLine": 48,
+            "endLine": 48
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "user_id",
+              "attributes": {
+                "startLine": 48,
+                "endLine": 48
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 48,
+              "endLine": 48
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "manager",
+                "attributes": {
+                  "startLine": 57,
+                  "comments": [
+                    {
+                      "nodeType": "Comment_Doc",
+                      "text": "/**\n\t\t * Filters the class name for the session token manager.\n\t\t *\n\t\t * @since 4.0.0\n\t\t *\n\t\t * @param string $session Name of class to use as the manager.\n\t\t *                        Default 'WP_User_Meta_Session_Tokens'.\n\t\t */",
+                      "line": 49,
+                      "filePos": 1090,
+                      "tokenPos": 65,
+                      "endLine": 56,
+                      "endFilePos": 1317,
+                      "endTokenPos": 65
+                    }
+                  ],
+                  "endLine": 57
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "apply_filters"
+                  ],
+                  "attributes": {
+                    "startLine": 57,
+                    "endLine": 57
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "session_token_manager",
+                      "attributes": {
+                        "startLine": 57,
+                        "endLine": 57,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 57,
+                      "endLine": 57
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "WP_User_Meta_Session_Tokens",
+                      "attributes": {
+                        "startLine": 57,
+                        "endLine": 57,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 57,
+                      "endLine": 57
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 57,
+                  "endLine": 57
+                }
+              },
+              "attributes": {
+                "startLine": 57,
+                "comments": [
+                  {
+                    "nodeType": "Comment_Doc",
+                    "text": "/**\n\t\t * Filters the class name for the session token manager.\n\t\t *\n\t\t * @since 4.0.0\n\t\t *\n\t\t * @param string $session Name of class to use as the manager.\n\t\t *                        Default 'WP_User_Meta_Session_Tokens'.\n\t\t */",
+                    "line": 49,
+                    "filePos": 1090,
+                    "tokenPos": 65,
+                    "endLine": 56,
+                    "endFilePos": 1317,
+                    "endTokenPos": 65
+                  }
+                ],
+                "endLine": 57
+              }
+            },
+            "attributes": {
+              "startLine": 57,
+              "comments": [
+                {
+                  "nodeType": "Comment_Doc",
+                  "text": "/**\n\t\t * Filters the class name for the session token manager.\n\t\t *\n\t\t * @since 4.0.0\n\t\t *\n\t\t * @param string $session Name of class to use as the manager.\n\t\t *                        Default 'WP_User_Meta_Session_Tokens'.\n\t\t */",
+                  "line": 49,
+                  "filePos": 1090,
+                  "tokenPos": 65,
+                  "endLine": 56,
+                  "endFilePos": 1317,
+                  "endTokenPos": 65
+                }
+              ],
+              "endLine": 57
+            }
+          },
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_New",
+              "class": {
+                "nodeType": "Expr_Variable",
+                "name": "manager",
+                "attributes": {
+                  "startLine": 58,
+                  "endLine": 58
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "user_id",
+                    "attributes": {
+                      "startLine": 58,
+                      "endLine": 58
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 58,
+                    "endLine": 58
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 58,
+                "endLine": 58
+              }
+            },
+            "attributes": {
+              "startLine": 58,
+              "endLine": 58
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 48,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Retrieves a session manager instance for a user.\n\t *\n\t * This method contains a {@see 'session_token_manager'} filter, allowing a plugin to swap out\n\t * the session manager for a subclass of `WP_Session_Tokens`.\n\t *\n\t * @since 4.0.0\n\t *\n\t * @param int $user_id User whose session to manage.\n\t * @return WP_Session_Tokens The session object, which is by default an instance of\n\t *                           the `WP_User_Meta_Session_Tokens` class.\n\t */",
+              "line": 36,
+              "filePos": 571,
+              "tokenPos": 46,
+              "endLine": 47,
+              "endFilePos": 1029,
+              "endTokenPos": 46
+            }
+          ],
+          "endLine": 59
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 36,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "hash_token",
+          "attributes": {
+            "startLine": 69,
+            "endLine": 69
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "token",
+              "attributes": {
+                "startLine": 69,
+                "endLine": 69
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 69,
+              "endLine": 69
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "function_exists"
+                ],
+                "attributes": {
+                  "startLine": 71,
+                  "endLine": 71
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "hash",
+                    "attributes": {
+                      "startLine": 71,
+                      "endLine": 71,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 71,
+                    "endLine": 71
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 71,
+                "endLine": 71
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Return",
+                "expr": {
+                  "nodeType": "Expr_FuncCall",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "hash"
+                    ],
+                    "attributes": {
+                      "startLine": 72,
+                      "endLine": 72
+                    }
+                  },
+                  "args": [
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Scalar_String",
+                        "value": "sha256",
+                        "attributes": {
+                          "startLine": 72,
+                          "endLine": 72,
+                          "kind": 1
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 72,
+                        "endLine": 72
+                      }
+                    },
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Expr_Variable",
+                        "name": "token",
+                        "attributes": {
+                          "startLine": 72,
+                          "endLine": 72
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 72,
+                        "endLine": 72
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 72,
+                    "endLine": 72
+                  }
+                },
+                "attributes": {
+                  "startLine": 72,
+                  "endLine": 72
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": {
+              "nodeType": "Stmt_Else",
+              "stmts": [
+                {
+                  "nodeType": "Stmt_Return",
+                  "expr": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "sha1"
+                      ],
+                      "attributes": {
+                        "startLine": 74,
+                        "endLine": 74
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "token",
+                          "attributes": {
+                            "startLine": 74,
+                            "endLine": 74
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 74,
+                          "endLine": 74
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 74,
+                      "endLine": 74
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 74,
+                    "endLine": 74
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 73,
+                "endLine": 75
+              }
+            },
+            "attributes": {
+              "startLine": 71,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// If ext/hash is not present, use sha1() instead.\n",
+                  "line": 70,
+                  "filePos": 1685,
+                  "tokenPos": 113,
+                  "endLine": 71,
+                  "endFilePos": 1735,
+                  "endTokenPos": 113
+                }
+              ],
+              "endLine": 75
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 69,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Hashes the given session token for storage.\n\t *\n\t * @since 4.0.0\n\t *\n\t * @param string $token Session token to hash.\n\t * @return string A hash of the session token (a verifier).\n\t */",
+              "line": 61,
+              "filePos": 1445,
+              "tokenPos": 96,
+              "endLine": 68,
+              "endFilePos": 1634,
+              "endTokenPos": 96
+            }
+          ],
+          "endLine": 76
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 33,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "get",
+          "attributes": {
+            "startLine": 86,
+            "endLine": 86
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "token",
+              "attributes": {
+                "startLine": 86,
+                "endLine": 86
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 86,
+              "endLine": 86
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "verifier",
+                "attributes": {
+                  "startLine": 87,
+                  "endLine": 87
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_MethodCall",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "this",
+                  "attributes": {
+                    "startLine": 87,
+                    "endLine": 87
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "hash_token",
+                  "attributes": {
+                    "startLine": 87,
+                    "endLine": 87
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "token",
+                      "attributes": {
+                        "startLine": 87,
+                        "endLine": 87
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 87,
+                      "endLine": 87
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 87,
+                  "endLine": 87
+                }
+              },
+              "attributes": {
+                "startLine": 87,
+                "endLine": 87
+              }
+            },
+            "attributes": {
+              "startLine": 87,
+              "endLine": 87
+            }
+          },
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_MethodCall",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "this",
+                "attributes": {
+                  "startLine": 88,
+                  "endLine": 88
+                }
+              },
+              "name": {
+                "nodeType": "Identifier",
+                "name": "get_session",
+                "attributes": {
+                  "startLine": 88,
+                  "endLine": 88
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "verifier",
+                    "attributes": {
+                      "startLine": 88,
+                      "endLine": 88
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 88,
+                    "endLine": 88
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 88,
+                "endLine": 88
+              }
+            },
+            "attributes": {
+              "startLine": 88,
+              "endLine": 88
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 86,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Retrieves a user's session for the given token.\n\t *\n\t * @since 4.0.0\n\t *\n\t * @param string $token Session token.\n\t * @return array|null The session, or null if it does not exist.\n\t */",
+              "line": 78,
+              "filePos": 1855,
+              "tokenPos": 163,
+              "endLine": 85,
+              "endFilePos": 2045,
+              "endTokenPos": 163
+            }
+          ],
+          "endLine": 89
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 33,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "verify",
+          "attributes": {
+            "startLine": 101,
+            "endLine": 101
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "token",
+              "attributes": {
+                "startLine": 101,
+                "endLine": 101
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 101,
+              "endLine": 101
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "verifier",
+                "attributes": {
+                  "startLine": 102,
+                  "endLine": 102
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_MethodCall",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "this",
+                  "attributes": {
+                    "startLine": 102,
+                    "endLine": 102
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "hash_token",
+                  "attributes": {
+                    "startLine": 102,
+                    "endLine": 102
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "token",
+                      "attributes": {
+                        "startLine": 102,
+                        "endLine": 102
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 102,
+                      "endLine": 102
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 102,
+                  "endLine": 102
+                }
+              },
+              "attributes": {
+                "startLine": 102,
+                "endLine": 102
+              }
+            },
+            "attributes": {
+              "startLine": 102,
+              "endLine": 102
+            }
+          },
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_Cast_Bool",
+              "expr": {
+                "nodeType": "Expr_MethodCall",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "this",
+                  "attributes": {
+                    "startLine": 103,
+                    "endLine": 103
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "get_session",
+                  "attributes": {
+                    "startLine": 103,
+                    "endLine": 103
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "verifier",
+                      "attributes": {
+                        "startLine": 103,
+                        "endLine": 103
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 103,
+                      "endLine": 103
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 103,
+                  "endLine": 103
+                }
+              },
+              "attributes": {
+                "startLine": 103,
+                "endLine": 103
+              }
+            },
+            "attributes": {
+              "startLine": 103,
+              "endLine": 103
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 101,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Validates the given session token for authenticity and validity.\n\t *\n\t * Checks that the given token is present and hasn't expired.\n\t *\n\t * @since 4.0.0\n\t *\n\t * @param string $token Token to verify.\n\t * @return bool Whether the token is valid for the user.\n\t */",
+              "line": 91,
+              "filePos": 2176,
+              "tokenPos": 208,
+              "endLine": 100,
+              "endFilePos": 2444,
+              "endTokenPos": 208
+            }
+          ],
+          "endLine": 104
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 33,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "create",
+          "attributes": {
+            "startLine": 122,
+            "endLine": 122
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "expiration",
+              "attributes": {
+                "startLine": 122,
+                "endLine": 122
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 122,
+              "endLine": 122
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "session",
+                "attributes": {
+                  "startLine": 133,
+                  "comments": [
+                    {
+                      "nodeType": "Comment_Doc",
+                      "text": "/**\n\t\t * Filters the information attached to the newly created session.\n\t\t *\n\t\t * Can be used to attach further information to a session.\n\t\t *\n\t\t * @since 4.0.0\n\t\t *\n\t\t * @param array $session Array of extra data.\n\t\t * @param int   $user_id User ID.\n\t\t */",
+                      "line": 123,
+                      "filePos": 3215,
+                      "tokenPos": 272,
+                      "endLine": 132,
+                      "endFilePos": 3469,
+                      "endTokenPos": 272
+                    }
+                  ],
+                  "endLine": 133
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "apply_filters"
+                  ],
+                  "attributes": {
+                    "startLine": 133,
+                    "endLine": 133
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "attach_session_information",
+                      "attributes": {
+                        "startLine": 133,
+                        "endLine": 133,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 133,
+                      "endLine": 133
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Array",
+                      "items": [],
+                      "attributes": {
+                        "startLine": 133,
+                        "endLine": 133,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 133,
+                      "endLine": 133
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_PropertyFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "this",
+                        "attributes": {
+                          "startLine": 133,
+                          "endLine": 133
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "user_id",
+                        "attributes": {
+                          "startLine": 133,
+                          "endLine": 133
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 133,
+                        "endLine": 133
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 133,
+                      "endLine": 133
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 133,
+                  "endLine": 133
+                }
+              },
+              "attributes": {
+                "startLine": 133,
+                "comments": [
+                  {
+                    "nodeType": "Comment_Doc",
+                    "text": "/**\n\t\t * Filters the information attached to the newly created session.\n\t\t *\n\t\t * Can be used to attach further information to a session.\n\t\t *\n\t\t * @since 4.0.0\n\t\t *\n\t\t * @param array $session Array of extra data.\n\t\t * @param int   $user_id User ID.\n\t\t */",
+                    "line": 123,
+                    "filePos": 3215,
+                    "tokenPos": 272,
+                    "endLine": 132,
+                    "endFilePos": 3469,
+                    "endTokenPos": 272
+                  }
+                ],
+                "endLine": 133
+              }
+            },
+            "attributes": {
+              "startLine": 133,
+              "comments": [
+                {
+                  "nodeType": "Comment_Doc",
+                  "text": "/**\n\t\t * Filters the information attached to the newly created session.\n\t\t *\n\t\t * Can be used to attach further information to a session.\n\t\t *\n\t\t * @since 4.0.0\n\t\t *\n\t\t * @param array $session Array of extra data.\n\t\t * @param int   $user_id User ID.\n\t\t */",
+                  "line": 123,
+                  "filePos": 3215,
+                  "tokenPos": 272,
+                  "endLine": 132,
+                  "endFilePos": 3469,
+                  "endTokenPos": 272
+                }
+              ],
+              "endLine": 133
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "session",
+                  "attributes": {
+                    "startLine": 134,
+                    "endLine": 134
+                  }
+                },
+                "dim": {
+                  "nodeType": "Scalar_String",
+                  "value": "expiration",
+                  "attributes": {
+                    "startLine": 134,
+                    "endLine": 134,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 134,
+                  "endLine": 134
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Variable",
+                "name": "expiration",
+                "attributes": {
+                  "startLine": 134,
+                  "endLine": 134
+                }
+              },
+              "attributes": {
+                "startLine": 134,
+                "endLine": 134
+              }
+            },
+            "attributes": {
+              "startLine": 134,
+              "endLine": 134
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BooleanNot",
+              "expr": {
+                "nodeType": "Expr_Empty",
+                "expr": {
+                  "nodeType": "Expr_ArrayDimFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "_SERVER",
+                    "attributes": {
+                      "startLine": 137,
+                      "endLine": 137
+                    }
+                  },
+                  "dim": {
+                    "nodeType": "Scalar_String",
+                    "value": "REMOTE_ADDR",
+                    "attributes": {
+                      "startLine": 137,
+                      "endLine": 137,
+                      "kind": 1
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 137,
+                    "endLine": 137
+                  }
+                },
+                "attributes": {
+                  "startLine": 137,
+                  "endLine": 137
+                }
+              },
+              "attributes": {
+                "startLine": 137,
+                "endLine": 137
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_ArrayDimFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "session",
+                      "attributes": {
+                        "startLine": 138,
+                        "endLine": 138
+                      }
+                    },
+                    "dim": {
+                      "nodeType": "Scalar_String",
+                      "value": "ip",
+                      "attributes": {
+                        "startLine": 138,
+                        "endLine": 138,
+                        "kind": 1
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 138,
+                      "endLine": 138
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_ArrayDimFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "_SERVER",
+                      "attributes": {
+                        "startLine": 138,
+                        "endLine": 138
+                      }
+                    },
+                    "dim": {
+                      "nodeType": "Scalar_String",
+                      "value": "REMOTE_ADDR",
+                      "attributes": {
+                        "startLine": 138,
+                        "endLine": 138,
+                        "kind": 1
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 138,
+                      "endLine": 138
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 138,
+                    "endLine": 138
+                  }
+                },
+                "attributes": {
+                  "startLine": 138,
+                  "endLine": 138
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 137,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// IP address.\n",
+                  "line": 136,
+                  "filePos": 3613,
+                  "tokenPos": 306,
+                  "endLine": 137,
+                  "endFilePos": 3627,
+                  "endTokenPos": 306
+                }
+              ],
+              "endLine": 139
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BooleanNot",
+              "expr": {
+                "nodeType": "Expr_Empty",
+                "expr": {
+                  "nodeType": "Expr_ArrayDimFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "_SERVER",
+                    "attributes": {
+                      "startLine": 142,
+                      "endLine": 142
+                    }
+                  },
+                  "dim": {
+                    "nodeType": "Scalar_String",
+                    "value": "HTTP_USER_AGENT",
+                    "attributes": {
+                      "startLine": 142,
+                      "endLine": 142,
+                      "kind": 1
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 142,
+                    "endLine": 142
+                  }
+                },
+                "attributes": {
+                  "startLine": 142,
+                  "endLine": 142
+                }
+              },
+              "attributes": {
+                "startLine": 142,
+                "endLine": 142
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_ArrayDimFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "session",
+                      "attributes": {
+                        "startLine": 143,
+                        "endLine": 143
+                      }
+                    },
+                    "dim": {
+                      "nodeType": "Scalar_String",
+                      "value": "ua",
+                      "attributes": {
+                        "startLine": 143,
+                        "endLine": 143,
+                        "kind": 1
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 143,
+                      "endLine": 143
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "wp_unslash"
+                      ],
+                      "attributes": {
+                        "startLine": 143,
+                        "endLine": 143
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_ArrayDimFetch",
+                          "var": {
+                            "nodeType": "Expr_Variable",
+                            "name": "_SERVER",
+                            "attributes": {
+                              "startLine": 143,
+                              "endLine": 143
+                            }
+                          },
+                          "dim": {
+                            "nodeType": "Scalar_String",
+                            "value": "HTTP_USER_AGENT",
+                            "attributes": {
+                              "startLine": 143,
+                              "endLine": 143,
+                              "kind": 1
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 143,
+                            "endLine": 143
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 143,
+                          "endLine": 143
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 143,
+                      "endLine": 143
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 143,
+                    "endLine": 143
+                  }
+                },
+                "attributes": {
+                  "startLine": 143,
+                  "endLine": 143
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 142,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// User-agent.\n",
+                  "line": 141,
+                  "filePos": 3726,
+                  "tokenPos": 343,
+                  "endLine": 142,
+                  "endFilePos": 3740,
+                  "endTokenPos": 343
+                }
+              ],
+              "endLine": 144
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "session",
+                  "attributes": {
+                    "startLine": 147,
+                    "comments": [
+                      {
+                        "nodeType": "Comment",
+                        "text": "// Timestamp.\n",
+                        "line": 146,
+                        "filePos": 3861,
+                        "tokenPos": 385,
+                        "endLine": 147,
+                        "endFilePos": 3874,
+                        "endTokenPos": 385
+                      }
+                    ],
+                    "endLine": 147
+                  }
+                },
+                "dim": {
+                  "nodeType": "Scalar_String",
+                  "value": "login",
+                  "attributes": {
+                    "startLine": 147,
+                    "endLine": 147,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 147,
+                  "comments": [
+                    {
+                      "nodeType": "Comment",
+                      "text": "// Timestamp.\n",
+                      "line": 146,
+                      "filePos": 3861,
+                      "tokenPos": 385,
+                      "endLine": 147,
+                      "endFilePos": 3874,
+                      "endTokenPos": 385
+                    }
+                  ],
+                  "endLine": 147
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "time"
+                  ],
+                  "attributes": {
+                    "startLine": 147,
+                    "endLine": 147
+                  }
+                },
+                "args": [],
+                "attributes": {
+                  "startLine": 147,
+                  "endLine": 147
+                }
+              },
+              "attributes": {
+                "startLine": 147,
+                "comments": [
+                  {
+                    "nodeType": "Comment",
+                    "text": "// Timestamp.\n",
+                    "line": 146,
+                    "filePos": 3861,
+                    "tokenPos": 385,
+                    "endLine": 147,
+                    "endFilePos": 3874,
+                    "endTokenPos": 385
+                  }
+                ],
+                "endLine": 147
+              }
+            },
+            "attributes": {
+              "startLine": 147,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// Timestamp.\n",
+                  "line": 146,
+                  "filePos": 3861,
+                  "tokenPos": 385,
+                  "endLine": 147,
+                  "endFilePos": 3874,
+                  "endTokenPos": 385
+                }
+              ],
+              "endLine": 147
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "token",
+                "attributes": {
+                  "startLine": 149,
+                  "endLine": 149
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "wp_generate_password"
+                  ],
+                  "attributes": {
+                    "startLine": 149,
+                    "endLine": 149
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_LNumber",
+                      "value": 43,
+                      "attributes": {
+                        "startLine": 149,
+                        "endLine": 149,
+                        "kind": 10
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 149,
+                      "endLine": 149
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_ConstFetch",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "false"
+                        ],
+                        "attributes": {
+                          "startLine": 149,
+                          "endLine": 149
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 149,
+                        "endLine": 149
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 149,
+                      "endLine": 149
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_ConstFetch",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "false"
+                        ],
+                        "attributes": {
+                          "startLine": 149,
+                          "endLine": 149
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 149,
+                        "endLine": 149
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 149,
+                      "endLine": 149
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 149,
+                  "endLine": 149
+                }
+              },
+              "attributes": {
+                "startLine": 149,
+                "endLine": 149
+              }
+            },
+            "attributes": {
+              "startLine": 149,
+              "endLine": 149
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_MethodCall",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "this",
+                "attributes": {
+                  "startLine": 151,
+                  "endLine": 151
+                }
+              },
+              "name": {
+                "nodeType": "Identifier",
+                "name": "update",
+                "attributes": {
+                  "startLine": 151,
+                  "endLine": 151
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "token",
+                    "attributes": {
+                      "startLine": 151,
+                      "endLine": 151
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 151,
+                    "endLine": 151
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "session",
+                    "attributes": {
+                      "startLine": 151,
+                      "endLine": 151
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 151,
+                    "endLine": 151
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 151,
+                "endLine": 151
+              }
+            },
+            "attributes": {
+              "startLine": 151,
+              "endLine": 151
+            }
+          },
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_Variable",
+              "name": "token",
+              "attributes": {
+                "startLine": 153,
+                "endLine": 153
+              }
+            },
+            "attributes": {
+              "startLine": 153,
+              "endLine": 153
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 122,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Generates a session token and attaches session information to it.\n\t *\n\t * A session token is a long, random string. It is used in a cookie\n\t * to link that cookie to an expiration time and to ensure the cookie\n\t * becomes invalidated when the user logs out.\n\t *\n\t * This function generates a token and stores it with the associated\n\t * expiration time (and potentially other session information via the\n\t * {@see 'attach_session_information'} filter).\n\t *\n\t * @since 4.0.0\n\t *\n\t * @param int $expiration Session expiration timestamp.\n\t * @return string Session token.\n\t */",
+              "line": 106,
+              "filePos": 2585,
+              "tokenPos": 255,
+              "endLine": 121,
+              "endFilePos": 3164,
+              "endTokenPos": 255
+            }
+          ],
+          "endLine": 154
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 33,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "update",
+          "attributes": {
+            "startLine": 164,
+            "endLine": 164
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "token",
+              "attributes": {
+                "startLine": 164,
+                "endLine": 164
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 164,
+              "endLine": 164
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "session",
+              "attributes": {
+                "startLine": 164,
+                "endLine": 164
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 164,
+              "endLine": 164
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "verifier",
+                "attributes": {
+                  "startLine": 165,
+                  "endLine": 165
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_MethodCall",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "this",
+                  "attributes": {
+                    "startLine": 165,
+                    "endLine": 165
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "hash_token",
+                  "attributes": {
+                    "startLine": 165,
+                    "endLine": 165
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "token",
+                      "attributes": {
+                        "startLine": 165,
+                        "endLine": 165
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 165,
+                      "endLine": 165
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 165,
+                  "endLine": 165
+                }
+              },
+              "attributes": {
+                "startLine": 165,
+                "endLine": 165
+              }
+            },
+            "attributes": {
+              "startLine": 165,
+              "endLine": 165
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_MethodCall",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "this",
+                "attributes": {
+                  "startLine": 166,
+                  "endLine": 166
+                }
+              },
+              "name": {
+                "nodeType": "Identifier",
+                "name": "update_session",
+                "attributes": {
+                  "startLine": 166,
+                  "endLine": 166
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "verifier",
+                    "attributes": {
+                      "startLine": 166,
+                      "endLine": 166
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 166,
+                    "endLine": 166
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "session",
+                    "attributes": {
+                      "startLine": 166,
+                      "endLine": 166
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 166,
+                    "endLine": 166
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 166,
+                "endLine": 166
+              }
+            },
+            "attributes": {
+              "startLine": 166,
+              "endLine": 166
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 164,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Updates the data for the session with the given token.\n\t *\n\t * @since 4.0.0\n\t *\n\t * @param string $token Session token to update.\n\t * @param array  $session Session information.\n\t */",
+              "line": 156,
+              "filePos": 4020,
+              "tokenPos": 437,
+              "endLine": 163,
+              "endFilePos": 4209,
+              "endTokenPos": 437
+            }
+          ],
+          "endLine": 167
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 33,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "destroy",
+          "attributes": {
+            "startLine": 176,
+            "endLine": 176
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "token",
+              "attributes": {
+                "startLine": 176,
+                "endLine": 176
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 176,
+              "endLine": 176
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "verifier",
+                "attributes": {
+                  "startLine": 177,
+                  "endLine": 177
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_MethodCall",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "this",
+                  "attributes": {
+                    "startLine": 177,
+                    "endLine": 177
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "hash_token",
+                  "attributes": {
+                    "startLine": 177,
+                    "endLine": 177
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "token",
+                      "attributes": {
+                        "startLine": 177,
+                        "endLine": 177
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 177,
+                      "endLine": 177
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 177,
+                  "endLine": 177
+                }
+              },
+              "attributes": {
+                "startLine": 177,
+                "endLine": 177
+              }
+            },
+            "attributes": {
+              "startLine": 177,
+              "endLine": 177
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_MethodCall",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "this",
+                "attributes": {
+                  "startLine": 178,
+                  "endLine": 178
+                }
+              },
+              "name": {
+                "nodeType": "Identifier",
+                "name": "update_session",
+                "attributes": {
+                  "startLine": 178,
+                  "endLine": 178
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "verifier",
+                    "attributes": {
+                      "startLine": 178,
+                      "endLine": 178
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 178,
+                    "endLine": 178
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_ConstFetch",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "null"
+                      ],
+                      "attributes": {
+                        "startLine": 178,
+                        "endLine": 178
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 178,
+                      "endLine": 178
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 178,
+                    "endLine": 178
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 178,
+                "endLine": 178
+              }
+            },
+            "attributes": {
+              "startLine": 178,
+              "endLine": 178
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 176,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Destroys the session with the given token.\n\t *\n\t * @since 4.0.0\n\t *\n\t * @param string $token Session token to destroy.\n\t */",
+              "line": 169,
+              "filePos": 4359,
+              "tokenPos": 486,
+              "endLine": 175,
+              "endFilePos": 4489,
+              "endTokenPos": 486
+            }
+          ],
+          "endLine": 179
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 33,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "destroy_others",
+          "attributes": {
+            "startLine": 188,
+            "endLine": 188
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "token_to_keep",
+              "attributes": {
+                "startLine": 188,
+                "endLine": 188
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 188,
+              "endLine": 188
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "verifier",
+                "attributes": {
+                  "startLine": 189,
+                  "endLine": 189
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_MethodCall",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "this",
+                  "attributes": {
+                    "startLine": 189,
+                    "endLine": 189
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "hash_token",
+                  "attributes": {
+                    "startLine": 189,
+                    "endLine": 189
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "token_to_keep",
+                      "attributes": {
+                        "startLine": 189,
+                        "endLine": 189
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 189,
+                      "endLine": 189
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 189,
+                  "endLine": 189
+                }
+              },
+              "attributes": {
+                "startLine": 189,
+                "endLine": 189
+              }
+            },
+            "attributes": {
+              "startLine": 189,
+              "endLine": 189
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "session",
+                "attributes": {
+                  "startLine": 190,
+                  "endLine": 190
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_MethodCall",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "this",
+                  "attributes": {
+                    "startLine": 190,
+                    "endLine": 190
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "get_session",
+                  "attributes": {
+                    "startLine": 190,
+                    "endLine": 190
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "verifier",
+                      "attributes": {
+                        "startLine": 190,
+                        "endLine": 190
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 190,
+                      "endLine": 190
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 190,
+                  "endLine": 190
+                }
+              },
+              "attributes": {
+                "startLine": 190,
+                "endLine": 190
+              }
+            },
+            "attributes": {
+              "startLine": 190,
+              "endLine": 190
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_Variable",
+              "name": "session",
+              "attributes": {
+                "startLine": 191,
+                "endLine": 191
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_MethodCall",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "this",
+                    "attributes": {
+                      "startLine": 192,
+                      "endLine": 192
+                    }
+                  },
+                  "name": {
+                    "nodeType": "Identifier",
+                    "name": "destroy_other_sessions",
+                    "attributes": {
+                      "startLine": 192,
+                      "endLine": 192
+                    }
+                  },
+                  "args": [
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Expr_Variable",
+                        "name": "verifier",
+                        "attributes": {
+                          "startLine": 192,
+                          "endLine": 192
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 192,
+                        "endLine": 192
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 192,
+                    "endLine": 192
+                  }
+                },
+                "attributes": {
+                  "startLine": 192,
+                  "endLine": 192
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": {
+              "nodeType": "Stmt_Else",
+              "stmts": [
+                {
+                  "nodeType": "Stmt_Expression",
+                  "expr": {
+                    "nodeType": "Expr_MethodCall",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "this",
+                      "attributes": {
+                        "startLine": 194,
+                        "endLine": 194
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "destroy_all_sessions",
+                      "attributes": {
+                        "startLine": 194,
+                        "endLine": 194
+                      }
+                    },
+                    "args": [],
+                    "attributes": {
+                      "startLine": 194,
+                      "endLine": 194
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 194,
+                    "endLine": 194
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 193,
+                "endLine": 195
+              }
+            },
+            "attributes": {
+              "startLine": 191,
+              "endLine": 195
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 188,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Destroys all sessions for this user except the one with the given token (presumably the one in use).\n\t *\n\t * @since 4.0.0\n\t *\n\t * @param string $token_to_keep Session token to keep.\n\t */",
+              "line": 181,
+              "filePos": 4626,
+              "tokenPos": 532,
+              "endLine": 187,
+              "endFilePos": 4819,
+              "endTokenPos": 532
+            }
+          ],
+          "endLine": 196
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 34,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "is_still_valid",
+          "attributes": {
+            "startLine": 206,
+            "endLine": 206
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "session",
+              "attributes": {
+                "startLine": 206,
+                "endLine": 206
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 206,
+              "endLine": 206
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_BinaryOp_GreaterOrEqual",
+              "left": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "session",
+                  "attributes": {
+                    "startLine": 207,
+                    "endLine": 207
+                  }
+                },
+                "dim": {
+                  "nodeType": "Scalar_String",
+                  "value": "expiration",
+                  "attributes": {
+                    "startLine": 207,
+                    "endLine": 207,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 207,
+                  "endLine": 207
+                }
+              },
+              "right": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "time"
+                  ],
+                  "attributes": {
+                    "startLine": 207,
+                    "endLine": 207
+                  }
+                },
+                "args": [],
+                "attributes": {
+                  "startLine": 207,
+                  "endLine": 207
+                }
+              },
+              "attributes": {
+                "startLine": 207,
+                "endLine": 207
+              }
+            },
+            "attributes": {
+              "startLine": 207,
+              "endLine": 207
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 206,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Determines whether a session is still valid, based on its expiration timestamp.\n\t *\n\t * @since 4.0.0\n\t *\n\t * @param array $session Session to check.\n\t * @return bool Whether session is valid.\n\t */",
+              "line": 198,
+              "filePos": 5098,
+              "tokenPos": 614,
+              "endLine": 205,
+              "endFilePos": 5301,
+              "endTokenPos": 614
+            }
+          ],
+          "endLine": 208
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 33,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "destroy_all",
+          "attributes": {
+            "startLine": 215,
+            "endLine": 215
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_MethodCall",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "this",
+                "attributes": {
+                  "startLine": 216,
+                  "endLine": 216
+                }
+              },
+              "name": {
+                "nodeType": "Identifier",
+                "name": "destroy_all_sessions",
+                "attributes": {
+                  "startLine": 216,
+                  "endLine": 216
+                }
+              },
+              "args": [],
+              "attributes": {
+                "startLine": 216,
+                "endLine": 216
+              }
+            },
+            "attributes": {
+              "startLine": 216,
+              "endLine": 216
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 215,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Destroys all sessions for a user.\n\t *\n\t * @since 4.0.0\n\t */",
+              "line": 210,
+              "filePos": 5406,
+              "tokenPos": 647,
+              "endLine": 214,
+              "endFilePos": 5472,
+              "endTokenPos": 647
+            }
+          ],
+          "endLine": 217
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 41,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "destroy_all_for_all_users",
+          "attributes": {
+            "startLine": 224,
+            "endLine": 224
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "manager",
+                "attributes": {
+                  "startLine": 226,
+                  "comments": [
+                    {
+                      "nodeType": "Comment_Doc",
+                      "text": "/** This filter is documented in wp-includes/class-wp-session-tokens.php */",
+                      "line": 225,
+                      "filePos": 5684,
+                      "tokenPos": 686,
+                      "endLine": 225,
+                      "endFilePos": 5758,
+                      "endTokenPos": 686
+                    }
+                  ],
+                  "endLine": 226
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "apply_filters"
+                  ],
+                  "attributes": {
+                    "startLine": 226,
+                    "endLine": 226
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "session_token_manager",
+                      "attributes": {
+                        "startLine": 226,
+                        "endLine": 226,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 226,
+                      "endLine": 226
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "WP_User_Meta_Session_Tokens",
+                      "attributes": {
+                        "startLine": 226,
+                        "endLine": 226,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 226,
+                      "endLine": 226
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 226,
+                  "endLine": 226
+                }
+              },
+              "attributes": {
+                "startLine": 226,
+                "comments": [
+                  {
+                    "nodeType": "Comment_Doc",
+                    "text": "/** This filter is documented in wp-includes/class-wp-session-tokens.php */",
+                    "line": 225,
+                    "filePos": 5684,
+                    "tokenPos": 686,
+                    "endLine": 225,
+                    "endFilePos": 5758,
+                    "endTokenPos": 686
+                  }
+                ],
+                "endLine": 226
+              }
+            },
+            "attributes": {
+              "startLine": 226,
+              "comments": [
+                {
+                  "nodeType": "Comment_Doc",
+                  "text": "/** This filter is documented in wp-includes/class-wp-session-tokens.php */",
+                  "line": 225,
+                  "filePos": 5684,
+                  "tokenPos": 686,
+                  "endLine": 225,
+                  "endFilePos": 5758,
+                  "endTokenPos": 686
+                }
+              ],
+              "endLine": 226
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "call_user_func"
+                ],
+                "attributes": {
+                  "startLine": 227,
+                  "endLine": 227
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Array",
+                    "items": [
+                      {
+                        "nodeType": "Expr_ArrayItem",
+                        "key": null,
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "manager",
+                          "attributes": {
+                            "startLine": 227,
+                            "endLine": 227
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 227,
+                          "endLine": 227
+                        }
+                      },
+                      {
+                        "nodeType": "Expr_ArrayItem",
+                        "key": null,
+                        "value": {
+                          "nodeType": "Scalar_String",
+                          "value": "drop_sessions",
+                          "attributes": {
+                            "startLine": 227,
+                            "endLine": 227,
+                            "kind": 1
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 227,
+                          "endLine": 227
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 227,
+                      "endLine": 227,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 227,
+                    "endLine": 227
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 227,
+                "endLine": 227
+              }
+            },
+            "attributes": {
+              "startLine": 227,
+              "endLine": 227
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 224,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Destroys all sessions for all users.\n\t *\n\t * @since 4.0.0\n\t */",
+              "line": 219,
+              "filePos": 5551,
+              "tokenPos": 670,
+              "endLine": 223,
+              "endFilePos": 5620,
+              "endTokenPos": 670
+            }
+          ],
+          "endLine": 228
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 33,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "get_all",
+          "attributes": {
+            "startLine": 237,
+            "endLine": 237
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "array_values"
+                ],
+                "attributes": {
+                  "startLine": 238,
+                  "endLine": 238
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_MethodCall",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "this",
+                      "attributes": {
+                        "startLine": 238,
+                        "endLine": 238
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "get_sessions",
+                      "attributes": {
+                        "startLine": 238,
+                        "endLine": 238
+                      }
+                    },
+                    "args": [],
+                    "attributes": {
+                      "startLine": 238,
+                      "endLine": 238
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 238,
+                    "endLine": 238
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 238,
+                "endLine": 238
+              }
+            },
+            "attributes": {
+              "startLine": 238,
+              "endLine": 238
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 237,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Retrieves all sessions for a user.\n\t *\n\t * @since 4.0.0\n\t *\n\t * @return array Sessions for a user.\n\t */",
+              "line": 230,
+              "filePos": 5907,
+              "tokenPos": 721,
+              "endLine": 236,
+              "endFilePos": 6017,
+              "endTokenPos": 721
+            }
+          ],
+          "endLine": 239
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 18,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "get_sessions",
+          "attributes": {
+            "startLine": 248,
+            "endLine": 248
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": null,
+        "attributes": {
+          "startLine": 248,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Retrieves all sessions of the user.\n\t *\n\t * @since 4.0.0\n\t *\n\t * @return array Sessions of the user.\n\t */",
+              "line": 241,
+              "filePos": 6107,
+              "tokenPos": 751,
+              "endLine": 247,
+              "endFilePos": 6219,
+              "endTokenPos": 751
+            }
+          ],
+          "endLine": 248
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 18,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "get_session",
+          "attributes": {
+            "startLine": 258,
+            "endLine": 258
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "verifier",
+              "attributes": {
+                "startLine": 258,
+                "endLine": 258
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 258,
+              "endLine": 258
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": null,
+        "attributes": {
+          "startLine": 258,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Retrieves a session based on its verifier (token hash).\n\t *\n\t * @since 4.0.0\n\t *\n\t * @param string $verifier Verifier for the session to retrieve.\n\t * @return array|null The session, or null if it does not exist.\n\t */",
+              "line": 250,
+              "filePos": 6268,
+              "tokenPos": 764,
+              "endLine": 257,
+              "endFilePos": 6492,
+              "endTokenPos": 764
+            }
+          ],
+          "endLine": 258
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 18,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "update_session",
+          "attributes": {
+            "startLine": 270,
+            "endLine": 270
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "verifier",
+              "attributes": {
+                "startLine": 270,
+                "endLine": 270
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 270,
+              "endLine": 270
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "session",
+              "attributes": {
+                "startLine": 270,
+                "endLine": 270
+              }
+            },
+            "default": {
+              "nodeType": "Expr_ConstFetch",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "null"
+                ],
+                "attributes": {
+                  "startLine": 270,
+                  "endLine": 270
+                }
+              },
+              "attributes": {
+                "startLine": 270,
+                "endLine": 270
+              }
+            },
+            "attributes": {
+              "startLine": 270,
+              "endLine": 270
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": null,
+        "attributes": {
+          "startLine": 270,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Updates a session based on its verifier (token hash).\n\t *\n\t * Omitting the second argument destroys the session.\n\t *\n\t * @since 4.0.0\n\t *\n\t * @param string $verifier Verifier for the session to update.\n\t * @param array  $session  Optional. Session. Omitting this argument destroys the session.\n\t */",
+              "line": 260,
+              "filePos": 6551,
+              "tokenPos": 780,
+              "endLine": 269,
+              "endFilePos": 6856,
+              "endTokenPos": 780
+            }
+          ],
+          "endLine": 270
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 18,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "destroy_other_sessions",
+          "attributes": {
+            "startLine": 279,
+            "endLine": 279
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "verifier",
+              "attributes": {
+                "startLine": 279,
+                "endLine": 279
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 279,
+              "endLine": 279
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": null,
+        "attributes": {
+          "startLine": 279,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Destroys all sessions for this user, except the single session with the given verifier.\n\t *\n\t * @since 4.0.0\n\t *\n\t * @param string $verifier Verifier of the session to keep.\n\t */",
+              "line": 272,
+              "filePos": 6935,
+              "tokenPos": 803,
+              "endLine": 278,
+              "endFilePos": 7120,
+              "endTokenPos": 803
+            }
+          ],
+          "endLine": 279
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 18,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "destroy_all_sessions",
+          "attributes": {
+            "startLine": 286,
+            "endLine": 286
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": null,
+        "attributes": {
+          "startLine": 286,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Destroys all sessions for the user.\n\t *\n\t * @since 4.0.0\n\t */",
+              "line": 281,
+              "filePos": 7190,
+              "tokenPos": 819,
+              "endLine": 285,
+              "endFilePos": 7258,
+              "endTokenPos": 819
+            }
+          ],
+          "endLine": 286
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 9,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "drop_sessions",
+          "attributes": {
+            "startLine": 293,
+            "endLine": 293
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [],
+        "attributes": {
+          "startLine": 293,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Destroys all sessions for all users.\n\t *\n\t * @since 4.0.0\n\t */",
+              "line": 288,
+              "filePos": 7315,
+              "tokenPos": 832,
+              "endLine": 292,
+              "endFilePos": 7384,
+              "endTokenPos": 832
+            }
+          ],
+          "endLine": 293
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 15,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Session API: WP_Session_Tokens class\n *\n * @package WordPress\n * @subpackage Session\n * @since 4.7.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 8,
+          "endFilePos": 116,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Abstract class for managing user session tokens.\n *\n * @since 4.0.0\n */",
+          "line": 10,
+          "filePos": 119,
+          "tokenPos": 3,
+          "endLine": 14,
+          "endFilePos": 196,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 294
+    }
+  }
+]

@@ -1,0 +1,121 @@
+[
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "do_action"
+        ],
+        "attributes": {
+          "startLine": 18,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n * Contains the post embed footer template\n *\n * When a post is embedded in an iframe, this file is used to create the footer output\n * if the active theme does not include a footer-embed.php template.\n *\n * @package WordPress\n * @subpackage Theme_Compat\n * @since 4.5.0\n */",
+              "line": 2,
+              "filePos": 6,
+              "tokenPos": 1,
+              "endLine": 11,
+              "endFilePos": 283,
+              "endTokenPos": 1
+            },
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n * Prints scripts or data before the closing body tag in the embed template.\n *\n * @since 4.4.0\n */",
+              "line": 13,
+              "filePos": 286,
+              "tokenPos": 3,
+              "endLine": 17,
+              "endFilePos": 388,
+              "endTokenPos": 3
+            }
+          ],
+          "endLine": 18
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "embed_footer",
+            "attributes": {
+              "startLine": 18,
+              "endLine": 18,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 18,
+            "endLine": 18
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 18,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/**\n * Contains the post embed footer template\n *\n * When a post is embedded in an iframe, this file is used to create the footer output\n * if the active theme does not include a footer-embed.php template.\n *\n * @package WordPress\n * @subpackage Theme_Compat\n * @since 4.5.0\n */",
+            "line": 2,
+            "filePos": 6,
+            "tokenPos": 1,
+            "endLine": 11,
+            "endFilePos": 283,
+            "endTokenPos": 1
+          },
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/**\n * Prints scripts or data before the closing body tag in the embed template.\n *\n * @since 4.4.0\n */",
+            "line": 13,
+            "filePos": 286,
+            "tokenPos": 3,
+            "endLine": 17,
+            "endFilePos": 388,
+            "endTokenPos": 3
+          }
+        ],
+        "endLine": 18
+      }
+    },
+    "attributes": {
+      "startLine": 18,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Contains the post embed footer template\n *\n * When a post is embedded in an iframe, this file is used to create the footer output\n * if the active theme does not include a footer-embed.php template.\n *\n * @package WordPress\n * @subpackage Theme_Compat\n * @since 4.5.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 11,
+          "endFilePos": 283,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Prints scripts or data before the closing body tag in the embed template.\n *\n * @since 4.4.0\n */",
+          "line": 13,
+          "filePos": 286,
+          "tokenPos": 3,
+          "endLine": 17,
+          "endFilePos": 388,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 18
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</body>\n</html>\n",
+    "attributes": {
+      "startLine": 20,
+      "hasLeadingNewline": true,
+      "endLine": 22
+    }
+  }
+]

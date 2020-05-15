@@ -1,0 +1,1389 @@
+[
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_BooleanNot",
+      "expr": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "function_exists"
+          ],
+          "attributes": {
+            "startLine": 35,
+            "endLine": 35
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "add_action",
+              "attributes": {
+                "startLine": 35,
+                "endLine": 35,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 35,
+              "endLine": 35
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 35,
+          "endLine": 35
+        }
+      },
+      "attributes": {
+        "startLine": 35,
+        "endLine": 35
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Echo",
+        "exprs": [
+          {
+            "nodeType": "Scalar_String",
+            "value": "Hi there!  I'm just a plugin, not much I can do when called directly.",
+            "attributes": {
+              "startLine": 36,
+              "endLine": 36,
+              "kind": 1
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 36,
+          "endLine": 36
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Exit",
+          "expr": null,
+          "attributes": {
+            "startLine": 37,
+            "endLine": 37,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 37,
+          "endLine": 37
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 35,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * @package Akismet\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 4,
+          "endFilePos": 32,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment",
+          "text": "/*\nPlugin Name: Akismet Anti-Spam\nPlugin URI: https://akismet.com/\nDescription: Used by millions, Akismet is quite possibly the best way in the world to <strong>protect your blog from spam</strong>. It keeps your site protected even while you sleep. To get started: activate the Akismet plugin and then go to your Akismet Settings page to set up your API key.\nVersion: 4.1.4\nAuthor: Automattic\nAuthor URI: https://automattic.com/wordpress-plugins/\nLicense: GPLv2 or later\nText Domain: akismet\n*/",
+          "line": 5,
+          "filePos": 34,
+          "tokenPos": 3,
+          "endLine": 14,
+          "endFilePos": 528,
+          "endTokenPos": 3
+        },
+        {
+          "nodeType": "Comment",
+          "text": "/*\nThis program is free software; you can redistribute it and/or\nmodify it under the terms of the GNU General Public License\nas published by the Free Software Foundation; either version 2\nof the License, or (at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.\n\nYou should have received a copy of the GNU General Public License\nalong with this program; if not, write to the Free Software\nFoundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.\n\nCopyright 2005-2015 Automattic, Inc.\n*/",
+          "line": 16,
+          "filePos": 531,
+          "tokenPos": 5,
+          "endLine": 32,
+          "endFilePos": 1255,
+          "endTokenPos": 5
+        },
+        {
+          "nodeType": "Comment",
+          "text": "// Make sure we don't expose any info if called directly\n",
+          "line": 34,
+          "filePos": 1258,
+          "tokenPos": 7,
+          "endLine": 35,
+          "endFilePos": 1314,
+          "endTokenPos": 7
+        }
+      ],
+      "endLine": 38
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "define"
+        ],
+        "attributes": {
+          "startLine": 40,
+          "endLine": 40
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "AKISMET_VERSION",
+            "attributes": {
+              "startLine": 40,
+              "endLine": 40,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 40,
+            "endLine": 40
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "4.1.4",
+            "attributes": {
+              "startLine": 40,
+              "endLine": 40,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 40,
+            "endLine": 40
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 40,
+        "endLine": 40
+      }
+    },
+    "attributes": {
+      "startLine": 40,
+      "endLine": 40
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "define"
+        ],
+        "attributes": {
+          "startLine": 41,
+          "endLine": 41
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "AKISMET__MINIMUM_WP_VERSION",
+            "attributes": {
+              "startLine": 41,
+              "endLine": 41,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 41,
+            "endLine": 41
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "4.0",
+            "attributes": {
+              "startLine": 41,
+              "endLine": 41,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 41,
+            "endLine": 41
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 41,
+        "endLine": 41
+      }
+    },
+    "attributes": {
+      "startLine": 41,
+      "endLine": 41
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "define"
+        ],
+        "attributes": {
+          "startLine": 42,
+          "endLine": 42
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "AKISMET__PLUGIN_DIR",
+            "attributes": {
+              "startLine": 42,
+              "endLine": 42,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 42,
+            "endLine": 42
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "plugin_dir_path"
+              ],
+              "attributes": {
+                "startLine": 42,
+                "endLine": 42
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_MagicConst_File",
+                  "attributes": {
+                    "startLine": 42,
+                    "endLine": 42
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 42,
+                  "endLine": 42
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 42,
+              "endLine": 42
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 42,
+            "endLine": 42
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 42,
+        "endLine": 42
+      }
+    },
+    "attributes": {
+      "startLine": 42,
+      "endLine": 42
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "define"
+        ],
+        "attributes": {
+          "startLine": 43,
+          "endLine": 43
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "AKISMET_DELETE_LIMIT",
+            "attributes": {
+              "startLine": 43,
+              "endLine": 43,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 43,
+            "endLine": 43
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_LNumber",
+            "value": 100000,
+            "attributes": {
+              "startLine": 43,
+              "endLine": 43,
+              "kind": 10
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 43,
+            "endLine": 43
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 43,
+        "endLine": 43
+      }
+    },
+    "attributes": {
+      "startLine": 43,
+      "endLine": 43
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "register_activation_hook"
+        ],
+        "attributes": {
+          "startLine": 45,
+          "endLine": 45
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_MagicConst_File",
+            "attributes": {
+              "startLine": 45,
+              "endLine": 45
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 45,
+            "endLine": 45
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_Array",
+            "items": [
+              {
+                "nodeType": "Expr_ArrayItem",
+                "key": null,
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "Akismet",
+                  "attributes": {
+                    "startLine": 45,
+                    "endLine": 45,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 45,
+                  "endLine": 45
+                }
+              },
+              {
+                "nodeType": "Expr_ArrayItem",
+                "key": null,
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "plugin_activation",
+                  "attributes": {
+                    "startLine": 45,
+                    "endLine": 45,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 45,
+                  "endLine": 45
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 45,
+              "endLine": 45,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 45,
+            "endLine": 45
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 45,
+        "endLine": 45
+      }
+    },
+    "attributes": {
+      "startLine": 45,
+      "endLine": 45
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "register_deactivation_hook"
+        ],
+        "attributes": {
+          "startLine": 46,
+          "endLine": 46
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_MagicConst_File",
+            "attributes": {
+              "startLine": 46,
+              "endLine": 46
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 46,
+            "endLine": 46
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_Array",
+            "items": [
+              {
+                "nodeType": "Expr_ArrayItem",
+                "key": null,
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "Akismet",
+                  "attributes": {
+                    "startLine": 46,
+                    "endLine": 46,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 46,
+                  "endLine": 46
+                }
+              },
+              {
+                "nodeType": "Expr_ArrayItem",
+                "key": null,
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "plugin_deactivation",
+                  "attributes": {
+                    "startLine": 46,
+                    "endLine": 46,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 46,
+                  "endLine": 46
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 46,
+              "endLine": 46,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 46,
+            "endLine": 46
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 46,
+        "endLine": 46
+      }
+    },
+    "attributes": {
+      "startLine": 46,
+      "endLine": 46
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_ConstFetch",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "AKISMET__PLUGIN_DIR"
+            ],
+            "attributes": {
+              "startLine": 48,
+              "endLine": 48
+            }
+          },
+          "attributes": {
+            "startLine": 48,
+            "endLine": 48
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "class.akismet.php",
+          "attributes": {
+            "startLine": 48,
+            "endLine": 48,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 48,
+          "endLine": 48
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 48,
+        "endLine": 48
+      }
+    },
+    "attributes": {
+      "startLine": 48,
+      "endLine": 48
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_ConstFetch",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "AKISMET__PLUGIN_DIR"
+            ],
+            "attributes": {
+              "startLine": 49,
+              "endLine": 49
+            }
+          },
+          "attributes": {
+            "startLine": 49,
+            "endLine": 49
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "class.akismet-widget.php",
+          "attributes": {
+            "startLine": 49,
+            "endLine": 49,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 49,
+          "endLine": 49
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 49,
+        "endLine": 49
+      }
+    },
+    "attributes": {
+      "startLine": 49,
+      "endLine": 49
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_ConstFetch",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "AKISMET__PLUGIN_DIR"
+            ],
+            "attributes": {
+              "startLine": 50,
+              "endLine": 50
+            }
+          },
+          "attributes": {
+            "startLine": 50,
+            "endLine": 50
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "class.akismet-rest-api.php",
+          "attributes": {
+            "startLine": 50,
+            "endLine": 50,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 50,
+          "endLine": 50
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 50,
+        "endLine": 50
+      }
+    },
+    "attributes": {
+      "startLine": 50,
+      "endLine": 50
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "add_action"
+        ],
+        "attributes": {
+          "startLine": 52,
+          "endLine": 52
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "init",
+            "attributes": {
+              "startLine": 52,
+              "endLine": 52,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 52,
+            "endLine": 52
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_Array",
+            "items": [
+              {
+                "nodeType": "Expr_ArrayItem",
+                "key": null,
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "Akismet",
+                  "attributes": {
+                    "startLine": 52,
+                    "endLine": 52,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 52,
+                  "endLine": 52
+                }
+              },
+              {
+                "nodeType": "Expr_ArrayItem",
+                "key": null,
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "init",
+                  "attributes": {
+                    "startLine": 52,
+                    "endLine": 52,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 52,
+                  "endLine": 52
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 52,
+              "endLine": 52,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 52,
+            "endLine": 52
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 52,
+        "endLine": 52
+      }
+    },
+    "attributes": {
+      "startLine": 52,
+      "endLine": 52
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "add_action"
+        ],
+        "attributes": {
+          "startLine": 54,
+          "endLine": 54
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "rest_api_init",
+            "attributes": {
+              "startLine": 54,
+              "endLine": 54,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 54,
+            "endLine": 54
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_Array",
+            "items": [
+              {
+                "nodeType": "Expr_ArrayItem",
+                "key": null,
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "Akismet_REST_API",
+                  "attributes": {
+                    "startLine": 54,
+                    "endLine": 54,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 54,
+                  "endLine": 54
+                }
+              },
+              {
+                "nodeType": "Expr_ArrayItem",
+                "key": null,
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "init",
+                  "attributes": {
+                    "startLine": 54,
+                    "endLine": 54,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 54,
+                  "endLine": 54
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 54,
+              "endLine": 54,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 54,
+            "endLine": 54
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 54,
+        "endLine": 54
+      }
+    },
+    "attributes": {
+      "startLine": 54,
+      "endLine": 54
+    }
+  },
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_BinaryOp_BooleanOr",
+      "left": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "is_admin"
+          ],
+          "attributes": {
+            "startLine": 56,
+            "endLine": 56
+          }
+        },
+        "args": [],
+        "attributes": {
+          "startLine": 56,
+          "endLine": 56
+        }
+      },
+      "right": {
+        "nodeType": "Expr_BinaryOp_BooleanAnd",
+        "left": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "defined"
+            ],
+            "attributes": {
+              "startLine": 56,
+              "endLine": 56
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "WP_CLI",
+                "attributes": {
+                  "startLine": 56,
+                  "endLine": 56,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 56,
+                "endLine": 56
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 56,
+            "endLine": 56
+          }
+        },
+        "right": {
+          "nodeType": "Expr_ConstFetch",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "WP_CLI"
+            ],
+            "attributes": {
+              "startLine": 56,
+              "endLine": 56
+            }
+          },
+          "attributes": {
+            "startLine": 56,
+            "endLine": 56
+          }
+        },
+        "attributes": {
+          "startLine": 56,
+          "endLine": 56
+        }
+      },
+      "attributes": {
+        "startLine": 56,
+        "endLine": 56
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Include",
+          "expr": {
+            "nodeType": "Expr_BinaryOp_Concat",
+            "left": {
+              "nodeType": "Expr_ConstFetch",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "AKISMET__PLUGIN_DIR"
+                ],
+                "attributes": {
+                  "startLine": 57,
+                  "endLine": 57
+                }
+              },
+              "attributes": {
+                "startLine": 57,
+                "endLine": 57
+              }
+            },
+            "right": {
+              "nodeType": "Scalar_String",
+              "value": "class.akismet-admin.php",
+              "attributes": {
+                "startLine": 57,
+                "endLine": 57,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 57,
+              "endLine": 57
+            }
+          },
+          "type": 4,
+          "attributes": {
+            "startLine": 57,
+            "endLine": 57
+          }
+        },
+        "attributes": {
+          "startLine": 57,
+          "endLine": 57
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "add_action"
+            ],
+            "attributes": {
+              "startLine": 58,
+              "endLine": 58
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "init",
+                "attributes": {
+                  "startLine": 58,
+                  "endLine": 58,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 58,
+                "endLine": 58
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Array",
+                "items": [
+                  {
+                    "nodeType": "Expr_ArrayItem",
+                    "key": null,
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "Akismet_Admin",
+                      "attributes": {
+                        "startLine": 58,
+                        "endLine": 58,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 58,
+                      "endLine": 58
+                    }
+                  },
+                  {
+                    "nodeType": "Expr_ArrayItem",
+                    "key": null,
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "init",
+                      "attributes": {
+                        "startLine": 58,
+                        "endLine": 58,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 58,
+                      "endLine": 58
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 58,
+                  "endLine": 58,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 58,
+                "endLine": 58
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 58,
+            "endLine": 58
+          }
+        },
+        "attributes": {
+          "startLine": 58,
+          "endLine": 58
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 56,
+      "endLine": 59
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_ConstFetch",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "AKISMET__PLUGIN_DIR"
+            ],
+            "attributes": {
+              "startLine": 62,
+              "endLine": 62
+            }
+          },
+          "attributes": {
+            "startLine": 62,
+            "endLine": 62
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "wrapper.php",
+          "attributes": {
+            "startLine": 62,
+            "endLine": 62,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 62,
+          "endLine": 62
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 62,
+        "comments": [
+          {
+            "nodeType": "Comment",
+            "text": "//add wrapper class around deprecated akismet functions that are referenced elsewhere\n",
+            "line": 61,
+            "filePos": 2298,
+            "tokenPos": 257,
+            "endLine": 62,
+            "endFilePos": 2383,
+            "endTokenPos": 257
+          }
+        ],
+        "endLine": 62
+      }
+    },
+    "attributes": {
+      "startLine": 62,
+      "comments": [
+        {
+          "nodeType": "Comment",
+          "text": "//add wrapper class around deprecated akismet functions that are referenced elsewhere\n",
+          "line": 61,
+          "filePos": 2298,
+          "tokenPos": 257,
+          "endLine": 62,
+          "endFilePos": 2383,
+          "endTokenPos": 257
+        }
+      ],
+      "endLine": 62
+    }
+  },
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_BinaryOp_BooleanAnd",
+      "left": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "defined"
+          ],
+          "attributes": {
+            "startLine": 64,
+            "endLine": 64
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "WP_CLI",
+              "attributes": {
+                "startLine": 64,
+                "endLine": 64,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 64,
+              "endLine": 64
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 64,
+          "endLine": 64
+        }
+      },
+      "right": {
+        "nodeType": "Expr_ConstFetch",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "WP_CLI"
+          ],
+          "attributes": {
+            "startLine": 64,
+            "endLine": 64
+          }
+        },
+        "attributes": {
+          "startLine": 64,
+          "endLine": 64
+        }
+      },
+      "attributes": {
+        "startLine": 64,
+        "endLine": 64
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Include",
+          "expr": {
+            "nodeType": "Expr_BinaryOp_Concat",
+            "left": {
+              "nodeType": "Expr_ConstFetch",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "AKISMET__PLUGIN_DIR"
+                ],
+                "attributes": {
+                  "startLine": 65,
+                  "endLine": 65
+                }
+              },
+              "attributes": {
+                "startLine": 65,
+                "endLine": 65
+              }
+            },
+            "right": {
+              "nodeType": "Scalar_String",
+              "value": "class.akismet-cli.php",
+              "attributes": {
+                "startLine": 65,
+                "endLine": 65,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 65,
+              "endLine": 65
+            }
+          },
+          "type": 4,
+          "attributes": {
+            "startLine": 65,
+            "endLine": 65
+          }
+        },
+        "attributes": {
+          "startLine": 65,
+          "endLine": 65
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 64,
+      "endLine": 66
+    }
+  }
+]

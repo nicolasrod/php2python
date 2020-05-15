@@ -1,0 +1,4025 @@
+[
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "get_column_headers",
+      "attributes": {
+        "startLine": 19,
+        "endLine": 19
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "screen",
+          "attributes": {
+            "startLine": 19,
+            "endLine": 19
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 19,
+          "endLine": 19
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "is_string"
+            ],
+            "attributes": {
+              "startLine": 20,
+              "endLine": 20
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "screen",
+                "attributes": {
+                  "startLine": 20,
+                  "endLine": 20
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 20,
+                "endLine": 20
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 20,
+            "endLine": 20
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "screen",
+                "attributes": {
+                  "startLine": 21,
+                  "endLine": 21
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "convert_to_screen"
+                  ],
+                  "attributes": {
+                    "startLine": 21,
+                    "endLine": 21
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "screen",
+                      "attributes": {
+                        "startLine": 21,
+                        "endLine": 21
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 21,
+                      "endLine": 21
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 21,
+                  "endLine": 21
+                }
+              },
+              "attributes": {
+                "startLine": 21,
+                "endLine": 21
+              }
+            },
+            "attributes": {
+              "startLine": 21,
+              "endLine": 21
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 20,
+          "endLine": 22
+        }
+      },
+      {
+        "nodeType": "Stmt_Static",
+        "vars": [
+          {
+            "nodeType": "Stmt_StaticVar",
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "column_headers",
+              "attributes": {
+                "startLine": 24,
+                "endLine": 24
+              }
+            },
+            "default": {
+              "nodeType": "Expr_Array",
+              "items": [],
+              "attributes": {
+                "startLine": 24,
+                "endLine": 24,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 24,
+              "endLine": 24
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 24,
+          "endLine": 24
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BooleanNot",
+          "expr": {
+            "nodeType": "Expr_Isset",
+            "vars": [
+              {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "column_headers",
+                  "attributes": {
+                    "startLine": 26,
+                    "endLine": 26
+                  }
+                },
+                "dim": {
+                  "nodeType": "Expr_PropertyFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "screen",
+                    "attributes": {
+                      "startLine": 26,
+                      "endLine": 26
+                    }
+                  },
+                  "name": {
+                    "nodeType": "Identifier",
+                    "name": "id",
+                    "attributes": {
+                      "startLine": 26,
+                      "endLine": 26
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 26,
+                    "endLine": 26
+                  }
+                },
+                "attributes": {
+                  "startLine": 26,
+                  "endLine": 26
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 26,
+              "endLine": 26
+            }
+          },
+          "attributes": {
+            "startLine": 26,
+            "endLine": 26
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "column_headers",
+                  "attributes": {
+                    "startLine": 39,
+                    "comments": [
+                      {
+                        "nodeType": "Comment_Doc",
+                        "text": "/**\n\t\t * Filters the column headers for a list table on a specific screen.\n\t\t *\n\t\t * The dynamic portion of the hook name, `$screen->id`, refers to the\n\t\t * ID of a specific screen. For example, the screen ID for the Posts\n\t\t * list table is edit-post, so the filter for that screen would be\n\t\t * manage_edit-post_columns.\n\t\t *\n\t\t * @since 3.0.0\n\t\t *\n\t\t * @param string[] $columns The column header labels keyed by column ID.\n\t\t */",
+                        "line": 27,
+                        "filePos": 562,
+                        "tokenPos": 80,
+                        "endLine": 38,
+                        "endFilePos": 992,
+                        "endTokenPos": 80
+                      }
+                    ],
+                    "endLine": 39
+                  }
+                },
+                "dim": {
+                  "nodeType": "Expr_PropertyFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "screen",
+                    "attributes": {
+                      "startLine": 39,
+                      "endLine": 39
+                    }
+                  },
+                  "name": {
+                    "nodeType": "Identifier",
+                    "name": "id",
+                    "attributes": {
+                      "startLine": 39,
+                      "endLine": 39
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 39,
+                    "endLine": 39
+                  }
+                },
+                "attributes": {
+                  "startLine": 39,
+                  "comments": [
+                    {
+                      "nodeType": "Comment_Doc",
+                      "text": "/**\n\t\t * Filters the column headers for a list table on a specific screen.\n\t\t *\n\t\t * The dynamic portion of the hook name, `$screen->id`, refers to the\n\t\t * ID of a specific screen. For example, the screen ID for the Posts\n\t\t * list table is edit-post, so the filter for that screen would be\n\t\t * manage_edit-post_columns.\n\t\t *\n\t\t * @since 3.0.0\n\t\t *\n\t\t * @param string[] $columns The column header labels keyed by column ID.\n\t\t */",
+                      "line": 27,
+                      "filePos": 562,
+                      "tokenPos": 80,
+                      "endLine": 38,
+                      "endFilePos": 992,
+                      "endTokenPos": 80
+                    }
+                  ],
+                  "endLine": 39
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "apply_filters"
+                  ],
+                  "attributes": {
+                    "startLine": 39,
+                    "endLine": 39
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_Encapsed",
+                      "parts": [
+                        {
+                          "nodeType": "Scalar_EncapsedStringPart",
+                          "value": "manage_",
+                          "attributes": {
+                            "startLine": 39,
+                            "endLine": 39
+                          }
+                        },
+                        {
+                          "nodeType": "Expr_PropertyFetch",
+                          "var": {
+                            "nodeType": "Expr_Variable",
+                            "name": "screen",
+                            "attributes": {
+                              "startLine": 39,
+                              "endLine": 39
+                            }
+                          },
+                          "name": {
+                            "nodeType": "Identifier",
+                            "name": "id",
+                            "attributes": {
+                              "startLine": 39,
+                              "endLine": 39
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 39,
+                            "endLine": 39
+                          }
+                        },
+                        {
+                          "nodeType": "Scalar_EncapsedStringPart",
+                          "value": "_columns",
+                          "attributes": {
+                            "startLine": 39,
+                            "endLine": 39
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 39,
+                        "endLine": 39,
+                        "kind": 2
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 39,
+                      "endLine": 39
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Array",
+                      "items": [],
+                      "attributes": {
+                        "startLine": 39,
+                        "endLine": 39,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 39,
+                      "endLine": 39
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 39,
+                  "endLine": 39
+                }
+              },
+              "attributes": {
+                "startLine": 39,
+                "comments": [
+                  {
+                    "nodeType": "Comment_Doc",
+                    "text": "/**\n\t\t * Filters the column headers for a list table on a specific screen.\n\t\t *\n\t\t * The dynamic portion of the hook name, `$screen->id`, refers to the\n\t\t * ID of a specific screen. For example, the screen ID for the Posts\n\t\t * list table is edit-post, so the filter for that screen would be\n\t\t * manage_edit-post_columns.\n\t\t *\n\t\t * @since 3.0.0\n\t\t *\n\t\t * @param string[] $columns The column header labels keyed by column ID.\n\t\t */",
+                    "line": 27,
+                    "filePos": 562,
+                    "tokenPos": 80,
+                    "endLine": 38,
+                    "endFilePos": 992,
+                    "endTokenPos": 80
+                  }
+                ],
+                "endLine": 39
+              }
+            },
+            "attributes": {
+              "startLine": 39,
+              "comments": [
+                {
+                  "nodeType": "Comment_Doc",
+                  "text": "/**\n\t\t * Filters the column headers for a list table on a specific screen.\n\t\t *\n\t\t * The dynamic portion of the hook name, `$screen->id`, refers to the\n\t\t * ID of a specific screen. For example, the screen ID for the Posts\n\t\t * list table is edit-post, so the filter for that screen would be\n\t\t * manage_edit-post_columns.\n\t\t *\n\t\t * @since 3.0.0\n\t\t *\n\t\t * @param string[] $columns The column header labels keyed by column ID.\n\t\t */",
+                  "line": 27,
+                  "filePos": 562,
+                  "tokenPos": 80,
+                  "endLine": 38,
+                  "endFilePos": 992,
+                  "endTokenPos": 80
+                }
+              ],
+              "endLine": 39
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 26,
+          "endLine": 40
+        }
+      },
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_ArrayDimFetch",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "column_headers",
+            "attributes": {
+              "startLine": 42,
+              "endLine": 42
+            }
+          },
+          "dim": {
+            "nodeType": "Expr_PropertyFetch",
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "screen",
+              "attributes": {
+                "startLine": 42,
+                "endLine": 42
+              }
+            },
+            "name": {
+              "nodeType": "Identifier",
+              "name": "id",
+              "attributes": {
+                "startLine": 42,
+                "endLine": 42
+              }
+            },
+            "attributes": {
+              "startLine": 42,
+              "endLine": 42
+            }
+          },
+          "attributes": {
+            "startLine": 42,
+            "endLine": 42
+          }
+        },
+        "attributes": {
+          "startLine": 42,
+          "endLine": 42
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 19,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * WordPress Administration Screen API.\n *\n * @package WordPress\n * @subpackage Administration\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 7,
+          "endFilePos": 107,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Get the column headers for a screen\n *\n * @since 2.7.0\n *\n * @staticvar array $column_headers\n *\n * @param string|WP_Screen $screen The screen you want the headers for\n * @return string[] The column header labels keyed by column ID.\n */",
+          "line": 9,
+          "filePos": 110,
+          "tokenPos": 3,
+          "endLine": 18,
+          "endFilePos": 352,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 43
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "get_hidden_columns",
+      "attributes": {
+        "startLine": 53,
+        "endLine": 53
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "screen",
+          "attributes": {
+            "startLine": 53,
+            "endLine": 53
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 53,
+          "endLine": 53
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "is_string"
+            ],
+            "attributes": {
+              "startLine": 54,
+              "endLine": 54
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "screen",
+                "attributes": {
+                  "startLine": 54,
+                  "endLine": 54
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 54,
+                "endLine": 54
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 54,
+            "endLine": 54
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "screen",
+                "attributes": {
+                  "startLine": 55,
+                  "endLine": 55
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "convert_to_screen"
+                  ],
+                  "attributes": {
+                    "startLine": 55,
+                    "endLine": 55
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "screen",
+                      "attributes": {
+                        "startLine": 55,
+                        "endLine": 55
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 55,
+                      "endLine": 55
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 55,
+                  "endLine": 55
+                }
+              },
+              "attributes": {
+                "startLine": 55,
+                "endLine": 55
+              }
+            },
+            "attributes": {
+              "startLine": 55,
+              "endLine": 55
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 54,
+          "endLine": 56
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "hidden",
+            "attributes": {
+              "startLine": 58,
+              "endLine": 58
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "get_user_option"
+              ],
+              "attributes": {
+                "startLine": 58,
+                "endLine": 58
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_BinaryOp_Concat",
+                  "left": {
+                    "nodeType": "Expr_BinaryOp_Concat",
+                    "left": {
+                      "nodeType": "Scalar_String",
+                      "value": "manage",
+                      "attributes": {
+                        "startLine": 58,
+                        "endLine": 58,
+                        "kind": 1
+                      }
+                    },
+                    "right": {
+                      "nodeType": "Expr_PropertyFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "screen",
+                        "attributes": {
+                          "startLine": 58,
+                          "endLine": 58
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "id",
+                        "attributes": {
+                          "startLine": 58,
+                          "endLine": 58
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 58,
+                        "endLine": 58
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 58,
+                      "endLine": 58
+                    }
+                  },
+                  "right": {
+                    "nodeType": "Scalar_String",
+                    "value": "columnshidden",
+                    "attributes": {
+                      "startLine": 58,
+                      "endLine": 58,
+                      "kind": 1
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 58,
+                    "endLine": 58
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 58,
+                  "endLine": 58
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 58,
+              "endLine": 58
+            }
+          },
+          "attributes": {
+            "startLine": 58,
+            "endLine": 58
+          }
+        },
+        "attributes": {
+          "startLine": 58,
+          "endLine": 58
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "use_defaults",
+            "attributes": {
+              "startLine": 60,
+              "endLine": 60
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_BooleanNot",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "is_array"
+                ],
+                "attributes": {
+                  "startLine": 60,
+                  "endLine": 60
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "hidden",
+                    "attributes": {
+                      "startLine": 60,
+                      "endLine": 60
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 60,
+                    "endLine": 60
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 60,
+                "endLine": 60
+              }
+            },
+            "attributes": {
+              "startLine": 60,
+              "endLine": 60
+            }
+          },
+          "attributes": {
+            "startLine": 60,
+            "endLine": 60
+          }
+        },
+        "attributes": {
+          "startLine": 60,
+          "endLine": 60
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_Variable",
+          "name": "use_defaults",
+          "attributes": {
+            "startLine": 62,
+            "endLine": 62
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "hidden",
+                "attributes": {
+                  "startLine": 63,
+                  "endLine": 63
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Array",
+                "items": [],
+                "attributes": {
+                  "startLine": 63,
+                  "endLine": 63,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 63,
+                "endLine": 63
+              }
+            },
+            "attributes": {
+              "startLine": 63,
+              "endLine": 63
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "hidden",
+                "attributes": {
+                  "startLine": 73,
+                  "comments": [
+                    {
+                      "nodeType": "Comment_Doc",
+                      "text": "/**\n\t\t * Filters the default list of hidden columns.\n\t\t *\n\t\t * @since 4.4.0\n\t\t *\n\t\t * @param string[]  $hidden Array of IDs of columns hidden by default.\n\t\t * @param WP_Screen $screen WP_Screen object of the current screen.\n\t\t */",
+                      "line": 65,
+                      "filePos": 1607,
+                      "tokenPos": 227,
+                      "endLine": 72,
+                      "endFilePos": 1835,
+                      "endTokenPos": 227
+                    }
+                  ],
+                  "endLine": 73
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "apply_filters"
+                  ],
+                  "attributes": {
+                    "startLine": 73,
+                    "endLine": 73
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "default_hidden_columns",
+                      "attributes": {
+                        "startLine": 73,
+                        "endLine": 73,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 73,
+                      "endLine": 73
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "hidden",
+                      "attributes": {
+                        "startLine": 73,
+                        "endLine": 73
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 73,
+                      "endLine": 73
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "screen",
+                      "attributes": {
+                        "startLine": 73,
+                        "endLine": 73
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 73,
+                      "endLine": 73
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 73,
+                  "endLine": 73
+                }
+              },
+              "attributes": {
+                "startLine": 73,
+                "comments": [
+                  {
+                    "nodeType": "Comment_Doc",
+                    "text": "/**\n\t\t * Filters the default list of hidden columns.\n\t\t *\n\t\t * @since 4.4.0\n\t\t *\n\t\t * @param string[]  $hidden Array of IDs of columns hidden by default.\n\t\t * @param WP_Screen $screen WP_Screen object of the current screen.\n\t\t */",
+                    "line": 65,
+                    "filePos": 1607,
+                    "tokenPos": 227,
+                    "endLine": 72,
+                    "endFilePos": 1835,
+                    "endTokenPos": 227
+                  }
+                ],
+                "endLine": 73
+              }
+            },
+            "attributes": {
+              "startLine": 73,
+              "comments": [
+                {
+                  "nodeType": "Comment_Doc",
+                  "text": "/**\n\t\t * Filters the default list of hidden columns.\n\t\t *\n\t\t * @since 4.4.0\n\t\t *\n\t\t * @param string[]  $hidden Array of IDs of columns hidden by default.\n\t\t * @param WP_Screen $screen WP_Screen object of the current screen.\n\t\t */",
+                  "line": 65,
+                  "filePos": 1607,
+                  "tokenPos": 227,
+                  "endLine": 72,
+                  "endFilePos": 1835,
+                  "endTokenPos": 227
+                }
+              ],
+              "endLine": 73
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 62,
+          "endLine": 74
+        }
+      },
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "apply_filters"
+            ],
+            "attributes": {
+              "startLine": 86,
+              "endLine": 86
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "hidden_columns",
+                "attributes": {
+                  "startLine": 86,
+                  "endLine": 86,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 86,
+                "endLine": 86
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "hidden",
+                "attributes": {
+                  "startLine": 86,
+                  "endLine": 86
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 86,
+                "endLine": 86
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "screen",
+                "attributes": {
+                  "startLine": 86,
+                  "endLine": 86
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 86,
+                "endLine": 86
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "use_defaults",
+                "attributes": {
+                  "startLine": 86,
+                  "endLine": 86
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 86,
+                "endLine": 86
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 86,
+            "endLine": 86
+          }
+        },
+        "attributes": {
+          "startLine": 86,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Filters the list of hidden columns.\n\t *\n\t * @since 4.4.0\n\t * @since 4.4.1 Added the `use_defaults` parameter.\n\t *\n\t * @param string[]  $hidden       Array of IDs of hidden columns.\n\t * @param WP_Screen $screen       WP_Screen object of the current screen.\n\t * @param bool      $use_defaults Whether to show the default columns.\n\t */",
+              "line": 76,
+              "filePos": 1915,
+              "tokenPos": 249,
+              "endLine": 85,
+              "endFilePos": 2254,
+              "endTokenPos": 249
+            }
+          ],
+          "endLine": 86
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 53,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Get a list of hidden columns.\n *\n * @since 2.7.0\n *\n * @param string|WP_Screen $screen The screen you want the hidden columns for\n * @return string[] Array of IDs of hidden columns.\n */",
+          "line": 45,
+          "filePos": 1134,
+          "tokenPos": 130,
+          "endLine": 52,
+          "endFilePos": 1325,
+          "endTokenPos": 130
+        }
+      ],
+      "endLine": 87
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "meta_box_prefs",
+      "attributes": {
+        "startLine": 98,
+        "endLine": 98
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "screen",
+          "attributes": {
+            "startLine": 98,
+            "endLine": 98
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 98,
+          "endLine": 98
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Global",
+        "vars": [
+          {
+            "nodeType": "Expr_Variable",
+            "name": "wp_meta_boxes",
+            "attributes": {
+              "startLine": 99,
+              "endLine": 99
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 99,
+          "endLine": 99
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "is_string"
+            ],
+            "attributes": {
+              "startLine": 101,
+              "endLine": 101
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "screen",
+                "attributes": {
+                  "startLine": 101,
+                  "endLine": 101
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 101,
+                "endLine": 101
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 101,
+            "endLine": 101
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "screen",
+                "attributes": {
+                  "startLine": 102,
+                  "endLine": 102
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "convert_to_screen"
+                  ],
+                  "attributes": {
+                    "startLine": 102,
+                    "endLine": 102
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "screen",
+                      "attributes": {
+                        "startLine": 102,
+                        "endLine": 102
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 102,
+                      "endLine": 102
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 102,
+                  "endLine": 102
+                }
+              },
+              "attributes": {
+                "startLine": 102,
+                "endLine": 102
+              }
+            },
+            "attributes": {
+              "startLine": 102,
+              "endLine": 102
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 101,
+          "endLine": 103
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_Empty",
+          "expr": {
+            "nodeType": "Expr_ArrayDimFetch",
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "wp_meta_boxes",
+              "attributes": {
+                "startLine": 105,
+                "endLine": 105
+              }
+            },
+            "dim": {
+              "nodeType": "Expr_PropertyFetch",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "screen",
+                "attributes": {
+                  "startLine": 105,
+                  "endLine": 105
+                }
+              },
+              "name": {
+                "nodeType": "Identifier",
+                "name": "id",
+                "attributes": {
+                  "startLine": 105,
+                  "endLine": 105
+                }
+              },
+              "attributes": {
+                "startLine": 105,
+                "endLine": 105
+              }
+            },
+            "attributes": {
+              "startLine": 105,
+              "endLine": 105
+            }
+          },
+          "attributes": {
+            "startLine": 105,
+            "endLine": 105
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Return",
+            "expr": null,
+            "attributes": {
+              "startLine": 106,
+              "endLine": 106
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 105,
+          "endLine": 107
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "hidden",
+            "attributes": {
+              "startLine": 109,
+              "endLine": 109
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "get_hidden_meta_boxes"
+              ],
+              "attributes": {
+                "startLine": 109,
+                "endLine": 109
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "screen",
+                  "attributes": {
+                    "startLine": 109,
+                    "endLine": 109
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 109,
+                  "endLine": 109
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 109,
+              "endLine": 109
+            }
+          },
+          "attributes": {
+            "startLine": 109,
+            "endLine": 109
+          }
+        },
+        "attributes": {
+          "startLine": 109,
+          "endLine": 109
+        }
+      },
+      {
+        "nodeType": "Stmt_Foreach",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "array_keys"
+            ],
+            "attributes": {
+              "startLine": 111,
+              "endLine": 111
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "wp_meta_boxes",
+                  "attributes": {
+                    "startLine": 111,
+                    "endLine": 111
+                  }
+                },
+                "dim": {
+                  "nodeType": "Expr_PropertyFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "screen",
+                    "attributes": {
+                      "startLine": 111,
+                      "endLine": 111
+                    }
+                  },
+                  "name": {
+                    "nodeType": "Identifier",
+                    "name": "id",
+                    "attributes": {
+                      "startLine": 111,
+                      "endLine": 111
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 111,
+                    "endLine": 111
+                  }
+                },
+                "attributes": {
+                  "startLine": 111,
+                  "endLine": 111
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 111,
+                "endLine": 111
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 111,
+            "endLine": 111
+          }
+        },
+        "keyVar": null,
+        "byRef": false,
+        "valueVar": {
+          "nodeType": "Expr_Variable",
+          "name": "context",
+          "attributes": {
+            "startLine": 111,
+            "endLine": 111
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Foreach",
+            "expr": {
+              "nodeType": "Expr_Array",
+              "items": [
+                {
+                  "nodeType": "Expr_ArrayItem",
+                  "key": null,
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "high",
+                    "attributes": {
+                      "startLine": 112,
+                      "endLine": 112,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 112,
+                    "endLine": 112
+                  }
+                },
+                {
+                  "nodeType": "Expr_ArrayItem",
+                  "key": null,
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "core",
+                    "attributes": {
+                      "startLine": 112,
+                      "endLine": 112,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 112,
+                    "endLine": 112
+                  }
+                },
+                {
+                  "nodeType": "Expr_ArrayItem",
+                  "key": null,
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "default",
+                    "attributes": {
+                      "startLine": 112,
+                      "endLine": 112,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 112,
+                    "endLine": 112
+                  }
+                },
+                {
+                  "nodeType": "Expr_ArrayItem",
+                  "key": null,
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "low",
+                    "attributes": {
+                      "startLine": 112,
+                      "endLine": 112,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 112,
+                    "endLine": 112
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 112,
+                "endLine": 112,
+                "kind": 1
+              }
+            },
+            "keyVar": null,
+            "byRef": false,
+            "valueVar": {
+              "nodeType": "Expr_Variable",
+              "name": "priority",
+              "attributes": {
+                "startLine": 112,
+                "endLine": 112
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_If",
+                "cond": {
+                  "nodeType": "Expr_BooleanNot",
+                  "expr": {
+                    "nodeType": "Expr_Isset",
+                    "vars": [
+                      {
+                        "nodeType": "Expr_ArrayDimFetch",
+                        "var": {
+                          "nodeType": "Expr_ArrayDimFetch",
+                          "var": {
+                            "nodeType": "Expr_ArrayDimFetch",
+                            "var": {
+                              "nodeType": "Expr_Variable",
+                              "name": "wp_meta_boxes",
+                              "attributes": {
+                                "startLine": 113,
+                                "endLine": 113
+                              }
+                            },
+                            "dim": {
+                              "nodeType": "Expr_PropertyFetch",
+                              "var": {
+                                "nodeType": "Expr_Variable",
+                                "name": "screen",
+                                "attributes": {
+                                  "startLine": 113,
+                                  "endLine": 113
+                                }
+                              },
+                              "name": {
+                                "nodeType": "Identifier",
+                                "name": "id",
+                                "attributes": {
+                                  "startLine": 113,
+                                  "endLine": 113
+                                }
+                              },
+                              "attributes": {
+                                "startLine": 113,
+                                "endLine": 113
+                              }
+                            },
+                            "attributes": {
+                              "startLine": 113,
+                              "endLine": 113
+                            }
+                          },
+                          "dim": {
+                            "nodeType": "Expr_Variable",
+                            "name": "context",
+                            "attributes": {
+                              "startLine": 113,
+                              "endLine": 113
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 113,
+                            "endLine": 113
+                          }
+                        },
+                        "dim": {
+                          "nodeType": "Expr_Variable",
+                          "name": "priority",
+                          "attributes": {
+                            "startLine": 113,
+                            "endLine": 113
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 113,
+                          "endLine": 113
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 113,
+                      "endLine": 113
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 113,
+                    "endLine": 113
+                  }
+                },
+                "stmts": [
+                  {
+                    "nodeType": "Stmt_Continue",
+                    "num": null,
+                    "attributes": {
+                      "startLine": 114,
+                      "endLine": 114
+                    }
+                  }
+                ],
+                "elseifs": [],
+                "else": null,
+                "attributes": {
+                  "startLine": 113,
+                  "endLine": 115
+                }
+              },
+              {
+                "nodeType": "Stmt_Foreach",
+                "expr": {
+                  "nodeType": "Expr_ArrayDimFetch",
+                  "var": {
+                    "nodeType": "Expr_ArrayDimFetch",
+                    "var": {
+                      "nodeType": "Expr_ArrayDimFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "wp_meta_boxes",
+                        "attributes": {
+                          "startLine": 116,
+                          "endLine": 116
+                        }
+                      },
+                      "dim": {
+                        "nodeType": "Expr_PropertyFetch",
+                        "var": {
+                          "nodeType": "Expr_Variable",
+                          "name": "screen",
+                          "attributes": {
+                            "startLine": 116,
+                            "endLine": 116
+                          }
+                        },
+                        "name": {
+                          "nodeType": "Identifier",
+                          "name": "id",
+                          "attributes": {
+                            "startLine": 116,
+                            "endLine": 116
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 116,
+                          "endLine": 116
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 116,
+                        "endLine": 116
+                      }
+                    },
+                    "dim": {
+                      "nodeType": "Expr_Variable",
+                      "name": "context",
+                      "attributes": {
+                        "startLine": 116,
+                        "endLine": 116
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 116,
+                      "endLine": 116
+                    }
+                  },
+                  "dim": {
+                    "nodeType": "Expr_Variable",
+                    "name": "priority",
+                    "attributes": {
+                      "startLine": 116,
+                      "endLine": 116
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 116,
+                    "endLine": 116
+                  }
+                },
+                "keyVar": null,
+                "byRef": false,
+                "valueVar": {
+                  "nodeType": "Expr_Variable",
+                  "name": "box",
+                  "attributes": {
+                    "startLine": 116,
+                    "endLine": 116
+                  }
+                },
+                "stmts": [
+                  {
+                    "nodeType": "Stmt_If",
+                    "cond": {
+                      "nodeType": "Expr_BinaryOp_BooleanOr",
+                      "left": {
+                        "nodeType": "Expr_BinaryOp_Equal",
+                        "left": {
+                          "nodeType": "Expr_ConstFetch",
+                          "name": {
+                            "nodeType": "Name",
+                            "parts": [
+                              "false"
+                            ],
+                            "attributes": {
+                              "startLine": 117,
+                              "endLine": 117
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 117,
+                            "endLine": 117
+                          }
+                        },
+                        "right": {
+                          "nodeType": "Expr_Variable",
+                          "name": "box",
+                          "attributes": {
+                            "startLine": 117,
+                            "endLine": 117
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 117,
+                          "endLine": 117
+                        }
+                      },
+                      "right": {
+                        "nodeType": "Expr_BooleanNot",
+                        "expr": {
+                          "nodeType": "Expr_ArrayDimFetch",
+                          "var": {
+                            "nodeType": "Expr_Variable",
+                            "name": "box",
+                            "attributes": {
+                              "startLine": 117,
+                              "endLine": 117
+                            }
+                          },
+                          "dim": {
+                            "nodeType": "Scalar_String",
+                            "value": "title",
+                            "attributes": {
+                              "startLine": 117,
+                              "endLine": 117,
+                              "kind": 1
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 117,
+                            "endLine": 117
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 117,
+                          "endLine": 117
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 117,
+                        "endLine": 117
+                      }
+                    },
+                    "stmts": [
+                      {
+                        "nodeType": "Stmt_Continue",
+                        "num": null,
+                        "attributes": {
+                          "startLine": 118,
+                          "endLine": 118
+                        }
+                      }
+                    ],
+                    "elseifs": [],
+                    "else": null,
+                    "attributes": {
+                      "startLine": 117,
+                      "endLine": 119
+                    }
+                  },
+                  {
+                    "nodeType": "Stmt_If",
+                    "cond": {
+                      "nodeType": "Expr_BinaryOp_BooleanOr",
+                      "left": {
+                        "nodeType": "Expr_BinaryOp_Equal",
+                        "left": {
+                          "nodeType": "Scalar_String",
+                          "value": "submitdiv",
+                          "attributes": {
+                            "startLine": 121,
+                            "endLine": 121,
+                            "kind": 1
+                          }
+                        },
+                        "right": {
+                          "nodeType": "Expr_ArrayDimFetch",
+                          "var": {
+                            "nodeType": "Expr_Variable",
+                            "name": "box",
+                            "attributes": {
+                              "startLine": 121,
+                              "endLine": 121
+                            }
+                          },
+                          "dim": {
+                            "nodeType": "Scalar_String",
+                            "value": "id",
+                            "attributes": {
+                              "startLine": 121,
+                              "endLine": 121,
+                              "kind": 1
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 121,
+                            "endLine": 121
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 121,
+                          "endLine": 121
+                        }
+                      },
+                      "right": {
+                        "nodeType": "Expr_BinaryOp_Equal",
+                        "left": {
+                          "nodeType": "Scalar_String",
+                          "value": "linksubmitdiv",
+                          "attributes": {
+                            "startLine": 121,
+                            "endLine": 121,
+                            "kind": 1
+                          }
+                        },
+                        "right": {
+                          "nodeType": "Expr_ArrayDimFetch",
+                          "var": {
+                            "nodeType": "Expr_Variable",
+                            "name": "box",
+                            "attributes": {
+                              "startLine": 121,
+                              "endLine": 121
+                            }
+                          },
+                          "dim": {
+                            "nodeType": "Scalar_String",
+                            "value": "id",
+                            "attributes": {
+                              "startLine": 121,
+                              "endLine": 121,
+                              "kind": 1
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 121,
+                            "endLine": 121
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 121,
+                          "endLine": 121
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 121,
+                        "endLine": 121
+                      }
+                    },
+                    "stmts": [
+                      {
+                        "nodeType": "Stmt_Continue",
+                        "num": null,
+                        "attributes": {
+                          "startLine": 122,
+                          "endLine": 122
+                        }
+                      }
+                    ],
+                    "elseifs": [],
+                    "else": null,
+                    "attributes": {
+                      "startLine": 121,
+                      "comments": [
+                        {
+                          "nodeType": "Comment",
+                          "text": "// Submit box cannot be hidden.\n",
+                          "line": 120,
+                          "filePos": 3118,
+                          "tokenPos": 510,
+                          "endLine": 121,
+                          "endFilePos": 3149,
+                          "endTokenPos": 510
+                        }
+                      ],
+                      "endLine": 123
+                    }
+                  },
+                  {
+                    "nodeType": "Stmt_Expression",
+                    "expr": {
+                      "nodeType": "Expr_Assign",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "widget_title",
+                        "attributes": {
+                          "startLine": 125,
+                          "endLine": 125
+                        }
+                      },
+                      "expr": {
+                        "nodeType": "Expr_ArrayDimFetch",
+                        "var": {
+                          "nodeType": "Expr_Variable",
+                          "name": "box",
+                          "attributes": {
+                            "startLine": 125,
+                            "endLine": 125
+                          }
+                        },
+                        "dim": {
+                          "nodeType": "Scalar_String",
+                          "value": "title",
+                          "attributes": {
+                            "startLine": 125,
+                            "endLine": 125,
+                            "kind": 1
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 125,
+                          "endLine": 125
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 125,
+                        "endLine": 125
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 125,
+                      "endLine": 125
+                    }
+                  },
+                  {
+                    "nodeType": "Stmt_If",
+                    "cond": {
+                      "nodeType": "Expr_BinaryOp_BooleanAnd",
+                      "left": {
+                        "nodeType": "Expr_FuncCall",
+                        "name": {
+                          "nodeType": "Name",
+                          "parts": [
+                            "is_array"
+                          ],
+                          "attributes": {
+                            "startLine": 127,
+                            "endLine": 127
+                          }
+                        },
+                        "args": [
+                          {
+                            "nodeType": "Arg",
+                            "value": {
+                              "nodeType": "Expr_ArrayDimFetch",
+                              "var": {
+                                "nodeType": "Expr_Variable",
+                                "name": "box",
+                                "attributes": {
+                                  "startLine": 127,
+                                  "endLine": 127
+                                }
+                              },
+                              "dim": {
+                                "nodeType": "Scalar_String",
+                                "value": "args",
+                                "attributes": {
+                                  "startLine": 127,
+                                  "endLine": 127,
+                                  "kind": 1
+                                }
+                              },
+                              "attributes": {
+                                "startLine": 127,
+                                "endLine": 127
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 127,
+                              "endLine": 127
+                            }
+                          }
+                        ],
+                        "attributes": {
+                          "startLine": 127,
+                          "endLine": 127
+                        }
+                      },
+                      "right": {
+                        "nodeType": "Expr_Isset",
+                        "vars": [
+                          {
+                            "nodeType": "Expr_ArrayDimFetch",
+                            "var": {
+                              "nodeType": "Expr_ArrayDimFetch",
+                              "var": {
+                                "nodeType": "Expr_Variable",
+                                "name": "box",
+                                "attributes": {
+                                  "startLine": 127,
+                                  "endLine": 127
+                                }
+                              },
+                              "dim": {
+                                "nodeType": "Scalar_String",
+                                "value": "args",
+                                "attributes": {
+                                  "startLine": 127,
+                                  "endLine": 127,
+                                  "kind": 1
+                                }
+                              },
+                              "attributes": {
+                                "startLine": 127,
+                                "endLine": 127
+                              }
+                            },
+                            "dim": {
+                              "nodeType": "Scalar_String",
+                              "value": "__widget_basename",
+                              "attributes": {
+                                "startLine": 127,
+                                "endLine": 127,
+                                "kind": 1
+                              }
+                            },
+                            "attributes": {
+                              "startLine": 127,
+                              "endLine": 127
+                            }
+                          }
+                        ],
+                        "attributes": {
+                          "startLine": 127,
+                          "endLine": 127
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 127,
+                        "endLine": 127
+                      }
+                    },
+                    "stmts": [
+                      {
+                        "nodeType": "Stmt_Expression",
+                        "expr": {
+                          "nodeType": "Expr_Assign",
+                          "var": {
+                            "nodeType": "Expr_Variable",
+                            "name": "widget_title",
+                            "attributes": {
+                              "startLine": 128,
+                              "endLine": 128
+                            }
+                          },
+                          "expr": {
+                            "nodeType": "Expr_ArrayDimFetch",
+                            "var": {
+                              "nodeType": "Expr_ArrayDimFetch",
+                              "var": {
+                                "nodeType": "Expr_Variable",
+                                "name": "box",
+                                "attributes": {
+                                  "startLine": 128,
+                                  "endLine": 128
+                                }
+                              },
+                              "dim": {
+                                "nodeType": "Scalar_String",
+                                "value": "args",
+                                "attributes": {
+                                  "startLine": 128,
+                                  "endLine": 128,
+                                  "kind": 1
+                                }
+                              },
+                              "attributes": {
+                                "startLine": 128,
+                                "endLine": 128
+                              }
+                            },
+                            "dim": {
+                              "nodeType": "Scalar_String",
+                              "value": "__widget_basename",
+                              "attributes": {
+                                "startLine": 128,
+                                "endLine": 128,
+                                "kind": 1
+                              }
+                            },
+                            "attributes": {
+                              "startLine": 128,
+                              "endLine": 128
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 128,
+                            "endLine": 128
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 128,
+                          "endLine": 128
+                        }
+                      }
+                    ],
+                    "elseifs": [],
+                    "else": null,
+                    "attributes": {
+                      "startLine": 127,
+                      "endLine": 129
+                    }
+                  },
+                  {
+                    "nodeType": "Stmt_Expression",
+                    "expr": {
+                      "nodeType": "Expr_FuncCall",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "printf"
+                        ],
+                        "attributes": {
+                          "startLine": 131,
+                          "endLine": 131
+                        }
+                      },
+                      "args": [
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Scalar_String",
+                            "value": "<label for=\"%1$s-hide\"><input class=\"hide-postbox-tog\" name=\"%1$s-hide\" type=\"checkbox\" id=\"%1$s-hide\" value=\"%1$s\" %2$s />%3$s</label>",
+                            "attributes": {
+                              "startLine": 132,
+                              "endLine": 132,
+                              "kind": 1
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 132,
+                            "endLine": 132
+                          }
+                        },
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Expr_FuncCall",
+                            "name": {
+                              "nodeType": "Name",
+                              "parts": [
+                                "esc_attr"
+                              ],
+                              "attributes": {
+                                "startLine": 133,
+                                "endLine": 133
+                              }
+                            },
+                            "args": [
+                              {
+                                "nodeType": "Arg",
+                                "value": {
+                                  "nodeType": "Expr_ArrayDimFetch",
+                                  "var": {
+                                    "nodeType": "Expr_Variable",
+                                    "name": "box",
+                                    "attributes": {
+                                      "startLine": 133,
+                                      "endLine": 133
+                                    }
+                                  },
+                                  "dim": {
+                                    "nodeType": "Scalar_String",
+                                    "value": "id",
+                                    "attributes": {
+                                      "startLine": 133,
+                                      "endLine": 133,
+                                      "kind": 1
+                                    }
+                                  },
+                                  "attributes": {
+                                    "startLine": 133,
+                                    "endLine": 133
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 133,
+                                  "endLine": 133
+                                }
+                              }
+                            ],
+                            "attributes": {
+                              "startLine": 133,
+                              "endLine": 133
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 133,
+                            "endLine": 133
+                          }
+                        },
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Expr_FuncCall",
+                            "name": {
+                              "nodeType": "Name",
+                              "parts": [
+                                "checked"
+                              ],
+                              "attributes": {
+                                "startLine": 134,
+                                "endLine": 134
+                              }
+                            },
+                            "args": [
+                              {
+                                "nodeType": "Arg",
+                                "value": {
+                                  "nodeType": "Expr_FuncCall",
+                                  "name": {
+                                    "nodeType": "Name",
+                                    "parts": [
+                                      "in_array"
+                                    ],
+                                    "attributes": {
+                                      "startLine": 134,
+                                      "endLine": 134
+                                    }
+                                  },
+                                  "args": [
+                                    {
+                                      "nodeType": "Arg",
+                                      "value": {
+                                        "nodeType": "Expr_ArrayDimFetch",
+                                        "var": {
+                                          "nodeType": "Expr_Variable",
+                                          "name": "box",
+                                          "attributes": {
+                                            "startLine": 134,
+                                            "endLine": 134
+                                          }
+                                        },
+                                        "dim": {
+                                          "nodeType": "Scalar_String",
+                                          "value": "id",
+                                          "attributes": {
+                                            "startLine": 134,
+                                            "endLine": 134,
+                                            "kind": 1
+                                          }
+                                        },
+                                        "attributes": {
+                                          "startLine": 134,
+                                          "endLine": 134
+                                        }
+                                      },
+                                      "byRef": false,
+                                      "unpack": false,
+                                      "attributes": {
+                                        "startLine": 134,
+                                        "endLine": 134
+                                      }
+                                    },
+                                    {
+                                      "nodeType": "Arg",
+                                      "value": {
+                                        "nodeType": "Expr_Variable",
+                                        "name": "hidden",
+                                        "attributes": {
+                                          "startLine": 134,
+                                          "endLine": 134
+                                        }
+                                      },
+                                      "byRef": false,
+                                      "unpack": false,
+                                      "attributes": {
+                                        "startLine": 134,
+                                        "endLine": 134
+                                      }
+                                    }
+                                  ],
+                                  "attributes": {
+                                    "startLine": 134,
+                                    "endLine": 134
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 134,
+                                  "endLine": 134
+                                }
+                              },
+                              {
+                                "nodeType": "Arg",
+                                "value": {
+                                  "nodeType": "Expr_ConstFetch",
+                                  "name": {
+                                    "nodeType": "Name",
+                                    "parts": [
+                                      "false"
+                                    ],
+                                    "attributes": {
+                                      "startLine": 134,
+                                      "endLine": 134
+                                    }
+                                  },
+                                  "attributes": {
+                                    "startLine": 134,
+                                    "endLine": 134
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 134,
+                                  "endLine": 134
+                                }
+                              },
+                              {
+                                "nodeType": "Arg",
+                                "value": {
+                                  "nodeType": "Expr_ConstFetch",
+                                  "name": {
+                                    "nodeType": "Name",
+                                    "parts": [
+                                      "false"
+                                    ],
+                                    "attributes": {
+                                      "startLine": 134,
+                                      "endLine": 134
+                                    }
+                                  },
+                                  "attributes": {
+                                    "startLine": 134,
+                                    "endLine": 134
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 134,
+                                  "endLine": 134
+                                }
+                              }
+                            ],
+                            "attributes": {
+                              "startLine": 134,
+                              "endLine": 134
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 134,
+                            "endLine": 134
+                          }
+                        },
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Expr_Variable",
+                            "name": "widget_title",
+                            "attributes": {
+                              "startLine": 135,
+                              "endLine": 135
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 135,
+                            "endLine": 135
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 131,
+                        "endLine": 136
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 131,
+                      "endLine": 136
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 116,
+                  "endLine": 137
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 112,
+              "endLine": 138
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 111,
+          "endLine": 139
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 98,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Prints the meta box preferences for screen meta.\n *\n * @since 2.7.0\n *\n * @global array $wp_meta_boxes\n *\n * @param WP_Screen $screen\n */",
+          "line": 89,
+          "filePos": 2335,
+          "tokenPos": 272,
+          "endLine": 97,
+          "endFilePos": 2478,
+          "endTokenPos": 272
+        }
+      ],
+      "endLine": 140
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "get_hidden_meta_boxes",
+      "attributes": {
+        "startLine": 150,
+        "endLine": 150
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "screen",
+          "attributes": {
+            "startLine": 150,
+            "endLine": 150
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 150,
+          "endLine": 150
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "is_string"
+            ],
+            "attributes": {
+              "startLine": 151,
+              "endLine": 151
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "screen",
+                "attributes": {
+                  "startLine": 151,
+                  "endLine": 151
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 151,
+                "endLine": 151
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 151,
+            "endLine": 151
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "screen",
+                "attributes": {
+                  "startLine": 152,
+                  "endLine": 152
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "convert_to_screen"
+                  ],
+                  "attributes": {
+                    "startLine": 152,
+                    "endLine": 152
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "screen",
+                      "attributes": {
+                        "startLine": 152,
+                        "endLine": 152
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 152,
+                      "endLine": 152
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 152,
+                  "endLine": 152
+                }
+              },
+              "attributes": {
+                "startLine": 152,
+                "endLine": 152
+              }
+            },
+            "attributes": {
+              "startLine": 152,
+              "endLine": 152
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 151,
+          "endLine": 153
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "hidden",
+            "attributes": {
+              "startLine": 155,
+              "endLine": 155
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "get_user_option"
+              ],
+              "attributes": {
+                "startLine": 155,
+                "endLine": 155
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_Encapsed",
+                  "parts": [
+                    {
+                      "nodeType": "Scalar_EncapsedStringPart",
+                      "value": "metaboxhidden_",
+                      "attributes": {
+                        "startLine": 155,
+                        "endLine": 155
+                      }
+                    },
+                    {
+                      "nodeType": "Expr_PropertyFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "screen",
+                        "attributes": {
+                          "startLine": 155,
+                          "endLine": 155
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "id",
+                        "attributes": {
+                          "startLine": 155,
+                          "endLine": 155
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 155,
+                        "endLine": 155
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 155,
+                    "endLine": 155,
+                    "kind": 2
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 155,
+                  "endLine": 155
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 155,
+              "endLine": 155
+            }
+          },
+          "attributes": {
+            "startLine": 155,
+            "endLine": 155
+          }
+        },
+        "attributes": {
+          "startLine": 155,
+          "endLine": 155
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "use_defaults",
+            "attributes": {
+              "startLine": 157,
+              "endLine": 157
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_BooleanNot",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "is_array"
+                ],
+                "attributes": {
+                  "startLine": 157,
+                  "endLine": 157
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "hidden",
+                    "attributes": {
+                      "startLine": 157,
+                      "endLine": 157
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 157,
+                    "endLine": 157
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 157,
+                "endLine": 157
+              }
+            },
+            "attributes": {
+              "startLine": 157,
+              "endLine": 157
+            }
+          },
+          "attributes": {
+            "startLine": 157,
+            "endLine": 157
+          }
+        },
+        "attributes": {
+          "startLine": 157,
+          "endLine": 157
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_Variable",
+          "name": "use_defaults",
+          "attributes": {
+            "startLine": 160,
+            "endLine": 160
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "hidden",
+                "attributes": {
+                  "startLine": 161,
+                  "endLine": 161
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Array",
+                "items": [],
+                "attributes": {
+                  "startLine": 161,
+                  "endLine": 161,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 161,
+                "endLine": 161
+              }
+            },
+            "attributes": {
+              "startLine": 161,
+              "endLine": 161
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BinaryOp_Equal",
+              "left": {
+                "nodeType": "Scalar_String",
+                "value": "post",
+                "attributes": {
+                  "startLine": 162,
+                  "endLine": 162,
+                  "kind": 1
+                }
+              },
+              "right": {
+                "nodeType": "Expr_PropertyFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "screen",
+                  "attributes": {
+                    "startLine": 162,
+                    "endLine": 162
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "base",
+                  "attributes": {
+                    "startLine": 162,
+                    "endLine": 162
+                  }
+                },
+                "attributes": {
+                  "startLine": 162,
+                  "endLine": 162
+                }
+              },
+              "attributes": {
+                "startLine": 162,
+                "endLine": 162
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_If",
+                "cond": {
+                  "nodeType": "Expr_BinaryOp_BooleanOr",
+                  "left": {
+                    "nodeType": "Expr_BinaryOp_BooleanOr",
+                    "left": {
+                      "nodeType": "Expr_BinaryOp_Equal",
+                      "left": {
+                        "nodeType": "Scalar_String",
+                        "value": "post",
+                        "attributes": {
+                          "startLine": 163,
+                          "endLine": 163,
+                          "kind": 1
+                        }
+                      },
+                      "right": {
+                        "nodeType": "Expr_PropertyFetch",
+                        "var": {
+                          "nodeType": "Expr_Variable",
+                          "name": "screen",
+                          "attributes": {
+                            "startLine": 163,
+                            "endLine": 163
+                          }
+                        },
+                        "name": {
+                          "nodeType": "Identifier",
+                          "name": "post_type",
+                          "attributes": {
+                            "startLine": 163,
+                            "endLine": 163
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 163,
+                          "endLine": 163
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 163,
+                        "endLine": 163
+                      }
+                    },
+                    "right": {
+                      "nodeType": "Expr_BinaryOp_Equal",
+                      "left": {
+                        "nodeType": "Scalar_String",
+                        "value": "page",
+                        "attributes": {
+                          "startLine": 163,
+                          "endLine": 163,
+                          "kind": 1
+                        }
+                      },
+                      "right": {
+                        "nodeType": "Expr_PropertyFetch",
+                        "var": {
+                          "nodeType": "Expr_Variable",
+                          "name": "screen",
+                          "attributes": {
+                            "startLine": 163,
+                            "endLine": 163
+                          }
+                        },
+                        "name": {
+                          "nodeType": "Identifier",
+                          "name": "post_type",
+                          "attributes": {
+                            "startLine": 163,
+                            "endLine": 163
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 163,
+                          "endLine": 163
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 163,
+                        "endLine": 163
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 163,
+                      "endLine": 163
+                    }
+                  },
+                  "right": {
+                    "nodeType": "Expr_BinaryOp_Equal",
+                    "left": {
+                      "nodeType": "Scalar_String",
+                      "value": "attachment",
+                      "attributes": {
+                        "startLine": 163,
+                        "endLine": 163,
+                        "kind": 1
+                      }
+                    },
+                    "right": {
+                      "nodeType": "Expr_PropertyFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "screen",
+                        "attributes": {
+                          "startLine": 163,
+                          "endLine": 163
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "post_type",
+                        "attributes": {
+                          "startLine": 163,
+                          "endLine": 163
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 163,
+                        "endLine": 163
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 163,
+                      "endLine": 163
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 163,
+                    "endLine": 163
+                  }
+                },
+                "stmts": [
+                  {
+                    "nodeType": "Stmt_Expression",
+                    "expr": {
+                      "nodeType": "Expr_Assign",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "hidden",
+                        "attributes": {
+                          "startLine": 164,
+                          "endLine": 164
+                        }
+                      },
+                      "expr": {
+                        "nodeType": "Expr_Array",
+                        "items": [
+                          {
+                            "nodeType": "Expr_ArrayItem",
+                            "key": null,
+                            "value": {
+                              "nodeType": "Scalar_String",
+                              "value": "slugdiv",
+                              "attributes": {
+                                "startLine": 164,
+                                "endLine": 164,
+                                "kind": 1
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 164,
+                              "endLine": 164
+                            }
+                          },
+                          {
+                            "nodeType": "Expr_ArrayItem",
+                            "key": null,
+                            "value": {
+                              "nodeType": "Scalar_String",
+                              "value": "trackbacksdiv",
+                              "attributes": {
+                                "startLine": 164,
+                                "endLine": 164,
+                                "kind": 1
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 164,
+                              "endLine": 164
+                            }
+                          },
+                          {
+                            "nodeType": "Expr_ArrayItem",
+                            "key": null,
+                            "value": {
+                              "nodeType": "Scalar_String",
+                              "value": "postcustom",
+                              "attributes": {
+                                "startLine": 164,
+                                "endLine": 164,
+                                "kind": 1
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 164,
+                              "endLine": 164
+                            }
+                          },
+                          {
+                            "nodeType": "Expr_ArrayItem",
+                            "key": null,
+                            "value": {
+                              "nodeType": "Scalar_String",
+                              "value": "postexcerpt",
+                              "attributes": {
+                                "startLine": 164,
+                                "endLine": 164,
+                                "kind": 1
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 164,
+                              "endLine": 164
+                            }
+                          },
+                          {
+                            "nodeType": "Expr_ArrayItem",
+                            "key": null,
+                            "value": {
+                              "nodeType": "Scalar_String",
+                              "value": "commentstatusdiv",
+                              "attributes": {
+                                "startLine": 164,
+                                "endLine": 164,
+                                "kind": 1
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 164,
+                              "endLine": 164
+                            }
+                          },
+                          {
+                            "nodeType": "Expr_ArrayItem",
+                            "key": null,
+                            "value": {
+                              "nodeType": "Scalar_String",
+                              "value": "commentsdiv",
+                              "attributes": {
+                                "startLine": 164,
+                                "endLine": 164,
+                                "kind": 1
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 164,
+                              "endLine": 164
+                            }
+                          },
+                          {
+                            "nodeType": "Expr_ArrayItem",
+                            "key": null,
+                            "value": {
+                              "nodeType": "Scalar_String",
+                              "value": "authordiv",
+                              "attributes": {
+                                "startLine": 164,
+                                "endLine": 164,
+                                "kind": 1
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 164,
+                              "endLine": 164
+                            }
+                          },
+                          {
+                            "nodeType": "Expr_ArrayItem",
+                            "key": null,
+                            "value": {
+                              "nodeType": "Scalar_String",
+                              "value": "revisionsdiv",
+                              "attributes": {
+                                "startLine": 164,
+                                "endLine": 164,
+                                "kind": 1
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 164,
+                              "endLine": 164
+                            }
+                          }
+                        ],
+                        "attributes": {
+                          "startLine": 164,
+                          "endLine": 164,
+                          "kind": 1
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 164,
+                        "endLine": 164
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 164,
+                      "endLine": 164
+                    }
+                  }
+                ],
+                "elseifs": [],
+                "else": {
+                  "nodeType": "Stmt_Else",
+                  "stmts": [
+                    {
+                      "nodeType": "Stmt_Expression",
+                      "expr": {
+                        "nodeType": "Expr_Assign",
+                        "var": {
+                          "nodeType": "Expr_Variable",
+                          "name": "hidden",
+                          "attributes": {
+                            "startLine": 166,
+                            "endLine": 166
+                          }
+                        },
+                        "expr": {
+                          "nodeType": "Expr_Array",
+                          "items": [
+                            {
+                              "nodeType": "Expr_ArrayItem",
+                              "key": null,
+                              "value": {
+                                "nodeType": "Scalar_String",
+                                "value": "slugdiv",
+                                "attributes": {
+                                  "startLine": 166,
+                                  "endLine": 166,
+                                  "kind": 1
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 166,
+                                "endLine": 166
+                              }
+                            }
+                          ],
+                          "attributes": {
+                            "startLine": 166,
+                            "endLine": 166,
+                            "kind": 1
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 166,
+                          "endLine": 166
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 166,
+                        "endLine": 166
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 165,
+                    "endLine": 167
+                  }
+                },
+                "attributes": {
+                  "startLine": 163,
+                  "endLine": 167
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 162,
+              "endLine": 168
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "hidden",
+                "attributes": {
+                  "startLine": 178,
+                  "comments": [
+                    {
+                      "nodeType": "Comment_Doc",
+                      "text": "/**\n\t\t * Filters the default list of hidden meta boxes.\n\t\t *\n\t\t * @since 3.1.0\n\t\t *\n\t\t * @param string[]  $hidden An array of IDs of meta boxes hidden by default.\n\t\t * @param WP_Screen $screen WP_Screen object of the current screen.\n\t\t */",
+                      "line": 170,
+                      "filePos": 4540,
+                      "tokenPos": 861,
+                      "endLine": 177,
+                      "endFilePos": 4777,
+                      "endTokenPos": 861
+                    }
+                  ],
+                  "endLine": 178
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "apply_filters"
+                  ],
+                  "attributes": {
+                    "startLine": 178,
+                    "endLine": 178
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "default_hidden_meta_boxes",
+                      "attributes": {
+                        "startLine": 178,
+                        "endLine": 178,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 178,
+                      "endLine": 178
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "hidden",
+                      "attributes": {
+                        "startLine": 178,
+                        "endLine": 178
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 178,
+                      "endLine": 178
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "screen",
+                      "attributes": {
+                        "startLine": 178,
+                        "endLine": 178
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 178,
+                      "endLine": 178
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 178,
+                  "endLine": 178
+                }
+              },
+              "attributes": {
+                "startLine": 178,
+                "comments": [
+                  {
+                    "nodeType": "Comment_Doc",
+                    "text": "/**\n\t\t * Filters the default list of hidden meta boxes.\n\t\t *\n\t\t * @since 3.1.0\n\t\t *\n\t\t * @param string[]  $hidden An array of IDs of meta boxes hidden by default.\n\t\t * @param WP_Screen $screen WP_Screen object of the current screen.\n\t\t */",
+                    "line": 170,
+                    "filePos": 4540,
+                    "tokenPos": 861,
+                    "endLine": 177,
+                    "endFilePos": 4777,
+                    "endTokenPos": 861
+                  }
+                ],
+                "endLine": 178
+              }
+            },
+            "attributes": {
+              "startLine": 178,
+              "comments": [
+                {
+                  "nodeType": "Comment_Doc",
+                  "text": "/**\n\t\t * Filters the default list of hidden meta boxes.\n\t\t *\n\t\t * @since 3.1.0\n\t\t *\n\t\t * @param string[]  $hidden An array of IDs of meta boxes hidden by default.\n\t\t * @param WP_Screen $screen WP_Screen object of the current screen.\n\t\t */",
+                  "line": 170,
+                  "filePos": 4540,
+                  "tokenPos": 861,
+                  "endLine": 177,
+                  "endFilePos": 4777,
+                  "endTokenPos": 861
+                }
+              ],
+              "endLine": 178
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 160,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "// Hide slug boxes by default.\n",
+              "line": 159,
+              "filePos": 4116,
+              "tokenPos": 733,
+              "endLine": 160,
+              "endFilePos": 4146,
+              "endTokenPos": 733
+            }
+          ],
+          "endLine": 179
+        }
+      },
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "apply_filters"
+            ],
+            "attributes": {
+              "startLine": 191,
+              "endLine": 191
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "hidden_meta_boxes",
+                "attributes": {
+                  "startLine": 191,
+                  "endLine": 191,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 191,
+                "endLine": 191
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "hidden",
+                "attributes": {
+                  "startLine": 191,
+                  "endLine": 191
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 191,
+                "endLine": 191
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "screen",
+                "attributes": {
+                  "startLine": 191,
+                  "endLine": 191
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 191,
+                "endLine": 191
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "use_defaults",
+                "attributes": {
+                  "startLine": 191,
+                  "endLine": 191
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 191,
+                "endLine": 191
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 191,
+            "endLine": 191
+          }
+        },
+        "attributes": {
+          "startLine": 191,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Filters the list of hidden meta boxes.\n\t *\n\t * @since 3.3.0\n\t *\n\t * @param string[]  $hidden       An array of IDs of hidden meta boxes.\n\t * @param WP_Screen $screen       WP_Screen object of the current screen.\n\t * @param bool      $use_defaults Whether to show the default meta boxes.\n\t *                                Default true.\n\t */",
+              "line": 181,
+              "filePos": 4860,
+              "tokenPos": 883,
+              "endLine": 190,
+              "endFilePos": 5207,
+              "endTokenPos": 883
+            }
+          ],
+          "endLine": 191
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 150,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Gets an array of IDs of hidden meta boxes.\n *\n * @since 2.7.0\n *\n * @param string|WP_Screen $screen Screen identifier\n * @return string[] IDs of hidden meta boxes.\n */",
+          "line": 142,
+          "filePos": 3716,
+          "tokenPos": 658,
+          "endLine": 149,
+          "endFilePos": 3889,
+          "endTokenPos": 658
+        }
+      ],
+      "endLine": 192
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "add_screen_option",
+      "attributes": {
+        "startLine": 202,
+        "endLine": 202
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "option",
+          "attributes": {
+            "startLine": 202,
+            "endLine": 202
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 202,
+          "endLine": 202
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "args",
+          "attributes": {
+            "startLine": 202,
+            "endLine": 202
+          }
+        },
+        "default": {
+          "nodeType": "Expr_Array",
+          "items": [],
+          "attributes": {
+            "startLine": 202,
+            "endLine": 202,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 202,
+          "endLine": 202
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "current_screen",
+            "attributes": {
+              "startLine": 203,
+              "endLine": 203
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "get_current_screen"
+              ],
+              "attributes": {
+                "startLine": 203,
+                "endLine": 203
+              }
+            },
+            "args": [],
+            "attributes": {
+              "startLine": 203,
+              "endLine": 203
+            }
+          },
+          "attributes": {
+            "startLine": 203,
+            "endLine": 203
+          }
+        },
+        "attributes": {
+          "startLine": 203,
+          "endLine": 203
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BooleanNot",
+          "expr": {
+            "nodeType": "Expr_Variable",
+            "name": "current_screen",
+            "attributes": {
+              "startLine": 205,
+              "endLine": 205
+            }
+          },
+          "attributes": {
+            "startLine": 205,
+            "endLine": 205
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Return",
+            "expr": null,
+            "attributes": {
+              "startLine": 206,
+              "endLine": 206
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 205,
+          "endLine": 207
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_MethodCall",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "current_screen",
+            "attributes": {
+              "startLine": 209,
+              "endLine": 209
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "add_option",
+            "attributes": {
+              "startLine": 209,
+              "endLine": 209
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "option",
+                "attributes": {
+                  "startLine": 209,
+                  "endLine": 209
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 209,
+                "endLine": 209
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "args",
+                "attributes": {
+                  "startLine": 209,
+                  "endLine": 209
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 209,
+                "endLine": 209
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 209,
+            "endLine": 209
+          }
+        },
+        "attributes": {
+          "startLine": 209,
+          "endLine": 209
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 202,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Register and configure an admin screen option\n *\n * @since 3.1.0\n *\n * @param string $option An option name.\n * @param mixed $args Option-dependent arguments.\n */",
+          "line": 194,
+          "filePos": 5291,
+          "tokenPos": 906,
+          "endLine": 201,
+          "endFilePos": 5459,
+          "endTokenPos": 906
+        }
+      ],
+      "endLine": 210
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "get_current_screen",
+      "attributes": {
+        "startLine": 221,
+        "endLine": 221
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Global",
+        "vars": [
+          {
+            "nodeType": "Expr_Variable",
+            "name": "current_screen",
+            "attributes": {
+              "startLine": 222,
+              "endLine": 222
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 222,
+          "endLine": 222
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BooleanNot",
+          "expr": {
+            "nodeType": "Expr_Isset",
+            "vars": [
+              {
+                "nodeType": "Expr_Variable",
+                "name": "current_screen",
+                "attributes": {
+                  "startLine": 224,
+                  "endLine": 224
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 224,
+              "endLine": 224
+            }
+          },
+          "attributes": {
+            "startLine": 224,
+            "endLine": 224
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_ConstFetch",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "null"
+                ],
+                "attributes": {
+                  "startLine": 225,
+                  "endLine": 225
+                }
+              },
+              "attributes": {
+                "startLine": 225,
+                "endLine": 225
+              }
+            },
+            "attributes": {
+              "startLine": 225,
+              "endLine": 225
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 224,
+          "endLine": 226
+        }
+      },
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_Variable",
+          "name": "current_screen",
+          "attributes": {
+            "startLine": 228,
+            "endLine": 228
+          }
+        },
+        "attributes": {
+          "startLine": 228,
+          "endLine": 228
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 221,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Get the current screen object\n *\n * @since 3.1.0\n *\n * @global WP_Screen $current_screen WordPress current screen object.\n *\n * @return WP_Screen|null Current screen object or null when screen not defined.\n */",
+          "line": 212,
+          "filePos": 5653,
+          "tokenPos": 969,
+          "endLine": 220,
+          "endFilePos": 5868,
+          "endTokenPos": 969
+        }
+      ],
+      "endLine": 229
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "set_current_screen",
+      "attributes": {
+        "startLine": 239,
+        "endLine": 239
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "hook_name",
+          "attributes": {
+            "startLine": 239,
+            "endLine": 239
+          }
+        },
+        "default": {
+          "nodeType": "Scalar_String",
+          "value": "",
+          "attributes": {
+            "startLine": 239,
+            "endLine": 239,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 239,
+          "endLine": 239
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_MethodCall",
+          "var": {
+            "nodeType": "Expr_StaticCall",
+            "class": {
+              "nodeType": "Name",
+              "parts": [
+                "WP_Screen"
+              ],
+              "attributes": {
+                "startLine": 240,
+                "endLine": 240
+              }
+            },
+            "name": {
+              "nodeType": "Identifier",
+              "name": "get",
+              "attributes": {
+                "startLine": 240,
+                "endLine": 240
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "hook_name",
+                  "attributes": {
+                    "startLine": 240,
+                    "endLine": 240
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 240,
+                  "endLine": 240
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 240,
+              "endLine": 240
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "set_current_screen",
+            "attributes": {
+              "startLine": 240,
+              "endLine": 240
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 240,
+            "endLine": 240
+          }
+        },
+        "attributes": {
+          "startLine": 240,
+          "endLine": 240
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 239,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Set the current screen object\n *\n * @since 3.0.0\n *\n * @param string|WP_Screen $hook_name Optional. The hook name (also known as the hook suffix) used to determine the screen,\n *                                    or an existing screen object.\n */",
+          "line": 231,
+          "filePos": 6012,
+          "tokenPos": 1015,
+          "endLine": 238,
+          "endFilePos": 6265,
+          "endTokenPos": 1015
+        }
+      ],
+      "endLine": 241
+    }
+  }
+]

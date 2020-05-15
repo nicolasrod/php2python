@@ -1,0 +1,301 @@
+[
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "<div class=\"akismet-setup-instructions\">\n\t<p>",
+    "attributes": {
+      "startLine": 1,
+      "hasLeadingNewline": true,
+      "endLine": 2
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "esc_html_e"
+        ],
+        "attributes": {
+          "startLine": 2,
+          "endLine": 2
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "Set up your Akismet account to enable spam filtering on this site.",
+            "attributes": {
+              "startLine": 2,
+              "endLine": 2,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 2,
+            "endLine": 2
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "akismet",
+            "attributes": {
+              "startLine": 2,
+              "endLine": 2,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 2,
+            "endLine": 2
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 2,
+        "endLine": 2
+      }
+    },
+    "attributes": {
+      "startLine": 2,
+      "endLine": 2
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</p>\n\t",
+    "attributes": {
+      "startLine": 2,
+      "hasLeadingNewline": false,
+      "endLine": 3
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_StaticCall",
+      "class": {
+        "nodeType": "Name",
+        "parts": [
+          "Akismet"
+        ],
+        "attributes": {
+          "startLine": 3,
+          "endLine": 3
+        }
+      },
+      "name": {
+        "nodeType": "Identifier",
+        "name": "view",
+        "attributes": {
+          "startLine": 3,
+          "endLine": 3
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "get",
+            "attributes": {
+              "startLine": 3,
+              "endLine": 3,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 3,
+            "endLine": 3
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_Array",
+            "items": [
+              {
+                "nodeType": "Expr_ArrayItem",
+                "key": {
+                  "nodeType": "Scalar_String",
+                  "value": "text",
+                  "attributes": {
+                    "startLine": 3,
+                    "endLine": 3,
+                    "kind": 1
+                  }
+                },
+                "value": {
+                  "nodeType": "Expr_FuncCall",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "__"
+                    ],
+                    "attributes": {
+                      "startLine": 3,
+                      "endLine": 3
+                    }
+                  },
+                  "args": [
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Scalar_String",
+                        "value": "Set up your Akismet account",
+                        "attributes": {
+                          "startLine": 3,
+                          "endLine": 3,
+                          "kind": 1
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 3,
+                        "endLine": 3
+                      }
+                    },
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Scalar_String",
+                        "value": "akismet",
+                        "attributes": {
+                          "startLine": 3,
+                          "endLine": 3,
+                          "kind": 1
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 3,
+                        "endLine": 3
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 3,
+                    "endLine": 3
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 3,
+                  "endLine": 3
+                }
+              },
+              {
+                "nodeType": "Expr_ArrayItem",
+                "key": {
+                  "nodeType": "Scalar_String",
+                  "value": "classes",
+                  "attributes": {
+                    "startLine": 3,
+                    "endLine": 3,
+                    "kind": 1
+                  }
+                },
+                "value": {
+                  "nodeType": "Expr_Array",
+                  "items": [
+                    {
+                      "nodeType": "Expr_ArrayItem",
+                      "key": null,
+                      "value": {
+                        "nodeType": "Scalar_String",
+                        "value": "akismet-button",
+                        "attributes": {
+                          "startLine": 3,
+                          "endLine": 3,
+                          "kind": 1
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 3,
+                        "endLine": 3
+                      }
+                    },
+                    {
+                      "nodeType": "Expr_ArrayItem",
+                      "key": null,
+                      "value": {
+                        "nodeType": "Scalar_String",
+                        "value": "akismet-is-primary",
+                        "attributes": {
+                          "startLine": 3,
+                          "endLine": 3,
+                          "kind": 1
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 3,
+                        "endLine": 3
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 3,
+                    "endLine": 3,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 3,
+                  "endLine": 3
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 3,
+              "endLine": 3,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 3,
+            "endLine": 3
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 3,
+        "endLine": 3
+      }
+    },
+    "attributes": {
+      "startLine": 3,
+      "endLine": 3
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</div>\n",
+    "attributes": {
+      "startLine": 4,
+      "hasLeadingNewline": true,
+      "endLine": 5
+    }
+  }
+]

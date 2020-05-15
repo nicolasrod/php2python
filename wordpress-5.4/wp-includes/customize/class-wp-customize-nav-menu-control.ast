@@ -1,0 +1,830 @@
+[
+  {
+    "nodeType": "Stmt_Class",
+    "flags": 0,
+    "extends": {
+      "nodeType": "Name",
+      "parts": [
+        "WP_Customize_Control"
+      ],
+      "attributes": {
+        "startLine": 17,
+        "endLine": 17
+      }
+    },
+    "implements": [],
+    "name": {
+      "nodeType": "Identifier",
+      "name": "WP_Customize_Nav_Menu_Control",
+      "attributes": {
+        "startLine": 17,
+        "endLine": 17
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "type",
+              "attributes": {
+                "startLine": 25,
+                "endLine": 25
+              }
+            },
+            "default": {
+              "nodeType": "Scalar_String",
+              "value": "nav_menu",
+              "attributes": {
+                "startLine": 25,
+                "endLine": 25,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 25,
+              "endLine": 25
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 25,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Control type.\n\t *\n\t * @since 4.3.0\n\t * @var string\n\t */",
+              "line": 19,
+              "filePos": 300,
+              "tokenPos": 15,
+              "endLine": 24,
+              "endFilePos": 362,
+              "endTokenPos": 15
+            }
+          ],
+          "endLine": 25
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "render_content",
+          "attributes": {
+            "startLine": 32,
+            "endLine": 32
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [],
+        "attributes": {
+          "startLine": 32,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Don't render the control's content - it uses a JS template instead.\n\t *\n\t * @since 4.3.0\n\t */",
+              "line": 27,
+              "filePos": 394,
+              "tokenPos": 26,
+              "endLine": 31,
+              "endFilePos": 494,
+              "endTokenPos": 26
+            }
+          ],
+          "endLine": 32
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "content_template",
+          "attributes": {
+            "startLine": 39,
+            "endLine": 39
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "add_items",
+                "attributes": {
+                  "startLine": 40,
+                  "endLine": 40
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "__"
+                  ],
+                  "attributes": {
+                    "startLine": 40,
+                    "endLine": 40
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "Add Items",
+                      "attributes": {
+                        "startLine": 40,
+                        "endLine": 40,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 40,
+                      "endLine": 40
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 40,
+                  "endLine": 40
+                }
+              },
+              "attributes": {
+                "startLine": 40,
+                "endLine": 40
+              }
+            },
+            "attributes": {
+              "startLine": 40,
+              "endLine": 40
+            }
+          },
+          {
+            "nodeType": "Stmt_InlineHTML",
+            "value": "\t\t<p class=\"new-menu-item-invitation\">\n\t\t\t",
+            "attributes": {
+              "startLine": 42,
+              "hasLeadingNewline": true,
+              "endLine": 43
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "printf"
+                ],
+                "attributes": {
+                  "startLine": 44,
+                  "endLine": 44
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "__"
+                      ],
+                      "attributes": {
+                        "startLine": 46,
+                        "comments": [
+                          {
+                            "nodeType": "Comment",
+                            "text": "/* translators: %s: \"Add Items\" button text. */",
+                            "line": 45,
+                            "filePos": 752,
+                            "tokenPos": 70,
+                            "endLine": 45,
+                            "endFilePos": 798,
+                            "endTokenPos": 70
+                          }
+                        ],
+                        "endLine": 46
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Scalar_String",
+                          "value": "Time to add some links! Click &#8220;%s&#8221; to start putting pages, categories, and custom links in your menu. Add as many things as you&#8217;d like.",
+                          "attributes": {
+                            "startLine": 46,
+                            "endLine": 46,
+                            "kind": 1
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 46,
+                          "endLine": 46
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 46,
+                      "comments": [
+                        {
+                          "nodeType": "Comment",
+                          "text": "/* translators: %s: \"Add Items\" button text. */",
+                          "line": 45,
+                          "filePos": 752,
+                          "tokenPos": 70,
+                          "endLine": 45,
+                          "endFilePos": 798,
+                          "endTokenPos": 70
+                        }
+                      ],
+                      "endLine": 46
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 46,
+                    "comments": [
+                      {
+                        "nodeType": "Comment",
+                        "text": "/* translators: %s: \"Add Items\" button text. */",
+                        "line": 45,
+                        "filePos": 752,
+                        "tokenPos": 70,
+                        "endLine": 45,
+                        "endFilePos": 798,
+                        "endTokenPos": 70
+                      }
+                    ],
+                    "endLine": 46
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "add_items",
+                    "attributes": {
+                      "startLine": 47,
+                      "endLine": 47
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 47,
+                    "endLine": 47
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 44,
+                "endLine": 48
+              }
+            },
+            "attributes": {
+              "startLine": 44,
+              "endLine": 48
+            }
+          },
+          {
+            "nodeType": "Stmt_InlineHTML",
+            "value": "\t\t</p>\n\t\t<div class=\"customize-control-nav_menu-buttons\">\n\t\t\t<button type=\"button\" class=\"button add-new-menu-item\" aria-label=\"",
+            "attributes": {
+              "startLine": 50,
+              "hasLeadingNewline": true,
+              "endLine": 52
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "esc_attr_e"
+                ],
+                "attributes": {
+                  "startLine": 52,
+                  "endLine": 52
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "Add or remove menu items",
+                    "attributes": {
+                      "startLine": 52,
+                      "endLine": 52,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 52,
+                    "endLine": 52
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 52,
+                "endLine": 52
+              }
+            },
+            "attributes": {
+              "startLine": 52,
+              "endLine": 52
+            }
+          },
+          {
+            "nodeType": "Stmt_InlineHTML",
+            "value": "\" aria-expanded=\"false\" aria-controls=\"available-menu-items\">\n\t\t\t\t",
+            "attributes": {
+              "startLine": 52,
+              "hasLeadingNewline": false,
+              "endLine": 53
+            }
+          },
+          {
+            "nodeType": "Stmt_Echo",
+            "exprs": [
+              {
+                "nodeType": "Expr_Variable",
+                "name": "add_items",
+                "attributes": {
+                  "startLine": 53,
+                  "endLine": 53
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 53,
+              "endLine": 53
+            }
+          },
+          {
+            "nodeType": "Stmt_InlineHTML",
+            "value": "\t\t\t</button>\n\t\t\t<button type=\"button\" class=\"button-link reorder-toggle\" aria-label=\"",
+            "attributes": {
+              "startLine": 54,
+              "hasLeadingNewline": true,
+              "endLine": 55
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "esc_attr_e"
+                ],
+                "attributes": {
+                  "startLine": 55,
+                  "endLine": 55
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "Reorder menu items",
+                    "attributes": {
+                      "startLine": 55,
+                      "endLine": 55,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 55,
+                    "endLine": 55
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 55,
+                "endLine": 55
+              }
+            },
+            "attributes": {
+              "startLine": 55,
+              "endLine": 55
+            }
+          },
+          {
+            "nodeType": "Stmt_InlineHTML",
+            "value": "\" aria-describedby=\"reorder-items-desc-{{ data.menu_id }}\">\n\t\t\t\t<span class=\"reorder\">",
+            "attributes": {
+              "startLine": 55,
+              "hasLeadingNewline": false,
+              "endLine": 56
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "_e"
+                ],
+                "attributes": {
+                  "startLine": 56,
+                  "endLine": 56
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "Reorder",
+                    "attributes": {
+                      "startLine": 56,
+                      "endLine": 56,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 56,
+                    "endLine": 56
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 56,
+                "endLine": 56
+              }
+            },
+            "attributes": {
+              "startLine": 56,
+              "endLine": 56
+            }
+          },
+          {
+            "nodeType": "Stmt_InlineHTML",
+            "value": "</span>\n\t\t\t\t<span class=\"reorder-done\">",
+            "attributes": {
+              "startLine": 56,
+              "hasLeadingNewline": false,
+              "endLine": 57
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "_e"
+                ],
+                "attributes": {
+                  "startLine": 57,
+                  "endLine": 57
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "Done",
+                    "attributes": {
+                      "startLine": 57,
+                      "endLine": 57,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 57,
+                    "endLine": 57
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 57,
+                "endLine": 57
+              }
+            },
+            "attributes": {
+              "startLine": 57,
+              "endLine": 57
+            }
+          },
+          {
+            "nodeType": "Stmt_InlineHTML",
+            "value": "</span>\n\t\t\t</button>\n\t\t</div>\n\t\t<p class=\"screen-reader-text\" id=\"reorder-items-desc-{{ data.menu_id }}\">",
+            "attributes": {
+              "startLine": 57,
+              "hasLeadingNewline": false,
+              "endLine": 60
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "_e"
+                ],
+                "attributes": {
+                  "startLine": 60,
+                  "endLine": 60
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "When in reorder mode, additional controls to reorder menu items will be available in the items list above.",
+                    "attributes": {
+                      "startLine": 60,
+                      "endLine": 60,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 60,
+                    "endLine": 60
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 60,
+                "endLine": 60
+              }
+            },
+            "attributes": {
+              "startLine": 60,
+              "endLine": 60
+            }
+          },
+          {
+            "nodeType": "Stmt_InlineHTML",
+            "value": "</p>\n\t\t",
+            "attributes": {
+              "startLine": 60,
+              "hasLeadingNewline": false,
+              "endLine": 61
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 39,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * JS/Underscore template for the control UI.\n\t *\n\t * @since 4.3.0\n\t */",
+              "line": 34,
+              "filePos": 535,
+              "tokenPos": 39,
+              "endLine": 38,
+              "endFilePos": 610,
+              "endTokenPos": 39
+            }
+          ],
+          "endLine": 62
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "json",
+          "attributes": {
+            "startLine": 71,
+            "endLine": 71
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "exported",
+                "attributes": {
+                  "startLine": 72,
+                  "endLine": 72
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_StaticCall",
+                "class": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "parent"
+                  ],
+                  "attributes": {
+                    "startLine": 72,
+                    "endLine": 72
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "json",
+                  "attributes": {
+                    "startLine": 72,
+                    "endLine": 72
+                  }
+                },
+                "args": [],
+                "attributes": {
+                  "startLine": 72,
+                  "endLine": 72
+                }
+              },
+              "attributes": {
+                "startLine": 72,
+                "endLine": 72
+              }
+            },
+            "attributes": {
+              "startLine": 72,
+              "endLine": 72
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "exported",
+                  "attributes": {
+                    "startLine": 73,
+                    "endLine": 73
+                  }
+                },
+                "dim": {
+                  "nodeType": "Scalar_String",
+                  "value": "menu_id",
+                  "attributes": {
+                    "startLine": 73,
+                    "endLine": 73,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 73,
+                  "endLine": 73
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_PropertyFetch",
+                "var": {
+                  "nodeType": "Expr_PropertyFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "this",
+                    "attributes": {
+                      "startLine": 73,
+                      "endLine": 73
+                    }
+                  },
+                  "name": {
+                    "nodeType": "Identifier",
+                    "name": "setting",
+                    "attributes": {
+                      "startLine": 73,
+                      "endLine": 73
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 73,
+                    "endLine": 73
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "term_id",
+                  "attributes": {
+                    "startLine": 73,
+                    "endLine": 73
+                  }
+                },
+                "attributes": {
+                  "startLine": 73,
+                  "endLine": 73
+                }
+              },
+              "attributes": {
+                "startLine": 73,
+                "endLine": 73
+              }
+            },
+            "attributes": {
+              "startLine": 73,
+              "endLine": 73
+            }
+          },
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_Variable",
+              "name": "exported",
+              "attributes": {
+                "startLine": 75,
+                "endLine": 75
+              }
+            },
+            "attributes": {
+              "startLine": 75,
+              "endLine": 75
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 71,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Return parameters for this control.\n\t *\n\t * @since 4.3.0\n\t *\n\t * @return array Exported parameters.\n\t */",
+              "line": 64,
+              "filePos": 1812,
+              "tokenPos": 154,
+              "endLine": 70,
+              "endFilePos": 1923,
+              "endTokenPos": 154
+            }
+          ],
+          "endLine": 76
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 17,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Customize API: WP_Customize_Nav_Menu_Control class\n *\n * @package WordPress\n * @subpackage Customize\n * @since 4.4.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 8,
+          "endFilePos": 132,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Customize Nav Menu Control Class.\n *\n * @since 4.3.0\n *\n * @see WP_Customize_Control\n */",
+          "line": 10,
+          "filePos": 135,
+          "tokenPos": 3,
+          "endLine": 16,
+          "endFilePos": 229,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 77
+    }
+  }
+]

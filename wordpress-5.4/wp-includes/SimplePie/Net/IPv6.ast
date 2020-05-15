@@ -1,0 +1,4985 @@
+[
+  {
+    "nodeType": "Stmt_Class",
+    "flags": 0,
+    "extends": null,
+    "implements": [],
+    "name": {
+      "nodeType": "Identifier",
+      "name": "SimplePie_Net_IPv6",
+      "attributes": {
+        "startLine": 59,
+        "endLine": 59
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 9,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "uncompress",
+          "attributes": {
+            "startLine": 79,
+            "endLine": 79
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "ip",
+              "attributes": {
+                "startLine": 79,
+                "endLine": 79
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 79,
+              "endLine": 79
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "c1",
+                "attributes": {
+                  "startLine": 81,
+                  "endLine": 81
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_UnaryMinus",
+                "expr": {
+                  "nodeType": "Scalar_LNumber",
+                  "value": 1,
+                  "attributes": {
+                    "startLine": 81,
+                    "endLine": 81,
+                    "kind": 10
+                  }
+                },
+                "attributes": {
+                  "startLine": 81,
+                  "endLine": 81
+                }
+              },
+              "attributes": {
+                "startLine": 81,
+                "endLine": 81
+              }
+            },
+            "attributes": {
+              "startLine": 81,
+              "endLine": 81
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "c2",
+                "attributes": {
+                  "startLine": 82,
+                  "endLine": 82
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_UnaryMinus",
+                "expr": {
+                  "nodeType": "Scalar_LNumber",
+                  "value": 1,
+                  "attributes": {
+                    "startLine": 82,
+                    "endLine": 82,
+                    "kind": 10
+                  }
+                },
+                "attributes": {
+                  "startLine": 82,
+                  "endLine": 82
+                }
+              },
+              "attributes": {
+                "startLine": 82,
+                "endLine": 82
+              }
+            },
+            "attributes": {
+              "startLine": 82,
+              "endLine": 82
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BinaryOp_Identical",
+              "left": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "substr_count"
+                  ],
+                  "attributes": {
+                    "startLine": 83,
+                    "endLine": 83
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "ip",
+                      "attributes": {
+                        "startLine": 83,
+                        "endLine": 83
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 83,
+                      "endLine": 83
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "::",
+                      "attributes": {
+                        "startLine": 83,
+                        "endLine": 83,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 83,
+                      "endLine": 83
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 83,
+                  "endLine": 83
+                }
+              },
+              "right": {
+                "nodeType": "Scalar_LNumber",
+                "value": 1,
+                "attributes": {
+                  "startLine": 83,
+                  "endLine": 83,
+                  "kind": 10
+                }
+              },
+              "attributes": {
+                "startLine": 83,
+                "endLine": 83
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_List",
+                    "items": [
+                      {
+                        "nodeType": "Expr_ArrayItem",
+                        "key": null,
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "ip1",
+                          "attributes": {
+                            "startLine": 85,
+                            "endLine": 85
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 85,
+                          "endLine": 85
+                        }
+                      },
+                      {
+                        "nodeType": "Expr_ArrayItem",
+                        "key": null,
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "ip2",
+                          "attributes": {
+                            "startLine": 85,
+                            "endLine": 85
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 85,
+                          "endLine": 85
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 85,
+                      "endLine": 85
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "explode"
+                      ],
+                      "attributes": {
+                        "startLine": 85,
+                        "endLine": 85
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Scalar_String",
+                          "value": "::",
+                          "attributes": {
+                            "startLine": 85,
+                            "endLine": 85,
+                            "kind": 1
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 85,
+                          "endLine": 85
+                        }
+                      },
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "ip",
+                          "attributes": {
+                            "startLine": 85,
+                            "endLine": 85
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 85,
+                          "endLine": 85
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 85,
+                      "endLine": 85
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 85,
+                    "endLine": 85
+                  }
+                },
+                "attributes": {
+                  "startLine": 85,
+                  "endLine": 85
+                }
+              },
+              {
+                "nodeType": "Stmt_If",
+                "cond": {
+                  "nodeType": "Expr_BinaryOp_Identical",
+                  "left": {
+                    "nodeType": "Expr_Variable",
+                    "name": "ip1",
+                    "attributes": {
+                      "startLine": 86,
+                      "endLine": 86
+                    }
+                  },
+                  "right": {
+                    "nodeType": "Scalar_String",
+                    "value": "",
+                    "attributes": {
+                      "startLine": 86,
+                      "endLine": 86,
+                      "kind": 1
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 86,
+                    "endLine": 86
+                  }
+                },
+                "stmts": [
+                  {
+                    "nodeType": "Stmt_Expression",
+                    "expr": {
+                      "nodeType": "Expr_Assign",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "c1",
+                        "attributes": {
+                          "startLine": 88,
+                          "endLine": 88
+                        }
+                      },
+                      "expr": {
+                        "nodeType": "Expr_UnaryMinus",
+                        "expr": {
+                          "nodeType": "Scalar_LNumber",
+                          "value": 1,
+                          "attributes": {
+                            "startLine": 88,
+                            "endLine": 88,
+                            "kind": 10
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 88,
+                          "endLine": 88
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 88,
+                        "endLine": 88
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 88,
+                      "endLine": 88
+                    }
+                  }
+                ],
+                "elseifs": [],
+                "else": {
+                  "nodeType": "Stmt_Else",
+                  "stmts": [
+                    {
+                      "nodeType": "Stmt_Expression",
+                      "expr": {
+                        "nodeType": "Expr_Assign",
+                        "var": {
+                          "nodeType": "Expr_Variable",
+                          "name": "c1",
+                          "attributes": {
+                            "startLine": 92,
+                            "endLine": 92
+                          }
+                        },
+                        "expr": {
+                          "nodeType": "Expr_FuncCall",
+                          "name": {
+                            "nodeType": "Name",
+                            "parts": [
+                              "substr_count"
+                            ],
+                            "attributes": {
+                              "startLine": 92,
+                              "endLine": 92
+                            }
+                          },
+                          "args": [
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Expr_Variable",
+                                "name": "ip1",
+                                "attributes": {
+                                  "startLine": 92,
+                                  "endLine": 92
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 92,
+                                "endLine": 92
+                              }
+                            },
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Scalar_String",
+                                "value": ":",
+                                "attributes": {
+                                  "startLine": 92,
+                                  "endLine": 92,
+                                  "kind": 1
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 92,
+                                "endLine": 92
+                              }
+                            }
+                          ],
+                          "attributes": {
+                            "startLine": 92,
+                            "endLine": 92
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 92,
+                          "endLine": 92
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 92,
+                        "endLine": 92
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 90,
+                    "endLine": 93
+                  }
+                },
+                "attributes": {
+                  "startLine": 86,
+                  "endLine": 93
+                }
+              },
+              {
+                "nodeType": "Stmt_If",
+                "cond": {
+                  "nodeType": "Expr_BinaryOp_Identical",
+                  "left": {
+                    "nodeType": "Expr_Variable",
+                    "name": "ip2",
+                    "attributes": {
+                      "startLine": 94,
+                      "endLine": 94
+                    }
+                  },
+                  "right": {
+                    "nodeType": "Scalar_String",
+                    "value": "",
+                    "attributes": {
+                      "startLine": 94,
+                      "endLine": 94,
+                      "kind": 1
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 94,
+                    "endLine": 94
+                  }
+                },
+                "stmts": [
+                  {
+                    "nodeType": "Stmt_Expression",
+                    "expr": {
+                      "nodeType": "Expr_Assign",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "c2",
+                        "attributes": {
+                          "startLine": 96,
+                          "endLine": 96
+                        }
+                      },
+                      "expr": {
+                        "nodeType": "Expr_UnaryMinus",
+                        "expr": {
+                          "nodeType": "Scalar_LNumber",
+                          "value": 1,
+                          "attributes": {
+                            "startLine": 96,
+                            "endLine": 96,
+                            "kind": 10
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 96,
+                          "endLine": 96
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 96,
+                        "endLine": 96
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 96,
+                      "endLine": 96
+                    }
+                  }
+                ],
+                "elseifs": [],
+                "else": {
+                  "nodeType": "Stmt_Else",
+                  "stmts": [
+                    {
+                      "nodeType": "Stmt_Expression",
+                      "expr": {
+                        "nodeType": "Expr_Assign",
+                        "var": {
+                          "nodeType": "Expr_Variable",
+                          "name": "c2",
+                          "attributes": {
+                            "startLine": 100,
+                            "endLine": 100
+                          }
+                        },
+                        "expr": {
+                          "nodeType": "Expr_FuncCall",
+                          "name": {
+                            "nodeType": "Name",
+                            "parts": [
+                              "substr_count"
+                            ],
+                            "attributes": {
+                              "startLine": 100,
+                              "endLine": 100
+                            }
+                          },
+                          "args": [
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Expr_Variable",
+                                "name": "ip2",
+                                "attributes": {
+                                  "startLine": 100,
+                                  "endLine": 100
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 100,
+                                "endLine": 100
+                              }
+                            },
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Scalar_String",
+                                "value": ":",
+                                "attributes": {
+                                  "startLine": 100,
+                                  "endLine": 100,
+                                  "kind": 1
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 100,
+                                "endLine": 100
+                              }
+                            }
+                          ],
+                          "attributes": {
+                            "startLine": 100,
+                            "endLine": 100
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 100,
+                          "endLine": 100
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 100,
+                        "endLine": 100
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 98,
+                    "endLine": 101
+                  }
+                },
+                "attributes": {
+                  "startLine": 94,
+                  "endLine": 101
+                }
+              },
+              {
+                "nodeType": "Stmt_If",
+                "cond": {
+                  "nodeType": "Expr_BinaryOp_NotIdentical",
+                  "left": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "strpos"
+                      ],
+                      "attributes": {
+                        "startLine": 102,
+                        "endLine": 102
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "ip2",
+                          "attributes": {
+                            "startLine": 102,
+                            "endLine": 102
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 102,
+                          "endLine": 102
+                        }
+                      },
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Scalar_String",
+                          "value": ".",
+                          "attributes": {
+                            "startLine": 102,
+                            "endLine": 102,
+                            "kind": 1
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 102,
+                          "endLine": 102
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 102,
+                      "endLine": 102
+                    }
+                  },
+                  "right": {
+                    "nodeType": "Expr_ConstFetch",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "false"
+                      ],
+                      "attributes": {
+                        "startLine": 102,
+                        "endLine": 102
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 102,
+                      "endLine": 102
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 102,
+                    "endLine": 102
+                  }
+                },
+                "stmts": [
+                  {
+                    "nodeType": "Stmt_Expression",
+                    "expr": {
+                      "nodeType": "Expr_PostInc",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "c2",
+                        "attributes": {
+                          "startLine": 104,
+                          "endLine": 104
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 104,
+                        "endLine": 104
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 104,
+                      "endLine": 104
+                    }
+                  }
+                ],
+                "elseifs": [],
+                "else": null,
+                "attributes": {
+                  "startLine": 102,
+                  "endLine": 105
+                }
+              },
+              {
+                "nodeType": "Stmt_If",
+                "cond": {
+                  "nodeType": "Expr_BinaryOp_BooleanAnd",
+                  "left": {
+                    "nodeType": "Expr_BinaryOp_Identical",
+                    "left": {
+                      "nodeType": "Expr_Variable",
+                      "name": "c1",
+                      "attributes": {
+                        "startLine": 107,
+                        "endLine": 107
+                      }
+                    },
+                    "right": {
+                      "nodeType": "Expr_UnaryMinus",
+                      "expr": {
+                        "nodeType": "Scalar_LNumber",
+                        "value": 1,
+                        "attributes": {
+                          "startLine": 107,
+                          "endLine": 107,
+                          "kind": 10
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 107,
+                        "endLine": 107
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 107,
+                      "endLine": 107
+                    }
+                  },
+                  "right": {
+                    "nodeType": "Expr_BinaryOp_Identical",
+                    "left": {
+                      "nodeType": "Expr_Variable",
+                      "name": "c2",
+                      "attributes": {
+                        "startLine": 107,
+                        "endLine": 107
+                      }
+                    },
+                    "right": {
+                      "nodeType": "Expr_UnaryMinus",
+                      "expr": {
+                        "nodeType": "Scalar_LNumber",
+                        "value": 1,
+                        "attributes": {
+                          "startLine": 107,
+                          "endLine": 107,
+                          "kind": 10
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 107,
+                        "endLine": 107
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 107,
+                      "endLine": 107
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 107,
+                    "endLine": 107
+                  }
+                },
+                "stmts": [
+                  {
+                    "nodeType": "Stmt_Expression",
+                    "expr": {
+                      "nodeType": "Expr_Assign",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "ip",
+                        "attributes": {
+                          "startLine": 109,
+                          "endLine": 109
+                        }
+                      },
+                      "expr": {
+                        "nodeType": "Scalar_String",
+                        "value": "0:0:0:0:0:0:0:0",
+                        "attributes": {
+                          "startLine": 109,
+                          "endLine": 109,
+                          "kind": 1
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 109,
+                        "endLine": 109
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 109,
+                      "endLine": 109
+                    }
+                  }
+                ],
+                "elseifs": [],
+                "else": {
+                  "nodeType": "Stmt_Else",
+                  "stmts": [
+                    {
+                      "nodeType": "Stmt_If",
+                      "cond": {
+                        "nodeType": "Expr_BinaryOp_Identical",
+                        "left": {
+                          "nodeType": "Expr_Variable",
+                          "name": "c1",
+                          "attributes": {
+                            "startLine": 112,
+                            "endLine": 112
+                          }
+                        },
+                        "right": {
+                          "nodeType": "Expr_UnaryMinus",
+                          "expr": {
+                            "nodeType": "Scalar_LNumber",
+                            "value": 1,
+                            "attributes": {
+                              "startLine": 112,
+                              "endLine": 112,
+                              "kind": 10
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 112,
+                            "endLine": 112
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 112,
+                          "endLine": 112
+                        }
+                      },
+                      "stmts": [
+                        {
+                          "nodeType": "Stmt_Expression",
+                          "expr": {
+                            "nodeType": "Expr_Assign",
+                            "var": {
+                              "nodeType": "Expr_Variable",
+                              "name": "fill",
+                              "attributes": {
+                                "startLine": 114,
+                                "endLine": 114
+                              }
+                            },
+                            "expr": {
+                              "nodeType": "Expr_FuncCall",
+                              "name": {
+                                "nodeType": "Name",
+                                "parts": [
+                                  "str_repeat"
+                                ],
+                                "attributes": {
+                                  "startLine": 114,
+                                  "endLine": 114
+                                }
+                              },
+                              "args": [
+                                {
+                                  "nodeType": "Arg",
+                                  "value": {
+                                    "nodeType": "Scalar_String",
+                                    "value": "0:",
+                                    "attributes": {
+                                      "startLine": 114,
+                                      "endLine": 114,
+                                      "kind": 1
+                                    }
+                                  },
+                                  "byRef": false,
+                                  "unpack": false,
+                                  "attributes": {
+                                    "startLine": 114,
+                                    "endLine": 114
+                                  }
+                                },
+                                {
+                                  "nodeType": "Arg",
+                                  "value": {
+                                    "nodeType": "Expr_BinaryOp_Minus",
+                                    "left": {
+                                      "nodeType": "Scalar_LNumber",
+                                      "value": 7,
+                                      "attributes": {
+                                        "startLine": 114,
+                                        "endLine": 114,
+                                        "kind": 10
+                                      }
+                                    },
+                                    "right": {
+                                      "nodeType": "Expr_Variable",
+                                      "name": "c2",
+                                      "attributes": {
+                                        "startLine": 114,
+                                        "endLine": 114
+                                      }
+                                    },
+                                    "attributes": {
+                                      "startLine": 114,
+                                      "endLine": 114
+                                    }
+                                  },
+                                  "byRef": false,
+                                  "unpack": false,
+                                  "attributes": {
+                                    "startLine": 114,
+                                    "endLine": 114
+                                  }
+                                }
+                              ],
+                              "attributes": {
+                                "startLine": 114,
+                                "endLine": 114
+                              }
+                            },
+                            "attributes": {
+                              "startLine": 114,
+                              "endLine": 114
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 114,
+                            "endLine": 114
+                          }
+                        },
+                        {
+                          "nodeType": "Stmt_Expression",
+                          "expr": {
+                            "nodeType": "Expr_Assign",
+                            "var": {
+                              "nodeType": "Expr_Variable",
+                              "name": "ip",
+                              "attributes": {
+                                "startLine": 115,
+                                "endLine": 115
+                              }
+                            },
+                            "expr": {
+                              "nodeType": "Expr_FuncCall",
+                              "name": {
+                                "nodeType": "Name",
+                                "parts": [
+                                  "str_replace"
+                                ],
+                                "attributes": {
+                                  "startLine": 115,
+                                  "endLine": 115
+                                }
+                              },
+                              "args": [
+                                {
+                                  "nodeType": "Arg",
+                                  "value": {
+                                    "nodeType": "Scalar_String",
+                                    "value": "::",
+                                    "attributes": {
+                                      "startLine": 115,
+                                      "endLine": 115,
+                                      "kind": 1
+                                    }
+                                  },
+                                  "byRef": false,
+                                  "unpack": false,
+                                  "attributes": {
+                                    "startLine": 115,
+                                    "endLine": 115
+                                  }
+                                },
+                                {
+                                  "nodeType": "Arg",
+                                  "value": {
+                                    "nodeType": "Expr_Variable",
+                                    "name": "fill",
+                                    "attributes": {
+                                      "startLine": 115,
+                                      "endLine": 115
+                                    }
+                                  },
+                                  "byRef": false,
+                                  "unpack": false,
+                                  "attributes": {
+                                    "startLine": 115,
+                                    "endLine": 115
+                                  }
+                                },
+                                {
+                                  "nodeType": "Arg",
+                                  "value": {
+                                    "nodeType": "Expr_Variable",
+                                    "name": "ip",
+                                    "attributes": {
+                                      "startLine": 115,
+                                      "endLine": 115
+                                    }
+                                  },
+                                  "byRef": false,
+                                  "unpack": false,
+                                  "attributes": {
+                                    "startLine": 115,
+                                    "endLine": 115
+                                  }
+                                }
+                              ],
+                              "attributes": {
+                                "startLine": 115,
+                                "endLine": 115
+                              }
+                            },
+                            "attributes": {
+                              "startLine": 115,
+                              "endLine": 115
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 115,
+                            "endLine": 115
+                          }
+                        }
+                      ],
+                      "elseifs": [],
+                      "else": {
+                        "nodeType": "Stmt_Else",
+                        "stmts": [
+                          {
+                            "nodeType": "Stmt_If",
+                            "cond": {
+                              "nodeType": "Expr_BinaryOp_Identical",
+                              "left": {
+                                "nodeType": "Expr_Variable",
+                                "name": "c2",
+                                "attributes": {
+                                  "startLine": 118,
+                                  "endLine": 118
+                                }
+                              },
+                              "right": {
+                                "nodeType": "Expr_UnaryMinus",
+                                "expr": {
+                                  "nodeType": "Scalar_LNumber",
+                                  "value": 1,
+                                  "attributes": {
+                                    "startLine": 118,
+                                    "endLine": 118,
+                                    "kind": 10
+                                  }
+                                },
+                                "attributes": {
+                                  "startLine": 118,
+                                  "endLine": 118
+                                }
+                              },
+                              "attributes": {
+                                "startLine": 118,
+                                "endLine": 118
+                              }
+                            },
+                            "stmts": [
+                              {
+                                "nodeType": "Stmt_Expression",
+                                "expr": {
+                                  "nodeType": "Expr_Assign",
+                                  "var": {
+                                    "nodeType": "Expr_Variable",
+                                    "name": "fill",
+                                    "attributes": {
+                                      "startLine": 120,
+                                      "endLine": 120
+                                    }
+                                  },
+                                  "expr": {
+                                    "nodeType": "Expr_FuncCall",
+                                    "name": {
+                                      "nodeType": "Name",
+                                      "parts": [
+                                        "str_repeat"
+                                      ],
+                                      "attributes": {
+                                        "startLine": 120,
+                                        "endLine": 120
+                                      }
+                                    },
+                                    "args": [
+                                      {
+                                        "nodeType": "Arg",
+                                        "value": {
+                                          "nodeType": "Scalar_String",
+                                          "value": ":0",
+                                          "attributes": {
+                                            "startLine": 120,
+                                            "endLine": 120,
+                                            "kind": 1
+                                          }
+                                        },
+                                        "byRef": false,
+                                        "unpack": false,
+                                        "attributes": {
+                                          "startLine": 120,
+                                          "endLine": 120
+                                        }
+                                      },
+                                      {
+                                        "nodeType": "Arg",
+                                        "value": {
+                                          "nodeType": "Expr_BinaryOp_Minus",
+                                          "left": {
+                                            "nodeType": "Scalar_LNumber",
+                                            "value": 7,
+                                            "attributes": {
+                                              "startLine": 120,
+                                              "endLine": 120,
+                                              "kind": 10
+                                            }
+                                          },
+                                          "right": {
+                                            "nodeType": "Expr_Variable",
+                                            "name": "c1",
+                                            "attributes": {
+                                              "startLine": 120,
+                                              "endLine": 120
+                                            }
+                                          },
+                                          "attributes": {
+                                            "startLine": 120,
+                                            "endLine": 120
+                                          }
+                                        },
+                                        "byRef": false,
+                                        "unpack": false,
+                                        "attributes": {
+                                          "startLine": 120,
+                                          "endLine": 120
+                                        }
+                                      }
+                                    ],
+                                    "attributes": {
+                                      "startLine": 120,
+                                      "endLine": 120
+                                    }
+                                  },
+                                  "attributes": {
+                                    "startLine": 120,
+                                    "endLine": 120
+                                  }
+                                },
+                                "attributes": {
+                                  "startLine": 120,
+                                  "endLine": 120
+                                }
+                              },
+                              {
+                                "nodeType": "Stmt_Expression",
+                                "expr": {
+                                  "nodeType": "Expr_Assign",
+                                  "var": {
+                                    "nodeType": "Expr_Variable",
+                                    "name": "ip",
+                                    "attributes": {
+                                      "startLine": 121,
+                                      "endLine": 121
+                                    }
+                                  },
+                                  "expr": {
+                                    "nodeType": "Expr_FuncCall",
+                                    "name": {
+                                      "nodeType": "Name",
+                                      "parts": [
+                                        "str_replace"
+                                      ],
+                                      "attributes": {
+                                        "startLine": 121,
+                                        "endLine": 121
+                                      }
+                                    },
+                                    "args": [
+                                      {
+                                        "nodeType": "Arg",
+                                        "value": {
+                                          "nodeType": "Scalar_String",
+                                          "value": "::",
+                                          "attributes": {
+                                            "startLine": 121,
+                                            "endLine": 121,
+                                            "kind": 1
+                                          }
+                                        },
+                                        "byRef": false,
+                                        "unpack": false,
+                                        "attributes": {
+                                          "startLine": 121,
+                                          "endLine": 121
+                                        }
+                                      },
+                                      {
+                                        "nodeType": "Arg",
+                                        "value": {
+                                          "nodeType": "Expr_Variable",
+                                          "name": "fill",
+                                          "attributes": {
+                                            "startLine": 121,
+                                            "endLine": 121
+                                          }
+                                        },
+                                        "byRef": false,
+                                        "unpack": false,
+                                        "attributes": {
+                                          "startLine": 121,
+                                          "endLine": 121
+                                        }
+                                      },
+                                      {
+                                        "nodeType": "Arg",
+                                        "value": {
+                                          "nodeType": "Expr_Variable",
+                                          "name": "ip",
+                                          "attributes": {
+                                            "startLine": 121,
+                                            "endLine": 121
+                                          }
+                                        },
+                                        "byRef": false,
+                                        "unpack": false,
+                                        "attributes": {
+                                          "startLine": 121,
+                                          "endLine": 121
+                                        }
+                                      }
+                                    ],
+                                    "attributes": {
+                                      "startLine": 121,
+                                      "endLine": 121
+                                    }
+                                  },
+                                  "attributes": {
+                                    "startLine": 121,
+                                    "endLine": 121
+                                  }
+                                },
+                                "attributes": {
+                                  "startLine": 121,
+                                  "endLine": 121
+                                }
+                              }
+                            ],
+                            "elseifs": [],
+                            "else": {
+                              "nodeType": "Stmt_Else",
+                              "stmts": [
+                                {
+                                  "nodeType": "Stmt_Expression",
+                                  "expr": {
+                                    "nodeType": "Expr_Assign",
+                                    "var": {
+                                      "nodeType": "Expr_Variable",
+                                      "name": "fill",
+                                      "attributes": {
+                                        "startLine": 126,
+                                        "endLine": 126
+                                      }
+                                    },
+                                    "expr": {
+                                      "nodeType": "Expr_BinaryOp_Concat",
+                                      "left": {
+                                        "nodeType": "Scalar_String",
+                                        "value": ":",
+                                        "attributes": {
+                                          "startLine": 126,
+                                          "endLine": 126,
+                                          "kind": 1
+                                        }
+                                      },
+                                      "right": {
+                                        "nodeType": "Expr_FuncCall",
+                                        "name": {
+                                          "nodeType": "Name",
+                                          "parts": [
+                                            "str_repeat"
+                                          ],
+                                          "attributes": {
+                                            "startLine": 126,
+                                            "endLine": 126
+                                          }
+                                        },
+                                        "args": [
+                                          {
+                                            "nodeType": "Arg",
+                                            "value": {
+                                              "nodeType": "Scalar_String",
+                                              "value": "0:",
+                                              "attributes": {
+                                                "startLine": 126,
+                                                "endLine": 126,
+                                                "kind": 1
+                                              }
+                                            },
+                                            "byRef": false,
+                                            "unpack": false,
+                                            "attributes": {
+                                              "startLine": 126,
+                                              "endLine": 126
+                                            }
+                                          },
+                                          {
+                                            "nodeType": "Arg",
+                                            "value": {
+                                              "nodeType": "Expr_BinaryOp_Minus",
+                                              "left": {
+                                                "nodeType": "Expr_BinaryOp_Minus",
+                                                "left": {
+                                                  "nodeType": "Scalar_LNumber",
+                                                  "value": 6,
+                                                  "attributes": {
+                                                    "startLine": 126,
+                                                    "endLine": 126,
+                                                    "kind": 10
+                                                  }
+                                                },
+                                                "right": {
+                                                  "nodeType": "Expr_Variable",
+                                                  "name": "c2",
+                                                  "attributes": {
+                                                    "startLine": 126,
+                                                    "endLine": 126
+                                                  }
+                                                },
+                                                "attributes": {
+                                                  "startLine": 126,
+                                                  "endLine": 126
+                                                }
+                                              },
+                                              "right": {
+                                                "nodeType": "Expr_Variable",
+                                                "name": "c1",
+                                                "attributes": {
+                                                  "startLine": 126,
+                                                  "endLine": 126
+                                                }
+                                              },
+                                              "attributes": {
+                                                "startLine": 126,
+                                                "endLine": 126
+                                              }
+                                            },
+                                            "byRef": false,
+                                            "unpack": false,
+                                            "attributes": {
+                                              "startLine": 126,
+                                              "endLine": 126
+                                            }
+                                          }
+                                        ],
+                                        "attributes": {
+                                          "startLine": 126,
+                                          "endLine": 126
+                                        }
+                                      },
+                                      "attributes": {
+                                        "startLine": 126,
+                                        "endLine": 126
+                                      }
+                                    },
+                                    "attributes": {
+                                      "startLine": 126,
+                                      "endLine": 126
+                                    }
+                                  },
+                                  "attributes": {
+                                    "startLine": 126,
+                                    "endLine": 126
+                                  }
+                                },
+                                {
+                                  "nodeType": "Stmt_Expression",
+                                  "expr": {
+                                    "nodeType": "Expr_Assign",
+                                    "var": {
+                                      "nodeType": "Expr_Variable",
+                                      "name": "ip",
+                                      "attributes": {
+                                        "startLine": 127,
+                                        "endLine": 127
+                                      }
+                                    },
+                                    "expr": {
+                                      "nodeType": "Expr_FuncCall",
+                                      "name": {
+                                        "nodeType": "Name",
+                                        "parts": [
+                                          "str_replace"
+                                        ],
+                                        "attributes": {
+                                          "startLine": 127,
+                                          "endLine": 127
+                                        }
+                                      },
+                                      "args": [
+                                        {
+                                          "nodeType": "Arg",
+                                          "value": {
+                                            "nodeType": "Scalar_String",
+                                            "value": "::",
+                                            "attributes": {
+                                              "startLine": 127,
+                                              "endLine": 127,
+                                              "kind": 1
+                                            }
+                                          },
+                                          "byRef": false,
+                                          "unpack": false,
+                                          "attributes": {
+                                            "startLine": 127,
+                                            "endLine": 127
+                                          }
+                                        },
+                                        {
+                                          "nodeType": "Arg",
+                                          "value": {
+                                            "nodeType": "Expr_Variable",
+                                            "name": "fill",
+                                            "attributes": {
+                                              "startLine": 127,
+                                              "endLine": 127
+                                            }
+                                          },
+                                          "byRef": false,
+                                          "unpack": false,
+                                          "attributes": {
+                                            "startLine": 127,
+                                            "endLine": 127
+                                          }
+                                        },
+                                        {
+                                          "nodeType": "Arg",
+                                          "value": {
+                                            "nodeType": "Expr_Variable",
+                                            "name": "ip",
+                                            "attributes": {
+                                              "startLine": 127,
+                                              "endLine": 127
+                                            }
+                                          },
+                                          "byRef": false,
+                                          "unpack": false,
+                                          "attributes": {
+                                            "startLine": 127,
+                                            "endLine": 127
+                                          }
+                                        }
+                                      ],
+                                      "attributes": {
+                                        "startLine": 127,
+                                        "endLine": 127
+                                      }
+                                    },
+                                    "attributes": {
+                                      "startLine": 127,
+                                      "endLine": 127
+                                    }
+                                  },
+                                  "attributes": {
+                                    "startLine": 127,
+                                    "endLine": 127
+                                  }
+                                }
+                              ],
+                              "attributes": {
+                                "startLine": 124,
+                                "comments": [
+                                  {
+                                    "nodeType": "Comment",
+                                    "text": "// xxx::xxx\n",
+                                    "line": 123,
+                                    "filePos": 3943,
+                                    "tokenPos": 322,
+                                    "endLine": 124,
+                                    "endFilePos": 3954,
+                                    "endTokenPos": 322
+                                  }
+                                ],
+                                "endLine": 128
+                              }
+                            },
+                            "attributes": {
+                              "startLine": 118,
+                              "endLine": 128
+                            }
+                          }
+                        ],
+                        "attributes": {
+                          "startLine": 118,
+                          "comments": [
+                            {
+                              "nodeType": "Comment",
+                              "text": "// xxx::\n",
+                              "line": 117,
+                              "filePos": 3817,
+                              "tokenPos": 270,
+                              "endLine": 118,
+                              "endFilePos": 3825,
+                              "endTokenPos": 270
+                            }
+                          ],
+                          "endLine": 128
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 112,
+                        "endLine": 128
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 112,
+                    "comments": [
+                      {
+                        "nodeType": "Comment",
+                        "text": "// ::xxx\n",
+                        "line": 111,
+                        "filePos": 3691,
+                        "tokenPos": 218,
+                        "endLine": 112,
+                        "endFilePos": 3699,
+                        "endTokenPos": 218
+                      }
+                    ],
+                    "endLine": 128
+                  }
+                },
+                "attributes": {
+                  "startLine": 107,
+                  "comments": [
+                    {
+                      "nodeType": "Comment",
+                      "text": "// ::\n",
+                      "line": 106,
+                      "filePos": 3610,
+                      "tokenPos": 185,
+                      "endLine": 107,
+                      "endFilePos": 3615,
+                      "endTokenPos": 185
+                    }
+                  ],
+                  "endLine": 128
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 83,
+              "endLine": 129
+            }
+          },
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_Variable",
+              "name": "ip",
+              "attributes": {
+                "startLine": 130,
+                "endLine": 130
+              }
+            },
+            "attributes": {
+              "startLine": 130,
+              "endLine": 130
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 79,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Uncompresses an IPv6 address\n\t *\n\t * RFC 4291 allows you to compress concecutive zero pieces in an address to\n\t * '::'. This method expects a valid IPv6 address and expands the '::' to\n\t * the required number of zero pieces.\n\t *\n\t * Example:  FF01::101   ->  FF01:0:0:0:0:0:0:101\n\t *           ::1         ->  0:0:0:0:0:0:0:1\n\t *\n\t * @author Alexander Merz <alexander.merz@web.de>\n\t * @author elfrink at introweb dot nl\n\t * @author Josh Peck <jmp at joshpeck dot org>\n\t * @copyright 2003-2005 The PHP Group\n\t * @license http://www.opensource.org/licenses/bsd-license.php\n\t * @param string $ip An IPv6 address\n\t * @return string The uncompressed IPv6 address\n\t */",
+              "line": 61,
+              "filePos": 2535,
+              "tokenPos": 11,
+              "endLine": 78,
+              "endFilePos": 3204,
+              "endTokenPos": 11
+            }
+          ],
+          "endLine": 131
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 9,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "compress",
+          "attributes": {
+            "startLine": 147,
+            "endLine": 147
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "ip",
+              "attributes": {
+                "startLine": 147,
+                "endLine": 147
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 147,
+              "endLine": 147
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "ip",
+                "attributes": {
+                  "startLine": 150,
+                  "comments": [
+                    {
+                      "nodeType": "Comment",
+                      "text": "// Prepare the IP to be compressed\n",
+                      "line": 149,
+                      "filePos": 4566,
+                      "tokenPos": 395,
+                      "endLine": 150,
+                      "endFilePos": 4600,
+                      "endTokenPos": 395
+                    }
+                  ],
+                  "endLine": 150
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_StaticCall",
+                "class": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "self"
+                  ],
+                  "attributes": {
+                    "startLine": 150,
+                    "endLine": 150
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "uncompress",
+                  "attributes": {
+                    "startLine": 150,
+                    "endLine": 150
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "ip",
+                      "attributes": {
+                        "startLine": 150,
+                        "endLine": 150
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 150,
+                      "endLine": 150
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 150,
+                  "endLine": 150
+                }
+              },
+              "attributes": {
+                "startLine": 150,
+                "comments": [
+                  {
+                    "nodeType": "Comment",
+                    "text": "// Prepare the IP to be compressed\n",
+                    "line": 149,
+                    "filePos": 4566,
+                    "tokenPos": 395,
+                    "endLine": 150,
+                    "endFilePos": 4600,
+                    "endTokenPos": 395
+                  }
+                ],
+                "endLine": 150
+              }
+            },
+            "attributes": {
+              "startLine": 150,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// Prepare the IP to be compressed\n",
+                  "line": 149,
+                  "filePos": 4566,
+                  "tokenPos": 395,
+                  "endLine": 150,
+                  "endFilePos": 4600,
+                  "endTokenPos": 395
+                }
+              ],
+              "endLine": 150
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "ip_parts",
+                "attributes": {
+                  "startLine": 151,
+                  "endLine": 151
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_StaticCall",
+                "class": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "self"
+                  ],
+                  "attributes": {
+                    "startLine": 151,
+                    "endLine": 151
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "split_v6_v4",
+                  "attributes": {
+                    "startLine": 151,
+                    "endLine": 151
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "ip",
+                      "attributes": {
+                        "startLine": 151,
+                        "endLine": 151
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 151,
+                      "endLine": 151
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 151,
+                  "endLine": 151
+                }
+              },
+              "attributes": {
+                "startLine": 151,
+                "endLine": 151
+              }
+            },
+            "attributes": {
+              "startLine": 151,
+              "endLine": 151
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "ip_parts",
+                  "attributes": {
+                    "startLine": 154,
+                    "comments": [
+                      {
+                        "nodeType": "Comment",
+                        "text": "// Replace all leading zeros\n",
+                        "line": 153,
+                        "filePos": 4673,
+                        "tokenPos": 421,
+                        "endLine": 154,
+                        "endFilePos": 4701,
+                        "endTokenPos": 421
+                      }
+                    ],
+                    "endLine": 154
+                  }
+                },
+                "dim": {
+                  "nodeType": "Scalar_LNumber",
+                  "value": 0,
+                  "attributes": {
+                    "startLine": 154,
+                    "endLine": 154,
+                    "kind": 10
+                  }
+                },
+                "attributes": {
+                  "startLine": 154,
+                  "comments": [
+                    {
+                      "nodeType": "Comment",
+                      "text": "// Replace all leading zeros\n",
+                      "line": 153,
+                      "filePos": 4673,
+                      "tokenPos": 421,
+                      "endLine": 154,
+                      "endFilePos": 4701,
+                      "endTokenPos": 421
+                    }
+                  ],
+                  "endLine": 154
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "preg_replace"
+                  ],
+                  "attributes": {
+                    "startLine": 154,
+                    "endLine": 154
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "/(^|:)0+([0-9])/",
+                      "attributes": {
+                        "startLine": 154,
+                        "endLine": 154,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 154,
+                      "endLine": 154
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "\\1\\2",
+                      "attributes": {
+                        "startLine": 154,
+                        "endLine": 154,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 154,
+                      "endLine": 154
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_ArrayDimFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "ip_parts",
+                        "attributes": {
+                          "startLine": 154,
+                          "endLine": 154
+                        }
+                      },
+                      "dim": {
+                        "nodeType": "Scalar_LNumber",
+                        "value": 0,
+                        "attributes": {
+                          "startLine": 154,
+                          "endLine": 154,
+                          "kind": 10
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 154,
+                        "endLine": 154
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 154,
+                      "endLine": 154
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 154,
+                  "endLine": 154
+                }
+              },
+              "attributes": {
+                "startLine": 154,
+                "comments": [
+                  {
+                    "nodeType": "Comment",
+                    "text": "// Replace all leading zeros\n",
+                    "line": 153,
+                    "filePos": 4673,
+                    "tokenPos": 421,
+                    "endLine": 154,
+                    "endFilePos": 4701,
+                    "endTokenPos": 421
+                  }
+                ],
+                "endLine": 154
+              }
+            },
+            "attributes": {
+              "startLine": 154,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// Replace all leading zeros\n",
+                  "line": 153,
+                  "filePos": 4673,
+                  "tokenPos": 421,
+                  "endLine": 154,
+                  "endFilePos": 4701,
+                  "endTokenPos": 421
+                }
+              ],
+              "endLine": 154
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "preg_match_all"
+                ],
+                "attributes": {
+                  "startLine": 157,
+                  "endLine": 157
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "/(?:^|:)(?:0(?::|$))+/",
+                    "attributes": {
+                      "startLine": 157,
+                      "endLine": 157,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 157,
+                    "endLine": 157
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_ArrayDimFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "ip_parts",
+                      "attributes": {
+                        "startLine": 157,
+                        "endLine": 157
+                      }
+                    },
+                    "dim": {
+                      "nodeType": "Scalar_LNumber",
+                      "value": 0,
+                      "attributes": {
+                        "startLine": 157,
+                        "endLine": 157,
+                        "kind": 10
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 157,
+                      "endLine": 157
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 157,
+                    "endLine": 157
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "matches",
+                    "attributes": {
+                      "startLine": 157,
+                      "endLine": 157
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 157,
+                    "endLine": 157
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_ConstFetch",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "PREG_OFFSET_CAPTURE"
+                      ],
+                      "attributes": {
+                        "startLine": 157,
+                        "endLine": 157
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 157,
+                      "endLine": 157
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 157,
+                    "endLine": 157
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 157,
+                "endLine": 157
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "max",
+                    "attributes": {
+                      "startLine": 159,
+                      "endLine": 159
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Scalar_LNumber",
+                    "value": 0,
+                    "attributes": {
+                      "startLine": 159,
+                      "endLine": 159,
+                      "kind": 10
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 159,
+                    "endLine": 159
+                  }
+                },
+                "attributes": {
+                  "startLine": 159,
+                  "endLine": 159
+                }
+              },
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "pos",
+                    "attributes": {
+                      "startLine": 160,
+                      "endLine": 160
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_ConstFetch",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "null"
+                      ],
+                      "attributes": {
+                        "startLine": 160,
+                        "endLine": 160
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 160,
+                      "endLine": 160
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 160,
+                    "endLine": 160
+                  }
+                },
+                "attributes": {
+                  "startLine": 160,
+                  "endLine": 160
+                }
+              },
+              {
+                "nodeType": "Stmt_Foreach",
+                "expr": {
+                  "nodeType": "Expr_ArrayDimFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "matches",
+                    "attributes": {
+                      "startLine": 161,
+                      "endLine": 161
+                    }
+                  },
+                  "dim": {
+                    "nodeType": "Scalar_LNumber",
+                    "value": 0,
+                    "attributes": {
+                      "startLine": 161,
+                      "endLine": 161,
+                      "kind": 10
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 161,
+                    "endLine": 161
+                  }
+                },
+                "keyVar": null,
+                "byRef": false,
+                "valueVar": {
+                  "nodeType": "Expr_Variable",
+                  "name": "match",
+                  "attributes": {
+                    "startLine": 161,
+                    "endLine": 161
+                  }
+                },
+                "stmts": [
+                  {
+                    "nodeType": "Stmt_If",
+                    "cond": {
+                      "nodeType": "Expr_BinaryOp_Greater",
+                      "left": {
+                        "nodeType": "Expr_FuncCall",
+                        "name": {
+                          "nodeType": "Name",
+                          "parts": [
+                            "strlen"
+                          ],
+                          "attributes": {
+                            "startLine": 163,
+                            "endLine": 163
+                          }
+                        },
+                        "args": [
+                          {
+                            "nodeType": "Arg",
+                            "value": {
+                              "nodeType": "Expr_ArrayDimFetch",
+                              "var": {
+                                "nodeType": "Expr_Variable",
+                                "name": "match",
+                                "attributes": {
+                                  "startLine": 163,
+                                  "endLine": 163
+                                }
+                              },
+                              "dim": {
+                                "nodeType": "Scalar_LNumber",
+                                "value": 0,
+                                "attributes": {
+                                  "startLine": 163,
+                                  "endLine": 163,
+                                  "kind": 10
+                                }
+                              },
+                              "attributes": {
+                                "startLine": 163,
+                                "endLine": 163
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 163,
+                              "endLine": 163
+                            }
+                          }
+                        ],
+                        "attributes": {
+                          "startLine": 163,
+                          "endLine": 163
+                        }
+                      },
+                      "right": {
+                        "nodeType": "Expr_Variable",
+                        "name": "max",
+                        "attributes": {
+                          "startLine": 163,
+                          "endLine": 163
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 163,
+                        "endLine": 163
+                      }
+                    },
+                    "stmts": [
+                      {
+                        "nodeType": "Stmt_Expression",
+                        "expr": {
+                          "nodeType": "Expr_Assign",
+                          "var": {
+                            "nodeType": "Expr_Variable",
+                            "name": "max",
+                            "attributes": {
+                              "startLine": 165,
+                              "endLine": 165
+                            }
+                          },
+                          "expr": {
+                            "nodeType": "Expr_FuncCall",
+                            "name": {
+                              "nodeType": "Name",
+                              "parts": [
+                                "strlen"
+                              ],
+                              "attributes": {
+                                "startLine": 165,
+                                "endLine": 165
+                              }
+                            },
+                            "args": [
+                              {
+                                "nodeType": "Arg",
+                                "value": {
+                                  "nodeType": "Expr_ArrayDimFetch",
+                                  "var": {
+                                    "nodeType": "Expr_Variable",
+                                    "name": "match",
+                                    "attributes": {
+                                      "startLine": 165,
+                                      "endLine": 165
+                                    }
+                                  },
+                                  "dim": {
+                                    "nodeType": "Scalar_LNumber",
+                                    "value": 0,
+                                    "attributes": {
+                                      "startLine": 165,
+                                      "endLine": 165,
+                                      "kind": 10
+                                    }
+                                  },
+                                  "attributes": {
+                                    "startLine": 165,
+                                    "endLine": 165
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 165,
+                                  "endLine": 165
+                                }
+                              }
+                            ],
+                            "attributes": {
+                              "startLine": 165,
+                              "endLine": 165
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 165,
+                            "endLine": 165
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 165,
+                          "endLine": 165
+                        }
+                      },
+                      {
+                        "nodeType": "Stmt_Expression",
+                        "expr": {
+                          "nodeType": "Expr_Assign",
+                          "var": {
+                            "nodeType": "Expr_Variable",
+                            "name": "pos",
+                            "attributes": {
+                              "startLine": 166,
+                              "endLine": 166
+                            }
+                          },
+                          "expr": {
+                            "nodeType": "Expr_ArrayDimFetch",
+                            "var": {
+                              "nodeType": "Expr_Variable",
+                              "name": "match",
+                              "attributes": {
+                                "startLine": 166,
+                                "endLine": 166
+                              }
+                            },
+                            "dim": {
+                              "nodeType": "Scalar_LNumber",
+                              "value": 1,
+                              "attributes": {
+                                "startLine": 166,
+                                "endLine": 166,
+                                "kind": 10
+                              }
+                            },
+                            "attributes": {
+                              "startLine": 166,
+                              "endLine": 166
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 166,
+                            "endLine": 166
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 166,
+                          "endLine": 166
+                        }
+                      }
+                    ],
+                    "elseifs": [],
+                    "else": null,
+                    "attributes": {
+                      "startLine": 163,
+                      "endLine": 167
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 161,
+                  "endLine": 168
+                }
+              },
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_ArrayDimFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "ip_parts",
+                      "attributes": {
+                        "startLine": 170,
+                        "endLine": 170
+                      }
+                    },
+                    "dim": {
+                      "nodeType": "Scalar_LNumber",
+                      "value": 0,
+                      "attributes": {
+                        "startLine": 170,
+                        "endLine": 170,
+                        "kind": 10
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 170,
+                      "endLine": 170
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "substr_replace"
+                      ],
+                      "attributes": {
+                        "startLine": 170,
+                        "endLine": 170
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_ArrayDimFetch",
+                          "var": {
+                            "nodeType": "Expr_Variable",
+                            "name": "ip_parts",
+                            "attributes": {
+                              "startLine": 170,
+                              "endLine": 170
+                            }
+                          },
+                          "dim": {
+                            "nodeType": "Scalar_LNumber",
+                            "value": 0,
+                            "attributes": {
+                              "startLine": 170,
+                              "endLine": 170,
+                              "kind": 10
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 170,
+                            "endLine": 170
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 170,
+                          "endLine": 170
+                        }
+                      },
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Scalar_String",
+                          "value": "::",
+                          "attributes": {
+                            "startLine": 170,
+                            "endLine": 170,
+                            "kind": 1
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 170,
+                          "endLine": 170
+                        }
+                      },
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "pos",
+                          "attributes": {
+                            "startLine": 170,
+                            "endLine": 170
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 170,
+                          "endLine": 170
+                        }
+                      },
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "max",
+                          "attributes": {
+                            "startLine": 170,
+                            "endLine": 170
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 170,
+                          "endLine": 170
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 170,
+                      "endLine": 170
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 170,
+                    "endLine": 170
+                  }
+                },
+                "attributes": {
+                  "startLine": 170,
+                  "endLine": 170
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 157,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// Find bunches of zeros\n",
+                  "line": 156,
+                  "filePos": 4778,
+                  "tokenPos": 445,
+                  "endLine": 157,
+                  "endFilePos": 4802,
+                  "endTokenPos": 445
+                }
+              ],
+              "endLine": 171
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BinaryOp_NotIdentical",
+              "left": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "ip_parts",
+                  "attributes": {
+                    "startLine": 173,
+                    "endLine": 173
+                  }
+                },
+                "dim": {
+                  "nodeType": "Scalar_LNumber",
+                  "value": 1,
+                  "attributes": {
+                    "startLine": 173,
+                    "endLine": 173,
+                    "kind": 10
+                  }
+                },
+                "attributes": {
+                  "startLine": 173,
+                  "endLine": 173
+                }
+              },
+              "right": {
+                "nodeType": "Scalar_String",
+                "value": "",
+                "attributes": {
+                  "startLine": 173,
+                  "endLine": 173,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 173,
+                "endLine": 173
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Return",
+                "expr": {
+                  "nodeType": "Expr_FuncCall",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "implode"
+                    ],
+                    "attributes": {
+                      "startLine": 175,
+                      "endLine": 175
+                    }
+                  },
+                  "args": [
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Scalar_String",
+                        "value": ":",
+                        "attributes": {
+                          "startLine": 175,
+                          "endLine": 175,
+                          "kind": 1
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 175,
+                        "endLine": 175
+                      }
+                    },
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Expr_Variable",
+                        "name": "ip_parts",
+                        "attributes": {
+                          "startLine": 175,
+                          "endLine": 175
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 175,
+                        "endLine": 175
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 175,
+                    "endLine": 175
+                  }
+                },
+                "attributes": {
+                  "startLine": 175,
+                  "endLine": 175
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": {
+              "nodeType": "Stmt_Else",
+              "stmts": [
+                {
+                  "nodeType": "Stmt_Return",
+                  "expr": {
+                    "nodeType": "Expr_ArrayDimFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "ip_parts",
+                      "attributes": {
+                        "startLine": 179,
+                        "endLine": 179
+                      }
+                    },
+                    "dim": {
+                      "nodeType": "Scalar_LNumber",
+                      "value": 0,
+                      "attributes": {
+                        "startLine": 179,
+                        "endLine": 179,
+                        "kind": 10
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 179,
+                      "endLine": 179
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 179,
+                    "endLine": 179
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 177,
+                "endLine": 180
+              }
+            },
+            "attributes": {
+              "startLine": 173,
+              "endLine": 180
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 147,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Compresses an IPv6 address\n\t *\n\t * RFC 4291 allows you to compress concecutive zero pieces in an address to\n\t * '::'. This method expects a valid IPv6 address and compresses consecutive\n\t * zero pieces to '::'.\n\t *\n\t * Example:  FF01:0:0:0:0:0:0:101   ->  FF01::101\n\t *           0:0:0:0:0:0:0:1        ->  ::1\n\t *\n\t * @see uncompress()\n\t * @param string $ip An IPv6 address\n\t * @return string The compressed IPv6 address\n\t */",
+              "line": 133,
+              "filePos": 4088,
+              "tokenPos": 380,
+              "endLine": 146,
+              "endFilePos": 4521,
+              "endTokenPos": 380
+            }
+          ],
+          "endLine": 181
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 12,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "split_v6_v4",
+          "attributes": {
+            "startLine": 195,
+            "endLine": 195
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "ip",
+              "attributes": {
+                "startLine": 195,
+                "endLine": 195
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 195,
+              "endLine": 195
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BinaryOp_NotIdentical",
+              "left": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "strpos"
+                  ],
+                  "attributes": {
+                    "startLine": 197,
+                    "endLine": 197
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "ip",
+                      "attributes": {
+                        "startLine": 197,
+                        "endLine": 197
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 197,
+                      "endLine": 197
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": ".",
+                      "attributes": {
+                        "startLine": 197,
+                        "endLine": 197,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 197,
+                      "endLine": 197
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 197,
+                  "endLine": 197
+                }
+              },
+              "right": {
+                "nodeType": "Expr_ConstFetch",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "false"
+                  ],
+                  "attributes": {
+                    "startLine": 197,
+                    "endLine": 197
+                  }
+                },
+                "attributes": {
+                  "startLine": 197,
+                  "endLine": 197
+                }
+              },
+              "attributes": {
+                "startLine": 197,
+                "endLine": 197
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "pos",
+                    "attributes": {
+                      "startLine": 199,
+                      "endLine": 199
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "strrpos"
+                      ],
+                      "attributes": {
+                        "startLine": 199,
+                        "endLine": 199
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "ip",
+                          "attributes": {
+                            "startLine": 199,
+                            "endLine": 199
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 199,
+                          "endLine": 199
+                        }
+                      },
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Scalar_String",
+                          "value": ":",
+                          "attributes": {
+                            "startLine": 199,
+                            "endLine": 199,
+                            "kind": 1
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 199,
+                          "endLine": 199
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 199,
+                      "endLine": 199
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 199,
+                    "endLine": 199
+                  }
+                },
+                "attributes": {
+                  "startLine": 199,
+                  "endLine": 199
+                }
+              },
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "ipv6_part",
+                    "attributes": {
+                      "startLine": 200,
+                      "endLine": 200
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "substr"
+                      ],
+                      "attributes": {
+                        "startLine": 200,
+                        "endLine": 200
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "ip",
+                          "attributes": {
+                            "startLine": 200,
+                            "endLine": 200
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 200,
+                          "endLine": 200
+                        }
+                      },
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Scalar_LNumber",
+                          "value": 0,
+                          "attributes": {
+                            "startLine": 200,
+                            "endLine": 200,
+                            "kind": 10
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 200,
+                          "endLine": 200
+                        }
+                      },
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "pos",
+                          "attributes": {
+                            "startLine": 200,
+                            "endLine": 200
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 200,
+                          "endLine": 200
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 200,
+                      "endLine": 200
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 200,
+                    "endLine": 200
+                  }
+                },
+                "attributes": {
+                  "startLine": 200,
+                  "endLine": 200
+                }
+              },
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "ipv4_part",
+                    "attributes": {
+                      "startLine": 201,
+                      "endLine": 201
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "substr"
+                      ],
+                      "attributes": {
+                        "startLine": 201,
+                        "endLine": 201
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "ip",
+                          "attributes": {
+                            "startLine": 201,
+                            "endLine": 201
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 201,
+                          "endLine": 201
+                        }
+                      },
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_BinaryOp_Plus",
+                          "left": {
+                            "nodeType": "Expr_Variable",
+                            "name": "pos",
+                            "attributes": {
+                              "startLine": 201,
+                              "endLine": 201
+                            }
+                          },
+                          "right": {
+                            "nodeType": "Scalar_LNumber",
+                            "value": 1,
+                            "attributes": {
+                              "startLine": 201,
+                              "endLine": 201,
+                              "kind": 10
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 201,
+                            "endLine": 201
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 201,
+                          "endLine": 201
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 201,
+                      "endLine": 201
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 201,
+                    "endLine": 201
+                  }
+                },
+                "attributes": {
+                  "startLine": 201,
+                  "endLine": 201
+                }
+              },
+              {
+                "nodeType": "Stmt_Return",
+                "expr": {
+                  "nodeType": "Expr_Array",
+                  "items": [
+                    {
+                      "nodeType": "Expr_ArrayItem",
+                      "key": null,
+                      "value": {
+                        "nodeType": "Expr_Variable",
+                        "name": "ipv6_part",
+                        "attributes": {
+                          "startLine": 202,
+                          "endLine": 202
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 202,
+                        "endLine": 202
+                      }
+                    },
+                    {
+                      "nodeType": "Expr_ArrayItem",
+                      "key": null,
+                      "value": {
+                        "nodeType": "Expr_Variable",
+                        "name": "ipv4_part",
+                        "attributes": {
+                          "startLine": 202,
+                          "endLine": 202
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 202,
+                        "endLine": 202
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 202,
+                    "endLine": 202,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 202,
+                  "endLine": 202
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": {
+              "nodeType": "Stmt_Else",
+              "stmts": [
+                {
+                  "nodeType": "Stmt_Return",
+                  "expr": {
+                    "nodeType": "Expr_Array",
+                    "items": [
+                      {
+                        "nodeType": "Expr_ArrayItem",
+                        "key": null,
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "ip",
+                          "attributes": {
+                            "startLine": 206,
+                            "endLine": 206
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 206,
+                          "endLine": 206
+                        }
+                      },
+                      {
+                        "nodeType": "Expr_ArrayItem",
+                        "key": null,
+                        "value": {
+                          "nodeType": "Scalar_String",
+                          "value": "",
+                          "attributes": {
+                            "startLine": 206,
+                            "endLine": 206,
+                            "kind": 1
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 206,
+                          "endLine": 206
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 206,
+                      "endLine": 206,
+                      "kind": 1
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 206,
+                    "endLine": 206
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 204,
+                "endLine": 207
+              }
+            },
+            "attributes": {
+              "startLine": 197,
+              "endLine": 207
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 195,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Splits an IPv6 address into the IPv6 and IPv4 representation parts\n\t *\n\t * RFC 4291 allows you to represent the last two parts of an IPv6 address\n\t * using the standard IPv4 representation\n\t *\n\t * Example:  0:0:0:0:0:0:13.1.68.3\n\t *           0:0:0:0:0:FFFF:129.144.52.38\n\t *\n\t * @param string $ip An IPv6 address\n\t * @return array [0] contains the IPv6 represented part, and [1] the IPv4 represented part\n\t */",
+              "line": 183,
+              "filePos": 5260,
+              "tokenPos": 615,
+              "endLine": 194,
+              "endFilePos": 5677,
+              "endTokenPos": 615
+            }
+          ],
+          "endLine": 208
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 9,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "check_ipv6",
+          "attributes": {
+            "startLine": 218,
+            "endLine": 218
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "ip",
+              "attributes": {
+                "startLine": 218,
+                "endLine": 218
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 218,
+              "endLine": 218
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "ip",
+                "attributes": {
+                  "startLine": 220,
+                  "endLine": 220
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_StaticCall",
+                "class": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "self"
+                  ],
+                  "attributes": {
+                    "startLine": 220,
+                    "endLine": 220
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "uncompress",
+                  "attributes": {
+                    "startLine": 220,
+                    "endLine": 220
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "ip",
+                      "attributes": {
+                        "startLine": 220,
+                        "endLine": 220
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 220,
+                      "endLine": 220
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 220,
+                  "endLine": 220
+                }
+              },
+              "attributes": {
+                "startLine": 220,
+                "endLine": 220
+              }
+            },
+            "attributes": {
+              "startLine": 220,
+              "endLine": 220
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_List",
+                "items": [
+                  {
+                    "nodeType": "Expr_ArrayItem",
+                    "key": null,
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "ipv6",
+                      "attributes": {
+                        "startLine": 221,
+                        "endLine": 221
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 221,
+                      "endLine": 221
+                    }
+                  },
+                  {
+                    "nodeType": "Expr_ArrayItem",
+                    "key": null,
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "ipv4",
+                      "attributes": {
+                        "startLine": 221,
+                        "endLine": 221
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 221,
+                      "endLine": 221
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 221,
+                  "endLine": 221
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_StaticCall",
+                "class": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "self"
+                  ],
+                  "attributes": {
+                    "startLine": 221,
+                    "endLine": 221
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "split_v6_v4",
+                  "attributes": {
+                    "startLine": 221,
+                    "endLine": 221
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "ip",
+                      "attributes": {
+                        "startLine": 221,
+                        "endLine": 221
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 221,
+                      "endLine": 221
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 221,
+                  "endLine": 221
+                }
+              },
+              "attributes": {
+                "startLine": 221,
+                "endLine": 221
+              }
+            },
+            "attributes": {
+              "startLine": 221,
+              "endLine": 221
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "ipv6",
+                "attributes": {
+                  "startLine": 222,
+                  "endLine": 222
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "explode"
+                  ],
+                  "attributes": {
+                    "startLine": 222,
+                    "endLine": 222
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": ":",
+                      "attributes": {
+                        "startLine": 222,
+                        "endLine": 222,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 222,
+                      "endLine": 222
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "ipv6",
+                      "attributes": {
+                        "startLine": 222,
+                        "endLine": 222
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 222,
+                      "endLine": 222
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 222,
+                  "endLine": 222
+                }
+              },
+              "attributes": {
+                "startLine": 222,
+                "endLine": 222
+              }
+            },
+            "attributes": {
+              "startLine": 222,
+              "endLine": 222
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "ipv4",
+                "attributes": {
+                  "startLine": 223,
+                  "endLine": 223
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "explode"
+                  ],
+                  "attributes": {
+                    "startLine": 223,
+                    "endLine": 223
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": ".",
+                      "attributes": {
+                        "startLine": 223,
+                        "endLine": 223,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 223,
+                      "endLine": 223
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "ipv4",
+                      "attributes": {
+                        "startLine": 223,
+                        "endLine": 223
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 223,
+                      "endLine": 223
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 223,
+                  "endLine": 223
+                }
+              },
+              "attributes": {
+                "startLine": 223,
+                "endLine": 223
+              }
+            },
+            "attributes": {
+              "startLine": 223,
+              "endLine": 223
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BinaryOp_BooleanOr",
+              "left": {
+                "nodeType": "Expr_BinaryOp_BooleanAnd",
+                "left": {
+                  "nodeType": "Expr_BinaryOp_Identical",
+                  "left": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "count"
+                      ],
+                      "attributes": {
+                        "startLine": 224,
+                        "endLine": 224
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "ipv6",
+                          "attributes": {
+                            "startLine": 224,
+                            "endLine": 224
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 224,
+                          "endLine": 224
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 224,
+                      "endLine": 224
+                    }
+                  },
+                  "right": {
+                    "nodeType": "Scalar_LNumber",
+                    "value": 8,
+                    "attributes": {
+                      "startLine": 224,
+                      "endLine": 224,
+                      "kind": 10
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 224,
+                    "endLine": 224
+                  }
+                },
+                "right": {
+                  "nodeType": "Expr_BinaryOp_Identical",
+                  "left": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "count"
+                      ],
+                      "attributes": {
+                        "startLine": 224,
+                        "endLine": 224
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "ipv4",
+                          "attributes": {
+                            "startLine": 224,
+                            "endLine": 224
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 224,
+                          "endLine": 224
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 224,
+                      "endLine": 224
+                    }
+                  },
+                  "right": {
+                    "nodeType": "Scalar_LNumber",
+                    "value": 1,
+                    "attributes": {
+                      "startLine": 224,
+                      "endLine": 224,
+                      "kind": 10
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 224,
+                    "endLine": 224
+                  }
+                },
+                "attributes": {
+                  "startLine": 224,
+                  "endLine": 224
+                }
+              },
+              "right": {
+                "nodeType": "Expr_BinaryOp_BooleanAnd",
+                "left": {
+                  "nodeType": "Expr_BinaryOp_Identical",
+                  "left": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "count"
+                      ],
+                      "attributes": {
+                        "startLine": 224,
+                        "endLine": 224
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "ipv6",
+                          "attributes": {
+                            "startLine": 224,
+                            "endLine": 224
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 224,
+                          "endLine": 224
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 224,
+                      "endLine": 224
+                    }
+                  },
+                  "right": {
+                    "nodeType": "Scalar_LNumber",
+                    "value": 6,
+                    "attributes": {
+                      "startLine": 224,
+                      "endLine": 224,
+                      "kind": 10
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 224,
+                    "endLine": 224
+                  }
+                },
+                "right": {
+                  "nodeType": "Expr_BinaryOp_Identical",
+                  "left": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "count"
+                      ],
+                      "attributes": {
+                        "startLine": 224,
+                        "endLine": 224
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "ipv4",
+                          "attributes": {
+                            "startLine": 224,
+                            "endLine": 224
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 224,
+                          "endLine": 224
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 224,
+                      "endLine": 224
+                    }
+                  },
+                  "right": {
+                    "nodeType": "Scalar_LNumber",
+                    "value": 4,
+                    "attributes": {
+                      "startLine": 224,
+                      "endLine": 224,
+                      "kind": 10
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 224,
+                    "endLine": 224
+                  }
+                },
+                "attributes": {
+                  "startLine": 224,
+                  "endLine": 224
+                }
+              },
+              "attributes": {
+                "startLine": 224,
+                "endLine": 224
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Foreach",
+                "expr": {
+                  "nodeType": "Expr_Variable",
+                  "name": "ipv6",
+                  "attributes": {
+                    "startLine": 226,
+                    "endLine": 226
+                  }
+                },
+                "keyVar": null,
+                "byRef": false,
+                "valueVar": {
+                  "nodeType": "Expr_Variable",
+                  "name": "ipv6_part",
+                  "attributes": {
+                    "startLine": 226,
+                    "endLine": 226
+                  }
+                },
+                "stmts": [
+                  {
+                    "nodeType": "Stmt_If",
+                    "cond": {
+                      "nodeType": "Expr_BinaryOp_Identical",
+                      "left": {
+                        "nodeType": "Expr_Variable",
+                        "name": "ipv6_part",
+                        "attributes": {
+                          "startLine": 229,
+                          "endLine": 229
+                        }
+                      },
+                      "right": {
+                        "nodeType": "Scalar_String",
+                        "value": "",
+                        "attributes": {
+                          "startLine": 229,
+                          "endLine": 229,
+                          "kind": 1
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 229,
+                        "endLine": 229
+                      }
+                    },
+                    "stmts": [
+                      {
+                        "nodeType": "Stmt_Return",
+                        "expr": {
+                          "nodeType": "Expr_ConstFetch",
+                          "name": {
+                            "nodeType": "Name",
+                            "parts": [
+                              "false"
+                            ],
+                            "attributes": {
+                              "startLine": 230,
+                              "endLine": 230
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 230,
+                            "endLine": 230
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 230,
+                          "endLine": 230
+                        }
+                      }
+                    ],
+                    "elseifs": [],
+                    "else": null,
+                    "attributes": {
+                      "startLine": 229,
+                      "comments": [
+                        {
+                          "nodeType": "Comment",
+                          "text": "// The section can't be empty\n",
+                          "line": 228,
+                          "filePos": 6466,
+                          "tokenPos": 857,
+                          "endLine": 229,
+                          "endFilePos": 6495,
+                          "endTokenPos": 857
+                        }
+                      ],
+                      "endLine": 230
+                    }
+                  },
+                  {
+                    "nodeType": "Stmt_If",
+                    "cond": {
+                      "nodeType": "Expr_BinaryOp_Greater",
+                      "left": {
+                        "nodeType": "Expr_FuncCall",
+                        "name": {
+                          "nodeType": "Name",
+                          "parts": [
+                            "strlen"
+                          ],
+                          "attributes": {
+                            "startLine": 233,
+                            "endLine": 233
+                          }
+                        },
+                        "args": [
+                          {
+                            "nodeType": "Arg",
+                            "value": {
+                              "nodeType": "Expr_Variable",
+                              "name": "ipv6_part",
+                              "attributes": {
+                                "startLine": 233,
+                                "endLine": 233
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 233,
+                              "endLine": 233
+                            }
+                          }
+                        ],
+                        "attributes": {
+                          "startLine": 233,
+                          "endLine": 233
+                        }
+                      },
+                      "right": {
+                        "nodeType": "Scalar_LNumber",
+                        "value": 4,
+                        "attributes": {
+                          "startLine": 233,
+                          "endLine": 233,
+                          "kind": 10
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 233,
+                        "endLine": 233
+                      }
+                    },
+                    "stmts": [
+                      {
+                        "nodeType": "Stmt_Return",
+                        "expr": {
+                          "nodeType": "Expr_ConstFetch",
+                          "name": {
+                            "nodeType": "Name",
+                            "parts": [
+                              "false"
+                            ],
+                            "attributes": {
+                              "startLine": 234,
+                              "endLine": 234
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 234,
+                            "endLine": 234
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 234,
+                          "endLine": 234
+                        }
+                      }
+                    ],
+                    "elseifs": [],
+                    "else": null,
+                    "attributes": {
+                      "startLine": 233,
+                      "comments": [
+                        {
+                          "nodeType": "Comment",
+                          "text": "// Nor can it be over four characters\n",
+                          "line": 232,
+                          "filePos": 6547,
+                          "tokenPos": 874,
+                          "endLine": 233,
+                          "endFilePos": 6584,
+                          "endTokenPos": 874
+                        }
+                      ],
+                      "endLine": 234
+                    }
+                  },
+                  {
+                    "nodeType": "Stmt_Expression",
+                    "expr": {
+                      "nodeType": "Expr_Assign",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "ipv6_part",
+                        "attributes": {
+                          "startLine": 237,
+                          "comments": [
+                            {
+                              "nodeType": "Comment",
+                              "text": "// Remove leading zeros (this is safe because of the above)\n",
+                              "line": 236,
+                              "filePos": 6641,
+                              "tokenPos": 894,
+                              "endLine": 237,
+                              "endFilePos": 6700,
+                              "endTokenPos": 894
+                            }
+                          ],
+                          "endLine": 237
+                        }
+                      },
+                      "expr": {
+                        "nodeType": "Expr_FuncCall",
+                        "name": {
+                          "nodeType": "Name",
+                          "parts": [
+                            "ltrim"
+                          ],
+                          "attributes": {
+                            "startLine": 237,
+                            "endLine": 237
+                          }
+                        },
+                        "args": [
+                          {
+                            "nodeType": "Arg",
+                            "value": {
+                              "nodeType": "Expr_Variable",
+                              "name": "ipv6_part",
+                              "attributes": {
+                                "startLine": 237,
+                                "endLine": 237
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 237,
+                              "endLine": 237
+                            }
+                          },
+                          {
+                            "nodeType": "Arg",
+                            "value": {
+                              "nodeType": "Scalar_String",
+                              "value": "0",
+                              "attributes": {
+                                "startLine": 237,
+                                "endLine": 237,
+                                "kind": 1
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 237,
+                              "endLine": 237
+                            }
+                          }
+                        ],
+                        "attributes": {
+                          "startLine": 237,
+                          "endLine": 237
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 237,
+                        "comments": [
+                          {
+                            "nodeType": "Comment",
+                            "text": "// Remove leading zeros (this is safe because of the above)\n",
+                            "line": 236,
+                            "filePos": 6641,
+                            "tokenPos": 894,
+                            "endLine": 237,
+                            "endFilePos": 6700,
+                            "endTokenPos": 894
+                          }
+                        ],
+                        "endLine": 237
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 237,
+                      "comments": [
+                        {
+                          "nodeType": "Comment",
+                          "text": "// Remove leading zeros (this is safe because of the above)\n",
+                          "line": 236,
+                          "filePos": 6641,
+                          "tokenPos": 894,
+                          "endLine": 237,
+                          "endFilePos": 6700,
+                          "endTokenPos": 894
+                        }
+                      ],
+                      "endLine": 237
+                    }
+                  },
+                  {
+                    "nodeType": "Stmt_If",
+                    "cond": {
+                      "nodeType": "Expr_BinaryOp_Identical",
+                      "left": {
+                        "nodeType": "Expr_Variable",
+                        "name": "ipv6_part",
+                        "attributes": {
+                          "startLine": 238,
+                          "endLine": 238
+                        }
+                      },
+                      "right": {
+                        "nodeType": "Scalar_String",
+                        "value": "",
+                        "attributes": {
+                          "startLine": 238,
+                          "endLine": 238,
+                          "kind": 1
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 238,
+                        "endLine": 238
+                      }
+                    },
+                    "stmts": [
+                      {
+                        "nodeType": "Stmt_Expression",
+                        "expr": {
+                          "nodeType": "Expr_Assign",
+                          "var": {
+                            "nodeType": "Expr_Variable",
+                            "name": "ipv6_part",
+                            "attributes": {
+                              "startLine": 239,
+                              "endLine": 239
+                            }
+                          },
+                          "expr": {
+                            "nodeType": "Scalar_String",
+                            "value": "0",
+                            "attributes": {
+                              "startLine": 239,
+                              "endLine": 239,
+                              "kind": 1
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 239,
+                            "endLine": 239
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 239,
+                          "endLine": 239
+                        }
+                      }
+                    ],
+                    "elseifs": [],
+                    "else": null,
+                    "attributes": {
+                      "startLine": 238,
+                      "endLine": 239
+                    }
+                  },
+                  {
+                    "nodeType": "Stmt_Expression",
+                    "expr": {
+                      "nodeType": "Expr_Assign",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "value",
+                        "attributes": {
+                          "startLine": 242,
+                          "comments": [
+                            {
+                              "nodeType": "Comment",
+                              "text": "// Check the value is valid\n",
+                              "line": 241,
+                              "filePos": 6797,
+                              "tokenPos": 926,
+                              "endLine": 242,
+                              "endFilePos": 6824,
+                              "endTokenPos": 926
+                            }
+                          ],
+                          "endLine": 242
+                        }
+                      },
+                      "expr": {
+                        "nodeType": "Expr_FuncCall",
+                        "name": {
+                          "nodeType": "Name",
+                          "parts": [
+                            "hexdec"
+                          ],
+                          "attributes": {
+                            "startLine": 242,
+                            "endLine": 242
+                          }
+                        },
+                        "args": [
+                          {
+                            "nodeType": "Arg",
+                            "value": {
+                              "nodeType": "Expr_Variable",
+                              "name": "ipv6_part",
+                              "attributes": {
+                                "startLine": 242,
+                                "endLine": 242
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 242,
+                              "endLine": 242
+                            }
+                          }
+                        ],
+                        "attributes": {
+                          "startLine": 242,
+                          "endLine": 242
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 242,
+                        "comments": [
+                          {
+                            "nodeType": "Comment",
+                            "text": "// Check the value is valid\n",
+                            "line": 241,
+                            "filePos": 6797,
+                            "tokenPos": 926,
+                            "endLine": 242,
+                            "endFilePos": 6824,
+                            "endTokenPos": 926
+                          }
+                        ],
+                        "endLine": 242
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 242,
+                      "comments": [
+                        {
+                          "nodeType": "Comment",
+                          "text": "// Check the value is valid\n",
+                          "line": 241,
+                          "filePos": 6797,
+                          "tokenPos": 926,
+                          "endLine": 242,
+                          "endFilePos": 6824,
+                          "endTokenPos": 926
+                        }
+                      ],
+                      "endLine": 242
+                    }
+                  },
+                  {
+                    "nodeType": "Stmt_If",
+                    "cond": {
+                      "nodeType": "Expr_BinaryOp_BooleanOr",
+                      "left": {
+                        "nodeType": "Expr_BinaryOp_BooleanOr",
+                        "left": {
+                          "nodeType": "Expr_BinaryOp_NotIdentical",
+                          "left": {
+                            "nodeType": "Expr_FuncCall",
+                            "name": {
+                              "nodeType": "Name",
+                              "parts": [
+                                "dechex"
+                              ],
+                              "attributes": {
+                                "startLine": 243,
+                                "endLine": 243
+                              }
+                            },
+                            "args": [
+                              {
+                                "nodeType": "Arg",
+                                "value": {
+                                  "nodeType": "Expr_Variable",
+                                  "name": "value",
+                                  "attributes": {
+                                    "startLine": 243,
+                                    "endLine": 243
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 243,
+                                  "endLine": 243
+                                }
+                              }
+                            ],
+                            "attributes": {
+                              "startLine": 243,
+                              "endLine": 243
+                            }
+                          },
+                          "right": {
+                            "nodeType": "Expr_FuncCall",
+                            "name": {
+                              "nodeType": "Name",
+                              "parts": [
+                                "strtolower"
+                              ],
+                              "attributes": {
+                                "startLine": 243,
+                                "endLine": 243
+                              }
+                            },
+                            "args": [
+                              {
+                                "nodeType": "Arg",
+                                "value": {
+                                  "nodeType": "Expr_Variable",
+                                  "name": "ipv6_part",
+                                  "attributes": {
+                                    "startLine": 243,
+                                    "endLine": 243
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 243,
+                                  "endLine": 243
+                                }
+                              }
+                            ],
+                            "attributes": {
+                              "startLine": 243,
+                              "endLine": 243
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 243,
+                            "endLine": 243
+                          }
+                        },
+                        "right": {
+                          "nodeType": "Expr_BinaryOp_Smaller",
+                          "left": {
+                            "nodeType": "Expr_Variable",
+                            "name": "value",
+                            "attributes": {
+                              "startLine": 243,
+                              "endLine": 243
+                            }
+                          },
+                          "right": {
+                            "nodeType": "Scalar_LNumber",
+                            "value": 0,
+                            "attributes": {
+                              "startLine": 243,
+                              "endLine": 243,
+                              "kind": 10
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 243,
+                            "endLine": 243
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 243,
+                          "endLine": 243
+                        }
+                      },
+                      "right": {
+                        "nodeType": "Expr_BinaryOp_Greater",
+                        "left": {
+                          "nodeType": "Expr_Variable",
+                          "name": "value",
+                          "attributes": {
+                            "startLine": 243,
+                            "endLine": 243
+                          }
+                        },
+                        "right": {
+                          "nodeType": "Scalar_LNumber",
+                          "value": 65535,
+                          "attributes": {
+                            "startLine": 243,
+                            "endLine": 243,
+                            "kind": 16
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 243,
+                          "endLine": 243
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 243,
+                        "endLine": 243
+                      }
+                    },
+                    "stmts": [
+                      {
+                        "nodeType": "Stmt_Return",
+                        "expr": {
+                          "nodeType": "Expr_ConstFetch",
+                          "name": {
+                            "nodeType": "Name",
+                            "parts": [
+                              "false"
+                            ],
+                            "attributes": {
+                              "startLine": 244,
+                              "endLine": 244
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 244,
+                            "endLine": 244
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 244,
+                          "endLine": 244
+                        }
+                      }
+                    ],
+                    "elseifs": [],
+                    "else": null,
+                    "attributes": {
+                      "startLine": 243,
+                      "endLine": 244
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 226,
+                  "endLine": 245
+                }
+              },
+              {
+                "nodeType": "Stmt_If",
+                "cond": {
+                  "nodeType": "Expr_BinaryOp_Identical",
+                  "left": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "count"
+                      ],
+                      "attributes": {
+                        "startLine": 246,
+                        "endLine": 246
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "ipv4",
+                          "attributes": {
+                            "startLine": 246,
+                            "endLine": 246
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 246,
+                          "endLine": 246
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 246,
+                      "endLine": 246
+                    }
+                  },
+                  "right": {
+                    "nodeType": "Scalar_LNumber",
+                    "value": 4,
+                    "attributes": {
+                      "startLine": 246,
+                      "endLine": 246,
+                      "kind": 10
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 246,
+                    "endLine": 246
+                  }
+                },
+                "stmts": [
+                  {
+                    "nodeType": "Stmt_Foreach",
+                    "expr": {
+                      "nodeType": "Expr_Variable",
+                      "name": "ipv4",
+                      "attributes": {
+                        "startLine": 248,
+                        "endLine": 248
+                      }
+                    },
+                    "keyVar": null,
+                    "byRef": false,
+                    "valueVar": {
+                      "nodeType": "Expr_Variable",
+                      "name": "ipv4_part",
+                      "attributes": {
+                        "startLine": 248,
+                        "endLine": 248
+                      }
+                    },
+                    "stmts": [
+                      {
+                        "nodeType": "Stmt_Expression",
+                        "expr": {
+                          "nodeType": "Expr_Assign",
+                          "var": {
+                            "nodeType": "Expr_Variable",
+                            "name": "value",
+                            "attributes": {
+                              "startLine": 250,
+                              "endLine": 250
+                            }
+                          },
+                          "expr": {
+                            "nodeType": "Expr_Cast_Int",
+                            "expr": {
+                              "nodeType": "Expr_Variable",
+                              "name": "ipv4_part",
+                              "attributes": {
+                                "startLine": 250,
+                                "endLine": 250
+                              }
+                            },
+                            "attributes": {
+                              "startLine": 250,
+                              "endLine": 250
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 250,
+                            "endLine": 250
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 250,
+                          "endLine": 250
+                        }
+                      },
+                      {
+                        "nodeType": "Stmt_If",
+                        "cond": {
+                          "nodeType": "Expr_BinaryOp_BooleanOr",
+                          "left": {
+                            "nodeType": "Expr_BinaryOp_BooleanOr",
+                            "left": {
+                              "nodeType": "Expr_BinaryOp_NotIdentical",
+                              "left": {
+                                "nodeType": "Expr_Cast_String",
+                                "expr": {
+                                  "nodeType": "Expr_Variable",
+                                  "name": "value",
+                                  "attributes": {
+                                    "startLine": 251,
+                                    "endLine": 251
+                                  }
+                                },
+                                "attributes": {
+                                  "startLine": 251,
+                                  "endLine": 251
+                                }
+                              },
+                              "right": {
+                                "nodeType": "Expr_Variable",
+                                "name": "ipv4_part",
+                                "attributes": {
+                                  "startLine": 251,
+                                  "endLine": 251
+                                }
+                              },
+                              "attributes": {
+                                "startLine": 251,
+                                "endLine": 251
+                              }
+                            },
+                            "right": {
+                              "nodeType": "Expr_BinaryOp_Smaller",
+                              "left": {
+                                "nodeType": "Expr_Variable",
+                                "name": "value",
+                                "attributes": {
+                                  "startLine": 251,
+                                  "endLine": 251
+                                }
+                              },
+                              "right": {
+                                "nodeType": "Scalar_LNumber",
+                                "value": 0,
+                                "attributes": {
+                                  "startLine": 251,
+                                  "endLine": 251,
+                                  "kind": 10
+                                }
+                              },
+                              "attributes": {
+                                "startLine": 251,
+                                "endLine": 251
+                              }
+                            },
+                            "attributes": {
+                              "startLine": 251,
+                              "endLine": 251
+                            }
+                          },
+                          "right": {
+                            "nodeType": "Expr_BinaryOp_Greater",
+                            "left": {
+                              "nodeType": "Expr_Variable",
+                              "name": "value",
+                              "attributes": {
+                                "startLine": 251,
+                                "endLine": 251
+                              }
+                            },
+                            "right": {
+                              "nodeType": "Scalar_LNumber",
+                              "value": 255,
+                              "attributes": {
+                                "startLine": 251,
+                                "endLine": 251,
+                                "kind": 16
+                              }
+                            },
+                            "attributes": {
+                              "startLine": 251,
+                              "endLine": 251
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 251,
+                            "endLine": 251
+                          }
+                        },
+                        "stmts": [
+                          {
+                            "nodeType": "Stmt_Return",
+                            "expr": {
+                              "nodeType": "Expr_ConstFetch",
+                              "name": {
+                                "nodeType": "Name",
+                                "parts": [
+                                  "false"
+                                ],
+                                "attributes": {
+                                  "startLine": 252,
+                                  "endLine": 252
+                                }
+                              },
+                              "attributes": {
+                                "startLine": 252,
+                                "endLine": 252
+                              }
+                            },
+                            "attributes": {
+                              "startLine": 252,
+                              "endLine": 252
+                            }
+                          }
+                        ],
+                        "elseifs": [],
+                        "else": null,
+                        "attributes": {
+                          "startLine": 251,
+                          "endLine": 252
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 248,
+                      "endLine": 253
+                    }
+                  }
+                ],
+                "elseifs": [],
+                "else": null,
+                "attributes": {
+                  "startLine": 246,
+                  "endLine": 254
+                }
+              },
+              {
+                "nodeType": "Stmt_Return",
+                "expr": {
+                  "nodeType": "Expr_ConstFetch",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "true"
+                    ],
+                    "attributes": {
+                      "startLine": 255,
+                      "endLine": 255
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 255,
+                    "endLine": 255
+                  }
+                },
+                "attributes": {
+                  "startLine": 255,
+                  "endLine": 255
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": {
+              "nodeType": "Stmt_Else",
+              "stmts": [
+                {
+                  "nodeType": "Stmt_Return",
+                  "expr": {
+                    "nodeType": "Expr_ConstFetch",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "false"
+                      ],
+                      "attributes": {
+                        "startLine": 259,
+                        "endLine": 259
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 259,
+                      "endLine": 259
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 259,
+                    "endLine": 259
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 257,
+                "endLine": 260
+              }
+            },
+            "attributes": {
+              "startLine": 224,
+              "endLine": 260
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 218,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Checks an IPv6 address\n\t *\n\t * Checks if the given IP is a valid IPv6 address\n\t *\n\t * @param string $ip An IPv6 address\n\t * @return bool true if $ip is a valid IPv6 address\n\t */",
+              "line": 210,
+              "filePos": 5959,
+              "tokenPos": 726,
+              "endLine": 217,
+              "endFilePos": 6143,
+              "endTokenPos": 726
+            }
+          ],
+          "endLine": 261
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 9,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "checkIPv6",
+          "attributes": {
+            "startLine": 272,
+            "endLine": 272
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "ip",
+              "attributes": {
+                "startLine": 272,
+                "endLine": 272
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 272,
+              "endLine": 272
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_StaticCall",
+              "class": {
+                "nodeType": "Name",
+                "parts": [
+                  "self"
+                ],
+                "attributes": {
+                  "startLine": 274,
+                  "endLine": 274
+                }
+              },
+              "name": {
+                "nodeType": "Identifier",
+                "name": "check_ipv6",
+                "attributes": {
+                  "startLine": 274,
+                  "endLine": 274
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "ip",
+                    "attributes": {
+                      "startLine": 274,
+                      "endLine": 274
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 274,
+                    "endLine": 274
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 274,
+                "endLine": 274
+              }
+            },
+            "attributes": {
+              "startLine": 274,
+              "endLine": 274
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 272,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Checks if the given IP is a valid IPv6 address\n\t *\n\t * @codeCoverageIgnore\n\t * @deprecated Use {@see SimplePie_Net_IPv6::check_ipv6()} instead\n\t * @see check_ipv6\n\t * @param string $ip An IPv6 address\n\t * @return bool true if $ip is a valid IPv6 address\n\t */",
+              "line": 263,
+              "filePos": 7230,
+              "tokenPos": 1070,
+              "endLine": 271,
+              "endFilePos": 7495,
+              "endTokenPos": 1070
+            }
+          ],
+          "endLine": 275
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 59,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * SimplePie\n *\n * A PHP-Based RSS and Atom Feed Framework.\n * Takes the hard work out of managing a complete RSS/Atom solution.\n *\n * Copyright (c) 2004-2012, Ryan Parman, Geoffrey Sneddon, Ryan McCue, and contributors\n * All rights reserved.\n *\n * Redistribution and use in source and binary forms, with or without modification, are\n * permitted provided that the following conditions are met:\n *\n * \t* Redistributions of source code must retain the above copyright notice, this list of\n * \t  conditions and the following disclaimer.\n *\n * \t* Redistributions in binary form must reproduce the above copyright notice, this list\n * \t  of conditions and the following disclaimer in the documentation and/or other materials\n * \t  provided with the distribution.\n *\n * \t* Neither the name of the SimplePie Team nor the names of its contributors may be used\n * \t  to endorse or promote products derived from this software without specific prior\n * \t  written permission.\n *\n * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY EXPRESS\n * OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY\n * AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS\n * AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR\n * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR\n * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY\n * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR\n * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE\n * POSSIBILITY OF SUCH DAMAGE.\n *\n * @package SimplePie\n * @version 1.3.1\n * @copyright 2004-2012 Ryan Parman, Geoffrey Sneddon, Ryan McCue\n * @author Ryan Parman\n * @author Geoffrey Sneddon\n * @author Ryan McCue\n * @link http://simplepie.org/ SimplePie\n * @license http://www.opensource.org/licenses/bsd-license.php BSD License\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 43,
+          "endFilePos": 2065,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Class to validate and to work with IPv6 addresses.\n *\n * @package SimplePie\n * @subpackage HTTP\n * @copyright 2003-2005 The PHP Group\n * @license http://www.opensource.org/licenses/bsd-license.php\n * @link http://pear.php.net/package/Net_IPv6\n * @author Alexander Merz <alexander.merz@web.de>\n * @author elfrink at introweb dot nl\n * @author Josh Peck <jmp at joshpeck dot org>\n * @author Geoffrey Sneddon <geoffers@gmail.com>\n */",
+          "line": 46,
+          "filePos": 2069,
+          "tokenPos": 3,
+          "endLine": 58,
+          "endFilePos": 2505,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 276
+    }
+  }
+]

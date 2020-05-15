@@ -1,0 +1,1049 @@
+[
+  {
+    "nodeType": "Stmt_Class",
+    "flags": 0,
+    "extends": {
+      "nodeType": "Name",
+      "parts": [
+        "WP_Customize_Control"
+      ],
+      "attributes": {
+        "startLine": 17,
+        "endLine": 17
+      }
+    },
+    "implements": [],
+    "name": {
+      "nodeType": "Identifier",
+      "name": "WP_Customize_Nav_Menu_Locations_Control",
+      "attributes": {
+        "startLine": 17,
+        "endLine": 17
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "type",
+              "attributes": {
+                "startLine": 25,
+                "endLine": 25
+              }
+            },
+            "default": {
+              "nodeType": "Scalar_String",
+              "value": "nav_menu_locations",
+              "attributes": {
+                "startLine": 25,
+                "endLine": 25,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 25,
+              "endLine": 25
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 25,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Control type.\n\t *\n\t * @since 4.9.0\n\t * @var string\n\t */",
+              "line": 19,
+              "filePos": 330,
+              "tokenPos": 15,
+              "endLine": 24,
+              "endFilePos": 392,
+              "endTokenPos": 15
+            }
+          ],
+          "endLine": 25
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "render_content",
+          "attributes": {
+            "startLine": 32,
+            "endLine": 32
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [],
+        "attributes": {
+          "startLine": 32,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Don't render the control's content - it uses a JS template instead.\n\t *\n\t * @since 4.9.0\n\t */",
+              "line": 27,
+              "filePos": 434,
+              "tokenPos": 26,
+              "endLine": 31,
+              "endFilePos": 534,
+              "endTokenPos": 26
+            }
+          ],
+          "endLine": 32
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "content_template",
+          "attributes": {
+            "startLine": 39,
+            "endLine": 39
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "current_theme_supports"
+                ],
+                "attributes": {
+                  "startLine": 40,
+                  "endLine": 40
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "menus",
+                    "attributes": {
+                      "startLine": 40,
+                      "endLine": 40,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 40,
+                    "endLine": 40
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 40,
+                "endLine": 40
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_InlineHTML",
+                "value": "\t\t\t<# var elementId; #>\n\t\t\t<ul class=\"menu-location-settings\">\n\t\t\t\t<li class=\"customize-control assigned-menu-locations-title\">\n\t\t\t\t\t<span class=\"customize-control-title\">{{ wp.customize.Menus.data.l10n.locationsTitle }}</span>\n\t\t\t\t\t<# if ( data.isCreating ) { #>\n\t\t\t\t\t\t<p>\n\t\t\t\t\t\t\t",
+                "attributes": {
+                  "startLine": 42,
+                  "hasLeadingNewline": true,
+                  "endLine": 48
+                }
+              },
+              {
+                "nodeType": "Stmt_Echo",
+                "exprs": [
+                  {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "_x"
+                      ],
+                      "attributes": {
+                        "startLine": 48,
+                        "endLine": 48
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Scalar_String",
+                          "value": "Where do you want this menu to appear?",
+                          "attributes": {
+                            "startLine": 48,
+                            "endLine": 48,
+                            "kind": 1
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 48,
+                          "endLine": 48
+                        }
+                      },
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Scalar_String",
+                          "value": "menu locations",
+                          "attributes": {
+                            "startLine": 48,
+                            "endLine": 48,
+                            "kind": 1
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 48,
+                          "endLine": 48
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 48,
+                      "endLine": 48
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 48,
+                  "endLine": 48
+                }
+              },
+              {
+                "nodeType": "Stmt_InlineHTML",
+                "value": "\t\t\t\t\t\t\t<em class=\"new-menu-locations-widget-note\">\n\t\t\t\t\t\t\t\t",
+                "attributes": {
+                  "startLine": 49,
+                  "hasLeadingNewline": true,
+                  "endLine": 50
+                }
+              },
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_FuncCall",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "printf"
+                    ],
+                    "attributes": {
+                      "startLine": 51,
+                      "endLine": 51
+                    }
+                  },
+                  "args": [
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Expr_FuncCall",
+                        "name": {
+                          "nodeType": "Name",
+                          "parts": [
+                            "_x"
+                          ],
+                          "attributes": {
+                            "startLine": 53,
+                            "comments": [
+                              {
+                                "nodeType": "Comment",
+                                "text": "/* translators: 1: Documentation URL, 2: Additional link attributes, 3: Accessibility text. */",
+                                "line": 52,
+                                "filePos": 1192,
+                                "tokenPos": 89,
+                                "endLine": 52,
+                                "endFilePos": 1285,
+                                "endTokenPos": 89
+                              }
+                            ],
+                            "endLine": 53
+                          }
+                        },
+                        "args": [
+                          {
+                            "nodeType": "Arg",
+                            "value": {
+                              "nodeType": "Scalar_String",
+                              "value": "(If you plan to use a menu <a href=\"%1$s\" %2$s>widget%3$s</a>, skip this step.)",
+                              "attributes": {
+                                "startLine": 53,
+                                "endLine": 53,
+                                "kind": 1
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 53,
+                              "endLine": 53
+                            }
+                          },
+                          {
+                            "nodeType": "Arg",
+                            "value": {
+                              "nodeType": "Scalar_String",
+                              "value": "menu locations",
+                              "attributes": {
+                                "startLine": 53,
+                                "endLine": 53,
+                                "kind": 1
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 53,
+                              "endLine": 53
+                            }
+                          }
+                        ],
+                        "attributes": {
+                          "startLine": 53,
+                          "comments": [
+                            {
+                              "nodeType": "Comment",
+                              "text": "/* translators: 1: Documentation URL, 2: Additional link attributes, 3: Accessibility text. */",
+                              "line": 52,
+                              "filePos": 1192,
+                              "tokenPos": 89,
+                              "endLine": 52,
+                              "endFilePos": 1285,
+                              "endTokenPos": 89
+                            }
+                          ],
+                          "endLine": 53
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 53,
+                        "comments": [
+                          {
+                            "nodeType": "Comment",
+                            "text": "/* translators: 1: Documentation URL, 2: Additional link attributes, 3: Accessibility text. */",
+                            "line": 52,
+                            "filePos": 1192,
+                            "tokenPos": 89,
+                            "endLine": 52,
+                            "endFilePos": 1285,
+                            "endTokenPos": 89
+                          }
+                        ],
+                        "endLine": 53
+                      }
+                    },
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Expr_FuncCall",
+                        "name": {
+                          "nodeType": "Name",
+                          "parts": [
+                            "__"
+                          ],
+                          "attributes": {
+                            "startLine": 54,
+                            "endLine": 54
+                          }
+                        },
+                        "args": [
+                          {
+                            "nodeType": "Arg",
+                            "value": {
+                              "nodeType": "Scalar_String",
+                              "value": "https://wordpress.org/support/article/wordpress-widgets/",
+                              "attributes": {
+                                "startLine": 54,
+                                "endLine": 54,
+                                "kind": 1
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 54,
+                              "endLine": 54
+                            }
+                          }
+                        ],
+                        "attributes": {
+                          "startLine": 54,
+                          "endLine": 54
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 54,
+                        "endLine": 54
+                      }
+                    },
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Scalar_String",
+                        "value": " class=\"external-link\" target=\"_blank\"",
+                        "attributes": {
+                          "startLine": 55,
+                          "endLine": 55,
+                          "kind": 1
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 55,
+                        "endLine": 55
+                      }
+                    },
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Expr_FuncCall",
+                        "name": {
+                          "nodeType": "Name",
+                          "parts": [
+                            "sprintf"
+                          ],
+                          "attributes": {
+                            "startLine": 56,
+                            "endLine": 56
+                          }
+                        },
+                        "args": [
+                          {
+                            "nodeType": "Arg",
+                            "value": {
+                              "nodeType": "Scalar_String",
+                              "value": "<span class=\"screen-reader-text\"> %s</span>",
+                              "attributes": {
+                                "startLine": 57,
+                                "endLine": 57,
+                                "kind": 1
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 57,
+                              "endLine": 57
+                            }
+                          },
+                          {
+                            "nodeType": "Arg",
+                            "value": {
+                              "nodeType": "Expr_FuncCall",
+                              "name": {
+                                "nodeType": "Name",
+                                "parts": [
+                                  "__"
+                                ],
+                                "attributes": {
+                                  "startLine": 59,
+                                  "comments": [
+                                    {
+                                      "nodeType": "Comment",
+                                      "text": "/* translators: Accessibility text. */",
+                                      "line": 58,
+                                      "filePos": 1614,
+                                      "tokenPos": 119,
+                                      "endLine": 58,
+                                      "endFilePos": 1651,
+                                      "endTokenPos": 119
+                                    }
+                                  ],
+                                  "endLine": 59
+                                }
+                              },
+                              "args": [
+                                {
+                                  "nodeType": "Arg",
+                                  "value": {
+                                    "nodeType": "Scalar_String",
+                                    "value": "(opens in a new tab)",
+                                    "attributes": {
+                                      "startLine": 59,
+                                      "endLine": 59,
+                                      "kind": 1
+                                    }
+                                  },
+                                  "byRef": false,
+                                  "unpack": false,
+                                  "attributes": {
+                                    "startLine": 59,
+                                    "endLine": 59
+                                  }
+                                }
+                              ],
+                              "attributes": {
+                                "startLine": 59,
+                                "comments": [
+                                  {
+                                    "nodeType": "Comment",
+                                    "text": "/* translators: Accessibility text. */",
+                                    "line": 58,
+                                    "filePos": 1614,
+                                    "tokenPos": 119,
+                                    "endLine": 58,
+                                    "endFilePos": 1651,
+                                    "endTokenPos": 119
+                                  }
+                                ],
+                                "endLine": 59
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 59,
+                              "comments": [
+                                {
+                                  "nodeType": "Comment",
+                                  "text": "/* translators: Accessibility text. */",
+                                  "line": 58,
+                                  "filePos": 1614,
+                                  "tokenPos": 119,
+                                  "endLine": 58,
+                                  "endFilePos": 1651,
+                                  "endTokenPos": 119
+                                }
+                              ],
+                              "endLine": 59
+                            }
+                          }
+                        ],
+                        "attributes": {
+                          "startLine": 56,
+                          "endLine": 60
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 56,
+                        "endLine": 60
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 51,
+                    "endLine": 61
+                  }
+                },
+                "attributes": {
+                  "startLine": 51,
+                  "endLine": 61
+                }
+              },
+              {
+                "nodeType": "Stmt_InlineHTML",
+                "value": "\t\t\t\t\t\t\t</em>\n\t\t\t\t\t\t</p>\n\t\t\t\t\t<# } else { #>\n\t\t\t\t\t\t<p>",
+                "attributes": {
+                  "startLine": 63,
+                  "hasLeadingNewline": true,
+                  "endLine": 66
+                }
+              },
+              {
+                "nodeType": "Stmt_Echo",
+                "exprs": [
+                  {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "_x"
+                      ],
+                      "attributes": {
+                        "startLine": 66,
+                        "endLine": 66
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Scalar_String",
+                          "value": "Here&#8217;s where this menu appears. If you&#8217;d like to change that, pick another location.",
+                          "attributes": {
+                            "startLine": 66,
+                            "endLine": 66,
+                            "kind": 1
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 66,
+                          "endLine": 66
+                        }
+                      },
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Scalar_String",
+                          "value": "menu locations",
+                          "attributes": {
+                            "startLine": 66,
+                            "endLine": 66,
+                            "kind": 1
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 66,
+                          "endLine": 66
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 66,
+                      "endLine": 66
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 66,
+                  "endLine": 66
+                }
+              },
+              {
+                "nodeType": "Stmt_InlineHTML",
+                "value": "</p>\n\t\t\t\t\t<# } #>\n\t\t\t\t</li>\n\n\t\t\t\t",
+                "attributes": {
+                  "startLine": 66,
+                  "hasLeadingNewline": false,
+                  "endLine": 70
+                }
+              },
+              {
+                "nodeType": "Stmt_Foreach",
+                "expr": {
+                  "nodeType": "Expr_FuncCall",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "get_registered_nav_menus"
+                    ],
+                    "attributes": {
+                      "startLine": 70,
+                      "endLine": 70
+                    }
+                  },
+                  "args": [],
+                  "attributes": {
+                    "startLine": 70,
+                    "endLine": 70
+                  }
+                },
+                "keyVar": {
+                  "nodeType": "Expr_Variable",
+                  "name": "location",
+                  "attributes": {
+                    "startLine": 70,
+                    "endLine": 70
+                  }
+                },
+                "byRef": false,
+                "valueVar": {
+                  "nodeType": "Expr_Variable",
+                  "name": "description",
+                  "attributes": {
+                    "startLine": 70,
+                    "endLine": 70
+                  }
+                },
+                "stmts": [
+                  {
+                    "nodeType": "Stmt_InlineHTML",
+                    "value": "\t\t\t\t\t<# elementId = _.uniqueId( 'customize-nav-menu-control-location-' ); #>\n\t\t\t\t\t<li class=\"customize-control customize-control-checkbox assigned-menu-location\">\n\t\t\t\t\t\t<span class=\"customize-inside-control-row\">\n\t\t\t\t\t\t\t<input id=\"{{ elementId }}\" type=\"checkbox\" data-menu-id=\"{{ data.menu_id }}\" data-location-id=\"",
+                    "attributes": {
+                      "startLine": 71,
+                      "hasLeadingNewline": true,
+                      "endLine": 74
+                    }
+                  },
+                  {
+                    "nodeType": "Stmt_Echo",
+                    "exprs": [
+                      {
+                        "nodeType": "Expr_FuncCall",
+                        "name": {
+                          "nodeType": "Name",
+                          "parts": [
+                            "esc_attr"
+                          ],
+                          "attributes": {
+                            "startLine": 74,
+                            "endLine": 74
+                          }
+                        },
+                        "args": [
+                          {
+                            "nodeType": "Arg",
+                            "value": {
+                              "nodeType": "Expr_Variable",
+                              "name": "location",
+                              "attributes": {
+                                "startLine": 74,
+                                "endLine": 74
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 74,
+                              "endLine": 74
+                            }
+                          }
+                        ],
+                        "attributes": {
+                          "startLine": 74,
+                          "endLine": 74
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 74,
+                      "endLine": 74
+                    }
+                  },
+                  {
+                    "nodeType": "Stmt_InlineHTML",
+                    "value": "\" class=\"menu-location\" />\n\t\t\t\t\t\t\t<label for=\"{{ elementId }}\">\n\t\t\t\t\t\t\t\t",
+                    "attributes": {
+                      "startLine": 74,
+                      "hasLeadingNewline": false,
+                      "endLine": 76
+                    }
+                  },
+                  {
+                    "nodeType": "Stmt_Echo",
+                    "exprs": [
+                      {
+                        "nodeType": "Expr_Variable",
+                        "name": "description",
+                        "attributes": {
+                          "startLine": 76,
+                          "endLine": 76
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 76,
+                      "endLine": 76
+                    }
+                  },
+                  {
+                    "nodeType": "Stmt_InlineHTML",
+                    "value": "\t\t\t\t\t\t\t\t<span class=\"theme-location-set\">\n\t\t\t\t\t\t\t\t\t",
+                    "attributes": {
+                      "startLine": 77,
+                      "hasLeadingNewline": true,
+                      "endLine": 78
+                    }
+                  },
+                  {
+                    "nodeType": "Stmt_Expression",
+                    "expr": {
+                      "nodeType": "Expr_FuncCall",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "printf"
+                        ],
+                        "attributes": {
+                          "startLine": 79,
+                          "endLine": 79
+                        }
+                      },
+                      "args": [
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Expr_FuncCall",
+                            "name": {
+                              "nodeType": "Name",
+                              "parts": [
+                                "_x"
+                              ],
+                              "attributes": {
+                                "startLine": 81,
+                                "comments": [
+                                  {
+                                    "nodeType": "Comment",
+                                    "text": "/* translators: %s: Menu name. */",
+                                    "line": 80,
+                                    "filePos": 2563,
+                                    "tokenPos": 200,
+                                    "endLine": 80,
+                                    "endFilePos": 2595,
+                                    "endTokenPos": 200
+                                  }
+                                ],
+                                "endLine": 81
+                              }
+                            },
+                            "args": [
+                              {
+                                "nodeType": "Arg",
+                                "value": {
+                                  "nodeType": "Scalar_String",
+                                  "value": "(Current: %s)",
+                                  "attributes": {
+                                    "startLine": 81,
+                                    "endLine": 81,
+                                    "kind": 1
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 81,
+                                  "endLine": 81
+                                }
+                              },
+                              {
+                                "nodeType": "Arg",
+                                "value": {
+                                  "nodeType": "Scalar_String",
+                                  "value": "menu location",
+                                  "attributes": {
+                                    "startLine": 81,
+                                    "endLine": 81,
+                                    "kind": 1
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 81,
+                                  "endLine": 81
+                                }
+                              }
+                            ],
+                            "attributes": {
+                              "startLine": 81,
+                              "comments": [
+                                {
+                                  "nodeType": "Comment",
+                                  "text": "/* translators: %s: Menu name. */",
+                                  "line": 80,
+                                  "filePos": 2563,
+                                  "tokenPos": 200,
+                                  "endLine": 80,
+                                  "endFilePos": 2595,
+                                  "endTokenPos": 200
+                                }
+                              ],
+                              "endLine": 81
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 81,
+                            "comments": [
+                              {
+                                "nodeType": "Comment",
+                                "text": "/* translators: %s: Menu name. */",
+                                "line": 80,
+                                "filePos": 2563,
+                                "tokenPos": 200,
+                                "endLine": 80,
+                                "endFilePos": 2595,
+                                "endTokenPos": 200
+                              }
+                            ],
+                            "endLine": 81
+                          }
+                        },
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Expr_BinaryOp_Concat",
+                            "left": {
+                              "nodeType": "Expr_BinaryOp_Concat",
+                              "left": {
+                                "nodeType": "Scalar_String",
+                                "value": "<span class=\"current-menu-location-name-",
+                                "attributes": {
+                                  "startLine": 82,
+                                  "endLine": 82,
+                                  "kind": 1
+                                }
+                              },
+                              "right": {
+                                "nodeType": "Expr_FuncCall",
+                                "name": {
+                                  "nodeType": "Name",
+                                  "parts": [
+                                    "esc_attr"
+                                  ],
+                                  "attributes": {
+                                    "startLine": 82,
+                                    "endLine": 82
+                                  }
+                                },
+                                "args": [
+                                  {
+                                    "nodeType": "Arg",
+                                    "value": {
+                                      "nodeType": "Expr_Variable",
+                                      "name": "location",
+                                      "attributes": {
+                                        "startLine": 82,
+                                        "endLine": 82
+                                      }
+                                    },
+                                    "byRef": false,
+                                    "unpack": false,
+                                    "attributes": {
+                                      "startLine": 82,
+                                      "endLine": 82
+                                    }
+                                  }
+                                ],
+                                "attributes": {
+                                  "startLine": 82,
+                                  "endLine": 82
+                                }
+                              },
+                              "attributes": {
+                                "startLine": 82,
+                                "endLine": 82
+                              }
+                            },
+                            "right": {
+                              "nodeType": "Scalar_String",
+                              "value": "\"></span>",
+                              "attributes": {
+                                "startLine": 82,
+                                "endLine": 82,
+                                "kind": 1
+                              }
+                            },
+                            "attributes": {
+                              "startLine": 82,
+                              "endLine": 82
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 82,
+                            "endLine": 82
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 79,
+                        "endLine": 83
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 79,
+                      "endLine": 83
+                    }
+                  },
+                  {
+                    "nodeType": "Stmt_InlineHTML",
+                    "value": "\t\t\t\t\t\t\t\t</span>\n\t\t\t\t\t\t\t</label>\n\t\t\t\t\t\t</span>\n\t\t\t\t\t</li>\n\t\t\t\t",
+                    "attributes": {
+                      "startLine": 85,
+                      "hasLeadingNewline": true,
+                      "endLine": 89
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 70,
+                  "endLine": 89
+                }
+              },
+              {
+                "nodeType": "Stmt_InlineHTML",
+                "value": "\t\t\t</ul>\n\t\t\t",
+                "attributes": {
+                  "startLine": 90,
+                  "hasLeadingNewline": true,
+                  "endLine": 91
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 40,
+              "endLine": 92
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 39,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * JS/Underscore template for the control UI.\n\t *\n\t * @since 4.9.0\n\t */",
+              "line": 34,
+              "filePos": 575,
+              "tokenPos": 39,
+              "endLine": 38,
+              "endFilePos": 650,
+              "endTokenPos": 39
+            }
+          ],
+          "endLine": 93
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 17,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Customize API: WP_Customize_Nav_Menu_Locations_Control class\n *\n * @package WordPress\n * @subpackage Customize\n * @since 4.9.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 8,
+          "endFilePos": 142,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Customize Nav Menu Locations Control Class.\n *\n * @since 4.9.0\n *\n * @see WP_Customize_Control\n */",
+          "line": 10,
+          "filePos": 145,
+          "tokenPos": 3,
+          "endLine": 16,
+          "endFilePos": 249,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 94
+    }
+  }
+]

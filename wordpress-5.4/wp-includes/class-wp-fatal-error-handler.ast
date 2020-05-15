@@ -1,0 +1,3378 @@
+[
+  {
+    "nodeType": "Stmt_Class",
+    "flags": 0,
+    "extends": null,
+    "implements": [],
+    "name": {
+      "nodeType": "Identifier",
+      "name": "WP_Fatal_Error_Handler",
+      "attributes": {
+        "startLine": 19,
+        "endLine": 19
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "handle",
+          "attributes": {
+            "startLine": 28,
+            "endLine": 28
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BinaryOp_BooleanAnd",
+              "left": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "defined"
+                  ],
+                  "attributes": {
+                    "startLine": 29,
+                    "endLine": 29
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "WP_SANDBOX_SCRAPING",
+                      "attributes": {
+                        "startLine": 29,
+                        "endLine": 29,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 29,
+                      "endLine": 29
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 29,
+                  "endLine": 29
+                }
+              },
+              "right": {
+                "nodeType": "Expr_ConstFetch",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "WP_SANDBOX_SCRAPING"
+                  ],
+                  "attributes": {
+                    "startLine": 29,
+                    "endLine": 29
+                  }
+                },
+                "attributes": {
+                  "startLine": 29,
+                  "endLine": 29
+                }
+              },
+              "attributes": {
+                "startLine": 29,
+                "endLine": 29
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Return",
+                "expr": null,
+                "attributes": {
+                  "startLine": 30,
+                  "endLine": 30
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 29,
+              "endLine": 31
+            }
+          },
+          {
+            "nodeType": "Stmt_TryCatch",
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "error",
+                    "attributes": {
+                      "startLine": 35,
+                      "comments": [
+                        {
+                          "nodeType": "Comment",
+                          "text": "// Bail if no error found.\n",
+                          "line": 34,
+                          "filePos": 852,
+                          "tokenPos": 51,
+                          "endLine": 35,
+                          "endFilePos": 878,
+                          "endTokenPos": 51
+                        }
+                      ],
+                      "endLine": 35
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_MethodCall",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "this",
+                      "attributes": {
+                        "startLine": 35,
+                        "endLine": 35
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "detect_error",
+                      "attributes": {
+                        "startLine": 35,
+                        "endLine": 35
+                      }
+                    },
+                    "args": [],
+                    "attributes": {
+                      "startLine": 35,
+                      "endLine": 35
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 35,
+                    "comments": [
+                      {
+                        "nodeType": "Comment",
+                        "text": "// Bail if no error found.\n",
+                        "line": 34,
+                        "filePos": 852,
+                        "tokenPos": 51,
+                        "endLine": 35,
+                        "endFilePos": 878,
+                        "endTokenPos": 51
+                      }
+                    ],
+                    "endLine": 35
+                  }
+                },
+                "attributes": {
+                  "startLine": 35,
+                  "comments": [
+                    {
+                      "nodeType": "Comment",
+                      "text": "// Bail if no error found.\n",
+                      "line": 34,
+                      "filePos": 852,
+                      "tokenPos": 51,
+                      "endLine": 35,
+                      "endFilePos": 878,
+                      "endTokenPos": 51
+                    }
+                  ],
+                  "endLine": 35
+                }
+              },
+              {
+                "nodeType": "Stmt_If",
+                "cond": {
+                  "nodeType": "Expr_BooleanNot",
+                  "expr": {
+                    "nodeType": "Expr_Variable",
+                    "name": "error",
+                    "attributes": {
+                      "startLine": 36,
+                      "endLine": 36
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 36,
+                    "endLine": 36
+                  }
+                },
+                "stmts": [
+                  {
+                    "nodeType": "Stmt_Return",
+                    "expr": null,
+                    "attributes": {
+                      "startLine": 37,
+                      "endLine": 37
+                    }
+                  }
+                ],
+                "elseifs": [],
+                "else": null,
+                "attributes": {
+                  "startLine": 36,
+                  "endLine": 38
+                }
+              },
+              {
+                "nodeType": "Stmt_If",
+                "cond": {
+                  "nodeType": "Expr_BinaryOp_BooleanAnd",
+                  "left": {
+                    "nodeType": "Expr_BooleanNot",
+                    "expr": {
+                      "nodeType": "Expr_Isset",
+                      "vars": [
+                        {
+                          "nodeType": "Expr_ArrayDimFetch",
+                          "var": {
+                            "nodeType": "Expr_Variable",
+                            "name": "GLOBALS",
+                            "attributes": {
+                              "startLine": 40,
+                              "endLine": 40
+                            }
+                          },
+                          "dim": {
+                            "nodeType": "Scalar_String",
+                            "value": "wp_locale",
+                            "attributes": {
+                              "startLine": 40,
+                              "endLine": 40,
+                              "kind": 1
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 40,
+                            "endLine": 40
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 40,
+                        "endLine": 40
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 40,
+                      "endLine": 40
+                    }
+                  },
+                  "right": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "function_exists"
+                      ],
+                      "attributes": {
+                        "startLine": 40,
+                        "endLine": 40
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Scalar_String",
+                          "value": "load_default_textdomain",
+                          "attributes": {
+                            "startLine": 40,
+                            "endLine": 40,
+                            "kind": 1
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 40,
+                          "endLine": 40
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 40,
+                      "endLine": 40
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 40,
+                    "endLine": 40
+                  }
+                },
+                "stmts": [
+                  {
+                    "nodeType": "Stmt_Expression",
+                    "expr": {
+                      "nodeType": "Expr_FuncCall",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "load_default_textdomain"
+                        ],
+                        "attributes": {
+                          "startLine": 41,
+                          "endLine": 41
+                        }
+                      },
+                      "args": [],
+                      "attributes": {
+                        "startLine": 41,
+                        "endLine": 41
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 41,
+                      "endLine": 41
+                    }
+                  }
+                ],
+                "elseifs": [],
+                "else": null,
+                "attributes": {
+                  "startLine": 40,
+                  "endLine": 42
+                }
+              },
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "handled",
+                    "attributes": {
+                      "startLine": 44,
+                      "endLine": 44
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_ConstFetch",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "false"
+                      ],
+                      "attributes": {
+                        "startLine": 44,
+                        "endLine": 44
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 44,
+                      "endLine": 44
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 44,
+                    "endLine": 44
+                  }
+                },
+                "attributes": {
+                  "startLine": 44,
+                  "endLine": 44
+                }
+              },
+              {
+                "nodeType": "Stmt_If",
+                "cond": {
+                  "nodeType": "Expr_BinaryOp_BooleanAnd",
+                  "left": {
+                    "nodeType": "Expr_BooleanNot",
+                    "expr": {
+                      "nodeType": "Expr_FuncCall",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "is_multisite"
+                        ],
+                        "attributes": {
+                          "startLine": 46,
+                          "endLine": 46
+                        }
+                      },
+                      "args": [],
+                      "attributes": {
+                        "startLine": 46,
+                        "endLine": 46
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 46,
+                      "endLine": 46
+                    }
+                  },
+                  "right": {
+                    "nodeType": "Expr_MethodCall",
+                    "var": {
+                      "nodeType": "Expr_FuncCall",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "wp_recovery_mode"
+                        ],
+                        "attributes": {
+                          "startLine": 46,
+                          "endLine": 46
+                        }
+                      },
+                      "args": [],
+                      "attributes": {
+                        "startLine": 46,
+                        "endLine": 46
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "is_initialized",
+                      "attributes": {
+                        "startLine": 46,
+                        "endLine": 46
+                      }
+                    },
+                    "args": [],
+                    "attributes": {
+                      "startLine": 46,
+                      "endLine": 46
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 46,
+                    "endLine": 46
+                  }
+                },
+                "stmts": [
+                  {
+                    "nodeType": "Stmt_Expression",
+                    "expr": {
+                      "nodeType": "Expr_Assign",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "handled",
+                        "attributes": {
+                          "startLine": 47,
+                          "endLine": 47
+                        }
+                      },
+                      "expr": {
+                        "nodeType": "Expr_MethodCall",
+                        "var": {
+                          "nodeType": "Expr_FuncCall",
+                          "name": {
+                            "nodeType": "Name",
+                            "parts": [
+                              "wp_recovery_mode"
+                            ],
+                            "attributes": {
+                              "startLine": 47,
+                              "endLine": 47
+                            }
+                          },
+                          "args": [],
+                          "attributes": {
+                            "startLine": 47,
+                            "endLine": 47
+                          }
+                        },
+                        "name": {
+                          "nodeType": "Identifier",
+                          "name": "handle_error",
+                          "attributes": {
+                            "startLine": 47,
+                            "endLine": 47
+                          }
+                        },
+                        "args": [
+                          {
+                            "nodeType": "Arg",
+                            "value": {
+                              "nodeType": "Expr_Variable",
+                              "name": "error",
+                              "attributes": {
+                                "startLine": 47,
+                                "endLine": 47
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 47,
+                              "endLine": 47
+                            }
+                          }
+                        ],
+                        "attributes": {
+                          "startLine": 47,
+                          "endLine": 47
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 47,
+                        "endLine": 47
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 47,
+                      "endLine": 47
+                    }
+                  }
+                ],
+                "elseifs": [],
+                "else": null,
+                "attributes": {
+                  "startLine": 46,
+                  "endLine": 48
+                }
+              },
+              {
+                "nodeType": "Stmt_If",
+                "cond": {
+                  "nodeType": "Expr_BinaryOp_BooleanOr",
+                  "left": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "is_admin"
+                      ],
+                      "attributes": {
+                        "startLine": 51,
+                        "endLine": 51
+                      }
+                    },
+                    "args": [],
+                    "attributes": {
+                      "startLine": 51,
+                      "endLine": 51
+                    }
+                  },
+                  "right": {
+                    "nodeType": "Expr_BooleanNot",
+                    "expr": {
+                      "nodeType": "Expr_FuncCall",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "headers_sent"
+                        ],
+                        "attributes": {
+                          "startLine": 51,
+                          "endLine": 51
+                        }
+                      },
+                      "args": [],
+                      "attributes": {
+                        "startLine": 51,
+                        "endLine": 51
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 51,
+                      "endLine": 51
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 51,
+                    "endLine": 51
+                  }
+                },
+                "stmts": [
+                  {
+                    "nodeType": "Stmt_Expression",
+                    "expr": {
+                      "nodeType": "Expr_MethodCall",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "this",
+                        "attributes": {
+                          "startLine": 52,
+                          "endLine": 52
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "display_error_template",
+                        "attributes": {
+                          "startLine": 52,
+                          "endLine": 52
+                        }
+                      },
+                      "args": [
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Expr_Variable",
+                            "name": "error",
+                            "attributes": {
+                              "startLine": 52,
+                              "endLine": 52
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 52,
+                            "endLine": 52
+                          }
+                        },
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Expr_Variable",
+                            "name": "handled",
+                            "attributes": {
+                              "startLine": 52,
+                              "endLine": 52
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 52,
+                            "endLine": 52
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 52,
+                        "endLine": 52
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 52,
+                      "endLine": 52
+                    }
+                  }
+                ],
+                "elseifs": [],
+                "else": null,
+                "attributes": {
+                  "startLine": 51,
+                  "comments": [
+                    {
+                      "nodeType": "Comment",
+                      "text": "// Display the PHP error template if headers not sent.\n",
+                      "line": 50,
+                      "filePos": 1242,
+                      "tokenPos": 166,
+                      "endLine": 51,
+                      "endFilePos": 1296,
+                      "endTokenPos": 166
+                    }
+                  ],
+                  "endLine": 53
+                }
+              }
+            ],
+            "catches": [
+              {
+                "nodeType": "Stmt_Catch",
+                "types": [
+                  {
+                    "nodeType": "Name",
+                    "parts": [
+                      "Exception"
+                    ],
+                    "attributes": {
+                      "startLine": 54,
+                      "endLine": 54
+                    }
+                  }
+                ],
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "e",
+                  "attributes": {
+                    "startLine": 54,
+                    "endLine": 54
+                  }
+                },
+                "stmts": [
+                  {
+                    "nodeType": "Stmt_Nop",
+                    "attributes": {
+                      "comments": [
+                        {
+                          "nodeType": "Comment",
+                          "text": "// Catch exceptions and remain silent.\n",
+                          "line": 55,
+                          "filePos": 1432,
+                          "tokenPos": 217,
+                          "endLine": 56,
+                          "endFilePos": 1470,
+                          "endTokenPos": 217
+                        }
+                      ],
+                      "startLine": 56,
+                      "endLine": 56,
+                      "startFilePos": 1471,
+                      "endFilePos": 1470,
+                      "startTokenPos": 218,
+                      "endTokenPos": 217
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 54,
+                  "endLine": 56
+                }
+              }
+            ],
+            "finally": null,
+            "attributes": {
+              "startLine": 33,
+              "endLine": 56
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 28,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Runs the shutdown handler.\n\t *\n\t * This method is registered via `register_shutdown_function()`.\n\t *\n\t * @since 5.2.0\n\t */",
+              "line": 21,
+              "filePos": 599,
+              "tokenPos": 11,
+              "endLine": 27,
+              "endFilePos": 728,
+              "endTokenPos": 11
+            }
+          ],
+          "endLine": 57
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 2,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "detect_error",
+          "attributes": {
+            "startLine": 66,
+            "endLine": 66
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "error",
+                "attributes": {
+                  "startLine": 67,
+                  "endLine": 67
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "error_get_last"
+                  ],
+                  "attributes": {
+                    "startLine": 67,
+                    "endLine": 67
+                  }
+                },
+                "args": [],
+                "attributes": {
+                  "startLine": 67,
+                  "endLine": 67
+                }
+              },
+              "attributes": {
+                "startLine": 67,
+                "endLine": 67
+              }
+            },
+            "attributes": {
+              "startLine": 67,
+              "endLine": 67
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BinaryOp_Identical",
+              "left": {
+                "nodeType": "Expr_ConstFetch",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "null"
+                  ],
+                  "attributes": {
+                    "startLine": 70,
+                    "endLine": 70
+                  }
+                },
+                "attributes": {
+                  "startLine": 70,
+                  "endLine": 70
+                }
+              },
+              "right": {
+                "nodeType": "Expr_Variable",
+                "name": "error",
+                "attributes": {
+                  "startLine": 70,
+                  "endLine": 70
+                }
+              },
+              "attributes": {
+                "startLine": 70,
+                "endLine": 70
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Return",
+                "expr": {
+                  "nodeType": "Expr_ConstFetch",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "null"
+                    ],
+                    "attributes": {
+                      "startLine": 71,
+                      "endLine": 71
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 71,
+                    "endLine": 71
+                  }
+                },
+                "attributes": {
+                  "startLine": 71,
+                  "endLine": 71
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 70,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// No error, just skip the error handling code.\n",
+                  "line": 69,
+                  "filePos": 1765,
+                  "tokenPos": 244,
+                  "endLine": 70,
+                  "endFilePos": 1812,
+                  "endTokenPos": 244
+                }
+              ],
+              "endLine": 72
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BooleanNot",
+              "expr": {
+                "nodeType": "Expr_MethodCall",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "this",
+                  "attributes": {
+                    "startLine": 75,
+                    "endLine": 75
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "should_handle_error",
+                  "attributes": {
+                    "startLine": 75,
+                    "endLine": 75
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "error",
+                      "attributes": {
+                        "startLine": 75,
+                        "endLine": 75
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 75,
+                      "endLine": 75
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 75,
+                  "endLine": 75
+                }
+              },
+              "attributes": {
+                "startLine": 75,
+                "endLine": 75
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Return",
+                "expr": {
+                  "nodeType": "Expr_ConstFetch",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "null"
+                    ],
+                    "attributes": {
+                      "startLine": 76,
+                      "endLine": 76
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 76,
+                    "endLine": 76
+                  }
+                },
+                "attributes": {
+                  "startLine": 76,
+                  "endLine": 76
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 75,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// Bail if this error should not be handled.\n",
+                  "line": 74,
+                  "filePos": 1863,
+                  "tokenPos": 267,
+                  "endLine": 75,
+                  "endFilePos": 1907,
+                  "endTokenPos": 267
+                }
+              ],
+              "endLine": 77
+            }
+          },
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_Variable",
+              "name": "error",
+              "attributes": {
+                "startLine": 79,
+                "endLine": 79
+              }
+            },
+            "attributes": {
+              "startLine": 79,
+              "endLine": 79
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 66,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Detects the error causing the crash if it should be handled.\n\t *\n\t * @since 5.2.0\n\t *\n\t * @return array|null Error that was triggered, or null if no error received or if the error should not be handled.\n\t */",
+              "line": 59,
+              "filePos": 1480,
+              "tokenPos": 223,
+              "endLine": 65,
+              "endFilePos": 1694,
+              "endTokenPos": 223
+            }
+          ],
+          "endLine": 80
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 2,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "should_handle_error",
+          "attributes": {
+            "startLine": 91,
+            "endLine": 91
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "error",
+              "attributes": {
+                "startLine": 91,
+                "endLine": 91
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 91,
+              "endLine": 91
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "error_types_to_handle",
+                "attributes": {
+                  "startLine": 92,
+                  "endLine": 92
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Array",
+                "items": [
+                  {
+                    "nodeType": "Expr_ArrayItem",
+                    "key": null,
+                    "value": {
+                      "nodeType": "Expr_ConstFetch",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "E_ERROR"
+                        ],
+                        "attributes": {
+                          "startLine": 93,
+                          "endLine": 93
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 93,
+                        "endLine": 93
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 93,
+                      "endLine": 93
+                    }
+                  },
+                  {
+                    "nodeType": "Expr_ArrayItem",
+                    "key": null,
+                    "value": {
+                      "nodeType": "Expr_ConstFetch",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "E_PARSE"
+                        ],
+                        "attributes": {
+                          "startLine": 94,
+                          "endLine": 94
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 94,
+                        "endLine": 94
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 94,
+                      "endLine": 94
+                    }
+                  },
+                  {
+                    "nodeType": "Expr_ArrayItem",
+                    "key": null,
+                    "value": {
+                      "nodeType": "Expr_ConstFetch",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "E_USER_ERROR"
+                        ],
+                        "attributes": {
+                          "startLine": 95,
+                          "endLine": 95
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 95,
+                        "endLine": 95
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 95,
+                      "endLine": 95
+                    }
+                  },
+                  {
+                    "nodeType": "Expr_ArrayItem",
+                    "key": null,
+                    "value": {
+                      "nodeType": "Expr_ConstFetch",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "E_COMPILE_ERROR"
+                        ],
+                        "attributes": {
+                          "startLine": 96,
+                          "endLine": 96
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 96,
+                        "endLine": 96
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 96,
+                      "endLine": 96
+                    }
+                  },
+                  {
+                    "nodeType": "Expr_ArrayItem",
+                    "key": null,
+                    "value": {
+                      "nodeType": "Expr_ConstFetch",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "E_RECOVERABLE_ERROR"
+                        ],
+                        "attributes": {
+                          "startLine": 97,
+                          "endLine": 97
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 97,
+                        "endLine": 97
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 97,
+                      "endLine": 97
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 92,
+                  "endLine": 98,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 92,
+                "endLine": 98
+              }
+            },
+            "attributes": {
+              "startLine": 92,
+              "endLine": 98
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BinaryOp_BooleanAnd",
+              "left": {
+                "nodeType": "Expr_Isset",
+                "vars": [
+                  {
+                    "nodeType": "Expr_ArrayDimFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "error",
+                      "attributes": {
+                        "startLine": 100,
+                        "endLine": 100
+                      }
+                    },
+                    "dim": {
+                      "nodeType": "Scalar_String",
+                      "value": "type",
+                      "attributes": {
+                        "startLine": 100,
+                        "endLine": 100,
+                        "kind": 1
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 100,
+                      "endLine": 100
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 100,
+                  "endLine": 100
+                }
+              },
+              "right": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "in_array"
+                  ],
+                  "attributes": {
+                    "startLine": 100,
+                    "endLine": 100
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_ArrayDimFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "error",
+                        "attributes": {
+                          "startLine": 100,
+                          "endLine": 100
+                        }
+                      },
+                      "dim": {
+                        "nodeType": "Scalar_String",
+                        "value": "type",
+                        "attributes": {
+                          "startLine": 100,
+                          "endLine": 100,
+                          "kind": 1
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 100,
+                        "endLine": 100
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 100,
+                      "endLine": 100
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "error_types_to_handle",
+                      "attributes": {
+                        "startLine": 100,
+                        "endLine": 100
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 100,
+                      "endLine": 100
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_ConstFetch",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "true"
+                        ],
+                        "attributes": {
+                          "startLine": 100,
+                          "endLine": 100
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 100,
+                        "endLine": 100
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 100,
+                      "endLine": 100
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 100,
+                  "endLine": 100
+                }
+              },
+              "attributes": {
+                "startLine": 100,
+                "endLine": 100
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Return",
+                "expr": {
+                  "nodeType": "Expr_ConstFetch",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "true"
+                    ],
+                    "attributes": {
+                      "startLine": 101,
+                      "endLine": 101
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 101,
+                    "endLine": 101
+                  }
+                },
+                "attributes": {
+                  "startLine": 101,
+                  "endLine": 101
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 100,
+              "endLine": 102
+            }
+          },
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_Cast_Bool",
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "apply_filters"
+                  ],
+                  "attributes": {
+                    "startLine": 116,
+                    "endLine": 116
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "wp_should_handle_php_error",
+                      "attributes": {
+                        "startLine": 116,
+                        "endLine": 116,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 116,
+                      "endLine": 116
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_ConstFetch",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "false"
+                        ],
+                        "attributes": {
+                          "startLine": 116,
+                          "endLine": 116
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 116,
+                        "endLine": 116
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 116,
+                      "endLine": 116
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "error",
+                      "attributes": {
+                        "startLine": 116,
+                        "endLine": 116
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 116,
+                      "endLine": 116
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 116,
+                  "endLine": 116
+                }
+              },
+              "attributes": {
+                "startLine": 116,
+                "endLine": 116
+              }
+            },
+            "attributes": {
+              "startLine": 116,
+              "comments": [
+                {
+                  "nodeType": "Comment_Doc",
+                  "text": "/**\n\t\t * Filters whether a given thrown error should be handled by the fatal error handler.\n\t\t *\n\t\t * This filter is only fired if the error is not already configured to be handled by WordPress core. As such,\n\t\t * it exclusively allows adding further rules for which errors should be handled, but not removing existing\n\t\t * ones.\n\t\t *\n\t\t * @since 5.2.0\n\t\t *\n\t\t * @param bool  $should_handle_error Whether the error should be handled by the fatal error handler.\n\t\t * @param array $error               Error information retrieved from error_get_last().\n\t\t */",
+                  "line": 104,
+                  "filePos": 2604,
+                  "tokenPos": 385,
+                  "endLine": 115,
+                  "endFilePos": 3159,
+                  "endTokenPos": 385
+                }
+              ],
+              "endLine": 116
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 91,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Determines whether we are dealing with an error that WordPress should handle\n\t * in order to protect the admin backend against WSODs.\n\t *\n\t * @since 5.2.0\n\t *\n\t * @param array $error Error information retrieved from error_get_last().\n\t * @return bool Whether WordPress should handle this error.\n\t */",
+              "line": 82,
+              "filePos": 2001,
+              "tokenPos": 302,
+              "endLine": 90,
+              "endFilePos": 2307,
+              "endTokenPos": 302
+            }
+          ],
+          "endLine": 117
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 2,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "display_error_template",
+          "attributes": {
+            "startLine": 135,
+            "endLine": 135
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "error",
+              "attributes": {
+                "startLine": 135,
+                "endLine": 135
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 135,
+              "endLine": 135
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "handled",
+              "attributes": {
+                "startLine": 135,
+                "endLine": 135
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 135,
+              "endLine": 135
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "defined"
+                ],
+                "attributes": {
+                  "startLine": 136,
+                  "endLine": 136
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "WP_CONTENT_DIR",
+                    "attributes": {
+                      "startLine": 136,
+                      "endLine": 136,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 136,
+                    "endLine": 136
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 136,
+                "endLine": 136
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "php_error_pluggable",
+                    "attributes": {
+                      "startLine": 138,
+                      "comments": [
+                        {
+                          "nodeType": "Comment",
+                          "text": "// Load custom PHP error template, if present.\n",
+                          "line": 137,
+                          "filePos": 4215,
+                          "tokenPos": 440,
+                          "endLine": 138,
+                          "endFilePos": 4261,
+                          "endTokenPos": 440
+                        }
+                      ],
+                      "endLine": 138
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_BinaryOp_Concat",
+                    "left": {
+                      "nodeType": "Expr_ConstFetch",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "WP_CONTENT_DIR"
+                        ],
+                        "attributes": {
+                          "startLine": 138,
+                          "endLine": 138
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 138,
+                        "endLine": 138
+                      }
+                    },
+                    "right": {
+                      "nodeType": "Scalar_String",
+                      "value": "/php-error.php",
+                      "attributes": {
+                        "startLine": 138,
+                        "endLine": 138,
+                        "kind": 1
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 138,
+                      "endLine": 138
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 138,
+                    "comments": [
+                      {
+                        "nodeType": "Comment",
+                        "text": "// Load custom PHP error template, if present.\n",
+                        "line": 137,
+                        "filePos": 4215,
+                        "tokenPos": 440,
+                        "endLine": 138,
+                        "endFilePos": 4261,
+                        "endTokenPos": 440
+                      }
+                    ],
+                    "endLine": 138
+                  }
+                },
+                "attributes": {
+                  "startLine": 138,
+                  "comments": [
+                    {
+                      "nodeType": "Comment",
+                      "text": "// Load custom PHP error template, if present.\n",
+                      "line": 137,
+                      "filePos": 4215,
+                      "tokenPos": 440,
+                      "endLine": 138,
+                      "endFilePos": 4261,
+                      "endTokenPos": 440
+                    }
+                  ],
+                  "endLine": 138
+                }
+              },
+              {
+                "nodeType": "Stmt_If",
+                "cond": {
+                  "nodeType": "Expr_FuncCall",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "is_readable"
+                    ],
+                    "attributes": {
+                      "startLine": 139,
+                      "endLine": 139
+                    }
+                  },
+                  "args": [
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Expr_Variable",
+                        "name": "php_error_pluggable",
+                        "attributes": {
+                          "startLine": 139,
+                          "endLine": 139
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 139,
+                        "endLine": 139
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 139,
+                    "endLine": 139
+                  }
+                },
+                "stmts": [
+                  {
+                    "nodeType": "Stmt_Expression",
+                    "expr": {
+                      "nodeType": "Expr_Include",
+                      "expr": {
+                        "nodeType": "Expr_Variable",
+                        "name": "php_error_pluggable",
+                        "attributes": {
+                          "startLine": 140,
+                          "endLine": 140
+                        }
+                      },
+                      "type": 4,
+                      "attributes": {
+                        "startLine": 140,
+                        "endLine": 140
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 140,
+                      "endLine": 140
+                    }
+                  },
+                  {
+                    "nodeType": "Stmt_Return",
+                    "expr": null,
+                    "attributes": {
+                      "startLine": 142,
+                      "endLine": 142
+                    }
+                  }
+                ],
+                "elseifs": [],
+                "else": null,
+                "attributes": {
+                  "startLine": 139,
+                  "endLine": 143
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 136,
+              "endLine": 144
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_MethodCall",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "this",
+                "attributes": {
+                  "startLine": 147,
+                  "comments": [
+                    {
+                      "nodeType": "Comment",
+                      "text": "// Otherwise, display the default error template.\n",
+                      "line": 146,
+                      "filePos": 4435,
+                      "tokenPos": 480,
+                      "endLine": 147,
+                      "endFilePos": 4484,
+                      "endTokenPos": 480
+                    }
+                  ],
+                  "endLine": 147
+                }
+              },
+              "name": {
+                "nodeType": "Identifier",
+                "name": "display_default_error_template",
+                "attributes": {
+                  "startLine": 147,
+                  "endLine": 147
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "error",
+                    "attributes": {
+                      "startLine": 147,
+                      "endLine": 147
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 147,
+                    "endLine": 147
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "handled",
+                    "attributes": {
+                      "startLine": 147,
+                      "endLine": 147
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 147,
+                    "endLine": 147
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 147,
+                "comments": [
+                  {
+                    "nodeType": "Comment",
+                    "text": "// Otherwise, display the default error template.\n",
+                    "line": 146,
+                    "filePos": 4435,
+                    "tokenPos": 480,
+                    "endLine": 147,
+                    "endFilePos": 4484,
+                    "endTokenPos": 480
+                  }
+                ],
+                "endLine": 147
+              }
+            },
+            "attributes": {
+              "startLine": 147,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// Otherwise, display the default error template.\n",
+                  "line": 146,
+                  "filePos": 4435,
+                  "tokenPos": 480,
+                  "endLine": 147,
+                  "endFilePos": 4484,
+                  "endTokenPos": 480
+                }
+              ],
+              "endLine": 147
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 135,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Displays the PHP error template and sends the HTTP status code, typically 500.\n\t *\n\t * A drop-in 'php-error.php' can be used as a custom template. This drop-in should control the HTTP status code and\n\t * print the HTML markup indicating that a PHP error occurred. Note that this drop-in may potentially be executed\n\t * very early in the WordPress bootstrap process, so any core functions used that are not part of\n\t * `wp-includes/load.php` should be checked for before being called.\n\t *\n\t * If no such drop-in is available, this will call {@see WP_Fatal_Error_Handler::display_default_error_template()}.\n\t *\n\t * @since 5.2.0\n\t * @since 5.3.0 The `$handled` parameter was added.\n\t *\n\t * @param array         $error   Error information retrieved from `error_get_last()`.\n\t * @param true|WP_Error $handled Whether Recovery Mode handled the fatal error.\n\t */",
+              "line": 119,
+              "filePos": 3244,
+              "tokenPos": 407,
+              "endLine": 134,
+              "endFilePos": 4106,
+              "endTokenPos": 407
+            }
+          ],
+          "endLine": 148
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 2,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "display_default_error_template",
+          "attributes": {
+            "startLine": 165,
+            "endLine": 165
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "error",
+              "attributes": {
+                "startLine": 165,
+                "endLine": 165
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 165,
+              "endLine": 165
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "handled",
+              "attributes": {
+                "startLine": 165,
+                "endLine": 165
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 165,
+              "endLine": 165
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BooleanNot",
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "function_exists"
+                  ],
+                  "attributes": {
+                    "startLine": 166,
+                    "endLine": 166
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "__",
+                      "attributes": {
+                        "startLine": 166,
+                        "endLine": 166,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 166,
+                      "endLine": 166
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 166,
+                  "endLine": 166
+                }
+              },
+              "attributes": {
+                "startLine": 166,
+                "endLine": 166
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_FuncCall",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "wp_load_translations_early"
+                    ],
+                    "attributes": {
+                      "startLine": 167,
+                      "endLine": 167
+                    }
+                  },
+                  "args": [],
+                  "attributes": {
+                    "startLine": 167,
+                    "endLine": 167
+                  }
+                },
+                "attributes": {
+                  "startLine": 167,
+                  "endLine": 167
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 166,
+              "endLine": 168
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BooleanNot",
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "function_exists"
+                  ],
+                  "attributes": {
+                    "startLine": 170,
+                    "endLine": 170
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "wp_die",
+                      "attributes": {
+                        "startLine": 170,
+                        "endLine": 170,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 170,
+                      "endLine": 170
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 170,
+                  "endLine": 170
+                }
+              },
+              "attributes": {
+                "startLine": 170,
+                "endLine": 170
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Include",
+                  "expr": {
+                    "nodeType": "Expr_BinaryOp_Concat",
+                    "left": {
+                      "nodeType": "Expr_BinaryOp_Concat",
+                      "left": {
+                        "nodeType": "Expr_ConstFetch",
+                        "name": {
+                          "nodeType": "Name",
+                          "parts": [
+                            "ABSPATH"
+                          ],
+                          "attributes": {
+                            "startLine": 171,
+                            "endLine": 171
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 171,
+                          "endLine": 171
+                        }
+                      },
+                      "right": {
+                        "nodeType": "Expr_ConstFetch",
+                        "name": {
+                          "nodeType": "Name",
+                          "parts": [
+                            "WPINC"
+                          ],
+                          "attributes": {
+                            "startLine": 171,
+                            "endLine": 171
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 171,
+                          "endLine": 171
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 171,
+                        "endLine": 171
+                      }
+                    },
+                    "right": {
+                      "nodeType": "Scalar_String",
+                      "value": "/functions.php",
+                      "attributes": {
+                        "startLine": 171,
+                        "endLine": 171,
+                        "kind": 1
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 171,
+                      "endLine": 171
+                    }
+                  },
+                  "type": 4,
+                  "attributes": {
+                    "startLine": 171,
+                    "endLine": 171
+                  }
+                },
+                "attributes": {
+                  "startLine": 171,
+                  "endLine": 171
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 170,
+              "endLine": 172
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BooleanNot",
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "class_exists"
+                  ],
+                  "attributes": {
+                    "startLine": 174,
+                    "endLine": 174
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "WP_Error",
+                      "attributes": {
+                        "startLine": 174,
+                        "endLine": 174,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 174,
+                      "endLine": 174
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 174,
+                  "endLine": 174
+                }
+              },
+              "attributes": {
+                "startLine": 174,
+                "endLine": 174
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Include",
+                  "expr": {
+                    "nodeType": "Expr_BinaryOp_Concat",
+                    "left": {
+                      "nodeType": "Expr_BinaryOp_Concat",
+                      "left": {
+                        "nodeType": "Expr_ConstFetch",
+                        "name": {
+                          "nodeType": "Name",
+                          "parts": [
+                            "ABSPATH"
+                          ],
+                          "attributes": {
+                            "startLine": 175,
+                            "endLine": 175
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 175,
+                          "endLine": 175
+                        }
+                      },
+                      "right": {
+                        "nodeType": "Expr_ConstFetch",
+                        "name": {
+                          "nodeType": "Name",
+                          "parts": [
+                            "WPINC"
+                          ],
+                          "attributes": {
+                            "startLine": 175,
+                            "endLine": 175
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 175,
+                          "endLine": 175
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 175,
+                        "endLine": 175
+                      }
+                    },
+                    "right": {
+                      "nodeType": "Scalar_String",
+                      "value": "/class-wp-error.php",
+                      "attributes": {
+                        "startLine": 175,
+                        "endLine": 175,
+                        "kind": 1
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 175,
+                      "endLine": 175
+                    }
+                  },
+                  "type": 4,
+                  "attributes": {
+                    "startLine": 175,
+                    "endLine": 175
+                  }
+                },
+                "attributes": {
+                  "startLine": 175,
+                  "endLine": 175
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 174,
+              "endLine": 176
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BinaryOp_BooleanAnd",
+              "left": {
+                "nodeType": "Expr_BinaryOp_Identical",
+                "left": {
+                  "nodeType": "Expr_ConstFetch",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "true"
+                    ],
+                    "attributes": {
+                      "startLine": 178,
+                      "endLine": 178
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 178,
+                    "endLine": 178
+                  }
+                },
+                "right": {
+                  "nodeType": "Expr_Variable",
+                  "name": "handled",
+                  "attributes": {
+                    "startLine": 178,
+                    "endLine": 178
+                  }
+                },
+                "attributes": {
+                  "startLine": 178,
+                  "endLine": 178
+                }
+              },
+              "right": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "wp_is_recovery_mode"
+                  ],
+                  "attributes": {
+                    "startLine": 178,
+                    "endLine": 178
+                  }
+                },
+                "args": [],
+                "attributes": {
+                  "startLine": 178,
+                  "endLine": 178
+                }
+              },
+              "attributes": {
+                "startLine": 178,
+                "endLine": 178
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "message",
+                    "attributes": {
+                      "startLine": 179,
+                      "endLine": 179
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "__"
+                      ],
+                      "attributes": {
+                        "startLine": 179,
+                        "endLine": 179
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Scalar_String",
+                          "value": "There has been a critical error on your website, putting it in recovery mode. Please check the Themes and Plugins screens for more details. If you just installed or updated a theme or plugin, check the relevant page for that first.",
+                          "attributes": {
+                            "startLine": 179,
+                            "endLine": 179,
+                            "kind": 1
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 179,
+                          "endLine": 179
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 179,
+                      "endLine": 179
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 179,
+                    "endLine": 179
+                  }
+                },
+                "attributes": {
+                  "startLine": 179,
+                  "endLine": 179
+                }
+              }
+            ],
+            "elseifs": [
+              {
+                "nodeType": "Stmt_ElseIf",
+                "cond": {
+                  "nodeType": "Expr_FuncCall",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "is_protected_endpoint"
+                    ],
+                    "attributes": {
+                      "startLine": 180,
+                      "endLine": 180
+                    }
+                  },
+                  "args": [],
+                  "attributes": {
+                    "startLine": 180,
+                    "endLine": 180
+                  }
+                },
+                "stmts": [
+                  {
+                    "nodeType": "Stmt_Expression",
+                    "expr": {
+                      "nodeType": "Expr_Assign",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "message",
+                        "attributes": {
+                          "startLine": 181,
+                          "endLine": 181
+                        }
+                      },
+                      "expr": {
+                        "nodeType": "Expr_FuncCall",
+                        "name": {
+                          "nodeType": "Name",
+                          "parts": [
+                            "__"
+                          ],
+                          "attributes": {
+                            "startLine": 181,
+                            "endLine": 181
+                          }
+                        },
+                        "args": [
+                          {
+                            "nodeType": "Arg",
+                            "value": {
+                              "nodeType": "Scalar_String",
+                              "value": "There has been a critical error on your website. Please check your site admin email inbox for instructions.",
+                              "attributes": {
+                                "startLine": 181,
+                                "endLine": 181,
+                                "kind": 1
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 181,
+                              "endLine": 181
+                            }
+                          }
+                        ],
+                        "attributes": {
+                          "startLine": 181,
+                          "endLine": 181
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 181,
+                        "endLine": 181
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 181,
+                      "endLine": 181
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 180,
+                  "endLine": 182
+                }
+              }
+            ],
+            "else": {
+              "nodeType": "Stmt_Else",
+              "stmts": [
+                {
+                  "nodeType": "Stmt_Expression",
+                  "expr": {
+                    "nodeType": "Expr_Assign",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "message",
+                      "attributes": {
+                        "startLine": 183,
+                        "endLine": 183
+                      }
+                    },
+                    "expr": {
+                      "nodeType": "Expr_FuncCall",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "__"
+                        ],
+                        "attributes": {
+                          "startLine": 183,
+                          "endLine": 183
+                        }
+                      },
+                      "args": [
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Scalar_String",
+                            "value": "There has been a critical error on your website.",
+                            "attributes": {
+                              "startLine": 183,
+                              "endLine": 183,
+                              "kind": 1
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 183,
+                            "endLine": 183
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 183,
+                        "endLine": 183
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 183,
+                      "endLine": 183
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 183,
+                    "endLine": 183
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 182,
+                "endLine": 184
+              }
+            },
+            "attributes": {
+              "startLine": 178,
+              "endLine": 184
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "message",
+                "attributes": {
+                  "startLine": 186,
+                  "endLine": 186
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "sprintf"
+                  ],
+                  "attributes": {
+                    "startLine": 186,
+                    "endLine": 186
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "<p>%s</p><p><a href=\"%s\">%s</a></p>",
+                      "attributes": {
+                        "startLine": 187,
+                        "endLine": 187,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 187,
+                      "endLine": 187
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "message",
+                      "attributes": {
+                        "startLine": 188,
+                        "endLine": 188
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 188,
+                      "endLine": 188
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_FuncCall",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "__"
+                        ],
+                        "attributes": {
+                          "startLine": 190,
+                          "comments": [
+                            {
+                              "nodeType": "Comment",
+                              "text": "/* translators: Documentation explaining debugging in WordPress. */",
+                              "line": 189,
+                              "filePos": 6208,
+                              "tokenPos": 694,
+                              "endLine": 189,
+                              "endFilePos": 6274,
+                              "endTokenPos": 694
+                            }
+                          ],
+                          "endLine": 190
+                        }
+                      },
+                      "args": [
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Scalar_String",
+                            "value": "https://wordpress.org/support/article/debugging-in-wordpress/",
+                            "attributes": {
+                              "startLine": 190,
+                              "endLine": 190,
+                              "kind": 1
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 190,
+                            "endLine": 190
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 190,
+                        "comments": [
+                          {
+                            "nodeType": "Comment",
+                            "text": "/* translators: Documentation explaining debugging in WordPress. */",
+                            "line": 189,
+                            "filePos": 6208,
+                            "tokenPos": 694,
+                            "endLine": 189,
+                            "endFilePos": 6274,
+                            "endTokenPos": 694
+                          }
+                        ],
+                        "endLine": 190
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 190,
+                      "comments": [
+                        {
+                          "nodeType": "Comment",
+                          "text": "/* translators: Documentation explaining debugging in WordPress. */",
+                          "line": 189,
+                          "filePos": 6208,
+                          "tokenPos": 694,
+                          "endLine": 189,
+                          "endFilePos": 6274,
+                          "endTokenPos": 694
+                        }
+                      ],
+                      "endLine": 190
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_FuncCall",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "__"
+                        ],
+                        "attributes": {
+                          "startLine": 191,
+                          "endLine": 191
+                        }
+                      },
+                      "args": [
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Scalar_String",
+                            "value": "Learn more about debugging in WordPress.",
+                            "attributes": {
+                              "startLine": 191,
+                              "endLine": 191,
+                              "kind": 1
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 191,
+                            "endLine": 191
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 191,
+                        "endLine": 191
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 191,
+                      "endLine": 191
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 186,
+                  "endLine": 192
+                }
+              },
+              "attributes": {
+                "startLine": 186,
+                "endLine": 192
+              }
+            },
+            "attributes": {
+              "startLine": 186,
+              "endLine": 192
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "args",
+                "attributes": {
+                  "startLine": 194,
+                  "endLine": 194
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Array",
+                "items": [
+                  {
+                    "nodeType": "Expr_ArrayItem",
+                    "key": {
+                      "nodeType": "Scalar_String",
+                      "value": "response",
+                      "attributes": {
+                        "startLine": 195,
+                        "endLine": 195,
+                        "kind": 1
+                      }
+                    },
+                    "value": {
+                      "nodeType": "Scalar_LNumber",
+                      "value": 500,
+                      "attributes": {
+                        "startLine": 195,
+                        "endLine": 195,
+                        "kind": 10
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 195,
+                      "endLine": 195
+                    }
+                  },
+                  {
+                    "nodeType": "Expr_ArrayItem",
+                    "key": {
+                      "nodeType": "Scalar_String",
+                      "value": "exit",
+                      "attributes": {
+                        "startLine": 196,
+                        "endLine": 196,
+                        "kind": 1
+                      }
+                    },
+                    "value": {
+                      "nodeType": "Expr_ConstFetch",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "false"
+                        ],
+                        "attributes": {
+                          "startLine": 196,
+                          "endLine": 196
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 196,
+                        "endLine": 196
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 196,
+                      "endLine": 196
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 194,
+                  "endLine": 197,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 194,
+                "endLine": 197
+              }
+            },
+            "attributes": {
+              "startLine": 194,
+              "endLine": 197
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "message",
+                "attributes": {
+                  "startLine": 207,
+                  "comments": [
+                    {
+                      "nodeType": "Comment_Doc",
+                      "text": "/**\n\t\t * Filters the message that the default PHP error template displays.\n\t\t *\n\t\t * @since 5.2.0\n\t\t *\n\t\t * @param string $message HTML error message to display.\n\t\t * @param array  $error   Error information retrieved from `error_get_last()`.\n\t\t */",
+                      "line": 199,
+                      "filePos": 6479,
+                      "tokenPos": 738,
+                      "endLine": 206,
+                      "endFilePos": 6726,
+                      "endTokenPos": 738
+                    }
+                  ],
+                  "endLine": 207
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "apply_filters"
+                  ],
+                  "attributes": {
+                    "startLine": 207,
+                    "endLine": 207
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "wp_php_error_message",
+                      "attributes": {
+                        "startLine": 207,
+                        "endLine": 207,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 207,
+                      "endLine": 207
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "message",
+                      "attributes": {
+                        "startLine": 207,
+                        "endLine": 207
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 207,
+                      "endLine": 207
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "error",
+                      "attributes": {
+                        "startLine": 207,
+                        "endLine": 207
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 207,
+                      "endLine": 207
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 207,
+                  "endLine": 207
+                }
+              },
+              "attributes": {
+                "startLine": 207,
+                "comments": [
+                  {
+                    "nodeType": "Comment_Doc",
+                    "text": "/**\n\t\t * Filters the message that the default PHP error template displays.\n\t\t *\n\t\t * @since 5.2.0\n\t\t *\n\t\t * @param string $message HTML error message to display.\n\t\t * @param array  $error   Error information retrieved from `error_get_last()`.\n\t\t */",
+                    "line": 199,
+                    "filePos": 6479,
+                    "tokenPos": 738,
+                    "endLine": 206,
+                    "endFilePos": 6726,
+                    "endTokenPos": 738
+                  }
+                ],
+                "endLine": 207
+              }
+            },
+            "attributes": {
+              "startLine": 207,
+              "comments": [
+                {
+                  "nodeType": "Comment_Doc",
+                  "text": "/**\n\t\t * Filters the message that the default PHP error template displays.\n\t\t *\n\t\t * @since 5.2.0\n\t\t *\n\t\t * @param string $message HTML error message to display.\n\t\t * @param array  $error   Error information retrieved from `error_get_last()`.\n\t\t */",
+                  "line": 199,
+                  "filePos": 6479,
+                  "tokenPos": 738,
+                  "endLine": 206,
+                  "endFilePos": 6726,
+                  "endTokenPos": 738
+                }
+              ],
+              "endLine": 207
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "args",
+                "attributes": {
+                  "startLine": 218,
+                  "comments": [
+                    {
+                      "nodeType": "Comment_Doc",
+                      "text": "/**\n\t\t * Filters the arguments passed to {@see wp_die()} for the default PHP error template.\n\t\t *\n\t\t * @since 5.2.0\n\t\t *\n\t\t * @param array $args Associative array of arguments passed to `wp_die()`. By default these contain a\n\t\t *                    'response' key, and optionally 'link_url' and 'link_text' keys.\n\t\t * @param array $error Error information retrieved from `error_get_last()`.\n\t\t */",
+                      "line": 209,
+                      "filePos": 6803,
+                      "tokenPos": 758,
+                      "endLine": 217,
+                      "endFilePos": 7198,
+                      "endTokenPos": 758
+                    }
+                  ],
+                  "endLine": 218
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "apply_filters"
+                  ],
+                  "attributes": {
+                    "startLine": 218,
+                    "endLine": 218
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "wp_php_error_args",
+                      "attributes": {
+                        "startLine": 218,
+                        "endLine": 218,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 218,
+                      "endLine": 218
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "args",
+                      "attributes": {
+                        "startLine": 218,
+                        "endLine": 218
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 218,
+                      "endLine": 218
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "error",
+                      "attributes": {
+                        "startLine": 218,
+                        "endLine": 218
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 218,
+                      "endLine": 218
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 218,
+                  "endLine": 218
+                }
+              },
+              "attributes": {
+                "startLine": 218,
+                "comments": [
+                  {
+                    "nodeType": "Comment_Doc",
+                    "text": "/**\n\t\t * Filters the arguments passed to {@see wp_die()} for the default PHP error template.\n\t\t *\n\t\t * @since 5.2.0\n\t\t *\n\t\t * @param array $args Associative array of arguments passed to `wp_die()`. By default these contain a\n\t\t *                    'response' key, and optionally 'link_url' and 'link_text' keys.\n\t\t * @param array $error Error information retrieved from `error_get_last()`.\n\t\t */",
+                    "line": 209,
+                    "filePos": 6803,
+                    "tokenPos": 758,
+                    "endLine": 217,
+                    "endFilePos": 7198,
+                    "endTokenPos": 758
+                  }
+                ],
+                "endLine": 218
+              }
+            },
+            "attributes": {
+              "startLine": 218,
+              "comments": [
+                {
+                  "nodeType": "Comment_Doc",
+                  "text": "/**\n\t\t * Filters the arguments passed to {@see wp_die()} for the default PHP error template.\n\t\t *\n\t\t * @since 5.2.0\n\t\t *\n\t\t * @param array $args Associative array of arguments passed to `wp_die()`. By default these contain a\n\t\t *                    'response' key, and optionally 'link_url' and 'link_text' keys.\n\t\t * @param array $error Error information retrieved from `error_get_last()`.\n\t\t */",
+                  "line": 209,
+                  "filePos": 6803,
+                  "tokenPos": 758,
+                  "endLine": 217,
+                  "endFilePos": 7198,
+                  "endTokenPos": 758
+                }
+              ],
+              "endLine": 218
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "wp_error",
+                "attributes": {
+                  "startLine": 220,
+                  "endLine": 220
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_New",
+                "class": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "WP_Error"
+                  ],
+                  "attributes": {
+                    "startLine": 220,
+                    "endLine": 220
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "internal_server_error",
+                      "attributes": {
+                        "startLine": 221,
+                        "endLine": 221,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 221,
+                      "endLine": 221
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "message",
+                      "attributes": {
+                        "startLine": 222,
+                        "endLine": 222
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 222,
+                      "endLine": 222
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Array",
+                      "items": [
+                        {
+                          "nodeType": "Expr_ArrayItem",
+                          "key": {
+                            "nodeType": "Scalar_String",
+                            "value": "error",
+                            "attributes": {
+                              "startLine": 224,
+                              "endLine": 224,
+                              "kind": 1
+                            }
+                          },
+                          "value": {
+                            "nodeType": "Expr_Variable",
+                            "name": "error",
+                            "attributes": {
+                              "startLine": 224,
+                              "endLine": 224
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 224,
+                            "endLine": 224
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 223,
+                        "endLine": 225,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 223,
+                      "endLine": 225
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 220,
+                  "endLine": 226
+                }
+              },
+              "attributes": {
+                "startLine": 220,
+                "endLine": 226
+              }
+            },
+            "attributes": {
+              "startLine": 220,
+              "endLine": 226
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "wp_die"
+                ],
+                "attributes": {
+                  "startLine": 228,
+                  "endLine": 228
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "wp_error",
+                    "attributes": {
+                      "startLine": 228,
+                      "endLine": 228
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 228,
+                    "endLine": 228
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "",
+                    "attributes": {
+                      "startLine": 228,
+                      "endLine": 228,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 228,
+                    "endLine": 228
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "args",
+                    "attributes": {
+                      "startLine": 228,
+                      "endLine": 228
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 228,
+                    "endLine": 228
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 228,
+                "endLine": 228
+              }
+            },
+            "attributes": {
+              "startLine": 228,
+              "endLine": 228
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 165,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Displays the default PHP error template.\n\t *\n\t * This method is called conditionally if no 'php-error.php' drop-in is available.\n\t *\n\t * It calls {@see wp_die()} with a message indicating that the site is experiencing technical difficulties and a\n\t * login link to the admin backend. The {@see 'wp_php_error_message'} and {@see 'wp_php_error_args'} filters can\n\t * be used to modify these parameters.\n\t *\n\t * @since 5.2.0\n\t * @since 5.3.0 The `$handled` parameter was added.\n\t *\n\t * @param array         $error   Error information retrieved from `error_get_last()`.\n\t * @param true|WP_Error $handled Whether Recovery Mode handled the fatal error.\n\t */",
+              "line": 150,
+              "filePos": 4551,
+              "tokenPos": 497,
+              "endLine": 164,
+              "endFilePos": 5209,
+              "endTokenPos": 497
+            }
+          ],
+          "endLine": 229
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 19,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Error Protection API: WP_Fatal_Error_Handler class\n *\n * @package WordPress\n * @since 5.2.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 7,
+          "endFilePos": 107,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Core class used as the default shutdown handler for fatal errors.\n *\n * A drop-in 'fatal-error-handler.php' can be used to override the instance of this class and use a custom\n * implementation for the fatal error handler that WordPress registers. The custom class should extend this class and\n * can override its methods individually as necessary. The file must return the instance of the class that should be\n * registered.\n *\n * @since 5.2.0\n */",
+          "line": 9,
+          "filePos": 110,
+          "tokenPos": 3,
+          "endLine": 18,
+          "endFilePos": 564,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 230
+    }
+  }
+]

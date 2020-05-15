@@ -1,0 +1,566 @@
+[
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "get_header"
+        ],
+        "attributes": {
+          "startLine": 12,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n * The template for displaying archive pages\n *\n * @link https://developer.wordpress.org/themes/basics/template-hierarchy/\n *\n * @package WordPress\n * @subpackage Twenty_Nineteen\n * @since Twenty Nineteen 1.0\n */",
+              "line": 2,
+              "filePos": 6,
+              "tokenPos": 1,
+              "endLine": 10,
+              "endFilePos": 221,
+              "endTokenPos": 1
+            }
+          ],
+          "endLine": 12
+        }
+      },
+      "args": [],
+      "attributes": {
+        "startLine": 12,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/**\n * The template for displaying archive pages\n *\n * @link https://developer.wordpress.org/themes/basics/template-hierarchy/\n *\n * @package WordPress\n * @subpackage Twenty_Nineteen\n * @since Twenty Nineteen 1.0\n */",
+            "line": 2,
+            "filePos": 6,
+            "tokenPos": 1,
+            "endLine": 10,
+            "endFilePos": 221,
+            "endTokenPos": 1
+          }
+        ],
+        "endLine": 12
+      }
+    },
+    "attributes": {
+      "startLine": 12,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * The template for displaying archive pages\n *\n * @link https://developer.wordpress.org/themes/basics/template-hierarchy/\n *\n * @package WordPress\n * @subpackage Twenty_Nineteen\n * @since Twenty Nineteen 1.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 10,
+          "endFilePos": 221,
+          "endTokenPos": 1
+        }
+      ],
+      "endLine": 12
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\n\t<div id=\"primary\" class=\"content-area\">\n\t\t<main id=\"main\" class=\"site-main\">\n\n\t\t",
+    "attributes": {
+      "startLine": 14,
+      "hasLeadingNewline": true,
+      "endLine": 18
+    }
+  },
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "have_posts"
+        ],
+        "attributes": {
+          "startLine": 18,
+          "endLine": 18
+        }
+      },
+      "args": [],
+      "attributes": {
+        "startLine": 18,
+        "endLine": 18
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "\n\t\t\t<header class=\"page-header\">\n\t\t\t\t",
+        "attributes": {
+          "startLine": 19,
+          "hasLeadingNewline": true,
+          "endLine": 21
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "the_archive_title"
+            ],
+            "attributes": {
+              "startLine": 22,
+              "endLine": 22
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "<h1 class=\"page-title\">",
+                "attributes": {
+                  "startLine": 22,
+                  "endLine": 22,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 22,
+                "endLine": 22
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "</h1>",
+                "attributes": {
+                  "startLine": 22,
+                  "endLine": 22,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 22,
+                "endLine": 22
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 22,
+            "endLine": 22
+          }
+        },
+        "attributes": {
+          "startLine": 22,
+          "endLine": 22
+        }
+      },
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "\t\t\t</header><!-- .page-header -->\n\n\t\t\t",
+        "attributes": {
+          "startLine": 24,
+          "hasLeadingNewline": true,
+          "endLine": 26
+        }
+      },
+      {
+        "nodeType": "Stmt_While",
+        "cond": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "have_posts"
+            ],
+            "attributes": {
+              "startLine": 28,
+              "endLine": 28
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 28,
+            "endLine": 28
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "the_post"
+                ],
+                "attributes": {
+                  "startLine": 29,
+                  "endLine": 29
+                }
+              },
+              "args": [],
+              "attributes": {
+                "startLine": 29,
+                "endLine": 29
+              }
+            },
+            "attributes": {
+              "startLine": 29,
+              "endLine": 29
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "get_template_part"
+                ],
+                "attributes": {
+                  "startLine": 37,
+                  "comments": [
+                    {
+                      "nodeType": "Comment",
+                      "text": "/*\n\t\t\t\t * Include the Post-Format-specific template for the content.\n\t\t\t\t * If you want to override this in a child theme, then include a file\n\t\t\t\t * called content-___.php (where ___ is the Post Format name) and that\n\t\t\t\t * will be used instead.\n\t\t\t\t */",
+                      "line": 31,
+                      "filePos": 581,
+                      "tokenPos": 61,
+                      "endLine": 36,
+                      "endFilePos": 834,
+                      "endTokenPos": 61
+                    }
+                  ],
+                  "endLine": 37
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "template-parts/content/content",
+                    "attributes": {
+                      "startLine": 37,
+                      "endLine": 37,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 37,
+                    "endLine": 37
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "excerpt",
+                    "attributes": {
+                      "startLine": 37,
+                      "endLine": 37,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 37,
+                    "endLine": 37
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 37,
+                "comments": [
+                  {
+                    "nodeType": "Comment",
+                    "text": "/*\n\t\t\t\t * Include the Post-Format-specific template for the content.\n\t\t\t\t * If you want to override this in a child theme, then include a file\n\t\t\t\t * called content-___.php (where ___ is the Post Format name) and that\n\t\t\t\t * will be used instead.\n\t\t\t\t */",
+                    "line": 31,
+                    "filePos": 581,
+                    "tokenPos": 61,
+                    "endLine": 36,
+                    "endFilePos": 834,
+                    "endTokenPos": 61
+                  }
+                ],
+                "endLine": 37
+              }
+            },
+            "attributes": {
+              "startLine": 37,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "/*\n\t\t\t\t * Include the Post-Format-specific template for the content.\n\t\t\t\t * If you want to override this in a child theme, then include a file\n\t\t\t\t * called content-___.php (where ___ is the Post Format name) and that\n\t\t\t\t * will be used instead.\n\t\t\t\t */",
+                  "line": 31,
+                  "filePos": 581,
+                  "tokenPos": 61,
+                  "endLine": 36,
+                  "endFilePos": 834,
+                  "endTokenPos": 61
+                }
+              ],
+              "endLine": 37
+            }
+          },
+          {
+            "nodeType": "Stmt_Nop",
+            "attributes": {
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// End the loop.\n",
+                  "line": 39,
+                  "filePos": 911,
+                  "tokenPos": 74,
+                  "endLine": 40,
+                  "endFilePos": 927,
+                  "endTokenPos": 74
+                }
+              ],
+              "startLine": 40,
+              "endLine": 40,
+              "startFilePos": 928,
+              "endFilePos": 927,
+              "startTokenPos": 75,
+              "endTokenPos": 74
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 28,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "// Start the Loop.\n",
+              "line": 27,
+              "filePos": 513,
+              "tokenPos": 42,
+              "endLine": 28,
+              "endFilePos": 531,
+              "endTokenPos": 42
+            }
+          ],
+          "endLine": 40
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "twentynineteen_the_posts_navigation"
+            ],
+            "attributes": {
+              "startLine": 43,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// Previous/next page navigation.\n",
+                  "line": 42,
+                  "filePos": 945,
+                  "tokenPos": 79,
+                  "endLine": 43,
+                  "endFilePos": 978,
+                  "endTokenPos": 79
+                }
+              ],
+              "endLine": 43
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 43,
+            "comments": [
+              {
+                "nodeType": "Comment",
+                "text": "// Previous/next page navigation.\n",
+                "line": 42,
+                "filePos": 945,
+                "tokenPos": 79,
+                "endLine": 43,
+                "endFilePos": 978,
+                "endTokenPos": 79
+              }
+            ],
+            "endLine": 43
+          }
+        },
+        "attributes": {
+          "startLine": 43,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "// Previous/next page navigation.\n",
+              "line": 42,
+              "filePos": 945,
+              "tokenPos": 79,
+              "endLine": 43,
+              "endFilePos": 978,
+              "endTokenPos": 79
+            }
+          ],
+          "endLine": 43
+        }
+      },
+      {
+        "nodeType": "Stmt_Nop",
+        "attributes": {
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "// If no content, include the \"No posts found\" template.\n",
+              "line": 45,
+              "filePos": 1025,
+              "tokenPos": 86,
+              "endLine": 46,
+              "endFilePos": 1081,
+              "endTokenPos": 86
+            }
+          ],
+          "startLine": 46,
+          "endLine": 46,
+          "startFilePos": 1082,
+          "endFilePos": 1081,
+          "startTokenPos": 87,
+          "endTokenPos": 86
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": {
+      "nodeType": "Stmt_Else",
+      "stmts": [
+        {
+          "nodeType": "Stmt_Expression",
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "get_template_part"
+              ],
+              "attributes": {
+                "startLine": 47,
+                "endLine": 47
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "template-parts/content/content",
+                  "attributes": {
+                    "startLine": 47,
+                    "endLine": 47,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 47,
+                  "endLine": 47
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "none",
+                  "attributes": {
+                    "startLine": 47,
+                    "endLine": 47,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 47,
+                  "endLine": 47
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 47,
+              "endLine": 47
+            }
+          },
+          "attributes": {
+            "startLine": 47,
+            "endLine": 47
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 46,
+        "comments": [
+          {
+            "nodeType": "Comment",
+            "text": "// If no content, include the \"No posts found\" template.\n",
+            "line": 45,
+            "filePos": 1025,
+            "tokenPos": 86,
+            "endLine": 46,
+            "endFilePos": 1081,
+            "endTokenPos": 86
+          }
+        ],
+        "endLine": 47
+      }
+    },
+    "attributes": {
+      "startLine": 18,
+      "endLine": 49
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\t\t</main><!-- #main -->\n\t</div><!-- #primary -->\n\n",
+    "attributes": {
+      "startLine": 51,
+      "hasLeadingNewline": true,
+      "endLine": 54
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "get_footer"
+        ],
+        "attributes": {
+          "startLine": 55,
+          "endLine": 55
+        }
+      },
+      "args": [],
+      "attributes": {
+        "startLine": 55,
+        "endLine": 55
+      }
+    },
+    "attributes": {
+      "startLine": 55,
+      "endLine": 55
+    }
+  }
+]

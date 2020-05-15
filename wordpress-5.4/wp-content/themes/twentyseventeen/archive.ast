@@ -1,0 +1,1103 @@
+[
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "get_header"
+        ],
+        "attributes": {
+          "startLine": 13,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n * The template for displaying archive pages\n *\n * @link https://developer.wordpress.org/themes/basics/template-hierarchy/\n *\n * @package WordPress\n * @subpackage Twenty_Seventeen\n * @since Twenty Seventeen 1.0\n * @version 1.0\n */",
+              "line": 2,
+              "filePos": 6,
+              "tokenPos": 1,
+              "endLine": 11,
+              "endFilePos": 239,
+              "endTokenPos": 1
+            }
+          ],
+          "endLine": 13
+        }
+      },
+      "args": [],
+      "attributes": {
+        "startLine": 13,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/**\n * The template for displaying archive pages\n *\n * @link https://developer.wordpress.org/themes/basics/template-hierarchy/\n *\n * @package WordPress\n * @subpackage Twenty_Seventeen\n * @since Twenty Seventeen 1.0\n * @version 1.0\n */",
+            "line": 2,
+            "filePos": 6,
+            "tokenPos": 1,
+            "endLine": 11,
+            "endFilePos": 239,
+            "endTokenPos": 1
+          }
+        ],
+        "endLine": 13
+      }
+    },
+    "attributes": {
+      "startLine": 13,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * The template for displaying archive pages\n *\n * @link https://developer.wordpress.org/themes/basics/template-hierarchy/\n *\n * @package WordPress\n * @subpackage Twenty_Seventeen\n * @since Twenty Seventeen 1.0\n * @version 1.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 11,
+          "endFilePos": 239,
+          "endTokenPos": 1
+        }
+      ],
+      "endLine": 13
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\n<div class=\"wrap\">\n\n\t",
+    "attributes": {
+      "startLine": 14,
+      "hasLeadingNewline": true,
+      "endLine": 17
+    }
+  },
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "have_posts"
+        ],
+        "attributes": {
+          "startLine": 17,
+          "endLine": 17
+        }
+      },
+      "args": [],
+      "attributes": {
+        "startLine": 17,
+        "endLine": 17
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "\t\t<header class=\"page-header\">\n\t\t\t",
+        "attributes": {
+          "startLine": 18,
+          "hasLeadingNewline": true,
+          "endLine": 19
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "the_archive_title"
+            ],
+            "attributes": {
+              "startLine": 20,
+              "endLine": 20
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "<h1 class=\"page-title\">",
+                "attributes": {
+                  "startLine": 20,
+                  "endLine": 20,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 20,
+                "endLine": 20
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "</h1>",
+                "attributes": {
+                  "startLine": 20,
+                  "endLine": 20,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 20,
+                "endLine": 20
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 20,
+            "endLine": 20
+          }
+        },
+        "attributes": {
+          "startLine": 20,
+          "endLine": 20
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "the_archive_description"
+            ],
+            "attributes": {
+              "startLine": 21,
+              "endLine": 21
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "<div class=\"taxonomy-description\">",
+                "attributes": {
+                  "startLine": 21,
+                  "endLine": 21,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 21,
+                "endLine": 21
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "</div>",
+                "attributes": {
+                  "startLine": 21,
+                  "endLine": 21,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 21,
+                "endLine": 21
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 21,
+            "endLine": 21
+          }
+        },
+        "attributes": {
+          "startLine": 21,
+          "endLine": 21
+        }
+      },
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "\t\t</header><!-- .page-header -->\n\t",
+        "attributes": {
+          "startLine": 23,
+          "hasLeadingNewline": true,
+          "endLine": 24
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 17,
+      "endLine": 24
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\n\t<div id=\"primary\" class=\"content-area\">\n\t\t<main id=\"main\" class=\"site-main\" role=\"main\">\n\n\t\t",
+    "attributes": {
+      "startLine": 25,
+      "hasLeadingNewline": true,
+      "endLine": 29
+    }
+  },
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "have_posts"
+        ],
+        "attributes": {
+          "startLine": 30,
+          "endLine": 30
+        }
+      },
+      "args": [],
+      "attributes": {
+        "startLine": 30,
+        "endLine": 30
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_InlineHTML",
+        "value": "\t\t\t",
+        "attributes": {
+          "startLine": 32,
+          "hasLeadingNewline": true,
+          "endLine": 32
+        }
+      },
+      {
+        "nodeType": "Stmt_While",
+        "cond": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "have_posts"
+            ],
+            "attributes": {
+              "startLine": 34,
+              "endLine": 34
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 34,
+            "endLine": 34
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "the_post"
+                ],
+                "attributes": {
+                  "startLine": 35,
+                  "endLine": 35
+                }
+              },
+              "args": [],
+              "attributes": {
+                "startLine": 35,
+                "endLine": 35
+              }
+            },
+            "attributes": {
+              "startLine": 35,
+              "endLine": 35
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "get_template_part"
+                ],
+                "attributes": {
+                  "startLine": 43,
+                  "comments": [
+                    {
+                      "nodeType": "Comment",
+                      "text": "/*\n\t\t\t\t * Include the Post-Format-specific template for the content.\n\t\t\t\t * If you want to override this in a child theme, then include a file\n\t\t\t\t * called content-___.php (where ___ is the Post Format name) and that\n\t\t\t\t * will be used instead.\n\t\t\t\t */",
+                      "line": 37,
+                      "filePos": 758,
+                      "tokenPos": 94,
+                      "endLine": 42,
+                      "endFilePos": 1011,
+                      "endTokenPos": 94
+                    }
+                  ],
+                  "endLine": 43
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "template-parts/post/content",
+                    "attributes": {
+                      "startLine": 43,
+                      "endLine": 43,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 43,
+                    "endLine": 43
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "get_post_format"
+                      ],
+                      "attributes": {
+                        "startLine": 43,
+                        "endLine": 43
+                      }
+                    },
+                    "args": [],
+                    "attributes": {
+                      "startLine": 43,
+                      "endLine": 43
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 43,
+                    "endLine": 43
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 43,
+                "comments": [
+                  {
+                    "nodeType": "Comment",
+                    "text": "/*\n\t\t\t\t * Include the Post-Format-specific template for the content.\n\t\t\t\t * If you want to override this in a child theme, then include a file\n\t\t\t\t * called content-___.php (where ___ is the Post Format name) and that\n\t\t\t\t * will be used instead.\n\t\t\t\t */",
+                    "line": 37,
+                    "filePos": 758,
+                    "tokenPos": 94,
+                    "endLine": 42,
+                    "endFilePos": 1011,
+                    "endTokenPos": 94
+                  }
+                ],
+                "endLine": 43
+              }
+            },
+            "attributes": {
+              "startLine": 43,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "/*\n\t\t\t\t * Include the Post-Format-specific template for the content.\n\t\t\t\t * If you want to override this in a child theme, then include a file\n\t\t\t\t * called content-___.php (where ___ is the Post Format name) and that\n\t\t\t\t * will be used instead.\n\t\t\t\t */",
+                  "line": 37,
+                  "filePos": 758,
+                  "tokenPos": 94,
+                  "endLine": 42,
+                  "endFilePos": 1011,
+                  "endTokenPos": 94
+                }
+              ],
+              "endLine": 43
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 34,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "// Start the Loop.\n",
+              "line": 33,
+              "filePos": 690,
+              "tokenPos": 75,
+              "endLine": 34,
+              "endFilePos": 708,
+              "endTokenPos": 75
+            }
+          ],
+          "endLine": 45
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "the_posts_pagination"
+            ],
+            "attributes": {
+              "startLine": 47,
+              "endLine": 47
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Array",
+                "items": [
+                  {
+                    "nodeType": "Expr_ArrayItem",
+                    "key": {
+                      "nodeType": "Scalar_String",
+                      "value": "prev_text",
+                      "attributes": {
+                        "startLine": 49,
+                        "endLine": 49,
+                        "kind": 1
+                      }
+                    },
+                    "value": {
+                      "nodeType": "Expr_BinaryOp_Concat",
+                      "left": {
+                        "nodeType": "Expr_BinaryOp_Concat",
+                        "left": {
+                          "nodeType": "Expr_BinaryOp_Concat",
+                          "left": {
+                            "nodeType": "Expr_FuncCall",
+                            "name": {
+                              "nodeType": "Name",
+                              "parts": [
+                                "twentyseventeen_get_svg"
+                              ],
+                              "attributes": {
+                                "startLine": 49,
+                                "endLine": 49
+                              }
+                            },
+                            "args": [
+                              {
+                                "nodeType": "Arg",
+                                "value": {
+                                  "nodeType": "Expr_Array",
+                                  "items": [
+                                    {
+                                      "nodeType": "Expr_ArrayItem",
+                                      "key": {
+                                        "nodeType": "Scalar_String",
+                                        "value": "icon",
+                                        "attributes": {
+                                          "startLine": 49,
+                                          "endLine": 49,
+                                          "kind": 1
+                                        }
+                                      },
+                                      "value": {
+                                        "nodeType": "Scalar_String",
+                                        "value": "arrow-left",
+                                        "attributes": {
+                                          "startLine": 49,
+                                          "endLine": 49,
+                                          "kind": 1
+                                        }
+                                      },
+                                      "byRef": false,
+                                      "unpack": false,
+                                      "attributes": {
+                                        "startLine": 49,
+                                        "endLine": 49
+                                      }
+                                    }
+                                  ],
+                                  "attributes": {
+                                    "startLine": 49,
+                                    "endLine": 49,
+                                    "kind": 1
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 49,
+                                  "endLine": 49
+                                }
+                              }
+                            ],
+                            "attributes": {
+                              "startLine": 49,
+                              "endLine": 49
+                            }
+                          },
+                          "right": {
+                            "nodeType": "Scalar_String",
+                            "value": "<span class=\"screen-reader-text\">",
+                            "attributes": {
+                              "startLine": 49,
+                              "endLine": 49,
+                              "kind": 1
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 49,
+                            "endLine": 49
+                          }
+                        },
+                        "right": {
+                          "nodeType": "Expr_FuncCall",
+                          "name": {
+                            "nodeType": "Name",
+                            "parts": [
+                              "__"
+                            ],
+                            "attributes": {
+                              "startLine": 49,
+                              "endLine": 49
+                            }
+                          },
+                          "args": [
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Scalar_String",
+                                "value": "Previous page",
+                                "attributes": {
+                                  "startLine": 49,
+                                  "endLine": 49,
+                                  "kind": 1
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 49,
+                                "endLine": 49
+                              }
+                            },
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Scalar_String",
+                                "value": "twentyseventeen",
+                                "attributes": {
+                                  "startLine": 49,
+                                  "endLine": 49,
+                                  "kind": 1
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 49,
+                                "endLine": 49
+                              }
+                            }
+                          ],
+                          "attributes": {
+                            "startLine": 49,
+                            "endLine": 49
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 49,
+                          "endLine": 49
+                        }
+                      },
+                      "right": {
+                        "nodeType": "Scalar_String",
+                        "value": "</span>",
+                        "attributes": {
+                          "startLine": 49,
+                          "endLine": 49,
+                          "kind": 1
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 49,
+                        "endLine": 49
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 49,
+                      "endLine": 49
+                    }
+                  },
+                  {
+                    "nodeType": "Expr_ArrayItem",
+                    "key": {
+                      "nodeType": "Scalar_String",
+                      "value": "next_text",
+                      "attributes": {
+                        "startLine": 50,
+                        "endLine": 50,
+                        "kind": 1
+                      }
+                    },
+                    "value": {
+                      "nodeType": "Expr_BinaryOp_Concat",
+                      "left": {
+                        "nodeType": "Expr_BinaryOp_Concat",
+                        "left": {
+                          "nodeType": "Expr_BinaryOp_Concat",
+                          "left": {
+                            "nodeType": "Scalar_String",
+                            "value": "<span class=\"screen-reader-text\">",
+                            "attributes": {
+                              "startLine": 50,
+                              "endLine": 50,
+                              "kind": 1
+                            }
+                          },
+                          "right": {
+                            "nodeType": "Expr_FuncCall",
+                            "name": {
+                              "nodeType": "Name",
+                              "parts": [
+                                "__"
+                              ],
+                              "attributes": {
+                                "startLine": 50,
+                                "endLine": 50
+                              }
+                            },
+                            "args": [
+                              {
+                                "nodeType": "Arg",
+                                "value": {
+                                  "nodeType": "Scalar_String",
+                                  "value": "Next page",
+                                  "attributes": {
+                                    "startLine": 50,
+                                    "endLine": 50,
+                                    "kind": 1
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 50,
+                                  "endLine": 50
+                                }
+                              },
+                              {
+                                "nodeType": "Arg",
+                                "value": {
+                                  "nodeType": "Scalar_String",
+                                  "value": "twentyseventeen",
+                                  "attributes": {
+                                    "startLine": 50,
+                                    "endLine": 50,
+                                    "kind": 1
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 50,
+                                  "endLine": 50
+                                }
+                              }
+                            ],
+                            "attributes": {
+                              "startLine": 50,
+                              "endLine": 50
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 50,
+                            "endLine": 50
+                          }
+                        },
+                        "right": {
+                          "nodeType": "Scalar_String",
+                          "value": "</span>",
+                          "attributes": {
+                            "startLine": 50,
+                            "endLine": 50,
+                            "kind": 1
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 50,
+                          "endLine": 50
+                        }
+                      },
+                      "right": {
+                        "nodeType": "Expr_FuncCall",
+                        "name": {
+                          "nodeType": "Name",
+                          "parts": [
+                            "twentyseventeen_get_svg"
+                          ],
+                          "attributes": {
+                            "startLine": 50,
+                            "endLine": 50
+                          }
+                        },
+                        "args": [
+                          {
+                            "nodeType": "Arg",
+                            "value": {
+                              "nodeType": "Expr_Array",
+                              "items": [
+                                {
+                                  "nodeType": "Expr_ArrayItem",
+                                  "key": {
+                                    "nodeType": "Scalar_String",
+                                    "value": "icon",
+                                    "attributes": {
+                                      "startLine": 50,
+                                      "endLine": 50,
+                                      "kind": 1
+                                    }
+                                  },
+                                  "value": {
+                                    "nodeType": "Scalar_String",
+                                    "value": "arrow-right",
+                                    "attributes": {
+                                      "startLine": 50,
+                                      "endLine": 50,
+                                      "kind": 1
+                                    }
+                                  },
+                                  "byRef": false,
+                                  "unpack": false,
+                                  "attributes": {
+                                    "startLine": 50,
+                                    "endLine": 50
+                                  }
+                                }
+                              ],
+                              "attributes": {
+                                "startLine": 50,
+                                "endLine": 50,
+                                "kind": 1
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 50,
+                              "endLine": 50
+                            }
+                          }
+                        ],
+                        "attributes": {
+                          "startLine": 50,
+                          "endLine": 50
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 50,
+                        "endLine": 50
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 50,
+                      "endLine": 50
+                    }
+                  },
+                  {
+                    "nodeType": "Expr_ArrayItem",
+                    "key": {
+                      "nodeType": "Scalar_String",
+                      "value": "before_page_number",
+                      "attributes": {
+                        "startLine": 51,
+                        "endLine": 51,
+                        "kind": 1
+                      }
+                    },
+                    "value": {
+                      "nodeType": "Expr_BinaryOp_Concat",
+                      "left": {
+                        "nodeType": "Expr_BinaryOp_Concat",
+                        "left": {
+                          "nodeType": "Scalar_String",
+                          "value": "<span class=\"meta-nav screen-reader-text\">",
+                          "attributes": {
+                            "startLine": 51,
+                            "endLine": 51,
+                            "kind": 1
+                          }
+                        },
+                        "right": {
+                          "nodeType": "Expr_FuncCall",
+                          "name": {
+                            "nodeType": "Name",
+                            "parts": [
+                              "__"
+                            ],
+                            "attributes": {
+                              "startLine": 51,
+                              "endLine": 51
+                            }
+                          },
+                          "args": [
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Scalar_String",
+                                "value": "Page",
+                                "attributes": {
+                                  "startLine": 51,
+                                  "endLine": 51,
+                                  "kind": 1
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 51,
+                                "endLine": 51
+                              }
+                            },
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Scalar_String",
+                                "value": "twentyseventeen",
+                                "attributes": {
+                                  "startLine": 51,
+                                  "endLine": 51,
+                                  "kind": 1
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 51,
+                                "endLine": 51
+                              }
+                            }
+                          ],
+                          "attributes": {
+                            "startLine": 51,
+                            "endLine": 51
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 51,
+                          "endLine": 51
+                        }
+                      },
+                      "right": {
+                        "nodeType": "Scalar_String",
+                        "value": " </span>",
+                        "attributes": {
+                          "startLine": 51,
+                          "endLine": 51,
+                          "kind": 1
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 51,
+                        "endLine": 51
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 51,
+                      "endLine": 51
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 48,
+                  "endLine": 52,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 48,
+                "endLine": 52
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 47,
+            "endLine": 53
+          }
+        },
+        "attributes": {
+          "startLine": 47,
+          "endLine": 53
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": {
+      "nodeType": "Stmt_Else",
+      "stmts": [
+        {
+          "nodeType": "Stmt_Expression",
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "get_template_part"
+              ],
+              "attributes": {
+                "startLine": 57,
+                "endLine": 57
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "template-parts/post/content",
+                  "attributes": {
+                    "startLine": 57,
+                    "endLine": 57,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 57,
+                  "endLine": 57
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "none",
+                  "attributes": {
+                    "startLine": 57,
+                    "endLine": 57,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 57,
+                  "endLine": 57
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 57,
+              "endLine": 57
+            }
+          },
+          "attributes": {
+            "startLine": 57,
+            "endLine": 57
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 55,
+        "endLine": 57
+      }
+    },
+    "attributes": {
+      "startLine": 30,
+      "endLine": 59
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "\n\t\t</main><!-- #main -->\n\t</div><!-- #primary -->\n\t",
+    "attributes": {
+      "startLine": 61,
+      "hasLeadingNewline": true,
+      "endLine": 64
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "get_sidebar"
+        ],
+        "attributes": {
+          "startLine": 64,
+          "endLine": 64
+        }
+      },
+      "args": [],
+      "attributes": {
+        "startLine": 64,
+        "endLine": 64
+      }
+    },
+    "attributes": {
+      "startLine": 64,
+      "endLine": 64
+    }
+  },
+  {
+    "nodeType": "Stmt_InlineHTML",
+    "value": "</div><!-- .wrap -->\n\n",
+    "attributes": {
+      "startLine": 65,
+      "hasLeadingNewline": true,
+      "endLine": 67
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "get_footer"
+        ],
+        "attributes": {
+          "startLine": 68,
+          "endLine": 68
+        }
+      },
+      "args": [],
+      "attributes": {
+        "startLine": 68,
+        "endLine": 68
+      }
+    },
+    "attributes": {
+      "startLine": 68,
+      "endLine": 68
+    }
+  }
+]

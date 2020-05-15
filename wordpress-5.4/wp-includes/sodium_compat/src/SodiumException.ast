@@ -1,0 +1,123 @@
+[
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_BooleanNot",
+      "expr": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "class_exists"
+          ],
+          "attributes": {
+            "startLine": 3,
+            "endLine": 3
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "SodiumException",
+              "attributes": {
+                "startLine": 3,
+                "endLine": 3,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 3,
+              "endLine": 3
+            }
+          },
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Expr_ConstFetch",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "false"
+                ],
+                "attributes": {
+                  "startLine": 3,
+                  "endLine": 3
+                }
+              },
+              "attributes": {
+                "startLine": 3,
+                "endLine": 3
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 3,
+              "endLine": 3
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 3,
+          "endLine": 3
+        }
+      },
+      "attributes": {
+        "startLine": 3,
+        "endLine": 3
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Class",
+        "flags": 0,
+        "extends": {
+          "nodeType": "Name",
+          "parts": [
+            "Exception"
+          ],
+          "attributes": {
+            "startLine": 7,
+            "endLine": 7
+          }
+        },
+        "implements": [],
+        "name": {
+          "nodeType": "Identifier",
+          "name": "SodiumException",
+          "attributes": {
+            "startLine": 7,
+            "endLine": 7
+          }
+        },
+        "stmts": [],
+        "attributes": {
+          "startLine": 7,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n     * Class SodiumException\n     */",
+              "line": 4,
+              "filePos": 58,
+              "tokenPos": 17,
+              "endLine": 6,
+              "endFilePos": 97,
+              "endTokenPos": 17
+            }
+          ],
+          "endLine": 10
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 3,
+      "endLine": 11
+    }
+  }
+]

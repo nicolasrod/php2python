@@ -1,0 +1,1277 @@
+[
+  {
+    "nodeType": "Stmt_Class",
+    "flags": 0,
+    "extends": null,
+    "implements": [
+      {
+        "nodeType": "Name",
+        "parts": [
+          "Requests_Auth"
+        ],
+        "attributes": {
+          "startLine": 18,
+          "endLine": 18
+        }
+      }
+    ],
+    "name": {
+      "nodeType": "Identifier",
+      "name": "Requests_Auth_Basic",
+      "attributes": {
+        "startLine": 18,
+        "endLine": 18
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "user",
+              "attributes": {
+                "startLine": 24,
+                "endLine": 24
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 24,
+              "endLine": 24
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 24,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Username\n\t *\n\t * @var string\n\t */",
+              "line": 19,
+              "filePos": 339,
+              "tokenPos": 15,
+              "endLine": 23,
+              "endFilePos": 379,
+              "endTokenPos": 15
+            }
+          ],
+          "endLine": 24
+        }
+      },
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "pass",
+              "attributes": {
+                "startLine": 31,
+                "endLine": 31
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 31,
+              "endLine": 31
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 31,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Password\n\t *\n\t * @var string\n\t */",
+              "line": 26,
+              "filePos": 398,
+              "tokenPos": 22,
+              "endLine": 30,
+              "endFilePos": 438,
+              "endTokenPos": 22
+            }
+          ],
+          "endLine": 31
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "__construct",
+          "attributes": {
+            "startLine": 39,
+            "endLine": 39
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "args",
+              "attributes": {
+                "startLine": 39,
+                "endLine": 39
+              }
+            },
+            "default": {
+              "nodeType": "Expr_ConstFetch",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "null"
+                ],
+                "attributes": {
+                  "startLine": 39,
+                  "endLine": 39
+                }
+              },
+              "attributes": {
+                "startLine": 39,
+                "endLine": 39
+              }
+            },
+            "attributes": {
+              "startLine": 39,
+              "endLine": 39
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "is_array"
+                ],
+                "attributes": {
+                  "startLine": 40,
+                  "endLine": 40
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "args",
+                    "attributes": {
+                      "startLine": 40,
+                      "endLine": 40
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 40,
+                    "endLine": 40
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 40,
+                "endLine": 40
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_If",
+                "cond": {
+                  "nodeType": "Expr_BinaryOp_NotIdentical",
+                  "left": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "count"
+                      ],
+                      "attributes": {
+                        "startLine": 41,
+                        "endLine": 41
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "args",
+                          "attributes": {
+                            "startLine": 41,
+                            "endLine": 41
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 41,
+                          "endLine": 41
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 41,
+                      "endLine": 41
+                    }
+                  },
+                  "right": {
+                    "nodeType": "Scalar_LNumber",
+                    "value": 2,
+                    "attributes": {
+                      "startLine": 41,
+                      "endLine": 41,
+                      "kind": 10
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 41,
+                    "endLine": 41
+                  }
+                },
+                "stmts": [
+                  {
+                    "nodeType": "Stmt_Throw",
+                    "expr": {
+                      "nodeType": "Expr_New",
+                      "class": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "Requests_Exception"
+                        ],
+                        "attributes": {
+                          "startLine": 42,
+                          "endLine": 42
+                        }
+                      },
+                      "args": [
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Scalar_String",
+                            "value": "Invalid number of arguments",
+                            "attributes": {
+                              "startLine": 42,
+                              "endLine": 42,
+                              "kind": 1
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 42,
+                            "endLine": 42
+                          }
+                        },
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Scalar_String",
+                            "value": "authbasicbadargs",
+                            "attributes": {
+                              "startLine": 42,
+                              "endLine": 42,
+                              "kind": 1
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 42,
+                            "endLine": 42
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 42,
+                        "endLine": 42
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 42,
+                      "endLine": 42
+                    }
+                  }
+                ],
+                "elseifs": [],
+                "else": null,
+                "attributes": {
+                  "startLine": 41,
+                  "endLine": 43
+                }
+              },
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_List",
+                    "items": [
+                      {
+                        "nodeType": "Expr_ArrayItem",
+                        "key": null,
+                        "value": {
+                          "nodeType": "Expr_PropertyFetch",
+                          "var": {
+                            "nodeType": "Expr_Variable",
+                            "name": "this",
+                            "attributes": {
+                              "startLine": 45,
+                              "endLine": 45
+                            }
+                          },
+                          "name": {
+                            "nodeType": "Identifier",
+                            "name": "user",
+                            "attributes": {
+                              "startLine": 45,
+                              "endLine": 45
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 45,
+                            "endLine": 45
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 45,
+                          "endLine": 45
+                        }
+                      },
+                      {
+                        "nodeType": "Expr_ArrayItem",
+                        "key": null,
+                        "value": {
+                          "nodeType": "Expr_PropertyFetch",
+                          "var": {
+                            "nodeType": "Expr_Variable",
+                            "name": "this",
+                            "attributes": {
+                              "startLine": 45,
+                              "endLine": 45
+                            }
+                          },
+                          "name": {
+                            "nodeType": "Identifier",
+                            "name": "pass",
+                            "attributes": {
+                              "startLine": 45,
+                              "endLine": 45
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 45,
+                            "endLine": 45
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 45,
+                          "endLine": 45
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 45,
+                      "endLine": 45
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_Variable",
+                    "name": "args",
+                    "attributes": {
+                      "startLine": 45,
+                      "endLine": 45
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 45,
+                    "endLine": 45
+                  }
+                },
+                "attributes": {
+                  "startLine": 45,
+                  "endLine": 45
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 40,
+              "endLine": 46
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 39,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Constructor\n\t *\n\t * @throws Requests_Exception On incorrect number of arguments (`authbasicbadargs`)\n\t * @param array|null $args Array of user and password. Must have exactly two elements\n\t */",
+              "line": 33,
+              "filePos": 457,
+              "tokenPos": 29,
+              "endLine": 38,
+              "endFilePos": 656,
+              "endTokenPos": 29
+            }
+          ],
+          "endLine": 47
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "register",
+          "attributes": {
+            "startLine": 56,
+            "endLine": 56
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": {
+              "nodeType": "Name",
+              "parts": [
+                "Requests_Hooks"
+              ],
+              "attributes": {
+                "startLine": 56,
+                "endLine": 56
+              }
+            },
+            "byRef": true,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "hooks",
+              "attributes": {
+                "startLine": 56,
+                "endLine": 56
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 56,
+              "endLine": 56
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_MethodCall",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "hooks",
+                "attributes": {
+                  "startLine": 57,
+                  "endLine": 57
+                }
+              },
+              "name": {
+                "nodeType": "Identifier",
+                "name": "register",
+                "attributes": {
+                  "startLine": 57,
+                  "endLine": 57
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "curl.before_send",
+                    "attributes": {
+                      "startLine": 57,
+                      "endLine": 57,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 57,
+                    "endLine": 57
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Array",
+                    "items": [
+                      {
+                        "nodeType": "Expr_ArrayItem",
+                        "key": null,
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "this",
+                          "attributes": {
+                            "startLine": 57,
+                            "endLine": 57
+                          }
+                        },
+                        "byRef": true,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 57,
+                          "endLine": 57
+                        }
+                      },
+                      {
+                        "nodeType": "Expr_ArrayItem",
+                        "key": null,
+                        "value": {
+                          "nodeType": "Scalar_String",
+                          "value": "curl_before_send",
+                          "attributes": {
+                            "startLine": 57,
+                            "endLine": 57,
+                            "kind": 1
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 57,
+                          "endLine": 57
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 57,
+                      "endLine": 57,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 57,
+                    "endLine": 57
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 57,
+                "endLine": 57
+              }
+            },
+            "attributes": {
+              "startLine": 57,
+              "endLine": 57
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_MethodCall",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "hooks",
+                "attributes": {
+                  "startLine": 58,
+                  "endLine": 58
+                }
+              },
+              "name": {
+                "nodeType": "Identifier",
+                "name": "register",
+                "attributes": {
+                  "startLine": 58,
+                  "endLine": 58
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "fsockopen.after_headers",
+                    "attributes": {
+                      "startLine": 58,
+                      "endLine": 58,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 58,
+                    "endLine": 58
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Array",
+                    "items": [
+                      {
+                        "nodeType": "Expr_ArrayItem",
+                        "key": null,
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "this",
+                          "attributes": {
+                            "startLine": 58,
+                            "endLine": 58
+                          }
+                        },
+                        "byRef": true,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 58,
+                          "endLine": 58
+                        }
+                      },
+                      {
+                        "nodeType": "Expr_ArrayItem",
+                        "key": null,
+                        "value": {
+                          "nodeType": "Scalar_String",
+                          "value": "fsockopen_header",
+                          "attributes": {
+                            "startLine": 58,
+                            "endLine": 58,
+                            "kind": 1
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 58,
+                          "endLine": 58
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 58,
+                      "endLine": 58,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 58,
+                    "endLine": 58
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 58,
+                "endLine": 58
+              }
+            },
+            "attributes": {
+              "startLine": 58,
+              "endLine": 58
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 56,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Register the necessary callbacks\n\t *\n\t * @see curl_before_send\n\t * @see fsockopen_header\n\t * @param Requests_Hooks $hooks Hook system\n\t */",
+              "line": 49,
+              "filePos": 900,
+              "tokenPos": 108,
+              "endLine": 55,
+              "endFilePos": 1045,
+              "endTokenPos": 108
+            }
+          ],
+          "endLine": 59
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "curl_before_send",
+          "attributes": {
+            "startLine": 66,
+            "endLine": 66
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": true,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "handle",
+              "attributes": {
+                "startLine": 66,
+                "endLine": 66
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 66,
+              "endLine": 66
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "curl_setopt"
+                ],
+                "attributes": {
+                  "startLine": 67,
+                  "endLine": 67
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "handle",
+                    "attributes": {
+                      "startLine": 67,
+                      "endLine": 67
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 67,
+                    "endLine": 67
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_ConstFetch",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "CURLOPT_HTTPAUTH"
+                      ],
+                      "attributes": {
+                        "startLine": 67,
+                        "endLine": 67
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 67,
+                      "endLine": 67
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 67,
+                    "endLine": 67
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_ConstFetch",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "CURLAUTH_BASIC"
+                      ],
+                      "attributes": {
+                        "startLine": 67,
+                        "endLine": 67
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 67,
+                      "endLine": 67
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 67,
+                    "endLine": 67
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 67,
+                "endLine": 67
+              }
+            },
+            "attributes": {
+              "startLine": 67,
+              "endLine": 67
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "curl_setopt"
+                ],
+                "attributes": {
+                  "startLine": 68,
+                  "endLine": 68
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "handle",
+                    "attributes": {
+                      "startLine": 68,
+                      "endLine": 68
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 68,
+                    "endLine": 68
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_ConstFetch",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "CURLOPT_USERPWD"
+                      ],
+                      "attributes": {
+                        "startLine": 68,
+                        "endLine": 68
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 68,
+                      "endLine": 68
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 68,
+                    "endLine": 68
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_MethodCall",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "this",
+                      "attributes": {
+                        "startLine": 68,
+                        "endLine": 68
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "getAuthString",
+                      "attributes": {
+                        "startLine": 68,
+                        "endLine": 68
+                      }
+                    },
+                    "args": [],
+                    "attributes": {
+                      "startLine": 68,
+                      "endLine": 68
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 68,
+                    "endLine": 68
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 68,
+                "endLine": 68
+              }
+            },
+            "attributes": {
+              "startLine": 68,
+              "endLine": 68
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 66,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Set cURL parameters before the data is sent\n\t *\n\t * @param resource $handle cURL resource\n\t */",
+              "line": 61,
+              "filePos": 1261,
+              "tokenPos": 162,
+              "endLine": 65,
+              "endFilePos": 1362,
+              "endTokenPos": 162
+            }
+          ],
+          "endLine": 69
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "fsockopen_header",
+          "attributes": {
+            "startLine": 76,
+            "endLine": 76
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": true,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "out",
+              "attributes": {
+                "startLine": 76,
+                "endLine": 76
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 76,
+              "endLine": 76
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_AssignOp_Concat",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "out",
+                "attributes": {
+                  "startLine": 77,
+                  "endLine": 77
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "sprintf"
+                  ],
+                  "attributes": {
+                    "startLine": 77,
+                    "endLine": 77
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "Authorization: Basic %s\r\n",
+                      "attributes": {
+                        "startLine": 77,
+                        "endLine": 77,
+                        "kind": 2
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 77,
+                      "endLine": 77
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_FuncCall",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "base64_encode"
+                        ],
+                        "attributes": {
+                          "startLine": 77,
+                          "endLine": 77
+                        }
+                      },
+                      "args": [
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Expr_MethodCall",
+                            "var": {
+                              "nodeType": "Expr_Variable",
+                              "name": "this",
+                              "attributes": {
+                                "startLine": 77,
+                                "endLine": 77
+                              }
+                            },
+                            "name": {
+                              "nodeType": "Identifier",
+                              "name": "getAuthString",
+                              "attributes": {
+                                "startLine": 77,
+                                "endLine": 77
+                              }
+                            },
+                            "args": [],
+                            "attributes": {
+                              "startLine": 77,
+                              "endLine": 77
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 77,
+                            "endLine": 77
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 77,
+                        "endLine": 77
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 77,
+                      "endLine": 77
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 77,
+                  "endLine": 77
+                }
+              },
+              "attributes": {
+                "startLine": 77,
+                "endLine": 77
+              }
+            },
+            "attributes": {
+              "startLine": 77,
+              "endLine": 77
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 76,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Add extra headers to the request before sending\n\t *\n\t * @param string $out HTTP header string\n\t */",
+              "line": 71,
+              "filePos": 1538,
+              "tokenPos": 206,
+              "endLine": 75,
+              "endFilePos": 1643,
+              "endTokenPos": 206
+            }
+          ],
+          "endLine": 78
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "getAuthString",
+          "attributes": {
+            "startLine": 85,
+            "endLine": 85
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_BinaryOp_Concat",
+              "left": {
+                "nodeType": "Expr_BinaryOp_Concat",
+                "left": {
+                  "nodeType": "Expr_PropertyFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "this",
+                    "attributes": {
+                      "startLine": 86,
+                      "endLine": 86
+                    }
+                  },
+                  "name": {
+                    "nodeType": "Identifier",
+                    "name": "user",
+                    "attributes": {
+                      "startLine": 86,
+                      "endLine": 86
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 86,
+                    "endLine": 86
+                  }
+                },
+                "right": {
+                  "nodeType": "Scalar_String",
+                  "value": ":",
+                  "attributes": {
+                    "startLine": 86,
+                    "endLine": 86,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 86,
+                  "endLine": 86
+                }
+              },
+              "right": {
+                "nodeType": "Expr_PropertyFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "this",
+                  "attributes": {
+                    "startLine": 86,
+                    "endLine": 86
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "pass",
+                  "attributes": {
+                    "startLine": 86,
+                    "endLine": 86
+                  }
+                },
+                "attributes": {
+                  "startLine": 86,
+                  "endLine": 86
+                }
+              },
+              "attributes": {
+                "startLine": 86,
+                "endLine": 86
+              }
+            },
+            "attributes": {
+              "startLine": 86,
+              "endLine": 86
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 85,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Get the authentication string (user:pass)\n\t *\n\t * @return string\n\t */",
+              "line": 80,
+              "filePos": 1782,
+              "tokenPos": 242,
+              "endLine": 84,
+              "endFilePos": 1858,
+              "endTokenPos": 242
+            }
+          ],
+          "endLine": 87
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 18,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Basic Authentication provider\n *\n * @package Requests\n * @subpackage Authentication\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 7,
+          "endFilePos": 99,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Basic Authentication provider\n *\n * Provides a handler for Basic HTTP authentication via the Authorization\n * header.\n *\n * @package Requests\n * @subpackage Authentication\n */",
+          "line": 9,
+          "filePos": 102,
+          "tokenPos": 3,
+          "endLine": 17,
+          "endFilePos": 283,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 88
+    }
+  }
+]

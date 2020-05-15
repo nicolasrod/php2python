@@ -1,0 +1,270 @@
+[
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_deprecated_file"
+        ],
+        "attributes": {
+          "startLine": 9,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n * Session API\n *\n * @since 4.0.0\n * @deprecated 4.7.0\n */",
+              "line": 2,
+              "filePos": 6,
+              "tokenPos": 1,
+              "endLine": 7,
+              "endFilePos": 67,
+              "endTokenPos": 1
+            }
+          ],
+          "endLine": 9
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "basename"
+              ],
+              "attributes": {
+                "startLine": 9,
+                "endLine": 9
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_MagicConst_File",
+                  "attributes": {
+                    "startLine": 9,
+                    "endLine": 9
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 9,
+                  "endLine": 9
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 9,
+              "endLine": 9
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 9,
+            "endLine": 9
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "4.7.0",
+            "attributes": {
+              "startLine": 9,
+              "endLine": 9,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 9,
+            "endLine": 9
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 9,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/**\n * Session API\n *\n * @since 4.0.0\n * @deprecated 4.7.0\n */",
+            "line": 2,
+            "filePos": 6,
+            "tokenPos": 1,
+            "endLine": 7,
+            "endFilePos": 67,
+            "endTokenPos": 1
+          }
+        ],
+        "endLine": 9
+      }
+    },
+    "attributes": {
+      "startLine": 9,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Session API\n *\n * @since 4.0.0\n * @deprecated 4.7.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 7,
+          "endFilePos": 67,
+          "endTokenPos": 1
+        }
+      ],
+      "endLine": 9
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_BinaryOp_Concat",
+          "left": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "ABSPATH"
+              ],
+              "attributes": {
+                "startLine": 11,
+                "endLine": 11
+              }
+            },
+            "attributes": {
+              "startLine": 11,
+              "endLine": 11
+            }
+          },
+          "right": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "WPINC"
+              ],
+              "attributes": {
+                "startLine": 11,
+                "endLine": 11
+              }
+            },
+            "attributes": {
+              "startLine": 11,
+              "endLine": 11
+            }
+          },
+          "attributes": {
+            "startLine": 11,
+            "endLine": 11
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/class-wp-session-tokens.php",
+          "attributes": {
+            "startLine": 11,
+            "endLine": 11,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 11,
+          "endLine": 11
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 11,
+        "endLine": 11
+      }
+    },
+    "attributes": {
+      "startLine": 11,
+      "endLine": 11
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_BinaryOp_Concat",
+          "left": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "ABSPATH"
+              ],
+              "attributes": {
+                "startLine": 12,
+                "endLine": 12
+              }
+            },
+            "attributes": {
+              "startLine": 12,
+              "endLine": 12
+            }
+          },
+          "right": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "WPINC"
+              ],
+              "attributes": {
+                "startLine": 12,
+                "endLine": 12
+              }
+            },
+            "attributes": {
+              "startLine": 12,
+              "endLine": 12
+            }
+          },
+          "attributes": {
+            "startLine": 12,
+            "endLine": 12
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/class-wp-user-meta-session-tokens.php",
+          "attributes": {
+            "startLine": 12,
+            "endLine": 12,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 12,
+          "endLine": 12
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 12,
+        "endLine": 12
+      }
+    },
+    "attributes": {
+      "startLine": 12,
+      "endLine": 12
+    }
+  }
+]

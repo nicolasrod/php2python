@@ -1,0 +1,216 @@
+[
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "_deprecated_file"
+        ],
+        "attributes": {
+          "startLine": 12,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n * API for fetching the HTML to embed remote content based on a provided URL.\n *\n * This file is deprecated, use 'wp-includes/class-wp-oembed.php' instead.\n *\n * @deprecated 5.3.0\n * @package WordPress\n * @subpackage oEmbed\n */",
+              "line": 2,
+              "filePos": 6,
+              "tokenPos": 1,
+              "endLine": 10,
+              "endFilePos": 236,
+              "endTokenPos": 1
+            }
+          ],
+          "endLine": 12
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "basename"
+              ],
+              "attributes": {
+                "startLine": 12,
+                "endLine": 12
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_MagicConst_File",
+                  "attributes": {
+                    "startLine": 12,
+                    "endLine": 12
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 12,
+                  "endLine": 12
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 12,
+              "endLine": 12
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 12,
+            "endLine": 12
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "5.3.0",
+            "attributes": {
+              "startLine": 12,
+              "endLine": 12,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 12,
+            "endLine": 12
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "wp-includes/class-wp-oembed.php",
+            "attributes": {
+              "startLine": 12,
+              "endLine": 12,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 12,
+            "endLine": 12
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 12,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/**\n * API for fetching the HTML to embed remote content based on a provided URL.\n *\n * This file is deprecated, use 'wp-includes/class-wp-oembed.php' instead.\n *\n * @deprecated 5.3.0\n * @package WordPress\n * @subpackage oEmbed\n */",
+            "line": 2,
+            "filePos": 6,
+            "tokenPos": 1,
+            "endLine": 10,
+            "endFilePos": 236,
+            "endTokenPos": 1
+          }
+        ],
+        "endLine": 12
+      }
+    },
+    "attributes": {
+      "startLine": 12,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * API for fetching the HTML to embed remote content based on a provided URL.\n *\n * This file is deprecated, use 'wp-includes/class-wp-oembed.php' instead.\n *\n * @deprecated 5.3.0\n * @package WordPress\n * @subpackage oEmbed\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 10,
+          "endFilePos": 236,
+          "endTokenPos": 1
+        }
+      ],
+      "endLine": 12
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_ConstFetch",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "ABSPATH"
+            ],
+            "attributes": {
+              "startLine": 15,
+              "endLine": 15
+            }
+          },
+          "attributes": {
+            "startLine": 15,
+            "endLine": 15
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "wp-includes/class-wp-oembed.php",
+          "attributes": {
+            "startLine": 15,
+            "endLine": 15,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 15,
+          "endLine": 15
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 15,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** WP_oEmbed class */",
+            "line": 14,
+            "filePos": 326,
+            "tokenPos": 22,
+            "endLine": 14,
+            "endFilePos": 347,
+            "endTokenPos": 22
+          }
+        ],
+        "endLine": 15
+      }
+    },
+    "attributes": {
+      "startLine": 15,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** WP_oEmbed class */",
+          "line": 14,
+          "filePos": 326,
+          "tokenPos": 22,
+          "endLine": 14,
+          "endFilePos": 347,
+          "endTokenPos": 22
+        }
+      ],
+      "endLine": 15
+    }
+  }
+]

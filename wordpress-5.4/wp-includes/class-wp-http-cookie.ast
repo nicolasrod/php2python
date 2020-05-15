@@ -1,0 +1,5330 @@
+[
+  {
+    "nodeType": "Stmt_Class",
+    "flags": 0,
+    "extends": null,
+    "implements": [],
+    "name": {
+      "nodeType": "Identifier",
+      "name": "WP_Http_Cookie",
+      "attributes": {
+        "startLine": 21,
+        "endLine": 21
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "name",
+              "attributes": {
+                "startLine": 29,
+                "endLine": 29
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 29,
+              "endLine": 29
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 29,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Cookie name.\n\t *\n\t * @since 2.8.0\n\t * @var string\n\t */",
+              "line": 23,
+              "filePos": 578,
+              "tokenPos": 11,
+              "endLine": 28,
+              "endFilePos": 639,
+              "endTokenPos": 11
+            }
+          ],
+          "endLine": 29
+        }
+      },
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "value",
+              "attributes": {
+                "startLine": 37,
+                "endLine": 37
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 37,
+              "endLine": 37
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 37,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Cookie value.\n\t *\n\t * @since 2.8.0\n\t * @var string\n\t */",
+              "line": 31,
+              "filePos": 658,
+              "tokenPos": 18,
+              "endLine": 36,
+              "endFilePos": 720,
+              "endTokenPos": 18
+            }
+          ],
+          "endLine": 37
+        }
+      },
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "expires",
+              "attributes": {
+                "startLine": 45,
+                "endLine": 45
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 45,
+              "endLine": 45
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 45,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * When the cookie expires. Unix timestamp or formatted date.\n\t *\n\t * @since 2.8.0\n\t * @var string|int|null\n\t */",
+              "line": 39,
+              "filePos": 740,
+              "tokenPos": 25,
+              "endLine": 44,
+              "endFilePos": 856,
+              "endTokenPos": 25
+            }
+          ],
+          "endLine": 45
+        }
+      },
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "path",
+              "attributes": {
+                "startLine": 53,
+                "endLine": 53
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 53,
+              "endLine": 53
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 53,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Cookie URL path.\n\t *\n\t * @since 2.8.0\n\t * @var string\n\t */",
+              "line": 47,
+              "filePos": 878,
+              "tokenPos": 32,
+              "endLine": 52,
+              "endFilePos": 943,
+              "endTokenPos": 32
+            }
+          ],
+          "endLine": 53
+        }
+      },
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "domain",
+              "attributes": {
+                "startLine": 61,
+                "endLine": 61
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 61,
+              "endLine": 61
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 61,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Cookie Domain.\n\t *\n\t * @since 2.8.0\n\t * @var string\n\t */",
+              "line": 55,
+              "filePos": 962,
+              "tokenPos": 39,
+              "endLine": 60,
+              "endFilePos": 1025,
+              "endTokenPos": 39
+            }
+          ],
+          "endLine": 61
+        }
+      },
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "host_only",
+              "attributes": {
+                "startLine": 69,
+                "endLine": 69
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 69,
+              "endLine": 69
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 69,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * host-only flag.\n\t *\n\t * @since 5.2.0\n\t * @var bool\n\t */",
+              "line": 63,
+              "filePos": 1046,
+              "tokenPos": 46,
+              "endLine": 68,
+              "endFilePos": 1108,
+              "endTokenPos": 46
+            }
+          ],
+          "endLine": 69
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "__construct",
+          "attributes": {
+            "startLine": 94,
+            "endLine": 94
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "data",
+              "attributes": {
+                "startLine": 94,
+                "endLine": 94
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 94,
+              "endLine": 94
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "requested_url",
+              "attributes": {
+                "startLine": 94,
+                "endLine": 94
+              }
+            },
+            "default": {
+              "nodeType": "Scalar_String",
+              "value": "",
+              "attributes": {
+                "startLine": 94,
+                "endLine": 94,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 94,
+              "endLine": 94
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_Variable",
+              "name": "requested_url",
+              "attributes": {
+                "startLine": 95,
+                "endLine": 95
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "arrURL",
+                    "attributes": {
+                      "startLine": 96,
+                      "endLine": 96
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_ErrorSuppress",
+                    "expr": {
+                      "nodeType": "Expr_FuncCall",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "parse_url"
+                        ],
+                        "attributes": {
+                          "startLine": 96,
+                          "endLine": 96
+                        }
+                      },
+                      "args": [
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Expr_Variable",
+                            "name": "requested_url",
+                            "attributes": {
+                              "startLine": 96,
+                              "endLine": 96
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 96,
+                            "endLine": 96
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 96,
+                        "endLine": 96
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 96,
+                      "endLine": 96
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 96,
+                    "endLine": 96
+                  }
+                },
+                "attributes": {
+                  "startLine": 96,
+                  "endLine": 96
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 95,
+              "endLine": 97
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_Isset",
+              "vars": [
+                {
+                  "nodeType": "Expr_ArrayDimFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "arrURL",
+                    "attributes": {
+                      "startLine": 98,
+                      "endLine": 98
+                    }
+                  },
+                  "dim": {
+                    "nodeType": "Scalar_String",
+                    "value": "host",
+                    "attributes": {
+                      "startLine": 98,
+                      "endLine": 98,
+                      "kind": 1
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 98,
+                    "endLine": 98
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 98,
+                "endLine": 98
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_PropertyFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "this",
+                      "attributes": {
+                        "startLine": 99,
+                        "endLine": 99
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "domain",
+                      "attributes": {
+                        "startLine": 99,
+                        "endLine": 99
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 99,
+                      "endLine": 99
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_ArrayDimFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "arrURL",
+                      "attributes": {
+                        "startLine": 99,
+                        "endLine": 99
+                      }
+                    },
+                    "dim": {
+                      "nodeType": "Scalar_String",
+                      "value": "host",
+                      "attributes": {
+                        "startLine": 99,
+                        "endLine": 99,
+                        "kind": 1
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 99,
+                      "endLine": 99
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 99,
+                    "endLine": 99
+                  }
+                },
+                "attributes": {
+                  "startLine": 99,
+                  "endLine": 99
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 98,
+              "endLine": 100
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_PropertyFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "this",
+                  "attributes": {
+                    "startLine": 101,
+                    "endLine": 101
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "path",
+                  "attributes": {
+                    "startLine": 101,
+                    "endLine": 101
+                  }
+                },
+                "attributes": {
+                  "startLine": 101,
+                  "endLine": 101
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Ternary",
+                "cond": {
+                  "nodeType": "Expr_Isset",
+                  "vars": [
+                    {
+                      "nodeType": "Expr_ArrayDimFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "arrURL",
+                        "attributes": {
+                          "startLine": 101,
+                          "endLine": 101
+                        }
+                      },
+                      "dim": {
+                        "nodeType": "Scalar_String",
+                        "value": "path",
+                        "attributes": {
+                          "startLine": 101,
+                          "endLine": 101,
+                          "kind": 1
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 101,
+                        "endLine": 101
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 101,
+                    "endLine": 101
+                  }
+                },
+                "if": {
+                  "nodeType": "Expr_ArrayDimFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "arrURL",
+                    "attributes": {
+                      "startLine": 101,
+                      "endLine": 101
+                    }
+                  },
+                  "dim": {
+                    "nodeType": "Scalar_String",
+                    "value": "path",
+                    "attributes": {
+                      "startLine": 101,
+                      "endLine": 101,
+                      "kind": 1
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 101,
+                    "endLine": 101
+                  }
+                },
+                "else": {
+                  "nodeType": "Scalar_String",
+                  "value": "/",
+                  "attributes": {
+                    "startLine": 101,
+                    "endLine": 101,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 101,
+                  "endLine": 101
+                }
+              },
+              "attributes": {
+                "startLine": 101,
+                "endLine": 101
+              }
+            },
+            "attributes": {
+              "startLine": 101,
+              "endLine": 101
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BinaryOp_NotEqual",
+              "left": {
+                "nodeType": "Scalar_String",
+                "value": "/",
+                "attributes": {
+                  "startLine": 102,
+                  "endLine": 102,
+                  "kind": 1
+                }
+              },
+              "right": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "substr"
+                  ],
+                  "attributes": {
+                    "startLine": 102,
+                    "endLine": 102
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_PropertyFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "this",
+                        "attributes": {
+                          "startLine": 102,
+                          "endLine": 102
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "path",
+                        "attributes": {
+                          "startLine": 102,
+                          "endLine": 102
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 102,
+                        "endLine": 102
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 102,
+                      "endLine": 102
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_UnaryMinus",
+                      "expr": {
+                        "nodeType": "Scalar_LNumber",
+                        "value": 1,
+                        "attributes": {
+                          "startLine": 102,
+                          "endLine": 102,
+                          "kind": 10
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 102,
+                        "endLine": 102
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 102,
+                      "endLine": 102
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 102,
+                  "endLine": 102
+                }
+              },
+              "attributes": {
+                "startLine": 102,
+                "endLine": 102
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_PropertyFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "this",
+                      "attributes": {
+                        "startLine": 103,
+                        "endLine": 103
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "path",
+                      "attributes": {
+                        "startLine": 103,
+                        "endLine": 103
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 103,
+                      "endLine": 103
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_BinaryOp_Concat",
+                    "left": {
+                      "nodeType": "Expr_FuncCall",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "dirname"
+                        ],
+                        "attributes": {
+                          "startLine": 103,
+                          "endLine": 103
+                        }
+                      },
+                      "args": [
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Expr_PropertyFetch",
+                            "var": {
+                              "nodeType": "Expr_Variable",
+                              "name": "this",
+                              "attributes": {
+                                "startLine": 103,
+                                "endLine": 103
+                              }
+                            },
+                            "name": {
+                              "nodeType": "Identifier",
+                              "name": "path",
+                              "attributes": {
+                                "startLine": 103,
+                                "endLine": 103
+                              }
+                            },
+                            "attributes": {
+                              "startLine": 103,
+                              "endLine": 103
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 103,
+                            "endLine": 103
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 103,
+                        "endLine": 103
+                      }
+                    },
+                    "right": {
+                      "nodeType": "Scalar_String",
+                      "value": "/",
+                      "attributes": {
+                        "startLine": 103,
+                        "endLine": 103,
+                        "kind": 1
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 103,
+                      "endLine": 103
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 103,
+                    "endLine": 103
+                  }
+                },
+                "attributes": {
+                  "startLine": 103,
+                  "endLine": 103
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 102,
+              "endLine": 104
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "is_string"
+                ],
+                "attributes": {
+                  "startLine": 106,
+                  "endLine": 106
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "data",
+                    "attributes": {
+                      "startLine": 106,
+                      "endLine": 106
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 106,
+                    "endLine": 106
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 106,
+                "endLine": 106
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "pairs",
+                    "attributes": {
+                      "startLine": 108,
+                      "comments": [
+                        {
+                          "nodeType": "Comment",
+                          "text": "// Assume it's a header string direct from a previous request.\n",
+                          "line": 107,
+                          "filePos": 2621,
+                          "tokenPos": 222,
+                          "endLine": 108,
+                          "endFilePos": 2683,
+                          "endTokenPos": 222
+                        }
+                      ],
+                      "endLine": 108
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "explode"
+                      ],
+                      "attributes": {
+                        "startLine": 108,
+                        "endLine": 108
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Scalar_String",
+                          "value": ";",
+                          "attributes": {
+                            "startLine": 108,
+                            "endLine": 108,
+                            "kind": 1
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 108,
+                          "endLine": 108
+                        }
+                      },
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "data",
+                          "attributes": {
+                            "startLine": 108,
+                            "endLine": 108
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 108,
+                          "endLine": 108
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 108,
+                      "endLine": 108
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 108,
+                    "comments": [
+                      {
+                        "nodeType": "Comment",
+                        "text": "// Assume it's a header string direct from a previous request.\n",
+                        "line": 107,
+                        "filePos": 2621,
+                        "tokenPos": 222,
+                        "endLine": 108,
+                        "endFilePos": 2683,
+                        "endTokenPos": 222
+                      }
+                    ],
+                    "endLine": 108
+                  }
+                },
+                "attributes": {
+                  "startLine": 108,
+                  "comments": [
+                    {
+                      "nodeType": "Comment",
+                      "text": "// Assume it's a header string direct from a previous request.\n",
+                      "line": 107,
+                      "filePos": 2621,
+                      "tokenPos": 222,
+                      "endLine": 108,
+                      "endFilePos": 2683,
+                      "endTokenPos": 222
+                    }
+                  ],
+                  "endLine": 108
+                }
+              },
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "name",
+                    "attributes": {
+                      "startLine": 111,
+                      "comments": [
+                        {
+                          "nodeType": "Comment",
+                          "text": "// Special handling for first pair; name=value. Also be careful of \"=\" in value.\n",
+                          "line": 110,
+                          "filePos": 2723,
+                          "tokenPos": 239,
+                          "endLine": 111,
+                          "endFilePos": 2803,
+                          "endTokenPos": 239
+                        }
+                      ],
+                      "endLine": 111
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "trim"
+                      ],
+                      "attributes": {
+                        "startLine": 111,
+                        "endLine": 111
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_FuncCall",
+                          "name": {
+                            "nodeType": "Name",
+                            "parts": [
+                              "substr"
+                            ],
+                            "attributes": {
+                              "startLine": 111,
+                              "endLine": 111
+                            }
+                          },
+                          "args": [
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Expr_ArrayDimFetch",
+                                "var": {
+                                  "nodeType": "Expr_Variable",
+                                  "name": "pairs",
+                                  "attributes": {
+                                    "startLine": 111,
+                                    "endLine": 111
+                                  }
+                                },
+                                "dim": {
+                                  "nodeType": "Scalar_LNumber",
+                                  "value": 0,
+                                  "attributes": {
+                                    "startLine": 111,
+                                    "endLine": 111,
+                                    "kind": 10
+                                  }
+                                },
+                                "attributes": {
+                                  "startLine": 111,
+                                  "endLine": 111
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 111,
+                                "endLine": 111
+                              }
+                            },
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Scalar_LNumber",
+                                "value": 0,
+                                "attributes": {
+                                  "startLine": 111,
+                                  "endLine": 111,
+                                  "kind": 10
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 111,
+                                "endLine": 111
+                              }
+                            },
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Expr_FuncCall",
+                                "name": {
+                                  "nodeType": "Name",
+                                  "parts": [
+                                    "strpos"
+                                  ],
+                                  "attributes": {
+                                    "startLine": 111,
+                                    "endLine": 111
+                                  }
+                                },
+                                "args": [
+                                  {
+                                    "nodeType": "Arg",
+                                    "value": {
+                                      "nodeType": "Expr_ArrayDimFetch",
+                                      "var": {
+                                        "nodeType": "Expr_Variable",
+                                        "name": "pairs",
+                                        "attributes": {
+                                          "startLine": 111,
+                                          "endLine": 111
+                                        }
+                                      },
+                                      "dim": {
+                                        "nodeType": "Scalar_LNumber",
+                                        "value": 0,
+                                        "attributes": {
+                                          "startLine": 111,
+                                          "endLine": 111,
+                                          "kind": 10
+                                        }
+                                      },
+                                      "attributes": {
+                                        "startLine": 111,
+                                        "endLine": 111
+                                      }
+                                    },
+                                    "byRef": false,
+                                    "unpack": false,
+                                    "attributes": {
+                                      "startLine": 111,
+                                      "endLine": 111
+                                    }
+                                  },
+                                  {
+                                    "nodeType": "Arg",
+                                    "value": {
+                                      "nodeType": "Scalar_String",
+                                      "value": "=",
+                                      "attributes": {
+                                        "startLine": 111,
+                                        "endLine": 111,
+                                        "kind": 1
+                                      }
+                                    },
+                                    "byRef": false,
+                                    "unpack": false,
+                                    "attributes": {
+                                      "startLine": 111,
+                                      "endLine": 111
+                                    }
+                                  }
+                                ],
+                                "attributes": {
+                                  "startLine": 111,
+                                  "endLine": 111
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 111,
+                                "endLine": 111
+                              }
+                            }
+                          ],
+                          "attributes": {
+                            "startLine": 111,
+                            "endLine": 111
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 111,
+                          "endLine": 111
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 111,
+                      "endLine": 111
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 111,
+                    "comments": [
+                      {
+                        "nodeType": "Comment",
+                        "text": "// Special handling for first pair; name=value. Also be careful of \"=\" in value.\n",
+                        "line": 110,
+                        "filePos": 2723,
+                        "tokenPos": 239,
+                        "endLine": 111,
+                        "endFilePos": 2803,
+                        "endTokenPos": 239
+                      }
+                    ],
+                    "endLine": 111
+                  }
+                },
+                "attributes": {
+                  "startLine": 111,
+                  "comments": [
+                    {
+                      "nodeType": "Comment",
+                      "text": "// Special handling for first pair; name=value. Also be careful of \"=\" in value.\n",
+                      "line": 110,
+                      "filePos": 2723,
+                      "tokenPos": 239,
+                      "endLine": 111,
+                      "endFilePos": 2803,
+                      "endTokenPos": 239
+                    }
+                  ],
+                  "endLine": 111
+                }
+              },
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "value",
+                    "attributes": {
+                      "startLine": 112,
+                      "endLine": 112
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "substr"
+                      ],
+                      "attributes": {
+                        "startLine": 112,
+                        "endLine": 112
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_ArrayDimFetch",
+                          "var": {
+                            "nodeType": "Expr_Variable",
+                            "name": "pairs",
+                            "attributes": {
+                              "startLine": 112,
+                              "endLine": 112
+                            }
+                          },
+                          "dim": {
+                            "nodeType": "Scalar_LNumber",
+                            "value": 0,
+                            "attributes": {
+                              "startLine": 112,
+                              "endLine": 112,
+                              "kind": 10
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 112,
+                            "endLine": 112
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 112,
+                          "endLine": 112
+                        }
+                      },
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_BinaryOp_Plus",
+                          "left": {
+                            "nodeType": "Expr_FuncCall",
+                            "name": {
+                              "nodeType": "Name",
+                              "parts": [
+                                "strpos"
+                              ],
+                              "attributes": {
+                                "startLine": 112,
+                                "endLine": 112
+                              }
+                            },
+                            "args": [
+                              {
+                                "nodeType": "Arg",
+                                "value": {
+                                  "nodeType": "Expr_ArrayDimFetch",
+                                  "var": {
+                                    "nodeType": "Expr_Variable",
+                                    "name": "pairs",
+                                    "attributes": {
+                                      "startLine": 112,
+                                      "endLine": 112
+                                    }
+                                  },
+                                  "dim": {
+                                    "nodeType": "Scalar_LNumber",
+                                    "value": 0,
+                                    "attributes": {
+                                      "startLine": 112,
+                                      "endLine": 112,
+                                      "kind": 10
+                                    }
+                                  },
+                                  "attributes": {
+                                    "startLine": 112,
+                                    "endLine": 112
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 112,
+                                  "endLine": 112
+                                }
+                              },
+                              {
+                                "nodeType": "Arg",
+                                "value": {
+                                  "nodeType": "Scalar_String",
+                                  "value": "=",
+                                  "attributes": {
+                                    "startLine": 112,
+                                    "endLine": 112,
+                                    "kind": 1
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 112,
+                                  "endLine": 112
+                                }
+                              }
+                            ],
+                            "attributes": {
+                              "startLine": 112,
+                              "endLine": 112
+                            }
+                          },
+                          "right": {
+                            "nodeType": "Scalar_LNumber",
+                            "value": 1,
+                            "attributes": {
+                              "startLine": 112,
+                              "endLine": 112,
+                              "kind": 10
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 112,
+                            "endLine": 112
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 112,
+                          "endLine": 112
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 112,
+                      "endLine": 112
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 112,
+                    "endLine": 112
+                  }
+                },
+                "attributes": {
+                  "startLine": 112,
+                  "endLine": 112
+                }
+              },
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_PropertyFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "this",
+                      "attributes": {
+                        "startLine": 113,
+                        "endLine": 113
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "name",
+                      "attributes": {
+                        "startLine": 113,
+                        "endLine": 113
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 113,
+                      "endLine": 113
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_Variable",
+                    "name": "name",
+                    "attributes": {
+                      "startLine": 113,
+                      "endLine": 113
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 113,
+                    "endLine": 113
+                  }
+                },
+                "attributes": {
+                  "startLine": 113,
+                  "endLine": 113
+                }
+              },
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_PropertyFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "this",
+                      "attributes": {
+                        "startLine": 114,
+                        "endLine": 114
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "value",
+                      "attributes": {
+                        "startLine": 114,
+                        "endLine": 114
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 114,
+                      "endLine": 114
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "urldecode"
+                      ],
+                      "attributes": {
+                        "startLine": 114,
+                        "endLine": 114
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "value",
+                          "attributes": {
+                            "startLine": 114,
+                            "endLine": 114
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 114,
+                          "endLine": 114
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 114,
+                      "endLine": 114
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 114,
+                    "endLine": 114
+                  }
+                },
+                "attributes": {
+                  "startLine": 114,
+                  "endLine": 114
+                }
+              },
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_FuncCall",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "array_shift"
+                    ],
+                    "attributes": {
+                      "startLine": 117,
+                      "comments": [
+                        {
+                          "nodeType": "Comment",
+                          "text": "// Removes name=value from items.\n",
+                          "line": 116,
+                          "filePos": 3017,
+                          "tokenPos": 334,
+                          "endLine": 117,
+                          "endFilePos": 3050,
+                          "endTokenPos": 334
+                        }
+                      ],
+                      "endLine": 117
+                    }
+                  },
+                  "args": [
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Expr_Variable",
+                        "name": "pairs",
+                        "attributes": {
+                          "startLine": 117,
+                          "endLine": 117
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 117,
+                        "endLine": 117
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 117,
+                    "comments": [
+                      {
+                        "nodeType": "Comment",
+                        "text": "// Removes name=value from items.\n",
+                        "line": 116,
+                        "filePos": 3017,
+                        "tokenPos": 334,
+                        "endLine": 117,
+                        "endFilePos": 3050,
+                        "endTokenPos": 334
+                      }
+                    ],
+                    "endLine": 117
+                  }
+                },
+                "attributes": {
+                  "startLine": 117,
+                  "comments": [
+                    {
+                      "nodeType": "Comment",
+                      "text": "// Removes name=value from items.\n",
+                      "line": 116,
+                      "filePos": 3017,
+                      "tokenPos": 334,
+                      "endLine": 117,
+                      "endFilePos": 3050,
+                      "endTokenPos": 334
+                    }
+                  ],
+                  "endLine": 117
+                }
+              },
+              {
+                "nodeType": "Stmt_Foreach",
+                "expr": {
+                  "nodeType": "Expr_Variable",
+                  "name": "pairs",
+                  "attributes": {
+                    "startLine": 120,
+                    "endLine": 120
+                  }
+                },
+                "keyVar": null,
+                "byRef": false,
+                "valueVar": {
+                  "nodeType": "Expr_Variable",
+                  "name": "pair",
+                  "attributes": {
+                    "startLine": 120,
+                    "endLine": 120
+                  }
+                },
+                "stmts": [
+                  {
+                    "nodeType": "Stmt_Expression",
+                    "expr": {
+                      "nodeType": "Expr_Assign",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "pair",
+                        "attributes": {
+                          "startLine": 121,
+                          "endLine": 121
+                        }
+                      },
+                      "expr": {
+                        "nodeType": "Expr_FuncCall",
+                        "name": {
+                          "nodeType": "Name",
+                          "parts": [
+                            "rtrim"
+                          ],
+                          "attributes": {
+                            "startLine": 121,
+                            "endLine": 121
+                          }
+                        },
+                        "args": [
+                          {
+                            "nodeType": "Arg",
+                            "value": {
+                              "nodeType": "Expr_Variable",
+                              "name": "pair",
+                              "attributes": {
+                                "startLine": 121,
+                                "endLine": 121
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 121,
+                              "endLine": 121
+                            }
+                          }
+                        ],
+                        "attributes": {
+                          "startLine": 121,
+                          "endLine": 121
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 121,
+                        "endLine": 121
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 121,
+                      "endLine": 121
+                    }
+                  },
+                  {
+                    "nodeType": "Stmt_If",
+                    "cond": {
+                      "nodeType": "Expr_Empty",
+                      "expr": {
+                        "nodeType": "Expr_Variable",
+                        "name": "pair",
+                        "attributes": {
+                          "startLine": 124,
+                          "endLine": 124
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 124,
+                        "endLine": 124
+                      }
+                    },
+                    "stmts": [
+                      {
+                        "nodeType": "Stmt_Continue",
+                        "num": null,
+                        "attributes": {
+                          "startLine": 125,
+                          "endLine": 125
+                        }
+                      }
+                    ],
+                    "elseifs": [],
+                    "else": null,
+                    "attributes": {
+                      "startLine": 124,
+                      "comments": [
+                        {
+                          "nodeType": "Comment",
+                          "text": "// Handle the cookie ending in ; which results in a empty final pair.\n",
+                          "line": 123,
+                          "filePos": 3185,
+                          "tokenPos": 372,
+                          "endLine": 124,
+                          "endFilePos": 3254,
+                          "endTokenPos": 372
+                        }
+                      ],
+                      "endLine": 126
+                    }
+                  },
+                  {
+                    "nodeType": "Stmt_Expression",
+                    "expr": {
+                      "nodeType": "Expr_Assign",
+                      "var": {
+                        "nodeType": "Expr_List",
+                        "items": [
+                          {
+                            "nodeType": "Expr_ArrayItem",
+                            "key": null,
+                            "value": {
+                              "nodeType": "Expr_Variable",
+                              "name": "key",
+                              "attributes": {
+                                "startLine": 128,
+                                "endLine": 128
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 128,
+                              "endLine": 128
+                            }
+                          },
+                          {
+                            "nodeType": "Expr_ArrayItem",
+                            "key": null,
+                            "value": {
+                              "nodeType": "Expr_Variable",
+                              "name": "val",
+                              "attributes": {
+                                "startLine": 128,
+                                "endLine": 128
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 128,
+                              "endLine": 128
+                            }
+                          }
+                        ],
+                        "attributes": {
+                          "startLine": 128,
+                          "endLine": 128
+                        }
+                      },
+                      "expr": {
+                        "nodeType": "Expr_Ternary",
+                        "cond": {
+                          "nodeType": "Expr_FuncCall",
+                          "name": {
+                            "nodeType": "Name",
+                            "parts": [
+                              "strpos"
+                            ],
+                            "attributes": {
+                              "startLine": 128,
+                              "endLine": 128
+                            }
+                          },
+                          "args": [
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Expr_Variable",
+                                "name": "pair",
+                                "attributes": {
+                                  "startLine": 128,
+                                  "endLine": 128
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 128,
+                                "endLine": 128
+                              }
+                            },
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Scalar_String",
+                                "value": "=",
+                                "attributes": {
+                                  "startLine": 128,
+                                  "endLine": 128,
+                                  "kind": 1
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 128,
+                                "endLine": 128
+                              }
+                            }
+                          ],
+                          "attributes": {
+                            "startLine": 128,
+                            "endLine": 128
+                          }
+                        },
+                        "if": {
+                          "nodeType": "Expr_FuncCall",
+                          "name": {
+                            "nodeType": "Name",
+                            "parts": [
+                              "explode"
+                            ],
+                            "attributes": {
+                              "startLine": 128,
+                              "endLine": 128
+                            }
+                          },
+                          "args": [
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Scalar_String",
+                                "value": "=",
+                                "attributes": {
+                                  "startLine": 128,
+                                  "endLine": 128,
+                                  "kind": 1
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 128,
+                                "endLine": 128
+                              }
+                            },
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Expr_Variable",
+                                "name": "pair",
+                                "attributes": {
+                                  "startLine": 128,
+                                  "endLine": 128
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 128,
+                                "endLine": 128
+                              }
+                            }
+                          ],
+                          "attributes": {
+                            "startLine": 128,
+                            "endLine": 128
+                          }
+                        },
+                        "else": {
+                          "nodeType": "Expr_Array",
+                          "items": [
+                            {
+                              "nodeType": "Expr_ArrayItem",
+                              "key": null,
+                              "value": {
+                                "nodeType": "Expr_Variable",
+                                "name": "pair",
+                                "attributes": {
+                                  "startLine": 128,
+                                  "endLine": 128
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 128,
+                                "endLine": 128
+                              }
+                            },
+                            {
+                              "nodeType": "Expr_ArrayItem",
+                              "key": null,
+                              "value": {
+                                "nodeType": "Scalar_String",
+                                "value": "",
+                                "attributes": {
+                                  "startLine": 128,
+                                  "endLine": 128,
+                                  "kind": 1
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 128,
+                                "endLine": 128
+                              }
+                            }
+                          ],
+                          "attributes": {
+                            "startLine": 128,
+                            "endLine": 128,
+                            "kind": 1
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 128,
+                          "endLine": 128
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 128,
+                        "endLine": 128
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 128,
+                      "endLine": 128
+                    }
+                  },
+                  {
+                    "nodeType": "Stmt_Expression",
+                    "expr": {
+                      "nodeType": "Expr_Assign",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "key",
+                        "attributes": {
+                          "startLine": 129,
+                          "endLine": 129
+                        }
+                      },
+                      "expr": {
+                        "nodeType": "Expr_FuncCall",
+                        "name": {
+                          "nodeType": "Name",
+                          "parts": [
+                            "strtolower"
+                          ],
+                          "attributes": {
+                            "startLine": 129,
+                            "endLine": 129
+                          }
+                        },
+                        "args": [
+                          {
+                            "nodeType": "Arg",
+                            "value": {
+                              "nodeType": "Expr_FuncCall",
+                              "name": {
+                                "nodeType": "Name",
+                                "parts": [
+                                  "trim"
+                                ],
+                                "attributes": {
+                                  "startLine": 129,
+                                  "endLine": 129
+                                }
+                              },
+                              "args": [
+                                {
+                                  "nodeType": "Arg",
+                                  "value": {
+                                    "nodeType": "Expr_Variable",
+                                    "name": "key",
+                                    "attributes": {
+                                      "startLine": 129,
+                                      "endLine": 129
+                                    }
+                                  },
+                                  "byRef": false,
+                                  "unpack": false,
+                                  "attributes": {
+                                    "startLine": 129,
+                                    "endLine": 129
+                                  }
+                                }
+                              ],
+                              "attributes": {
+                                "startLine": 129,
+                                "endLine": 129
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 129,
+                              "endLine": 129
+                            }
+                          }
+                        ],
+                        "attributes": {
+                          "startLine": 129,
+                          "endLine": 129
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 129,
+                        "endLine": 129
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 129,
+                      "endLine": 129
+                    }
+                  },
+                  {
+                    "nodeType": "Stmt_If",
+                    "cond": {
+                      "nodeType": "Expr_BinaryOp_Equal",
+                      "left": {
+                        "nodeType": "Scalar_String",
+                        "value": "expires",
+                        "attributes": {
+                          "startLine": 130,
+                          "endLine": 130,
+                          "kind": 1
+                        }
+                      },
+                      "right": {
+                        "nodeType": "Expr_Variable",
+                        "name": "key",
+                        "attributes": {
+                          "startLine": 130,
+                          "endLine": 130
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 130,
+                        "endLine": 130
+                      }
+                    },
+                    "stmts": [
+                      {
+                        "nodeType": "Stmt_Expression",
+                        "expr": {
+                          "nodeType": "Expr_Assign",
+                          "var": {
+                            "nodeType": "Expr_Variable",
+                            "name": "val",
+                            "attributes": {
+                              "startLine": 131,
+                              "endLine": 131
+                            }
+                          },
+                          "expr": {
+                            "nodeType": "Expr_FuncCall",
+                            "name": {
+                              "nodeType": "Name",
+                              "parts": [
+                                "strtotime"
+                              ],
+                              "attributes": {
+                                "startLine": 131,
+                                "endLine": 131
+                              }
+                            },
+                            "args": [
+                              {
+                                "nodeType": "Arg",
+                                "value": {
+                                  "nodeType": "Expr_Variable",
+                                  "name": "val",
+                                  "attributes": {
+                                    "startLine": 131,
+                                    "endLine": 131
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 131,
+                                  "endLine": 131
+                                }
+                              }
+                            ],
+                            "attributes": {
+                              "startLine": 131,
+                              "endLine": 131
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 131,
+                            "endLine": 131
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 131,
+                          "endLine": 131
+                        }
+                      }
+                    ],
+                    "elseifs": [],
+                    "else": null,
+                    "attributes": {
+                      "startLine": 130,
+                      "endLine": 132
+                    }
+                  },
+                  {
+                    "nodeType": "Stmt_Expression",
+                    "expr": {
+                      "nodeType": "Expr_Assign",
+                      "var": {
+                        "nodeType": "Expr_PropertyFetch",
+                        "var": {
+                          "nodeType": "Expr_Variable",
+                          "name": "this",
+                          "attributes": {
+                            "startLine": 133,
+                            "endLine": 133
+                          }
+                        },
+                        "name": {
+                          "nodeType": "Expr_Variable",
+                          "name": "key",
+                          "attributes": {
+                            "startLine": 133,
+                            "endLine": 133
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 133,
+                          "endLine": 133
+                        }
+                      },
+                      "expr": {
+                        "nodeType": "Expr_Variable",
+                        "name": "val",
+                        "attributes": {
+                          "startLine": 133,
+                          "endLine": 133
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 133,
+                        "endLine": 133
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 133,
+                      "endLine": 133
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 120,
+                  "comments": [
+                    {
+                      "nodeType": "Comment",
+                      "text": "// Set everything else as a property.\n",
+                      "line": 119,
+                      "filePos": 3081,
+                      "tokenPos": 344,
+                      "endLine": 120,
+                      "endFilePos": 3118,
+                      "endTokenPos": 344
+                    }
+                  ],
+                  "endLine": 134
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": {
+              "nodeType": "Stmt_Else",
+              "stmts": [
+                {
+                  "nodeType": "Stmt_If",
+                  "cond": {
+                    "nodeType": "Expr_BooleanNot",
+                    "expr": {
+                      "nodeType": "Expr_Isset",
+                      "vars": [
+                        {
+                          "nodeType": "Expr_ArrayDimFetch",
+                          "var": {
+                            "nodeType": "Expr_Variable",
+                            "name": "data",
+                            "attributes": {
+                              "startLine": 136,
+                              "endLine": 136
+                            }
+                          },
+                          "dim": {
+                            "nodeType": "Scalar_String",
+                            "value": "name",
+                            "attributes": {
+                              "startLine": 136,
+                              "endLine": 136,
+                              "kind": 1
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 136,
+                            "endLine": 136
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 136,
+                        "endLine": 136
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 136,
+                      "endLine": 136
+                    }
+                  },
+                  "stmts": [
+                    {
+                      "nodeType": "Stmt_Return",
+                      "expr": null,
+                      "attributes": {
+                        "startLine": 137,
+                        "endLine": 137
+                      }
+                    }
+                  ],
+                  "elseifs": [],
+                  "else": null,
+                  "attributes": {
+                    "startLine": 136,
+                    "endLine": 138
+                  }
+                },
+                {
+                  "nodeType": "Stmt_Foreach",
+                  "expr": {
+                    "nodeType": "Expr_Array",
+                    "items": [
+                      {
+                        "nodeType": "Expr_ArrayItem",
+                        "key": null,
+                        "value": {
+                          "nodeType": "Scalar_String",
+                          "value": "name",
+                          "attributes": {
+                            "startLine": 141,
+                            "endLine": 141,
+                            "kind": 1
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 141,
+                          "endLine": 141
+                        }
+                      },
+                      {
+                        "nodeType": "Expr_ArrayItem",
+                        "key": null,
+                        "value": {
+                          "nodeType": "Scalar_String",
+                          "value": "value",
+                          "attributes": {
+                            "startLine": 141,
+                            "endLine": 141,
+                            "kind": 1
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 141,
+                          "endLine": 141
+                        }
+                      },
+                      {
+                        "nodeType": "Expr_ArrayItem",
+                        "key": null,
+                        "value": {
+                          "nodeType": "Scalar_String",
+                          "value": "path",
+                          "attributes": {
+                            "startLine": 141,
+                            "endLine": 141,
+                            "kind": 1
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 141,
+                          "endLine": 141
+                        }
+                      },
+                      {
+                        "nodeType": "Expr_ArrayItem",
+                        "key": null,
+                        "value": {
+                          "nodeType": "Scalar_String",
+                          "value": "domain",
+                          "attributes": {
+                            "startLine": 141,
+                            "endLine": 141,
+                            "kind": 1
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 141,
+                          "endLine": 141
+                        }
+                      },
+                      {
+                        "nodeType": "Expr_ArrayItem",
+                        "key": null,
+                        "value": {
+                          "nodeType": "Scalar_String",
+                          "value": "port",
+                          "attributes": {
+                            "startLine": 141,
+                            "endLine": 141,
+                            "kind": 1
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 141,
+                          "endLine": 141
+                        }
+                      },
+                      {
+                        "nodeType": "Expr_ArrayItem",
+                        "key": null,
+                        "value": {
+                          "nodeType": "Scalar_String",
+                          "value": "host_only",
+                          "attributes": {
+                            "startLine": 141,
+                            "endLine": 141,
+                            "kind": 1
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 141,
+                          "endLine": 141
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 141,
+                      "endLine": 141,
+                      "kind": 1
+                    }
+                  },
+                  "keyVar": null,
+                  "byRef": false,
+                  "valueVar": {
+                    "nodeType": "Expr_Variable",
+                    "name": "field",
+                    "attributes": {
+                      "startLine": 141,
+                      "endLine": 141
+                    }
+                  },
+                  "stmts": [
+                    {
+                      "nodeType": "Stmt_If",
+                      "cond": {
+                        "nodeType": "Expr_Isset",
+                        "vars": [
+                          {
+                            "nodeType": "Expr_ArrayDimFetch",
+                            "var": {
+                              "nodeType": "Expr_Variable",
+                              "name": "data",
+                              "attributes": {
+                                "startLine": 142,
+                                "endLine": 142
+                              }
+                            },
+                            "dim": {
+                              "nodeType": "Expr_Variable",
+                              "name": "field",
+                              "attributes": {
+                                "startLine": 142,
+                                "endLine": 142
+                              }
+                            },
+                            "attributes": {
+                              "startLine": 142,
+                              "endLine": 142
+                            }
+                          }
+                        ],
+                        "attributes": {
+                          "startLine": 142,
+                          "endLine": 142
+                        }
+                      },
+                      "stmts": [
+                        {
+                          "nodeType": "Stmt_Expression",
+                          "expr": {
+                            "nodeType": "Expr_Assign",
+                            "var": {
+                              "nodeType": "Expr_PropertyFetch",
+                              "var": {
+                                "nodeType": "Expr_Variable",
+                                "name": "this",
+                                "attributes": {
+                                  "startLine": 143,
+                                  "endLine": 143
+                                }
+                              },
+                              "name": {
+                                "nodeType": "Expr_Variable",
+                                "name": "field",
+                                "attributes": {
+                                  "startLine": 143,
+                                  "endLine": 143
+                                }
+                              },
+                              "attributes": {
+                                "startLine": 143,
+                                "endLine": 143
+                              }
+                            },
+                            "expr": {
+                              "nodeType": "Expr_ArrayDimFetch",
+                              "var": {
+                                "nodeType": "Expr_Variable",
+                                "name": "data",
+                                "attributes": {
+                                  "startLine": 143,
+                                  "endLine": 143
+                                }
+                              },
+                              "dim": {
+                                "nodeType": "Expr_Variable",
+                                "name": "field",
+                                "attributes": {
+                                  "startLine": 143,
+                                  "endLine": 143
+                                }
+                              },
+                              "attributes": {
+                                "startLine": 143,
+                                "endLine": 143
+                              }
+                            },
+                            "attributes": {
+                              "startLine": 143,
+                              "endLine": 143
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 143,
+                            "endLine": 143
+                          }
+                        }
+                      ],
+                      "elseifs": [],
+                      "else": null,
+                      "attributes": {
+                        "startLine": 142,
+                        "endLine": 144
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 141,
+                    "comments": [
+                      {
+                        "nodeType": "Comment",
+                        "text": "// Set properties based directly on parameters.\n",
+                        "line": 140,
+                        "filePos": 3616,
+                        "tokenPos": 528,
+                        "endLine": 141,
+                        "endFilePos": 3663,
+                        "endTokenPos": 528
+                      }
+                    ],
+                    "endLine": 145
+                  }
+                },
+                {
+                  "nodeType": "Stmt_If",
+                  "cond": {
+                    "nodeType": "Expr_Isset",
+                    "vars": [
+                      {
+                        "nodeType": "Expr_ArrayDimFetch",
+                        "var": {
+                          "nodeType": "Expr_Variable",
+                          "name": "data",
+                          "attributes": {
+                            "startLine": 147,
+                            "endLine": 147
+                          }
+                        },
+                        "dim": {
+                          "nodeType": "Scalar_String",
+                          "value": "expires",
+                          "attributes": {
+                            "startLine": 147,
+                            "endLine": 147,
+                            "kind": 1
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 147,
+                          "endLine": 147
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 147,
+                      "endLine": 147
+                    }
+                  },
+                  "stmts": [
+                    {
+                      "nodeType": "Stmt_Expression",
+                      "expr": {
+                        "nodeType": "Expr_Assign",
+                        "var": {
+                          "nodeType": "Expr_PropertyFetch",
+                          "var": {
+                            "nodeType": "Expr_Variable",
+                            "name": "this",
+                            "attributes": {
+                              "startLine": 148,
+                              "endLine": 148
+                            }
+                          },
+                          "name": {
+                            "nodeType": "Identifier",
+                            "name": "expires",
+                            "attributes": {
+                              "startLine": 148,
+                              "endLine": 148
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 148,
+                            "endLine": 148
+                          }
+                        },
+                        "expr": {
+                          "nodeType": "Expr_Ternary",
+                          "cond": {
+                            "nodeType": "Expr_FuncCall",
+                            "name": {
+                              "nodeType": "Name",
+                              "parts": [
+                                "is_int"
+                              ],
+                              "attributes": {
+                                "startLine": 148,
+                                "endLine": 148
+                              }
+                            },
+                            "args": [
+                              {
+                                "nodeType": "Arg",
+                                "value": {
+                                  "nodeType": "Expr_ArrayDimFetch",
+                                  "var": {
+                                    "nodeType": "Expr_Variable",
+                                    "name": "data",
+                                    "attributes": {
+                                      "startLine": 148,
+                                      "endLine": 148
+                                    }
+                                  },
+                                  "dim": {
+                                    "nodeType": "Scalar_String",
+                                    "value": "expires",
+                                    "attributes": {
+                                      "startLine": 148,
+                                      "endLine": 148,
+                                      "kind": 1
+                                    }
+                                  },
+                                  "attributes": {
+                                    "startLine": 148,
+                                    "endLine": 148
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 148,
+                                  "endLine": 148
+                                }
+                              }
+                            ],
+                            "attributes": {
+                              "startLine": 148,
+                              "endLine": 148
+                            }
+                          },
+                          "if": {
+                            "nodeType": "Expr_ArrayDimFetch",
+                            "var": {
+                              "nodeType": "Expr_Variable",
+                              "name": "data",
+                              "attributes": {
+                                "startLine": 148,
+                                "endLine": 148
+                              }
+                            },
+                            "dim": {
+                              "nodeType": "Scalar_String",
+                              "value": "expires",
+                              "attributes": {
+                                "startLine": 148,
+                                "endLine": 148,
+                                "kind": 1
+                              }
+                            },
+                            "attributes": {
+                              "startLine": 148,
+                              "endLine": 148
+                            }
+                          },
+                          "else": {
+                            "nodeType": "Expr_FuncCall",
+                            "name": {
+                              "nodeType": "Name",
+                              "parts": [
+                                "strtotime"
+                              ],
+                              "attributes": {
+                                "startLine": 148,
+                                "endLine": 148
+                              }
+                            },
+                            "args": [
+                              {
+                                "nodeType": "Arg",
+                                "value": {
+                                  "nodeType": "Expr_ArrayDimFetch",
+                                  "var": {
+                                    "nodeType": "Expr_Variable",
+                                    "name": "data",
+                                    "attributes": {
+                                      "startLine": 148,
+                                      "endLine": 148
+                                    }
+                                  },
+                                  "dim": {
+                                    "nodeType": "Scalar_String",
+                                    "value": "expires",
+                                    "attributes": {
+                                      "startLine": 148,
+                                      "endLine": 148,
+                                      "kind": 1
+                                    }
+                                  },
+                                  "attributes": {
+                                    "startLine": 148,
+                                    "endLine": 148
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 148,
+                                  "endLine": 148
+                                }
+                              }
+                            ],
+                            "attributes": {
+                              "startLine": 148,
+                              "endLine": 148
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 148,
+                            "endLine": 148
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 148,
+                          "endLine": 148
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 148,
+                        "endLine": 148
+                      }
+                    }
+                  ],
+                  "elseifs": [],
+                  "else": {
+                    "nodeType": "Stmt_Else",
+                    "stmts": [
+                      {
+                        "nodeType": "Stmt_Expression",
+                        "expr": {
+                          "nodeType": "Expr_Assign",
+                          "var": {
+                            "nodeType": "Expr_PropertyFetch",
+                            "var": {
+                              "nodeType": "Expr_Variable",
+                              "name": "this",
+                              "attributes": {
+                                "startLine": 150,
+                                "endLine": 150
+                              }
+                            },
+                            "name": {
+                              "nodeType": "Identifier",
+                              "name": "expires",
+                              "attributes": {
+                                "startLine": 150,
+                                "endLine": 150
+                              }
+                            },
+                            "attributes": {
+                              "startLine": 150,
+                              "endLine": 150
+                            }
+                          },
+                          "expr": {
+                            "nodeType": "Expr_ConstFetch",
+                            "name": {
+                              "nodeType": "Name",
+                              "parts": [
+                                "null"
+                              ],
+                              "attributes": {
+                                "startLine": 150,
+                                "endLine": 150
+                              }
+                            },
+                            "attributes": {
+                              "startLine": 150,
+                              "endLine": 150
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 150,
+                            "endLine": 150
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 150,
+                          "endLine": 150
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 149,
+                      "endLine": 151
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 147,
+                    "endLine": 151
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 135,
+                "endLine": 152
+              }
+            },
+            "attributes": {
+              "startLine": 106,
+              "endLine": 152
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 94,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Sets up this cookie object.\n\t *\n\t * The parameter $data should be either an associative array containing the indices names below\n\t * or a header string detailing it.\n\t *\n\t * @since 2.8.0\n\t * @since 5.2.0 Added `host_only` to the `$data` parameter.\n\t *\n\t * @param string|array $data {\n\t *     Raw cookie data as header string or data array.\n\t *\n\t *     @type string          $name      Cookie name.\n\t *     @type mixed           $value     Value. Should NOT already be urlencoded.\n\t *     @type string|int|null $expires   Optional. Unix timestamp or formatted date. Default null.\n\t *     @type string          $path      Optional. Path. Default '/'.\n\t *     @type string          $domain    Optional. Domain. Default host of parsed $requested_url.\n\t *     @type int             $port      Optional. Port. Default null.\n\t *     @type bool            $host_only Optional. host-only storage flag. Default true.\n\t * }\n\t * @param string       $requested_url The URL which the cookie was set on, used for default $domain\n\t *                                    and $port values.\n\t */",
+              "line": 71,
+              "filePos": 1132,
+              "tokenPos": 53,
+              "endLine": 93,
+              "endFilePos": 2214,
+              "endTokenPos": 53
+            }
+          ],
+          "endLine": 153
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "test",
+          "attributes": {
+            "startLine": 165,
+            "endLine": 165
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "url",
+              "attributes": {
+                "startLine": 165,
+                "endLine": 165
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 165,
+              "endLine": 165
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "is_null"
+                ],
+                "attributes": {
+                  "startLine": 166,
+                  "endLine": 166
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_PropertyFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "this",
+                      "attributes": {
+                        "startLine": 166,
+                        "endLine": 166
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "name",
+                      "attributes": {
+                        "startLine": 166,
+                        "endLine": 166
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 166,
+                      "endLine": 166
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 166,
+                    "endLine": 166
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 166,
+                "endLine": 166
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Return",
+                "expr": {
+                  "nodeType": "Expr_ConstFetch",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "false"
+                    ],
+                    "attributes": {
+                      "startLine": 167,
+                      "endLine": 167
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 167,
+                    "endLine": 167
+                  }
+                },
+                "attributes": {
+                  "startLine": 167,
+                  "endLine": 167
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 166,
+              "endLine": 168
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BinaryOp_BooleanAnd",
+              "left": {
+                "nodeType": "Expr_Isset",
+                "vars": [
+                  {
+                    "nodeType": "Expr_PropertyFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "this",
+                      "attributes": {
+                        "startLine": 171,
+                        "endLine": 171
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "expires",
+                      "attributes": {
+                        "startLine": 171,
+                        "endLine": 171
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 171,
+                      "endLine": 171
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 171,
+                  "endLine": 171
+                }
+              },
+              "right": {
+                "nodeType": "Expr_BinaryOp_Greater",
+                "left": {
+                  "nodeType": "Expr_FuncCall",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "time"
+                    ],
+                    "attributes": {
+                      "startLine": 171,
+                      "endLine": 171
+                    }
+                  },
+                  "args": [],
+                  "attributes": {
+                    "startLine": 171,
+                    "endLine": 171
+                  }
+                },
+                "right": {
+                  "nodeType": "Expr_PropertyFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "this",
+                    "attributes": {
+                      "startLine": 171,
+                      "endLine": 171
+                    }
+                  },
+                  "name": {
+                    "nodeType": "Identifier",
+                    "name": "expires",
+                    "attributes": {
+                      "startLine": 171,
+                      "endLine": 171
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 171,
+                    "endLine": 171
+                  }
+                },
+                "attributes": {
+                  "startLine": 171,
+                  "endLine": 171
+                }
+              },
+              "attributes": {
+                "startLine": 171,
+                "endLine": 171
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Return",
+                "expr": {
+                  "nodeType": "Expr_ConstFetch",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "false"
+                    ],
+                    "attributes": {
+                      "startLine": 172,
+                      "endLine": 172
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 172,
+                    "endLine": 172
+                  }
+                },
+                "attributes": {
+                  "startLine": 172,
+                  "endLine": 172
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 171,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// Expires - if expired then nothing else matters.\n",
+                  "line": 170,
+                  "filePos": 4427,
+                  "tokenPos": 716,
+                  "endLine": 171,
+                  "endFilePos": 4477,
+                  "endTokenPos": 716
+                }
+              ],
+              "endLine": 173
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "url",
+                "attributes": {
+                  "startLine": 176,
+                  "comments": [
+                    {
+                      "nodeType": "Comment",
+                      "text": "// Get details on the URL we're thinking about sending to.\n",
+                      "line": 175,
+                      "filePos": 4564,
+                      "tokenPos": 754,
+                      "endLine": 176,
+                      "endFilePos": 4622,
+                      "endTokenPos": 754
+                    }
+                  ],
+                  "endLine": 176
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "parse_url"
+                  ],
+                  "attributes": {
+                    "startLine": 176,
+                    "endLine": 176
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "url",
+                      "attributes": {
+                        "startLine": 176,
+                        "endLine": 176
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 176,
+                      "endLine": 176
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 176,
+                  "endLine": 176
+                }
+              },
+              "attributes": {
+                "startLine": 176,
+                "comments": [
+                  {
+                    "nodeType": "Comment",
+                    "text": "// Get details on the URL we're thinking about sending to.\n",
+                    "line": 175,
+                    "filePos": 4564,
+                    "tokenPos": 754,
+                    "endLine": 176,
+                    "endFilePos": 4622,
+                    "endTokenPos": 754
+                  }
+                ],
+                "endLine": 176
+              }
+            },
+            "attributes": {
+              "startLine": 176,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// Get details on the URL we're thinking about sending to.\n",
+                  "line": 175,
+                  "filePos": 4564,
+                  "tokenPos": 754,
+                  "endLine": 176,
+                  "endFilePos": 4622,
+                  "endTokenPos": 754
+                }
+              ],
+              "endLine": 176
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "url",
+                  "attributes": {
+                    "startLine": 177,
+                    "endLine": 177
+                  }
+                },
+                "dim": {
+                  "nodeType": "Scalar_String",
+                  "value": "port",
+                  "attributes": {
+                    "startLine": 177,
+                    "endLine": 177,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 177,
+                  "endLine": 177
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Ternary",
+                "cond": {
+                  "nodeType": "Expr_Isset",
+                  "vars": [
+                    {
+                      "nodeType": "Expr_ArrayDimFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "url",
+                        "attributes": {
+                          "startLine": 177,
+                          "endLine": 177
+                        }
+                      },
+                      "dim": {
+                        "nodeType": "Scalar_String",
+                        "value": "port",
+                        "attributes": {
+                          "startLine": 177,
+                          "endLine": 177,
+                          "kind": 1
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 177,
+                        "endLine": 177
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 177,
+                    "endLine": 177
+                  }
+                },
+                "if": {
+                  "nodeType": "Expr_ArrayDimFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "url",
+                    "attributes": {
+                      "startLine": 177,
+                      "endLine": 177
+                    }
+                  },
+                  "dim": {
+                    "nodeType": "Scalar_String",
+                    "value": "port",
+                    "attributes": {
+                      "startLine": 177,
+                      "endLine": 177,
+                      "kind": 1
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 177,
+                    "endLine": 177
+                  }
+                },
+                "else": {
+                  "nodeType": "Expr_Ternary",
+                  "cond": {
+                    "nodeType": "Expr_BinaryOp_Equal",
+                    "left": {
+                      "nodeType": "Scalar_String",
+                      "value": "https",
+                      "attributes": {
+                        "startLine": 177,
+                        "endLine": 177,
+                        "kind": 1
+                      }
+                    },
+                    "right": {
+                      "nodeType": "Expr_ArrayDimFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "url",
+                        "attributes": {
+                          "startLine": 177,
+                          "endLine": 177
+                        }
+                      },
+                      "dim": {
+                        "nodeType": "Scalar_String",
+                        "value": "scheme",
+                        "attributes": {
+                          "startLine": 177,
+                          "endLine": 177,
+                          "kind": 1
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 177,
+                        "endLine": 177
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 177,
+                      "endLine": 177
+                    }
+                  },
+                  "if": {
+                    "nodeType": "Scalar_LNumber",
+                    "value": 443,
+                    "attributes": {
+                      "startLine": 177,
+                      "endLine": 177,
+                      "kind": 10
+                    }
+                  },
+                  "else": {
+                    "nodeType": "Scalar_LNumber",
+                    "value": 80,
+                    "attributes": {
+                      "startLine": 177,
+                      "endLine": 177,
+                      "kind": 10
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 177,
+                    "endLine": 177
+                  }
+                },
+                "attributes": {
+                  "startLine": 177,
+                  "endLine": 177
+                }
+              },
+              "attributes": {
+                "startLine": 177,
+                "endLine": 177
+              }
+            },
+            "attributes": {
+              "startLine": 177,
+              "endLine": 177
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "url",
+                  "attributes": {
+                    "startLine": 178,
+                    "endLine": 178
+                  }
+                },
+                "dim": {
+                  "nodeType": "Scalar_String",
+                  "value": "path",
+                  "attributes": {
+                    "startLine": 178,
+                    "endLine": 178,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 178,
+                  "endLine": 178
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Ternary",
+                "cond": {
+                  "nodeType": "Expr_Isset",
+                  "vars": [
+                    {
+                      "nodeType": "Expr_ArrayDimFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "url",
+                        "attributes": {
+                          "startLine": 178,
+                          "endLine": 178
+                        }
+                      },
+                      "dim": {
+                        "nodeType": "Scalar_String",
+                        "value": "path",
+                        "attributes": {
+                          "startLine": 178,
+                          "endLine": 178,
+                          "kind": 1
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 178,
+                        "endLine": 178
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 178,
+                    "endLine": 178
+                  }
+                },
+                "if": {
+                  "nodeType": "Expr_ArrayDimFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "url",
+                    "attributes": {
+                      "startLine": 178,
+                      "endLine": 178
+                    }
+                  },
+                  "dim": {
+                    "nodeType": "Scalar_String",
+                    "value": "path",
+                    "attributes": {
+                      "startLine": 178,
+                      "endLine": 178,
+                      "kind": 1
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 178,
+                    "endLine": 178
+                  }
+                },
+                "else": {
+                  "nodeType": "Scalar_String",
+                  "value": "/",
+                  "attributes": {
+                    "startLine": 178,
+                    "endLine": 178,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 178,
+                  "endLine": 178
+                }
+              },
+              "attributes": {
+                "startLine": 178,
+                "endLine": 178
+              }
+            },
+            "attributes": {
+              "startLine": 178,
+              "endLine": 178
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "path",
+                "attributes": {
+                  "startLine": 181,
+                  "comments": [
+                    {
+                      "nodeType": "Comment",
+                      "text": "// Values to use for comparison against the URL.\n",
+                      "line": 180,
+                      "filePos": 4821,
+                      "tokenPos": 845,
+                      "endLine": 181,
+                      "endFilePos": 4869,
+                      "endTokenPos": 845
+                    }
+                  ],
+                  "endLine": 181
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Ternary",
+                "cond": {
+                  "nodeType": "Expr_Isset",
+                  "vars": [
+                    {
+                      "nodeType": "Expr_PropertyFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "this",
+                        "attributes": {
+                          "startLine": 181,
+                          "endLine": 181
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "path",
+                        "attributes": {
+                          "startLine": 181,
+                          "endLine": 181
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 181,
+                        "endLine": 181
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 181,
+                    "endLine": 181
+                  }
+                },
+                "if": {
+                  "nodeType": "Expr_PropertyFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "this",
+                    "attributes": {
+                      "startLine": 181,
+                      "endLine": 181
+                    }
+                  },
+                  "name": {
+                    "nodeType": "Identifier",
+                    "name": "path",
+                    "attributes": {
+                      "startLine": 181,
+                      "endLine": 181
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 181,
+                    "endLine": 181
+                  }
+                },
+                "else": {
+                  "nodeType": "Scalar_String",
+                  "value": "/",
+                  "attributes": {
+                    "startLine": 181,
+                    "endLine": 181,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 181,
+                  "endLine": 181
+                }
+              },
+              "attributes": {
+                "startLine": 181,
+                "comments": [
+                  {
+                    "nodeType": "Comment",
+                    "text": "// Values to use for comparison against the URL.\n",
+                    "line": 180,
+                    "filePos": 4821,
+                    "tokenPos": 845,
+                    "endLine": 181,
+                    "endFilePos": 4869,
+                    "endTokenPos": 845
+                  }
+                ],
+                "endLine": 181
+              }
+            },
+            "attributes": {
+              "startLine": 181,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// Values to use for comparison against the URL.\n",
+                  "line": 180,
+                  "filePos": 4821,
+                  "tokenPos": 845,
+                  "endLine": 181,
+                  "endFilePos": 4869,
+                  "endTokenPos": 845
+                }
+              ],
+              "endLine": 181
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "port",
+                "attributes": {
+                  "startLine": 182,
+                  "endLine": 182
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Ternary",
+                "cond": {
+                  "nodeType": "Expr_Isset",
+                  "vars": [
+                    {
+                      "nodeType": "Expr_PropertyFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "this",
+                        "attributes": {
+                          "startLine": 182,
+                          "endLine": 182
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "port",
+                        "attributes": {
+                          "startLine": 182,
+                          "endLine": 182
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 182,
+                        "endLine": 182
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 182,
+                    "endLine": 182
+                  }
+                },
+                "if": {
+                  "nodeType": "Expr_PropertyFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "this",
+                    "attributes": {
+                      "startLine": 182,
+                      "endLine": 182
+                    }
+                  },
+                  "name": {
+                    "nodeType": "Identifier",
+                    "name": "port",
+                    "attributes": {
+                      "startLine": 182,
+                      "endLine": 182
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 182,
+                    "endLine": 182
+                  }
+                },
+                "else": {
+                  "nodeType": "Expr_ConstFetch",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "null"
+                    ],
+                    "attributes": {
+                      "startLine": 182,
+                      "endLine": 182
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 182,
+                    "endLine": 182
+                  }
+                },
+                "attributes": {
+                  "startLine": 182,
+                  "endLine": 182
+                }
+              },
+              "attributes": {
+                "startLine": 182,
+                "endLine": 182
+              }
+            },
+            "attributes": {
+              "startLine": 182,
+              "endLine": 182
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "domain",
+                "attributes": {
+                  "startLine": 183,
+                  "endLine": 183
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Ternary",
+                "cond": {
+                  "nodeType": "Expr_Isset",
+                  "vars": [
+                    {
+                      "nodeType": "Expr_PropertyFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "this",
+                        "attributes": {
+                          "startLine": 183,
+                          "endLine": 183
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "domain",
+                        "attributes": {
+                          "startLine": 183,
+                          "endLine": 183
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 183,
+                        "endLine": 183
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 183,
+                    "endLine": 183
+                  }
+                },
+                "if": {
+                  "nodeType": "Expr_FuncCall",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "strtolower"
+                    ],
+                    "attributes": {
+                      "startLine": 183,
+                      "endLine": 183
+                    }
+                  },
+                  "args": [
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Expr_PropertyFetch",
+                        "var": {
+                          "nodeType": "Expr_Variable",
+                          "name": "this",
+                          "attributes": {
+                            "startLine": 183,
+                            "endLine": 183
+                          }
+                        },
+                        "name": {
+                          "nodeType": "Identifier",
+                          "name": "domain",
+                          "attributes": {
+                            "startLine": 183,
+                            "endLine": 183
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 183,
+                          "endLine": 183
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 183,
+                        "endLine": 183
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 183,
+                    "endLine": 183
+                  }
+                },
+                "else": {
+                  "nodeType": "Expr_FuncCall",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "strtolower"
+                    ],
+                    "attributes": {
+                      "startLine": 183,
+                      "endLine": 183
+                    }
+                  },
+                  "args": [
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Expr_ArrayDimFetch",
+                        "var": {
+                          "nodeType": "Expr_Variable",
+                          "name": "url",
+                          "attributes": {
+                            "startLine": 183,
+                            "endLine": 183
+                          }
+                        },
+                        "dim": {
+                          "nodeType": "Scalar_String",
+                          "value": "host",
+                          "attributes": {
+                            "startLine": 183,
+                            "endLine": 183,
+                            "kind": 1
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 183,
+                          "endLine": 183
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 183,
+                        "endLine": 183
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 183,
+                    "endLine": 183
+                  }
+                },
+                "attributes": {
+                  "startLine": 183,
+                  "endLine": 183
+                }
+              },
+              "attributes": {
+                "startLine": 183,
+                "endLine": 183
+              }
+            },
+            "attributes": {
+              "startLine": 183,
+              "endLine": 183
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BinaryOp_Identical",
+              "left": {
+                "nodeType": "Expr_ConstFetch",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "false"
+                  ],
+                  "attributes": {
+                    "startLine": 184,
+                    "endLine": 184
+                  }
+                },
+                "attributes": {
+                  "startLine": 184,
+                  "endLine": 184
+                }
+              },
+              "right": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "stripos"
+                  ],
+                  "attributes": {
+                    "startLine": 184,
+                    "endLine": 184
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "domain",
+                      "attributes": {
+                        "startLine": 184,
+                        "endLine": 184
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 184,
+                      "endLine": 184
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": ".",
+                      "attributes": {
+                        "startLine": 184,
+                        "endLine": 184,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 184,
+                      "endLine": 184
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 184,
+                  "endLine": 184
+                }
+              },
+              "attributes": {
+                "startLine": 184,
+                "endLine": 184
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_AssignOp_Concat",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "domain",
+                    "attributes": {
+                      "startLine": 185,
+                      "endLine": 185
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Scalar_String",
+                    "value": ".local",
+                    "attributes": {
+                      "startLine": 185,
+                      "endLine": 185,
+                      "kind": 1
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 185,
+                    "endLine": 185
+                  }
+                },
+                "attributes": {
+                  "startLine": 185,
+                  "endLine": 185
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 184,
+              "endLine": 186
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "domain",
+                "attributes": {
+                  "startLine": 189,
+                  "comments": [
+                    {
+                      "nodeType": "Comment",
+                      "text": "// Host - very basic check that the request URL ends with the domain restriction (minus leading dot).\n",
+                      "line": 188,
+                      "filePos": 5150,
+                      "tokenPos": 963,
+                      "endLine": 189,
+                      "endFilePos": 5251,
+                      "endTokenPos": 963
+                    }
+                  ],
+                  "endLine": 189
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Ternary",
+                "cond": {
+                  "nodeType": "Expr_BinaryOp_Equal",
+                  "left": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "substr"
+                      ],
+                      "attributes": {
+                        "startLine": 189,
+                        "endLine": 189
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "domain",
+                          "attributes": {
+                            "startLine": 189,
+                            "endLine": 189
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 189,
+                          "endLine": 189
+                        }
+                      },
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Scalar_LNumber",
+                          "value": 0,
+                          "attributes": {
+                            "startLine": 189,
+                            "endLine": 189,
+                            "kind": 10
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 189,
+                          "endLine": 189
+                        }
+                      },
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Scalar_LNumber",
+                          "value": 1,
+                          "attributes": {
+                            "startLine": 189,
+                            "endLine": 189,
+                            "kind": 10
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 189,
+                          "endLine": 189
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 189,
+                      "endLine": 189
+                    }
+                  },
+                  "right": {
+                    "nodeType": "Scalar_String",
+                    "value": ".",
+                    "attributes": {
+                      "startLine": 189,
+                      "endLine": 189,
+                      "kind": 1
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 189,
+                    "endLine": 189
+                  }
+                },
+                "if": {
+                  "nodeType": "Expr_FuncCall",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "substr"
+                    ],
+                    "attributes": {
+                      "startLine": 189,
+                      "endLine": 189
+                    }
+                  },
+                  "args": [
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Expr_Variable",
+                        "name": "domain",
+                        "attributes": {
+                          "startLine": 189,
+                          "endLine": 189
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 189,
+                        "endLine": 189
+                      }
+                    },
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Scalar_LNumber",
+                        "value": 1,
+                        "attributes": {
+                          "startLine": 189,
+                          "endLine": 189,
+                          "kind": 10
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 189,
+                        "endLine": 189
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 189,
+                    "endLine": 189
+                  }
+                },
+                "else": {
+                  "nodeType": "Expr_Variable",
+                  "name": "domain",
+                  "attributes": {
+                    "startLine": 189,
+                    "endLine": 189
+                  }
+                },
+                "attributes": {
+                  "startLine": 189,
+                  "endLine": 189
+                }
+              },
+              "attributes": {
+                "startLine": 189,
+                "comments": [
+                  {
+                    "nodeType": "Comment",
+                    "text": "// Host - very basic check that the request URL ends with the domain restriction (minus leading dot).\n",
+                    "line": 188,
+                    "filePos": 5150,
+                    "tokenPos": 963,
+                    "endLine": 189,
+                    "endFilePos": 5251,
+                    "endTokenPos": 963
+                  }
+                ],
+                "endLine": 189
+              }
+            },
+            "attributes": {
+              "startLine": 189,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// Host - very basic check that the request URL ends with the domain restriction (minus leading dot).\n",
+                  "line": 188,
+                  "filePos": 5150,
+                  "tokenPos": 963,
+                  "endLine": 189,
+                  "endFilePos": 5251,
+                  "endTokenPos": 963
+                }
+              ],
+              "endLine": 189
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BinaryOp_NotEqual",
+              "left": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "substr"
+                  ],
+                  "attributes": {
+                    "startLine": 190,
+                    "endLine": 190
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_ArrayDimFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "url",
+                        "attributes": {
+                          "startLine": 190,
+                          "endLine": 190
+                        }
+                      },
+                      "dim": {
+                        "nodeType": "Scalar_String",
+                        "value": "host",
+                        "attributes": {
+                          "startLine": 190,
+                          "endLine": 190,
+                          "kind": 1
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 190,
+                        "endLine": 190
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 190,
+                      "endLine": 190
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_UnaryMinus",
+                      "expr": {
+                        "nodeType": "Expr_FuncCall",
+                        "name": {
+                          "nodeType": "Name",
+                          "parts": [
+                            "strlen"
+                          ],
+                          "attributes": {
+                            "startLine": 190,
+                            "endLine": 190
+                          }
+                        },
+                        "args": [
+                          {
+                            "nodeType": "Arg",
+                            "value": {
+                              "nodeType": "Expr_Variable",
+                              "name": "domain",
+                              "attributes": {
+                                "startLine": 190,
+                                "endLine": 190
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 190,
+                              "endLine": 190
+                            }
+                          }
+                        ],
+                        "attributes": {
+                          "startLine": 190,
+                          "endLine": 190
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 190,
+                        "endLine": 190
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 190,
+                      "endLine": 190
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 190,
+                  "endLine": 190
+                }
+              },
+              "right": {
+                "nodeType": "Expr_Variable",
+                "name": "domain",
+                "attributes": {
+                  "startLine": 190,
+                  "endLine": 190
+                }
+              },
+              "attributes": {
+                "startLine": 190,
+                "endLine": 190
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Return",
+                "expr": {
+                  "nodeType": "Expr_ConstFetch",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "false"
+                    ],
+                    "attributes": {
+                      "startLine": 191,
+                      "endLine": 191
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 191,
+                    "endLine": 191
+                  }
+                },
+                "attributes": {
+                  "startLine": 191,
+                  "endLine": 191
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 190,
+              "endLine": 192
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BinaryOp_BooleanAnd",
+              "left": {
+                "nodeType": "Expr_BooleanNot",
+                "expr": {
+                  "nodeType": "Expr_Empty",
+                  "expr": {
+                    "nodeType": "Expr_Variable",
+                    "name": "port",
+                    "attributes": {
+                      "startLine": 195,
+                      "endLine": 195
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 195,
+                    "endLine": 195
+                  }
+                },
+                "attributes": {
+                  "startLine": 195,
+                  "endLine": 195
+                }
+              },
+              "right": {
+                "nodeType": "Expr_BooleanNot",
+                "expr": {
+                  "nodeType": "Expr_FuncCall",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "in_array"
+                    ],
+                    "attributes": {
+                      "startLine": 195,
+                      "endLine": 195
+                    }
+                  },
+                  "args": [
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Expr_ArrayDimFetch",
+                        "var": {
+                          "nodeType": "Expr_Variable",
+                          "name": "url",
+                          "attributes": {
+                            "startLine": 195,
+                            "endLine": 195
+                          }
+                        },
+                        "dim": {
+                          "nodeType": "Scalar_String",
+                          "value": "port",
+                          "attributes": {
+                            "startLine": 195,
+                            "endLine": 195,
+                            "kind": 1
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 195,
+                          "endLine": 195
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 195,
+                        "endLine": 195
+                      }
+                    },
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Expr_FuncCall",
+                        "name": {
+                          "nodeType": "Name",
+                          "parts": [
+                            "explode"
+                          ],
+                          "attributes": {
+                            "startLine": 195,
+                            "endLine": 195
+                          }
+                        },
+                        "args": [
+                          {
+                            "nodeType": "Arg",
+                            "value": {
+                              "nodeType": "Scalar_String",
+                              "value": ",",
+                              "attributes": {
+                                "startLine": 195,
+                                "endLine": 195,
+                                "kind": 1
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 195,
+                              "endLine": 195
+                            }
+                          },
+                          {
+                            "nodeType": "Arg",
+                            "value": {
+                              "nodeType": "Expr_Variable",
+                              "name": "port",
+                              "attributes": {
+                                "startLine": 195,
+                                "endLine": 195
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 195,
+                              "endLine": 195
+                            }
+                          }
+                        ],
+                        "attributes": {
+                          "startLine": 195,
+                          "endLine": 195
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 195,
+                        "endLine": 195
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 195,
+                    "endLine": 195
+                  }
+                },
+                "attributes": {
+                  "startLine": 195,
+                  "endLine": 195
+                }
+              },
+              "attributes": {
+                "startLine": 195,
+                "endLine": 195
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Return",
+                "expr": {
+                  "nodeType": "Expr_ConstFetch",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "false"
+                    ],
+                    "attributes": {
+                      "startLine": 196,
+                      "endLine": 196
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 196,
+                    "endLine": 196
+                  }
+                },
+                "attributes": {
+                  "startLine": 196,
+                  "endLine": 196
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 195,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// Port - supports \"port-lists\" in the format: \"80,8000,8080\".\n",
+                  "line": 194,
+                  "filePos": 5418,
+                  "tokenPos": 1041,
+                  "endLine": 195,
+                  "endFilePos": 5480,
+                  "endTokenPos": 1041
+                }
+              ],
+              "endLine": 197
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BinaryOp_NotEqual",
+              "left": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "substr"
+                  ],
+                  "attributes": {
+                    "startLine": 200,
+                    "endLine": 200
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_ArrayDimFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "url",
+                        "attributes": {
+                          "startLine": 200,
+                          "endLine": 200
+                        }
+                      },
+                      "dim": {
+                        "nodeType": "Scalar_String",
+                        "value": "path",
+                        "attributes": {
+                          "startLine": 200,
+                          "endLine": 200,
+                          "kind": 1
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 200,
+                        "endLine": 200
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 200,
+                      "endLine": 200
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_LNumber",
+                      "value": 0,
+                      "attributes": {
+                        "startLine": 200,
+                        "endLine": 200,
+                        "kind": 10
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 200,
+                      "endLine": 200
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_FuncCall",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "strlen"
+                        ],
+                        "attributes": {
+                          "startLine": 200,
+                          "endLine": 200
+                        }
+                      },
+                      "args": [
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Expr_Variable",
+                            "name": "path",
+                            "attributes": {
+                              "startLine": 200,
+                              "endLine": 200
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 200,
+                            "endLine": 200
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 200,
+                        "endLine": 200
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 200,
+                      "endLine": 200
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 200,
+                  "endLine": 200
+                }
+              },
+              "right": {
+                "nodeType": "Expr_Variable",
+                "name": "path",
+                "attributes": {
+                  "startLine": 200,
+                  "endLine": 200
+                }
+              },
+              "attributes": {
+                "startLine": 200,
+                "endLine": 200
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Return",
+                "expr": {
+                  "nodeType": "Expr_ConstFetch",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "false"
+                    ],
+                    "attributes": {
+                      "startLine": 201,
+                      "endLine": 201
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 201,
+                    "endLine": 201
+                  }
+                },
+                "attributes": {
+                  "startLine": 201,
+                  "endLine": 201
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 200,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// Path - request path must start with path restriction.\n",
+                  "line": 199,
+                  "filePos": 5586,
+                  "tokenPos": 1092,
+                  "endLine": 200,
+                  "endFilePos": 5642,
+                  "endTokenPos": 1092
+                }
+              ],
+              "endLine": 202
+            }
+          },
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_ConstFetch",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "true"
+                ],
+                "attributes": {
+                  "startLine": 204,
+                  "endLine": 204
+                }
+              },
+              "attributes": {
+                "startLine": 204,
+                "endLine": 204
+              }
+            },
+            "attributes": {
+              "startLine": 204,
+              "endLine": 204
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 165,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Confirms that it's OK to send this cookie to the URL checked against.\n\t *\n\t * Decision is based on RFC 2109/2965, so look there for details on validity.\n\t *\n\t * @since 2.8.0\n\t *\n\t * @param string $url URL you intend to send this cookie to\n\t * @return bool true if allowed, false otherwise.\n\t */",
+              "line": 155,
+              "filePos": 4034,
+              "tokenPos": 677,
+              "endLine": 164,
+              "endFilePos": 4335,
+              "endTokenPos": 677
+            }
+          ],
+          "endLine": 205
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "getHeaderValue",
+          "attributes": {
+            "startLine": 214,
+            "endLine": 214
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BinaryOp_BooleanOr",
+              "left": {
+                "nodeType": "Expr_BooleanNot",
+                "expr": {
+                  "nodeType": "Expr_Isset",
+                  "vars": [
+                    {
+                      "nodeType": "Expr_PropertyFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "this",
+                        "attributes": {
+                          "startLine": 215,
+                          "endLine": 215
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "name",
+                        "attributes": {
+                          "startLine": 215,
+                          "endLine": 215
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 215,
+                        "endLine": 215
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 215,
+                    "endLine": 215
+                  }
+                },
+                "attributes": {
+                  "startLine": 215,
+                  "endLine": 215
+                }
+              },
+              "right": {
+                "nodeType": "Expr_BooleanNot",
+                "expr": {
+                  "nodeType": "Expr_Isset",
+                  "vars": [
+                    {
+                      "nodeType": "Expr_PropertyFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "this",
+                        "attributes": {
+                          "startLine": 215,
+                          "endLine": 215
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "value",
+                        "attributes": {
+                          "startLine": 215,
+                          "endLine": 215
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 215,
+                        "endLine": 215
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 215,
+                    "endLine": 215
+                  }
+                },
+                "attributes": {
+                  "startLine": 215,
+                  "endLine": 215
+                }
+              },
+              "attributes": {
+                "startLine": 215,
+                "endLine": 215
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Return",
+                "expr": {
+                  "nodeType": "Scalar_String",
+                  "value": "",
+                  "attributes": {
+                    "startLine": 216,
+                    "endLine": 216,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 216,
+                  "endLine": 216
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 215,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid\n",
+                  "line": 214,
+                  "filePos": 5932,
+                  "tokenPos": 1153,
+                  "endLine": 215,
+                  "endFilePos": 6011,
+                  "endTokenPos": 1153
+                }
+              ],
+              "endLine": 217
+            }
+          },
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_BinaryOp_Concat",
+              "left": {
+                "nodeType": "Expr_BinaryOp_Concat",
+                "left": {
+                  "nodeType": "Expr_PropertyFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "this",
+                    "attributes": {
+                      "startLine": 227,
+                      "endLine": 227
+                    }
+                  },
+                  "name": {
+                    "nodeType": "Identifier",
+                    "name": "name",
+                    "attributes": {
+                      "startLine": 227,
+                      "endLine": 227
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 227,
+                    "endLine": 227
+                  }
+                },
+                "right": {
+                  "nodeType": "Scalar_String",
+                  "value": "=",
+                  "attributes": {
+                    "startLine": 227,
+                    "endLine": 227,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 227,
+                  "endLine": 227
+                }
+              },
+              "right": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "apply_filters"
+                  ],
+                  "attributes": {
+                    "startLine": 227,
+                    "endLine": 227
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "wp_http_cookie_value",
+                      "attributes": {
+                        "startLine": 227,
+                        "endLine": 227,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 227,
+                      "endLine": 227
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_PropertyFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "this",
+                        "attributes": {
+                          "startLine": 227,
+                          "endLine": 227
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "value",
+                        "attributes": {
+                          "startLine": 227,
+                          "endLine": 227
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 227,
+                        "endLine": 227
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 227,
+                      "endLine": 227
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_PropertyFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "this",
+                        "attributes": {
+                          "startLine": 227,
+                          "endLine": 227
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "name",
+                        "attributes": {
+                          "startLine": 227,
+                          "endLine": 227
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 227,
+                        "endLine": 227
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 227,
+                      "endLine": 227
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 227,
+                  "endLine": 227
+                }
+              },
+              "attributes": {
+                "startLine": 227,
+                "endLine": 227
+              }
+            },
+            "attributes": {
+              "startLine": 227,
+              "comments": [
+                {
+                  "nodeType": "Comment_Doc",
+                  "text": "/**\n\t\t * Filters the header-encoded cookie value.\n\t\t *\n\t\t * @since 3.4.0\n\t\t *\n\t\t * @param string $value The cookie value.\n\t\t * @param string $name  The cookie name.\n\t\t */",
+                  "line": 219,
+                  "filePos": 6094,
+                  "tokenPos": 1194,
+                  "endLine": 226,
+                  "endFilePos": 6263,
+                  "endTokenPos": 1194
+                }
+              ],
+              "endLine": 227
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 214,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Convert cookie name and value back to header string.\n\t *\n\t * @since 2.8.0\n\t *\n\t * @return string Header encoded cookie name and value.\n\t */",
+              "line": 207,
+              "filePos": 5748,
+              "tokenPos": 1141,
+              "endLine": 213,
+              "endFilePos": 5894,
+              "endTokenPos": 1141
+            }
+          ],
+          "endLine": 228
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "getFullHeader",
+          "attributes": {
+            "startLine": 237,
+            "endLine": 237
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_BinaryOp_Concat",
+              "left": {
+                "nodeType": "Scalar_String",
+                "value": "Cookie: ",
+                "attributes": {
+                  "startLine": 238,
+                  "endLine": 238,
+                  "kind": 1
+                }
+              },
+              "right": {
+                "nodeType": "Expr_MethodCall",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "this",
+                  "attributes": {
+                    "startLine": 238,
+                    "endLine": 238
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "getHeaderValue",
+                  "attributes": {
+                    "startLine": 238,
+                    "endLine": 238
+                  }
+                },
+                "args": [],
+                "attributes": {
+                  "startLine": 238,
+                  "endLine": 238
+                }
+              },
+              "attributes": {
+                "startLine": 238,
+                "endLine": 238
+              }
+            },
+            "attributes": {
+              "startLine": 238,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid\n",
+                  "line": 237,
+                  "filePos": 6531,
+                  "tokenPos": 1240,
+                  "endLine": 238,
+                  "endFilePos": 6610,
+                  "endTokenPos": 1240
+                }
+              ],
+              "endLine": 238
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 237,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Retrieve cookie header for usage in the rest of the WordPress HTTP API.\n\t *\n\t * @since 2.8.0\n\t *\n\t * @return string\n\t */",
+              "line": 230,
+              "filePos": 6367,
+              "tokenPos": 1228,
+              "endLine": 236,
+              "endFilePos": 6494,
+              "endTokenPos": 1228
+            }
+          ],
+          "endLine": 239
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "get_attributes",
+          "attributes": {
+            "startLine": 254,
+            "endLine": 254
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_Array",
+              "items": [
+                {
+                  "nodeType": "Expr_ArrayItem",
+                  "key": {
+                    "nodeType": "Scalar_String",
+                    "value": "expires",
+                    "attributes": {
+                      "startLine": 256,
+                      "endLine": 256,
+                      "kind": 1
+                    }
+                  },
+                  "value": {
+                    "nodeType": "Expr_PropertyFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "this",
+                      "attributes": {
+                        "startLine": 256,
+                        "endLine": 256
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "expires",
+                      "attributes": {
+                        "startLine": 256,
+                        "endLine": 256
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 256,
+                      "endLine": 256
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 256,
+                    "endLine": 256
+                  }
+                },
+                {
+                  "nodeType": "Expr_ArrayItem",
+                  "key": {
+                    "nodeType": "Scalar_String",
+                    "value": "path",
+                    "attributes": {
+                      "startLine": 257,
+                      "endLine": 257,
+                      "kind": 1
+                    }
+                  },
+                  "value": {
+                    "nodeType": "Expr_PropertyFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "this",
+                      "attributes": {
+                        "startLine": 257,
+                        "endLine": 257
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "path",
+                      "attributes": {
+                        "startLine": 257,
+                        "endLine": 257
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 257,
+                      "endLine": 257
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 257,
+                    "endLine": 257
+                  }
+                },
+                {
+                  "nodeType": "Expr_ArrayItem",
+                  "key": {
+                    "nodeType": "Scalar_String",
+                    "value": "domain",
+                    "attributes": {
+                      "startLine": 258,
+                      "endLine": 258,
+                      "kind": 1
+                    }
+                  },
+                  "value": {
+                    "nodeType": "Expr_PropertyFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "this",
+                      "attributes": {
+                        "startLine": 258,
+                        "endLine": 258
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "domain",
+                      "attributes": {
+                        "startLine": 258,
+                        "endLine": 258
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 258,
+                      "endLine": 258
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 258,
+                    "endLine": 258
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 255,
+                "endLine": 259,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 255,
+              "endLine": 259
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 254,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Retrieves cookie attributes.\n\t *\n\t * @since 4.6.0\n\t *\n\t * @return array {\n\t *    List of attributes.\n\t *\n\t *    @type string|int|null $expires When the cookie expires. Unix timestamp or formatted date.\n\t *    @type string          $path    Cookie URL path.\n\t *    @type string          $domain  Cookie domain.\n\t * }\n\t */",
+              "line": 241,
+              "filePos": 6663,
+              "tokenPos": 1257,
+              "endLine": 253,
+              "endFilePos": 6990,
+              "endTokenPos": 1257
+            }
+          ],
+          "endLine": 260
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 21,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * HTTP API: WP_Http_Cookie class\n *\n * @package WordPress\n * @subpackage HTTP\n * @since 4.4.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 8,
+          "endFilePos": 107,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Core class used to encapsulate a single cookie object for internal use.\n *\n * Returned cookies are represented using this class, and when cookies are set, if they are not\n * already a WP_Http_Cookie() object, then they are turned into one.\n *\n * @todo The WordPress convention is to use underscores instead of camelCase for function and method\n * names. Need to switch to use underscores instead for the methods.\n *\n * @since 2.8.0\n */",
+          "line": 10,
+          "filePos": 110,
+          "tokenPos": 3,
+          "endLine": 20,
+          "endFilePos": 551,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 261
+    }
+  }
+]

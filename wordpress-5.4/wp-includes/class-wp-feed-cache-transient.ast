@@ -1,0 +1,1470 @@
+[
+  {
+    "nodeType": "Stmt_Class",
+    "flags": 0,
+    "extends": null,
+    "implements": [],
+    "name": {
+      "nodeType": "Identifier",
+      "name": "WP_Feed_Cache_Transient",
+      "attributes": {
+        "startLine": 15,
+        "endLine": 15
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "name",
+              "attributes": {
+                "startLine": 23,
+                "endLine": 23
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 23,
+              "endLine": 23
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 23,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Holds the transient name.\n\t *\n\t * @since 2.8.0\n\t * @var string\n\t */",
+              "line": 17,
+              "filePos": 235,
+              "tokenPos": 11,
+              "endLine": 22,
+              "endFilePos": 309,
+              "endTokenPos": 11
+            }
+          ],
+          "endLine": 23
+        }
+      },
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "mod_name",
+              "attributes": {
+                "startLine": 31,
+                "endLine": 31
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 31,
+              "endLine": 31
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 31,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Holds the transient mod name.\n\t *\n\t * @since 2.8.0\n\t * @var string\n\t */",
+              "line": 25,
+              "filePos": 328,
+              "tokenPos": 18,
+              "endLine": 30,
+              "endFilePos": 406,
+              "endTokenPos": 18
+            }
+          ],
+          "endLine": 31
+        }
+      },
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "lifetime",
+              "attributes": {
+                "startLine": 41,
+                "endLine": 41
+              }
+            },
+            "default": {
+              "nodeType": "Scalar_LNumber",
+              "value": 43200,
+              "attributes": {
+                "startLine": 41,
+                "endLine": 41,
+                "kind": 10
+              }
+            },
+            "attributes": {
+              "startLine": 41,
+              "endLine": 41
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 41,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Holds the cache duration in seconds.\n\t *\n\t * Defaults to 43200 seconds (12 hours).\n\t *\n\t * @since 2.8.0\n\t * @var int\n\t */",
+              "line": 33,
+              "filePos": 429,
+              "tokenPos": 25,
+              "endLine": 40,
+              "endFilePos": 557,
+              "endTokenPos": 25
+            }
+          ],
+          "endLine": 41
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "__construct",
+          "attributes": {
+            "startLine": 53,
+            "endLine": 53
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "location",
+              "attributes": {
+                "startLine": 53,
+                "endLine": 53
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 53,
+              "endLine": 53
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "filename",
+              "attributes": {
+                "startLine": 53,
+                "endLine": 53
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 53,
+              "endLine": 53
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "extension",
+              "attributes": {
+                "startLine": 53,
+                "endLine": 53
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 53,
+              "endLine": 53
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_PropertyFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "this",
+                  "attributes": {
+                    "startLine": 54,
+                    "endLine": 54
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "name",
+                  "attributes": {
+                    "startLine": 54,
+                    "endLine": 54
+                  }
+                },
+                "attributes": {
+                  "startLine": 54,
+                  "endLine": 54
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_BinaryOp_Concat",
+                "left": {
+                  "nodeType": "Scalar_String",
+                  "value": "feed_",
+                  "attributes": {
+                    "startLine": 54,
+                    "endLine": 54,
+                    "kind": 1
+                  }
+                },
+                "right": {
+                  "nodeType": "Expr_Variable",
+                  "name": "filename",
+                  "attributes": {
+                    "startLine": 54,
+                    "endLine": 54
+                  }
+                },
+                "attributes": {
+                  "startLine": 54,
+                  "endLine": 54
+                }
+              },
+              "attributes": {
+                "startLine": 54,
+                "endLine": 54
+              }
+            },
+            "attributes": {
+              "startLine": 54,
+              "endLine": 54
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_PropertyFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "this",
+                  "attributes": {
+                    "startLine": 55,
+                    "endLine": 55
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "mod_name",
+                  "attributes": {
+                    "startLine": 55,
+                    "endLine": 55
+                  }
+                },
+                "attributes": {
+                  "startLine": 55,
+                  "endLine": 55
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_BinaryOp_Concat",
+                "left": {
+                  "nodeType": "Scalar_String",
+                  "value": "feed_mod_",
+                  "attributes": {
+                    "startLine": 55,
+                    "endLine": 55,
+                    "kind": 1
+                  }
+                },
+                "right": {
+                  "nodeType": "Expr_Variable",
+                  "name": "filename",
+                  "attributes": {
+                    "startLine": 55,
+                    "endLine": 55
+                  }
+                },
+                "attributes": {
+                  "startLine": 55,
+                  "endLine": 55
+                }
+              },
+              "attributes": {
+                "startLine": 55,
+                "endLine": 55
+              }
+            },
+            "attributes": {
+              "startLine": 55,
+              "endLine": 55
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "lifetime",
+                "attributes": {
+                  "startLine": 57,
+                  "endLine": 57
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_PropertyFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "this",
+                  "attributes": {
+                    "startLine": 57,
+                    "endLine": 57
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "lifetime",
+                  "attributes": {
+                    "startLine": 57,
+                    "endLine": 57
+                  }
+                },
+                "attributes": {
+                  "startLine": 57,
+                  "endLine": 57
+                }
+              },
+              "attributes": {
+                "startLine": 57,
+                "endLine": 57
+              }
+            },
+            "attributes": {
+              "startLine": 57,
+              "endLine": 57
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_PropertyFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "this",
+                  "attributes": {
+                    "startLine": 66,
+                    "comments": [
+                      {
+                        "nodeType": "Comment_Doc",
+                        "text": "/**\n\t\t * Filters the transient lifetime of the feed cache.\n\t\t *\n\t\t * @since 2.8.0\n\t\t *\n\t\t * @param int    $lifetime Cache duration in seconds. Default is 43200 seconds (12 hours).\n\t\t * @param string $filename Unique identifier for the cache object.\n\t\t */",
+                        "line": 58,
+                        "filePos": 1069,
+                        "tokenPos": 92,
+                        "endLine": 65,
+                        "endFilePos": 1322,
+                        "endTokenPos": 92
+                      }
+                    ],
+                    "endLine": 66
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "lifetime",
+                  "attributes": {
+                    "startLine": 66,
+                    "endLine": 66
+                  }
+                },
+                "attributes": {
+                  "startLine": 66,
+                  "comments": [
+                    {
+                      "nodeType": "Comment_Doc",
+                      "text": "/**\n\t\t * Filters the transient lifetime of the feed cache.\n\t\t *\n\t\t * @since 2.8.0\n\t\t *\n\t\t * @param int    $lifetime Cache duration in seconds. Default is 43200 seconds (12 hours).\n\t\t * @param string $filename Unique identifier for the cache object.\n\t\t */",
+                      "line": 58,
+                      "filePos": 1069,
+                      "tokenPos": 92,
+                      "endLine": 65,
+                      "endFilePos": 1322,
+                      "endTokenPos": 92
+                    }
+                  ],
+                  "endLine": 66
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "apply_filters"
+                  ],
+                  "attributes": {
+                    "startLine": 66,
+                    "endLine": 66
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "wp_feed_cache_transient_lifetime",
+                      "attributes": {
+                        "startLine": 66,
+                        "endLine": 66,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 66,
+                      "endLine": 66
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "lifetime",
+                      "attributes": {
+                        "startLine": 66,
+                        "endLine": 66
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 66,
+                      "endLine": 66
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "filename",
+                      "attributes": {
+                        "startLine": 66,
+                        "endLine": 66
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 66,
+                      "endLine": 66
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 66,
+                  "endLine": 66
+                }
+              },
+              "attributes": {
+                "startLine": 66,
+                "comments": [
+                  {
+                    "nodeType": "Comment_Doc",
+                    "text": "/**\n\t\t * Filters the transient lifetime of the feed cache.\n\t\t *\n\t\t * @since 2.8.0\n\t\t *\n\t\t * @param int    $lifetime Cache duration in seconds. Default is 43200 seconds (12 hours).\n\t\t * @param string $filename Unique identifier for the cache object.\n\t\t */",
+                    "line": 58,
+                    "filePos": 1069,
+                    "tokenPos": 92,
+                    "endLine": 65,
+                    "endFilePos": 1322,
+                    "endTokenPos": 92
+                  }
+                ],
+                "endLine": 66
+              }
+            },
+            "attributes": {
+              "startLine": 66,
+              "comments": [
+                {
+                  "nodeType": "Comment_Doc",
+                  "text": "/**\n\t\t * Filters the transient lifetime of the feed cache.\n\t\t *\n\t\t * @since 2.8.0\n\t\t *\n\t\t * @param int    $lifetime Cache duration in seconds. Default is 43200 seconds (12 hours).\n\t\t * @param string $filename Unique identifier for the cache object.\n\t\t */",
+                  "line": 58,
+                  "filePos": 1069,
+                  "tokenPos": 92,
+                  "endLine": 65,
+                  "endFilePos": 1322,
+                  "endTokenPos": 92
+                }
+              ],
+              "endLine": 66
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 53,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Constructor.\n\t *\n\t * @since 2.8.0\n\t * @since 3.2.0 Updated to use a PHP5 constructor.\n\t *\n\t * @param string $location  URL location (scheme is used to determine handler).\n\t * @param string $filename  Unique identifier for cache object.\n\t * @param string $extension 'spi' or 'spc'.\n\t */",
+              "line": 43,
+              "filePos": 588,
+              "tokenPos": 36,
+              "endLine": 52,
+              "endFilePos": 880,
+              "endTokenPos": 36
+            }
+          ],
+          "endLine": 67
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "save",
+          "attributes": {
+            "startLine": 77,
+            "endLine": 77
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "data",
+              "attributes": {
+                "startLine": 77,
+                "endLine": 77
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 77,
+              "endLine": 77
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_Instanceof",
+              "expr": {
+                "nodeType": "Expr_Variable",
+                "name": "data",
+                "attributes": {
+                  "startLine": 78,
+                  "endLine": 78
+                }
+              },
+              "class": {
+                "nodeType": "Name",
+                "parts": [
+                  "SimplePie"
+                ],
+                "attributes": {
+                  "startLine": 78,
+                  "endLine": 78
+                }
+              },
+              "attributes": {
+                "startLine": 78,
+                "endLine": 78
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "data",
+                    "attributes": {
+                      "startLine": 79,
+                      "endLine": 79
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_PropertyFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "data",
+                      "attributes": {
+                        "startLine": 79,
+                        "endLine": 79
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "data",
+                      "attributes": {
+                        "startLine": 79,
+                        "endLine": 79
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 79,
+                      "endLine": 79
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 79,
+                    "endLine": 79
+                  }
+                },
+                "attributes": {
+                  "startLine": 79,
+                  "endLine": 79
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 78,
+              "endLine": 80
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "set_transient"
+                ],
+                "attributes": {
+                  "startLine": 82,
+                  "endLine": 82
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_PropertyFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "this",
+                      "attributes": {
+                        "startLine": 82,
+                        "endLine": 82
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "name",
+                      "attributes": {
+                        "startLine": 82,
+                        "endLine": 82
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 82,
+                      "endLine": 82
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 82,
+                    "endLine": 82
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "data",
+                    "attributes": {
+                      "startLine": 82,
+                      "endLine": 82
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 82,
+                    "endLine": 82
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_PropertyFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "this",
+                      "attributes": {
+                        "startLine": 82,
+                        "endLine": 82
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "lifetime",
+                      "attributes": {
+                        "startLine": 82,
+                        "endLine": 82
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 82,
+                      "endLine": 82
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 82,
+                    "endLine": 82
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 82,
+                "endLine": 82
+              }
+            },
+            "attributes": {
+              "startLine": 82,
+              "endLine": 82
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "set_transient"
+                ],
+                "attributes": {
+                  "startLine": 83,
+                  "endLine": 83
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_PropertyFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "this",
+                      "attributes": {
+                        "startLine": 83,
+                        "endLine": 83
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "mod_name",
+                      "attributes": {
+                        "startLine": 83,
+                        "endLine": 83
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 83,
+                      "endLine": 83
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 83,
+                    "endLine": 83
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "time"
+                      ],
+                      "attributes": {
+                        "startLine": 83,
+                        "endLine": 83
+                      }
+                    },
+                    "args": [],
+                    "attributes": {
+                      "startLine": 83,
+                      "endLine": 83
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 83,
+                    "endLine": 83
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_PropertyFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "this",
+                      "attributes": {
+                        "startLine": 83,
+                        "endLine": 83
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "lifetime",
+                      "attributes": {
+                        "startLine": 83,
+                        "endLine": 83
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 83,
+                      "endLine": 83
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 83,
+                    "endLine": 83
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 83,
+                "endLine": 83
+              }
+            },
+            "attributes": {
+              "startLine": 83,
+              "endLine": 83
+            }
+          },
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_ConstFetch",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "true"
+                ],
+                "attributes": {
+                  "startLine": 84,
+                  "endLine": 84
+                }
+              },
+              "attributes": {
+                "startLine": 84,
+                "endLine": 84
+              }
+            },
+            "attributes": {
+              "startLine": 84,
+              "endLine": 84
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 77,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Sets the transient.\n\t *\n\t * @since 2.8.0\n\t *\n\t * @param SimplePie $data Data to save.\n\t * @return true Always true.\n\t */",
+              "line": 69,
+              "filePos": 1424,
+              "tokenPos": 116,
+              "endLine": 76,
+              "endFilePos": 1551,
+              "endTokenPos": 116
+            }
+          ],
+          "endLine": 85
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "load",
+          "attributes": {
+            "startLine": 94,
+            "endLine": 94
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "get_transient"
+                ],
+                "attributes": {
+                  "startLine": 95,
+                  "endLine": 95
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_PropertyFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "this",
+                      "attributes": {
+                        "startLine": 95,
+                        "endLine": 95
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "name",
+                      "attributes": {
+                        "startLine": 95,
+                        "endLine": 95
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 95,
+                      "endLine": 95
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 95,
+                    "endLine": 95
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 95,
+                "endLine": 95
+              }
+            },
+            "attributes": {
+              "startLine": 95,
+              "endLine": 95
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 94,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Gets the transient.\n\t *\n\t * @since 2.8.0\n\t *\n\t * @return mixed Transient value.\n\t */",
+              "line": 87,
+              "filePos": 1790,
+              "tokenPos": 201,
+              "endLine": 93,
+              "endFilePos": 1881,
+              "endTokenPos": 201
+            }
+          ],
+          "endLine": 96
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "mtime",
+          "attributes": {
+            "startLine": 105,
+            "endLine": 105
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "get_transient"
+                ],
+                "attributes": {
+                  "startLine": 106,
+                  "endLine": 106
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_PropertyFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "this",
+                      "attributes": {
+                        "startLine": 106,
+                        "endLine": 106
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "mod_name",
+                      "attributes": {
+                        "startLine": 106,
+                        "endLine": 106
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 106,
+                      "endLine": 106
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 106,
+                    "endLine": 106
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 106,
+                "endLine": 106
+              }
+            },
+            "attributes": {
+              "startLine": 106,
+              "endLine": 106
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 105,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Gets mod transient.\n\t *\n\t * @since 2.8.0\n\t *\n\t * @return mixed Transient value.\n\t */",
+              "line": 98,
+              "filePos": 1953,
+              "tokenPos": 227,
+              "endLine": 104,
+              "endFilePos": 2044,
+              "endTokenPos": 227
+            }
+          ],
+          "endLine": 107
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "touch",
+          "attributes": {
+            "startLine": 116,
+            "endLine": 116
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "set_transient"
+                ],
+                "attributes": {
+                  "startLine": 117,
+                  "endLine": 117
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_PropertyFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "this",
+                      "attributes": {
+                        "startLine": 117,
+                        "endLine": 117
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "mod_name",
+                      "attributes": {
+                        "startLine": 117,
+                        "endLine": 117
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 117,
+                      "endLine": 117
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 117,
+                    "endLine": 117
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "time"
+                      ],
+                      "attributes": {
+                        "startLine": 117,
+                        "endLine": 117
+                      }
+                    },
+                    "args": [],
+                    "attributes": {
+                      "startLine": 117,
+                      "endLine": 117
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 117,
+                    "endLine": 117
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_PropertyFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "this",
+                      "attributes": {
+                        "startLine": 117,
+                        "endLine": 117
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "lifetime",
+                      "attributes": {
+                        "startLine": 117,
+                        "endLine": 117
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 117,
+                      "endLine": 117
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 117,
+                    "endLine": 117
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 117,
+                "endLine": 117
+              }
+            },
+            "attributes": {
+              "startLine": 117,
+              "endLine": 117
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 116,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Sets mod transient.\n\t *\n\t * @since 2.8.0\n\t *\n\t * @return bool False if value was not set and true if value was set.\n\t */",
+              "line": 109,
+              "filePos": 2121,
+              "tokenPos": 253,
+              "endLine": 115,
+              "endFilePos": 2248,
+              "endTokenPos": 253
+            }
+          ],
+          "endLine": 118
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "unlink",
+          "attributes": {
+            "startLine": 127,
+            "endLine": 127
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "delete_transient"
+                ],
+                "attributes": {
+                  "startLine": 128,
+                  "endLine": 128
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_PropertyFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "this",
+                      "attributes": {
+                        "startLine": 128,
+                        "endLine": 128
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "name",
+                      "attributes": {
+                        "startLine": 128,
+                        "endLine": 128
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 128,
+                      "endLine": 128
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 128,
+                    "endLine": 128
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 128,
+                "endLine": 128
+              }
+            },
+            "attributes": {
+              "startLine": 128,
+              "endLine": 128
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "delete_transient"
+                ],
+                "attributes": {
+                  "startLine": 129,
+                  "endLine": 129
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_PropertyFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "this",
+                      "attributes": {
+                        "startLine": 129,
+                        "endLine": 129
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "mod_name",
+                      "attributes": {
+                        "startLine": 129,
+                        "endLine": 129
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 129,
+                      "endLine": 129
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 129,
+                    "endLine": 129
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 129,
+                "endLine": 129
+              }
+            },
+            "attributes": {
+              "startLine": 129,
+              "endLine": 129
+            }
+          },
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_ConstFetch",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "true"
+                ],
+                "attributes": {
+                  "startLine": 130,
+                  "endLine": 130
+                }
+              },
+              "attributes": {
+                "startLine": 130,
+                "endLine": 130
+              }
+            },
+            "attributes": {
+              "startLine": 130,
+              "endLine": 130
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 127,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Deletes transients.\n\t *\n\t * @since 2.8.0\n\t *\n\t * @return true Always true.\n\t */",
+              "line": 120,
+              "filePos": 2350,
+              "tokenPos": 289,
+              "endLine": 126,
+              "endFilePos": 2436,
+              "endTokenPos": 289
+            }
+          ],
+          "endLine": 131
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 15,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Feed API: WP_Feed_Cache_Transient class\n *\n * @package WordPress\n * @subpackage Feed\n * @since 4.7.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 8,
+          "endFilePos": 116,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Core class used to implement feed cache transients.\n *\n * @since 2.8.0\n */",
+          "line": 10,
+          "filePos": 119,
+          "tokenPos": 3,
+          "endLine": 14,
+          "endFilePos": 199,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 132
+    }
+  }
+]

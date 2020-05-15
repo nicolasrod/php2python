@@ -1,0 +1,957 @@
+[
+  {
+    "nodeType": "Stmt_Class",
+    "flags": 0,
+    "extends": null,
+    "implements": [
+      {
+        "nodeType": "Name",
+        "parts": [
+          "Requests_Hooker"
+        ],
+        "attributes": {
+          "startLine": 15,
+          "endLine": 15
+        }
+      }
+    ],
+    "name": {
+      "nodeType": "Identifier",
+      "name": "Requests_Hooks",
+      "attributes": {
+        "startLine": 15,
+        "endLine": 15
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 2,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "hooks",
+              "attributes": {
+                "startLine": 21,
+                "endLine": 21
+              }
+            },
+            "default": {
+              "nodeType": "Expr_Array",
+              "items": [],
+              "attributes": {
+                "startLine": 21,
+                "endLine": 21,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 21,
+              "endLine": 21
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 21,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Registered callbacks for each hook\n\t *\n\t * @var array\n\t */",
+              "line": 16,
+              "filePos": 254,
+              "tokenPos": 15,
+              "endLine": 20,
+              "endFilePos": 319,
+              "endTokenPos": 15
+            }
+          ],
+          "endLine": 21
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "__construct",
+          "attributes": {
+            "startLine": 26,
+            "endLine": 26
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Nop",
+            "attributes": {
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// pass\n",
+                  "line": 27,
+                  "filePos": 412,
+                  "tokenPos": 40,
+                  "endLine": 28,
+                  "endFilePos": 419,
+                  "endTokenPos": 40
+                }
+              ],
+              "startLine": 28,
+              "endLine": 28,
+              "startFilePos": 420,
+              "endFilePos": 419,
+              "startTokenPos": 41,
+              "endTokenPos": 40
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 26,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Constructor\n\t */",
+              "line": 23,
+              "filePos": 352,
+              "tokenPos": 28,
+              "endLine": 25,
+              "endFilePos": 375,
+              "endTokenPos": 28
+            }
+          ],
+          "endLine": 28
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "register",
+          "attributes": {
+            "startLine": 37,
+            "endLine": 37
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "hook",
+              "attributes": {
+                "startLine": 37,
+                "endLine": 37
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 37,
+              "endLine": 37
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "callback",
+              "attributes": {
+                "startLine": 37,
+                "endLine": 37
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 37,
+              "endLine": 37
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "priority",
+              "attributes": {
+                "startLine": 37,
+                "endLine": 37
+              }
+            },
+            "default": {
+              "nodeType": "Scalar_LNumber",
+              "value": 0,
+              "attributes": {
+                "startLine": 37,
+                "endLine": 37,
+                "kind": 10
+              }
+            },
+            "attributes": {
+              "startLine": 37,
+              "endLine": 37
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BooleanNot",
+              "expr": {
+                "nodeType": "Expr_Isset",
+                "vars": [
+                  {
+                    "nodeType": "Expr_ArrayDimFetch",
+                    "var": {
+                      "nodeType": "Expr_PropertyFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "this",
+                        "attributes": {
+                          "startLine": 38,
+                          "endLine": 38
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "hooks",
+                        "attributes": {
+                          "startLine": 38,
+                          "endLine": 38
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 38,
+                        "endLine": 38
+                      }
+                    },
+                    "dim": {
+                      "nodeType": "Expr_Variable",
+                      "name": "hook",
+                      "attributes": {
+                        "startLine": 38,
+                        "endLine": 38
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 38,
+                      "endLine": 38
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 38,
+                  "endLine": 38
+                }
+              },
+              "attributes": {
+                "startLine": 38,
+                "endLine": 38
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_ArrayDimFetch",
+                    "var": {
+                      "nodeType": "Expr_PropertyFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "this",
+                        "attributes": {
+                          "startLine": 39,
+                          "endLine": 39
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "hooks",
+                        "attributes": {
+                          "startLine": 39,
+                          "endLine": 39
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 39,
+                        "endLine": 39
+                      }
+                    },
+                    "dim": {
+                      "nodeType": "Expr_Variable",
+                      "name": "hook",
+                      "attributes": {
+                        "startLine": 39,
+                        "endLine": 39
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 39,
+                      "endLine": 39
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_Array",
+                    "items": [],
+                    "attributes": {
+                      "startLine": 39,
+                      "endLine": 39,
+                      "kind": 1
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 39,
+                    "endLine": 39
+                  }
+                },
+                "attributes": {
+                  "startLine": 39,
+                  "endLine": 39
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 38,
+              "endLine": 40
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BooleanNot",
+              "expr": {
+                "nodeType": "Expr_Isset",
+                "vars": [
+                  {
+                    "nodeType": "Expr_ArrayDimFetch",
+                    "var": {
+                      "nodeType": "Expr_ArrayDimFetch",
+                      "var": {
+                        "nodeType": "Expr_PropertyFetch",
+                        "var": {
+                          "nodeType": "Expr_Variable",
+                          "name": "this",
+                          "attributes": {
+                            "startLine": 41,
+                            "endLine": 41
+                          }
+                        },
+                        "name": {
+                          "nodeType": "Identifier",
+                          "name": "hooks",
+                          "attributes": {
+                            "startLine": 41,
+                            "endLine": 41
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 41,
+                          "endLine": 41
+                        }
+                      },
+                      "dim": {
+                        "nodeType": "Expr_Variable",
+                        "name": "hook",
+                        "attributes": {
+                          "startLine": 41,
+                          "endLine": 41
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 41,
+                        "endLine": 41
+                      }
+                    },
+                    "dim": {
+                      "nodeType": "Expr_Variable",
+                      "name": "priority",
+                      "attributes": {
+                        "startLine": 41,
+                        "endLine": 41
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 41,
+                      "endLine": 41
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 41,
+                  "endLine": 41
+                }
+              },
+              "attributes": {
+                "startLine": 41,
+                "endLine": 41
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_ArrayDimFetch",
+                    "var": {
+                      "nodeType": "Expr_ArrayDimFetch",
+                      "var": {
+                        "nodeType": "Expr_PropertyFetch",
+                        "var": {
+                          "nodeType": "Expr_Variable",
+                          "name": "this",
+                          "attributes": {
+                            "startLine": 42,
+                            "endLine": 42
+                          }
+                        },
+                        "name": {
+                          "nodeType": "Identifier",
+                          "name": "hooks",
+                          "attributes": {
+                            "startLine": 42,
+                            "endLine": 42
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 42,
+                          "endLine": 42
+                        }
+                      },
+                      "dim": {
+                        "nodeType": "Expr_Variable",
+                        "name": "hook",
+                        "attributes": {
+                          "startLine": 42,
+                          "endLine": 42
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 42,
+                        "endLine": 42
+                      }
+                    },
+                    "dim": {
+                      "nodeType": "Expr_Variable",
+                      "name": "priority",
+                      "attributes": {
+                        "startLine": 42,
+                        "endLine": 42
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 42,
+                      "endLine": 42
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_Array",
+                    "items": [],
+                    "attributes": {
+                      "startLine": 42,
+                      "endLine": 42,
+                      "kind": 1
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 42,
+                    "endLine": 42
+                  }
+                },
+                "attributes": {
+                  "startLine": 42,
+                  "endLine": 42
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 41,
+              "endLine": 43
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_ArrayDimFetch",
+                  "var": {
+                    "nodeType": "Expr_ArrayDimFetch",
+                    "var": {
+                      "nodeType": "Expr_PropertyFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "this",
+                        "attributes": {
+                          "startLine": 45,
+                          "endLine": 45
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "hooks",
+                        "attributes": {
+                          "startLine": 45,
+                          "endLine": 45
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 45,
+                        "endLine": 45
+                      }
+                    },
+                    "dim": {
+                      "nodeType": "Expr_Variable",
+                      "name": "hook",
+                      "attributes": {
+                        "startLine": 45,
+                        "endLine": 45
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 45,
+                      "endLine": 45
+                    }
+                  },
+                  "dim": {
+                    "nodeType": "Expr_Variable",
+                    "name": "priority",
+                    "attributes": {
+                      "startLine": 45,
+                      "endLine": 45
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 45,
+                    "endLine": 45
+                  }
+                },
+                "dim": null,
+                "attributes": {
+                  "startLine": 45,
+                  "endLine": 45
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Variable",
+                "name": "callback",
+                "attributes": {
+                  "startLine": 45,
+                  "endLine": 45
+                }
+              },
+              "attributes": {
+                "startLine": 45,
+                "endLine": 45
+              }
+            },
+            "attributes": {
+              "startLine": 45,
+              "endLine": 45
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 37,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Register a callback for a hook\n\t *\n\t * @param string $hook Hook name\n\t * @param callback $callback Function/method to call on event\n\t * @param int $priority Priority number. <0 is executed earlier, >0 is executed later\n\t */",
+              "line": 30,
+              "filePos": 425,
+              "tokenPos": 44,
+              "endLine": 36,
+              "endFilePos": 655,
+              "endTokenPos": 44
+            }
+          ],
+          "endLine": 46
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "dispatch",
+          "attributes": {
+            "startLine": 55,
+            "endLine": 55
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "hook",
+              "attributes": {
+                "startLine": 55,
+                "endLine": 55
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 55,
+              "endLine": 55
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "parameters",
+              "attributes": {
+                "startLine": 55,
+                "endLine": 55
+              }
+            },
+            "default": {
+              "nodeType": "Expr_Array",
+              "items": [],
+              "attributes": {
+                "startLine": 55,
+                "endLine": 55,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 55,
+              "endLine": 55
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_Empty",
+              "expr": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_PropertyFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "this",
+                    "attributes": {
+                      "startLine": 56,
+                      "endLine": 56
+                    }
+                  },
+                  "name": {
+                    "nodeType": "Identifier",
+                    "name": "hooks",
+                    "attributes": {
+                      "startLine": 56,
+                      "endLine": 56
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 56,
+                    "endLine": 56
+                  }
+                },
+                "dim": {
+                  "nodeType": "Expr_Variable",
+                  "name": "hook",
+                  "attributes": {
+                    "startLine": 56,
+                    "endLine": 56
+                  }
+                },
+                "attributes": {
+                  "startLine": 56,
+                  "endLine": 56
+                }
+              },
+              "attributes": {
+                "startLine": 56,
+                "endLine": 56
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Return",
+                "expr": {
+                  "nodeType": "Expr_ConstFetch",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "false"
+                    ],
+                    "attributes": {
+                      "startLine": 57,
+                      "endLine": 57
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 57,
+                    "endLine": 57
+                  }
+                },
+                "attributes": {
+                  "startLine": 57,
+                  "endLine": 57
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 56,
+              "endLine": 58
+            }
+          },
+          {
+            "nodeType": "Stmt_Foreach",
+            "expr": {
+              "nodeType": "Expr_ArrayDimFetch",
+              "var": {
+                "nodeType": "Expr_PropertyFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "this",
+                  "attributes": {
+                    "startLine": 60,
+                    "endLine": 60
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "hooks",
+                  "attributes": {
+                    "startLine": 60,
+                    "endLine": 60
+                  }
+                },
+                "attributes": {
+                  "startLine": 60,
+                  "endLine": 60
+                }
+              },
+              "dim": {
+                "nodeType": "Expr_Variable",
+                "name": "hook",
+                "attributes": {
+                  "startLine": 60,
+                  "endLine": 60
+                }
+              },
+              "attributes": {
+                "startLine": 60,
+                "endLine": 60
+              }
+            },
+            "keyVar": {
+              "nodeType": "Expr_Variable",
+              "name": "priority",
+              "attributes": {
+                "startLine": 60,
+                "endLine": 60
+              }
+            },
+            "byRef": false,
+            "valueVar": {
+              "nodeType": "Expr_Variable",
+              "name": "hooked",
+              "attributes": {
+                "startLine": 60,
+                "endLine": 60
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Foreach",
+                "expr": {
+                  "nodeType": "Expr_Variable",
+                  "name": "hooked",
+                  "attributes": {
+                    "startLine": 61,
+                    "endLine": 61
+                  }
+                },
+                "keyVar": null,
+                "byRef": false,
+                "valueVar": {
+                  "nodeType": "Expr_Variable",
+                  "name": "callback",
+                  "attributes": {
+                    "startLine": 61,
+                    "endLine": 61
+                  }
+                },
+                "stmts": [
+                  {
+                    "nodeType": "Stmt_Expression",
+                    "expr": {
+                      "nodeType": "Expr_FuncCall",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "call_user_func_array"
+                        ],
+                        "attributes": {
+                          "startLine": 62,
+                          "endLine": 62
+                        }
+                      },
+                      "args": [
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Expr_Variable",
+                            "name": "callback",
+                            "attributes": {
+                              "startLine": 62,
+                              "endLine": 62
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 62,
+                            "endLine": 62
+                          }
+                        },
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Expr_Variable",
+                            "name": "parameters",
+                            "attributes": {
+                              "startLine": 62,
+                              "endLine": 62
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 62,
+                            "endLine": 62
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 62,
+                        "endLine": 62
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 62,
+                      "endLine": 62
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 61,
+                  "endLine": 63
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 60,
+              "endLine": 64
+            }
+          },
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_ConstFetch",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "true"
+                ],
+                "attributes": {
+                  "startLine": 66,
+                  "endLine": 66
+                }
+              },
+              "attributes": {
+                "startLine": 66,
+                "endLine": 66
+              }
+            },
+            "attributes": {
+              "startLine": 66,
+              "endLine": 66
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 55,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Dispatch a message\n\t *\n\t * @param string $hook Hook name\n\t * @param array $parameters Parameters to pass to callbacks\n\t * @return boolean Successfulness\n\t */",
+              "line": 48,
+              "filePos": 944,
+              "tokenPos": 158,
+              "endLine": 54,
+              "endFilePos": 1108,
+              "endTokenPos": 158
+            }
+          ],
+          "endLine": 67
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 15,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Handles adding and dispatching events\n *\n * @package Requests\n * @subpackage Utilities\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 7,
+          "endFilePos": 102,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Handles adding and dispatching events\n *\n * @package Requests\n * @subpackage Utilities\n */",
+          "line": 9,
+          "filePos": 105,
+          "tokenPos": 3,
+          "endLine": 14,
+          "endFilePos": 201,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 68
+    }
+  }
+]

@@ -1,0 +1,721 @@
+[
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "class_exists"
+        ],
+        "attributes": {
+          "startLine": 3,
+          "endLine": 3
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "ParagonIE_Sodium_Core_XSalsa20",
+            "attributes": {
+              "startLine": 3,
+              "endLine": 3,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 3,
+            "endLine": 3
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "false"
+              ],
+              "attributes": {
+                "startLine": 3,
+                "endLine": 3
+              }
+            },
+            "attributes": {
+              "startLine": 3,
+              "endLine": 3
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 3,
+            "endLine": 3
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 3,
+        "endLine": 3
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": null,
+        "attributes": {
+          "startLine": 4,
+          "endLine": 4
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 3,
+      "endLine": 5
+    }
+  },
+  {
+    "nodeType": "Stmt_Class",
+    "flags": 16,
+    "extends": {
+      "nodeType": "Name",
+      "parts": [
+        "ParagonIE_Sodium_Core_HSalsa20"
+      ],
+      "attributes": {
+        "startLine": 10,
+        "endLine": 10
+      }
+    },
+    "implements": [],
+    "name": {
+      "nodeType": "Identifier",
+      "name": "ParagonIE_Sodium_Core_XSalsa20",
+      "attributes": {
+        "startLine": 10,
+        "endLine": 10
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 9,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "xsalsa20",
+          "attributes": {
+            "startLine": 24,
+            "endLine": 24
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "len",
+              "attributes": {
+                "startLine": 24,
+                "endLine": 24
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 24,
+              "endLine": 24
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "nonce",
+              "attributes": {
+                "startLine": 24,
+                "endLine": 24
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 24,
+              "endLine": 24
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "key",
+              "attributes": {
+                "startLine": 24,
+                "endLine": 24
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 24,
+              "endLine": 24
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "ret",
+                "attributes": {
+                  "startLine": 26,
+                  "endLine": 26
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_StaticCall",
+                "class": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "self"
+                  ],
+                  "attributes": {
+                    "startLine": 26,
+                    "endLine": 26
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "salsa20",
+                  "attributes": {
+                    "startLine": 26,
+                    "endLine": 26
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "len",
+                      "attributes": {
+                        "startLine": 27,
+                        "endLine": 27
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 27,
+                      "endLine": 27
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_StaticCall",
+                      "class": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "self"
+                        ],
+                        "attributes": {
+                          "startLine": 28,
+                          "endLine": 28
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "substr",
+                        "attributes": {
+                          "startLine": 28,
+                          "endLine": 28
+                        }
+                      },
+                      "args": [
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Expr_Variable",
+                            "name": "nonce",
+                            "attributes": {
+                              "startLine": 28,
+                              "endLine": 28
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 28,
+                            "endLine": 28
+                          }
+                        },
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Scalar_LNumber",
+                            "value": 16,
+                            "attributes": {
+                              "startLine": 28,
+                              "endLine": 28,
+                              "kind": 10
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 28,
+                            "endLine": 28
+                          }
+                        },
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Scalar_LNumber",
+                            "value": 8,
+                            "attributes": {
+                              "startLine": 28,
+                              "endLine": 28,
+                              "kind": 10
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 28,
+                            "endLine": 28
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 28,
+                        "endLine": 28
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 28,
+                      "endLine": 28
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_StaticCall",
+                      "class": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "self"
+                        ],
+                        "attributes": {
+                          "startLine": 29,
+                          "endLine": 29
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "hsalsa20",
+                        "attributes": {
+                          "startLine": 29,
+                          "endLine": 29
+                        }
+                      },
+                      "args": [
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Expr_Variable",
+                            "name": "nonce",
+                            "attributes": {
+                              "startLine": 29,
+                              "endLine": 29
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 29,
+                            "endLine": 29
+                          }
+                        },
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Expr_Variable",
+                            "name": "key",
+                            "attributes": {
+                              "startLine": 29,
+                              "endLine": 29
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 29,
+                            "endLine": 29
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 29,
+                        "endLine": 29
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 29,
+                      "endLine": 29
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 26,
+                  "endLine": 30
+                }
+              },
+              "attributes": {
+                "startLine": 26,
+                "endLine": 30
+              }
+            },
+            "attributes": {
+              "startLine": 26,
+              "endLine": 30
+            }
+          },
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_Variable",
+              "name": "ret",
+              "attributes": {
+                "startLine": 31,
+                "endLine": 31
+              }
+            },
+            "attributes": {
+              "startLine": 31,
+              "endLine": 31
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 24,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n     * Expand a key and nonce into an xsalsa20 keystream.\n     *\n     * @internal You should not use this directly from another application\n     *\n     * @param int $len\n     * @param string $nonce\n     * @param string $key\n     * @return string\n     * @throws SodiumException\n     * @throws TypeError\n     */",
+              "line": 12,
+              "filePos": 222,
+              "tokenPos": 35,
+              "endLine": 23,
+              "endFilePos": 534,
+              "endTokenPos": 35
+            }
+          ],
+          "endLine": 32
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 9,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "xsalsa20_xor",
+          "attributes": {
+            "startLine": 46,
+            "endLine": 46
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "message",
+              "attributes": {
+                "startLine": 46,
+                "endLine": 46
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 46,
+              "endLine": 46
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "nonce",
+              "attributes": {
+                "startLine": 46,
+                "endLine": 46
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 46,
+              "endLine": 46
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "key",
+              "attributes": {
+                "startLine": 46,
+                "endLine": 46
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 46,
+              "endLine": 46
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_StaticCall",
+              "class": {
+                "nodeType": "Name",
+                "parts": [
+                  "self"
+                ],
+                "attributes": {
+                  "startLine": 48,
+                  "endLine": 48
+                }
+              },
+              "name": {
+                "nodeType": "Identifier",
+                "name": "xorStrings",
+                "attributes": {
+                  "startLine": 48,
+                  "endLine": 48
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "message",
+                    "attributes": {
+                      "startLine": 49,
+                      "endLine": 49
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 49,
+                    "endLine": 49
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_StaticCall",
+                    "class": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "self"
+                      ],
+                      "attributes": {
+                        "startLine": 50,
+                        "endLine": 50
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "xsalsa20",
+                      "attributes": {
+                        "startLine": 50,
+                        "endLine": 50
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_StaticCall",
+                          "class": {
+                            "nodeType": "Name",
+                            "parts": [
+                              "self"
+                            ],
+                            "attributes": {
+                              "startLine": 51,
+                              "endLine": 51
+                            }
+                          },
+                          "name": {
+                            "nodeType": "Identifier",
+                            "name": "strlen",
+                            "attributes": {
+                              "startLine": 51,
+                              "endLine": 51
+                            }
+                          },
+                          "args": [
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Expr_Variable",
+                                "name": "message",
+                                "attributes": {
+                                  "startLine": 51,
+                                  "endLine": 51
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 51,
+                                "endLine": 51
+                              }
+                            }
+                          ],
+                          "attributes": {
+                            "startLine": 51,
+                            "endLine": 51
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 51,
+                          "endLine": 51
+                        }
+                      },
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "nonce",
+                          "attributes": {
+                            "startLine": 52,
+                            "endLine": 52
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 52,
+                          "endLine": 52
+                        }
+                      },
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "key",
+                          "attributes": {
+                            "startLine": 53,
+                            "endLine": 53
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 53,
+                          "endLine": 53
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 50,
+                      "endLine": 54
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 50,
+                    "endLine": 54
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 48,
+                "endLine": 55
+              }
+            },
+            "attributes": {
+              "startLine": 48,
+              "endLine": 55
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 46,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n     * Encrypt a string with XSalsa20. Doesn't provide integrity.\n     *\n     * @internal You should not use this directly from another application\n     *\n     * @param string $message\n     * @param string $nonce\n     * @param string $key\n     * @return string\n     * @throws SodiumException\n     * @throws TypeError\n     */",
+              "line": 34,
+              "filePos": 771,
+              "tokenPos": 102,
+              "endLine": 45,
+              "endFilePos": 1098,
+              "endTokenPos": 102
+            }
+          ],
+          "endLine": 56
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 10,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Class ParagonIE_Sodium_Core_XSalsa20\n */",
+          "line": 7,
+          "filePos": 83,
+          "tokenPos": 21,
+          "endLine": 9,
+          "endFilePos": 129,
+          "endTokenPos": 21
+        }
+      ],
+      "endLine": 57
+    }
+  }
+]

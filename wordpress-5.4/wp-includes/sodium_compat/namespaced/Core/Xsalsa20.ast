@@ -1,0 +1,52 @@
+[
+  {
+    "nodeType": "Stmt_Namespace",
+    "name": {
+      "nodeType": "Name",
+      "parts": [
+        "ParagonIE",
+        "Sodium",
+        "Core"
+      ],
+      "attributes": {
+        "startLine": 2,
+        "endLine": 2
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Class",
+        "flags": 0,
+        "extends": {
+          "nodeType": "Name_FullyQualified",
+          "parts": [
+            "ParagonIE_Sodium_Core_XSalsa20"
+          ],
+          "attributes": {
+            "startLine": 4,
+            "endLine": 4
+          }
+        },
+        "implements": [],
+        "name": {
+          "nodeType": "Identifier",
+          "name": "Xsalsa20",
+          "attributes": {
+            "startLine": 4,
+            "endLine": 4
+          }
+        },
+        "stmts": [],
+        "attributes": {
+          "startLine": 4,
+          "endLine": 7
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 2,
+      "endLine": 7,
+      "kind": 1
+    }
+  }
+]

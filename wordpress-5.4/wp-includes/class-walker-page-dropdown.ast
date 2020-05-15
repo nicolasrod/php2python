@@ -1,0 +1,1348 @@
+[
+  {
+    "nodeType": "Stmt_Class",
+    "flags": 0,
+    "extends": {
+      "nodeType": "Name",
+      "parts": [
+        "Walker"
+      ],
+      "attributes": {
+        "startLine": 17,
+        "endLine": 17
+      }
+    },
+    "implements": [],
+    "name": {
+      "nodeType": "Identifier",
+      "name": "Walker_PageDropdown",
+      "attributes": {
+        "startLine": 17,
+        "endLine": 17
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "tree_type",
+              "attributes": {
+                "startLine": 27,
+                "endLine": 27
+              }
+            },
+            "default": {
+              "nodeType": "Scalar_String",
+              "value": "page",
+              "attributes": {
+                "startLine": 27,
+                "endLine": 27,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 27,
+              "endLine": 27
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 27,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * What the class handles.\n\t *\n\t * @since 2.1.0\n\t * @var string\n\t *\n\t * @see Walker::$tree_type\n\t */",
+              "line": 19,
+              "filePos": 267,
+              "tokenPos": 15,
+              "endLine": 26,
+              "endFilePos": 371,
+              "endTokenPos": 15
+            }
+          ],
+          "endLine": 27
+        }
+      },
+      {
+        "nodeType": "Stmt_Property",
+        "flags": 1,
+        "props": [
+          {
+            "nodeType": "Stmt_PropertyProperty",
+            "name": {
+              "nodeType": "VarLikeIdentifier",
+              "name": "db_fields",
+              "attributes": {
+                "startLine": 38,
+                "endLine": 38
+              }
+            },
+            "default": {
+              "nodeType": "Expr_Array",
+              "items": [
+                {
+                  "nodeType": "Expr_ArrayItem",
+                  "key": {
+                    "nodeType": "Scalar_String",
+                    "value": "parent",
+                    "attributes": {
+                      "startLine": 39,
+                      "endLine": 39,
+                      "kind": 1
+                    }
+                  },
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "post_parent",
+                    "attributes": {
+                      "startLine": 39,
+                      "endLine": 39,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 39,
+                    "endLine": 39
+                  }
+                },
+                {
+                  "nodeType": "Expr_ArrayItem",
+                  "key": {
+                    "nodeType": "Scalar_String",
+                    "value": "id",
+                    "attributes": {
+                      "startLine": 40,
+                      "endLine": 40,
+                      "kind": 1
+                    }
+                  },
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "ID",
+                    "attributes": {
+                      "startLine": 40,
+                      "endLine": 40,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 40,
+                    "endLine": 40
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 38,
+                "endLine": 41,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 38,
+              "endLine": 41
+            }
+          }
+        ],
+        "type": null,
+        "attributes": {
+          "startLine": 38,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Database fields to use.\n\t *\n\t * @since 2.1.0\n\t * @var array\n\t *\n\t * @see Walker::$db_fields\n\t * @todo Decouple this\n\t */",
+              "line": 29,
+              "filePos": 404,
+              "tokenPos": 26,
+              "endLine": 37,
+              "endFilePos": 531,
+              "endTokenPos": 26
+            }
+          ],
+          "endLine": 41
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "start_el",
+          "attributes": {
+            "startLine": 59,
+            "endLine": 59
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": true,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "output",
+              "attributes": {
+                "startLine": 59,
+                "endLine": 59
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 59,
+              "endLine": 59
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "page",
+              "attributes": {
+                "startLine": 59,
+                "endLine": 59
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 59,
+              "endLine": 59
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "depth",
+              "attributes": {
+                "startLine": 59,
+                "endLine": 59
+              }
+            },
+            "default": {
+              "nodeType": "Scalar_LNumber",
+              "value": 0,
+              "attributes": {
+                "startLine": 59,
+                "endLine": 59,
+                "kind": 10
+              }
+            },
+            "attributes": {
+              "startLine": 59,
+              "endLine": 59
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "args",
+              "attributes": {
+                "startLine": 59,
+                "endLine": 59
+              }
+            },
+            "default": {
+              "nodeType": "Expr_Array",
+              "items": [],
+              "attributes": {
+                "startLine": 59,
+                "endLine": 59,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 59,
+              "endLine": 59
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "id",
+              "attributes": {
+                "startLine": 59,
+                "endLine": 59
+              }
+            },
+            "default": {
+              "nodeType": "Scalar_LNumber",
+              "value": 0,
+              "attributes": {
+                "startLine": 59,
+                "endLine": 59,
+                "kind": 10
+              }
+            },
+            "attributes": {
+              "startLine": 59,
+              "endLine": 59
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "pad",
+                "attributes": {
+                  "startLine": 60,
+                  "endLine": 60
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "str_repeat"
+                  ],
+                  "attributes": {
+                    "startLine": 60,
+                    "endLine": 60
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "&nbsp;",
+                      "attributes": {
+                        "startLine": 60,
+                        "endLine": 60,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 60,
+                      "endLine": 60
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_BinaryOp_Mul",
+                      "left": {
+                        "nodeType": "Expr_Variable",
+                        "name": "depth",
+                        "attributes": {
+                          "startLine": 60,
+                          "endLine": 60
+                        }
+                      },
+                      "right": {
+                        "nodeType": "Scalar_LNumber",
+                        "value": 3,
+                        "attributes": {
+                          "startLine": 60,
+                          "endLine": 60,
+                          "kind": 10
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 60,
+                        "endLine": 60
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 60,
+                      "endLine": 60
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 60,
+                  "endLine": 60
+                }
+              },
+              "attributes": {
+                "startLine": 60,
+                "endLine": 60
+              }
+            },
+            "attributes": {
+              "startLine": 60,
+              "endLine": 60
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BinaryOp_BooleanOr",
+              "left": {
+                "nodeType": "Expr_BooleanNot",
+                "expr": {
+                  "nodeType": "Expr_Isset",
+                  "vars": [
+                    {
+                      "nodeType": "Expr_ArrayDimFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "args",
+                        "attributes": {
+                          "startLine": 62,
+                          "endLine": 62
+                        }
+                      },
+                      "dim": {
+                        "nodeType": "Scalar_String",
+                        "value": "value_field",
+                        "attributes": {
+                          "startLine": 62,
+                          "endLine": 62,
+                          "kind": 1
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 62,
+                        "endLine": 62
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 62,
+                    "endLine": 62
+                  }
+                },
+                "attributes": {
+                  "startLine": 62,
+                  "endLine": 62
+                }
+              },
+              "right": {
+                "nodeType": "Expr_BooleanNot",
+                "expr": {
+                  "nodeType": "Expr_Isset",
+                  "vars": [
+                    {
+                      "nodeType": "Expr_PropertyFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "page",
+                        "attributes": {
+                          "startLine": 62,
+                          "endLine": 62
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Expr_ArrayDimFetch",
+                        "var": {
+                          "nodeType": "Expr_Variable",
+                          "name": "args",
+                          "attributes": {
+                            "startLine": 62,
+                            "endLine": 62
+                          }
+                        },
+                        "dim": {
+                          "nodeType": "Scalar_String",
+                          "value": "value_field",
+                          "attributes": {
+                            "startLine": 62,
+                            "endLine": 62,
+                            "kind": 1
+                          }
+                        },
+                        "attributes": {
+                          "startLine": 62,
+                          "endLine": 62
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 62,
+                        "endLine": 62
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 62,
+                    "endLine": 62
+                  }
+                },
+                "attributes": {
+                  "startLine": 62,
+                  "endLine": 62
+                }
+              },
+              "attributes": {
+                "startLine": 62,
+                "endLine": 62
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_ArrayDimFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "args",
+                      "attributes": {
+                        "startLine": 63,
+                        "endLine": 63
+                      }
+                    },
+                    "dim": {
+                      "nodeType": "Scalar_String",
+                      "value": "value_field",
+                      "attributes": {
+                        "startLine": 63,
+                        "endLine": 63,
+                        "kind": 1
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 63,
+                      "endLine": 63
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Scalar_String",
+                    "value": "ID",
+                    "attributes": {
+                      "startLine": 63,
+                      "endLine": 63,
+                      "kind": 1
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 63,
+                    "endLine": 63
+                  }
+                },
+                "attributes": {
+                  "startLine": 63,
+                  "endLine": 63
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 62,
+              "endLine": 64
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_AssignOp_Concat",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "output",
+                "attributes": {
+                  "startLine": 66,
+                  "endLine": 66
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_BinaryOp_Concat",
+                "left": {
+                  "nodeType": "Expr_BinaryOp_Concat",
+                  "left": {
+                    "nodeType": "Scalar_Encapsed",
+                    "parts": [
+                      {
+                        "nodeType": "Scalar_EncapsedStringPart",
+                        "value": "\t<option class=\"level-",
+                        "attributes": {
+                          "startLine": 66,
+                          "endLine": 66
+                        }
+                      },
+                      {
+                        "nodeType": "Expr_Variable",
+                        "name": "depth",
+                        "attributes": {
+                          "startLine": 66,
+                          "endLine": 66
+                        }
+                      },
+                      {
+                        "nodeType": "Scalar_EncapsedStringPart",
+                        "value": "\" value=\"",
+                        "attributes": {
+                          "startLine": 66,
+                          "endLine": 66
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 66,
+                      "endLine": 66,
+                      "kind": 2
+                    }
+                  },
+                  "right": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "esc_attr"
+                      ],
+                      "attributes": {
+                        "startLine": 66,
+                        "endLine": 66
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_PropertyFetch",
+                          "var": {
+                            "nodeType": "Expr_Variable",
+                            "name": "page",
+                            "attributes": {
+                              "startLine": 66,
+                              "endLine": 66
+                            }
+                          },
+                          "name": {
+                            "nodeType": "Expr_ArrayDimFetch",
+                            "var": {
+                              "nodeType": "Expr_Variable",
+                              "name": "args",
+                              "attributes": {
+                                "startLine": 66,
+                                "endLine": 66
+                              }
+                            },
+                            "dim": {
+                              "nodeType": "Scalar_String",
+                              "value": "value_field",
+                              "attributes": {
+                                "startLine": 66,
+                                "endLine": 66,
+                                "kind": 1
+                              }
+                            },
+                            "attributes": {
+                              "startLine": 66,
+                              "endLine": 66
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 66,
+                            "endLine": 66
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 66,
+                          "endLine": 66
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 66,
+                      "endLine": 66
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 66,
+                    "endLine": 66
+                  }
+                },
+                "right": {
+                  "nodeType": "Scalar_String",
+                  "value": "\"",
+                  "attributes": {
+                    "startLine": 66,
+                    "endLine": 66,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 66,
+                  "endLine": 66
+                }
+              },
+              "attributes": {
+                "startLine": 66,
+                "endLine": 66
+              }
+            },
+            "attributes": {
+              "startLine": 66,
+              "endLine": 66
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BinaryOp_Equal",
+              "left": {
+                "nodeType": "Expr_PropertyFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "page",
+                  "attributes": {
+                    "startLine": 67,
+                    "endLine": 67
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "ID",
+                  "attributes": {
+                    "startLine": 67,
+                    "endLine": 67
+                  }
+                },
+                "attributes": {
+                  "startLine": 67,
+                  "endLine": 67
+                }
+              },
+              "right": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "args",
+                  "attributes": {
+                    "startLine": 67,
+                    "endLine": 67
+                  }
+                },
+                "dim": {
+                  "nodeType": "Scalar_String",
+                  "value": "selected",
+                  "attributes": {
+                    "startLine": 67,
+                    "endLine": 67,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 67,
+                  "endLine": 67
+                }
+              },
+              "attributes": {
+                "startLine": 67,
+                "endLine": 67
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_AssignOp_Concat",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "output",
+                    "attributes": {
+                      "startLine": 68,
+                      "endLine": 68
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Scalar_String",
+                    "value": " selected=\"selected\"",
+                    "attributes": {
+                      "startLine": 68,
+                      "endLine": 68,
+                      "kind": 1
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 68,
+                    "endLine": 68
+                  }
+                },
+                "attributes": {
+                  "startLine": 68,
+                  "endLine": 68
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 67,
+              "endLine": 69
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_AssignOp_Concat",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "output",
+                "attributes": {
+                  "startLine": 70,
+                  "endLine": 70
+                }
+              },
+              "expr": {
+                "nodeType": "Scalar_String",
+                "value": ">",
+                "attributes": {
+                  "startLine": 70,
+                  "endLine": 70,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 70,
+                "endLine": 70
+              }
+            },
+            "attributes": {
+              "startLine": 70,
+              "endLine": 70
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "title",
+                "attributes": {
+                  "startLine": 72,
+                  "endLine": 72
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_PropertyFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "page",
+                  "attributes": {
+                    "startLine": 72,
+                    "endLine": 72
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "post_title",
+                  "attributes": {
+                    "startLine": 72,
+                    "endLine": 72
+                  }
+                },
+                "attributes": {
+                  "startLine": 72,
+                  "endLine": 72
+                }
+              },
+              "attributes": {
+                "startLine": 72,
+                "endLine": 72
+              }
+            },
+            "attributes": {
+              "startLine": 72,
+              "endLine": 72
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BinaryOp_Identical",
+              "left": {
+                "nodeType": "Scalar_String",
+                "value": "",
+                "attributes": {
+                  "startLine": 73,
+                  "endLine": 73,
+                  "kind": 1
+                }
+              },
+              "right": {
+                "nodeType": "Expr_Variable",
+                "name": "title",
+                "attributes": {
+                  "startLine": 73,
+                  "endLine": 73
+                }
+              },
+              "attributes": {
+                "startLine": 73,
+                "endLine": 73
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "title",
+                    "attributes": {
+                      "startLine": 75,
+                      "comments": [
+                        {
+                          "nodeType": "Comment",
+                          "text": "/* translators: %d: ID of a post. */",
+                          "line": 74,
+                          "filePos": 1869,
+                          "tokenPos": 254,
+                          "endLine": 74,
+                          "endFilePos": 1904,
+                          "endTokenPos": 254
+                        }
+                      ],
+                      "endLine": 75
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "sprintf"
+                      ],
+                      "attributes": {
+                        "startLine": 75,
+                        "endLine": 75
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_FuncCall",
+                          "name": {
+                            "nodeType": "Name",
+                            "parts": [
+                              "__"
+                            ],
+                            "attributes": {
+                              "startLine": 75,
+                              "endLine": 75
+                            }
+                          },
+                          "args": [
+                            {
+                              "nodeType": "Arg",
+                              "value": {
+                                "nodeType": "Scalar_String",
+                                "value": "#%d (no title)",
+                                "attributes": {
+                                  "startLine": 75,
+                                  "endLine": 75,
+                                  "kind": 1
+                                }
+                              },
+                              "byRef": false,
+                              "unpack": false,
+                              "attributes": {
+                                "startLine": 75,
+                                "endLine": 75
+                              }
+                            }
+                          ],
+                          "attributes": {
+                            "startLine": 75,
+                            "endLine": 75
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 75,
+                          "endLine": 75
+                        }
+                      },
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_PropertyFetch",
+                          "var": {
+                            "nodeType": "Expr_Variable",
+                            "name": "page",
+                            "attributes": {
+                              "startLine": 75,
+                              "endLine": 75
+                            }
+                          },
+                          "name": {
+                            "nodeType": "Identifier",
+                            "name": "ID",
+                            "attributes": {
+                              "startLine": 75,
+                              "endLine": 75
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 75,
+                            "endLine": 75
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 75,
+                          "endLine": 75
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 75,
+                      "endLine": 75
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 75,
+                    "comments": [
+                      {
+                        "nodeType": "Comment",
+                        "text": "/* translators: %d: ID of a post. */",
+                        "line": 74,
+                        "filePos": 1869,
+                        "tokenPos": 254,
+                        "endLine": 74,
+                        "endFilePos": 1904,
+                        "endTokenPos": 254
+                      }
+                    ],
+                    "endLine": 75
+                  }
+                },
+                "attributes": {
+                  "startLine": 75,
+                  "comments": [
+                    {
+                      "nodeType": "Comment",
+                      "text": "/* translators: %d: ID of a post. */",
+                      "line": 74,
+                      "filePos": 1869,
+                      "tokenPos": 254,
+                      "endLine": 74,
+                      "endFilePos": 1904,
+                      "endTokenPos": 254
+                    }
+                  ],
+                  "endLine": 75
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 73,
+              "endLine": 76
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "title",
+                "attributes": {
+                  "startLine": 86,
+                  "comments": [
+                    {
+                      "nodeType": "Comment_Doc",
+                      "text": "/**\n\t\t * Filters the page title when creating an HTML drop-down list of pages.\n\t\t *\n\t\t * @since 3.1.0\n\t\t *\n\t\t * @param string  $title Page title.\n\t\t * @param WP_Post $page  Page data object.\n\t\t */",
+                      "line": 78,
+                      "filePos": 1971,
+                      "tokenPos": 280,
+                      "endLine": 85,
+                      "endFilePos": 2166,
+                      "endTokenPos": 280
+                    }
+                  ],
+                  "endLine": 86
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "apply_filters"
+                  ],
+                  "attributes": {
+                    "startLine": 86,
+                    "endLine": 86
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "list_pages",
+                      "attributes": {
+                        "startLine": 86,
+                        "endLine": 86,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 86,
+                      "endLine": 86
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "title",
+                      "attributes": {
+                        "startLine": 86,
+                        "endLine": 86
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 86,
+                      "endLine": 86
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "page",
+                      "attributes": {
+                        "startLine": 86,
+                        "endLine": 86
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 86,
+                      "endLine": 86
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 86,
+                  "endLine": 86
+                }
+              },
+              "attributes": {
+                "startLine": 86,
+                "comments": [
+                  {
+                    "nodeType": "Comment_Doc",
+                    "text": "/**\n\t\t * Filters the page title when creating an HTML drop-down list of pages.\n\t\t *\n\t\t * @since 3.1.0\n\t\t *\n\t\t * @param string  $title Page title.\n\t\t * @param WP_Post $page  Page data object.\n\t\t */",
+                    "line": 78,
+                    "filePos": 1971,
+                    "tokenPos": 280,
+                    "endLine": 85,
+                    "endFilePos": 2166,
+                    "endTokenPos": 280
+                  }
+                ],
+                "endLine": 86
+              }
+            },
+            "attributes": {
+              "startLine": 86,
+              "comments": [
+                {
+                  "nodeType": "Comment_Doc",
+                  "text": "/**\n\t\t * Filters the page title when creating an HTML drop-down list of pages.\n\t\t *\n\t\t * @since 3.1.0\n\t\t *\n\t\t * @param string  $title Page title.\n\t\t * @param WP_Post $page  Page data object.\n\t\t */",
+                  "line": 78,
+                  "filePos": 1971,
+                  "tokenPos": 280,
+                  "endLine": 85,
+                  "endFilePos": 2166,
+                  "endTokenPos": 280
+                }
+              ],
+              "endLine": 86
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_AssignOp_Concat",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "output",
+                "attributes": {
+                  "startLine": 88,
+                  "endLine": 88
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_BinaryOp_Concat",
+                "left": {
+                  "nodeType": "Expr_Variable",
+                  "name": "pad",
+                  "attributes": {
+                    "startLine": 88,
+                    "endLine": 88
+                  }
+                },
+                "right": {
+                  "nodeType": "Expr_FuncCall",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "esc_html"
+                    ],
+                    "attributes": {
+                      "startLine": 88,
+                      "endLine": 88
+                    }
+                  },
+                  "args": [
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Expr_Variable",
+                        "name": "title",
+                        "attributes": {
+                          "startLine": 88,
+                          "endLine": 88
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 88,
+                        "endLine": 88
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 88,
+                    "endLine": 88
+                  }
+                },
+                "attributes": {
+                  "startLine": 88,
+                  "endLine": 88
+                }
+              },
+              "attributes": {
+                "startLine": 88,
+                "endLine": 88
+              }
+            },
+            "attributes": {
+              "startLine": 88,
+              "endLine": 88
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_AssignOp_Concat",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "output",
+                "attributes": {
+                  "startLine": 89,
+                  "endLine": 89
+                }
+              },
+              "expr": {
+                "nodeType": "Scalar_String",
+                "value": "</option>\n",
+                "attributes": {
+                  "startLine": 89,
+                  "endLine": 89,
+                  "kind": 2
+                }
+              },
+              "attributes": {
+                "startLine": 89,
+                "endLine": 89
+              }
+            },
+            "attributes": {
+              "startLine": 89,
+              "endLine": 89
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 59,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Starts the element output.\n\t *\n\t * @since 2.1.0\n\t *\n\t * @see Walker::start_el()\n\t *\n\t * @param string  $output Used to append additional content. Passed by reference.\n\t * @param WP_Post $page   Page data object.\n\t * @param int     $depth  Optional. Depth of page in reference to parent pages. Used for padding.\n\t *                        Default 0.\n\t * @param array   $args   Optional. Uses 'selected' argument for selected page to set selected HTML\n\t *                        attribute for option element. Uses 'value_field' argument to fill \"value\"\n\t *                        attribute. See wp_dropdown_pages(). Default empty array.\n\t * @param int     $id     Optional. ID of the current page. Default 0 (unused).\n\t */",
+              "line": 43,
+              "filePos": 616,
+              "tokenPos": 54,
+              "endLine": 58,
+              "endFilePos": 1343,
+              "endTokenPos": 54
+            }
+          ],
+          "endLine": 90
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 17,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Post API: Walker_PageDropdown class\n *\n * @package WordPress\n * @subpackage Post\n * @since 4.4.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 8,
+          "endFilePos": 112,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Core class used to create an HTML drop-down list of pages.\n *\n * @since 2.1.0\n *\n * @see Walker\n */",
+          "line": 10,
+          "filePos": 115,
+          "tokenPos": 3,
+          "endLine": 16,
+          "endFilePos": 220,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 91
+    }
+  }
+]

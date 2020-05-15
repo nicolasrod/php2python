@@ -1,0 +1,6077 @@
+[
+  {
+    "nodeType": "Stmt_Global",
+    "vars": [
+      {
+        "nodeType": "Expr_Variable",
+        "name": "wpcom_api_key",
+        "attributes": {
+          "startLine": 3,
+          "endLine": 3
+        }
+      },
+      {
+        "nodeType": "Expr_Variable",
+        "name": "akismet_api_host",
+        "attributes": {
+          "startLine": 3,
+          "endLine": 3
+        }
+      },
+      {
+        "nodeType": "Expr_Variable",
+        "name": "akismet_api_port",
+        "attributes": {
+          "startLine": 3,
+          "endLine": 3
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 3,
+      "endLine": 3
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Assign",
+      "var": {
+        "nodeType": "Expr_Variable",
+        "name": "wpcom_api_key",
+        "attributes": {
+          "startLine": 5,
+          "endLine": 5
+        }
+      },
+      "expr": {
+        "nodeType": "Expr_Ternary",
+        "cond": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "defined"
+            ],
+            "attributes": {
+              "startLine": 5,
+              "endLine": 5
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "WPCOM_API_KEY",
+                "attributes": {
+                  "startLine": 5,
+                  "endLine": 5,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 5,
+                "endLine": 5
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 5,
+            "endLine": 5
+          }
+        },
+        "if": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "constant"
+            ],
+            "attributes": {
+              "startLine": 5,
+              "endLine": 5
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "WPCOM_API_KEY",
+                "attributes": {
+                  "startLine": 5,
+                  "endLine": 5,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 5,
+                "endLine": 5
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 5,
+            "endLine": 5
+          }
+        },
+        "else": {
+          "nodeType": "Scalar_String",
+          "value": "",
+          "attributes": {
+            "startLine": 5,
+            "endLine": 5,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 5,
+          "endLine": 5
+        }
+      },
+      "attributes": {
+        "startLine": 5,
+        "endLine": 5
+      }
+    },
+    "attributes": {
+      "startLine": 5,
+      "endLine": 5
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Assign",
+      "var": {
+        "nodeType": "Expr_Variable",
+        "name": "akismet_api_host",
+        "attributes": {
+          "startLine": 6,
+          "endLine": 6
+        }
+      },
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet"
+            ],
+            "attributes": {
+              "startLine": 6,
+              "endLine": 6
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "get_api_key",
+            "attributes": {
+              "startLine": 6,
+              "endLine": 6
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 6,
+            "endLine": 6
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": ".rest.akismet.com",
+          "attributes": {
+            "startLine": 6,
+            "endLine": 6,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 6,
+          "endLine": 6
+        }
+      },
+      "attributes": {
+        "startLine": 6,
+        "endLine": 6
+      }
+    },
+    "attributes": {
+      "startLine": 6,
+      "endLine": 6
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Assign",
+      "var": {
+        "nodeType": "Expr_Variable",
+        "name": "akismet_api_port",
+        "attributes": {
+          "startLine": 7,
+          "endLine": 7
+        }
+      },
+      "expr": {
+        "nodeType": "Scalar_LNumber",
+        "value": 80,
+        "attributes": {
+          "startLine": 7,
+          "endLine": 7,
+          "kind": 10
+        }
+      },
+      "attributes": {
+        "startLine": 7,
+        "endLine": 7
+      }
+    },
+    "attributes": {
+      "startLine": 7,
+      "endLine": 7
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_test_mode",
+      "attributes": {
+        "startLine": 9,
+        "endLine": 9
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet"
+            ],
+            "attributes": {
+              "startLine": 10,
+              "endLine": 10
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "is_test_mode",
+            "attributes": {
+              "startLine": 10,
+              "endLine": 10
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 10,
+            "endLine": 10
+          }
+        },
+        "attributes": {
+          "startLine": 10,
+          "endLine": 10
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 9,
+      "endLine": 11
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_http_post",
+      "attributes": {
+        "startLine": 13,
+        "endLine": 13
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "request",
+          "attributes": {
+            "startLine": 13,
+            "endLine": 13
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 13,
+          "endLine": 13
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "host",
+          "attributes": {
+            "startLine": 13,
+            "endLine": 13
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 13,
+          "endLine": 13
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "path",
+          "attributes": {
+            "startLine": 13,
+            "endLine": 13
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 13,
+          "endLine": 13
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "port",
+          "attributes": {
+            "startLine": 13,
+            "endLine": 13
+          }
+        },
+        "default": {
+          "nodeType": "Scalar_LNumber",
+          "value": 80,
+          "attributes": {
+            "startLine": 13,
+            "endLine": 13,
+            "kind": 10
+          }
+        },
+        "attributes": {
+          "startLine": 13,
+          "endLine": 13
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "ip",
+          "attributes": {
+            "startLine": 13,
+            "endLine": 13
+          }
+        },
+        "default": {
+          "nodeType": "Expr_ConstFetch",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "null"
+            ],
+            "attributes": {
+              "startLine": 13,
+              "endLine": 13
+            }
+          },
+          "attributes": {
+            "startLine": 13,
+            "endLine": 13
+          }
+        },
+        "attributes": {
+          "startLine": 13,
+          "endLine": 13
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "path",
+            "attributes": {
+              "startLine": 14,
+              "endLine": 14
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "str_replace"
+              ],
+              "attributes": {
+                "startLine": 14,
+                "endLine": 14
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "/1.1/",
+                  "attributes": {
+                    "startLine": 14,
+                    "endLine": 14,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 14,
+                  "endLine": 14
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "",
+                  "attributes": {
+                    "startLine": 14,
+                    "endLine": 14,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 14,
+                  "endLine": 14
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "path",
+                  "attributes": {
+                    "startLine": 14,
+                    "endLine": 14
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 14,
+                  "endLine": 14
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 14,
+              "endLine": 14
+            }
+          },
+          "attributes": {
+            "startLine": 14,
+            "endLine": 14
+          }
+        },
+        "attributes": {
+          "startLine": 14,
+          "endLine": 14
+        }
+      },
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet"
+            ],
+            "attributes": {
+              "startLine": 16,
+              "endLine": 16
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "http_post",
+            "attributes": {
+              "startLine": 16,
+              "endLine": 16
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "request",
+                "attributes": {
+                  "startLine": 16,
+                  "endLine": 16
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 16,
+                "endLine": 16
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "path",
+                "attributes": {
+                  "startLine": 16,
+                  "endLine": 16
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 16,
+                "endLine": 16
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "ip",
+                "attributes": {
+                  "startLine": 16,
+                  "endLine": 16
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 16,
+                "endLine": 16
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 16,
+            "endLine": 16
+          }
+        },
+        "attributes": {
+          "startLine": 16,
+          "endLine": 16
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 13,
+      "endLine": 17
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_microtime",
+      "attributes": {
+        "startLine": 19,
+        "endLine": 19
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet"
+            ],
+            "attributes": {
+              "startLine": 20,
+              "endLine": 20
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "_get_microtime",
+            "attributes": {
+              "startLine": 20,
+              "endLine": 20
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 20,
+            "endLine": 20
+          }
+        },
+        "attributes": {
+          "startLine": 20,
+          "endLine": 20
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 19,
+      "endLine": 21
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_delete_old",
+      "attributes": {
+        "startLine": 23,
+        "endLine": 23
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet"
+            ],
+            "attributes": {
+              "startLine": 24,
+              "endLine": 24
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "delete_old_comments",
+            "attributes": {
+              "startLine": 24,
+              "endLine": 24
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 24,
+            "endLine": 24
+          }
+        },
+        "attributes": {
+          "startLine": 24,
+          "endLine": 24
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 23,
+      "endLine": 25
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_delete_old_metadata",
+      "attributes": {
+        "startLine": 27,
+        "endLine": 27
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet"
+            ],
+            "attributes": {
+              "startLine": 28,
+              "endLine": 28
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "delete_old_comments_meta",
+            "attributes": {
+              "startLine": 28,
+              "endLine": 28
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 28,
+            "endLine": 28
+          }
+        },
+        "attributes": {
+          "startLine": 28,
+          "endLine": 28
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 27,
+      "endLine": 29
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_check_db_comment",
+      "attributes": {
+        "startLine": 31,
+        "endLine": 31
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "id",
+          "attributes": {
+            "startLine": 31,
+            "endLine": 31
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 31,
+          "endLine": 31
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "recheck_reason",
+          "attributes": {
+            "startLine": 31,
+            "endLine": 31
+          }
+        },
+        "default": {
+          "nodeType": "Scalar_String",
+          "value": "recheck_queue",
+          "attributes": {
+            "startLine": 31,
+            "endLine": 31,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 31,
+          "endLine": 31
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet"
+            ],
+            "attributes": {
+              "startLine": 32,
+              "endLine": 32
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "check_db_comment",
+            "attributes": {
+              "startLine": 32,
+              "endLine": 32
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "id",
+                "attributes": {
+                  "startLine": 32,
+                  "endLine": 32
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 32,
+                "endLine": 32
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "recheck_reason",
+                "attributes": {
+                  "startLine": 32,
+                  "endLine": 32
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 32,
+                "endLine": 32
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 32,
+            "endLine": 32
+          }
+        },
+        "attributes": {
+          "startLine": 32,
+          "endLine": 32
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 31,
+      "endLine": 33
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_rightnow",
+      "attributes": {
+        "startLine": 35,
+        "endLine": 35
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BooleanNot",
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "class_exists"
+              ],
+              "attributes": {
+                "startLine": 36,
+                "endLine": 36
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "Akismet_Admin",
+                  "attributes": {
+                    "startLine": 36,
+                    "endLine": 36,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 36,
+                  "endLine": 36
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 36,
+              "endLine": 36
+            }
+          },
+          "attributes": {
+            "startLine": 36,
+            "endLine": 36
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_ConstFetch",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "false"
+                ],
+                "attributes": {
+                  "startLine": 37,
+                  "endLine": 37
+                }
+              },
+              "attributes": {
+                "startLine": 37,
+                "endLine": 37
+              }
+            },
+            "attributes": {
+              "startLine": 37,
+              "endLine": 37
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 36,
+          "endLine": 37
+        }
+      },
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet_Admin"
+            ],
+            "attributes": {
+              "startLine": 39,
+              "endLine": 39
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "rightnow_stats",
+            "attributes": {
+              "startLine": 39,
+              "endLine": 39
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 39,
+            "endLine": 39
+          }
+        },
+        "attributes": {
+          "startLine": 39,
+          "endLine": 39
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 35,
+      "endLine": 40
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_admin_init",
+      "attributes": {
+        "startLine": 42,
+        "endLine": 42
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "_deprecated_function"
+            ],
+            "attributes": {
+              "startLine": 43,
+              "endLine": 43
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_MagicConst_Function",
+                "attributes": {
+                  "startLine": 43,
+                  "endLine": 43
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 43,
+                "endLine": 43
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "3.0",
+                "attributes": {
+                  "startLine": 43,
+                  "endLine": 43,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 43,
+                "endLine": 43
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 43,
+            "endLine": 43
+          }
+        },
+        "attributes": {
+          "startLine": 43,
+          "endLine": 43
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 42,
+      "endLine": 44
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_version_warning",
+      "attributes": {
+        "startLine": 45,
+        "endLine": 45
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "_deprecated_function"
+            ],
+            "attributes": {
+              "startLine": 46,
+              "endLine": 46
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_MagicConst_Function",
+                "attributes": {
+                  "startLine": 46,
+                  "endLine": 46
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 46,
+                "endLine": 46
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "3.0",
+                "attributes": {
+                  "startLine": 46,
+                  "endLine": 46,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 46,
+                "endLine": 46
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 46,
+            "endLine": 46
+          }
+        },
+        "attributes": {
+          "startLine": 46,
+          "endLine": 46
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 45,
+      "endLine": 47
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_load_js_and_css",
+      "attributes": {
+        "startLine": 48,
+        "endLine": 48
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "_deprecated_function"
+            ],
+            "attributes": {
+              "startLine": 49,
+              "endLine": 49
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_MagicConst_Function",
+                "attributes": {
+                  "startLine": 49,
+                  "endLine": 49
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 49,
+                "endLine": 49
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "3.0",
+                "attributes": {
+                  "startLine": 49,
+                  "endLine": 49,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 49,
+                "endLine": 49
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 49,
+            "endLine": 49
+          }
+        },
+        "attributes": {
+          "startLine": 49,
+          "endLine": 49
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 48,
+      "endLine": 50
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_nonce_field",
+      "attributes": {
+        "startLine": 51,
+        "endLine": 51
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "action",
+          "attributes": {
+            "startLine": 51,
+            "endLine": 51
+          }
+        },
+        "default": {
+          "nodeType": "Expr_UnaryMinus",
+          "expr": {
+            "nodeType": "Scalar_LNumber",
+            "value": 1,
+            "attributes": {
+              "startLine": 51,
+              "endLine": 51,
+              "kind": 10
+            }
+          },
+          "attributes": {
+            "startLine": 51,
+            "endLine": 51
+          }
+        },
+        "attributes": {
+          "startLine": 51,
+          "endLine": 51
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "wp_nonce_field"
+            ],
+            "attributes": {
+              "startLine": 52,
+              "endLine": 52
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "action",
+                "attributes": {
+                  "startLine": 52,
+                  "endLine": 52
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 52,
+                "endLine": 52
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 52,
+            "endLine": 52
+          }
+        },
+        "attributes": {
+          "startLine": 52,
+          "endLine": 52
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 51,
+      "endLine": 53
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_plugin_action_links",
+      "attributes": {
+        "startLine": 54,
+        "endLine": 54
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "links",
+          "attributes": {
+            "startLine": 54,
+            "endLine": 54
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 54,
+          "endLine": 54
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "file",
+          "attributes": {
+            "startLine": 54,
+            "endLine": 54
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 54,
+          "endLine": 54
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet_Admin"
+            ],
+            "attributes": {
+              "startLine": 55,
+              "endLine": 55
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "plugin_action_links",
+            "attributes": {
+              "startLine": 55,
+              "endLine": 55
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "links",
+                "attributes": {
+                  "startLine": 55,
+                  "endLine": 55
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 55,
+                "endLine": 55
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "file",
+                "attributes": {
+                  "startLine": 55,
+                  "endLine": 55
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 55,
+                "endLine": 55
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 55,
+            "endLine": 55
+          }
+        },
+        "attributes": {
+          "startLine": 55,
+          "endLine": 55
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 54,
+      "endLine": 56
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_conf",
+      "attributes": {
+        "startLine": 57,
+        "endLine": 57
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "_deprecated_function"
+            ],
+            "attributes": {
+              "startLine": 58,
+              "endLine": 58
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_MagicConst_Function",
+                "attributes": {
+                  "startLine": 58,
+                  "endLine": 58
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 58,
+                "endLine": 58
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "3.0",
+                "attributes": {
+                  "startLine": 58,
+                  "endLine": 58,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 58,
+                "endLine": 58
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 58,
+            "endLine": 58
+          }
+        },
+        "attributes": {
+          "startLine": 58,
+          "endLine": 58
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 57,
+      "endLine": 59
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_stats_display",
+      "attributes": {
+        "startLine": 60,
+        "endLine": 60
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "_deprecated_function"
+            ],
+            "attributes": {
+              "startLine": 61,
+              "endLine": 61
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_MagicConst_Function",
+                "attributes": {
+                  "startLine": 61,
+                  "endLine": 61
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 61,
+                "endLine": 61
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "3.0",
+                "attributes": {
+                  "startLine": 61,
+                  "endLine": 61,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 61,
+                "endLine": 61
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 61,
+            "endLine": 61
+          }
+        },
+        "attributes": {
+          "startLine": 61,
+          "endLine": 61
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 60,
+      "endLine": 62
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_stats",
+      "attributes": {
+        "startLine": 63,
+        "endLine": 63
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet_Admin"
+            ],
+            "attributes": {
+              "startLine": 64,
+              "endLine": 64
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "dashboard_stats",
+            "attributes": {
+              "startLine": 64,
+              "endLine": 64
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 64,
+            "endLine": 64
+          }
+        },
+        "attributes": {
+          "startLine": 64,
+          "endLine": 64
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 63,
+      "endLine": 65
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_admin_warnings",
+      "attributes": {
+        "startLine": 66,
+        "endLine": 66
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "_deprecated_function"
+            ],
+            "attributes": {
+              "startLine": 67,
+              "endLine": 67
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_MagicConst_Function",
+                "attributes": {
+                  "startLine": 67,
+                  "endLine": 67
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 67,
+                "endLine": 67
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "3.0",
+                "attributes": {
+                  "startLine": 67,
+                  "endLine": 67,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 67,
+                "endLine": 67
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 67,
+            "endLine": 67
+          }
+        },
+        "attributes": {
+          "startLine": 67,
+          "endLine": 67
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 66,
+      "endLine": 68
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_comment_row_action",
+      "attributes": {
+        "startLine": 69,
+        "endLine": 69
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "a",
+          "attributes": {
+            "startLine": 69,
+            "endLine": 69
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 69,
+          "endLine": 69
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "comment",
+          "attributes": {
+            "startLine": 69,
+            "endLine": 69
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 69,
+          "endLine": 69
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet_Admin"
+            ],
+            "attributes": {
+              "startLine": 70,
+              "endLine": 70
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "comment_row_actions",
+            "attributes": {
+              "startLine": 70,
+              "endLine": 70
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "a",
+                "attributes": {
+                  "startLine": 70,
+                  "endLine": 70
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 70,
+                "endLine": 70
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "comment",
+                "attributes": {
+                  "startLine": 70,
+                  "endLine": 70
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 70,
+                "endLine": 70
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 70,
+            "endLine": 70
+          }
+        },
+        "attributes": {
+          "startLine": 70,
+          "endLine": 70
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 69,
+      "endLine": 71
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_comment_status_meta_box",
+      "attributes": {
+        "startLine": 72,
+        "endLine": 72
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "comment",
+          "attributes": {
+            "startLine": 72,
+            "endLine": 72
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 72,
+          "endLine": 72
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet_Admin"
+            ],
+            "attributes": {
+              "startLine": 73,
+              "endLine": 73
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "comment_status_meta_box",
+            "attributes": {
+              "startLine": 73,
+              "endLine": 73
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "comment",
+                "attributes": {
+                  "startLine": 73,
+                  "endLine": 73
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 73,
+                "endLine": 73
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 73,
+            "endLine": 73
+          }
+        },
+        "attributes": {
+          "startLine": 73,
+          "endLine": 73
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 72,
+      "endLine": 74
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_comments_columns",
+      "attributes": {
+        "startLine": 75,
+        "endLine": 75
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "columns",
+          "attributes": {
+            "startLine": 75,
+            "endLine": 75
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 75,
+          "endLine": 75
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "_deprecated_function"
+            ],
+            "attributes": {
+              "startLine": 76,
+              "endLine": 76
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_MagicConst_Function",
+                "attributes": {
+                  "startLine": 76,
+                  "endLine": 76
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 76,
+                "endLine": 76
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "3.0",
+                "attributes": {
+                  "startLine": 76,
+                  "endLine": 76,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 76,
+                "endLine": 76
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 76,
+            "endLine": 76
+          }
+        },
+        "attributes": {
+          "startLine": 76,
+          "endLine": 76
+        }
+      },
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_Variable",
+          "name": "columns",
+          "attributes": {
+            "startLine": 78,
+            "endLine": 78
+          }
+        },
+        "attributes": {
+          "startLine": 78,
+          "endLine": 78
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 75,
+      "endLine": 79
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_comment_column_row",
+      "attributes": {
+        "startLine": 80,
+        "endLine": 80
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "column",
+          "attributes": {
+            "startLine": 80,
+            "endLine": 80
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 80,
+          "endLine": 80
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "comment_id",
+          "attributes": {
+            "startLine": 80,
+            "endLine": 80
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 80,
+          "endLine": 80
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "_deprecated_function"
+            ],
+            "attributes": {
+              "startLine": 81,
+              "endLine": 81
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_MagicConst_Function",
+                "attributes": {
+                  "startLine": 81,
+                  "endLine": 81
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 81,
+                "endLine": 81
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "3.0",
+                "attributes": {
+                  "startLine": 81,
+                  "endLine": 81,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 81,
+                "endLine": 81
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 81,
+            "endLine": 81
+          }
+        },
+        "attributes": {
+          "startLine": 81,
+          "endLine": 81
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 80,
+      "endLine": 82
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_text_add_link_callback",
+      "attributes": {
+        "startLine": 83,
+        "endLine": 83
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "m",
+          "attributes": {
+            "startLine": 83,
+            "endLine": 83
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 83,
+          "endLine": 83
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet_Admin"
+            ],
+            "attributes": {
+              "startLine": 84,
+              "endLine": 84
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "text_add_link_callback",
+            "attributes": {
+              "startLine": 84,
+              "endLine": 84
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "m",
+                "attributes": {
+                  "startLine": 84,
+                  "endLine": 84
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 84,
+                "endLine": 84
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 84,
+            "endLine": 84
+          }
+        },
+        "attributes": {
+          "startLine": 84,
+          "endLine": 84
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 83,
+      "endLine": 85
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_text_add_link_class",
+      "attributes": {
+        "startLine": 86,
+        "endLine": 86
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "comment_text",
+          "attributes": {
+            "startLine": 86,
+            "endLine": 86
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 86,
+          "endLine": 86
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet_Admin"
+            ],
+            "attributes": {
+              "startLine": 87,
+              "endLine": 87
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "text_add_link_class",
+            "attributes": {
+              "startLine": 87,
+              "endLine": 87
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "comment_text",
+                "attributes": {
+                  "startLine": 87,
+                  "endLine": 87
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 87,
+                "endLine": 87
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 87,
+            "endLine": 87
+          }
+        },
+        "attributes": {
+          "startLine": 87,
+          "endLine": 87
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 86,
+      "endLine": 88
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_check_for_spam_button",
+      "attributes": {
+        "startLine": 89,
+        "endLine": 89
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "comment_status",
+          "attributes": {
+            "startLine": 89,
+            "endLine": 89
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 89,
+          "endLine": 89
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet_Admin"
+            ],
+            "attributes": {
+              "startLine": 90,
+              "endLine": 90
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "check_for_spam_button",
+            "attributes": {
+              "startLine": 90,
+              "endLine": 90
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "comment_status",
+                "attributes": {
+                  "startLine": 90,
+                  "endLine": 90
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 90,
+                "endLine": 90
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 90,
+            "endLine": 90
+          }
+        },
+        "attributes": {
+          "startLine": 90,
+          "endLine": 90
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 89,
+      "endLine": 91
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_submit_nonspam_comment",
+      "attributes": {
+        "startLine": 92,
+        "endLine": 92
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "comment_id",
+          "attributes": {
+            "startLine": 92,
+            "endLine": 92
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 92,
+          "endLine": 92
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet"
+            ],
+            "attributes": {
+              "startLine": 93,
+              "endLine": 93
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "submit_nonspam_comment",
+            "attributes": {
+              "startLine": 93,
+              "endLine": 93
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "comment_id",
+                "attributes": {
+                  "startLine": 93,
+                  "endLine": 93
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 93,
+                "endLine": 93
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 93,
+            "endLine": 93
+          }
+        },
+        "attributes": {
+          "startLine": 93,
+          "endLine": 93
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 92,
+      "endLine": 94
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_submit_spam_comment",
+      "attributes": {
+        "startLine": 95,
+        "endLine": 95
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "comment_id",
+          "attributes": {
+            "startLine": 95,
+            "endLine": 95
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 95,
+          "endLine": 95
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet"
+            ],
+            "attributes": {
+              "startLine": 96,
+              "endLine": 96
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "submit_spam_comment",
+            "attributes": {
+              "startLine": 96,
+              "endLine": 96
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "comment_id",
+                "attributes": {
+                  "startLine": 96,
+                  "endLine": 96
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 96,
+                "endLine": 96
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 96,
+            "endLine": 96
+          }
+        },
+        "attributes": {
+          "startLine": 96,
+          "endLine": 96
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 95,
+      "endLine": 97
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_transition_comment_status",
+      "attributes": {
+        "startLine": 98,
+        "endLine": 98
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "new_status",
+          "attributes": {
+            "startLine": 98,
+            "endLine": 98
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 98,
+          "endLine": 98
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "old_status",
+          "attributes": {
+            "startLine": 98,
+            "endLine": 98
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 98,
+          "endLine": 98
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "comment",
+          "attributes": {
+            "startLine": 98,
+            "endLine": 98
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 98,
+          "endLine": 98
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet"
+            ],
+            "attributes": {
+              "startLine": 99,
+              "endLine": 99
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "transition_comment_status",
+            "attributes": {
+              "startLine": 99,
+              "endLine": 99
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "new_status",
+                "attributes": {
+                  "startLine": 99,
+                  "endLine": 99
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 99,
+                "endLine": 99
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "old_status",
+                "attributes": {
+                  "startLine": 99,
+                  "endLine": 99
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 99,
+                "endLine": 99
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "comment",
+                "attributes": {
+                  "startLine": 99,
+                  "endLine": 99
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 99,
+                "endLine": 99
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 99,
+            "endLine": 99
+          }
+        },
+        "attributes": {
+          "startLine": 99,
+          "endLine": 99
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 98,
+      "endLine": 100
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_spam_count",
+      "attributes": {
+        "startLine": 101,
+        "endLine": 101
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "type",
+          "attributes": {
+            "startLine": 101,
+            "endLine": 101
+          }
+        },
+        "default": {
+          "nodeType": "Expr_ConstFetch",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "false"
+            ],
+            "attributes": {
+              "startLine": 101,
+              "endLine": 101
+            }
+          },
+          "attributes": {
+            "startLine": 101,
+            "endLine": 101
+          }
+        },
+        "attributes": {
+          "startLine": 101,
+          "endLine": 101
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet_Admin"
+            ],
+            "attributes": {
+              "startLine": 102,
+              "endLine": 102
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "get_spam_count",
+            "attributes": {
+              "startLine": 102,
+              "endLine": 102
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "type",
+                "attributes": {
+                  "startLine": 102,
+                  "endLine": 102
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 102,
+                "endLine": 102
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 102,
+            "endLine": 102
+          }
+        },
+        "attributes": {
+          "startLine": 102,
+          "endLine": 102
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 101,
+      "endLine": 103
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_recheck_queue",
+      "attributes": {
+        "startLine": 104,
+        "endLine": 104
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet_Admin"
+            ],
+            "attributes": {
+              "startLine": 105,
+              "endLine": 105
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "recheck_queue",
+            "attributes": {
+              "startLine": 105,
+              "endLine": 105
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 105,
+            "endLine": 105
+          }
+        },
+        "attributes": {
+          "startLine": 105,
+          "endLine": 105
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 104,
+      "endLine": 106
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_remove_comment_author_url",
+      "attributes": {
+        "startLine": 107,
+        "endLine": 107
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet_Admin"
+            ],
+            "attributes": {
+              "startLine": 108,
+              "endLine": 108
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "remove_comment_author_url",
+            "attributes": {
+              "startLine": 108,
+              "endLine": 108
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 108,
+            "endLine": 108
+          }
+        },
+        "attributes": {
+          "startLine": 108,
+          "endLine": 108
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 107,
+      "endLine": 109
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_add_comment_author_url",
+      "attributes": {
+        "startLine": 110,
+        "endLine": 110
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet_Admin"
+            ],
+            "attributes": {
+              "startLine": 111,
+              "endLine": 111
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "add_comment_author_url",
+            "attributes": {
+              "startLine": 111,
+              "endLine": 111
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 111,
+            "endLine": 111
+          }
+        },
+        "attributes": {
+          "startLine": 111,
+          "endLine": 111
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 110,
+      "endLine": 112
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_check_server_connectivity",
+      "attributes": {
+        "startLine": 113,
+        "endLine": 113
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet_Admin"
+            ],
+            "attributes": {
+              "startLine": 114,
+              "endLine": 114
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "check_server_connectivity",
+            "attributes": {
+              "startLine": 114,
+              "endLine": 114
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 114,
+            "endLine": 114
+          }
+        },
+        "attributes": {
+          "startLine": 114,
+          "endLine": 114
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 113,
+      "endLine": 115
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_get_server_connectivity",
+      "attributes": {
+        "startLine": 116,
+        "endLine": 116
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "cache_timeout",
+          "attributes": {
+            "startLine": 116,
+            "endLine": 116
+          }
+        },
+        "default": {
+          "nodeType": "Scalar_LNumber",
+          "value": 86400,
+          "attributes": {
+            "startLine": 116,
+            "endLine": 116,
+            "kind": 10
+          }
+        },
+        "attributes": {
+          "startLine": 116,
+          "endLine": 116
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet_Admin"
+            ],
+            "attributes": {
+              "startLine": 117,
+              "endLine": 117
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "get_server_connectivity",
+            "attributes": {
+              "startLine": 117,
+              "endLine": 117
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "cache_timeout",
+                "attributes": {
+                  "startLine": 117,
+                  "endLine": 117
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 117,
+                "endLine": 117
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 117,
+            "endLine": 117
+          }
+        },
+        "attributes": {
+          "startLine": 117,
+          "endLine": 117
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 116,
+      "endLine": 118
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_server_connectivity_ok",
+      "attributes": {
+        "startLine": 119,
+        "endLine": 119
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "_deprecated_function"
+            ],
+            "attributes": {
+              "startLine": 120,
+              "endLine": 120
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_MagicConst_Function",
+                "attributes": {
+                  "startLine": 120,
+                  "endLine": 120
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 120,
+                "endLine": 120
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "3.0",
+                "attributes": {
+                  "startLine": 120,
+                  "endLine": 120,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 120,
+                "endLine": 120
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 120,
+            "endLine": 120
+          }
+        },
+        "attributes": {
+          "startLine": 120,
+          "endLine": 120
+        }
+      },
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_ConstFetch",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "true"
+            ],
+            "attributes": {
+              "startLine": 122,
+              "endLine": 122
+            }
+          },
+          "attributes": {
+            "startLine": 122,
+            "endLine": 122
+          }
+        },
+        "attributes": {
+          "startLine": 122,
+          "endLine": 122
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 119,
+      "endLine": 123
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_admin_menu",
+      "attributes": {
+        "startLine": 124,
+        "endLine": 124
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet_Admin"
+            ],
+            "attributes": {
+              "startLine": 125,
+              "endLine": 125
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "admin_menu",
+            "attributes": {
+              "startLine": 125,
+              "endLine": 125
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 125,
+            "endLine": 125
+          }
+        },
+        "attributes": {
+          "startLine": 125,
+          "endLine": 125
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 124,
+      "endLine": 126
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_load_menu",
+      "attributes": {
+        "startLine": 127,
+        "endLine": 127
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet_Admin"
+            ],
+            "attributes": {
+              "startLine": 128,
+              "endLine": 128
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "load_menu",
+            "attributes": {
+              "startLine": 128,
+              "endLine": 128
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 128,
+            "endLine": 128
+          }
+        },
+        "attributes": {
+          "startLine": 128,
+          "endLine": 128
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 127,
+      "endLine": 129
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_init",
+      "attributes": {
+        "startLine": 130,
+        "endLine": 130
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "_deprecated_function"
+            ],
+            "attributes": {
+              "startLine": 131,
+              "endLine": 131
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_MagicConst_Function",
+                "attributes": {
+                  "startLine": 131,
+                  "endLine": 131
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 131,
+                "endLine": 131
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "3.0",
+                "attributes": {
+                  "startLine": 131,
+                  "endLine": 131,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 131,
+                "endLine": 131
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 131,
+            "endLine": 131
+          }
+        },
+        "attributes": {
+          "startLine": 131,
+          "endLine": 131
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 130,
+      "endLine": 132
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_get_key",
+      "attributes": {
+        "startLine": 133,
+        "endLine": 133
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet"
+            ],
+            "attributes": {
+              "startLine": 134,
+              "endLine": 134
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "get_api_key",
+            "attributes": {
+              "startLine": 134,
+              "endLine": 134
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 134,
+            "endLine": 134
+          }
+        },
+        "attributes": {
+          "startLine": 134,
+          "endLine": 134
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 133,
+      "endLine": 135
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_check_key_status",
+      "attributes": {
+        "startLine": 136,
+        "endLine": 136
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "key",
+          "attributes": {
+            "startLine": 136,
+            "endLine": 136
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 136,
+          "endLine": 136
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "ip",
+          "attributes": {
+            "startLine": 136,
+            "endLine": 136
+          }
+        },
+        "default": {
+          "nodeType": "Expr_ConstFetch",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "null"
+            ],
+            "attributes": {
+              "startLine": 136,
+              "endLine": 136
+            }
+          },
+          "attributes": {
+            "startLine": 136,
+            "endLine": 136
+          }
+        },
+        "attributes": {
+          "startLine": 136,
+          "endLine": 136
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet"
+            ],
+            "attributes": {
+              "startLine": 137,
+              "endLine": 137
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "check_key_status",
+            "attributes": {
+              "startLine": 137,
+              "endLine": 137
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "key",
+                "attributes": {
+                  "startLine": 137,
+                  "endLine": 137
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 137,
+                "endLine": 137
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "ip",
+                "attributes": {
+                  "startLine": 137,
+                  "endLine": 137
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 137,
+                "endLine": 137
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 137,
+            "endLine": 137
+          }
+        },
+        "attributes": {
+          "startLine": 137,
+          "endLine": 137
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 136,
+      "endLine": 138
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_update_alert",
+      "attributes": {
+        "startLine": 139,
+        "endLine": 139
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "response",
+          "attributes": {
+            "startLine": 139,
+            "endLine": 139
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 139,
+          "endLine": 139
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet"
+            ],
+            "attributes": {
+              "startLine": 140,
+              "endLine": 140
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "update_alert",
+            "attributes": {
+              "startLine": 140,
+              "endLine": 140
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "response",
+                "attributes": {
+                  "startLine": 140,
+                  "endLine": 140
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 140,
+                "endLine": 140
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 140,
+            "endLine": 140
+          }
+        },
+        "attributes": {
+          "startLine": 140,
+          "endLine": 140
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 139,
+      "endLine": 141
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_verify_key",
+      "attributes": {
+        "startLine": 142,
+        "endLine": 142
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "key",
+          "attributes": {
+            "startLine": 142,
+            "endLine": 142
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 142,
+          "endLine": 142
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "ip",
+          "attributes": {
+            "startLine": 142,
+            "endLine": 142
+          }
+        },
+        "default": {
+          "nodeType": "Expr_ConstFetch",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "null"
+            ],
+            "attributes": {
+              "startLine": 142,
+              "endLine": 142
+            }
+          },
+          "attributes": {
+            "startLine": 142,
+            "endLine": 142
+          }
+        },
+        "attributes": {
+          "startLine": 142,
+          "endLine": 142
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet"
+            ],
+            "attributes": {
+              "startLine": 143,
+              "endLine": 143
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "verify_key",
+            "attributes": {
+              "startLine": 143,
+              "endLine": 143
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "key",
+                "attributes": {
+                  "startLine": 143,
+                  "endLine": 143
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 143,
+                "endLine": 143
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "ip",
+                "attributes": {
+                  "startLine": 143,
+                  "endLine": 143
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 143,
+                "endLine": 143
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 143,
+            "endLine": 143
+          }
+        },
+        "attributes": {
+          "startLine": 143,
+          "endLine": 143
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 142,
+      "endLine": 144
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_get_user_roles",
+      "attributes": {
+        "startLine": 145,
+        "endLine": 145
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "user_id",
+          "attributes": {
+            "startLine": 145,
+            "endLine": 145
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 145,
+          "endLine": 145
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet"
+            ],
+            "attributes": {
+              "startLine": 146,
+              "endLine": 146
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "get_user_roles",
+            "attributes": {
+              "startLine": 146,
+              "endLine": 146
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "user_id",
+                "attributes": {
+                  "startLine": 146,
+                  "endLine": 146
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 146,
+                "endLine": 146
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 146,
+            "endLine": 146
+          }
+        },
+        "attributes": {
+          "startLine": 146,
+          "endLine": 146
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 145,
+      "endLine": 147
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_result_spam",
+      "attributes": {
+        "startLine": 148,
+        "endLine": 148
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "approved",
+          "attributes": {
+            "startLine": 148,
+            "endLine": 148
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 148,
+          "endLine": 148
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet"
+            ],
+            "attributes": {
+              "startLine": 149,
+              "endLine": 149
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "comment_is_spam",
+            "attributes": {
+              "startLine": 149,
+              "endLine": 149
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "approved",
+                "attributes": {
+                  "startLine": 149,
+                  "endLine": 149
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 149,
+                "endLine": 149
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 149,
+            "endLine": 149
+          }
+        },
+        "attributes": {
+          "startLine": 149,
+          "endLine": 149
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 148,
+      "endLine": 150
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_result_hold",
+      "attributes": {
+        "startLine": 151,
+        "endLine": 151
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "approved",
+          "attributes": {
+            "startLine": 151,
+            "endLine": 151
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 151,
+          "endLine": 151
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet"
+            ],
+            "attributes": {
+              "startLine": 152,
+              "endLine": 152
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "comment_needs_moderation",
+            "attributes": {
+              "startLine": 152,
+              "endLine": 152
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "approved",
+                "attributes": {
+                  "startLine": 152,
+                  "endLine": 152
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 152,
+                "endLine": 152
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 152,
+            "endLine": 152
+          }
+        },
+        "attributes": {
+          "startLine": 152,
+          "endLine": 152
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 151,
+      "endLine": 153
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_get_user_comments_approved",
+      "attributes": {
+        "startLine": 154,
+        "endLine": 154
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "user_id",
+          "attributes": {
+            "startLine": 154,
+            "endLine": 154
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 154,
+          "endLine": 154
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "comment_author_email",
+          "attributes": {
+            "startLine": 154,
+            "endLine": 154
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 154,
+          "endLine": 154
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "comment_author",
+          "attributes": {
+            "startLine": 154,
+            "endLine": 154
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 154,
+          "endLine": 154
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "comment_author_url",
+          "attributes": {
+            "startLine": 154,
+            "endLine": 154
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 154,
+          "endLine": 154
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet"
+            ],
+            "attributes": {
+              "startLine": 155,
+              "endLine": 155
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "get_user_comments_approved",
+            "attributes": {
+              "startLine": 155,
+              "endLine": 155
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "user_id",
+                "attributes": {
+                  "startLine": 155,
+                  "endLine": 155
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 155,
+                "endLine": 155
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "comment_author_email",
+                "attributes": {
+                  "startLine": 155,
+                  "endLine": 155
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 155,
+                "endLine": 155
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "comment_author",
+                "attributes": {
+                  "startLine": 155,
+                  "endLine": 155
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 155,
+                "endLine": 155
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "comment_author_url",
+                "attributes": {
+                  "startLine": 155,
+                  "endLine": 155
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 155,
+                "endLine": 155
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 155,
+            "endLine": 155
+          }
+        },
+        "attributes": {
+          "startLine": 155,
+          "endLine": 155
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 154,
+      "endLine": 156
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_update_comment_history",
+      "attributes": {
+        "startLine": 157,
+        "endLine": 157
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "comment_id",
+          "attributes": {
+            "startLine": 157,
+            "endLine": 157
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 157,
+          "endLine": 157
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "message",
+          "attributes": {
+            "startLine": 157,
+            "endLine": 157
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 157,
+          "endLine": 157
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "event",
+          "attributes": {
+            "startLine": 157,
+            "endLine": 157
+          }
+        },
+        "default": {
+          "nodeType": "Expr_ConstFetch",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "null"
+            ],
+            "attributes": {
+              "startLine": 157,
+              "endLine": 157
+            }
+          },
+          "attributes": {
+            "startLine": 157,
+            "endLine": 157
+          }
+        },
+        "attributes": {
+          "startLine": 157,
+          "endLine": 157
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet"
+            ],
+            "attributes": {
+              "startLine": 158,
+              "endLine": 158
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "update_comment_history",
+            "attributes": {
+              "startLine": 158,
+              "endLine": 158
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "comment_id",
+                "attributes": {
+                  "startLine": 158,
+                  "endLine": 158
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 158,
+                "endLine": 158
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "message",
+                "attributes": {
+                  "startLine": 158,
+                  "endLine": 158
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 158,
+                "endLine": 158
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "event",
+                "attributes": {
+                  "startLine": 158,
+                  "endLine": 158
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 158,
+                "endLine": 158
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 158,
+            "endLine": 158
+          }
+        },
+        "attributes": {
+          "startLine": 158,
+          "endLine": 158
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 157,
+      "endLine": 159
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_get_comment_history",
+      "attributes": {
+        "startLine": 160,
+        "endLine": 160
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "comment_id",
+          "attributes": {
+            "startLine": 160,
+            "endLine": 160
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 160,
+          "endLine": 160
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet"
+            ],
+            "attributes": {
+              "startLine": 161,
+              "endLine": 161
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "get_comment_history",
+            "attributes": {
+              "startLine": 161,
+              "endLine": 161
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "comment_id",
+                "attributes": {
+                  "startLine": 161,
+                  "endLine": 161
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 161,
+                "endLine": 161
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 161,
+            "endLine": 161
+          }
+        },
+        "attributes": {
+          "startLine": 161,
+          "endLine": 161
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 160,
+      "endLine": 162
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_cmp_time",
+      "attributes": {
+        "startLine": 163,
+        "endLine": 163
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "a",
+          "attributes": {
+            "startLine": 163,
+            "endLine": 163
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 163,
+          "endLine": 163
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "b",
+          "attributes": {
+            "startLine": 163,
+            "endLine": 163
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 163,
+          "endLine": 163
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet"
+            ],
+            "attributes": {
+              "startLine": 164,
+              "endLine": 164
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "_cmp_time",
+            "attributes": {
+              "startLine": 164,
+              "endLine": 164
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "a",
+                "attributes": {
+                  "startLine": 164,
+                  "endLine": 164
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 164,
+                "endLine": 164
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "b",
+                "attributes": {
+                  "startLine": 164,
+                  "endLine": 164
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 164,
+                "endLine": 164
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 164,
+            "endLine": 164
+          }
+        },
+        "attributes": {
+          "startLine": 164,
+          "endLine": 164
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 163,
+      "endLine": 165
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_auto_check_update_meta",
+      "attributes": {
+        "startLine": 166,
+        "endLine": 166
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "id",
+          "attributes": {
+            "startLine": 166,
+            "endLine": 166
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 166,
+          "endLine": 166
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "comment",
+          "attributes": {
+            "startLine": 166,
+            "endLine": 166
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 166,
+          "endLine": 166
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet"
+            ],
+            "attributes": {
+              "startLine": 167,
+              "endLine": 167
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "auto_check_update_meta",
+            "attributes": {
+              "startLine": 167,
+              "endLine": 167
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "id",
+                "attributes": {
+                  "startLine": 167,
+                  "endLine": 167
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 167,
+                "endLine": 167
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "comment",
+                "attributes": {
+                  "startLine": 167,
+                  "endLine": 167
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 167,
+                "endLine": 167
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 167,
+            "endLine": 167
+          }
+        },
+        "attributes": {
+          "startLine": 167,
+          "endLine": 167
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 166,
+      "endLine": 168
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_auto_check_comment",
+      "attributes": {
+        "startLine": 169,
+        "endLine": 169
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "commentdata",
+          "attributes": {
+            "startLine": 169,
+            "endLine": 169
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 169,
+          "endLine": 169
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet"
+            ],
+            "attributes": {
+              "startLine": 170,
+              "endLine": 170
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "auto_check_comment",
+            "attributes": {
+              "startLine": 170,
+              "endLine": 170
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "commentdata",
+                "attributes": {
+                  "startLine": 170,
+                  "endLine": 170
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 170,
+                "endLine": 170
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 170,
+            "endLine": 170
+          }
+        },
+        "attributes": {
+          "startLine": 170,
+          "endLine": 170
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 169,
+      "endLine": 171
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_get_ip_address",
+      "attributes": {
+        "startLine": 172,
+        "endLine": 172
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet"
+            ],
+            "attributes": {
+              "startLine": 173,
+              "endLine": 173
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "get_ip_address",
+            "attributes": {
+              "startLine": 173,
+              "endLine": 173
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 173,
+            "endLine": 173
+          }
+        },
+        "attributes": {
+          "startLine": 173,
+          "endLine": 173
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 172,
+      "endLine": 174
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_cron_recheck",
+      "attributes": {
+        "startLine": 175,
+        "endLine": 175
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet"
+            ],
+            "attributes": {
+              "startLine": 176,
+              "endLine": 176
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "cron_recheck",
+            "attributes": {
+              "startLine": 176,
+              "endLine": 176
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 176,
+            "endLine": 176
+          }
+        },
+        "attributes": {
+          "startLine": 176,
+          "endLine": 176
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 175,
+      "endLine": 177
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_add_comment_nonce",
+      "attributes": {
+        "startLine": 178,
+        "endLine": 178
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "post_id",
+          "attributes": {
+            "startLine": 178,
+            "endLine": 178
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 178,
+          "endLine": 178
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet"
+            ],
+            "attributes": {
+              "startLine": 179,
+              "endLine": 179
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "add_comment_nonce",
+            "attributes": {
+              "startLine": 179,
+              "endLine": 179
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "post_id",
+                "attributes": {
+                  "startLine": 179,
+                  "endLine": 179
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 179,
+                "endLine": 179
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 179,
+            "endLine": 179
+          }
+        },
+        "attributes": {
+          "startLine": 179,
+          "endLine": 179
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 178,
+      "endLine": 180
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_fix_scheduled_recheck",
+      "attributes": {
+        "startLine": 181,
+        "endLine": 181
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet"
+            ],
+            "attributes": {
+              "startLine": 182,
+              "endLine": 182
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "fix_scheduled_recheck",
+            "attributes": {
+              "startLine": 182,
+              "endLine": 182
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 182,
+            "endLine": 182
+          }
+        },
+        "attributes": {
+          "startLine": 182,
+          "endLine": 182
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 181,
+      "endLine": 183
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_spam_comments",
+      "attributes": {
+        "startLine": 184,
+        "endLine": 184
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "_deprecated_function"
+            ],
+            "attributes": {
+              "startLine": 185,
+              "endLine": 185
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_MagicConst_Function",
+                "attributes": {
+                  "startLine": 185,
+                  "endLine": 185
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 185,
+                "endLine": 185
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "3.0",
+                "attributes": {
+                  "startLine": 185,
+                  "endLine": 185,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 185,
+                "endLine": 185
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 185,
+            "endLine": 185
+          }
+        },
+        "attributes": {
+          "startLine": 185,
+          "endLine": 185
+        }
+      },
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_Array",
+          "items": [],
+          "attributes": {
+            "startLine": 187,
+            "endLine": 187,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 187,
+          "endLine": 187
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 184,
+      "endLine": 188
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_spam_totals",
+      "attributes": {
+        "startLine": 189,
+        "endLine": 189
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "_deprecated_function"
+            ],
+            "attributes": {
+              "startLine": 190,
+              "endLine": 190
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_MagicConst_Function",
+                "attributes": {
+                  "startLine": 190,
+                  "endLine": 190
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 190,
+                "endLine": 190
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "3.0",
+                "attributes": {
+                  "startLine": 190,
+                  "endLine": 190,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 190,
+                "endLine": 190
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 190,
+            "endLine": 190
+          }
+        },
+        "attributes": {
+          "startLine": 190,
+          "endLine": 190
+        }
+      },
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_Array",
+          "items": [],
+          "attributes": {
+            "startLine": 192,
+            "endLine": 192,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 192,
+          "endLine": 192
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 189,
+      "endLine": 193
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_manage_page",
+      "attributes": {
+        "startLine": 194,
+        "endLine": 194
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "_deprecated_function"
+            ],
+            "attributes": {
+              "startLine": 195,
+              "endLine": 195
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_MagicConst_Function",
+                "attributes": {
+                  "startLine": 195,
+                  "endLine": 195
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 195,
+                "endLine": 195
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "3.0",
+                "attributes": {
+                  "startLine": 195,
+                  "endLine": 195,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 195,
+                "endLine": 195
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 195,
+            "endLine": 195
+          }
+        },
+        "attributes": {
+          "startLine": 195,
+          "endLine": 195
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 194,
+      "endLine": 196
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_caught",
+      "attributes": {
+        "startLine": 197,
+        "endLine": 197
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "_deprecated_function"
+            ],
+            "attributes": {
+              "startLine": 198,
+              "endLine": 198
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_MagicConst_Function",
+                "attributes": {
+                  "startLine": 198,
+                  "endLine": 198
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 198,
+                "endLine": 198
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "3.0",
+                "attributes": {
+                  "startLine": 198,
+                  "endLine": 198,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 198,
+                "endLine": 198
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 198,
+            "endLine": 198
+          }
+        },
+        "attributes": {
+          "startLine": 198,
+          "endLine": 198
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 197,
+      "endLine": 199
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "redirect_old_akismet_urls",
+      "attributes": {
+        "startLine": 200,
+        "endLine": 200
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "_deprecated_function"
+            ],
+            "attributes": {
+              "startLine": 201,
+              "endLine": 201
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_MagicConst_Function",
+                "attributes": {
+                  "startLine": 201,
+                  "endLine": 201
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 201,
+                "endLine": 201
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "3.0",
+                "attributes": {
+                  "startLine": 201,
+                  "endLine": 201,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 201,
+                "endLine": 201
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 201,
+            "endLine": 201
+          }
+        },
+        "attributes": {
+          "startLine": 201,
+          "endLine": 201
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 200,
+      "endLine": 202
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_kill_proxy_check",
+      "attributes": {
+        "startLine": 203,
+        "endLine": 203
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "option",
+          "attributes": {
+            "startLine": 203,
+            "endLine": 203
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 203,
+          "endLine": 203
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "_deprecated_function"
+            ],
+            "attributes": {
+              "startLine": 204,
+              "endLine": 204
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_MagicConst_Function",
+                "attributes": {
+                  "startLine": 204,
+                  "endLine": 204
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 204,
+                "endLine": 204
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "3.0",
+                "attributes": {
+                  "startLine": 204,
+                  "endLine": 204,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 204,
+                "endLine": 204
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 204,
+            "endLine": 204
+          }
+        },
+        "attributes": {
+          "startLine": 204,
+          "endLine": 204
+        }
+      },
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Scalar_LNumber",
+          "value": 0,
+          "attributes": {
+            "startLine": 206,
+            "endLine": 206,
+            "kind": 10
+          }
+        },
+        "attributes": {
+          "startLine": 206,
+          "endLine": 206
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 203,
+      "endLine": 207
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_pingback_forwarded_for",
+      "attributes": {
+        "startLine": 208,
+        "endLine": 208
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "r",
+          "attributes": {
+            "startLine": 208,
+            "endLine": 208
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 208,
+          "endLine": 208
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "url",
+          "attributes": {
+            "startLine": 208,
+            "endLine": 208
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 208,
+          "endLine": 208
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_ConstFetch",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "false"
+            ],
+            "attributes": {
+              "startLine": 210,
+              "endLine": 210
+            }
+          },
+          "attributes": {
+            "startLine": 210,
+            "endLine": 210
+          }
+        },
+        "attributes": {
+          "startLine": 210,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "// This functionality is now in core.\n",
+              "line": 209,
+              "filePos": 6285,
+              "tokenPos": 1604,
+              "endLine": 210,
+              "endFilePos": 6322,
+              "endTokenPos": 1604
+            }
+          ],
+          "endLine": 210
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 208,
+      "endLine": 211
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "akismet_pre_check_pingback",
+      "attributes": {
+        "startLine": 212,
+        "endLine": 212
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "method",
+          "attributes": {
+            "startLine": 212,
+            "endLine": 212
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 212,
+          "endLine": 212
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_StaticCall",
+          "class": {
+            "nodeType": "Name",
+            "parts": [
+              "Akismet"
+            ],
+            "attributes": {
+              "startLine": 213,
+              "endLine": 213
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "pre_check_pingback",
+            "attributes": {
+              "startLine": 213,
+              "endLine": 213
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "method",
+                "attributes": {
+                  "startLine": 213,
+                  "endLine": 213
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 213,
+                "endLine": 213
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 213,
+            "endLine": 213
+          }
+        },
+        "attributes": {
+          "startLine": 213,
+          "endLine": 213
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 212,
+      "endLine": 214
+    }
+  }
+]

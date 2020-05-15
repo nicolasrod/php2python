@@ -1,0 +1,219 @@
+[
+  {
+    "nodeType": "Stmt_Interface",
+    "extends": [],
+    "name": {
+      "nodeType": "Identifier",
+      "name": "Requests_Hooker",
+      "attributes": {
+        "startLine": 15,
+        "endLine": 15
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "register",
+          "attributes": {
+            "startLine": 23,
+            "endLine": 23
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "hook",
+              "attributes": {
+                "startLine": 23,
+                "endLine": 23
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 23,
+              "endLine": 23
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "callback",
+              "attributes": {
+                "startLine": 23,
+                "endLine": 23
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 23,
+              "endLine": 23
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "priority",
+              "attributes": {
+                "startLine": 23,
+                "endLine": 23
+              }
+            },
+            "default": {
+              "nodeType": "Scalar_LNumber",
+              "value": 0,
+              "attributes": {
+                "startLine": 23,
+                "endLine": 23,
+                "kind": 10
+              }
+            },
+            "attributes": {
+              "startLine": 23,
+              "endLine": 23
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": null,
+        "attributes": {
+          "startLine": 23,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Register a callback for a hook\n\t *\n\t * @param string $hook Hook name\n\t * @param callback $callback Function/method to call on event\n\t * @param int $priority Priority number. <0 is executed earlier, >0 is executed later\n\t */",
+              "line": 16,
+              "filePos": 190,
+              "tokenPos": 11,
+              "endLine": 22,
+              "endFilePos": 420,
+              "endTokenPos": 11
+            }
+          ],
+          "endLine": 23
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 1,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "dispatch",
+          "attributes": {
+            "startLine": 32,
+            "endLine": 32
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "hook",
+              "attributes": {
+                "startLine": 32,
+                "endLine": 32
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 32,
+              "endLine": 32
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "parameters",
+              "attributes": {
+                "startLine": 32,
+                "endLine": 32
+              }
+            },
+            "default": {
+              "nodeType": "Expr_Array",
+              "items": [],
+              "attributes": {
+                "startLine": 32,
+                "endLine": 32,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 32,
+              "endLine": 32
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": null,
+        "attributes": {
+          "startLine": 32,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Dispatch a message\n\t *\n\t * @param string $hook Hook name\n\t * @param array $parameters Parameters to pass to callbacks\n\t * @return boolean Successfulness\n\t */",
+              "line": 25,
+              "filePos": 484,
+              "tokenPos": 33,
+              "endLine": 31,
+              "endFilePos": 648,
+              "endTokenPos": 33
+            }
+          ],
+          "endLine": 32
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 15,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Event dispatcher\n *\n * @package Requests\n * @subpackage Utilities\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 7,
+          "endFilePos": 81,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Event dispatcher\n *\n * @package Requests\n * @subpackage Utilities\n */",
+          "line": 9,
+          "filePos": 84,
+          "tokenPos": 3,
+          "endLine": 14,
+          "endFilePos": 159,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 33
+    }
+  }
+]

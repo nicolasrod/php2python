@@ -1,0 +1,1834 @@
+[
+  {
+    "nodeType": "Stmt_Class",
+    "flags": 32,
+    "extends": null,
+    "implements": [],
+    "name": {
+      "nodeType": "Identifier",
+      "name": "WP_Internal_Pointers",
+      "attributes": {
+        "startLine": 15,
+        "endLine": 15
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 9,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "enqueue_scripts",
+          "attributes": {
+            "startLine": 36,
+            "endLine": 36
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "hook_suffix",
+              "attributes": {
+                "startLine": 36,
+                "endLine": 36
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 36,
+              "endLine": 36
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "registered_pointers",
+                "attributes": {
+                  "startLine": 50,
+                  "comments": [
+                    {
+                      "nodeType": "Comment",
+                      "text": "/*\n\t\t * Register feature pointers\n\t\t *\n\t\t * Format:\n\t\t *     array(\n\t\t *         hook_suffix => pointer callback\n\t\t *     )\n\t\t *\n\t\t * Example:\n\t\t *     array(\n\t\t *         'themes.php' => 'wp390_widgets'\n\t\t *     )\n\t\t */",
+                      "line": 37,
+                      "filePos": 997,
+                      "tokenPos": 30,
+                      "endLine": 49,
+                      "endFilePos": 1216,
+                      "endTokenPos": 30
+                    }
+                  ],
+                  "endLine": 50
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Array",
+                "items": [],
+                "attributes": {
+                  "startLine": 50,
+                  "endLine": 52,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 50,
+                "comments": [
+                  {
+                    "nodeType": "Comment",
+                    "text": "/*\n\t\t * Register feature pointers\n\t\t *\n\t\t * Format:\n\t\t *     array(\n\t\t *         hook_suffix => pointer callback\n\t\t *     )\n\t\t *\n\t\t * Example:\n\t\t *     array(\n\t\t *         'themes.php' => 'wp390_widgets'\n\t\t *     )\n\t\t */",
+                    "line": 37,
+                    "filePos": 997,
+                    "tokenPos": 30,
+                    "endLine": 49,
+                    "endFilePos": 1216,
+                    "endTokenPos": 30
+                  }
+                ],
+                "endLine": 52
+              }
+            },
+            "attributes": {
+              "startLine": 50,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "/*\n\t\t * Register feature pointers\n\t\t *\n\t\t * Format:\n\t\t *     array(\n\t\t *         hook_suffix => pointer callback\n\t\t *     )\n\t\t *\n\t\t * Example:\n\t\t *     array(\n\t\t *         'themes.php' => 'wp390_widgets'\n\t\t *     )\n\t\t */",
+                  "line": 37,
+                  "filePos": 997,
+                  "tokenPos": 30,
+                  "endLine": 49,
+                  "endFilePos": 1216,
+                  "endTokenPos": 30
+                }
+              ],
+              "endLine": 52
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_Empty",
+              "expr": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "registered_pointers",
+                  "attributes": {
+                    "startLine": 55,
+                    "endLine": 55
+                  }
+                },
+                "dim": {
+                  "nodeType": "Expr_Variable",
+                  "name": "hook_suffix",
+                  "attributes": {
+                    "startLine": 55,
+                    "endLine": 55
+                  }
+                },
+                "attributes": {
+                  "startLine": 55,
+                  "endLine": 55
+                }
+              },
+              "attributes": {
+                "startLine": 55,
+                "endLine": 55
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Return",
+                "expr": null,
+                "attributes": {
+                  "startLine": 56,
+                  "endLine": 56
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 55,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// Check if screen related pointer is registered.\n",
+                  "line": 54,
+                  "filePos": 1280,
+                  "tokenPos": 44,
+                  "endLine": 55,
+                  "endFilePos": 1329,
+                  "endTokenPos": 44
+                }
+              ],
+              "endLine": 57
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "pointers",
+                "attributes": {
+                  "startLine": 59,
+                  "endLine": 59
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Cast_Array",
+                "expr": {
+                  "nodeType": "Expr_ArrayDimFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "registered_pointers",
+                    "attributes": {
+                      "startLine": 59,
+                      "endLine": 59
+                    }
+                  },
+                  "dim": {
+                    "nodeType": "Expr_Variable",
+                    "name": "hook_suffix",
+                    "attributes": {
+                      "startLine": 59,
+                      "endLine": 59
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 59,
+                    "endLine": 59
+                  }
+                },
+                "attributes": {
+                  "startLine": 59,
+                  "endLine": 59
+                }
+              },
+              "attributes": {
+                "startLine": 59,
+                "endLine": 59
+              }
+            },
+            "attributes": {
+              "startLine": 59,
+              "endLine": 59
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "caps_required",
+                "attributes": {
+                  "startLine": 74,
+                  "comments": [
+                    {
+                      "nodeType": "Comment",
+                      "text": "/*\n\t\t * Specify required capabilities for feature pointers\n\t\t *\n\t\t * Format:\n\t\t *     array(\n\t\t *         pointer callback => Array of required capabilities\n\t\t *     )\n\t\t *\n\t\t * Example:\n\t\t *     array(\n\t\t *         'wp390_widgets' => array( 'edit_theme_options' )\n\t\t *     )\n\t\t */",
+                      "line": 61,
+                      "filePos": 1466,
+                      "tokenPos": 85,
+                      "endLine": 73,
+                      "endFilePos": 1746,
+                      "endTokenPos": 85
+                    }
+                  ],
+                  "endLine": 74
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_Array",
+                "items": [],
+                "attributes": {
+                  "startLine": 74,
+                  "endLine": 76,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 74,
+                "comments": [
+                  {
+                    "nodeType": "Comment",
+                    "text": "/*\n\t\t * Specify required capabilities for feature pointers\n\t\t *\n\t\t * Format:\n\t\t *     array(\n\t\t *         pointer callback => Array of required capabilities\n\t\t *     )\n\t\t *\n\t\t * Example:\n\t\t *     array(\n\t\t *         'wp390_widgets' => array( 'edit_theme_options' )\n\t\t *     )\n\t\t */",
+                    "line": 61,
+                    "filePos": 1466,
+                    "tokenPos": 85,
+                    "endLine": 73,
+                    "endFilePos": 1746,
+                    "endTokenPos": 85
+                  }
+                ],
+                "endLine": 76
+              }
+            },
+            "attributes": {
+              "startLine": 74,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "/*\n\t\t * Specify required capabilities for feature pointers\n\t\t *\n\t\t * Format:\n\t\t *     array(\n\t\t *         pointer callback => Array of required capabilities\n\t\t *     )\n\t\t *\n\t\t * Example:\n\t\t *     array(\n\t\t *         'wp390_widgets' => array( 'edit_theme_options' )\n\t\t *     )\n\t\t */",
+                  "line": 61,
+                  "filePos": 1466,
+                  "tokenPos": 85,
+                  "endLine": 73,
+                  "endFilePos": 1746,
+                  "endTokenPos": 85
+                }
+              ],
+              "endLine": 76
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "dismissed",
+                "attributes": {
+                  "startLine": 79,
+                  "comments": [
+                    {
+                      "nodeType": "Comment",
+                      "text": "// Get dismissed pointers.\n",
+                      "line": 78,
+                      "filePos": 1804,
+                      "tokenPos": 99,
+                      "endLine": 79,
+                      "endFilePos": 1830,
+                      "endTokenPos": 99
+                    }
+                  ],
+                  "endLine": 79
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "explode"
+                  ],
+                  "attributes": {
+                    "startLine": 79,
+                    "endLine": 79
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": ",",
+                      "attributes": {
+                        "startLine": 79,
+                        "endLine": 79,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 79,
+                      "endLine": 79
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Cast_String",
+                      "expr": {
+                        "nodeType": "Expr_FuncCall",
+                        "name": {
+                          "nodeType": "Name",
+                          "parts": [
+                            "get_user_meta"
+                          ],
+                          "attributes": {
+                            "startLine": 79,
+                            "endLine": 79
+                          }
+                        },
+                        "args": [
+                          {
+                            "nodeType": "Arg",
+                            "value": {
+                              "nodeType": "Expr_FuncCall",
+                              "name": {
+                                "nodeType": "Name",
+                                "parts": [
+                                  "get_current_user_id"
+                                ],
+                                "attributes": {
+                                  "startLine": 79,
+                                  "endLine": 79
+                                }
+                              },
+                              "args": [],
+                              "attributes": {
+                                "startLine": 79,
+                                "endLine": 79
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 79,
+                              "endLine": 79
+                            }
+                          },
+                          {
+                            "nodeType": "Arg",
+                            "value": {
+                              "nodeType": "Scalar_String",
+                              "value": "dismissed_wp_pointers",
+                              "attributes": {
+                                "startLine": 79,
+                                "endLine": 79,
+                                "kind": 1
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 79,
+                              "endLine": 79
+                            }
+                          },
+                          {
+                            "nodeType": "Arg",
+                            "value": {
+                              "nodeType": "Expr_ConstFetch",
+                              "name": {
+                                "nodeType": "Name",
+                                "parts": [
+                                  "true"
+                                ],
+                                "attributes": {
+                                  "startLine": 79,
+                                  "endLine": 79
+                                }
+                              },
+                              "attributes": {
+                                "startLine": 79,
+                                "endLine": 79
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 79,
+                              "endLine": 79
+                            }
+                          }
+                        ],
+                        "attributes": {
+                          "startLine": 79,
+                          "endLine": 79
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 79,
+                        "endLine": 79
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 79,
+                      "endLine": 79
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 79,
+                  "endLine": 79
+                }
+              },
+              "attributes": {
+                "startLine": 79,
+                "comments": [
+                  {
+                    "nodeType": "Comment",
+                    "text": "// Get dismissed pointers.\n",
+                    "line": 78,
+                    "filePos": 1804,
+                    "tokenPos": 99,
+                    "endLine": 79,
+                    "endFilePos": 1830,
+                    "endTokenPos": 99
+                  }
+                ],
+                "endLine": 79
+              }
+            },
+            "attributes": {
+              "startLine": 79,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// Get dismissed pointers.\n",
+                  "line": 78,
+                  "filePos": 1804,
+                  "tokenPos": 99,
+                  "endLine": 79,
+                  "endFilePos": 1830,
+                  "endTokenPos": 99
+                }
+              ],
+              "endLine": 79
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "got_pointers",
+                "attributes": {
+                  "startLine": 81,
+                  "endLine": 81
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_ConstFetch",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "false"
+                  ],
+                  "attributes": {
+                    "startLine": 81,
+                    "endLine": 81
+                  }
+                },
+                "attributes": {
+                  "startLine": 81,
+                  "endLine": 81
+                }
+              },
+              "attributes": {
+                "startLine": 81,
+                "endLine": 81
+              }
+            },
+            "attributes": {
+              "startLine": 81,
+              "endLine": 81
+            }
+          },
+          {
+            "nodeType": "Stmt_Foreach",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "array_diff"
+                ],
+                "attributes": {
+                  "startLine": 82,
+                  "endLine": 82
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "pointers",
+                    "attributes": {
+                      "startLine": 82,
+                      "endLine": 82
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 82,
+                    "endLine": 82
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "dismissed",
+                    "attributes": {
+                      "startLine": 82,
+                      "endLine": 82
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 82,
+                    "endLine": 82
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 82,
+                "endLine": 82
+              }
+            },
+            "keyVar": null,
+            "byRef": false,
+            "valueVar": {
+              "nodeType": "Expr_Variable",
+              "name": "pointer",
+              "attributes": {
+                "startLine": 82,
+                "endLine": 82
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_If",
+                "cond": {
+                  "nodeType": "Expr_Isset",
+                  "vars": [
+                    {
+                      "nodeType": "Expr_ArrayDimFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "caps_required",
+                        "attributes": {
+                          "startLine": 83,
+                          "endLine": 83
+                        }
+                      },
+                      "dim": {
+                        "nodeType": "Expr_Variable",
+                        "name": "pointer",
+                        "attributes": {
+                          "startLine": 83,
+                          "endLine": 83
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 83,
+                        "endLine": 83
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 83,
+                    "endLine": 83
+                  }
+                },
+                "stmts": [
+                  {
+                    "nodeType": "Stmt_Foreach",
+                    "expr": {
+                      "nodeType": "Expr_ArrayDimFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "caps_required",
+                        "attributes": {
+                          "startLine": 84,
+                          "endLine": 84
+                        }
+                      },
+                      "dim": {
+                        "nodeType": "Expr_Variable",
+                        "name": "pointer",
+                        "attributes": {
+                          "startLine": 84,
+                          "endLine": 84
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 84,
+                        "endLine": 84
+                      }
+                    },
+                    "keyVar": null,
+                    "byRef": false,
+                    "valueVar": {
+                      "nodeType": "Expr_Variable",
+                      "name": "cap",
+                      "attributes": {
+                        "startLine": 84,
+                        "endLine": 84
+                      }
+                    },
+                    "stmts": [
+                      {
+                        "nodeType": "Stmt_If",
+                        "cond": {
+                          "nodeType": "Expr_BooleanNot",
+                          "expr": {
+                            "nodeType": "Expr_FuncCall",
+                            "name": {
+                              "nodeType": "Name",
+                              "parts": [
+                                "current_user_can"
+                              ],
+                              "attributes": {
+                                "startLine": 85,
+                                "endLine": 85
+                              }
+                            },
+                            "args": [
+                              {
+                                "nodeType": "Arg",
+                                "value": {
+                                  "nodeType": "Expr_Variable",
+                                  "name": "cap",
+                                  "attributes": {
+                                    "startLine": 85,
+                                    "endLine": 85
+                                  }
+                                },
+                                "byRef": false,
+                                "unpack": false,
+                                "attributes": {
+                                  "startLine": 85,
+                                  "endLine": 85
+                                }
+                              }
+                            ],
+                            "attributes": {
+                              "startLine": 85,
+                              "endLine": 85
+                            }
+                          },
+                          "attributes": {
+                            "startLine": 85,
+                            "endLine": 85
+                          }
+                        },
+                        "stmts": [
+                          {
+                            "nodeType": "Stmt_Continue",
+                            "num": {
+                              "nodeType": "Scalar_LNumber",
+                              "value": 2,
+                              "attributes": {
+                                "startLine": 86,
+                                "endLine": 86,
+                                "kind": 10
+                              }
+                            },
+                            "attributes": {
+                              "startLine": 86,
+                              "endLine": 86
+                            }
+                          }
+                        ],
+                        "elseifs": [],
+                        "else": null,
+                        "attributes": {
+                          "startLine": 85,
+                          "endLine": 87
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 84,
+                      "endLine": 88
+                    }
+                  }
+                ],
+                "elseifs": [],
+                "else": null,
+                "attributes": {
+                  "startLine": 83,
+                  "endLine": 89
+                }
+              },
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_FuncCall",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "add_action"
+                    ],
+                    "attributes": {
+                      "startLine": 92,
+                      "comments": [
+                        {
+                          "nodeType": "Comment",
+                          "text": "// Bind pointer print function.\n",
+                          "line": 91,
+                          "filePos": 2214,
+                          "tokenPos": 227,
+                          "endLine": 92,
+                          "endFilePos": 2245,
+                          "endTokenPos": 227
+                        }
+                      ],
+                      "endLine": 92
+                    }
+                  },
+                  "args": [
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Scalar_String",
+                        "value": "admin_print_footer_scripts",
+                        "attributes": {
+                          "startLine": 92,
+                          "endLine": 92,
+                          "kind": 1
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 92,
+                        "endLine": 92
+                      }
+                    },
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Expr_Array",
+                        "items": [
+                          {
+                            "nodeType": "Expr_ArrayItem",
+                            "key": null,
+                            "value": {
+                              "nodeType": "Scalar_String",
+                              "value": "WP_Internal_Pointers",
+                              "attributes": {
+                                "startLine": 92,
+                                "endLine": 92,
+                                "kind": 1
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 92,
+                              "endLine": 92
+                            }
+                          },
+                          {
+                            "nodeType": "Expr_ArrayItem",
+                            "key": null,
+                            "value": {
+                              "nodeType": "Expr_BinaryOp_Concat",
+                              "left": {
+                                "nodeType": "Scalar_String",
+                                "value": "pointer_",
+                                "attributes": {
+                                  "startLine": 92,
+                                  "endLine": 92,
+                                  "kind": 1
+                                }
+                              },
+                              "right": {
+                                "nodeType": "Expr_Variable",
+                                "name": "pointer",
+                                "attributes": {
+                                  "startLine": 92,
+                                  "endLine": 92
+                                }
+                              },
+                              "attributes": {
+                                "startLine": 92,
+                                "endLine": 92
+                              }
+                            },
+                            "byRef": false,
+                            "unpack": false,
+                            "attributes": {
+                              "startLine": 92,
+                              "endLine": 92
+                            }
+                          }
+                        ],
+                        "attributes": {
+                          "startLine": 92,
+                          "endLine": 92,
+                          "kind": 1
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 92,
+                        "endLine": 92
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 92,
+                    "comments": [
+                      {
+                        "nodeType": "Comment",
+                        "text": "// Bind pointer print function.\n",
+                        "line": 91,
+                        "filePos": 2214,
+                        "tokenPos": 227,
+                        "endLine": 92,
+                        "endFilePos": 2245,
+                        "endTokenPos": 227
+                      }
+                    ],
+                    "endLine": 92
+                  }
+                },
+                "attributes": {
+                  "startLine": 92,
+                  "comments": [
+                    {
+                      "nodeType": "Comment",
+                      "text": "// Bind pointer print function.\n",
+                      "line": 91,
+                      "filePos": 2214,
+                      "tokenPos": 227,
+                      "endLine": 92,
+                      "endFilePos": 2245,
+                      "endTokenPos": 227
+                    }
+                  ],
+                  "endLine": 92
+                }
+              },
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "got_pointers",
+                    "attributes": {
+                      "startLine": 93,
+                      "endLine": 93
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_ConstFetch",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "true"
+                      ],
+                      "attributes": {
+                        "startLine": 93,
+                        "endLine": 93
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 93,
+                      "endLine": 93
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 93,
+                    "endLine": 93
+                  }
+                },
+                "attributes": {
+                  "startLine": 93,
+                  "endLine": 93
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 82,
+              "endLine": 94
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BooleanNot",
+              "expr": {
+                "nodeType": "Expr_Variable",
+                "name": "got_pointers",
+                "attributes": {
+                  "startLine": 96,
+                  "endLine": 96
+                }
+              },
+              "attributes": {
+                "startLine": 96,
+                "endLine": 96
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Return",
+                "expr": null,
+                "attributes": {
+                  "startLine": 97,
+                  "endLine": 97
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 96,
+              "endLine": 98
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "wp_enqueue_style"
+                ],
+                "attributes": {
+                  "startLine": 101,
+                  "comments": [
+                    {
+                      "nodeType": "Comment",
+                      "text": "// Add pointers script and style to queue.\n",
+                      "line": 100,
+                      "filePos": 2424,
+                      "tokenPos": 278,
+                      "endLine": 101,
+                      "endFilePos": 2466,
+                      "endTokenPos": 278
+                    }
+                  ],
+                  "endLine": 101
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "wp-pointer",
+                    "attributes": {
+                      "startLine": 101,
+                      "endLine": 101,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 101,
+                    "endLine": 101
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 101,
+                "comments": [
+                  {
+                    "nodeType": "Comment",
+                    "text": "// Add pointers script and style to queue.\n",
+                    "line": 100,
+                    "filePos": 2424,
+                    "tokenPos": 278,
+                    "endLine": 101,
+                    "endFilePos": 2466,
+                    "endTokenPos": 278
+                  }
+                ],
+                "endLine": 101
+              }
+            },
+            "attributes": {
+              "startLine": 101,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// Add pointers script and style to queue.\n",
+                  "line": 100,
+                  "filePos": 2424,
+                  "tokenPos": 278,
+                  "endLine": 101,
+                  "endFilePos": 2466,
+                  "endTokenPos": 278
+                }
+              ],
+              "endLine": 101
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "wp_enqueue_script"
+                ],
+                "attributes": {
+                  "startLine": 102,
+                  "endLine": 102
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "wp-pointer",
+                    "attributes": {
+                      "startLine": 102,
+                      "endLine": 102,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 102,
+                    "endLine": 102
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 102,
+                "endLine": 102
+              }
+            },
+            "attributes": {
+              "startLine": 102,
+              "endLine": 102
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 36,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Initializes the new feature pointers.\n\t *\n\t * @since 3.3.0\n\t *\n\t * All pointers can be disabled using the following:\n\t *     remove_action( 'admin_enqueue_scripts', array( 'WP_Internal_Pointers', 'enqueue_scripts' ) );\n\t *\n\t * Individual pointers (e.g. wp390_widgets) can be disabled using the following:\n\t *\n\t *    function yourprefix_remove_pointers() {\n\t *        remove_action(\n\t *            'admin_print_footer_scripts',\n\t *            array( 'WP_Internal_Pointers', 'pointer_wp390_widgets' )\n\t *        );\n\t *    }\n\t *    add_action( 'admin_enqueue_scripts', 'yourprefix_remove_pointers', 11 );\n\t *\n\t * @param string $hook_suffix The current admin page.\n\t */",
+              "line": 16,
+              "filePos": 263,
+              "tokenPos": 13,
+              "endLine": 35,
+              "endFilePos": 935,
+              "endTokenPos": 13
+            }
+          ],
+          "endLine": 103
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 12,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "print_js",
+          "attributes": {
+            "startLine": 114,
+            "endLine": 114
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "pointer_id",
+              "attributes": {
+                "startLine": 114,
+                "endLine": 114
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 114,
+              "endLine": 114
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "selector",
+              "attributes": {
+                "startLine": 114,
+                "endLine": 114
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 114,
+              "endLine": 114
+            }
+          },
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "args",
+              "attributes": {
+                "startLine": 114,
+                "endLine": 114
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 114,
+              "endLine": 114
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BinaryOp_BooleanOr",
+              "left": {
+                "nodeType": "Expr_BinaryOp_BooleanOr",
+                "left": {
+                  "nodeType": "Expr_BinaryOp_BooleanOr",
+                  "left": {
+                    "nodeType": "Expr_Empty",
+                    "expr": {
+                      "nodeType": "Expr_Variable",
+                      "name": "pointer_id",
+                      "attributes": {
+                        "startLine": 115,
+                        "endLine": 115
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 115,
+                      "endLine": 115
+                    }
+                  },
+                  "right": {
+                    "nodeType": "Expr_Empty",
+                    "expr": {
+                      "nodeType": "Expr_Variable",
+                      "name": "selector",
+                      "attributes": {
+                        "startLine": 115,
+                        "endLine": 115
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 115,
+                      "endLine": 115
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 115,
+                    "endLine": 115
+                  }
+                },
+                "right": {
+                  "nodeType": "Expr_Empty",
+                  "expr": {
+                    "nodeType": "Expr_Variable",
+                    "name": "args",
+                    "attributes": {
+                      "startLine": 115,
+                      "endLine": 115
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 115,
+                    "endLine": 115
+                  }
+                },
+                "attributes": {
+                  "startLine": 115,
+                  "endLine": 115
+                }
+              },
+              "right": {
+                "nodeType": "Expr_Empty",
+                "expr": {
+                  "nodeType": "Expr_ArrayDimFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "args",
+                    "attributes": {
+                      "startLine": 115,
+                      "endLine": 115
+                    }
+                  },
+                  "dim": {
+                    "nodeType": "Scalar_String",
+                    "value": "content",
+                    "attributes": {
+                      "startLine": 115,
+                      "endLine": 115,
+                      "kind": 1
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 115,
+                    "endLine": 115
+                  }
+                },
+                "attributes": {
+                  "startLine": 115,
+                  "endLine": 115
+                }
+              },
+              "attributes": {
+                "startLine": 115,
+                "endLine": 115
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Return",
+                "expr": null,
+                "attributes": {
+                  "startLine": 116,
+                  "endLine": 116
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 115,
+              "endLine": 117
+            }
+          },
+          {
+            "nodeType": "Stmt_InlineHTML",
+            "value": "\t\t<script type=\"text/javascript\">\n\t\t(function($){\n\t\t\tvar options = ",
+            "attributes": {
+              "startLine": 120,
+              "hasLeadingNewline": true,
+              "endLine": 122
+            }
+          },
+          {
+            "nodeType": "Stmt_Echo",
+            "exprs": [
+              {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "wp_json_encode"
+                  ],
+                  "attributes": {
+                    "startLine": 122,
+                    "endLine": 122
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "args",
+                      "attributes": {
+                        "startLine": 122,
+                        "endLine": 122
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 122,
+                      "endLine": 122
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 122,
+                  "endLine": 122
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 122,
+              "endLine": 122
+            }
+          },
+          {
+            "nodeType": "Stmt_InlineHTML",
+            "value": ", setup;\n\n\t\t\tif ( ! options )\n\t\t\t\treturn;\n\n\t\t\toptions = $.extend( options, {\n\t\t\t\tclose: function() {\n\t\t\t\t\t$.post( ajaxurl, {\n\t\t\t\t\t\tpointer: '",
+            "attributes": {
+              "startLine": 122,
+              "hasLeadingNewline": false,
+              "endLine": 130
+            }
+          },
+          {
+            "nodeType": "Stmt_Echo",
+            "exprs": [
+              {
+                "nodeType": "Expr_Variable",
+                "name": "pointer_id",
+                "attributes": {
+                  "startLine": 130,
+                  "endLine": 130
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 130,
+              "endLine": 130
+            }
+          },
+          {
+            "nodeType": "Stmt_InlineHTML",
+            "value": "',\n\t\t\t\t\t\taction: 'dismiss-wp-pointer'\n\t\t\t\t\t});\n\t\t\t\t}\n\t\t\t});\n\n\t\t\tsetup = function() {\n\t\t\t\t$('",
+            "attributes": {
+              "startLine": 130,
+              "hasLeadingNewline": false,
+              "endLine": 137
+            }
+          },
+          {
+            "nodeType": "Stmt_Echo",
+            "exprs": [
+              {
+                "nodeType": "Expr_Variable",
+                "name": "selector",
+                "attributes": {
+                  "startLine": 137,
+                  "endLine": 137
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 137,
+              "endLine": 137
+            }
+          },
+          {
+            "nodeType": "Stmt_InlineHTML",
+            "value": "').first().pointer( options ).pointer('open');\n\t\t\t};\n\n\t\t\tif ( options.position && options.position.defer_loading )\n\t\t\t\t$(window).bind( 'load.wp-pointers', setup );\n\t\t\telse\n\t\t\t\t$(document).ready( setup );\n\n\t\t})( jQuery );\n\t\t</script>\n\t\t",
+            "attributes": {
+              "startLine": 137,
+              "hasLeadingNewline": false,
+              "endLine": 147
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 114,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Print the pointer JavaScript data.\n\t *\n\t * @since 3.3.0\n\t *\n\t * @param string $pointer_id The pointer ID.\n\t * @param string $selector The HTML elements, on which the pointer should be attached.\n\t * @param array  $args Arguments to be passed to the pointer JS (see wp-pointer.js).\n\t */",
+              "line": 105,
+              "filePos": 2545,
+              "tokenPos": 298,
+              "endLine": 113,
+              "endFilePos": 2836,
+              "endTokenPos": 298
+            }
+          ],
+          "endLine": 148
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 9,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "pointer_wp330_toolbar",
+          "attributes": {
+            "startLine": 150,
+            "endLine": 150
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [],
+        "attributes": {
+          "startLine": 150,
+          "endLine": 150
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 9,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "pointer_wp330_media_uploader",
+          "attributes": {
+            "startLine": 151,
+            "endLine": 151
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [],
+        "attributes": {
+          "startLine": 151,
+          "endLine": 151
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 9,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "pointer_wp330_saving_widgets",
+          "attributes": {
+            "startLine": 152,
+            "endLine": 152
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [],
+        "attributes": {
+          "startLine": 152,
+          "endLine": 152
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 9,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "pointer_wp340_customize_current_theme_link",
+          "attributes": {
+            "startLine": 153,
+            "endLine": 153
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [],
+        "attributes": {
+          "startLine": 153,
+          "endLine": 153
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 9,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "pointer_wp340_choose_image_from_library",
+          "attributes": {
+            "startLine": 154,
+            "endLine": 154
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [],
+        "attributes": {
+          "startLine": 154,
+          "endLine": 154
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 9,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "pointer_wp350_media",
+          "attributes": {
+            "startLine": 155,
+            "endLine": 155
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [],
+        "attributes": {
+          "startLine": 155,
+          "endLine": 155
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 9,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "pointer_wp360_revisions",
+          "attributes": {
+            "startLine": 156,
+            "endLine": 156
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [],
+        "attributes": {
+          "startLine": 156,
+          "endLine": 156
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 9,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "pointer_wp360_locks",
+          "attributes": {
+            "startLine": 157,
+            "endLine": 157
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [],
+        "attributes": {
+          "startLine": 157,
+          "endLine": 157
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 9,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "pointer_wp390_widgets",
+          "attributes": {
+            "startLine": 158,
+            "endLine": 158
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [],
+        "attributes": {
+          "startLine": 158,
+          "endLine": 158
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 9,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "pointer_wp410_dfw",
+          "attributes": {
+            "startLine": 159,
+            "endLine": 159
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [],
+        "attributes": {
+          "startLine": 159,
+          "endLine": 159
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 9,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "pointer_wp496_privacy",
+          "attributes": {
+            "startLine": 160,
+            "endLine": 160
+          }
+        },
+        "params": [],
+        "returnType": null,
+        "stmts": [],
+        "attributes": {
+          "startLine": 160,
+          "endLine": 160
+        }
+      },
+      {
+        "nodeType": "Stmt_ClassMethod",
+        "flags": 9,
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "dismiss_pointers_for_new_users",
+          "attributes": {
+            "startLine": 169,
+            "endLine": 169
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "user_id",
+              "attributes": {
+                "startLine": 169,
+                "endLine": 169
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 169,
+              "endLine": 169
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "add_user_meta"
+                ],
+                "attributes": {
+                  "startLine": 170,
+                  "endLine": 170
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "user_id",
+                    "attributes": {
+                      "startLine": 170,
+                      "endLine": 170
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 170,
+                    "endLine": 170
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "dismissed_wp_pointers",
+                    "attributes": {
+                      "startLine": 170,
+                      "endLine": 170,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 170,
+                    "endLine": 170
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "",
+                    "attributes": {
+                      "startLine": 170,
+                      "endLine": 170,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 170,
+                    "endLine": 170
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 170,
+                "endLine": 170
+              }
+            },
+            "attributes": {
+              "startLine": 170,
+              "endLine": 170
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 169,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Prevents new users from seeing existing 'new feature' pointers.\n\t *\n\t * @since 3.3.0\n\t *\n\t * @param int $user_id User ID.\n\t */",
+              "line": 162,
+              "filePos": 4272,
+              "tokenPos": 549,
+              "endLine": 168,
+              "endFilePos": 4405,
+              "endTokenPos": 549
+            }
+          ],
+          "endLine": 171
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 15,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Administration API: WP_Internal_Pointers class\n *\n * @package WordPress\n * @subpackage Administration\n * @since 4.4.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 8,
+          "endFilePos": 133,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Core class used to implement an internal admin pointers API.\n *\n * @since 3.3.0\n */",
+          "line": 10,
+          "filePos": 136,
+          "tokenPos": 3,
+          "endLine": 14,
+          "endFilePos": 225,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 172
+    }
+  }
+]

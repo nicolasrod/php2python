@@ -103,6 +103,7 @@ class PythonIndenter:
         self.tabsize = tabsize
         self.lineno = 0
         self.expandtabs = expandtabs
+        self.errors = []
         self._write = fpo.write
         self.kwprog = re.compile(
                 r'^\s*(?P<kw>[a-z]+)'
@@ -131,9 +132,10 @@ class PythonIndenter:
     # end def readline
 
     def error(self, fmt, *args):
-        if args: fmt = fmt % args
+        if args:
+            fmt = fmt % args
         # end if
-        sys.stderr.write('Error at line %d: %s\n' % (self.lineno, fmt))
+        self.errors.append('Error at line %d: %s\n' % (self.lineno, fmt))
         self.write('### %s ###\n' % fmt)
     # end def error
 
@@ -183,7 +185,7 @@ class PythonIndenter:
             m = self.kwprog.match(line)
             if m:
                 kw = m.group('kw')
-                if kw in start:
+                if kw in start and (line.strip()[-1] == ':'):  # TODO: check it's not a if x: something cond
                     self.putline(line, len(stack))
                     stack.append((kw, kw))
                     continue
@@ -197,13 +199,17 @@ class PythonIndenter:
             # end if
             self.putline(line, len(stack))
         # end while
-        if stack:
+        if stack: 
             self.error('unterminated keywords')
             for kwa, kwb in stack:
-                self.write('\t%s\n' % kwa)
-            # end for
+                self.errors.append('\t%s\n' % kwa)
+            # end for
         # end if
     # end def reformat
+
+    def get_errors(self):
+        return "\n".join(self.errors)
+    # end def get_errors
 
     def delete(self):
         begin_counter = 0
@@ -417,7 +423,7 @@ def reformat_string(source, stepsize = STEPSIZE, tabsize = TABSIZE, expandtabs =
     output = StringWriter()
     pi = PythonIndenter(input, output, stepsize, tabsize, expandtabs)
     pi.reformat()
-    return output.getvalue()
+    return (output.getvalue(), pi.get_errors())
 # end def reformat_string
 
 def complete_file(filename, stepsize = STEPSIZE, tabsize = TABSIZE, expandtabs = EXPANDTABS):

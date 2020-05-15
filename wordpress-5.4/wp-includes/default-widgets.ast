@@ -1,0 +1,1846 @@
+[
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_BinaryOp_Concat",
+          "left": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "ABSPATH"
+              ],
+              "attributes": {
+                "startLine": 11,
+                "endLine": 11
+              }
+            },
+            "attributes": {
+              "startLine": 11,
+              "endLine": 11
+            }
+          },
+          "right": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "WPINC"
+              ],
+              "attributes": {
+                "startLine": 11,
+                "endLine": 11
+              }
+            },
+            "attributes": {
+              "startLine": 11,
+              "endLine": 11
+            }
+          },
+          "attributes": {
+            "startLine": 11,
+            "endLine": 11
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/widgets/class-wp-widget-pages.php",
+          "attributes": {
+            "startLine": 11,
+            "endLine": 11,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 11,
+          "endLine": 11
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 11,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/**\n * Widget API: Default core widgets\n *\n * @package WordPress\n * @subpackage Widgets\n * @since 2.8.0\n */",
+            "line": 2,
+            "filePos": 6,
+            "tokenPos": 1,
+            "endLine": 8,
+            "endFilePos": 112,
+            "endTokenPos": 1
+          },
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** WP_Widget_Pages class */",
+            "line": 10,
+            "filePos": 115,
+            "tokenPos": 3,
+            "endLine": 10,
+            "endFilePos": 142,
+            "endTokenPos": 3
+          }
+        ],
+        "endLine": 11
+      }
+    },
+    "attributes": {
+      "startLine": 11,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Widget API: Default core widgets\n *\n * @package WordPress\n * @subpackage Widgets\n * @since 2.8.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 8,
+          "endFilePos": 112,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** WP_Widget_Pages class */",
+          "line": 10,
+          "filePos": 115,
+          "tokenPos": 3,
+          "endLine": 10,
+          "endFilePos": 142,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 11
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_BinaryOp_Concat",
+          "left": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "ABSPATH"
+              ],
+              "attributes": {
+                "startLine": 14,
+                "endLine": 14
+              }
+            },
+            "attributes": {
+              "startLine": 14,
+              "endLine": 14
+            }
+          },
+          "right": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "WPINC"
+              ],
+              "attributes": {
+                "startLine": 14,
+                "endLine": 14
+              }
+            },
+            "attributes": {
+              "startLine": 14,
+              "endLine": 14
+            }
+          },
+          "attributes": {
+            "startLine": 14,
+            "endLine": 14
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/widgets/class-wp-widget-links.php",
+          "attributes": {
+            "startLine": 14,
+            "endLine": 14,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 14,
+          "endLine": 14
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 14,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** WP_Widget_Links class */",
+            "line": 13,
+            "filePos": 214,
+            "tokenPos": 18,
+            "endLine": 13,
+            "endFilePos": 241,
+            "endTokenPos": 18
+          }
+        ],
+        "endLine": 14
+      }
+    },
+    "attributes": {
+      "startLine": 14,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** WP_Widget_Links class */",
+          "line": 13,
+          "filePos": 214,
+          "tokenPos": 18,
+          "endLine": 13,
+          "endFilePos": 241,
+          "endTokenPos": 18
+        }
+      ],
+      "endLine": 14
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_BinaryOp_Concat",
+          "left": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "ABSPATH"
+              ],
+              "attributes": {
+                "startLine": 17,
+                "endLine": 17
+              }
+            },
+            "attributes": {
+              "startLine": 17,
+              "endLine": 17
+            }
+          },
+          "right": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "WPINC"
+              ],
+              "attributes": {
+                "startLine": 17,
+                "endLine": 17
+              }
+            },
+            "attributes": {
+              "startLine": 17,
+              "endLine": 17
+            }
+          },
+          "attributes": {
+            "startLine": 17,
+            "endLine": 17
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/widgets/class-wp-widget-search.php",
+          "attributes": {
+            "startLine": 17,
+            "endLine": 17,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 17,
+          "endLine": 17
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 17,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** WP_Widget_Search class */",
+            "line": 16,
+            "filePos": 313,
+            "tokenPos": 33,
+            "endLine": 16,
+            "endFilePos": 341,
+            "endTokenPos": 33
+          }
+        ],
+        "endLine": 17
+      }
+    },
+    "attributes": {
+      "startLine": 17,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** WP_Widget_Search class */",
+          "line": 16,
+          "filePos": 313,
+          "tokenPos": 33,
+          "endLine": 16,
+          "endFilePos": 341,
+          "endTokenPos": 33
+        }
+      ],
+      "endLine": 17
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_BinaryOp_Concat",
+          "left": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "ABSPATH"
+              ],
+              "attributes": {
+                "startLine": 20,
+                "endLine": 20
+              }
+            },
+            "attributes": {
+              "startLine": 20,
+              "endLine": 20
+            }
+          },
+          "right": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "WPINC"
+              ],
+              "attributes": {
+                "startLine": 20,
+                "endLine": 20
+              }
+            },
+            "attributes": {
+              "startLine": 20,
+              "endLine": 20
+            }
+          },
+          "attributes": {
+            "startLine": 20,
+            "endLine": 20
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/widgets/class-wp-widget-archives.php",
+          "attributes": {
+            "startLine": 20,
+            "endLine": 20,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 20,
+          "endLine": 20
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 20,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** WP_Widget_Archives class */",
+            "line": 19,
+            "filePos": 414,
+            "tokenPos": 48,
+            "endLine": 19,
+            "endFilePos": 444,
+            "endTokenPos": 48
+          }
+        ],
+        "endLine": 20
+      }
+    },
+    "attributes": {
+      "startLine": 20,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** WP_Widget_Archives class */",
+          "line": 19,
+          "filePos": 414,
+          "tokenPos": 48,
+          "endLine": 19,
+          "endFilePos": 444,
+          "endTokenPos": 48
+        }
+      ],
+      "endLine": 20
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_BinaryOp_Concat",
+          "left": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "ABSPATH"
+              ],
+              "attributes": {
+                "startLine": 23,
+                "endLine": 23
+              }
+            },
+            "attributes": {
+              "startLine": 23,
+              "endLine": 23
+            }
+          },
+          "right": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "WPINC"
+              ],
+              "attributes": {
+                "startLine": 23,
+                "endLine": 23
+              }
+            },
+            "attributes": {
+              "startLine": 23,
+              "endLine": 23
+            }
+          },
+          "attributes": {
+            "startLine": 23,
+            "endLine": 23
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/widgets/class-wp-widget-media.php",
+          "attributes": {
+            "startLine": 23,
+            "endLine": 23,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 23,
+          "endLine": 23
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 23,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** WP_Widget_Media class */",
+            "line": 22,
+            "filePos": 519,
+            "tokenPos": 63,
+            "endLine": 22,
+            "endFilePos": 546,
+            "endTokenPos": 63
+          }
+        ],
+        "endLine": 23
+      }
+    },
+    "attributes": {
+      "startLine": 23,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** WP_Widget_Media class */",
+          "line": 22,
+          "filePos": 519,
+          "tokenPos": 63,
+          "endLine": 22,
+          "endFilePos": 546,
+          "endTokenPos": 63
+        }
+      ],
+      "endLine": 23
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_BinaryOp_Concat",
+          "left": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "ABSPATH"
+              ],
+              "attributes": {
+                "startLine": 26,
+                "endLine": 26
+              }
+            },
+            "attributes": {
+              "startLine": 26,
+              "endLine": 26
+            }
+          },
+          "right": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "WPINC"
+              ],
+              "attributes": {
+                "startLine": 26,
+                "endLine": 26
+              }
+            },
+            "attributes": {
+              "startLine": 26,
+              "endLine": 26
+            }
+          },
+          "attributes": {
+            "startLine": 26,
+            "endLine": 26
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/widgets/class-wp-widget-media-audio.php",
+          "attributes": {
+            "startLine": 26,
+            "endLine": 26,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 26,
+          "endLine": 26
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 26,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** WP_Widget_Media_Audio class */",
+            "line": 25,
+            "filePos": 618,
+            "tokenPos": 78,
+            "endLine": 25,
+            "endFilePos": 651,
+            "endTokenPos": 78
+          }
+        ],
+        "endLine": 26
+      }
+    },
+    "attributes": {
+      "startLine": 26,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** WP_Widget_Media_Audio class */",
+          "line": 25,
+          "filePos": 618,
+          "tokenPos": 78,
+          "endLine": 25,
+          "endFilePos": 651,
+          "endTokenPos": 78
+        }
+      ],
+      "endLine": 26
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_BinaryOp_Concat",
+          "left": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "ABSPATH"
+              ],
+              "attributes": {
+                "startLine": 29,
+                "endLine": 29
+              }
+            },
+            "attributes": {
+              "startLine": 29,
+              "endLine": 29
+            }
+          },
+          "right": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "WPINC"
+              ],
+              "attributes": {
+                "startLine": 29,
+                "endLine": 29
+              }
+            },
+            "attributes": {
+              "startLine": 29,
+              "endLine": 29
+            }
+          },
+          "attributes": {
+            "startLine": 29,
+            "endLine": 29
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/widgets/class-wp-widget-media-image.php",
+          "attributes": {
+            "startLine": 29,
+            "endLine": 29,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 29,
+          "endLine": 29
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 29,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** WP_Widget_Media_Image class */",
+            "line": 28,
+            "filePos": 729,
+            "tokenPos": 93,
+            "endLine": 28,
+            "endFilePos": 762,
+            "endTokenPos": 93
+          }
+        ],
+        "endLine": 29
+      }
+    },
+    "attributes": {
+      "startLine": 29,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** WP_Widget_Media_Image class */",
+          "line": 28,
+          "filePos": 729,
+          "tokenPos": 93,
+          "endLine": 28,
+          "endFilePos": 762,
+          "endTokenPos": 93
+        }
+      ],
+      "endLine": 29
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_BinaryOp_Concat",
+          "left": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "ABSPATH"
+              ],
+              "attributes": {
+                "startLine": 32,
+                "endLine": 32
+              }
+            },
+            "attributes": {
+              "startLine": 32,
+              "endLine": 32
+            }
+          },
+          "right": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "WPINC"
+              ],
+              "attributes": {
+                "startLine": 32,
+                "endLine": 32
+              }
+            },
+            "attributes": {
+              "startLine": 32,
+              "endLine": 32
+            }
+          },
+          "attributes": {
+            "startLine": 32,
+            "endLine": 32
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/widgets/class-wp-widget-media-video.php",
+          "attributes": {
+            "startLine": 32,
+            "endLine": 32,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 32,
+          "endLine": 32
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 32,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** WP_Widget_Media_Video class */",
+            "line": 31,
+            "filePos": 840,
+            "tokenPos": 108,
+            "endLine": 31,
+            "endFilePos": 873,
+            "endTokenPos": 108
+          }
+        ],
+        "endLine": 32
+      }
+    },
+    "attributes": {
+      "startLine": 32,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** WP_Widget_Media_Video class */",
+          "line": 31,
+          "filePos": 840,
+          "tokenPos": 108,
+          "endLine": 31,
+          "endFilePos": 873,
+          "endTokenPos": 108
+        }
+      ],
+      "endLine": 32
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_BinaryOp_Concat",
+          "left": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "ABSPATH"
+              ],
+              "attributes": {
+                "startLine": 35,
+                "endLine": 35
+              }
+            },
+            "attributes": {
+              "startLine": 35,
+              "endLine": 35
+            }
+          },
+          "right": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "WPINC"
+              ],
+              "attributes": {
+                "startLine": 35,
+                "endLine": 35
+              }
+            },
+            "attributes": {
+              "startLine": 35,
+              "endLine": 35
+            }
+          },
+          "attributes": {
+            "startLine": 35,
+            "endLine": 35
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/widgets/class-wp-widget-media-gallery.php",
+          "attributes": {
+            "startLine": 35,
+            "endLine": 35,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 35,
+          "endLine": 35
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 35,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** WP_Widget_Media_Gallery class */",
+            "line": 34,
+            "filePos": 951,
+            "tokenPos": 123,
+            "endLine": 34,
+            "endFilePos": 986,
+            "endTokenPos": 123
+          }
+        ],
+        "endLine": 35
+      }
+    },
+    "attributes": {
+      "startLine": 35,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** WP_Widget_Media_Gallery class */",
+          "line": 34,
+          "filePos": 951,
+          "tokenPos": 123,
+          "endLine": 34,
+          "endFilePos": 986,
+          "endTokenPos": 123
+        }
+      ],
+      "endLine": 35
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_BinaryOp_Concat",
+          "left": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "ABSPATH"
+              ],
+              "attributes": {
+                "startLine": 38,
+                "endLine": 38
+              }
+            },
+            "attributes": {
+              "startLine": 38,
+              "endLine": 38
+            }
+          },
+          "right": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "WPINC"
+              ],
+              "attributes": {
+                "startLine": 38,
+                "endLine": 38
+              }
+            },
+            "attributes": {
+              "startLine": 38,
+              "endLine": 38
+            }
+          },
+          "attributes": {
+            "startLine": 38,
+            "endLine": 38
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/widgets/class-wp-widget-meta.php",
+          "attributes": {
+            "startLine": 38,
+            "endLine": 38,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 38,
+          "endLine": 38
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 38,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** WP_Widget_Meta class */",
+            "line": 37,
+            "filePos": 1066,
+            "tokenPos": 138,
+            "endLine": 37,
+            "endFilePos": 1092,
+            "endTokenPos": 138
+          }
+        ],
+        "endLine": 38
+      }
+    },
+    "attributes": {
+      "startLine": 38,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** WP_Widget_Meta class */",
+          "line": 37,
+          "filePos": 1066,
+          "tokenPos": 138,
+          "endLine": 37,
+          "endFilePos": 1092,
+          "endTokenPos": 138
+        }
+      ],
+      "endLine": 38
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_BinaryOp_Concat",
+          "left": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "ABSPATH"
+              ],
+              "attributes": {
+                "startLine": 41,
+                "endLine": 41
+              }
+            },
+            "attributes": {
+              "startLine": 41,
+              "endLine": 41
+            }
+          },
+          "right": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "WPINC"
+              ],
+              "attributes": {
+                "startLine": 41,
+                "endLine": 41
+              }
+            },
+            "attributes": {
+              "startLine": 41,
+              "endLine": 41
+            }
+          },
+          "attributes": {
+            "startLine": 41,
+            "endLine": 41
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/widgets/class-wp-widget-calendar.php",
+          "attributes": {
+            "startLine": 41,
+            "endLine": 41,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 41,
+          "endLine": 41
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 41,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** WP_Widget_Calendar class */",
+            "line": 40,
+            "filePos": 1163,
+            "tokenPos": 153,
+            "endLine": 40,
+            "endFilePos": 1193,
+            "endTokenPos": 153
+          }
+        ],
+        "endLine": 41
+      }
+    },
+    "attributes": {
+      "startLine": 41,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** WP_Widget_Calendar class */",
+          "line": 40,
+          "filePos": 1163,
+          "tokenPos": 153,
+          "endLine": 40,
+          "endFilePos": 1193,
+          "endTokenPos": 153
+        }
+      ],
+      "endLine": 41
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_BinaryOp_Concat",
+          "left": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "ABSPATH"
+              ],
+              "attributes": {
+                "startLine": 44,
+                "endLine": 44
+              }
+            },
+            "attributes": {
+              "startLine": 44,
+              "endLine": 44
+            }
+          },
+          "right": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "WPINC"
+              ],
+              "attributes": {
+                "startLine": 44,
+                "endLine": 44
+              }
+            },
+            "attributes": {
+              "startLine": 44,
+              "endLine": 44
+            }
+          },
+          "attributes": {
+            "startLine": 44,
+            "endLine": 44
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/widgets/class-wp-widget-text.php",
+          "attributes": {
+            "startLine": 44,
+            "endLine": 44,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 44,
+          "endLine": 44
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 44,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** WP_Widget_Text class */",
+            "line": 43,
+            "filePos": 1268,
+            "tokenPos": 168,
+            "endLine": 43,
+            "endFilePos": 1294,
+            "endTokenPos": 168
+          }
+        ],
+        "endLine": 44
+      }
+    },
+    "attributes": {
+      "startLine": 44,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** WP_Widget_Text class */",
+          "line": 43,
+          "filePos": 1268,
+          "tokenPos": 168,
+          "endLine": 43,
+          "endFilePos": 1294,
+          "endTokenPos": 168
+        }
+      ],
+      "endLine": 44
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_BinaryOp_Concat",
+          "left": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "ABSPATH"
+              ],
+              "attributes": {
+                "startLine": 47,
+                "endLine": 47
+              }
+            },
+            "attributes": {
+              "startLine": 47,
+              "endLine": 47
+            }
+          },
+          "right": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "WPINC"
+              ],
+              "attributes": {
+                "startLine": 47,
+                "endLine": 47
+              }
+            },
+            "attributes": {
+              "startLine": 47,
+              "endLine": 47
+            }
+          },
+          "attributes": {
+            "startLine": 47,
+            "endLine": 47
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/widgets/class-wp-widget-categories.php",
+          "attributes": {
+            "startLine": 47,
+            "endLine": 47,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 47,
+          "endLine": 47
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 47,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** WP_Widget_Categories class */",
+            "line": 46,
+            "filePos": 1365,
+            "tokenPos": 183,
+            "endLine": 46,
+            "endFilePos": 1397,
+            "endTokenPos": 183
+          }
+        ],
+        "endLine": 47
+      }
+    },
+    "attributes": {
+      "startLine": 47,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** WP_Widget_Categories class */",
+          "line": 46,
+          "filePos": 1365,
+          "tokenPos": 183,
+          "endLine": 46,
+          "endFilePos": 1397,
+          "endTokenPos": 183
+        }
+      ],
+      "endLine": 47
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_BinaryOp_Concat",
+          "left": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "ABSPATH"
+              ],
+              "attributes": {
+                "startLine": 50,
+                "endLine": 50
+              }
+            },
+            "attributes": {
+              "startLine": 50,
+              "endLine": 50
+            }
+          },
+          "right": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "WPINC"
+              ],
+              "attributes": {
+                "startLine": 50,
+                "endLine": 50
+              }
+            },
+            "attributes": {
+              "startLine": 50,
+              "endLine": 50
+            }
+          },
+          "attributes": {
+            "startLine": 50,
+            "endLine": 50
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/widgets/class-wp-widget-recent-posts.php",
+          "attributes": {
+            "startLine": 50,
+            "endLine": 50,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 50,
+          "endLine": 50
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 50,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** WP_Widget_Recent_Posts class */",
+            "line": 49,
+            "filePos": 1474,
+            "tokenPos": 198,
+            "endLine": 49,
+            "endFilePos": 1508,
+            "endTokenPos": 198
+          }
+        ],
+        "endLine": 50
+      }
+    },
+    "attributes": {
+      "startLine": 50,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** WP_Widget_Recent_Posts class */",
+          "line": 49,
+          "filePos": 1474,
+          "tokenPos": 198,
+          "endLine": 49,
+          "endFilePos": 1508,
+          "endTokenPos": 198
+        }
+      ],
+      "endLine": 50
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_BinaryOp_Concat",
+          "left": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "ABSPATH"
+              ],
+              "attributes": {
+                "startLine": 53,
+                "endLine": 53
+              }
+            },
+            "attributes": {
+              "startLine": 53,
+              "endLine": 53
+            }
+          },
+          "right": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "WPINC"
+              ],
+              "attributes": {
+                "startLine": 53,
+                "endLine": 53
+              }
+            },
+            "attributes": {
+              "startLine": 53,
+              "endLine": 53
+            }
+          },
+          "attributes": {
+            "startLine": 53,
+            "endLine": 53
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/widgets/class-wp-widget-recent-comments.php",
+          "attributes": {
+            "startLine": 53,
+            "endLine": 53,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 53,
+          "endLine": 53
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 53,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** WP_Widget_Recent_Comments class */",
+            "line": 52,
+            "filePos": 1587,
+            "tokenPos": 213,
+            "endLine": 52,
+            "endFilePos": 1624,
+            "endTokenPos": 213
+          }
+        ],
+        "endLine": 53
+      }
+    },
+    "attributes": {
+      "startLine": 53,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** WP_Widget_Recent_Comments class */",
+          "line": 52,
+          "filePos": 1587,
+          "tokenPos": 213,
+          "endLine": 52,
+          "endFilePos": 1624,
+          "endTokenPos": 213
+        }
+      ],
+      "endLine": 53
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_BinaryOp_Concat",
+          "left": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "ABSPATH"
+              ],
+              "attributes": {
+                "startLine": 56,
+                "endLine": 56
+              }
+            },
+            "attributes": {
+              "startLine": 56,
+              "endLine": 56
+            }
+          },
+          "right": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "WPINC"
+              ],
+              "attributes": {
+                "startLine": 56,
+                "endLine": 56
+              }
+            },
+            "attributes": {
+              "startLine": 56,
+              "endLine": 56
+            }
+          },
+          "attributes": {
+            "startLine": 56,
+            "endLine": 56
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/widgets/class-wp-widget-rss.php",
+          "attributes": {
+            "startLine": 56,
+            "endLine": 56,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 56,
+          "endLine": 56
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 56,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** WP_Widget_RSS class */",
+            "line": 55,
+            "filePos": 1706,
+            "tokenPos": 228,
+            "endLine": 55,
+            "endFilePos": 1731,
+            "endTokenPos": 228
+          }
+        ],
+        "endLine": 56
+      }
+    },
+    "attributes": {
+      "startLine": 56,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** WP_Widget_RSS class */",
+          "line": 55,
+          "filePos": 1706,
+          "tokenPos": 228,
+          "endLine": 55,
+          "endFilePos": 1731,
+          "endTokenPos": 228
+        }
+      ],
+      "endLine": 56
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_BinaryOp_Concat",
+          "left": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "ABSPATH"
+              ],
+              "attributes": {
+                "startLine": 59,
+                "endLine": 59
+              }
+            },
+            "attributes": {
+              "startLine": 59,
+              "endLine": 59
+            }
+          },
+          "right": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "WPINC"
+              ],
+              "attributes": {
+                "startLine": 59,
+                "endLine": 59
+              }
+            },
+            "attributes": {
+              "startLine": 59,
+              "endLine": 59
+            }
+          },
+          "attributes": {
+            "startLine": 59,
+            "endLine": 59
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/widgets/class-wp-widget-tag-cloud.php",
+          "attributes": {
+            "startLine": 59,
+            "endLine": 59,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 59,
+          "endLine": 59
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 59,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** WP_Widget_Tag_Cloud class */",
+            "line": 58,
+            "filePos": 1801,
+            "tokenPos": 243,
+            "endLine": 58,
+            "endFilePos": 1832,
+            "endTokenPos": 243
+          }
+        ],
+        "endLine": 59
+      }
+    },
+    "attributes": {
+      "startLine": 59,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** WP_Widget_Tag_Cloud class */",
+          "line": 58,
+          "filePos": 1801,
+          "tokenPos": 243,
+          "endLine": 58,
+          "endFilePos": 1832,
+          "endTokenPos": 243
+        }
+      ],
+      "endLine": 59
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_BinaryOp_Concat",
+          "left": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "ABSPATH"
+              ],
+              "attributes": {
+                "startLine": 62,
+                "endLine": 62
+              }
+            },
+            "attributes": {
+              "startLine": 62,
+              "endLine": 62
+            }
+          },
+          "right": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "WPINC"
+              ],
+              "attributes": {
+                "startLine": 62,
+                "endLine": 62
+              }
+            },
+            "attributes": {
+              "startLine": 62,
+              "endLine": 62
+            }
+          },
+          "attributes": {
+            "startLine": 62,
+            "endLine": 62
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/widgets/class-wp-nav-menu-widget.php",
+          "attributes": {
+            "startLine": 62,
+            "endLine": 62,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 62,
+          "endLine": 62
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 62,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** WP_Nav_Menu_Widget class */",
+            "line": 61,
+            "filePos": 1908,
+            "tokenPos": 258,
+            "endLine": 61,
+            "endFilePos": 1938,
+            "endTokenPos": 258
+          }
+        ],
+        "endLine": 62
+      }
+    },
+    "attributes": {
+      "startLine": 62,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** WP_Nav_Menu_Widget class */",
+          "line": 61,
+          "filePos": 1908,
+          "tokenPos": 258,
+          "endLine": 61,
+          "endFilePos": 1938,
+          "endTokenPos": 258
+        }
+      ],
+      "endLine": 62
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_BinaryOp_Concat",
+          "left": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "ABSPATH"
+              ],
+              "attributes": {
+                "startLine": 65,
+                "endLine": 65
+              }
+            },
+            "attributes": {
+              "startLine": 65,
+              "endLine": 65
+            }
+          },
+          "right": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "WPINC"
+              ],
+              "attributes": {
+                "startLine": 65,
+                "endLine": 65
+              }
+            },
+            "attributes": {
+              "startLine": 65,
+              "endLine": 65
+            }
+          },
+          "attributes": {
+            "startLine": 65,
+            "endLine": 65
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/widgets/class-wp-widget-custom-html.php",
+          "attributes": {
+            "startLine": 65,
+            "endLine": 65,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 65,
+          "endLine": 65
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 65,
+        "comments": [
+          {
+            "nodeType": "Comment_Doc",
+            "text": "/** WP_Widget_Custom_HTML class */",
+            "line": 64,
+            "filePos": 2013,
+            "tokenPos": 273,
+            "endLine": 64,
+            "endFilePos": 2046,
+            "endTokenPos": 273
+          }
+        ],
+        "endLine": 65
+      }
+    },
+    "attributes": {
+      "startLine": 65,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/** WP_Widget_Custom_HTML class */",
+          "line": 64,
+          "filePos": 2013,
+          "tokenPos": 273,
+          "endLine": 64,
+          "endFilePos": 2046,
+          "endTokenPos": 273
+        }
+      ],
+      "endLine": 65
+    }
+  }
+]

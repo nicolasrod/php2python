@@ -1,0 +1,1716 @@
+[
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "twentyseventeen_body_classes",
+      "attributes": {
+        "startLine": 16,
+        "endLine": 16
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "classes",
+          "attributes": {
+            "startLine": 16,
+            "endLine": 16
+          }
+        },
+        "default": null,
+        "attributes": {
+          "startLine": 16,
+          "endLine": 16
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "is_multi_author"
+            ],
+            "attributes": {
+              "startLine": 18,
+              "endLine": 18
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 18,
+            "endLine": 18
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "classes",
+                  "attributes": {
+                    "startLine": 19,
+                    "endLine": 19
+                  }
+                },
+                "dim": null,
+                "attributes": {
+                  "startLine": 19,
+                  "endLine": 19
+                }
+              },
+              "expr": {
+                "nodeType": "Scalar_String",
+                "value": "group-blog",
+                "attributes": {
+                  "startLine": 19,
+                  "endLine": 19,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 19,
+                "endLine": 19
+              }
+            },
+            "attributes": {
+              "startLine": 19,
+              "endLine": 19
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 18,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "// Add class of group-blog to blogs with more than 1 published author.\n",
+              "line": 17,
+              "filePos": 349,
+              "tokenPos": 16,
+              "endLine": 18,
+              "endFilePos": 419,
+              "endTokenPos": 16
+            }
+          ],
+          "endLine": 20
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BooleanNot",
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "is_singular"
+              ],
+              "attributes": {
+                "startLine": 23,
+                "endLine": 23
+              }
+            },
+            "args": [],
+            "attributes": {
+              "startLine": 23,
+              "endLine": 23
+            }
+          },
+          "attributes": {
+            "startLine": 23,
+            "endLine": 23
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "classes",
+                  "attributes": {
+                    "startLine": 24,
+                    "endLine": 24
+                  }
+                },
+                "dim": null,
+                "attributes": {
+                  "startLine": 24,
+                  "endLine": 24
+                }
+              },
+              "expr": {
+                "nodeType": "Scalar_String",
+                "value": "hfeed",
+                "attributes": {
+                  "startLine": 24,
+                  "endLine": 24,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 24,
+                "endLine": 24
+              }
+            },
+            "attributes": {
+              "startLine": 24,
+              "endLine": 24
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 23,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "// Add class of hfeed to non-singular pages.\n",
+              "line": 22,
+              "filePos": 482,
+              "tokenPos": 41,
+              "endLine": 23,
+              "endFilePos": 526,
+              "endTokenPos": 41
+            }
+          ],
+          "endLine": 25
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "is_customize_preview"
+            ],
+            "attributes": {
+              "startLine": 28,
+              "endLine": 28
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 28,
+            "endLine": 28
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "classes",
+                  "attributes": {
+                    "startLine": 29,
+                    "endLine": 29
+                  }
+                },
+                "dim": null,
+                "attributes": {
+                  "startLine": 29,
+                  "endLine": 29
+                }
+              },
+              "expr": {
+                "nodeType": "Scalar_String",
+                "value": "twentyseventeen-customizer",
+                "attributes": {
+                  "startLine": 29,
+                  "endLine": 29,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 29,
+                "endLine": 29
+              }
+            },
+            "attributes": {
+              "startLine": 29,
+              "endLine": 29
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 28,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "// Add class if we're viewing the Customizer for easier styling of theme options.\n",
+              "line": 27,
+              "filePos": 582,
+              "tokenPos": 68,
+              "endLine": 28,
+              "endFilePos": 663,
+              "endTokenPos": 68
+            }
+          ],
+          "endLine": 30
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BinaryOp_BooleanAnd",
+          "left": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "is_front_page"
+              ],
+              "attributes": {
+                "startLine": 33,
+                "endLine": 33
+              }
+            },
+            "args": [],
+            "attributes": {
+              "startLine": 33,
+              "endLine": 33
+            }
+          },
+          "right": {
+            "nodeType": "Expr_BinaryOp_NotIdentical",
+            "left": {
+              "nodeType": "Scalar_String",
+              "value": "posts",
+              "attributes": {
+                "startLine": 33,
+                "endLine": 33,
+                "kind": 1
+              }
+            },
+            "right": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "get_option"
+                ],
+                "attributes": {
+                  "startLine": 33,
+                  "endLine": 33
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "show_on_front",
+                    "attributes": {
+                      "startLine": 33,
+                      "endLine": 33,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 33,
+                    "endLine": 33
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 33,
+                "endLine": 33
+              }
+            },
+            "attributes": {
+              "startLine": 33,
+              "endLine": 33
+            }
+          },
+          "attributes": {
+            "startLine": 33,
+            "endLine": 33
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "classes",
+                  "attributes": {
+                    "startLine": 34,
+                    "endLine": 34
+                  }
+                },
+                "dim": null,
+                "attributes": {
+                  "startLine": 34,
+                  "endLine": 34
+                }
+              },
+              "expr": {
+                "nodeType": "Scalar_String",
+                "value": "twentyseventeen-front-page",
+                "attributes": {
+                  "startLine": 34,
+                  "endLine": 34,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 34,
+                "endLine": 34
+              }
+            },
+            "attributes": {
+              "startLine": 34,
+              "endLine": 34
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 33,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "// Add class on front page.\n",
+              "line": 32,
+              "filePos": 747,
+              "tokenPos": 93,
+              "endLine": 33,
+              "endFilePos": 774,
+              "endTokenPos": 93
+            }
+          ],
+          "endLine": 35
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "has_header_image"
+            ],
+            "attributes": {
+              "startLine": 38,
+              "endLine": 38
+            }
+          },
+          "args": [],
+          "attributes": {
+            "startLine": 38,
+            "endLine": 38
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "classes",
+                  "attributes": {
+                    "startLine": 39,
+                    "endLine": 39
+                  }
+                },
+                "dim": null,
+                "attributes": {
+                  "startLine": 39,
+                  "endLine": 39
+                }
+              },
+              "expr": {
+                "nodeType": "Scalar_String",
+                "value": "has-header-image",
+                "attributes": {
+                  "startLine": 39,
+                  "endLine": 39,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 39,
+                "endLine": 39
+              }
+            },
+            "attributes": {
+              "startLine": 39,
+              "endLine": 39
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 38,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "// Add a class if there is a custom header.\n",
+              "line": 37,
+              "filePos": 896,
+              "tokenPos": 131,
+              "endLine": 38,
+              "endFilePos": 939,
+              "endTokenPos": 131
+            }
+          ],
+          "endLine": 40
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BinaryOp_BooleanAnd",
+          "left": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "is_active_sidebar"
+              ],
+              "attributes": {
+                "startLine": 43,
+                "endLine": 43
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "sidebar-1",
+                  "attributes": {
+                    "startLine": 43,
+                    "endLine": 43,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 43,
+                  "endLine": 43
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 43,
+              "endLine": 43
+            }
+          },
+          "right": {
+            "nodeType": "Expr_BooleanNot",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "is_page"
+                ],
+                "attributes": {
+                  "startLine": 43,
+                  "endLine": 43
+                }
+              },
+              "args": [],
+              "attributes": {
+                "startLine": 43,
+                "endLine": 43
+              }
+            },
+            "attributes": {
+              "startLine": 43,
+              "endLine": 43
+            }
+          },
+          "attributes": {
+            "startLine": 43,
+            "endLine": 43
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "classes",
+                  "attributes": {
+                    "startLine": 44,
+                    "endLine": 44
+                  }
+                },
+                "dim": null,
+                "attributes": {
+                  "startLine": 44,
+                  "endLine": 44
+                }
+              },
+              "expr": {
+                "nodeType": "Scalar_String",
+                "value": "has-sidebar",
+                "attributes": {
+                  "startLine": 44,
+                  "endLine": 44,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 44,
+                "endLine": 44
+              }
+            },
+            "attributes": {
+              "startLine": 44,
+              "endLine": 44
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 43,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "// Add class if sidebar is used.\n",
+              "line": 42,
+              "filePos": 1009,
+              "tokenPos": 156,
+              "endLine": 43,
+              "endFilePos": 1041,
+              "endTokenPos": 156
+            }
+          ],
+          "endLine": 45
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BinaryOp_BooleanOr",
+          "left": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "is_page"
+              ],
+              "attributes": {
+                "startLine": 48,
+                "endLine": 48
+              }
+            },
+            "args": [],
+            "attributes": {
+              "startLine": 48,
+              "endLine": 48
+            }
+          },
+          "right": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "is_archive"
+              ],
+              "attributes": {
+                "startLine": 48,
+                "endLine": 48
+              }
+            },
+            "args": [],
+            "attributes": {
+              "startLine": 48,
+              "endLine": 48
+            }
+          },
+          "attributes": {
+            "startLine": 48,
+            "endLine": 48
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BinaryOp_Identical",
+              "left": {
+                "nodeType": "Scalar_String",
+                "value": "one-column",
+                "attributes": {
+                  "startLine": 49,
+                  "endLine": 49,
+                  "kind": 1
+                }
+              },
+              "right": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "get_theme_mod"
+                  ],
+                  "attributes": {
+                    "startLine": 49,
+                    "endLine": 49
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_String",
+                      "value": "page_layout",
+                      "attributes": {
+                        "startLine": 49,
+                        "endLine": 49,
+                        "kind": 1
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 49,
+                      "endLine": 49
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 49,
+                  "endLine": 49
+                }
+              },
+              "attributes": {
+                "startLine": 49,
+                "endLine": 49
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_ArrayDimFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "classes",
+                      "attributes": {
+                        "startLine": 50,
+                        "endLine": 50
+                      }
+                    },
+                    "dim": null,
+                    "attributes": {
+                      "startLine": 50,
+                      "endLine": 50
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Scalar_String",
+                    "value": "page-one-column",
+                    "attributes": {
+                      "startLine": 50,
+                      "endLine": 50,
+                      "kind": 1
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 50,
+                    "endLine": 50
+                  }
+                },
+                "attributes": {
+                  "startLine": 50,
+                  "endLine": 50
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": {
+              "nodeType": "Stmt_Else",
+              "stmts": [
+                {
+                  "nodeType": "Stmt_Expression",
+                  "expr": {
+                    "nodeType": "Expr_Assign",
+                    "var": {
+                      "nodeType": "Expr_ArrayDimFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "classes",
+                        "attributes": {
+                          "startLine": 52,
+                          "endLine": 52
+                        }
+                      },
+                      "dim": null,
+                      "attributes": {
+                        "startLine": 52,
+                        "endLine": 52
+                      }
+                    },
+                    "expr": {
+                      "nodeType": "Scalar_String",
+                      "value": "page-two-column",
+                      "attributes": {
+                        "startLine": 52,
+                        "endLine": 52,
+                        "kind": 1
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 52,
+                      "endLine": 52
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 52,
+                    "endLine": 52
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 51,
+                "endLine": 53
+              }
+            },
+            "attributes": {
+              "startLine": 49,
+              "endLine": 53
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 48,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "// Add class for one or two column page layouts.\n",
+              "line": 47,
+              "filePos": 1135,
+              "tokenPos": 192,
+              "endLine": 48,
+              "endFilePos": 1183,
+              "endTokenPos": 192
+            }
+          ],
+          "endLine": 54
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BinaryOp_Identical",
+          "left": {
+            "nodeType": "Scalar_String",
+            "value": "blank",
+            "attributes": {
+              "startLine": 57,
+              "endLine": 57,
+              "kind": 1
+            }
+          },
+          "right": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "get_header_textcolor"
+              ],
+              "attributes": {
+                "startLine": 57,
+                "endLine": 57
+              }
+            },
+            "args": [],
+            "attributes": {
+              "startLine": 57,
+              "endLine": 57
+            }
+          },
+          "attributes": {
+            "startLine": 57,
+            "endLine": 57
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "classes",
+                  "attributes": {
+                    "startLine": 58,
+                    "endLine": 58
+                  }
+                },
+                "dim": null,
+                "attributes": {
+                  "startLine": 58,
+                  "endLine": 58
+                }
+              },
+              "expr": {
+                "nodeType": "Scalar_String",
+                "value": "title-tagline-hidden",
+                "attributes": {
+                  "startLine": 58,
+                  "endLine": 58,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 58,
+                "endLine": 58
+              }
+            },
+            "attributes": {
+              "startLine": 58,
+              "endLine": 58
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 57,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "// Add class if the site title and tagline is hidden.\n",
+              "line": 56,
+              "filePos": 1369,
+              "tokenPos": 259,
+              "endLine": 57,
+              "endFilePos": 1422,
+              "endTokenPos": 259
+            }
+          ],
+          "endLine": 59
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "colors",
+            "attributes": {
+              "startLine": 62,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// Get the colorscheme or the default if there isn't one.\n",
+                  "line": 61,
+                  "filePos": 1512,
+                  "tokenPos": 288,
+                  "endLine": 62,
+                  "endFilePos": 1569,
+                  "endTokenPos": 288
+                }
+              ],
+              "endLine": 62
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "twentyseventeen_sanitize_colorscheme"
+              ],
+              "attributes": {
+                "startLine": 62,
+                "endLine": 62
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_FuncCall",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "get_theme_mod"
+                    ],
+                    "attributes": {
+                      "startLine": 62,
+                      "endLine": 62
+                    }
+                  },
+                  "args": [
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Scalar_String",
+                        "value": "colorscheme",
+                        "attributes": {
+                          "startLine": 62,
+                          "endLine": 62,
+                          "kind": 1
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 62,
+                        "endLine": 62
+                      }
+                    },
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Scalar_String",
+                        "value": "light",
+                        "attributes": {
+                          "startLine": 62,
+                          "endLine": 62,
+                          "kind": 1
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 62,
+                        "endLine": 62
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 62,
+                    "endLine": 62
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 62,
+                  "endLine": 62
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 62,
+              "endLine": 62
+            }
+          },
+          "attributes": {
+            "startLine": 62,
+            "comments": [
+              {
+                "nodeType": "Comment",
+                "text": "// Get the colorscheme or the default if there isn't one.\n",
+                "line": 61,
+                "filePos": 1512,
+                "tokenPos": 288,
+                "endLine": 62,
+                "endFilePos": 1569,
+                "endTokenPos": 288
+              }
+            ],
+            "endLine": 62
+          }
+        },
+        "attributes": {
+          "startLine": 62,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "// Get the colorscheme or the default if there isn't one.\n",
+              "line": 61,
+              "filePos": 1512,
+              "tokenPos": 288,
+              "endLine": 62,
+              "endFilePos": 1569,
+              "endTokenPos": 288
+            }
+          ],
+          "endLine": 62
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_ArrayDimFetch",
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "classes",
+              "attributes": {
+                "startLine": 63,
+                "endLine": 63
+              }
+            },
+            "dim": null,
+            "attributes": {
+              "startLine": 63,
+              "endLine": 63
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_BinaryOp_Concat",
+            "left": {
+              "nodeType": "Scalar_String",
+              "value": "colors-",
+              "attributes": {
+                "startLine": 63,
+                "endLine": 63,
+                "kind": 1
+              }
+            },
+            "right": {
+              "nodeType": "Expr_Variable",
+              "name": "colors",
+              "attributes": {
+                "startLine": 63,
+                "endLine": 63
+              }
+            },
+            "attributes": {
+              "startLine": 63,
+              "endLine": 63
+            }
+          },
+          "attributes": {
+            "startLine": 63,
+            "endLine": 63
+          }
+        },
+        "attributes": {
+          "startLine": 63,
+          "endLine": 63
+        }
+      },
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_Variable",
+          "name": "classes",
+          "attributes": {
+            "startLine": 65,
+            "endLine": 65
+          }
+        },
+        "attributes": {
+          "startLine": 65,
+          "endLine": 65
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 16,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Additional features to allow styling of the templates\n *\n * @package WordPress\n * @subpackage Twenty_Seventeen\n * @since Twenty Seventeen 1.0\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 8,
+          "endFilePos": 157,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Adds custom classes to the array of body classes.\n *\n * @param array $classes Classes for the body element.\n * @return array\n */",
+          "line": 10,
+          "filePos": 160,
+          "tokenPos": 3,
+          "endLine": 15,
+          "endFilePos": 294,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 66
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_FuncCall",
+      "name": {
+        "nodeType": "Name",
+        "parts": [
+          "add_filter"
+        ],
+        "attributes": {
+          "startLine": 67,
+          "endLine": 67
+        }
+      },
+      "args": [
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "body_class",
+            "attributes": {
+              "startLine": 67,
+              "endLine": 67,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 67,
+            "endLine": 67
+          }
+        },
+        {
+          "nodeType": "Arg",
+          "value": {
+            "nodeType": "Scalar_String",
+            "value": "twentyseventeen_body_classes",
+            "attributes": {
+              "startLine": 67,
+              "endLine": 67,
+              "kind": 1
+            }
+          },
+          "byRef": false,
+          "unpack": false,
+          "attributes": {
+            "startLine": 67,
+            "endLine": 67
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 67,
+        "endLine": 67
+      }
+    },
+    "attributes": {
+      "startLine": 67,
+      "endLine": 67
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "twentyseventeen_panel_count",
+      "attributes": {
+        "startLine": 74,
+        "endLine": 74
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "panel_count",
+            "attributes": {
+              "startLine": 76,
+              "endLine": 76
+            }
+          },
+          "expr": {
+            "nodeType": "Scalar_LNumber",
+            "value": 0,
+            "attributes": {
+              "startLine": 76,
+              "endLine": 76,
+              "kind": 10
+            }
+          },
+          "attributes": {
+            "startLine": 76,
+            "endLine": 76
+          }
+        },
+        "attributes": {
+          "startLine": 76,
+          "endLine": 76
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "num_sections",
+            "attributes": {
+              "startLine": 85,
+              "comments": [
+                {
+                  "nodeType": "Comment_Doc",
+                  "text": "/**\n\t * Filter number of front page sections in Twenty Seventeen.\n\t *\n\t * @since Twenty Seventeen 1.0\n\t *\n\t * @param int $num_sections Number of front page sections.\n\t */",
+                  "line": 78,
+                  "filePos": 1954,
+                  "tokenPos": 358,
+                  "endLine": 84,
+                  "endFilePos": 2123,
+                  "endTokenPos": 358
+                }
+              ],
+              "endLine": 85
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "apply_filters"
+              ],
+              "attributes": {
+                "startLine": 85,
+                "endLine": 85
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "twentyseventeen_front_page_sections",
+                  "attributes": {
+                    "startLine": 85,
+                    "endLine": 85,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 85,
+                  "endLine": 85
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_LNumber",
+                  "value": 4,
+                  "attributes": {
+                    "startLine": 85,
+                    "endLine": 85,
+                    "kind": 10
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 85,
+                  "endLine": 85
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 85,
+              "endLine": 85
+            }
+          },
+          "attributes": {
+            "startLine": 85,
+            "comments": [
+              {
+                "nodeType": "Comment_Doc",
+                "text": "/**\n\t * Filter number of front page sections in Twenty Seventeen.\n\t *\n\t * @since Twenty Seventeen 1.0\n\t *\n\t * @param int $num_sections Number of front page sections.\n\t */",
+                "line": 78,
+                "filePos": 1954,
+                "tokenPos": 358,
+                "endLine": 84,
+                "endFilePos": 2123,
+                "endTokenPos": 358
+              }
+            ],
+            "endLine": 85
+          }
+        },
+        "attributes": {
+          "startLine": 85,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Filter number of front page sections in Twenty Seventeen.\n\t *\n\t * @since Twenty Seventeen 1.0\n\t *\n\t * @param int $num_sections Number of front page sections.\n\t */",
+              "line": 78,
+              "filePos": 1954,
+              "tokenPos": 358,
+              "endLine": 84,
+              "endFilePos": 2123,
+              "endTokenPos": 358
+            }
+          ],
+          "endLine": 85
+        }
+      },
+      {
+        "nodeType": "Stmt_For",
+        "init": [
+          {
+            "nodeType": "Expr_Assign",
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "i",
+              "attributes": {
+                "startLine": 88,
+                "endLine": 88
+              }
+            },
+            "expr": {
+              "nodeType": "Scalar_LNumber",
+              "value": 1,
+              "attributes": {
+                "startLine": 88,
+                "endLine": 88,
+                "kind": 10
+              }
+            },
+            "attributes": {
+              "startLine": 88,
+              "endLine": 88
+            }
+          }
+        ],
+        "cond": [
+          {
+            "nodeType": "Expr_BinaryOp_Smaller",
+            "left": {
+              "nodeType": "Expr_Variable",
+              "name": "i",
+              "attributes": {
+                "startLine": 88,
+                "endLine": 88
+              }
+            },
+            "right": {
+              "nodeType": "Expr_BinaryOp_Plus",
+              "left": {
+                "nodeType": "Scalar_LNumber",
+                "value": 1,
+                "attributes": {
+                  "startLine": 88,
+                  "endLine": 88,
+                  "kind": 10
+                }
+              },
+              "right": {
+                "nodeType": "Expr_Variable",
+                "name": "num_sections",
+                "attributes": {
+                  "startLine": 88,
+                  "endLine": 88
+                }
+              },
+              "attributes": {
+                "startLine": 88,
+                "endLine": 88
+              }
+            },
+            "attributes": {
+              "startLine": 88,
+              "endLine": 88
+            }
+          }
+        ],
+        "loop": [
+          {
+            "nodeType": "Expr_PostInc",
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "i",
+              "attributes": {
+                "startLine": 88,
+                "endLine": 88
+              }
+            },
+            "attributes": {
+              "startLine": 88,
+              "endLine": 88
+            }
+          }
+        ],
+        "stmts": [
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "get_theme_mod"
+                ],
+                "attributes": {
+                  "startLine": 89,
+                  "endLine": 89
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_BinaryOp_Concat",
+                    "left": {
+                      "nodeType": "Scalar_String",
+                      "value": "panel_",
+                      "attributes": {
+                        "startLine": 89,
+                        "endLine": 89,
+                        "kind": 1
+                      }
+                    },
+                    "right": {
+                      "nodeType": "Expr_Variable",
+                      "name": "i",
+                      "attributes": {
+                        "startLine": 89,
+                        "endLine": 89
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 89,
+                      "endLine": 89
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 89,
+                    "endLine": 89
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 89,
+                "endLine": 89
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_PostInc",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "panel_count",
+                    "attributes": {
+                      "startLine": 90,
+                      "endLine": 90
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 90,
+                    "endLine": 90
+                  }
+                },
+                "attributes": {
+                  "startLine": 90,
+                  "endLine": 90
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 89,
+              "endLine": 91
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 88,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "// Create a setting and control for each of the sections available in the theme.\n",
+              "line": 87,
+              "filePos": 2203,
+              "tokenPos": 375,
+              "endLine": 88,
+              "endFilePos": 2283,
+              "endTokenPos": 375
+            }
+          ],
+          "endLine": 92
+        }
+      },
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_Variable",
+          "name": "panel_count",
+          "attributes": {
+            "startLine": 94,
+            "endLine": 94
+          }
+        },
+        "attributes": {
+          "startLine": 94,
+          "endLine": 94
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 74,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Count our number of active panels.\n *\n * Primarily used to see if we have any panels active, duh.\n */",
+          "line": 69,
+          "filePos": 1782,
+          "tokenPos": 341,
+          "endLine": 73,
+          "endFilePos": 1889,
+          "endTokenPos": 341
+        }
+      ],
+      "endLine": 95
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "twentyseventeen_is_frontpage",
+      "attributes": {
+        "startLine": 100,
+        "endLine": 100
+      }
+    },
+    "params": [],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_BinaryOp_BooleanAnd",
+          "left": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "is_front_page"
+              ],
+              "attributes": {
+                "startLine": 101,
+                "endLine": 101
+              }
+            },
+            "args": [],
+            "attributes": {
+              "startLine": 101,
+              "endLine": 101
+            }
+          },
+          "right": {
+            "nodeType": "Expr_BooleanNot",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "is_home"
+                ],
+                "attributes": {
+                  "startLine": 101,
+                  "endLine": 101
+                }
+              },
+              "args": [],
+              "attributes": {
+                "startLine": 101,
+                "endLine": 101
+              }
+            },
+            "attributes": {
+              "startLine": 101,
+              "endLine": 101
+            }
+          },
+          "attributes": {
+            "startLine": 101,
+            "endLine": 101
+          }
+        },
+        "attributes": {
+          "startLine": 101,
+          "endLine": 101
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 100,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Checks to see if we're on the front page or not.\n */",
+          "line": 97,
+          "filePos": 2430,
+          "tokenPos": 444,
+          "endLine": 99,
+          "endFilePos": 2488,
+          "endTokenPos": 444
+        }
+      ],
+      "endLine": 102
+    }
+  }
+]

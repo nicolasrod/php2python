@@ -1,0 +1,3350 @@
+[
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "has_post_thumbnail",
+      "attributes": {
+        "startLine": 25,
+        "endLine": 25
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "post",
+          "attributes": {
+            "startLine": 25,
+            "endLine": 25
+          }
+        },
+        "default": {
+          "nodeType": "Expr_ConstFetch",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "null"
+            ],
+            "attributes": {
+              "startLine": 25,
+              "endLine": 25
+            }
+          },
+          "attributes": {
+            "startLine": 25,
+            "endLine": 25
+          }
+        },
+        "attributes": {
+          "startLine": 25,
+          "endLine": 25
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "thumbnail_id",
+            "attributes": {
+              "startLine": 26,
+              "endLine": 26
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "get_post_thumbnail_id"
+              ],
+              "attributes": {
+                "startLine": 26,
+                "endLine": 26
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "post",
+                  "attributes": {
+                    "startLine": 26,
+                    "endLine": 26
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 26,
+                  "endLine": 26
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 26,
+              "endLine": 26
+            }
+          },
+          "attributes": {
+            "startLine": 26,
+            "endLine": 26
+          }
+        },
+        "attributes": {
+          "startLine": 26,
+          "endLine": 26
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "has_thumbnail",
+            "attributes": {
+              "startLine": 27,
+              "endLine": 27
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_Cast_Bool",
+            "expr": {
+              "nodeType": "Expr_Variable",
+              "name": "thumbnail_id",
+              "attributes": {
+                "startLine": 27,
+                "endLine": 27
+              }
+            },
+            "attributes": {
+              "startLine": 27,
+              "endLine": 27
+            }
+          },
+          "attributes": {
+            "startLine": 27,
+            "endLine": 27
+          }
+        },
+        "attributes": {
+          "startLine": 27,
+          "endLine": 27
+        }
+      },
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_Cast_Bool",
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "apply_filters"
+              ],
+              "attributes": {
+                "startLine": 38,
+                "endLine": 38
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "has_post_thumbnail",
+                  "attributes": {
+                    "startLine": 38,
+                    "endLine": 38,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 38,
+                  "endLine": 38
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "has_thumbnail",
+                  "attributes": {
+                    "startLine": 38,
+                    "endLine": 38
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 38,
+                  "endLine": 38
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "post",
+                  "attributes": {
+                    "startLine": 38,
+                    "endLine": 38
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 38,
+                  "endLine": 38
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "thumbnail_id",
+                  "attributes": {
+                    "startLine": 38,
+                    "endLine": 38
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 38,
+                  "endLine": 38
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 38,
+              "endLine": 38
+            }
+          },
+          "attributes": {
+            "startLine": 38,
+            "endLine": 38
+          }
+        },
+        "attributes": {
+          "startLine": 38,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Filters whether a post has a post thumbnail.\n\t *\n\t * @since 5.1.0\n\t *\n\t * @param bool             $has_thumbnail true if the post has a post thumbnail, otherwise false.\n\t * @param int|WP_Post|null $post          Post ID or WP_Post object. Default is global `$post`.\n\t * @param int|string       $thumbnail_id  Post thumbnail ID or empty string.\n\t */",
+              "line": 29,
+              "filePos": 877,
+              "tokenPos": 41,
+              "endLine": 37,
+              "endFilePos": 1232,
+              "endTokenPos": 41
+            }
+          ],
+          "endLine": 38
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 25,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * WordPress Post Thumbnail Template Functions.\n *\n * Support for post thumbnails.\n * Theme's functions.php must call add_theme_support( 'post-thumbnails' ) to use these.\n *\n * @package WordPress\n * @subpackage Template\n */",
+          "line": 2,
+          "filePos": 6,
+          "tokenPos": 1,
+          "endLine": 10,
+          "endFilePos": 232,
+          "endTokenPos": 1
+        },
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Determines whether a post has an image attached.\n *\n * For more information on this and similar theme functions, check out\n * the {@link https://developer.wordpress.org/themes/basics/conditional-tags/\n * Conditional Tags} article in the Theme Developer Handbook.\n *\n * @since 2.9.0\n * @since 4.4.0 `$post` can be a post ID or WP_Post object.\n *\n * @param int|WP_Post $post Optional. Post ID or WP_Post object. Default is global `$post`.\n * @return bool Whether the post has an image attached.\n */",
+          "line": 12,
+          "filePos": 235,
+          "tokenPos": 3,
+          "endLine": 24,
+          "endFilePos": 737,
+          "endTokenPos": 3
+        }
+      ],
+      "endLine": 39
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "get_post_thumbnail_id",
+      "attributes": {
+        "startLine": 50,
+        "endLine": 50
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "post",
+          "attributes": {
+            "startLine": 50,
+            "endLine": 50
+          }
+        },
+        "default": {
+          "nodeType": "Expr_ConstFetch",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "null"
+            ],
+            "attributes": {
+              "startLine": 50,
+              "endLine": 50
+            }
+          },
+          "attributes": {
+            "startLine": 50,
+            "endLine": 50
+          }
+        },
+        "attributes": {
+          "startLine": 50,
+          "endLine": 50
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "post",
+            "attributes": {
+              "startLine": 51,
+              "endLine": 51
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "get_post"
+              ],
+              "attributes": {
+                "startLine": 51,
+                "endLine": 51
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "post",
+                  "attributes": {
+                    "startLine": 51,
+                    "endLine": 51
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 51,
+                  "endLine": 51
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 51,
+              "endLine": 51
+            }
+          },
+          "attributes": {
+            "startLine": 51,
+            "endLine": 51
+          }
+        },
+        "attributes": {
+          "startLine": 51,
+          "endLine": 51
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BooleanNot",
+          "expr": {
+            "nodeType": "Expr_Variable",
+            "name": "post",
+            "attributes": {
+              "startLine": 52,
+              "endLine": 52
+            }
+          },
+          "attributes": {
+            "startLine": 52,
+            "endLine": 52
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Scalar_String",
+              "value": "",
+              "attributes": {
+                "startLine": 53,
+                "endLine": 53,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 53,
+              "endLine": 53
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 52,
+          "endLine": 54
+        }
+      },
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_Cast_Int",
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "get_post_meta"
+              ],
+              "attributes": {
+                "startLine": 55,
+                "endLine": 55
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_PropertyFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "post",
+                    "attributes": {
+                      "startLine": 55,
+                      "endLine": 55
+                    }
+                  },
+                  "name": {
+                    "nodeType": "Identifier",
+                    "name": "ID",
+                    "attributes": {
+                      "startLine": 55,
+                      "endLine": 55
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 55,
+                    "endLine": 55
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 55,
+                  "endLine": 55
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "_thumbnail_id",
+                  "attributes": {
+                    "startLine": 55,
+                    "endLine": 55,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 55,
+                  "endLine": 55
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_ConstFetch",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "true"
+                    ],
+                    "attributes": {
+                      "startLine": 55,
+                      "endLine": 55
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 55,
+                    "endLine": 55
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 55,
+                  "endLine": 55
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 55,
+              "endLine": 55
+            }
+          },
+          "attributes": {
+            "startLine": 55,
+            "endLine": 55
+          }
+        },
+        "attributes": {
+          "startLine": 55,
+          "endLine": 55
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 50,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Retrieve post thumbnail ID.\n *\n * @since 2.9.0\n * @since 4.4.0 `$post` can be a post ID or WP_Post object.\n *\n * @param int|WP_Post $post Optional. Post ID or WP_Post object. Default is global `$post`.\n * @return int|string Post thumbnail ID or empty string if the post does not exist.\n */",
+          "line": 41,
+          "filePos": 1329,
+          "tokenPos": 66,
+          "endLine": 49,
+          "endFilePos": 1624,
+          "endTokenPos": 66
+        }
+      ],
+      "endLine": 56
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "the_post_thumbnail",
+      "attributes": {
+        "startLine": 77,
+        "endLine": 77
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "size",
+          "attributes": {
+            "startLine": 77,
+            "endLine": 77
+          }
+        },
+        "default": {
+          "nodeType": "Scalar_String",
+          "value": "post-thumbnail",
+          "attributes": {
+            "startLine": 77,
+            "endLine": 77,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 77,
+          "endLine": 77
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "attr",
+          "attributes": {
+            "startLine": 77,
+            "endLine": 77
+          }
+        },
+        "default": {
+          "nodeType": "Scalar_String",
+          "value": "",
+          "attributes": {
+            "startLine": 77,
+            "endLine": 77,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 77,
+          "endLine": 77
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Echo",
+        "exprs": [
+          {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "get_the_post_thumbnail"
+              ],
+              "attributes": {
+                "startLine": 78,
+                "endLine": 78
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_ConstFetch",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "null"
+                    ],
+                    "attributes": {
+                      "startLine": 78,
+                      "endLine": 78
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 78,
+                    "endLine": 78
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 78,
+                  "endLine": 78
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "size",
+                  "attributes": {
+                    "startLine": 78,
+                    "endLine": 78
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 78,
+                  "endLine": 78
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "attr",
+                  "attributes": {
+                    "startLine": 78,
+                    "endLine": 78
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 78,
+                  "endLine": 78
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 78,
+              "endLine": 78
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 78,
+          "endLine": 78
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 77,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Display the post thumbnail.\n *\n * When a theme adds 'post-thumbnail' support, a special 'post-thumbnail' image size\n * is registered, which differs from the 'thumbnail' image size managed via the\n * Settings > Media screen.\n *\n * When using the_post_thumbnail() or related functions, the 'post-thumbnail' image\n * size is used by default, though a different size can be specified instead as needed.\n *\n * @since 2.9.0\n *\n * @see get_the_post_thumbnail()\n *\n * @param string|array $size Optional. Image size to use. Accepts any valid image size, or\n *                           an array of width and height values in pixels (in that order).\n *                           Default 'post-thumbnail'.\n * @param string|array $attr Optional. Query string or array of attributes. Default empty.\n */",
+          "line": 58,
+          "filePos": 1805,
+          "tokenPos": 136,
+          "endLine": 76,
+          "endFilePos": 2600,
+          "endTokenPos": 136
+        }
+      ],
+      "endLine": 79
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "update_post_thumbnail_cache",
+      "attributes": {
+        "startLine": 90,
+        "endLine": 90
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "wp_query",
+          "attributes": {
+            "startLine": 90,
+            "endLine": 90
+          }
+        },
+        "default": {
+          "nodeType": "Expr_ConstFetch",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "null"
+            ],
+            "attributes": {
+              "startLine": 90,
+              "endLine": 90
+            }
+          },
+          "attributes": {
+            "startLine": 90,
+            "endLine": 90
+          }
+        },
+        "attributes": {
+          "startLine": 90,
+          "endLine": 90
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BooleanNot",
+          "expr": {
+            "nodeType": "Expr_Variable",
+            "name": "wp_query",
+            "attributes": {
+              "startLine": 91,
+              "endLine": 91
+            }
+          },
+          "attributes": {
+            "startLine": 91,
+            "endLine": 91
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "wp_query",
+                "attributes": {
+                  "startLine": 92,
+                  "endLine": 92
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_ArrayDimFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "GLOBALS",
+                  "attributes": {
+                    "startLine": 92,
+                    "endLine": 92
+                  }
+                },
+                "dim": {
+                  "nodeType": "Scalar_String",
+                  "value": "wp_query",
+                  "attributes": {
+                    "startLine": 92,
+                    "endLine": 92,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 92,
+                  "endLine": 92
+                }
+              },
+              "attributes": {
+                "startLine": 92,
+                "endLine": 92
+              }
+            },
+            "attributes": {
+              "startLine": 92,
+              "endLine": 92
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 91,
+          "endLine": 93
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_PropertyFetch",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "wp_query",
+            "attributes": {
+              "startLine": 95,
+              "endLine": 95
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "thumbnails_cached",
+            "attributes": {
+              "startLine": 95,
+              "endLine": 95
+            }
+          },
+          "attributes": {
+            "startLine": 95,
+            "endLine": 95
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Return",
+            "expr": null,
+            "attributes": {
+              "startLine": 96,
+              "endLine": 96
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 95,
+          "endLine": 97
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "thumb_ids",
+            "attributes": {
+              "startLine": 99,
+              "endLine": 99
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_Array",
+            "items": [],
+            "attributes": {
+              "startLine": 99,
+              "endLine": 99,
+              "kind": 1
+            }
+          },
+          "attributes": {
+            "startLine": 99,
+            "endLine": 99
+          }
+        },
+        "attributes": {
+          "startLine": 99,
+          "endLine": 99
+        }
+      },
+      {
+        "nodeType": "Stmt_Foreach",
+        "expr": {
+          "nodeType": "Expr_PropertyFetch",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "wp_query",
+            "attributes": {
+              "startLine": 100,
+              "endLine": 100
+            }
+          },
+          "name": {
+            "nodeType": "Identifier",
+            "name": "posts",
+            "attributes": {
+              "startLine": 100,
+              "endLine": 100
+            }
+          },
+          "attributes": {
+            "startLine": 100,
+            "endLine": 100
+          }
+        },
+        "keyVar": null,
+        "byRef": false,
+        "valueVar": {
+          "nodeType": "Expr_Variable",
+          "name": "post",
+          "attributes": {
+            "startLine": 100,
+            "endLine": 100
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "id",
+                "attributes": {
+                  "startLine": 101,
+                  "endLine": 101
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "get_post_thumbnail_id"
+                  ],
+                  "attributes": {
+                    "startLine": 101,
+                    "endLine": 101
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_PropertyFetch",
+                      "var": {
+                        "nodeType": "Expr_Variable",
+                        "name": "post",
+                        "attributes": {
+                          "startLine": 101,
+                          "endLine": 101
+                        }
+                      },
+                      "name": {
+                        "nodeType": "Identifier",
+                        "name": "ID",
+                        "attributes": {
+                          "startLine": 101,
+                          "endLine": 101
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 101,
+                        "endLine": 101
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 101,
+                      "endLine": 101
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 101,
+                  "endLine": 101
+                }
+              },
+              "attributes": {
+                "startLine": 101,
+                "endLine": 101
+              }
+            },
+            "attributes": {
+              "startLine": 101,
+              "endLine": 101
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_Variable",
+              "name": "id",
+              "attributes": {
+                "startLine": 102,
+                "endLine": 102
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Assign",
+                  "var": {
+                    "nodeType": "Expr_ArrayDimFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "thumb_ids",
+                      "attributes": {
+                        "startLine": 103,
+                        "endLine": 103
+                      }
+                    },
+                    "dim": null,
+                    "attributes": {
+                      "startLine": 103,
+                      "endLine": 103
+                    }
+                  },
+                  "expr": {
+                    "nodeType": "Expr_Variable",
+                    "name": "id",
+                    "attributes": {
+                      "startLine": 103,
+                      "endLine": 103
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 103,
+                    "endLine": 103
+                  }
+                },
+                "attributes": {
+                  "startLine": 103,
+                  "endLine": 103
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 102,
+              "endLine": 104
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 100,
+          "endLine": 105
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BooleanNot",
+          "expr": {
+            "nodeType": "Expr_Empty",
+            "expr": {
+              "nodeType": "Expr_Variable",
+              "name": "thumb_ids",
+              "attributes": {
+                "startLine": 107,
+                "endLine": 107
+              }
+            },
+            "attributes": {
+              "startLine": 107,
+              "endLine": 107
+            }
+          },
+          "attributes": {
+            "startLine": 107,
+            "endLine": 107
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "_prime_post_caches"
+                ],
+                "attributes": {
+                  "startLine": 108,
+                  "endLine": 108
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "thumb_ids",
+                    "attributes": {
+                      "startLine": 108,
+                      "endLine": 108
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 108,
+                    "endLine": 108
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_ConstFetch",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "false"
+                      ],
+                      "attributes": {
+                        "startLine": 108,
+                        "endLine": 108
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 108,
+                      "endLine": 108
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 108,
+                    "endLine": 108
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_ConstFetch",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "true"
+                      ],
+                      "attributes": {
+                        "startLine": 108,
+                        "endLine": 108
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 108,
+                      "endLine": 108
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 108,
+                    "endLine": 108
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 108,
+                "endLine": 108
+              }
+            },
+            "attributes": {
+              "startLine": 108,
+              "endLine": 108
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 107,
+          "endLine": 109
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_PropertyFetch",
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "wp_query",
+              "attributes": {
+                "startLine": 111,
+                "endLine": 111
+              }
+            },
+            "name": {
+              "nodeType": "Identifier",
+              "name": "thumbnails_cached",
+              "attributes": {
+                "startLine": 111,
+                "endLine": 111
+              }
+            },
+            "attributes": {
+              "startLine": 111,
+              "endLine": 111
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "true"
+              ],
+              "attributes": {
+                "startLine": 111,
+                "endLine": 111
+              }
+            },
+            "attributes": {
+              "startLine": 111,
+              "endLine": 111
+            }
+          },
+          "attributes": {
+            "startLine": 111,
+            "endLine": 111
+          }
+        },
+        "attributes": {
+          "startLine": 111,
+          "endLine": 111
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 90,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Update cache for thumbnails in the current loop.\n *\n * @since 3.2.0\n *\n * @global WP_Query $wp_query WordPress Query object.\n *\n * @param WP_Query $wp_query Optional. A WP_Query instance. Defaults to the $wp_query global.\n */",
+          "line": 81,
+          "filePos": 2727,
+          "tokenPos": 178,
+          "endLine": 89,
+          "endFilePos": 2958,
+          "endTokenPos": 178
+        }
+      ],
+      "endLine": 112
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "get_the_post_thumbnail",
+      "attributes": {
+        "startLine": 134,
+        "endLine": 134
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "post",
+          "attributes": {
+            "startLine": 134,
+            "endLine": 134
+          }
+        },
+        "default": {
+          "nodeType": "Expr_ConstFetch",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "null"
+            ],
+            "attributes": {
+              "startLine": 134,
+              "endLine": 134
+            }
+          },
+          "attributes": {
+            "startLine": 134,
+            "endLine": 134
+          }
+        },
+        "attributes": {
+          "startLine": 134,
+          "endLine": 134
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "size",
+          "attributes": {
+            "startLine": 134,
+            "endLine": 134
+          }
+        },
+        "default": {
+          "nodeType": "Scalar_String",
+          "value": "post-thumbnail",
+          "attributes": {
+            "startLine": 134,
+            "endLine": 134,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 134,
+          "endLine": 134
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "attr",
+          "attributes": {
+            "startLine": 134,
+            "endLine": 134
+          }
+        },
+        "default": {
+          "nodeType": "Scalar_String",
+          "value": "",
+          "attributes": {
+            "startLine": 134,
+            "endLine": 134,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 134,
+          "endLine": 134
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "post",
+            "attributes": {
+              "startLine": 135,
+              "endLine": 135
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "get_post"
+              ],
+              "attributes": {
+                "startLine": 135,
+                "endLine": 135
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "post",
+                  "attributes": {
+                    "startLine": 135,
+                    "endLine": 135
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 135,
+                  "endLine": 135
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 135,
+              "endLine": 135
+            }
+          },
+          "attributes": {
+            "startLine": 135,
+            "endLine": 135
+          }
+        },
+        "attributes": {
+          "startLine": 135,
+          "endLine": 135
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BooleanNot",
+          "expr": {
+            "nodeType": "Expr_Variable",
+            "name": "post",
+            "attributes": {
+              "startLine": 136,
+              "endLine": 136
+            }
+          },
+          "attributes": {
+            "startLine": 136,
+            "endLine": 136
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Scalar_String",
+              "value": "",
+              "attributes": {
+                "startLine": 137,
+                "endLine": 137,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 137,
+              "endLine": 137
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 136,
+          "endLine": 138
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "post_thumbnail_id",
+            "attributes": {
+              "startLine": 139,
+              "endLine": 139
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "get_post_thumbnail_id"
+              ],
+              "attributes": {
+                "startLine": 139,
+                "endLine": 139
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "post",
+                  "attributes": {
+                    "startLine": 139,
+                    "endLine": 139
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 139,
+                  "endLine": 139
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 139,
+              "endLine": 139
+            }
+          },
+          "attributes": {
+            "startLine": 139,
+            "endLine": 139
+          }
+        },
+        "attributes": {
+          "startLine": 139,
+          "endLine": 139
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "size",
+            "attributes": {
+              "startLine": 151,
+              "comments": [
+                {
+                  "nodeType": "Comment_Doc",
+                  "text": "/**\n\t * Filters the post thumbnail size.\n\t *\n\t * @since 2.9.0\n\t * @since 4.9.0 Added the `$post_id` parameter.\n\t *\n\t * @param string|array $size    The post thumbnail size. Image size or array of width and height\n\t *                              values (in that order). Default 'post-thumbnail'.\n\t * @param int          $post_id The post ID.\n\t */",
+                  "line": 141,
+                  "filePos": 4584,
+                  "tokenPos": 416,
+                  "endLine": 150,
+                  "endFilePos": 4929,
+                  "endTokenPos": 416
+                }
+              ],
+              "endLine": 151
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "apply_filters"
+              ],
+              "attributes": {
+                "startLine": 151,
+                "endLine": 151
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "post_thumbnail_size",
+                  "attributes": {
+                    "startLine": 151,
+                    "endLine": 151,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 151,
+                  "endLine": 151
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "size",
+                  "attributes": {
+                    "startLine": 151,
+                    "endLine": 151
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 151,
+                  "endLine": 151
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_PropertyFetch",
+                  "var": {
+                    "nodeType": "Expr_Variable",
+                    "name": "post",
+                    "attributes": {
+                      "startLine": 151,
+                      "endLine": 151
+                    }
+                  },
+                  "name": {
+                    "nodeType": "Identifier",
+                    "name": "ID",
+                    "attributes": {
+                      "startLine": 151,
+                      "endLine": 151
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 151,
+                    "endLine": 151
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 151,
+                  "endLine": 151
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 151,
+              "endLine": 151
+            }
+          },
+          "attributes": {
+            "startLine": 151,
+            "comments": [
+              {
+                "nodeType": "Comment_Doc",
+                "text": "/**\n\t * Filters the post thumbnail size.\n\t *\n\t * @since 2.9.0\n\t * @since 4.9.0 Added the `$post_id` parameter.\n\t *\n\t * @param string|array $size    The post thumbnail size. Image size or array of width and height\n\t *                              values (in that order). Default 'post-thumbnail'.\n\t * @param int          $post_id The post ID.\n\t */",
+                "line": 141,
+                "filePos": 4584,
+                "tokenPos": 416,
+                "endLine": 150,
+                "endFilePos": 4929,
+                "endTokenPos": 416
+              }
+            ],
+            "endLine": 151
+          }
+        },
+        "attributes": {
+          "startLine": 151,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Filters the post thumbnail size.\n\t *\n\t * @since 2.9.0\n\t * @since 4.9.0 Added the `$post_id` parameter.\n\t *\n\t * @param string|array $size    The post thumbnail size. Image size or array of width and height\n\t *                              values (in that order). Default 'post-thumbnail'.\n\t * @param int          $post_id The post ID.\n\t */",
+              "line": 141,
+              "filePos": 4584,
+              "tokenPos": 416,
+              "endLine": 150,
+              "endFilePos": 4929,
+              "endTokenPos": 416
+            }
+          ],
+          "endLine": 151
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_Variable",
+          "name": "post_thumbnail_id",
+          "attributes": {
+            "startLine": 153,
+            "endLine": 153
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "do_action"
+                ],
+                "attributes": {
+                  "startLine": 167,
+                  "comments": [
+                    {
+                      "nodeType": "Comment_Doc",
+                      "text": "/**\n\t\t * Fires before fetching the post thumbnail HTML.\n\t\t *\n\t\t * Provides \"just in time\" filtering of all filters in wp_get_attachment_image().\n\t\t *\n\t\t * @since 2.9.0\n\t\t *\n\t\t * @param int          $post_id           The post ID.\n\t\t * @param string       $post_thumbnail_id The post thumbnail ID.\n\t\t * @param string|array $size              The post thumbnail size. Image size or array of width\n\t\t *                                        and height values (in that order). Default 'post-thumbnail'.\n\t\t */",
+                      "line": 155,
+                      "filePos": 5031,
+                      "tokenPos": 448,
+                      "endLine": 166,
+                      "endFilePos": 5535,
+                      "endTokenPos": 448
+                    }
+                  ],
+                  "endLine": 167
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "begin_fetch_post_thumbnail_html",
+                    "attributes": {
+                      "startLine": 167,
+                      "endLine": 167,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 167,
+                    "endLine": 167
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_PropertyFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "post",
+                      "attributes": {
+                        "startLine": 167,
+                        "endLine": 167
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "ID",
+                      "attributes": {
+                        "startLine": 167,
+                        "endLine": 167
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 167,
+                      "endLine": 167
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 167,
+                    "endLine": 167
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "post_thumbnail_id",
+                    "attributes": {
+                      "startLine": 167,
+                      "endLine": 167
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 167,
+                    "endLine": 167
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "size",
+                    "attributes": {
+                      "startLine": 167,
+                      "endLine": 167
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 167,
+                    "endLine": 167
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 167,
+                "comments": [
+                  {
+                    "nodeType": "Comment_Doc",
+                    "text": "/**\n\t\t * Fires before fetching the post thumbnail HTML.\n\t\t *\n\t\t * Provides \"just in time\" filtering of all filters in wp_get_attachment_image().\n\t\t *\n\t\t * @since 2.9.0\n\t\t *\n\t\t * @param int          $post_id           The post ID.\n\t\t * @param string       $post_thumbnail_id The post thumbnail ID.\n\t\t * @param string|array $size              The post thumbnail size. Image size or array of width\n\t\t *                                        and height values (in that order). Default 'post-thumbnail'.\n\t\t */",
+                    "line": 155,
+                    "filePos": 5031,
+                    "tokenPos": 448,
+                    "endLine": 166,
+                    "endFilePos": 5535,
+                    "endTokenPos": 448
+                  }
+                ],
+                "endLine": 167
+              }
+            },
+            "attributes": {
+              "startLine": 167,
+              "comments": [
+                {
+                  "nodeType": "Comment_Doc",
+                  "text": "/**\n\t\t * Fires before fetching the post thumbnail HTML.\n\t\t *\n\t\t * Provides \"just in time\" filtering of all filters in wp_get_attachment_image().\n\t\t *\n\t\t * @since 2.9.0\n\t\t *\n\t\t * @param int          $post_id           The post ID.\n\t\t * @param string       $post_thumbnail_id The post thumbnail ID.\n\t\t * @param string|array $size              The post thumbnail size. Image size or array of width\n\t\t *                                        and height values (in that order). Default 'post-thumbnail'.\n\t\t */",
+                  "line": 155,
+                  "filePos": 5031,
+                  "tokenPos": 448,
+                  "endLine": 166,
+                  "endFilePos": 5535,
+                  "endTokenPos": 448
+                }
+              ],
+              "endLine": 167
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "in_the_loop"
+                ],
+                "attributes": {
+                  "startLine": 168,
+                  "endLine": 168
+                }
+              },
+              "args": [],
+              "attributes": {
+                "startLine": 168,
+                "endLine": 168
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_FuncCall",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "update_post_thumbnail_cache"
+                    ],
+                    "attributes": {
+                      "startLine": 169,
+                      "endLine": 169
+                    }
+                  },
+                  "args": [],
+                  "attributes": {
+                    "startLine": 169,
+                    "endLine": 169
+                  }
+                },
+                "attributes": {
+                  "startLine": 169,
+                  "endLine": 169
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 168,
+              "endLine": 170
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "html",
+                "attributes": {
+                  "startLine": 171,
+                  "endLine": 171
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "wp_get_attachment_image"
+                  ],
+                  "attributes": {
+                    "startLine": 171,
+                    "endLine": 171
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "post_thumbnail_id",
+                      "attributes": {
+                        "startLine": 171,
+                        "endLine": 171
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 171,
+                      "endLine": 171
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "size",
+                      "attributes": {
+                        "startLine": 171,
+                        "endLine": 171
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 171,
+                      "endLine": 171
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_ConstFetch",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "false"
+                        ],
+                        "attributes": {
+                          "startLine": 171,
+                          "endLine": 171
+                        }
+                      },
+                      "attributes": {
+                        "startLine": 171,
+                        "endLine": 171
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 171,
+                      "endLine": 171
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "attr",
+                      "attributes": {
+                        "startLine": 171,
+                        "endLine": 171
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 171,
+                      "endLine": 171
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 171,
+                  "endLine": 171
+                }
+              },
+              "attributes": {
+                "startLine": 171,
+                "endLine": 171
+              }
+            },
+            "attributes": {
+              "startLine": 171,
+              "endLine": 171
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "do_action"
+                ],
+                "attributes": {
+                  "startLine": 183,
+                  "comments": [
+                    {
+                      "nodeType": "Comment_Doc",
+                      "text": "/**\n\t\t * Fires after fetching the post thumbnail HTML.\n\t\t *\n\t\t * @since 2.9.0\n\t\t *\n\t\t * @param int          $post_id           The post ID.\n\t\t * @param string       $post_thumbnail_id The post thumbnail ID.\n\t\t * @param string|array $size              The post thumbnail size. Image size or array of width\n\t\t *                                        and height values (in that order). Default 'post-thumbnail'.\n\t\t */",
+                      "line": 173,
+                      "filePos": 5769,
+                      "tokenPos": 509,
+                      "endLine": 182,
+                      "endFilePos": 6183,
+                      "endTokenPos": 509
+                    }
+                  ],
+                  "endLine": 183
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "end_fetch_post_thumbnail_html",
+                    "attributes": {
+                      "startLine": 183,
+                      "endLine": 183,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 183,
+                    "endLine": 183
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_PropertyFetch",
+                    "var": {
+                      "nodeType": "Expr_Variable",
+                      "name": "post",
+                      "attributes": {
+                        "startLine": 183,
+                        "endLine": 183
+                      }
+                    },
+                    "name": {
+                      "nodeType": "Identifier",
+                      "name": "ID",
+                      "attributes": {
+                        "startLine": 183,
+                        "endLine": 183
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 183,
+                      "endLine": 183
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 183,
+                    "endLine": 183
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "post_thumbnail_id",
+                    "attributes": {
+                      "startLine": 183,
+                      "endLine": 183
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 183,
+                    "endLine": 183
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "size",
+                    "attributes": {
+                      "startLine": 183,
+                      "endLine": 183
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 183,
+                    "endLine": 183
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 183,
+                "comments": [
+                  {
+                    "nodeType": "Comment_Doc",
+                    "text": "/**\n\t\t * Fires after fetching the post thumbnail HTML.\n\t\t *\n\t\t * @since 2.9.0\n\t\t *\n\t\t * @param int          $post_id           The post ID.\n\t\t * @param string       $post_thumbnail_id The post thumbnail ID.\n\t\t * @param string|array $size              The post thumbnail size. Image size or array of width\n\t\t *                                        and height values (in that order). Default 'post-thumbnail'.\n\t\t */",
+                    "line": 173,
+                    "filePos": 5769,
+                    "tokenPos": 509,
+                    "endLine": 182,
+                    "endFilePos": 6183,
+                    "endTokenPos": 509
+                  }
+                ],
+                "endLine": 183
+              }
+            },
+            "attributes": {
+              "startLine": 183,
+              "comments": [
+                {
+                  "nodeType": "Comment_Doc",
+                  "text": "/**\n\t\t * Fires after fetching the post thumbnail HTML.\n\t\t *\n\t\t * @since 2.9.0\n\t\t *\n\t\t * @param int          $post_id           The post ID.\n\t\t * @param string       $post_thumbnail_id The post thumbnail ID.\n\t\t * @param string|array $size              The post thumbnail size. Image size or array of width\n\t\t *                                        and height values (in that order). Default 'post-thumbnail'.\n\t\t */",
+                  "line": 173,
+                  "filePos": 5769,
+                  "tokenPos": 509,
+                  "endLine": 182,
+                  "endFilePos": 6183,
+                  "endTokenPos": 509
+                }
+              ],
+              "endLine": 183
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": {
+          "nodeType": "Stmt_Else",
+          "stmts": [
+            {
+              "nodeType": "Stmt_Expression",
+              "expr": {
+                "nodeType": "Expr_Assign",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "html",
+                  "attributes": {
+                    "startLine": 186,
+                    "endLine": 186
+                  }
+                },
+                "expr": {
+                  "nodeType": "Scalar_String",
+                  "value": "",
+                  "attributes": {
+                    "startLine": 186,
+                    "endLine": 186,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 186,
+                  "endLine": 186
+                }
+              },
+              "attributes": {
+                "startLine": 186,
+                "endLine": 186
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 185,
+            "endLine": 187
+          }
+        },
+        "attributes": {
+          "startLine": 153,
+          "endLine": 187
+        }
+      },
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "apply_filters"
+            ],
+            "attributes": {
+              "startLine": 200,
+              "endLine": 200
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "post_thumbnail_html",
+                "attributes": {
+                  "startLine": 200,
+                  "endLine": 200,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 200,
+                "endLine": 200
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "html",
+                "attributes": {
+                  "startLine": 200,
+                  "endLine": 200
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 200,
+                "endLine": 200
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_PropertyFetch",
+                "var": {
+                  "nodeType": "Expr_Variable",
+                  "name": "post",
+                  "attributes": {
+                    "startLine": 200,
+                    "endLine": 200
+                  }
+                },
+                "name": {
+                  "nodeType": "Identifier",
+                  "name": "ID",
+                  "attributes": {
+                    "startLine": 200,
+                    "endLine": 200
+                  }
+                },
+                "attributes": {
+                  "startLine": 200,
+                  "endLine": 200
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 200,
+                "endLine": 200
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "post_thumbnail_id",
+                "attributes": {
+                  "startLine": 200,
+                  "endLine": 200
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 200,
+                "endLine": 200
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "size",
+                "attributes": {
+                  "startLine": 200,
+                  "endLine": 200
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 200,
+                "endLine": 200
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "attr",
+                "attributes": {
+                  "startLine": 200,
+                  "endLine": 200
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 200,
+                "endLine": 200
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 200,
+            "endLine": 200
+          }
+        },
+        "attributes": {
+          "startLine": 200,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Filters the post thumbnail HTML.\n\t *\n\t * @since 2.9.0\n\t *\n\t * @param string       $html              The post thumbnail HTML.\n\t * @param int          $post_id           The post ID.\n\t * @param string       $post_thumbnail_id The post thumbnail ID.\n\t * @param string|array $size              The post thumbnail size. Image size or array of width and height\n\t *                                        values (in that order). Default 'post-thumbnail'.\n\t * @param string       $attr              Query string of attributes.\n\t */",
+              "line": 188,
+              "filePos": 6300,
+              "tokenPos": 545,
+              "endLine": 199,
+              "endFilePos": 6831,
+              "endTokenPos": 545
+            }
+          ],
+          "endLine": 200
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 134,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Retrieve the post thumbnail.\n *\n * When a theme adds 'post-thumbnail' support, a special 'post-thumbnail' image size\n * is registered, which differs from the 'thumbnail' image size managed via the\n * Settings > Media screen.\n *\n * When using the_post_thumbnail() or related functions, the 'post-thumbnail' image\n * size is used by default, though a different size can be specified instead as needed.\n *\n * @since 2.9.0\n * @since 4.4.0 `$post` can be a post ID or WP_Post object.\n *\n * @param int|WP_Post  $post Optional. Post ID or WP_Post object.  Default is global `$post`.\n * @param string|array $size Optional. Image size to use. Accepts any valid image size, or\n *                           an array of width and height values in pixels (in that order).\n *                           Default 'post-thumbnail'.\n * @param string|array $attr Optional. Query string or array of attributes. Default empty.\n * @return string The post thumbnail image tag.\n */",
+          "line": 114,
+          "filePos": 3414,
+          "tokenPos": 342,
+          "endLine": 133,
+          "endFilePos": 4376,
+          "endTokenPos": 342
+        }
+      ],
+      "endLine": 201
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "get_the_post_thumbnail_url",
+      "attributes": {
+        "startLine": 213,
+        "endLine": 213
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "post",
+          "attributes": {
+            "startLine": 213,
+            "endLine": 213
+          }
+        },
+        "default": {
+          "nodeType": "Expr_ConstFetch",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "null"
+            ],
+            "attributes": {
+              "startLine": 213,
+              "endLine": 213
+            }
+          },
+          "attributes": {
+            "startLine": 213,
+            "endLine": 213
+          }
+        },
+        "attributes": {
+          "startLine": 213,
+          "endLine": 213
+        }
+      },
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "size",
+          "attributes": {
+            "startLine": 213,
+            "endLine": 213
+          }
+        },
+        "default": {
+          "nodeType": "Scalar_String",
+          "value": "post-thumbnail",
+          "attributes": {
+            "startLine": 213,
+            "endLine": 213,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 213,
+          "endLine": 213
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "post_thumbnail_id",
+            "attributes": {
+              "startLine": 214,
+              "endLine": 214
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "get_post_thumbnail_id"
+              ],
+              "attributes": {
+                "startLine": 214,
+                "endLine": 214
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "post",
+                  "attributes": {
+                    "startLine": 214,
+                    "endLine": 214
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 214,
+                  "endLine": 214
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 214,
+              "endLine": 214
+            }
+          },
+          "attributes": {
+            "startLine": 214,
+            "endLine": 214
+          }
+        },
+        "attributes": {
+          "startLine": 214,
+          "endLine": 214
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BooleanNot",
+          "expr": {
+            "nodeType": "Expr_Variable",
+            "name": "post_thumbnail_id",
+            "attributes": {
+              "startLine": 215,
+              "endLine": 215
+            }
+          },
+          "attributes": {
+            "startLine": 215,
+            "endLine": 215
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_ConstFetch",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "false"
+                ],
+                "attributes": {
+                  "startLine": 216,
+                  "endLine": 216
+                }
+              },
+              "attributes": {
+                "startLine": 216,
+                "endLine": 216
+              }
+            },
+            "attributes": {
+              "startLine": 216,
+              "endLine": 216
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 215,
+          "endLine": 217
+        }
+      },
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "wp_get_attachment_image_url"
+            ],
+            "attributes": {
+              "startLine": 218,
+              "endLine": 218
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "post_thumbnail_id",
+                "attributes": {
+                  "startLine": 218,
+                  "endLine": 218
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 218,
+                "endLine": 218
+              }
+            },
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Expr_Variable",
+                "name": "size",
+                "attributes": {
+                  "startLine": 218,
+                  "endLine": 218
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 218,
+                "endLine": 218
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 218,
+            "endLine": 218
+          }
+        },
+        "attributes": {
+          "startLine": 218,
+          "endLine": 218
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 213,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Return the post thumbnail URL.\n *\n * @since 4.4.0\n *\n * @param int|WP_Post  $post Optional. Post ID or WP_Post object.  Default is global `$post`.\n * @param string|array $size Optional. Registered image size to retrieve the source for or a flat\n *                           array of height and width dimensions. Default 'post-thumbnail'.\n * @return string|false Post thumbnail URL or false if no URL is available.\n */",
+          "line": 203,
+          "filePos": 6936,
+          "tokenPos": 576,
+          "endLine": 212,
+          "endFilePos": 7359,
+          "endTokenPos": 576
+        }
+      ],
+      "endLine": 219
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "the_post_thumbnail_url",
+      "attributes": {
+        "startLine": 230,
+        "endLine": 230
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "size",
+          "attributes": {
+            "startLine": 230,
+            "endLine": 230
+          }
+        },
+        "default": {
+          "nodeType": "Scalar_String",
+          "value": "post-thumbnail",
+          "attributes": {
+            "startLine": 230,
+            "endLine": 230,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 230,
+          "endLine": 230
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "url",
+            "attributes": {
+              "startLine": 231,
+              "endLine": 231
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "get_the_post_thumbnail_url"
+              ],
+              "attributes": {
+                "startLine": 231,
+                "endLine": 231
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_ConstFetch",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "null"
+                    ],
+                    "attributes": {
+                      "startLine": 231,
+                      "endLine": 231
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 231,
+                    "endLine": 231
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 231,
+                  "endLine": 231
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "size",
+                  "attributes": {
+                    "startLine": 231,
+                    "endLine": 231
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 231,
+                  "endLine": 231
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 231,
+              "endLine": 231
+            }
+          },
+          "attributes": {
+            "startLine": 231,
+            "endLine": 231
+          }
+        },
+        "attributes": {
+          "startLine": 231,
+          "endLine": 231
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_Variable",
+          "name": "url",
+          "attributes": {
+            "startLine": 232,
+            "endLine": 232
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Echo",
+            "exprs": [
+              {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "esc_url"
+                  ],
+                  "attributes": {
+                    "startLine": 233,
+                    "endLine": 233
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "url",
+                      "attributes": {
+                        "startLine": 233,
+                        "endLine": 233
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 233,
+                      "endLine": 233
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 233,
+                  "endLine": 233
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 233,
+              "endLine": 233
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 232,
+          "endLine": 234
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 230,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Display the post thumbnail URL.\n *\n * @since 4.4.0\n *\n * @param string|array $size Optional. Image size to use. Accepts any valid image size,\n *                           or an array of width and height values in pixels (in that order).\n *                           Default 'post-thumbnail'.\n */",
+          "line": 221,
+          "filePos": 7614,
+          "tokenPos": 646,
+          "endLine": 229,
+          "endFilePos": 7915,
+          "endTokenPos": 646
+        }
+      ],
+      "endLine": 235
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "get_the_post_thumbnail_caption",
+      "attributes": {
+        "startLine": 245,
+        "endLine": 245
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "post",
+          "attributes": {
+            "startLine": 245,
+            "endLine": 245
+          }
+        },
+        "default": {
+          "nodeType": "Expr_ConstFetch",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "null"
+            ],
+            "attributes": {
+              "startLine": 245,
+              "endLine": 245
+            }
+          },
+          "attributes": {
+            "startLine": 245,
+            "endLine": 245
+          }
+        },
+        "attributes": {
+          "startLine": 245,
+          "endLine": 245
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "post_thumbnail_id",
+            "attributes": {
+              "startLine": 246,
+              "endLine": 246
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "get_post_thumbnail_id"
+              ],
+              "attributes": {
+                "startLine": 246,
+                "endLine": 246
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "post",
+                  "attributes": {
+                    "startLine": 246,
+                    "endLine": 246
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 246,
+                  "endLine": 246
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 246,
+              "endLine": 246
+            }
+          },
+          "attributes": {
+            "startLine": 246,
+            "endLine": 246
+          }
+        },
+        "attributes": {
+          "startLine": 246,
+          "endLine": 246
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BooleanNot",
+          "expr": {
+            "nodeType": "Expr_Variable",
+            "name": "post_thumbnail_id",
+            "attributes": {
+              "startLine": 247,
+              "endLine": 247
+            }
+          },
+          "attributes": {
+            "startLine": 247,
+            "endLine": 247
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Scalar_String",
+              "value": "",
+              "attributes": {
+                "startLine": 248,
+                "endLine": 248,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 248,
+              "endLine": 248
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 247,
+          "endLine": 249
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Assign",
+          "var": {
+            "nodeType": "Expr_Variable",
+            "name": "caption",
+            "attributes": {
+              "startLine": 251,
+              "endLine": 251
+            }
+          },
+          "expr": {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "wp_get_attachment_caption"
+              ],
+              "attributes": {
+                "startLine": 251,
+                "endLine": 251
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_Variable",
+                  "name": "post_thumbnail_id",
+                  "attributes": {
+                    "startLine": 251,
+                    "endLine": 251
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 251,
+                  "endLine": 251
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 251,
+              "endLine": 251
+            }
+          },
+          "attributes": {
+            "startLine": 251,
+            "endLine": 251
+          }
+        },
+        "attributes": {
+          "startLine": 251,
+          "endLine": 251
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BooleanNot",
+          "expr": {
+            "nodeType": "Expr_Variable",
+            "name": "caption",
+            "attributes": {
+              "startLine": 253,
+              "endLine": 253
+            }
+          },
+          "attributes": {
+            "startLine": 253,
+            "endLine": 253
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "caption",
+                "attributes": {
+                  "startLine": 254,
+                  "endLine": 254
+                }
+              },
+              "expr": {
+                "nodeType": "Scalar_String",
+                "value": "",
+                "attributes": {
+                  "startLine": 254,
+                  "endLine": 254,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 254,
+                "endLine": 254
+              }
+            },
+            "attributes": {
+              "startLine": 254,
+              "endLine": 254
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 253,
+          "endLine": 255
+        }
+      },
+      {
+        "nodeType": "Stmt_Return",
+        "expr": {
+          "nodeType": "Expr_Variable",
+          "name": "caption",
+          "attributes": {
+            "startLine": 257,
+            "endLine": 257
+          }
+        },
+        "attributes": {
+          "startLine": 257,
+          "endLine": 257
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 245,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Returns the post thumbnail caption.\n *\n * @since 4.6.0\n *\n * @param int|WP_Post $post Optional. Post ID or WP_Post object. Default is global `$post`.\n * @return string Post thumbnail caption.\n */",
+          "line": 237,
+          "filePos": 8075,
+          "tokenPos": 702,
+          "endLine": 244,
+          "endFilePos": 8276,
+          "endTokenPos": 702
+        }
+      ],
+      "endLine": 258
+    }
+  },
+  {
+    "nodeType": "Stmt_Function",
+    "byRef": false,
+    "name": {
+      "nodeType": "Identifier",
+      "name": "the_post_thumbnail_caption",
+      "attributes": {
+        "startLine": 267,
+        "endLine": 267
+      }
+    },
+    "params": [
+      {
+        "nodeType": "Param",
+        "type": null,
+        "byRef": false,
+        "variadic": false,
+        "var": {
+          "nodeType": "Expr_Variable",
+          "name": "post",
+          "attributes": {
+            "startLine": 267,
+            "endLine": 267
+          }
+        },
+        "default": {
+          "nodeType": "Expr_ConstFetch",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "null"
+            ],
+            "attributes": {
+              "startLine": 267,
+              "endLine": 267
+            }
+          },
+          "attributes": {
+            "startLine": 267,
+            "endLine": 267
+          }
+        },
+        "attributes": {
+          "startLine": 267,
+          "endLine": 267
+        }
+      }
+    ],
+    "returnType": null,
+    "stmts": [
+      {
+        "nodeType": "Stmt_Echo",
+        "exprs": [
+          {
+            "nodeType": "Expr_FuncCall",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "apply_filters"
+              ],
+              "attributes": {
+                "startLine": 275,
+                "endLine": 275
+              }
+            },
+            "args": [
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Scalar_String",
+                  "value": "the_post_thumbnail_caption",
+                  "attributes": {
+                    "startLine": 275,
+                    "endLine": 275,
+                    "kind": 1
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 275,
+                  "endLine": 275
+                }
+              },
+              {
+                "nodeType": "Arg",
+                "value": {
+                  "nodeType": "Expr_FuncCall",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "get_the_post_thumbnail_caption"
+                    ],
+                    "attributes": {
+                      "startLine": 275,
+                      "endLine": 275
+                    }
+                  },
+                  "args": [
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Expr_Variable",
+                        "name": "post",
+                        "attributes": {
+                          "startLine": 275,
+                          "endLine": 275
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 275,
+                        "endLine": 275
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 275,
+                    "endLine": 275
+                  }
+                },
+                "byRef": false,
+                "unpack": false,
+                "attributes": {
+                  "startLine": 275,
+                  "endLine": 275
+                }
+              }
+            ],
+            "attributes": {
+              "startLine": 275,
+              "endLine": 275
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 275,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n\t * Filters the displayed post thumbnail caption.\n\t *\n\t * @since 4.6.0\n\t *\n\t * @param string $caption Caption for the given attachment.\n\t */",
+              "line": 268,
+              "filePos": 8780,
+              "tokenPos": 807,
+              "endLine": 274,
+              "endFilePos": 8923,
+              "endTokenPos": 807
+            }
+          ],
+          "endLine": 275
+        }
+      }
+    ],
+    "attributes": {
+      "startLine": 267,
+      "comments": [
+        {
+          "nodeType": "Comment_Doc",
+          "text": "/**\n * Displays the post thumbnail caption.\n *\n * @since 4.6.0\n *\n * @param int|WP_Post $post Optional. Post ID or WP_Post object. Default is global `$post`.\n */",
+          "line": 260,
+          "filePos": 8563,
+          "tokenPos": 790,
+          "endLine": 266,
+          "endFilePos": 8723,
+          "endTokenPos": 790
+        }
+      ],
+      "endLine": 276
+    }
+  }
+]

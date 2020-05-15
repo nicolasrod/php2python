@@ -1,0 +1,1848 @@
+[
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_BooleanNot",
+      "expr": {
+        "nodeType": "Expr_FuncCall",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "is_callable"
+          ],
+          "attributes": {
+            "startLine": 3,
+            "endLine": 3
+          }
+        },
+        "args": [
+          {
+            "nodeType": "Arg",
+            "value": {
+              "nodeType": "Scalar_String",
+              "value": "sodiumCompatAutoloader",
+              "attributes": {
+                "startLine": 3,
+                "endLine": 3,
+                "kind": 1
+              }
+            },
+            "byRef": false,
+            "unpack": false,
+            "attributes": {
+              "startLine": 3,
+              "endLine": 3
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 3,
+          "endLine": 3
+        }
+      },
+      "attributes": {
+        "startLine": 3,
+        "endLine": 3
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Function",
+        "byRef": false,
+        "name": {
+          "nodeType": "Identifier",
+          "name": "sodiumCompatAutoloader",
+          "attributes": {
+            "startLine": 11,
+            "endLine": 11
+          }
+        },
+        "params": [
+          {
+            "nodeType": "Param",
+            "type": null,
+            "byRef": false,
+            "variadic": false,
+            "var": {
+              "nodeType": "Expr_Variable",
+              "name": "class",
+              "attributes": {
+                "startLine": 11,
+                "endLine": 11
+              }
+            },
+            "default": null,
+            "attributes": {
+              "startLine": 11,
+              "endLine": 11
+            }
+          }
+        ],
+        "returnType": null,
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "namespace",
+                "attributes": {
+                  "startLine": 13,
+                  "endLine": 13
+                }
+              },
+              "expr": {
+                "nodeType": "Scalar_String",
+                "value": "ParagonIE_Sodium_",
+                "attributes": {
+                  "startLine": 13,
+                  "endLine": 13,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 13,
+                "endLine": 13
+              }
+            },
+            "attributes": {
+              "startLine": 13,
+              "endLine": 13
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "len",
+                "attributes": {
+                  "startLine": 15,
+                  "comments": [
+                    {
+                      "nodeType": "Comment",
+                      "text": "// Does the class use the namespace prefix?\n",
+                      "line": 14,
+                      "filePos": 319,
+                      "tokenPos": 32,
+                      "endLine": 15,
+                      "endFilePos": 362,
+                      "endTokenPos": 32
+                    }
+                  ],
+                  "endLine": 15
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "strlen"
+                  ],
+                  "attributes": {
+                    "startLine": 15,
+                    "endLine": 15
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "namespace",
+                      "attributes": {
+                        "startLine": 15,
+                        "endLine": 15
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 15,
+                      "endLine": 15
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 15,
+                  "endLine": 15
+                }
+              },
+              "attributes": {
+                "startLine": 15,
+                "comments": [
+                  {
+                    "nodeType": "Comment",
+                    "text": "// Does the class use the namespace prefix?\n",
+                    "line": 14,
+                    "filePos": 319,
+                    "tokenPos": 32,
+                    "endLine": 15,
+                    "endFilePos": 362,
+                    "endTokenPos": 32
+                  }
+                ],
+                "endLine": 15
+              }
+            },
+            "attributes": {
+              "startLine": 15,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// Does the class use the namespace prefix?\n",
+                  "line": 14,
+                  "filePos": 319,
+                  "tokenPos": 32,
+                  "endLine": 15,
+                  "endFilePos": 362,
+                  "endTokenPos": 32
+                }
+              ],
+              "endLine": 15
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_BinaryOp_NotIdentical",
+              "left": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "strncmp"
+                  ],
+                  "attributes": {
+                    "startLine": 16,
+                    "endLine": 16
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "namespace",
+                      "attributes": {
+                        "startLine": 16,
+                        "endLine": 16
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 16,
+                      "endLine": 16
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "class",
+                      "attributes": {
+                        "startLine": 16,
+                        "endLine": 16
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 16,
+                      "endLine": 16
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "len",
+                      "attributes": {
+                        "startLine": 16,
+                        "endLine": 16
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 16,
+                      "endLine": 16
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 16,
+                  "endLine": 16
+                }
+              },
+              "right": {
+                "nodeType": "Scalar_LNumber",
+                "value": 0,
+                "attributes": {
+                  "startLine": 16,
+                  "endLine": 16,
+                  "kind": 10
+                }
+              },
+              "attributes": {
+                "startLine": 16,
+                "endLine": 16
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Return",
+                "expr": {
+                  "nodeType": "Expr_ConstFetch",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "false"
+                    ],
+                    "attributes": {
+                      "startLine": 18,
+                      "endLine": 18
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 18,
+                    "endLine": 18
+                  }
+                },
+                "attributes": {
+                  "startLine": 18,
+                  "comments": [
+                    {
+                      "nodeType": "Comment",
+                      "text": "// no, move to the next registered autoloader\n",
+                      "line": 17,
+                      "filePos": 465,
+                      "tokenPos": 65,
+                      "endLine": 18,
+                      "endFilePos": 510,
+                      "endTokenPos": 65
+                    }
+                  ],
+                  "endLine": 18
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 16,
+              "endLine": 19
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "relative_class",
+                "attributes": {
+                  "startLine": 22,
+                  "comments": [
+                    {
+                      "nodeType": "Comment",
+                      "text": "// Get the relative class name\n",
+                      "line": 21,
+                      "filePos": 556,
+                      "tokenPos": 74,
+                      "endLine": 22,
+                      "endFilePos": 586,
+                      "endTokenPos": 74
+                    }
+                  ],
+                  "endLine": 22
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "substr"
+                  ],
+                  "attributes": {
+                    "startLine": 22,
+                    "endLine": 22
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "class",
+                      "attributes": {
+                        "startLine": 22,
+                        "endLine": 22
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 22,
+                      "endLine": 22
+                    }
+                  },
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_Variable",
+                      "name": "len",
+                      "attributes": {
+                        "startLine": 22,
+                        "endLine": 22
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 22,
+                      "endLine": 22
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 22,
+                  "endLine": 22
+                }
+              },
+              "attributes": {
+                "startLine": 22,
+                "comments": [
+                  {
+                    "nodeType": "Comment",
+                    "text": "// Get the relative class name\n",
+                    "line": 21,
+                    "filePos": 556,
+                    "tokenPos": 74,
+                    "endLine": 22,
+                    "endFilePos": 586,
+                    "endTokenPos": 74
+                  }
+                ],
+                "endLine": 22
+              }
+            },
+            "attributes": {
+              "startLine": 22,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// Get the relative class name\n",
+                  "line": 21,
+                  "filePos": 556,
+                  "tokenPos": 74,
+                  "endLine": 22,
+                  "endFilePos": 586,
+                  "endTokenPos": 74
+                }
+              ],
+              "endLine": 22
+            }
+          },
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Assign",
+              "var": {
+                "nodeType": "Expr_Variable",
+                "name": "file",
+                "attributes": {
+                  "startLine": 27,
+                  "comments": [
+                    {
+                      "nodeType": "Comment",
+                      "text": "// Replace the namespace prefix with the base directory, replace namespace\n",
+                      "line": 24,
+                      "filePos": 644,
+                      "tokenPos": 89,
+                      "endLine": 25,
+                      "endFilePos": 718,
+                      "endTokenPos": 89
+                    },
+                    {
+                      "nodeType": "Comment",
+                      "text": "// separators with directory separators in the relative class name, append\n",
+                      "line": 25,
+                      "filePos": 727,
+                      "tokenPos": 91,
+                      "endLine": 26,
+                      "endFilePos": 801,
+                      "endTokenPos": 91
+                    },
+                    {
+                      "nodeType": "Comment",
+                      "text": "// with .php\n",
+                      "line": 26,
+                      "filePos": 810,
+                      "tokenPos": 93,
+                      "endLine": 27,
+                      "endFilePos": 822,
+                      "endTokenPos": 93
+                    }
+                  ],
+                  "endLine": 27
+                }
+              },
+              "expr": {
+                "nodeType": "Expr_BinaryOp_Concat",
+                "left": {
+                  "nodeType": "Expr_BinaryOp_Concat",
+                  "left": {
+                    "nodeType": "Expr_BinaryOp_Concat",
+                    "left": {
+                      "nodeType": "Expr_FuncCall",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "dirname"
+                        ],
+                        "attributes": {
+                          "startLine": 27,
+                          "endLine": 27
+                        }
+                      },
+                      "args": [
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Scalar_MagicConst_File",
+                            "attributes": {
+                              "startLine": 27,
+                              "endLine": 27
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 27,
+                            "endLine": 27
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 27,
+                        "endLine": 27
+                      }
+                    },
+                    "right": {
+                      "nodeType": "Scalar_String",
+                      "value": "/src/",
+                      "attributes": {
+                        "startLine": 27,
+                        "endLine": 27,
+                        "kind": 1
+                      }
+                    },
+                    "attributes": {
+                      "startLine": 27,
+                      "endLine": 27
+                    }
+                  },
+                  "right": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "str_replace"
+                      ],
+                      "attributes": {
+                        "startLine": 27,
+                        "endLine": 27
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Scalar_String",
+                          "value": "_",
+                          "attributes": {
+                            "startLine": 27,
+                            "endLine": 27,
+                            "kind": 1
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 27,
+                          "endLine": 27
+                        }
+                      },
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Scalar_String",
+                          "value": "/",
+                          "attributes": {
+                            "startLine": 27,
+                            "endLine": 27,
+                            "kind": 1
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 27,
+                          "endLine": 27
+                        }
+                      },
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Expr_Variable",
+                          "name": "relative_class",
+                          "attributes": {
+                            "startLine": 27,
+                            "endLine": 27
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 27,
+                          "endLine": 27
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 27,
+                      "endLine": 27
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 27,
+                    "endLine": 27
+                  }
+                },
+                "right": {
+                  "nodeType": "Scalar_String",
+                  "value": ".php",
+                  "attributes": {
+                    "startLine": 27,
+                    "endLine": 27,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 27,
+                  "endLine": 27
+                }
+              },
+              "attributes": {
+                "startLine": 27,
+                "comments": [
+                  {
+                    "nodeType": "Comment",
+                    "text": "// Replace the namespace prefix with the base directory, replace namespace\n",
+                    "line": 24,
+                    "filePos": 644,
+                    "tokenPos": 89,
+                    "endLine": 25,
+                    "endFilePos": 718,
+                    "endTokenPos": 89
+                  },
+                  {
+                    "nodeType": "Comment",
+                    "text": "// separators with directory separators in the relative class name, append\n",
+                    "line": 25,
+                    "filePos": 727,
+                    "tokenPos": 91,
+                    "endLine": 26,
+                    "endFilePos": 801,
+                    "endTokenPos": 91
+                  },
+                  {
+                    "nodeType": "Comment",
+                    "text": "// with .php\n",
+                    "line": 26,
+                    "filePos": 810,
+                    "tokenPos": 93,
+                    "endLine": 27,
+                    "endFilePos": 822,
+                    "endTokenPos": 93
+                  }
+                ],
+                "endLine": 27
+              }
+            },
+            "attributes": {
+              "startLine": 27,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// Replace the namespace prefix with the base directory, replace namespace\n",
+                  "line": 24,
+                  "filePos": 644,
+                  "tokenPos": 89,
+                  "endLine": 25,
+                  "endFilePos": 718,
+                  "endTokenPos": 89
+                },
+                {
+                  "nodeType": "Comment",
+                  "text": "// separators with directory separators in the relative class name, append\n",
+                  "line": 25,
+                  "filePos": 727,
+                  "tokenPos": 91,
+                  "endLine": 26,
+                  "endFilePos": 801,
+                  "endTokenPos": 91
+                },
+                {
+                  "nodeType": "Comment",
+                  "text": "// with .php\n",
+                  "line": 26,
+                  "filePos": 810,
+                  "tokenPos": 93,
+                  "endLine": 27,
+                  "endFilePos": 822,
+                  "endTokenPos": 93
+                }
+              ],
+              "endLine": 27
+            }
+          },
+          {
+            "nodeType": "Stmt_If",
+            "cond": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "file_exists"
+                ],
+                "attributes": {
+                  "startLine": 29,
+                  "endLine": 29
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_Variable",
+                    "name": "file",
+                    "attributes": {
+                      "startLine": 29,
+                      "endLine": 29
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 29,
+                    "endLine": 29
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 29,
+                "endLine": 29
+              }
+            },
+            "stmts": [
+              {
+                "nodeType": "Stmt_Expression",
+                "expr": {
+                  "nodeType": "Expr_Include",
+                  "expr": {
+                    "nodeType": "Expr_Variable",
+                    "name": "file",
+                    "attributes": {
+                      "startLine": 30,
+                      "endLine": 30
+                    }
+                  },
+                  "type": 4,
+                  "attributes": {
+                    "startLine": 30,
+                    "endLine": 30
+                  }
+                },
+                "attributes": {
+                  "startLine": 30,
+                  "endLine": 30
+                }
+              },
+              {
+                "nodeType": "Stmt_Return",
+                "expr": {
+                  "nodeType": "Expr_ConstFetch",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "true"
+                    ],
+                    "attributes": {
+                      "startLine": 31,
+                      "endLine": 31
+                    }
+                  },
+                  "attributes": {
+                    "startLine": 31,
+                    "endLine": 31
+                  }
+                },
+                "attributes": {
+                  "startLine": 31,
+                  "endLine": 31
+                }
+              }
+            ],
+            "elseifs": [],
+            "else": null,
+            "attributes": {
+              "startLine": 29,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// if the file exists, require it\n",
+                  "line": 28,
+                  "filePos": 926,
+                  "tokenPos": 126,
+                  "endLine": 29,
+                  "endFilePos": 959,
+                  "endTokenPos": 126
+                }
+              ],
+              "endLine": 32
+            }
+          },
+          {
+            "nodeType": "Stmt_Return",
+            "expr": {
+              "nodeType": "Expr_ConstFetch",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "false"
+                ],
+                "attributes": {
+                  "startLine": 33,
+                  "endLine": 33
+                }
+              },
+              "attributes": {
+                "startLine": 33,
+                "endLine": 33
+              }
+            },
+            "attributes": {
+              "startLine": 33,
+              "endLine": 33
+            }
+          }
+        ],
+        "attributes": {
+          "startLine": 11,
+          "comments": [
+            {
+              "nodeType": "Comment_Doc",
+              "text": "/**\n     * Sodium_Compat autoloader.\n     *\n     * @param string $class Class name to be autoloaded.\n     *\n     * @return bool         Stop autoloading?\n     */",
+              "line": 4,
+              "filePos": 57,
+              "tokenPos": 14,
+              "endLine": 10,
+              "endFilePos": 217,
+              "endTokenPos": 14
+            }
+          ],
+          "endLine": 34
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "spl_autoload_register"
+            ],
+            "attributes": {
+              "startLine": 37,
+              "comments": [
+                {
+                  "nodeType": "Comment",
+                  "text": "// Now that we have an autoloader, let's register it!\n",
+                  "line": 36,
+                  "filePos": 1094,
+                  "tokenPos": 158,
+                  "endLine": 37,
+                  "endFilePos": 1147,
+                  "endTokenPos": 158
+                }
+              ],
+              "endLine": 37
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "sodiumCompatAutoloader",
+                "attributes": {
+                  "startLine": 37,
+                  "endLine": 37,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 37,
+                "endLine": 37
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 37,
+            "comments": [
+              {
+                "nodeType": "Comment",
+                "text": "// Now that we have an autoloader, let's register it!\n",
+                "line": 36,
+                "filePos": 1094,
+                "tokenPos": 158,
+                "endLine": 37,
+                "endFilePos": 1147,
+                "endTokenPos": 158
+              }
+            ],
+            "endLine": 37
+          }
+        },
+        "attributes": {
+          "startLine": 37,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "// Now that we have an autoloader, let's register it!\n",
+              "line": 36,
+              "filePos": 1094,
+              "tokenPos": 158,
+              "endLine": 37,
+              "endFilePos": 1147,
+              "endTokenPos": 158
+            }
+          ],
+          "endLine": 37
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 3,
+      "endLine": 38
+    }
+  },
+  {
+    "nodeType": "Stmt_Expression",
+    "expr": {
+      "nodeType": "Expr_Include",
+      "expr": {
+        "nodeType": "Expr_BinaryOp_Concat",
+        "left": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "dirname"
+            ],
+            "attributes": {
+              "startLine": 40,
+              "endLine": 40
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_MagicConst_File",
+                "attributes": {
+                  "startLine": 40,
+                  "endLine": 40
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 40,
+                "endLine": 40
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 40,
+            "endLine": 40
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_String",
+          "value": "/src/SodiumException.php",
+          "attributes": {
+            "startLine": 40,
+            "endLine": 40,
+            "kind": 1
+          }
+        },
+        "attributes": {
+          "startLine": 40,
+          "endLine": 40
+        }
+      },
+      "type": 4,
+      "attributes": {
+        "startLine": 40,
+        "endLine": 40
+      }
+    },
+    "attributes": {
+      "startLine": 40,
+      "endLine": 40
+    }
+  },
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_BinaryOp_GreaterOrEqual",
+      "left": {
+        "nodeType": "Expr_ConstFetch",
+        "name": {
+          "nodeType": "Name",
+          "parts": [
+            "PHP_VERSION_ID"
+          ],
+          "attributes": {
+            "startLine": 41,
+            "endLine": 41
+          }
+        },
+        "attributes": {
+          "startLine": 41,
+          "endLine": 41
+        }
+      },
+      "right": {
+        "nodeType": "Scalar_LNumber",
+        "value": 50300,
+        "attributes": {
+          "startLine": 41,
+          "endLine": 41,
+          "kind": 10
+        }
+      },
+      "attributes": {
+        "startLine": 41,
+        "endLine": 41
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Include",
+          "expr": {
+            "nodeType": "Expr_BinaryOp_Concat",
+            "left": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "dirname"
+                ],
+                "attributes": {
+                  "startLine": 44,
+                  "endLine": 44
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_MagicConst_File",
+                    "attributes": {
+                      "startLine": 44,
+                      "endLine": 44
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 44,
+                    "endLine": 44
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 44,
+                "endLine": 44
+              }
+            },
+            "right": {
+              "nodeType": "Scalar_String",
+              "value": "/lib/namespaced.php",
+              "attributes": {
+                "startLine": 44,
+                "endLine": 44,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 44,
+              "endLine": 44
+            }
+          },
+          "type": 4,
+          "attributes": {
+            "startLine": 44,
+            "comments": [
+              {
+                "nodeType": "Comment",
+                "text": "// Namespaces didn't exist before 5.3.0, so don't even try to use this\n",
+                "line": 42,
+                "filePos": 1300,
+                "tokenPos": 192,
+                "endLine": 43,
+                "endFilePos": 1370,
+                "endTokenPos": 192
+              },
+              {
+                "nodeType": "Comment",
+                "text": "// unless PHP >= 5.3.0\n",
+                "line": 43,
+                "filePos": 1375,
+                "tokenPos": 194,
+                "endLine": 44,
+                "endFilePos": 1397,
+                "endTokenPos": 194
+              }
+            ],
+            "endLine": 44
+          }
+        },
+        "attributes": {
+          "startLine": 44,
+          "comments": [
+            {
+              "nodeType": "Comment",
+              "text": "// Namespaces didn't exist before 5.3.0, so don't even try to use this\n",
+              "line": 42,
+              "filePos": 1300,
+              "tokenPos": 192,
+              "endLine": 43,
+              "endFilePos": 1370,
+              "endTokenPos": 192
+            },
+            {
+              "nodeType": "Comment",
+              "text": "// unless PHP >= 5.3.0\n",
+              "line": 43,
+              "filePos": 1375,
+              "tokenPos": 194,
+              "endLine": 44,
+              "endFilePos": 1397,
+              "endTokenPos": 194
+            }
+          ],
+          "endLine": 44
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Include",
+          "expr": {
+            "nodeType": "Expr_BinaryOp_Concat",
+            "left": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "dirname"
+                ],
+                "attributes": {
+                  "startLine": 45,
+                  "endLine": 45
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_MagicConst_File",
+                    "attributes": {
+                      "startLine": 45,
+                      "endLine": 45
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 45,
+                    "endLine": 45
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 45,
+                "endLine": 45
+              }
+            },
+            "right": {
+              "nodeType": "Scalar_String",
+              "value": "/lib/sodium_compat.php",
+              "attributes": {
+                "startLine": 45,
+                "endLine": 45,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 45,
+              "endLine": 45
+            }
+          },
+          "type": 4,
+          "attributes": {
+            "startLine": 45,
+            "endLine": 45
+          }
+        },
+        "attributes": {
+          "startLine": 45,
+          "endLine": 45
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": {
+      "nodeType": "Stmt_Else",
+      "stmts": [
+        {
+          "nodeType": "Stmt_Expression",
+          "expr": {
+            "nodeType": "Expr_Include",
+            "expr": {
+              "nodeType": "Expr_BinaryOp_Concat",
+              "left": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "dirname"
+                  ],
+                  "attributes": {
+                    "startLine": 47,
+                    "endLine": 47
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Scalar_MagicConst_File",
+                      "attributes": {
+                        "startLine": 47,
+                        "endLine": 47
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 47,
+                      "endLine": 47
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 47,
+                  "endLine": 47
+                }
+              },
+              "right": {
+                "nodeType": "Scalar_String",
+                "value": "/src/PHP52/SplFixedArray.php",
+                "attributes": {
+                  "startLine": 47,
+                  "endLine": 47,
+                  "kind": 1
+                }
+              },
+              "attributes": {
+                "startLine": 47,
+                "endLine": 47
+              }
+            },
+            "type": 4,
+            "attributes": {
+              "startLine": 47,
+              "endLine": 47
+            }
+          },
+          "attributes": {
+            "startLine": 47,
+            "endLine": 47
+          }
+        }
+      ],
+      "attributes": {
+        "startLine": 46,
+        "endLine": 48
+      }
+    },
+    "attributes": {
+      "startLine": 41,
+      "endLine": 48
+    }
+  },
+  {
+    "nodeType": "Stmt_If",
+    "cond": {
+      "nodeType": "Expr_BinaryOp_BooleanOr",
+      "left": {
+        "nodeType": "Expr_BinaryOp_Smaller",
+        "left": {
+          "nodeType": "Expr_ConstFetch",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "PHP_VERSION_ID"
+            ],
+            "attributes": {
+              "startLine": 49,
+              "endLine": 49
+            }
+          },
+          "attributes": {
+            "startLine": 49,
+            "endLine": 49
+          }
+        },
+        "right": {
+          "nodeType": "Scalar_LNumber",
+          "value": 70200,
+          "attributes": {
+            "startLine": 49,
+            "endLine": 49,
+            "kind": 10
+          }
+        },
+        "attributes": {
+          "startLine": 49,
+          "endLine": 49
+        }
+      },
+      "right": {
+        "nodeType": "Expr_BooleanNot",
+        "expr": {
+          "nodeType": "Expr_FuncCall",
+          "name": {
+            "nodeType": "Name",
+            "parts": [
+              "extension_loaded"
+            ],
+            "attributes": {
+              "startLine": 49,
+              "endLine": 49
+            }
+          },
+          "args": [
+            {
+              "nodeType": "Arg",
+              "value": {
+                "nodeType": "Scalar_String",
+                "value": "sodium",
+                "attributes": {
+                  "startLine": 49,
+                  "endLine": 49,
+                  "kind": 1
+                }
+              },
+              "byRef": false,
+              "unpack": false,
+              "attributes": {
+                "startLine": 49,
+                "endLine": 49
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 49,
+            "endLine": 49
+          }
+        },
+        "attributes": {
+          "startLine": 49,
+          "endLine": 49
+        }
+      },
+      "attributes": {
+        "startLine": 49,
+        "endLine": 49
+      }
+    },
+    "stmts": [
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BinaryOp_BooleanAnd",
+          "left": {
+            "nodeType": "Expr_BinaryOp_GreaterOrEqual",
+            "left": {
+              "nodeType": "Expr_ConstFetch",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "PHP_VERSION_ID"
+                ],
+                "attributes": {
+                  "startLine": 50,
+                  "endLine": 50
+                }
+              },
+              "attributes": {
+                "startLine": 50,
+                "endLine": 50
+              }
+            },
+            "right": {
+              "nodeType": "Scalar_LNumber",
+              "value": 50300,
+              "attributes": {
+                "startLine": 50,
+                "endLine": 50,
+                "kind": 10
+              }
+            },
+            "attributes": {
+              "startLine": 50,
+              "endLine": 50
+            }
+          },
+          "right": {
+            "nodeType": "Expr_BooleanNot",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "defined"
+                ],
+                "attributes": {
+                  "startLine": 50,
+                  "endLine": 50
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "SODIUM_CRYPTO_SCALARMULT_BYTES",
+                    "attributes": {
+                      "startLine": 50,
+                      "endLine": 50,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 50,
+                    "endLine": 50
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 50,
+                "endLine": 50
+              }
+            },
+            "attributes": {
+              "startLine": 50,
+              "endLine": 50
+            }
+          },
+          "attributes": {
+            "startLine": 50,
+            "endLine": 50
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_Include",
+              "expr": {
+                "nodeType": "Expr_BinaryOp_Concat",
+                "left": {
+                  "nodeType": "Expr_FuncCall",
+                  "name": {
+                    "nodeType": "Name",
+                    "parts": [
+                      "dirname"
+                    ],
+                    "attributes": {
+                      "startLine": 51,
+                      "endLine": 51
+                    }
+                  },
+                  "args": [
+                    {
+                      "nodeType": "Arg",
+                      "value": {
+                        "nodeType": "Scalar_MagicConst_File",
+                        "attributes": {
+                          "startLine": 51,
+                          "endLine": 51
+                        }
+                      },
+                      "byRef": false,
+                      "unpack": false,
+                      "attributes": {
+                        "startLine": 51,
+                        "endLine": 51
+                      }
+                    }
+                  ],
+                  "attributes": {
+                    "startLine": 51,
+                    "endLine": 51
+                  }
+                },
+                "right": {
+                  "nodeType": "Scalar_String",
+                  "value": "/lib/php72compat_const.php",
+                  "attributes": {
+                    "startLine": 51,
+                    "endLine": 51,
+                    "kind": 1
+                  }
+                },
+                "attributes": {
+                  "startLine": 51,
+                  "endLine": 51
+                }
+              },
+              "type": 4,
+              "attributes": {
+                "startLine": 51,
+                "endLine": 51
+              }
+            },
+            "attributes": {
+              "startLine": 51,
+              "endLine": 51
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": null,
+        "attributes": {
+          "startLine": 50,
+          "endLine": 52
+        }
+      },
+      {
+        "nodeType": "Stmt_If",
+        "cond": {
+          "nodeType": "Expr_BinaryOp_GreaterOrEqual",
+          "left": {
+            "nodeType": "Expr_ConstFetch",
+            "name": {
+              "nodeType": "Name",
+              "parts": [
+                "PHP_VERSION_ID"
+              ],
+              "attributes": {
+                "startLine": 53,
+                "endLine": 53
+              }
+            },
+            "attributes": {
+              "startLine": 53,
+              "endLine": 53
+            }
+          },
+          "right": {
+            "nodeType": "Scalar_LNumber",
+            "value": 70000,
+            "attributes": {
+              "startLine": 53,
+              "endLine": 53,
+              "kind": 10
+            }
+          },
+          "attributes": {
+            "startLine": 53,
+            "endLine": 53
+          }
+        },
+        "stmts": [
+          {
+            "nodeType": "Stmt_Expression",
+            "expr": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "assert"
+                ],
+                "attributes": {
+                  "startLine": 54,
+                  "endLine": 54
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Expr_FuncCall",
+                    "name": {
+                      "nodeType": "Name",
+                      "parts": [
+                        "class_exists"
+                      ],
+                      "attributes": {
+                        "startLine": 54,
+                        "endLine": 54
+                      }
+                    },
+                    "args": [
+                      {
+                        "nodeType": "Arg",
+                        "value": {
+                          "nodeType": "Scalar_String",
+                          "value": "ParagonIE_Sodium_Compat",
+                          "attributes": {
+                            "startLine": 54,
+                            "endLine": 54,
+                            "kind": 1
+                          }
+                        },
+                        "byRef": false,
+                        "unpack": false,
+                        "attributes": {
+                          "startLine": 54,
+                          "endLine": 54
+                        }
+                      }
+                    ],
+                    "attributes": {
+                      "startLine": 54,
+                      "endLine": 54
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 54,
+                    "endLine": 54
+                  }
+                },
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_String",
+                    "value": "Possible filesystem/autoloader bug?",
+                    "attributes": {
+                      "startLine": 54,
+                      "endLine": 54,
+                      "kind": 1
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 54,
+                    "endLine": 54
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 54,
+                "endLine": 54
+              }
+            },
+            "attributes": {
+              "startLine": 54,
+              "endLine": 54
+            }
+          }
+        ],
+        "elseifs": [],
+        "else": {
+          "nodeType": "Stmt_Else",
+          "stmts": [
+            {
+              "nodeType": "Stmt_Expression",
+              "expr": {
+                "nodeType": "Expr_FuncCall",
+                "name": {
+                  "nodeType": "Name",
+                  "parts": [
+                    "assert"
+                  ],
+                  "attributes": {
+                    "startLine": 56,
+                    "endLine": 56
+                  }
+                },
+                "args": [
+                  {
+                    "nodeType": "Arg",
+                    "value": {
+                      "nodeType": "Expr_FuncCall",
+                      "name": {
+                        "nodeType": "Name",
+                        "parts": [
+                          "class_exists"
+                        ],
+                        "attributes": {
+                          "startLine": 56,
+                          "endLine": 56
+                        }
+                      },
+                      "args": [
+                        {
+                          "nodeType": "Arg",
+                          "value": {
+                            "nodeType": "Scalar_String",
+                            "value": "ParagonIE_Sodium_Compat",
+                            "attributes": {
+                              "startLine": 56,
+                              "endLine": 56,
+                              "kind": 1
+                            }
+                          },
+                          "byRef": false,
+                          "unpack": false,
+                          "attributes": {
+                            "startLine": 56,
+                            "endLine": 56
+                          }
+                        }
+                      ],
+                      "attributes": {
+                        "startLine": 56,
+                        "endLine": 56
+                      }
+                    },
+                    "byRef": false,
+                    "unpack": false,
+                    "attributes": {
+                      "startLine": 56,
+                      "endLine": 56
+                    }
+                  }
+                ],
+                "attributes": {
+                  "startLine": 56,
+                  "endLine": 56
+                }
+              },
+              "attributes": {
+                "startLine": 56,
+                "endLine": 56
+              }
+            }
+          ],
+          "attributes": {
+            "startLine": 55,
+            "endLine": 57
+          }
+        },
+        "attributes": {
+          "startLine": 53,
+          "endLine": 57
+        }
+      },
+      {
+        "nodeType": "Stmt_Expression",
+        "expr": {
+          "nodeType": "Expr_Include",
+          "expr": {
+            "nodeType": "Expr_BinaryOp_Concat",
+            "left": {
+              "nodeType": "Expr_FuncCall",
+              "name": {
+                "nodeType": "Name",
+                "parts": [
+                  "dirname"
+                ],
+                "attributes": {
+                  "startLine": 58,
+                  "endLine": 58
+                }
+              },
+              "args": [
+                {
+                  "nodeType": "Arg",
+                  "value": {
+                    "nodeType": "Scalar_MagicConst_File",
+                    "attributes": {
+                      "startLine": 58,
+                      "endLine": 58
+                    }
+                  },
+                  "byRef": false,
+                  "unpack": false,
+                  "attributes": {
+                    "startLine": 58,
+                    "endLine": 58
+                  }
+                }
+              ],
+              "attributes": {
+                "startLine": 58,
+                "endLine": 58
+              }
+            },
+            "right": {
+              "nodeType": "Scalar_String",
+              "value": "/lib/php72compat.php",
+              "attributes": {
+                "startLine": 58,
+                "endLine": 58,
+                "kind": 1
+              }
+            },
+            "attributes": {
+              "startLine": 58,
+              "endLine": 58
+            }
+          },
+          "type": 4,
+          "attributes": {
+            "startLine": 58,
+            "endLine": 58
+          }
+        },
+        "attributes": {
+          "startLine": 58,
+          "endLine": 58
+        }
+      }
+    ],
+    "elseifs": [],
+    "else": null,
+    "attributes": {
+      "startLine": 49,
+      "endLine": 59
+    }
+  }
+]
