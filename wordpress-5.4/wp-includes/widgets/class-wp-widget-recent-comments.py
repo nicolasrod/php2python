@@ -77,7 +77,7 @@ class WP_Widget_Recent_Comments(WP_Widget):
     #//
     def widget(self, args=None, instance=None):
         
-        first_instance = True
+        widget.first_instance = True
         if (not (php_isset(lambda : args["widget_id"]))):
             args["widget_id"] = self.id
         # end if
@@ -94,8 +94,8 @@ class WP_Widget_Recent_Comments(WP_Widget):
         if title:
             output += args["before_title"] + title + args["after_title"]
         # end if
-        recent_comments_id = "recentcomments" if first_instance else str("recentcomments-") + str(self.number)
-        first_instance = False
+        recent_comments_id = "recentcomments" if widget.first_instance else str("recentcomments-") + str(self.number)
+        widget.first_instance = False
         output += "<ul id=\"" + esc_attr(recent_comments_id) + "\">"
         if php_is_array(comments) and comments:
             #// Prime cache for associated posts. (Prime post term cache if we need it for permalinks.)

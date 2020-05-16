@@ -466,9 +466,9 @@ def wp_start_object_cache(*args_):
     
     global wp_filter
     php_check_if_defined("wp_filter")
-    first_init = True
+    wp_start_object_cache.first_init = True
     #// Only perform the following checks once.
-    if first_init:
+    if wp_start_object_cache.first_init:
         if (not php_function_exists("wp_cache_init")):
             #// 
             #// This is the normal situation. First-run of this function. No
@@ -506,7 +506,7 @@ def wp_start_object_cache(*args_):
     #// initialized. Reset signals to the cache that global IDs
     #// have changed and it may need to update keys and cleanup caches.
     #//
-    if (not first_init) and php_function_exists("wp_cache_switch_to_blog"):
+    if (not wp_start_object_cache.first_init) and php_function_exists("wp_cache_switch_to_blog"):
         wp_cache_switch_to_blog(get_current_blog_id())
     elif php_function_exists("wp_cache_init"):
         wp_cache_init()
@@ -515,7 +515,7 @@ def wp_start_object_cache(*args_):
         wp_cache_add_global_groups(Array("users", "userlogins", "usermeta", "user_meta", "useremail", "userslugs", "site-transient", "site-options", "blog-lookup", "blog-details", "site-details", "rss", "global-posts", "blog-id-cache", "networks", "sites", "blog_meta"))
         wp_cache_add_non_persistent_groups(Array("counts", "plugins"))
     # end if
-    first_init = False
+    wp_start_object_cache.first_init = False
 # end def wp_start_object_cache
 #// 
 #// Redirect to the installer if WordPress is not installed.
@@ -1024,11 +1024,11 @@ def wp_load_translations_early(*args_):
     
     global wp_locale
     php_check_if_defined("wp_locale")
-    loaded = False
-    if loaded:
+    wp_load_translations_early.loaded = False
+    if wp_load_translations_early.loaded:
         return
     # end if
-    loaded = True
+    wp_load_translations_early.loaded = True
     if php_function_exists("did_action") and did_action("init"):
         return
     # end if
@@ -1107,17 +1107,17 @@ def wp_load_translations_early(*args_):
 #//
 def wp_installing(is_installing=None, *args_):
     
-    installing = None
+    wp_installing.installing = None
     #// Support for the `WP_INSTALLING` constant, defined before WP is loaded.
-    if is_null(installing):
-        installing = php_defined("WP_INSTALLING") and WP_INSTALLING
+    if is_null(wp_installing.installing):
+        wp_installing.installing = php_defined("WP_INSTALLING") and WP_INSTALLING
     # end if
     if (not is_null(is_installing)):
-        old_installing = installing
-        installing = is_installing
+        old_installing = wp_installing.installing
+        wp_installing.installing = is_installing
         return php_bool(old_installing)
     # end if
-    return php_bool(installing)
+    return php_bool(wp_installing.installing)
 # end def wp_installing
 #// 
 #// Determines if SSL is used.
@@ -1181,20 +1181,20 @@ def wp_convert_hr_to_bytes(value=None, *args_):
 #//
 def wp_is_ini_value_changeable(setting=None, *args_):
     
-    ini_all = None
-    if (not (php_isset(lambda : ini_all))):
-        ini_all = False
+    wp_is_ini_value_changeable.ini_all = None
+    if (not (php_isset(lambda : wp_is_ini_value_changeable.ini_all))):
+        wp_is_ini_value_changeable.ini_all = False
         #// Sometimes `ini_get_all()` is disabled via the `disable_functions` option for "security purposes".
         if php_function_exists("ini_get_all"):
-            ini_all = php_ini_get_all()
+            wp_is_ini_value_changeable.ini_all = php_ini_get_all()
         # end if
     # end if
     #// Bit operator to workaround https://bugs.php.net/bug.php?id=44936 which changes access level to 63 in PHP 5.2.6 - 5.2.17.
-    if (php_isset(lambda : ini_all[setting]["access"])) and INI_ALL == ini_all[setting]["access"] & 7 or INI_USER == ini_all[setting]["access"] & 7:
+    if (php_isset(lambda : wp_is_ini_value_changeable.ini_all[setting]["access"])) and INI_ALL == wp_is_ini_value_changeable.ini_all[setting]["access"] & 7 or INI_USER == wp_is_ini_value_changeable.ini_all[setting]["access"] & 7:
         return True
     # end if
     #// If we were unable to retrieve the details, fail gracefully to assume it's changeable.
-    if (not php_is_array(ini_all)):
+    if (not php_is_array(wp_is_ini_value_changeable.ini_all)):
         return True
     # end if
     return False

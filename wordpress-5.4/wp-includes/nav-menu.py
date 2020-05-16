@@ -566,7 +566,7 @@ def wp_get_nav_menu_items(menu=None, args=Array(), *args_):
     if (not menu):
         return False
     # end if
-    fetched = Array()
+    wp_get_nav_menu_items.fetched = Array()
     items = get_objects_in_term(menu.term_id, "nav_menu")
     if is_wp_error(items):
         return False
@@ -580,8 +580,8 @@ def wp_get_nav_menu_items(menu=None, args=Array(), *args_):
         items = Array()
     # end if
     #// Get all posts and terms at once to prime the caches.
-    if php_empty(lambda : fetched[menu.term_id]) and (not wp_using_ext_object_cache()):
-        fetched[menu.term_id] = True
+    if php_empty(lambda : wp_get_nav_menu_items.fetched[menu.term_id]) and (not wp_using_ext_object_cache()):
+        wp_get_nav_menu_items.fetched[menu.term_id] = True
         posts = Array()
         terms = Array()
         for item in items:

@@ -859,11 +859,11 @@ def update_meta_cache(meta_type=None, object_ids=None, *args_):
 #//
 def wp_metadata_lazyloader(*args_):
     
-    wp_metadata_lazyloader = None
-    if None == wp_metadata_lazyloader:
-        wp_metadata_lazyloader = php_new_class("WP_Metadata_Lazyloader", lambda : WP_Metadata_Lazyloader())
+    wp_metadata_lazyloader.wp_metadata_lazyloader = None
+    if None == wp_metadata_lazyloader.wp_metadata_lazyloader:
+        wp_metadata_lazyloader.wp_metadata_lazyloader = php_new_class("WP_Metadata_Lazyloader", lambda : WP_Metadata_Lazyloader())
     # end if
-    return wp_metadata_lazyloader
+    return wp_metadata_lazyloader.wp_metadata_lazyloader
 # end def wp_metadata_lazyloader
 #// 
 #// Given a meta query, generates SQL clauses to be appended to a main query.

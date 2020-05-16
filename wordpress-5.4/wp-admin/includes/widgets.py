@@ -122,12 +122,12 @@ def wp_list_widget_controls_dynamic_sidebar(params=None, *args_):
     
     global wp_registered_widgets
     php_check_if_defined("wp_registered_widgets")
-    i = 0
-    i += 1
+    wp_list_widget_controls_dynamic_sidebar.i = 0
+    wp_list_widget_controls_dynamic_sidebar.i += 1
     widget_id = params[0]["widget_id"]
     id = params[0]["_temp_id"] if (php_isset(lambda : params[0]["_temp_id"])) else widget_id
     hidden = " style=\"display:none;\"" if (php_isset(lambda : params[0]["_hide"])) else ""
-    params[0]["before_widget"] = str("<div id='widget-") + str(i) + str("_") + str(id) + str("' class='widget'") + str(hidden) + str(">")
+    params[0]["before_widget"] = str("<div id='widget-") + str(wp_list_widget_controls_dynamic_sidebar.i) + str("_") + str(id) + str("' class='widget'") + str(hidden) + str(">")
     params[0]["after_widget"] = "</div>"
     params[0]["before_title"] = "%BEG_OF_TITLE%"
     #// Deprecated.

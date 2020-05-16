@@ -179,7 +179,7 @@ add_filter("nav_menu_link_attributes", "twentynineteen_nav_menu_link_attributes"
 #//
 def twentynineteen_add_mobile_parent_nav_menu_items(sorted_menu_items=None, args=None, *args_):
     
-    pseudo_id = 0
+    twentynineteen_add_mobile_parent_nav_menu_items.pseudo_id = 0
     if (not (php_isset(lambda : args.theme_location))) or "menu-1" != args.theme_location:
         return sorted_menu_items
     # end if
@@ -189,8 +189,8 @@ def twentynineteen_add_mobile_parent_nav_menu_items(sorted_menu_items=None, args
         if php_in_array("menu-item-has-children", nav_menu_item.classes, True):
             parent_menu_item = copy.deepcopy(nav_menu_item)
             parent_menu_item.original_id = nav_menu_item.ID
-            pseudo_id -= 1
-            parent_menu_item.ID = pseudo_id
+            twentynineteen_add_mobile_parent_nav_menu_items.pseudo_id -= 1
+            parent_menu_item.ID = twentynineteen_add_mobile_parent_nav_menu_items.pseudo_id
             parent_menu_item.db_id = parent_menu_item.ID
             parent_menu_item.object_id = parent_menu_item.ID
             parent_menu_item.classes = Array("mobile-parent-nav-menu-item")

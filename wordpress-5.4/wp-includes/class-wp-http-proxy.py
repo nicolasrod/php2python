@@ -208,22 +208,22 @@ class WP_HTTP_Proxy():
         if (not php_defined("WP_PROXY_BYPASS_HOSTS")):
             return True
         # end if
-        bypass_hosts = None
-        wildcard_regex = Array()
-        if None == bypass_hosts:
-            bypass_hosts = php_preg_split("|,\\s*|", WP_PROXY_BYPASS_HOSTS)
+        send_through_proxy.bypass_hosts = None
+        send_through_proxy.wildcard_regex = Array()
+        if None == send_through_proxy.bypass_hosts:
+            send_through_proxy.bypass_hosts = php_preg_split("|,\\s*|", WP_PROXY_BYPASS_HOSTS)
             if False != php_strpos(WP_PROXY_BYPASS_HOSTS, "*"):
-                wildcard_regex = Array()
-                for host in bypass_hosts:
-                    wildcard_regex[-1] = php_str_replace("\\*", ".+", preg_quote(host, "/"))
+                send_through_proxy.wildcard_regex = Array()
+                for host in send_through_proxy.bypass_hosts:
+                    send_through_proxy.wildcard_regex[-1] = php_str_replace("\\*", ".+", preg_quote(host, "/"))
                 # end for
-                wildcard_regex = "/^(" + php_implode("|", wildcard_regex) + ")$/i"
+                send_through_proxy.wildcard_regex = "/^(" + php_implode("|", send_through_proxy.wildcard_regex) + ")$/i"
             # end if
         # end if
-        if (not php_empty(lambda : wildcard_regex)):
-            return (not php_preg_match(wildcard_regex, check["host"]))
+        if (not php_empty(lambda : send_through_proxy.wildcard_regex)):
+            return (not php_preg_match(send_through_proxy.wildcard_regex, check["host"]))
         else:
-            return (not php_in_array(check["host"], bypass_hosts))
+            return (not php_in_array(check["host"], send_through_proxy.bypass_hosts))
         # end if
     # end def send_through_proxy
 # end class WP_HTTP_Proxy

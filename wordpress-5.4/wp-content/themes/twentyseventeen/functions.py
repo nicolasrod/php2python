@@ -416,12 +416,12 @@ add_filter("widget_tag_cloud_args", "twentyseventeen_widget_tag_cloud_args")
 #//
 def twentyseventeen_unique_id(prefix="", *args_):
     
-    id_counter = 0
+    twentyseventeen_unique_id.id_counter = 0
     if php_function_exists("wp_unique_id"):
         return wp_unique_id(prefix)
     # end if
-    id_counter += 1
-    return prefix + php_str(id_counter)
+    twentyseventeen_unique_id.id_counter += 1
+    return prefix + php_str(twentyseventeen_unique_id.id_counter)
 # end def twentyseventeen_unique_id
 #// 
 #// Implement the Custom Header feature.

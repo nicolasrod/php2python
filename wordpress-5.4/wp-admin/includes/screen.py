@@ -33,8 +33,8 @@ def get_column_headers(screen=None, *args_):
     if php_is_string(screen):
         screen = convert_to_screen(screen)
     # end if
-    column_headers = Array()
-    if (not (php_isset(lambda : column_headers[screen.id]))):
+    get_column_headers.column_headers = Array()
+    if (not (php_isset(lambda : get_column_headers.column_headers[screen.id]))):
         #// 
         #// Filters the column headers for a list table on a specific screen.
         #// 
@@ -47,9 +47,9 @@ def get_column_headers(screen=None, *args_):
         #// 
         #// @param string[] $columns The column header labels keyed by column ID.
         #//
-        column_headers[screen.id] = apply_filters(str("manage_") + str(screen.id) + str("_columns"), Array())
+        get_column_headers.column_headers[screen.id] = apply_filters(str("manage_") + str(screen.id) + str("_columns"), Array())
     # end if
-    return column_headers[screen.id]
+    return get_column_headers.column_headers[screen.id]
 # end def get_column_headers
 #// 
 #// Get a list of hidden columns.

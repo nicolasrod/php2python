@@ -159,20 +159,20 @@ def theme_update_available(theme=None, *args_):
 #//
 def get_theme_update_available(theme=None, *args_):
     
-    themes_update = None
+    get_theme_update_available.themes_update = None
     if (not current_user_can("update_themes")):
         return False
     # end if
-    if (not (php_isset(lambda : themes_update))):
-        themes_update = get_site_transient("update_themes")
+    if (not (php_isset(lambda : get_theme_update_available.themes_update))):
+        get_theme_update_available.themes_update = get_site_transient("update_themes")
     # end if
     if (not type(theme).__name__ == "WP_Theme"):
         return False
     # end if
     stylesheet = theme.get_stylesheet()
     html = ""
-    if (php_isset(lambda : themes_update.response[stylesheet])):
-        update = themes_update.response[stylesheet]
+    if (php_isset(lambda : get_theme_update_available.themes_update.response[stylesheet])):
+        update = get_theme_update_available.themes_update.response[stylesheet]
         theme_name = theme.display("Name")
         details_url = add_query_arg(Array({"TB_iframe": "true", "width": 1024, "height": 800}), update["url"])
         #// Theme browser inside WP? Replace this. Also, theme preview JS will override this on the available list.

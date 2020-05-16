@@ -231,8 +231,8 @@ class ParagonIE_Sodium_Core_BLAKE2b(ParagonIE_Sodium_Core_Util):
     @classmethod
     def pseudoconstructor(self):
         
-        called = False
-        if called:
+        pseudoconstructor.called = False
+        if pseudoconstructor.called:
             return
         # end if
         self.iv = php_new_class("SplFixedArray", lambda : SplFixedArray(8))
@@ -244,7 +244,7 @@ class ParagonIE_Sodium_Core_BLAKE2b(ParagonIE_Sodium_Core_Util):
         self.iv[5] = self.new64(2600822924, 725511199)
         self.iv[6] = self.new64(528734635, 4215389547)
         self.iv[7] = self.new64(1541459225, 327033209)
-        called = True
+        pseudoconstructor.called = True
     # end def pseudoconstructor
     #// 
     #// Returns a fresh BLAKE2 context.

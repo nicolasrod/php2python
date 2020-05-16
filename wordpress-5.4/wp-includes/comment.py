@@ -2152,15 +2152,15 @@ def wp_update_comment(commentarr=None, *args_):
 #//
 def wp_defer_comment_counting(defer=None, *args_):
     
-    _defer = False
+    wp_defer_comment_counting._defer = False
     if php_is_bool(defer):
-        _defer = defer
+        wp_defer_comment_counting._defer = defer
         #// Flush any deferred counts.
         if (not defer):
             wp_update_comment_count(None, True)
         # end if
     # end if
-    return _defer
+    return wp_defer_comment_counting._defer
 # end def wp_defer_comment_counting
 #// 
 #// Updates the comment count for post(s).
@@ -2186,20 +2186,20 @@ def wp_defer_comment_counting(defer=None, *args_):
 #//
 def wp_update_comment_count(post_id=None, do_deferred=False, *args_):
     
-    _deferred = Array()
+    wp_update_comment_count._deferred = Array()
     if php_empty(lambda : post_id) and (not do_deferred):
         return False
     # end if
     if do_deferred:
-        _deferred = array_unique(_deferred)
-        for i,_post_id in _deferred:
+        wp_update_comment_count._deferred = array_unique(wp_update_comment_count._deferred)
+        for i,_post_id in wp_update_comment_count._deferred:
             wp_update_comment_count_now(_post_id)
-            _deferred[i] = None
+            wp_update_comment_count._deferred[i] = None
             pass
         # end for
     # end if
     if wp_defer_comment_counting():
-        _deferred[-1] = post_id
+        wp_update_comment_count._deferred[-1] = post_id
         return True
     elif post_id:
         return wp_update_comment_count_now(post_id)

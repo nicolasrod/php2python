@@ -2167,8 +2167,8 @@ class getid3_id3v2(getid3_handler):
     #//
     def lookupextendedheaderrestrictionstagsizelimits(self, index=None):
         
-        LookupExtendedHeaderRestrictionsTagSizeLimits = Array({0: "No more than 128 frames and 1 MB total tag size", 1: "No more than 64 frames and 128 KB total tag size", 2: "No more than 32 frames and 40 KB total tag size", 3: "No more than 32 frames and 4 KB total tag size"})
-        return LookupExtendedHeaderRestrictionsTagSizeLimits[index] if (php_isset(lambda : LookupExtendedHeaderRestrictionsTagSizeLimits[index])) else ""
+        lookupextendedheaderrestrictionstagsizelimits.LookupExtendedHeaderRestrictionsTagSizeLimits = Array({0: "No more than 128 frames and 1 MB total tag size", 1: "No more than 64 frames and 128 KB total tag size", 2: "No more than 32 frames and 40 KB total tag size", 3: "No more than 32 frames and 4 KB total tag size"})
+        return lookupextendedheaderrestrictionstagsizelimits.LookupExtendedHeaderRestrictionsTagSizeLimits[index] if (php_isset(lambda : lookupextendedheaderrestrictionstagsizelimits.LookupExtendedHeaderRestrictionsTagSizeLimits[index])) else ""
     # end def lookupextendedheaderrestrictionstagsizelimits
     #// 
     #// @param int $index
@@ -2177,8 +2177,8 @@ class getid3_id3v2(getid3_handler):
     #//
     def lookupextendedheaderrestrictionstextencodings(self, index=None):
         
-        LookupExtendedHeaderRestrictionsTextEncodings = Array({0: "No restrictions", 1: "Strings are only encoded with ISO-8859-1 or UTF-8"})
-        return LookupExtendedHeaderRestrictionsTextEncodings[index] if (php_isset(lambda : LookupExtendedHeaderRestrictionsTextEncodings[index])) else ""
+        lookupextendedheaderrestrictionstextencodings.LookupExtendedHeaderRestrictionsTextEncodings = Array({0: "No restrictions", 1: "Strings are only encoded with ISO-8859-1 or UTF-8"})
+        return lookupextendedheaderrestrictionstextencodings.LookupExtendedHeaderRestrictionsTextEncodings[index] if (php_isset(lambda : lookupextendedheaderrestrictionstextencodings.LookupExtendedHeaderRestrictionsTextEncodings[index])) else ""
     # end def lookupextendedheaderrestrictionstextencodings
     #// 
     #// @param int $index
@@ -2187,8 +2187,8 @@ class getid3_id3v2(getid3_handler):
     #//
     def lookupextendedheaderrestrictionstextfieldsize(self, index=None):
         
-        LookupExtendedHeaderRestrictionsTextFieldSize = Array({0: "No restrictions", 1: "No string is longer than 1024 characters", 2: "No string is longer than 128 characters", 3: "No string is longer than 30 characters"})
-        return LookupExtendedHeaderRestrictionsTextFieldSize[index] if (php_isset(lambda : LookupExtendedHeaderRestrictionsTextFieldSize[index])) else ""
+        lookupextendedheaderrestrictionstextfieldsize.LookupExtendedHeaderRestrictionsTextFieldSize = Array({0: "No restrictions", 1: "No string is longer than 1024 characters", 2: "No string is longer than 128 characters", 3: "No string is longer than 30 characters"})
+        return lookupextendedheaderrestrictionstextfieldsize.LookupExtendedHeaderRestrictionsTextFieldSize[index] if (php_isset(lambda : lookupextendedheaderrestrictionstextfieldsize.LookupExtendedHeaderRestrictionsTextFieldSize[index])) else ""
     # end def lookupextendedheaderrestrictionstextfieldsize
     #// 
     #// @param int $index
@@ -2197,8 +2197,8 @@ class getid3_id3v2(getid3_handler):
     #//
     def lookupextendedheaderrestrictionsimageencoding(self, index=None):
         
-        LookupExtendedHeaderRestrictionsImageEncoding = Array({0: "No restrictions", 1: "Images are encoded only with PNG or JPEG"})
-        return LookupExtendedHeaderRestrictionsImageEncoding[index] if (php_isset(lambda : LookupExtendedHeaderRestrictionsImageEncoding[index])) else ""
+        lookupextendedheaderrestrictionsimageencoding.LookupExtendedHeaderRestrictionsImageEncoding = Array({0: "No restrictions", 1: "Images are encoded only with PNG or JPEG"})
+        return lookupextendedheaderrestrictionsimageencoding.LookupExtendedHeaderRestrictionsImageEncoding[index] if (php_isset(lambda : lookupextendedheaderrestrictionsimageencoding.LookupExtendedHeaderRestrictionsImageEncoding[index])) else ""
     # end def lookupextendedheaderrestrictionsimageencoding
     #// 
     #// @param int $index
@@ -2207,8 +2207,8 @@ class getid3_id3v2(getid3_handler):
     #//
     def lookupextendedheaderrestrictionsimagesizesize(self, index=None):
         
-        LookupExtendedHeaderRestrictionsImageSizeSize = Array({0: "No restrictions", 1: "All images are 256x256 pixels or smaller", 2: "All images are 64x64 pixels or smaller", 3: "All images are exactly 64x64 pixels, unless required otherwise"})
-        return LookupExtendedHeaderRestrictionsImageSizeSize[index] if (php_isset(lambda : LookupExtendedHeaderRestrictionsImageSizeSize[index])) else ""
+        lookupextendedheaderrestrictionsimagesizesize.LookupExtendedHeaderRestrictionsImageSizeSize = Array({0: "No restrictions", 1: "All images are 256x256 pixels or smaller", 2: "All images are 64x64 pixels or smaller", 3: "All images are exactly 64x64 pixels, unless required otherwise"})
+        return lookupextendedheaderrestrictionsimagesizesize.LookupExtendedHeaderRestrictionsImageSizeSize[index] if (php_isset(lambda : lookupextendedheaderrestrictionsimagesizesize.LookupExtendedHeaderRestrictionsImageSizeSize[index])) else ""
     # end def lookupextendedheaderrestrictionsimagesizesize
     #// 
     #// @param string $currencyid
@@ -3070,8 +3070,8 @@ class getid3_id3v2(getid3_handler):
         if index >= 240 and index <= 252:
             return "reserved for future use"
         # end if
-        EventLookup = Array({0: "padding (has no meaning)", 1: "end of initial silence", 2: "intro start", 3: "main part start", 4: "outro start", 5: "outro end", 6: "verse start", 7: "refrain start", 8: "interlude start", 9: "theme start", 10: "variation start", 11: "key change", 12: "time change", 13: "momentary unwanted noise (Snap, Crackle & Pop)", 14: "sustained noise", 15: "sustained noise end", 16: "intro end", 17: "main part end", 18: "verse end", 19: "refrain end", 20: "theme end", 21: "profanity", 22: "profanity end", 253: "audio end (start of silence)", 254: "audio file ends", 255: "one more byte of events follows"})
-        return EventLookup[index] if (php_isset(lambda : EventLookup[index])) else ""
+        etcoeventlookup.EventLookup = Array({0: "padding (has no meaning)", 1: "end of initial silence", 2: "intro start", 3: "main part start", 4: "outro start", 5: "outro end", 6: "verse start", 7: "refrain start", 8: "interlude start", 9: "theme start", 10: "variation start", 11: "key change", 12: "time change", 13: "momentary unwanted noise (Snap, Crackle & Pop)", 14: "sustained noise", 15: "sustained noise end", 16: "intro end", 17: "main part end", 18: "verse end", 19: "refrain end", 20: "theme end", 21: "profanity", 22: "profanity end", 253: "audio end (start of silence)", 254: "audio file ends", 255: "one more byte of events follows"})
+        return etcoeventlookup.EventLookup[index] if (php_isset(lambda : etcoeventlookup.EventLookup[index])) else ""
     # end def etcoeventlookup
     #// 
     #// @param int $index
@@ -3081,8 +3081,8 @@ class getid3_id3v2(getid3_handler):
     @classmethod
     def sytlcontenttypelookup(self, index=None):
         
-        SYTLContentTypeLookup = Array({0: "other", 1: "lyrics", 2: "text transcription", 3: "movement/part name", 4: "events", 5: "chord", 6: "trivia/'pop up' information", 7: "URLs to webpages", 8: "URLs to images"})
-        return SYTLContentTypeLookup[index] if (php_isset(lambda : SYTLContentTypeLookup[index])) else ""
+        sytlcontenttypelookup.SYTLContentTypeLookup = Array({0: "other", 1: "lyrics", 2: "text transcription", 3: "movement/part name", 4: "events", 5: "chord", 6: "trivia/'pop up' information", 7: "URLs to webpages", 8: "URLs to images"})
+        return sytlcontenttypelookup.SYTLContentTypeLookup[index] if (php_isset(lambda : sytlcontenttypelookup.SYTLContentTypeLookup[index])) else ""
     # end def sytlcontenttypelookup
     #// 
     #// @param int   $index
@@ -3093,11 +3093,11 @@ class getid3_id3v2(getid3_handler):
     @classmethod
     def apicpicturetypelookup(self, index=None, returnarray=False):
         
-        APICPictureTypeLookup = Array({0: "Other", 1: "32x32 pixels 'file icon' (PNG only)", 2: "Other file icon", 3: "Cover (front)", 4: "Cover (back)", 5: "Leaflet page", 6: "Media (e.g. label side of CD)", 7: "Lead artist/lead performer/soloist", 8: "Artist/performer", 9: "Conductor", 10: "Band/Orchestra", 11: "Composer", 12: "Lyricist/text writer", 13: "Recording Location", 14: "During recording", 15: "During performance", 16: "Movie/video screen capture", 17: "A bright coloured fish", 18: "Illustration", 19: "Band/artist logotype", 20: "Publisher/Studio logotype"})
+        apicpicturetypelookup.APICPictureTypeLookup = Array({0: "Other", 1: "32x32 pixels 'file icon' (PNG only)", 2: "Other file icon", 3: "Cover (front)", 4: "Cover (back)", 5: "Leaflet page", 6: "Media (e.g. label side of CD)", 7: "Lead artist/lead performer/soloist", 8: "Artist/performer", 9: "Conductor", 10: "Band/Orchestra", 11: "Composer", 12: "Lyricist/text writer", 13: "Recording Location", 14: "During recording", 15: "During performance", 16: "Movie/video screen capture", 17: "A bright coloured fish", 18: "Illustration", 19: "Band/artist logotype", 20: "Publisher/Studio logotype"})
         if returnarray:
-            return APICPictureTypeLookup
+            return apicpicturetypelookup.APICPictureTypeLookup
         # end if
-        return APICPictureTypeLookup[index] if (php_isset(lambda : APICPictureTypeLookup[index])) else ""
+        return apicpicturetypelookup.APICPictureTypeLookup[index] if (php_isset(lambda : apicpicturetypelookup.APICPictureTypeLookup[index])) else ""
     # end def apicpicturetypelookup
     #// 
     #// @param int $index
@@ -3107,8 +3107,8 @@ class getid3_id3v2(getid3_handler):
     @classmethod
     def comrreceivedaslookup(self, index=None):
         
-        COMRReceivedAsLookup = Array({0: "Other", 1: "Standard CD album with other songs", 2: "Compressed audio on CD", 3: "File over the Internet", 4: "Stream over the Internet", 5: "As note sheets", 6: "As note sheets in a book with other sheets", 7: "Music on other media", 8: "Non-musical merchandise"})
-        return COMRReceivedAsLookup[index] if (php_isset(lambda : COMRReceivedAsLookup[index])) else ""
+        comrreceivedaslookup.COMRReceivedAsLookup = Array({0: "Other", 1: "Standard CD album with other songs", 2: "Compressed audio on CD", 3: "File over the Internet", 4: "Stream over the Internet", 5: "As note sheets", 6: "As note sheets in a book with other sheets", 7: "Music on other media", 8: "Non-musical merchandise"})
+        return comrreceivedaslookup.COMRReceivedAsLookup[index] if (php_isset(lambda : comrreceivedaslookup.COMRReceivedAsLookup[index])) else ""
     # end def comrreceivedaslookup
     #// 
     #// @param int $index
@@ -3118,8 +3118,8 @@ class getid3_id3v2(getid3_handler):
     @classmethod
     def rva2channeltypelookup(self, index=None):
         
-        RVA2ChannelTypeLookup = Array({0: "Other", 1: "Master volume", 2: "Front right", 3: "Front left", 4: "Back right", 5: "Back left", 6: "Front centre", 7: "Back centre", 8: "Subwoofer"})
-        return RVA2ChannelTypeLookup[index] if (php_isset(lambda : RVA2ChannelTypeLookup[index])) else ""
+        rva2channeltypelookup.RVA2ChannelTypeLookup = Array({0: "Other", 1: "Master volume", 2: "Front right", 3: "Front left", 4: "Back right", 5: "Back left", 6: "Front centre", 7: "Back centre", 8: "Subwoofer"})
+        return rva2channeltypelookup.RVA2ChannelTypeLookup[index] if (php_isset(lambda : rva2channeltypelookup.RVA2ChannelTypeLookup[index])) else ""
     # end def rva2channeltypelookup
     #// 
     #// @param string $framename
@@ -3490,8 +3490,8 @@ class getid3_id3v2(getid3_handler):
     @classmethod
     def textencodingterminatorlookup(self, encoding=None):
         
-        TextEncodingTerminatorLookup = Array({0: " ", 1: "  ", 2: "  ", 3: " ", 255: "  "})
-        return TextEncodingTerminatorLookup[encoding] if (php_isset(lambda : TextEncodingTerminatorLookup[encoding])) else " "
+        textencodingterminatorlookup.TextEncodingTerminatorLookup = Array({0: " ", 1: "  ", 2: "  ", 3: " ", 255: "  "})
+        return textencodingterminatorlookup.TextEncodingTerminatorLookup[encoding] if (php_isset(lambda : textencodingterminatorlookup.TextEncodingTerminatorLookup[encoding])) else " "
     # end def textencodingterminatorlookup
     #// 
     #// @param int $encoding
@@ -3501,8 +3501,8 @@ class getid3_id3v2(getid3_handler):
     @classmethod
     def textencodingnamelookup(self, encoding=None):
         
-        TextEncodingNameLookup = Array({0: "ISO-8859-1", 1: "UTF-16", 2: "UTF-16BE", 3: "UTF-8", 255: "UTF-16BE"})
-        return TextEncodingNameLookup[encoding] if (php_isset(lambda : TextEncodingNameLookup[encoding])) else "ISO-8859-1"
+        textencodingnamelookup.TextEncodingNameLookup = Array({0: "ISO-8859-1", 1: "UTF-16", 2: "UTF-16BE", 3: "UTF-8", 255: "UTF-16BE"})
+        return textencodingnamelookup.TextEncodingNameLookup[encoding] if (php_isset(lambda : textencodingnamelookup.TextEncodingNameLookup[encoding])) else "ISO-8859-1"
     # end def textencodingnamelookup
     #// 
     #// @param string $string
@@ -3637,11 +3637,11 @@ class getid3_id3v2(getid3_handler):
     @classmethod
     def id3v22itunesbrokenframename(self, frame_name=None):
         
-        ID3v22_iTunes_BrokenFrames = Array({"BUF": "RBUF", "CNT": "PCNT", "COM": "COMM", "CRA": "AENC", "EQU": "EQUA", "ETC": "ETCO", "GEO": "GEOB", "IPL": "IPLS", "LNK": "LINK", "MCI": "MCDI", "MLL": "MLLT", "PIC": "APIC", "POP": "POPM", "REV": "RVRB", "RVA": "RVAD", "SLT": "SYLT", "STC": "SYTC", "TAL": "TALB", "TBP": "TBPM", "TCM": "TCOM", "TCO": "TCON", "TCP": "TCMP", "TCR": "TCOP", "TDA": "TDAT", "TDY": "TDLY", "TEN": "TENC", "TFT": "TFLT", "TIM": "TIME", "TKE": "TKEY", "TLA": "TLAN", "TLE": "TLEN", "TMT": "TMED", "TOA": "TOPE", "TOF": "TOFN", "TOL": "TOLY", "TOR": "TORY", "TOT": "TOAL", "TP1": "TPE1", "TP2": "TPE2", "TP3": "TPE3", "TP4": "TPE4", "TPA": "TPOS", "TPB": "TPUB", "TRC": "TSRC", "TRD": "TRDA", "TRK": "TRCK", "TS2": "TSO2", "TSA": "TSOA", "TSC": "TSOC", "TSI": "TSIZ", "TSP": "TSOP", "TSS": "TSSE", "TST": "TSOT", "TT1": "TIT1", "TT2": "TIT2", "TT3": "TIT3", "TXT": "TEXT", "TXX": "TXXX", "TYE": "TYER", "UFI": "UFID", "ULT": "USLT", "WAF": "WOAF", "WAR": "WOAR", "WAS": "WOAS", "WCM": "WCOM", "WCP": "WCOP", "WPB": "WPUB", "WXX": "WXXX"})
+        id3v22itunesbrokenframename.ID3v22_iTunes_BrokenFrames = Array({"BUF": "RBUF", "CNT": "PCNT", "COM": "COMM", "CRA": "AENC", "EQU": "EQUA", "ETC": "ETCO", "GEO": "GEOB", "IPL": "IPLS", "LNK": "LINK", "MCI": "MCDI", "MLL": "MLLT", "PIC": "APIC", "POP": "POPM", "REV": "RVRB", "RVA": "RVAD", "SLT": "SYLT", "STC": "SYTC", "TAL": "TALB", "TBP": "TBPM", "TCM": "TCOM", "TCO": "TCON", "TCP": "TCMP", "TCR": "TCOP", "TDA": "TDAT", "TDY": "TDLY", "TEN": "TENC", "TFT": "TFLT", "TIM": "TIME", "TKE": "TKEY", "TLA": "TLAN", "TLE": "TLEN", "TMT": "TMED", "TOA": "TOPE", "TOF": "TOFN", "TOL": "TOLY", "TOR": "TORY", "TOT": "TOAL", "TP1": "TPE1", "TP2": "TPE2", "TP3": "TPE3", "TP4": "TPE4", "TPA": "TPOS", "TPB": "TPUB", "TRC": "TSRC", "TRD": "TRDA", "TRK": "TRCK", "TS2": "TSO2", "TSA": "TSOA", "TSC": "TSOC", "TSI": "TSIZ", "TSP": "TSOP", "TSS": "TSSE", "TST": "TSOT", "TT1": "TIT1", "TT2": "TIT2", "TT3": "TIT3", "TXT": "TEXT", "TXX": "TXXX", "TYE": "TYER", "UFI": "UFID", "ULT": "USLT", "WAF": "WOAF", "WAR": "WOAR", "WAS": "WOAS", "WCM": "WCOM", "WCP": "WCOP", "WPB": "WPUB", "WXX": "WXXX"})
         if php_strlen(frame_name) == 4:
             if php_substr(frame_name, 3, 1) == " " or php_substr(frame_name, 3, 1) == " ":
-                if (php_isset(lambda : ID3v22_iTunes_BrokenFrames[php_substr(frame_name, 0, 3)])):
-                    return ID3v22_iTunes_BrokenFrames[php_substr(frame_name, 0, 3)]
+                if (php_isset(lambda : id3v22itunesbrokenframename.ID3v22_iTunes_BrokenFrames[php_substr(frame_name, 0, 3)])):
+                    return id3v22itunesbrokenframename.ID3v22_iTunes_BrokenFrames[php_substr(frame_name, 0, 3)]
                 # end if
             # end if
         # end if

@@ -546,14 +546,14 @@ class SimplePie_IRI():
     #//
     def set_iri(self, iri=None):
         
-        cache = None
-        if (not cache):
-            cache = Array()
+        set_iri.cache = None
+        if (not set_iri.cache):
+            set_iri.cache = Array()
         # end if
         if iri == None:
             return True
-        elif (php_isset(lambda : cache[iri])):
-            self.scheme, self.iuserinfo, self.ihost, self.port, self.ipath, self.iquery, self.ifragment, return_ = cache[iri]
+        elif (php_isset(lambda : set_iri.cache[iri])):
+            self.scheme, self.iuserinfo, self.ihost, self.port, self.ipath, self.iquery, self.ifragment, return_ = set_iri.cache[iri]
             return return_
         else:
             parsed = self.parse_iri(php_str(iri))
@@ -561,7 +561,7 @@ class SimplePie_IRI():
                 return False
             # end if
             return_ = self.set_scheme(parsed["scheme"]) and self.set_authority(parsed["authority"]) and self.set_path(parsed["path"]) and self.set_query(parsed["query"]) and self.set_fragment(parsed["fragment"])
-            cache[iri] = Array(self.scheme, self.iuserinfo, self.ihost, self.port, self.ipath, self.iquery, self.ifragment, return_)
+            set_iri.cache[iri] = Array(self.scheme, self.iuserinfo, self.ihost, self.port, self.ipath, self.iquery, self.ifragment, return_)
             return return_
         # end if
     # end def set_iri
@@ -593,17 +593,17 @@ class SimplePie_IRI():
     #//
     def set_authority(self, authority=None):
         
-        cache = None
-        if (not cache):
-            cache = Array()
+        set_authority.cache = None
+        if (not set_authority.cache):
+            set_authority.cache = Array()
         # end if
         if authority == None:
             self.iuserinfo = None
             self.ihost = None
             self.port = None
             return True
-        elif (php_isset(lambda : cache[authority])):
-            self.iuserinfo, self.ihost, self.port, return_ = cache[authority]
+        elif (php_isset(lambda : set_authority.cache[authority])):
+            self.iuserinfo, self.ihost, self.port, return_ = set_authority.cache[authority]
             return return_
         else:
             remaining = authority
@@ -625,7 +625,7 @@ class SimplePie_IRI():
                 port = None
             # end if
             return_ = self.set_userinfo(iuserinfo) and self.set_host(remaining) and self.set_port(port)
-            cache[authority] = Array(self.iuserinfo, self.ihost, self.port, return_)
+            set_authority.cache[authority] = Array(self.iuserinfo, self.ihost, self.port, return_)
             return return_
         # end if
     # end def set_authority
@@ -717,17 +717,17 @@ class SimplePie_IRI():
     #//
     def set_path(self, ipath=None):
         
-        cache = None
-        if (not cache):
-            cache = Array()
+        set_path.cache = None
+        if (not set_path.cache):
+            set_path.cache = Array()
         # end if
         ipath = php_str(ipath)
-        if (php_isset(lambda : cache[ipath])):
-            self.ipath = cache[ipath][php_int(self.scheme != None)]
+        if (php_isset(lambda : set_path.cache[ipath])):
+            self.ipath = set_path.cache[ipath][php_int(self.scheme != None)]
         else:
             valid = self.replace_invalid_with_pct_encoding(ipath, "!$&'()*+,;=@:/")
             removed = self.remove_dot_segments(valid)
-            cache[ipath] = Array(valid, removed)
+            set_path.cache[ipath] = Array(valid, removed)
             self.ipath = removed if self.scheme != None else valid
         # end if
         self.scheme_normalization()
@@ -772,15 +772,15 @@ class SimplePie_IRI():
     #//
     def to_uri(self, string=None):
         
-        non_ascii = None
-        if (not non_ascii):
-            non_ascii = php_implode("", range("", "ÿ"))
+        to_uri.non_ascii = None
+        if (not to_uri.non_ascii):
+            to_uri.non_ascii = php_implode("", range("", "ÿ"))
         # end if
         position = 0
         strlen = php_strlen(string)
         while True:
             
-            if not (position += strcspn(string, non_ascii, position) < strlen):
+            if not (position += strcspn(string, to_uri.non_ascii, position) < strlen):
                 break
             # end if
             string = php_substr_replace(string, php_sprintf("%%%02X", php_ord(string[position])), position, 1)

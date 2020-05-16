@@ -345,8 +345,8 @@ class getid3_flv(getid3_handler):
     @classmethod
     def audioformatlookup(self, id=None):
         
-        lookup = Array({0: "Linear PCM, platform endian", 1: "ADPCM", 2: "mp3", 3: "Linear PCM, little endian", 4: "Nellymoser 16kHz mono", 5: "Nellymoser 8kHz mono", 6: "Nellymoser", 7: "G.711A-law logarithmic PCM", 8: "G.711 mu-law logarithmic PCM", 9: "reserved", 10: "AAC", 11: "Speex", 12: False, 13: False, 14: "mp3 8kHz", 15: "Device-specific sound"})
-        return lookup[id] if (php_isset(lambda : lookup[id])) else False
+        audioformatlookup.lookup = Array({0: "Linear PCM, platform endian", 1: "ADPCM", 2: "mp3", 3: "Linear PCM, little endian", 4: "Nellymoser 16kHz mono", 5: "Nellymoser 8kHz mono", 6: "Nellymoser", 7: "G.711A-law logarithmic PCM", 8: "G.711 mu-law logarithmic PCM", 9: "reserved", 10: "AAC", 11: "Speex", 12: False, 13: False, 14: "mp3 8kHz", 15: "Device-specific sound"})
+        return audioformatlookup.lookup[id] if (php_isset(lambda : audioformatlookup.lookup[id])) else False
     # end def audioformatlookup
     #// 
     #// @param int $id
@@ -356,8 +356,8 @@ class getid3_flv(getid3_handler):
     @classmethod
     def audioratelookup(self, id=None):
         
-        lookup = Array({0: 5500, 1: 11025, 2: 22050, 3: 44100})
-        return lookup[id] if (php_isset(lambda : lookup[id])) else False
+        audioratelookup.lookup = Array({0: 5500, 1: 11025, 2: 22050, 3: 44100})
+        return audioratelookup.lookup[id] if (php_isset(lambda : audioratelookup.lookup[id])) else False
     # end def audioratelookup
     #// 
     #// @param int $id
@@ -367,8 +367,8 @@ class getid3_flv(getid3_handler):
     @classmethod
     def audiobitdepthlookup(self, id=None):
         
-        lookup = Array({0: 8, 1: 16})
-        return lookup[id] if (php_isset(lambda : lookup[id])) else False
+        audiobitdepthlookup.lookup = Array({0: 8, 1: 16})
+        return audiobitdepthlookup.lookup[id] if (php_isset(lambda : audiobitdepthlookup.lookup[id])) else False
     # end def audiobitdepthlookup
     #// 
     #// @param int $id
@@ -378,8 +378,8 @@ class getid3_flv(getid3_handler):
     @classmethod
     def videocodeclookup(self, id=None):
         
-        lookup = Array({GETID3_FLV_VIDEO_H263: "Sorenson H.263", GETID3_FLV_VIDEO_SCREEN: "Screen video", GETID3_FLV_VIDEO_VP6FLV: "On2 VP6", GETID3_FLV_VIDEO_VP6FLV_ALPHA: "On2 VP6 with alpha channel", GETID3_FLV_VIDEO_SCREENV2: "Screen video v2", GETID3_FLV_VIDEO_H264: "Sorenson H.264"})
-        return lookup[id] if (php_isset(lambda : lookup[id])) else False
+        videocodeclookup.lookup = Array({GETID3_FLV_VIDEO_H263: "Sorenson H.263", GETID3_FLV_VIDEO_SCREEN: "Screen video", GETID3_FLV_VIDEO_VP6FLV: "On2 VP6", GETID3_FLV_VIDEO_VP6FLV_ALPHA: "On2 VP6 with alpha channel", GETID3_FLV_VIDEO_SCREENV2: "Screen video v2", GETID3_FLV_VIDEO_H264: "Sorenson H.264"})
+        return videocodeclookup.lookup[id] if (php_isset(lambda : videocodeclookup.lookup[id])) else False
     # end def videocodeclookup
 # end class getid3_flv
 class AMFStream():

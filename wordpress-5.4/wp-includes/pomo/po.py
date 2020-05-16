@@ -463,20 +463,20 @@ if (not php_class_exists("PO", False)):
         #//
         def read_line(self, f=None, action="read"):
             
-            last_line = ""
-            use_last_line = False
+            read_line.last_line = ""
+            read_line.use_last_line = False
             if "clear" == action:
-                last_line = ""
+                read_line.last_line = ""
                 return True
             # end if
             if "put-back" == action:
-                use_last_line = True
+                read_line.use_last_line = True
                 return True
             # end if
-            line = last_line if use_last_line else php_fgets(f)
+            line = read_line.last_line if read_line.use_last_line else php_fgets(f)
             line = php_rtrim(line, "\r\n") + "\n" if "\r\n" == php_substr(line, -2) else line
-            last_line = line
-            use_last_line = False
+            read_line.last_line = line
+            read_line.use_last_line = False
             return line
         # end def read_line
         #// 

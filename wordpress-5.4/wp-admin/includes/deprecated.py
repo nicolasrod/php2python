@@ -625,12 +625,12 @@ def wp_dashboard_quick_press_output(*args_):
 def wp_tiny_mce(teeny=False, settings=False, *args_):
     
     _deprecated_function(__FUNCTION__, "3.3.0", "wp_editor()")
-    num = 1
+    wp_tiny_mce.num = 1
     if (not php_class_exists("_WP_Editors", False)):
         php_include_file(ABSPATH + WPINC + "/class-wp-editor.php", once=True)
     # end if
-    editor_id = "content" + num
-    num += 1
+    editor_id = "content" + wp_tiny_mce.num
+    wp_tiny_mce.num += 1
     set = Array({"teeny": teeny, "tinymce": settings if settings else True, "quicktags": False})
     set = _WP_Editors.parse_settings(editor_id, set)
     _WP_Editors.editor_settings(editor_id, set)

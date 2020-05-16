@@ -561,8 +561,8 @@ class getid3_ac3(getid3_handler):
     @classmethod
     def sampleratecodelookup(self, fscod=None):
         
-        sampleRateCodeLookup = Array({0: 48000, 1: 44100, 2: 32000, 3: "reserved"})
-        return sampleRateCodeLookup[fscod] if (php_isset(lambda : sampleRateCodeLookup[fscod])) else False
+        sampleratecodelookup.sampleRateCodeLookup = Array({0: 48000, 1: 44100, 2: 32000, 3: "reserved"})
+        return sampleratecodelookup.sampleRateCodeLookup[fscod] if (php_isset(lambda : sampleratecodelookup.sampleRateCodeLookup[fscod])) else False
     # end def sampleratecodelookup
     #// 
     #// @param int $fscod2
@@ -572,8 +572,8 @@ class getid3_ac3(getid3_handler):
     @classmethod
     def sampleratecodelookup2(self, fscod2=None):
         
-        sampleRateCodeLookup2 = Array({0: 24000, 1: 22050, 2: 16000, 3: "reserved"})
-        return sampleRateCodeLookup2[fscod2] if (php_isset(lambda : sampleRateCodeLookup2[fscod2])) else False
+        sampleratecodelookup2.sampleRateCodeLookup2 = Array({0: 24000, 1: 22050, 2: 16000, 3: "reserved"})
+        return sampleratecodelookup2.sampleRateCodeLookup2[fscod2] if (php_isset(lambda : sampleratecodelookup2.sampleRateCodeLookup2[fscod2])) else False
     # end def sampleratecodelookup2
     #// 
     #// @param int $bsmod
@@ -584,29 +584,29 @@ class getid3_ac3(getid3_handler):
     @classmethod
     def servicetypelookup(self, bsmod=None, acmod=None):
         
-        serviceTypeLookup = Array()
-        if php_empty(lambda : serviceTypeLookup):
+        servicetypelookup.serviceTypeLookup = Array()
+        if php_empty(lambda : servicetypelookup.serviceTypeLookup):
             i = 0
             while i <= 7:
                 
-                serviceTypeLookup[0][i] = "main audio service: complete main (CM)"
-                serviceTypeLookup[1][i] = "main audio service: music and effects (ME)"
-                serviceTypeLookup[2][i] = "associated service: visually impaired (VI)"
-                serviceTypeLookup[3][i] = "associated service: hearing impaired (HI)"
-                serviceTypeLookup[4][i] = "associated service: dialogue (D)"
-                serviceTypeLookup[5][i] = "associated service: commentary (C)"
-                serviceTypeLookup[6][i] = "associated service: emergency (E)"
+                servicetypelookup.serviceTypeLookup[0][i] = "main audio service: complete main (CM)"
+                servicetypelookup.serviceTypeLookup[1][i] = "main audio service: music and effects (ME)"
+                servicetypelookup.serviceTypeLookup[2][i] = "associated service: visually impaired (VI)"
+                servicetypelookup.serviceTypeLookup[3][i] = "associated service: hearing impaired (HI)"
+                servicetypelookup.serviceTypeLookup[4][i] = "associated service: dialogue (D)"
+                servicetypelookup.serviceTypeLookup[5][i] = "associated service: commentary (C)"
+                servicetypelookup.serviceTypeLookup[6][i] = "associated service: emergency (E)"
                 i += 1
             # end while
-            serviceTypeLookup[7][1] = "associated service: voice over (VO)"
+            servicetypelookup.serviceTypeLookup[7][1] = "associated service: voice over (VO)"
             i = 2
             while i <= 7:
                 
-                serviceTypeLookup[7][i] = "main audio service: karaoke"
+                servicetypelookup.serviceTypeLookup[7][i] = "main audio service: karaoke"
                 i += 1
             # end while
         # end if
-        return serviceTypeLookup[bsmod][acmod] if (php_isset(lambda : serviceTypeLookup[bsmod][acmod])) else False
+        return servicetypelookup.serviceTypeLookup[bsmod][acmod] if (php_isset(lambda : servicetypelookup.serviceTypeLookup[bsmod][acmod])) else False
     # end def servicetypelookup
     #// 
     #// @param int $acmod
@@ -616,8 +616,8 @@ class getid3_ac3(getid3_handler):
     @classmethod
     def audiocodingmodelookup(self, acmod=None):
         
-        audioCodingModeLookup = Array({0: Array({"channel_config": "1+1", "num_channels": 2, "channel_order": "Ch1,Ch2"})}, {1: Array({"channel_config": "1/0", "num_channels": 1, "channel_order": "C"})}, {2: Array({"channel_config": "2/0", "num_channels": 2, "channel_order": "L,R"})}, {3: Array({"channel_config": "3/0", "num_channels": 3, "channel_order": "L,C,R"})}, {4: Array({"channel_config": "2/1", "num_channels": 3, "channel_order": "L,R,S"})}, {5: Array({"channel_config": "3/1", "num_channels": 4, "channel_order": "L,C,R,S"})}, {6: Array({"channel_config": "2/2", "num_channels": 4, "channel_order": "L,R,SL,SR"})}, {7: Array({"channel_config": "3/2", "num_channels": 5, "channel_order": "L,C,R,SL,SR"})})
-        return audioCodingModeLookup[acmod] if (php_isset(lambda : audioCodingModeLookup[acmod])) else False
+        audiocodingmodelookup.audioCodingModeLookup = Array({0: Array({"channel_config": "1+1", "num_channels": 2, "channel_order": "Ch1,Ch2"})}, {1: Array({"channel_config": "1/0", "num_channels": 1, "channel_order": "C"})}, {2: Array({"channel_config": "2/0", "num_channels": 2, "channel_order": "L,R"})}, {3: Array({"channel_config": "3/0", "num_channels": 3, "channel_order": "L,C,R"})}, {4: Array({"channel_config": "2/1", "num_channels": 3, "channel_order": "L,R,S"})}, {5: Array({"channel_config": "3/1", "num_channels": 4, "channel_order": "L,C,R,S"})}, {6: Array({"channel_config": "2/2", "num_channels": 4, "channel_order": "L,R,SL,SR"})}, {7: Array({"channel_config": "3/2", "num_channels": 5, "channel_order": "L,C,R,SL,SR"})})
+        return audiocodingmodelookup.audioCodingModeLookup[acmod] if (php_isset(lambda : audiocodingmodelookup.audioCodingModeLookup[acmod])) else False
     # end def audiocodingmodelookup
     #// 
     #// @param int $cmixlev
@@ -627,11 +627,11 @@ class getid3_ac3(getid3_handler):
     @classmethod
     def centermixlevellookup(self, cmixlev=None):
         
-        centerMixLevelLookup = None
-        if php_empty(lambda : centerMixLevelLookup):
-            centerMixLevelLookup = Array({0: pow(2, -3 / 6), 1: pow(2, -4.5 / 6), 2: pow(2, -6 / 6), 3: "reserved"})
+        centermixlevellookup.centerMixLevelLookup = None
+        if php_empty(lambda : centermixlevellookup.centerMixLevelLookup):
+            centermixlevellookup.centerMixLevelLookup = Array({0: pow(2, -3 / 6), 1: pow(2, -4.5 / 6), 2: pow(2, -6 / 6), 3: "reserved"})
         # end if
-        return centerMixLevelLookup[cmixlev] if (php_isset(lambda : centerMixLevelLookup[cmixlev])) else False
+        return centermixlevellookup.centerMixLevelLookup[cmixlev] if (php_isset(lambda : centermixlevellookup.centerMixLevelLookup[cmixlev])) else False
     # end def centermixlevellookup
     #// 
     #// @param int $surmixlev
@@ -641,11 +641,11 @@ class getid3_ac3(getid3_handler):
     @classmethod
     def surroundmixlevellookup(self, surmixlev=None):
         
-        surroundMixLevelLookup = None
-        if php_empty(lambda : surroundMixLevelLookup):
-            surroundMixLevelLookup = Array({0: pow(2, -3 / 6), 1: pow(2, -6 / 6), 2: 0, 3: "reserved"})
+        surroundmixlevellookup.surroundMixLevelLookup = None
+        if php_empty(lambda : surroundmixlevellookup.surroundMixLevelLookup):
+            surroundmixlevellookup.surroundMixLevelLookup = Array({0: pow(2, -3 / 6), 1: pow(2, -6 / 6), 2: 0, 3: "reserved"})
         # end if
-        return surroundMixLevelLookup[surmixlev] if (php_isset(lambda : surroundMixLevelLookup[surmixlev])) else False
+        return surroundmixlevellookup.surroundMixLevelLookup[surmixlev] if (php_isset(lambda : surroundmixlevellookup.surroundMixLevelLookup[surmixlev])) else False
     # end def surroundmixlevellookup
     #// 
     #// @param int $dsurmod
@@ -655,8 +655,8 @@ class getid3_ac3(getid3_handler):
     @classmethod
     def dolbysurroundmodelookup(self, dsurmod=None):
         
-        dolbySurroundModeLookup = Array({0: "not indicated", 1: "Not Dolby Surround encoded", 2: "Dolby Surround encoded", 3: "reserved"})
-        return dolbySurroundModeLookup[dsurmod] if (php_isset(lambda : dolbySurroundModeLookup[dsurmod])) else False
+        dolbysurroundmodelookup.dolbySurroundModeLookup = Array({0: "not indicated", 1: "Not Dolby Surround encoded", 2: "Dolby Surround encoded", 3: "reserved"})
+        return dolbysurroundmodelookup.dolbySurroundModeLookup[dsurmod] if (php_isset(lambda : dolbysurroundmodelookup.dolbySurroundModeLookup[dsurmod])) else False
     # end def dolbysurroundmodelookup
     #// 
     #// @param int  $acmod
@@ -745,8 +745,8 @@ class getid3_ac3(getid3_handler):
     @classmethod
     def roomtypelookup(self, roomtyp=None):
         
-        roomTypeLookup = Array({0: "not indicated", 1: "large room, X curve monitor", 2: "small room, flat monitor", 3: "reserved"})
-        return roomTypeLookup[roomtyp] if (php_isset(lambda : roomTypeLookup[roomtyp])) else False
+        roomtypelookup.roomTypeLookup = Array({0: "not indicated", 1: "large room, X curve monitor", 2: "small room, flat monitor", 3: "reserved"})
+        return roomtypelookup.roomTypeLookup[roomtyp] if (php_isset(lambda : roomtypelookup.roomTypeLookup[roomtyp])) else False
     # end def roomtypelookup
     #// 
     #// @param int $frmsizecod
@@ -760,9 +760,9 @@ class getid3_ac3(getid3_handler):
         #// LSB is whether padding is used or not
         padding = php_bool(frmsizecod & 1)
         framesizeid = frmsizecod & 62 >> 1
-        frameSizeLookup = Array()
-        if php_empty(lambda : frameSizeLookup):
-            frameSizeLookup = Array({0: Array(128, 138, 192), 1: Array(160, 174, 240), 2: Array(192, 208, 288), 3: Array(224, 242, 336), 4: Array(256, 278, 384), 5: Array(320, 348, 480), 6: Array(384, 416, 576), 7: Array(448, 486, 672), 8: Array(512, 556, 768), 9: Array(640, 696, 960), 10: Array(768, 834, 1152), 11: Array(896, 974, 1344), 12: Array(1024, 1114, 1536), 13: Array(1280, 1392, 1920), 14: Array(1536, 1670, 2304), 15: Array(1792, 1950, 2688), 16: Array(2048, 2228, 3072), 17: Array(2304, 2506, 3456), 18: Array(2560, 2786, 3840)})
+        framesizelookup.frameSizeLookup = Array()
+        if php_empty(lambda : framesizelookup.frameSizeLookup):
+            framesizelookup.frameSizeLookup = Array({0: Array(128, 138, 192), 1: Array(160, 174, 240), 2: Array(192, 208, 288), 3: Array(224, 242, 336), 4: Array(256, 278, 384), 5: Array(320, 348, 480), 6: Array(384, 416, 576), 7: Array(448, 486, 672), 8: Array(512, 556, 768), 9: Array(640, 696, 960), 10: Array(768, 834, 1152), 11: Array(896, 974, 1344), 12: Array(1024, 1114, 1536), 13: Array(1280, 1392, 1920), 14: Array(1536, 1670, 2304), 15: Array(1792, 1950, 2688), 16: Array(2048, 2228, 3072), 17: Array(2304, 2506, 3456), 18: Array(2560, 2786, 3840)})
         # end if
         paddingBytes = 0
         if fscod == 1 and padding:
@@ -770,7 +770,7 @@ class getid3_ac3(getid3_handler):
             #// (fscode==1) means 44100Hz (see sampleRateCodeLookup)
             paddingBytes = 2
         # end if
-        return frameSizeLookup[framesizeid][fscod] + paddingBytes if (php_isset(lambda : frameSizeLookup[framesizeid][fscod])) else False
+        return framesizelookup.frameSizeLookup[framesizeid][fscod] + paddingBytes if (php_isset(lambda : framesizelookup.frameSizeLookup[framesizeid][fscod])) else False
     # end def framesizelookup
     #// 
     #// @param int $frmsizecod
@@ -783,8 +783,8 @@ class getid3_ac3(getid3_handler):
         #// LSB is whether padding is used or not
         padding = php_bool(frmsizecod & 1)
         framesizeid = frmsizecod & 62 >> 1
-        bitrateLookup = Array({0: 32000, 1: 40000, 2: 48000, 3: 56000, 4: 64000, 5: 80000, 6: 96000, 7: 112000, 8: 128000, 9: 160000, 10: 192000, 11: 224000, 12: 256000, 13: 320000, 14: 384000, 15: 448000, 16: 512000, 17: 576000, 18: 640000})
-        return bitrateLookup[framesizeid] if (php_isset(lambda : bitrateLookup[framesizeid])) else False
+        bitratelookup.bitrateLookup = Array({0: 32000, 1: 40000, 2: 48000, 3: 56000, 4: 64000, 5: 80000, 6: 96000, 7: 112000, 8: 128000, 9: 160000, 10: 192000, 11: 224000, 12: 256000, 13: 320000, 14: 384000, 15: 448000, 16: 512000, 17: 576000, 18: 640000})
+        return bitratelookup.bitrateLookup[framesizeid] if (php_isset(lambda : bitratelookup.bitrateLookup[framesizeid])) else False
     # end def bitratelookup
     #// 
     #// @param int $numblkscod
@@ -794,7 +794,7 @@ class getid3_ac3(getid3_handler):
     @classmethod
     def blockspersyncframe(self, numblkscod=None):
         
-        blocksPerSyncFrameLookup = Array({0: 1, 1: 2, 2: 3, 3: 6})
-        return blocksPerSyncFrameLookup[numblkscod] if (php_isset(lambda : blocksPerSyncFrameLookup[numblkscod])) else False
+        blockspersyncframe.blocksPerSyncFrameLookup = Array({0: 1, 1: 2, 2: 3, 3: 6})
+        return blockspersyncframe.blocksPerSyncFrameLookup[numblkscod] if (php_isset(lambda : blockspersyncframe.blocksPerSyncFrameLookup[numblkscod])) else False
     # end def blockspersyncframe
 # end class getid3_ac3

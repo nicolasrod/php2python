@@ -3072,11 +3072,11 @@ class ParagonIE_Sodium_Compat():
     #//
     def use_fallback(self, sodium_func_name=""):
         
-        res = None
-        if res == None:
-            res = php_extension_loaded("libsodium") and PHP_VERSION_ID >= 50300
+        use_fallback.res = None
+        if use_fallback.res == None:
+            use_fallback.res = php_extension_loaded("libsodium") and PHP_VERSION_ID >= 50300
         # end if
-        if res == False:
+        if use_fallback.res == False:
             #// No libsodium installed
             return False
         # end if
@@ -3098,14 +3098,14 @@ class ParagonIE_Sodium_Compat():
     #//
     def usenewsodiumapi(self):
         
-        res = None
-        if res == None:
-            res = PHP_VERSION_ID >= 70000 and php_extension_loaded("sodium")
+        usenewsodiumapi.res = None
+        if usenewsodiumapi.res == None:
+            usenewsodiumapi.res = PHP_VERSION_ID >= 70000 and php_extension_loaded("sodium")
         # end if
         if self.disableFallbackForUnitTests:
             #// Don't fallback. Use the PHP implementation.
             return False
         # end if
-        return php_bool(res)
+        return php_bool(usenewsodiumapi.res)
     # end def usenewsodiumapi
 # end class ParagonIE_Sodium_Compat

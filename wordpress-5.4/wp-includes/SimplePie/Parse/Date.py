@@ -79,16 +79,16 @@ class SimplePie_Parse_Date():
         
         self.day_pcre = "(" + php_implode("|", php_array_keys(self.day)) + ")"
         self.month_pcre = "(" + php_implode("|", php_array_keys(self.month)) + ")"
-        cache = None
-        if (not (php_isset(lambda : cache[get_class(self)]))):
+        __init__.cache = None
+        if (not (php_isset(lambda : __init__.cache[get_class(self)]))):
             all_methods = get_class_methods(self)
             for method in all_methods:
                 if php_strtolower(php_substr(method, 0, 5)) == "date_":
-                    cache[get_class(self)][-1] = method
+                    __init__.cache[get_class(self)][-1] = method
                 # end if
             # end for
         # end if
-        for method in cache[get_class(self)]:
+        for method in __init__.cache[get_class(self)]:
             self.built_in[-1] = method
         # end for
     # end def __init__
@@ -100,11 +100,11 @@ class SimplePie_Parse_Date():
     @classmethod
     def get(self):
         
-        object = None
-        if (not object):
-            object = php_new_class("SimplePie_Parse_Date", lambda : SimplePie_Parse_Date())
+        get.object = None
+        if (not get.object):
+            get.object = php_new_class("SimplePie_Parse_Date", lambda : SimplePie_Parse_Date())
         # end if
-        return object
+        return get.object
     # end def get
     #// 
     #// Parse a date
@@ -155,15 +155,15 @@ class SimplePie_Parse_Date():
     #//
     def date_w3cdtf(self, date=None):
         
-        pcre = None
-        if (not pcre):
+        date_w3cdtf.pcre = None
+        if (not date_w3cdtf.pcre):
             year = "([0-9]{4})"
             month = day
             decimal = "([0-9]*)"
             zone = "(?:(Z)|([+\\-])([0-9]{1,2}):?([0-9]{1,2}))"
-            pcre = "/^" + year + "(?:-?" + month + "(?:-?" + day + "(?:[Tt\\x09\\x20]+" + hour + "(?::?" + minute + "(?::?" + second + "(?:." + decimal + ")?)?)?" + zone + ")?)?)?$/"
+            date_w3cdtf.pcre = "/^" + year + "(?:-?" + month + "(?:-?" + day + "(?:[Tt\\x09\\x20]+" + hour + "(?::?" + minute + "(?::?" + second + "(?:." + decimal + ")?)?)?" + zone + ")?)?)?$/"
         # end if
-        if php_preg_match(pcre, date, match):
+        if php_preg_match(date_w3cdtf.pcre, date, match):
             #// 
             #// Capturing subpatterns:
             #// 1: Year
@@ -271,8 +271,8 @@ class SimplePie_Parse_Date():
     #//
     def date_rfc2822(self, date=None):
         
-        pcre = None
-        if (not pcre):
+        date_rfc2822.pcre = None
+        if (not date_rfc2822.pcre):
             wsp = "[\\x09\\x20]"
             fws = "(?:" + wsp + "+|" + wsp + "*(?:\\x0D\\x0A" + wsp + "+)+)"
             optional_fws = fws + "?"
@@ -284,9 +284,9 @@ class SimplePie_Parse_Date():
             num_zone = "([+\\-])([0-9]{2})([0-9]{2})"
             character_zone = "([A-Z]{1,5})"
             zone = "(?:" + num_zone + "|" + character_zone + ")"
-            pcre = "/(?:" + optional_fws + day_name + optional_fws + ",)?" + optional_fws + day + fws + month + fws + year + fws + hour + optional_fws + ":" + optional_fws + minute + "(?:" + optional_fws + ":" + optional_fws + second + ")?" + fws + zone + "/i"
+            date_rfc2822.pcre = "/(?:" + optional_fws + day_name + optional_fws + ",)?" + optional_fws + day + fws + month + fws + year + fws + hour + optional_fws + ":" + optional_fws + minute + "(?:" + optional_fws + ":" + optional_fws + second + ")?" + fws + zone + "/i"
         # end if
-        if php_preg_match(pcre, self.remove_rfc2822_comments(date), match):
+        if php_preg_match(date_rfc2822.pcre, self.remove_rfc2822_comments(date), match):
             #// 
             #// Capturing subpatterns:
             #// 1: Day name
@@ -341,17 +341,17 @@ class SimplePie_Parse_Date():
     #//
     def date_rfc850(self, date=None):
         
-        pcre = None
-        if (not pcre):
+        date_rfc850.pcre = None
+        if (not date_rfc850.pcre):
             space = "[\\x09\\x20]+"
             day_name = self.day_pcre
             month = self.month_pcre
             day = "([0-9]{1,2})"
             year = hour
             zone = "([A-Z]{1,5})"
-            pcre = "/^" + day_name + "," + space + day + "-" + month + "-" + year + space + hour + ":" + minute + ":" + second + space + zone + "$/i"
+            date_rfc850.pcre = "/^" + day_name + "," + space + day + "-" + month + "-" + year + space + hour + ":" + minute + ":" + second + space + zone + "$/i"
         # end if
-        if php_preg_match(pcre, date, match):
+        if php_preg_match(date_rfc850.pcre, date, match):
             #// 
             #// Capturing subpatterns:
             #// 1: Day name
@@ -390,8 +390,8 @@ class SimplePie_Parse_Date():
     #//
     def date_asctime(self, date=None):
         
-        pcre = None
-        if (not pcre):
+        date_asctime.pcre = None
+        if (not date_asctime.pcre):
             space = "[\\x09\\x20]+"
             wday_name = self.day_pcre
             mon_name = self.month_pcre
@@ -399,9 +399,9 @@ class SimplePie_Parse_Date():
             hour = sec
             year = "([0-9]{4})"
             terminator = "\\x0A?\\x00?"
-            pcre = "/^" + wday_name + space + mon_name + space + day + space + hour + ":" + min + ":" + sec + space + year + terminator + "$/i"
+            date_asctime.pcre = "/^" + wday_name + space + mon_name + space + day + space + hour + ":" + min + ":" + sec + space + year + terminator + "$/i"
         # end if
-        if php_preg_match(pcre, date, match):
+        if php_preg_match(date_asctime.pcre, date, match):
             #// 
             #// Capturing subpatterns:
             #// 1: Day name

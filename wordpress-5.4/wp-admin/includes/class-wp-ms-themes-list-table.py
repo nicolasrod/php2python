@@ -152,20 +152,20 @@ class WP_MS_Themes_List_Table(WP_List_Table):
     #//
     def _search_callback(self, theme=None):
         
-        term = None
-        if is_null(term):
-            term = wp_unslash(PHP_REQUEST["s"])
+        _search_callback.term = None
+        if is_null(_search_callback.term):
+            _search_callback.term = wp_unslash(PHP_REQUEST["s"])
         # end if
         for field in Array("Name", "Description", "Author", "Author", "AuthorURI"):
             #// Don't mark up; Do translate.
-            if False != php_stripos(theme.display(field, False, True), term):
+            if False != php_stripos(theme.display(field, False, True), _search_callback.term):
                 return True
             # end if
         # end for
-        if False != php_stripos(theme.get_stylesheet(), term):
+        if False != php_stripos(theme.get_stylesheet(), _search_callback.term):
             return True
         # end if
-        if False != php_stripos(theme.get_template(), term):
+        if False != php_stripos(theme.get_template(), _search_callback.term):
             return True
         # end if
         return False

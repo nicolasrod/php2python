@@ -605,10 +605,10 @@ def twentytwenty_toggle_duration(*args_):
 #//
 def twentytwenty_unique_id(prefix="", *args_):
     
-    id_counter = 0
+    twentytwenty_unique_id.id_counter = 0
     if php_function_exists("wp_unique_id"):
         return wp_unique_id(prefix)
     # end if
-    id_counter += 1
-    return prefix + php_str(id_counter)
+    twentytwenty_unique_id.id_counter += 1
+    return prefix + php_str(twentytwenty_unique_id.id_counter)
 # end def twentytwenty_unique_id

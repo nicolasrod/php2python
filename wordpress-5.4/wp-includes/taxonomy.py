@@ -2576,15 +2576,15 @@ def wp_update_term(term_id=None, taxonomy=None, args=Array(), *args_):
 #//
 def wp_defer_term_counting(defer=None, *args_):
     
-    _defer = False
+    wp_defer_term_counting._defer = False
     if php_is_bool(defer):
-        _defer = defer
+        wp_defer_term_counting._defer = defer
         #// Flush any deferred counts.
         if (not defer):
             wp_update_term_count(None, None, True)
         # end if
     # end if
-    return _defer
+    return wp_defer_term_counting._defer
 # end def wp_defer_term_counting
 #// 
 #// Updates the amount of terms in taxonomy.
@@ -2606,11 +2606,11 @@ def wp_defer_term_counting(defer=None, *args_):
 #//
 def wp_update_term_count(terms=None, taxonomy=None, do_deferred=False, *args_):
     
-    _deferred = Array()
+    wp_update_term_count._deferred = Array()
     if do_deferred:
-        for tax in php_array_keys(_deferred):
-            wp_update_term_count_now(_deferred[tax], tax)
-            _deferred[tax] = None
+        for tax in php_array_keys(wp_update_term_count._deferred):
+            wp_update_term_count_now(wp_update_term_count._deferred[tax], tax)
+            wp_update_term_count._deferred[tax] = None
         # end for
     # end if
     if php_empty(lambda : terms):
@@ -2620,10 +2620,10 @@ def wp_update_term_count(terms=None, taxonomy=None, do_deferred=False, *args_):
         terms = Array(terms)
     # end if
     if wp_defer_term_counting():
-        if (not (php_isset(lambda : _deferred[taxonomy]))):
-            _deferred[taxonomy] = Array()
+        if (not (php_isset(lambda : wp_update_term_count._deferred[taxonomy]))):
+            wp_update_term_count._deferred[taxonomy] = Array()
         # end if
-        _deferred[taxonomy] = array_unique(php_array_merge(_deferred[taxonomy], terms))
+        wp_update_term_count._deferred[taxonomy] = array_unique(php_array_merge(wp_update_term_count._deferred[taxonomy], terms))
         return True
     # end if
     return wp_update_term_count_now(terms, taxonomy)

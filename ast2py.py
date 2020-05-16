@@ -113,6 +113,8 @@ class AST:
         self.namespace = []
         self.globals = []
         self.parents = []
+        self.last_namespace = None
+        self.static_vars = {}
 
     def get_parent(self, level=1):
         try:
@@ -259,8 +261,7 @@ class AST:
 
         return any([x.startswith('Expr_') for x in self.frames[:-1]])
 
-    @staticmethod
-    def fix_variables(name):
+    def fix_variables(self, name):
         if '[' in name:
             return name
 
@@ -269,6 +270,12 @@ class AST:
 
         if iskeyword(name) or name.lower() in ['end', 'open']:
             return f'{name}_'
+
+        if name in self.static_vars:
+            if self.last_namespace is not None:
+                return '.'.join([self.last_namespace, name])
+            else:
+                assert False, f'Static variable {name} with no namespace! should not happen!'
         return f'{name}'
 
     @staticmethod
@@ -587,14 +594,15 @@ class AST:
         return f'yield from php_yield({{ {k}: {v} }})'
 
     def Stmt_Namespace(self, node):
+        name = self.parse(node['name']).replace('.', '_')
+        qname = quote(name)
+        self.last_namespace = name
         stmts = self.parse_children(node, 'stmts', '\n')
 
         if node['name'] is None:
             #  Global namespace
             return f'{stmts}\n'
 
-        name = self.parse(node['name']).replace('.', '_')
-        qname = quote(name)
         return self.with_docs(
             node, f'''
 if not php_defined({qname}):
@@ -622,6 +630,7 @@ class {name}({name}):
 
         supers = remove_both_ends(','.join([extends, implements]))
         name = self.parse(node['name'])
+        self.last_namespace = name
         stmts = self.pass_if_empty(self.parse_children(node, 'stmts', '\n'))
         return self.with_docs(
             node, f'''
@@ -675,6 +684,7 @@ class {name}({supers}):
 
     def Stmt_Function(self, node):
         name = self.parse(node['name'])
+        self.last_namespace = name
         params = self.parse_children(node, 'params', ', ').replace(' = ', '=')
         stmts = self.pass_if_empty(self.parse_children(node, 'stmts', '\n'))
 
@@ -712,6 +722,7 @@ def {name}({params}):
 
     def Stmt_ClassMethod(self, node):
         name = self.fix_method(self.parse(node['name']))
+        self.last_namespace = name
         params = 'self, ' + self.parse_children(node, 'params', ', ').replace(' = ', '=')
         params = remove_both_ends(params)
         stmts = self.pass_if_empty(self.parse_children(node, 'stmts', '\n'))
@@ -937,11 +948,13 @@ while {cond}:
         return self.with_docs(node, f'php_print({expr})')
 
     def Stmt_Static(self, node):
-        # TODO: static namespace to simulate static vars??
         _vars = self.parse_children(node, 'vars', '\n ')
         return f'{_vars}'
 
     def Stmt_StaticVar(self, node):
+        name = self.parse(node['var'])
+        self.static_vars[name] = True
+
         var = self.parse(node['var'])
         def_ = self.parse(node['default'])
         return f'{var} = {def_}'

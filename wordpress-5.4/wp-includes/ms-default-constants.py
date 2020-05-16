@@ -132,14 +132,14 @@ def ms_file_constants(*args_):
 #//
 def ms_subdomain_constants(*args_):
     
-    subdomain_error = None
-    subdomain_error_warn = None
-    if False == subdomain_error:
+    ms_subdomain_constants.subdomain_error = None
+    ms_subdomain_constants.subdomain_error_warn = None
+    if False == ms_subdomain_constants.subdomain_error:
         return
     # end if
-    if subdomain_error:
+    if ms_subdomain_constants.subdomain_error:
         vhost_deprecated = php_sprintf(__("The constant %1$s <strong>is deprecated</strong>. Use the boolean constant %2$s in %3$s to enable a subdomain configuration. Use %4$s to check whether a subdomain configuration is enabled."), "<code>VHOST</code>", "<code>SUBDOMAIN_INSTALL</code>", "<code>wp-config.php</code>", "<code>is_subdomain_install()</code>")
-        if subdomain_error_warn:
+        if ms_subdomain_constants.subdomain_error_warn:
             trigger_error(__("<strong>Conflicting values for the constants VHOST and SUBDOMAIN_INSTALL.</strong> The value of SUBDOMAIN_INSTALL will be assumed to be your subdomain configuration setting.") + " " + vhost_deprecated, E_USER_WARNING)
         else:
             _deprecated_argument("define()", "3.0.0", vhost_deprecated)
@@ -147,18 +147,18 @@ def ms_subdomain_constants(*args_):
         return
     # end if
     if php_defined("SUBDOMAIN_INSTALL") and php_defined("VHOST"):
-        subdomain_error = True
+        ms_subdomain_constants.subdomain_error = True
         if SUBDOMAIN_INSTALL != "yes" == VHOST:
-            subdomain_error_warn = True
+            ms_subdomain_constants.subdomain_error_warn = True
         # end if
     elif php_defined("SUBDOMAIN_INSTALL"):
-        subdomain_error = False
+        ms_subdomain_constants.subdomain_error = False
         php_define("VHOST", "yes" if SUBDOMAIN_INSTALL else "no")
     elif php_defined("VHOST"):
-        subdomain_error = True
+        ms_subdomain_constants.subdomain_error = True
         php_define("SUBDOMAIN_INSTALL", "yes" == VHOST)
     else:
-        subdomain_error = False
+        ms_subdomain_constants.subdomain_error = False
         php_define("SUBDOMAIN_INSTALL", False)
         php_define("VHOST", "no")
     # end if

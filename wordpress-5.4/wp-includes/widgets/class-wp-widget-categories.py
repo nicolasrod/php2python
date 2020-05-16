@@ -52,7 +52,7 @@ class WP_Widget_Categories(WP_Widget):
     #//
     def widget(self, args=None, instance=None):
         
-        first_dropdown = True
+        widget.first_dropdown = True
         title = instance["title"] if (not php_empty(lambda : instance["title"])) else __("Categories")
         #// This filter is documented in wp-includes/widgets/class-wp-widget-pages.php
         title = apply_filters("widget_title", title, instance, self.id_base)
@@ -66,8 +66,8 @@ class WP_Widget_Categories(WP_Widget):
         cat_args = Array({"orderby": "name", "show_count": count, "hierarchical": hierarchical})
         if dropdown:
             php_print(php_sprintf("<form action=\"%s\" method=\"get\">", esc_url(home_url())))
-            dropdown_id = "cat" if first_dropdown else str(self.id_base) + str("-dropdown-") + str(self.number)
-            first_dropdown = False
+            dropdown_id = "cat" if widget.first_dropdown else str(self.id_base) + str("-dropdown-") + str(self.number)
+            widget.first_dropdown = False
             php_print("<label class=\"screen-reader-text\" for=\"" + esc_attr(dropdown_id) + "\">" + title + "</label>")
             cat_args["show_option_none"] = __("Select Category")
             cat_args["id"] = dropdown_id

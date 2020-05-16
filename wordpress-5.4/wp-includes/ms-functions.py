@@ -1525,18 +1525,18 @@ def global_terms(term_id=None, deprecated="", *args_):
     
     global wpdb
     php_check_if_defined("wpdb")
-    global_terms_recurse = None
+    global_terms.global_terms_recurse = None
     if (not global_terms_enabled()):
         return term_id
     # end if
     #// Prevent a race condition.
     recurse_start = False
-    if None == global_terms_recurse:
+    if None == global_terms.global_terms_recurse:
         recurse_start = True
-        global_terms_recurse = 1
-    elif 10 < global_terms_recurse:
+        global_terms.global_terms_recurse = 1
+    elif 10 < global_terms.global_terms_recurse:
         return term_id
-        global_terms_recurse += 1
+        global_terms.global_terms_recurse += 1
     # end if
     term_id = php_intval(term_id)
     c = wpdb.get_row(wpdb.prepare(str("SELECT * FROM ") + str(wpdb.terms) + str(" WHERE term_id = %d"), term_id))
@@ -1560,7 +1560,7 @@ def global_terms(term_id=None, deprecated="", *args_):
         local_id = wpdb.get_var(wpdb.prepare(str("SELECT term_id FROM ") + str(wpdb.terms) + str(" WHERE term_id = %d"), global_id))
         if None != local_id:
             global_terms(local_id)
-            if 10 < global_terms_recurse:
+            if 10 < global_terms.global_terms_recurse:
                 global_id = term_id
             # end if
         # end if
@@ -1575,7 +1575,7 @@ def global_terms(term_id=None, deprecated="", *args_):
         clean_term_cache(term_id)
     # end if
     if recurse_start:
-        global_terms_recurse = None
+        global_terms.global_terms_recurse = None
     # end if
     return global_id
 # end def global_terms
@@ -1848,13 +1848,13 @@ def welcome_user_msg_filter(text=None, *args_):
 #//
 def force_ssl_content(force="", *args_):
     
-    forced_content = False
+    force_ssl_content.forced_content = False
     if "" != force:
-        old_forced = forced_content
-        forced_content = force
+        old_forced = force_ssl_content.forced_content
+        force_ssl_content.forced_content = force
         return old_forced
     # end if
-    return forced_content
+    return force_ssl_content.forced_content
 # end def force_ssl_content
 #// 
 #// Formats a URL to use https.

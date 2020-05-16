@@ -458,16 +458,16 @@ class WP_Http():
     #//
     def _dispatch_request(self, url=None, args=None):
         
-        transports = Array()
+        _dispatch_request.transports = Array()
         class_ = self._get_first_available_transport(args, url)
         if (not class_):
             return php_new_class("WP_Error", lambda : WP_Error("http_failure", __("There are no HTTP transports available which can complete the requested request.")))
         # end if
         #// Transport claims to support request, instantiate it and give it a whirl.
-        if php_empty(lambda : transports[class_]):
-            transports[class_] = php_new_class(class_, lambda : {**locals(), **globals()}[class_]())
+        if php_empty(lambda : _dispatch_request.transports[class_]):
+            _dispatch_request.transports[class_] = php_new_class(class_, lambda : {**locals(), **globals()}[class_]())
         # end if
-        response = transports[class_].request(url, args)
+        response = _dispatch_request.transports[class_].request(url, args)
         #// This action is documented in wp-includes/class-http.php
         do_action("http_api_debug", response, "response", class_, args, url)
         if is_wp_error(response):
@@ -747,22 +747,22 @@ class WP_Http():
         if (not php_defined("WP_ACCESSIBLE_HOSTS")):
             return True
         # end if
-        accessible_hosts = None
-        wildcard_regex = Array()
-        if None == accessible_hosts:
-            accessible_hosts = php_preg_split("|,\\s*|", WP_ACCESSIBLE_HOSTS)
+        block_request.accessible_hosts = None
+        block_request.wildcard_regex = Array()
+        if None == block_request.accessible_hosts:
+            block_request.accessible_hosts = php_preg_split("|,\\s*|", WP_ACCESSIBLE_HOSTS)
             if False != php_strpos(WP_ACCESSIBLE_HOSTS, "*"):
-                wildcard_regex = Array()
-                for host in accessible_hosts:
-                    wildcard_regex[-1] = php_str_replace("\\*", ".+", preg_quote(host, "/"))
+                block_request.wildcard_regex = Array()
+                for host in block_request.accessible_hosts:
+                    block_request.wildcard_regex[-1] = php_str_replace("\\*", ".+", preg_quote(host, "/"))
                 # end for
-                wildcard_regex = "/^(" + php_implode("|", wildcard_regex) + ")$/i"
+                block_request.wildcard_regex = "/^(" + php_implode("|", block_request.wildcard_regex) + ")$/i"
             # end if
         # end if
-        if (not php_empty(lambda : wildcard_regex)):
-            return (not php_preg_match(wildcard_regex, check["host"]))
+        if (not php_empty(lambda : block_request.wildcard_regex)):
+            return (not php_preg_match(block_request.wildcard_regex, check["host"]))
         else:
-            return (not php_in_array(check["host"], accessible_hosts))
+            return (not php_in_array(check["host"], block_request.accessible_hosts))
             pass
         # end if
     # end def block_request

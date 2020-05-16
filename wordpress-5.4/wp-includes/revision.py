@@ -35,13 +35,13 @@ if '__PHP2PY_LOADED__' not in globals():
 #//
 def _wp_post_revision_fields(post=Array(), deprecated=False, *args_):
     
-    fields = None
+    _wp_post_revision_fields.fields = None
     if (not php_is_array(post)):
         post = get_post(post, ARRAY_A)
     # end if
-    if is_null(fields):
+    if is_null(_wp_post_revision_fields.fields):
         #// Allow these to be versioned.
-        fields = Array({"post_title": __("Title"), "post_content": __("Content"), "post_excerpt": __("Excerpt")})
+        _wp_post_revision_fields.fields = Array({"post_title": __("Title"), "post_content": __("Content"), "post_excerpt": __("Excerpt")})
     # end if
     #// 
     #// Filters the list of fields saved in post revisions.
@@ -59,12 +59,12 @@ def _wp_post_revision_fields(post=Array(), deprecated=False, *args_):
     #// 'post_content', and 'post_excerpt' by default.
     #// @param array $post   A post array being processed for insertion as a post revision.
     #//
-    fields = apply_filters("_wp_post_revision_fields", fields, post)
+    _wp_post_revision_fields.fields = apply_filters("_wp_post_revision_fields", _wp_post_revision_fields.fields, post)
     #// WP uses these internally either in versioning or elsewhere - they cannot be versioned.
     for protect in Array("ID", "post_name", "post_parent", "post_date", "post_date_gmt", "post_status", "post_type", "comment_count", "post_author"):
-        fields[protect] = None
+        _wp_post_revision_fields.fields[protect] = None
     # end for
-    return fields
+    return _wp_post_revision_fields.fields
 # end def _wp_post_revision_fields
 #// 
 #// Returns a post array ready to be inserted into the posts table as a post revision.
@@ -82,9 +82,9 @@ def _wp_post_revision_data(post=Array(), autosave=False, *args_):
     if (not php_is_array(post)):
         post = get_post(post, ARRAY_A)
     # end if
-    fields = _wp_post_revision_fields(post)
+    _wp_post_revision_data.fields = _wp_post_revision_fields(post)
     revision_data = Array()
-    for field in php_array_intersect(php_array_keys(post), php_array_keys(fields)):
+    for field in php_array_intersect(php_array_keys(post), php_array_keys(_wp_post_revision_data.fields)):
         revision_data[field] = post[field]
     # end for
     revision_data["post_parent"] = post["ID"]
@@ -348,17 +348,17 @@ def wp_get_post_revision(post=None, output=OBJECT, filter="raw", *args_):
 #// @param array       $fields      Optional. What fields to restore from. Defaults to all.
 #// @return int|false|null Null if error, false if no fields to restore, (int) post ID if success.
 #//
-def wp_restore_post_revision(revision_id=None, fields=None, *args_):
+def wp_restore_post_revision(revision_id=None, wp_restore_post_revision.fields=None, *args_):
     
     revision = wp_get_post_revision(revision_id, ARRAY_A)
     if (not revision):
         return revision
     # end if
-    if (not php_is_array(fields)):
-        fields = php_array_keys(_wp_post_revision_fields(revision))
+    if (not php_is_array(wp_restore_post_revision.fields)):
+        wp_restore_post_revision.fields = php_array_keys(_wp_post_revision_fields(revision))
     # end if
     update = Array()
-    for field in php_array_intersect(php_array_keys(revision), fields):
+    for field in php_array_intersect(php_array_keys(revision), wp_restore_post_revision.fields):
         update[field] = revision[field]
     # end for
     if (not update):

@@ -497,12 +497,12 @@ def list_meta(meta=None, *args_):
 #//
 def _list_meta_row(entry=None, count=None, *args_):
     
-    update_nonce = ""
+    _list_meta_row.update_nonce = ""
     if is_protected_meta(entry["meta_key"], "post"):
         return ""
     # end if
-    if (not update_nonce):
-        update_nonce = wp_create_nonce("add-meta")
+    if (not _list_meta_row.update_nonce):
+        _list_meta_row.update_nonce = wp_create_nonce("add-meta")
     # end if
     r = ""
     count += 1
@@ -526,7 +526,7 @@ def _list_meta_row(entry=None, count=None, *args_):
     r += "\n        <div class='submit'>"
     r += get_submit_button(__("Delete"), "deletemeta small", str("deletemeta[") + str(entry["meta_id"]) + str("]"), False, Array({"data-wp-lists": str("delete:the-list:meta-") + str(entry["meta_id"]) + str("::_ajax_nonce=") + str(delete_nonce)}))
     r += "\n        "
-    r += get_submit_button(__("Update"), "updatemeta small", str("meta-") + str(entry["meta_id"]) + str("-submit"), False, Array({"data-wp-lists": str("add:the-list:meta-") + str(entry["meta_id"]) + str("::_ajax_nonce-add-meta=") + str(update_nonce)}))
+    r += get_submit_button(__("Update"), "updatemeta small", str("meta-") + str(entry["meta_id"]) + str("-submit"), False, Array({"data-wp-lists": str("add:the-list:meta-") + str(entry["meta_id"]) + str("::_ajax_nonce-add-meta=") + str(_list_meta_row.update_nonce)}))
     r += "</div>"
     r += wp_nonce_field("change-meta", "_ajax_nonce", False, False)
     r += "</td>"
@@ -1039,7 +1039,7 @@ def do_meta_boxes(screen=None, context=None, object=None, *args_):
     
     global wp_meta_boxes
     php_check_if_defined("wp_meta_boxes")
-    already_sorted = False
+    do_meta_boxes.already_sorted = False
     if php_empty(lambda : screen):
         screen = get_current_screen()
     elif php_is_string(screen):
@@ -1051,7 +1051,7 @@ def do_meta_boxes(screen=None, context=None, object=None, *args_):
     #// Grab the ones the user has manually sorted.
     #// Pull them out of their previous context/priority and into the one the user chose.
     sorted = get_user_option(str("meta-box-order_") + str(page))
-    if (not already_sorted) and sorted:
+    if (not do_meta_boxes.already_sorted) and sorted:
         for box_context,ids in sorted:
             for id in php_explode(",", ids):
                 if id and "dashboard_browser_nag" != id:
@@ -1060,7 +1060,7 @@ def do_meta_boxes(screen=None, context=None, object=None, *args_):
             # end for
         # end for
     # end if
-    already_sorted = True
+    do_meta_boxes.already_sorted = True
     i = 0
     if (php_isset(lambda : wp_meta_boxes[page][context])):
         for priority in Array("high", "sorted", "core", "default", "low"):

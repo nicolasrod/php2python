@@ -25,11 +25,11 @@ if '__PHP2PY_LOADED__' not in globals():
 #//
 def wp_paused_plugins(*args_):
     
-    storage = None
-    if None == storage:
-        storage = php_new_class("WP_Paused_Extensions_Storage", lambda : WP_Paused_Extensions_Storage("plugin"))
+    wp_paused_plugins.storage = None
+    if None == wp_paused_plugins.storage:
+        wp_paused_plugins.storage = php_new_class("WP_Paused_Extensions_Storage", lambda : WP_Paused_Extensions_Storage("plugin"))
     # end if
-    return storage
+    return wp_paused_plugins.storage
 # end def wp_paused_plugins
 #// 
 #// Get the instance for storing paused extensions.
@@ -38,11 +38,11 @@ def wp_paused_plugins(*args_):
 #//
 def wp_paused_themes(*args_):
     
-    storage = None
-    if None == storage:
-        storage = php_new_class("WP_Paused_Extensions_Storage", lambda : WP_Paused_Extensions_Storage("theme"))
+    wp_paused_themes.storage = None
+    if None == wp_paused_themes.storage:
+        wp_paused_themes.storage = php_new_class("WP_Paused_Extensions_Storage", lambda : WP_Paused_Extensions_Storage("theme"))
     # end if
-    return storage
+    return wp_paused_themes.storage
 # end def wp_paused_themes
 #// 
 #// Get a human readable description of an extension's error.
@@ -122,9 +122,9 @@ def wp_is_fatal_error_handler_enabled(*args_):
 #//
 def wp_recovery_mode(*args_):
     
-    wp_recovery_mode = None
-    if (not wp_recovery_mode):
-        wp_recovery_mode = php_new_class("WP_Recovery_Mode", lambda : WP_Recovery_Mode())
+    wp_recovery_mode.wp_recovery_mode = None
+    if (not wp_recovery_mode.wp_recovery_mode):
+        wp_recovery_mode.wp_recovery_mode = php_new_class("WP_Recovery_Mode", lambda : WP_Recovery_Mode())
     # end if
-    return wp_recovery_mode
+    return wp_recovery_mode.wp_recovery_mode
 # end def wp_recovery_mode

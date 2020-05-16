@@ -111,11 +111,11 @@ class SMTP():
     #//
     def connect(self, host=None, port=None, timeout=30, options=Array()):
         
-        streamok = None
+        connect.streamok = None
         #// This is enabled by default since 5.0.0 but some providers disable it
         #// Check this once and cache the result
-        if is_null(streamok):
-            streamok = php_function_exists("stream_socket_client")
+        if is_null(connect.streamok):
+            connect.streamok = php_function_exists("stream_socket_client")
         # end if
         #// Clear errors to avoid confusion
         self.seterror("")
@@ -132,7 +132,7 @@ class SMTP():
         self.edebug(str("Connection: opening to ") + str(host) + str(":") + str(port) + str(", timeout=") + str(timeout) + str(", options=") + var_export(options, True), self.DEBUG_CONNECTION)
         errno = 0
         errstr = ""
-        if streamok:
+        if connect.streamok:
             socket_context = stream_context_create(options)
             set_error_handler(Array(self, "errorHandler"))
             self.smtp_conn = stream_socket_client(host + ":" + port, errno, errstr, timeout, STREAM_CLIENT_CONNECT, socket_context)

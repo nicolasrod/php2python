@@ -1407,13 +1407,13 @@ class wpdb():
     #//
     def placeholder_escape(self):
         
-        placeholder = None
-        if (not placeholder):
+        placeholder_escape.placeholder = None
+        if (not placeholder_escape.placeholder):
             #// If ext/hash is not present, compat.php's hash_hmac() does not support sha256.
             algo = "sha256" if php_function_exists("hash") else "sha1"
             #// Old WP installs may not have AUTH_SALT defined.
             salt = AUTH_SALT if php_defined("AUTH_SALT") and AUTH_SALT else php_str(rand())
-            placeholder = "{" + hash_hmac(algo, uniqid(salt, True), salt) + "}"
+            placeholder_escape.placeholder = "{" + hash_hmac(algo, uniqid(salt, True), salt) + "}"
         # end if
         #// 
         #// Add the filter to remove the placeholder escaper. Uses priority 0, so that anything
@@ -1422,7 +1422,7 @@ class wpdb():
         if False == has_filter("query", Array(self, "remove_placeholder_escape")):
             add_filter("query", Array(self, "remove_placeholder_escape"), 0)
         # end if
-        return placeholder
+        return placeholder_escape.placeholder
     # end def placeholder_escape
     #// 
     #// Adds a placeholder escape string, to escape anything that resembles a printf() placeholder.

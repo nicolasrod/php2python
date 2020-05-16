@@ -310,14 +310,14 @@ class ParagonIE_Sodium_Core32_Curve25519(ParagonIE_Sodium_Core32_Curve25519_H):
     @classmethod
     def fe_isnonzero(self, f=None):
         
-        zero = None
-        if zero == None:
-            zero = php_str_repeat(" ", 32)
+        fe_isnonzero.zero = None
+        if fe_isnonzero.zero == None:
+            fe_isnonzero.zero = php_str_repeat(" ", 32)
         # end if
         #// @var string $str
         str = self.fe_tobytes(f)
         #// @var string $zero
-        return (not self.verify_32(str, zero))
+        return (not self.verify_32(str, fe_isnonzero.zero))
     # end def fe_isnonzero
     #// 
     #// Multiply two field elements
@@ -1288,10 +1288,10 @@ class ParagonIE_Sodium_Core32_Curve25519(ParagonIE_Sodium_Core32_Curve25519_H):
     @classmethod
     def ge_frombytes_negate_vartime(self, s=None):
         
-        d = None
-        if (not d):
+        ge_frombytes_negate_vartime.d = None
+        if (not ge_frombytes_negate_vartime.d):
             #// @var ParagonIE_Sodium_Core32_Curve25519_Fe $d
-            d = ParagonIE_Sodium_Core32_Curve25519_Fe.fromarray(Array(ParagonIE_Sodium_Core32_Int32.fromint(self.d[0]), ParagonIE_Sodium_Core32_Int32.fromint(self.d[1]), ParagonIE_Sodium_Core32_Int32.fromint(self.d[2]), ParagonIE_Sodium_Core32_Int32.fromint(self.d[3]), ParagonIE_Sodium_Core32_Int32.fromint(self.d[4]), ParagonIE_Sodium_Core32_Int32.fromint(self.d[5]), ParagonIE_Sodium_Core32_Int32.fromint(self.d[6]), ParagonIE_Sodium_Core32_Int32.fromint(self.d[7]), ParagonIE_Sodium_Core32_Int32.fromint(self.d[8]), ParagonIE_Sodium_Core32_Int32.fromint(self.d[9])))
+            ge_frombytes_negate_vartime.d = ParagonIE_Sodium_Core32_Curve25519_Fe.fromarray(Array(ParagonIE_Sodium_Core32_Int32.fromint(self.ge_frombytes_negate_vartime.d[0]), ParagonIE_Sodium_Core32_Int32.fromint(self.ge_frombytes_negate_vartime.d[1]), ParagonIE_Sodium_Core32_Int32.fromint(self.ge_frombytes_negate_vartime.d[2]), ParagonIE_Sodium_Core32_Int32.fromint(self.ge_frombytes_negate_vartime.d[3]), ParagonIE_Sodium_Core32_Int32.fromint(self.ge_frombytes_negate_vartime.d[4]), ParagonIE_Sodium_Core32_Int32.fromint(self.ge_frombytes_negate_vartime.d[5]), ParagonIE_Sodium_Core32_Int32.fromint(self.ge_frombytes_negate_vartime.d[6]), ParagonIE_Sodium_Core32_Int32.fromint(self.ge_frombytes_negate_vartime.d[7]), ParagonIE_Sodium_Core32_Int32.fromint(self.ge_frombytes_negate_vartime.d[8]), ParagonIE_Sodium_Core32_Int32.fromint(self.ge_frombytes_negate_vartime.d[9])))
         # end if
         #// # fe_frombytes(h->Y,s);
         #// # fe_1(h->Z);
@@ -1302,7 +1302,7 @@ class ParagonIE_Sodium_Core32_Curve25519(ParagonIE_Sodium_Core32_Curve25519_H):
         #// # fe_add(v,v,h->Z);       /* v = dy^2+1
         u = self.fe_sq(h.Y)
         #// @var ParagonIE_Sodium_Core32_Curve25519_Fe $d
-        v = self.fe_mul(u, d)
+        v = self.fe_mul(u, ge_frombytes_negate_vartime.d)
         u = self.fe_sub(u, h.Z)
         #// u =  y^2 - 1
         v = self.fe_add(v, h.Z)
@@ -1505,16 +1505,16 @@ class ParagonIE_Sodium_Core32_Curve25519(ParagonIE_Sodium_Core32_Curve25519_H):
     @classmethod
     def ge_p3_to_cached(self, p=None):
         
-        d2 = None
-        if d2 == None:
-            d2 = ParagonIE_Sodium_Core32_Curve25519_Fe.fromarray(Array(ParagonIE_Sodium_Core32_Int32.fromint(self.d2[0]), ParagonIE_Sodium_Core32_Int32.fromint(self.d2[1]), ParagonIE_Sodium_Core32_Int32.fromint(self.d2[2]), ParagonIE_Sodium_Core32_Int32.fromint(self.d2[3]), ParagonIE_Sodium_Core32_Int32.fromint(self.d2[4]), ParagonIE_Sodium_Core32_Int32.fromint(self.d2[5]), ParagonIE_Sodium_Core32_Int32.fromint(self.d2[6]), ParagonIE_Sodium_Core32_Int32.fromint(self.d2[7]), ParagonIE_Sodium_Core32_Int32.fromint(self.d2[8]), ParagonIE_Sodium_Core32_Int32.fromint(self.d2[9])))
+        ge_p3_to_cached.d2 = None
+        if ge_p3_to_cached.d2 == None:
+            ge_p3_to_cached.d2 = ParagonIE_Sodium_Core32_Curve25519_Fe.fromarray(Array(ParagonIE_Sodium_Core32_Int32.fromint(self.ge_p3_to_cached.d2[0]), ParagonIE_Sodium_Core32_Int32.fromint(self.ge_p3_to_cached.d2[1]), ParagonIE_Sodium_Core32_Int32.fromint(self.ge_p3_to_cached.d2[2]), ParagonIE_Sodium_Core32_Int32.fromint(self.ge_p3_to_cached.d2[3]), ParagonIE_Sodium_Core32_Int32.fromint(self.ge_p3_to_cached.d2[4]), ParagonIE_Sodium_Core32_Int32.fromint(self.ge_p3_to_cached.d2[5]), ParagonIE_Sodium_Core32_Int32.fromint(self.ge_p3_to_cached.d2[6]), ParagonIE_Sodium_Core32_Int32.fromint(self.ge_p3_to_cached.d2[7]), ParagonIE_Sodium_Core32_Int32.fromint(self.ge_p3_to_cached.d2[8]), ParagonIE_Sodium_Core32_Int32.fromint(self.ge_p3_to_cached.d2[9])))
         # end if
         #// @var ParagonIE_Sodium_Core32_Curve25519_Fe $d2
         r = php_new_class("ParagonIE_Sodium_Core32_Curve25519_Ge_Cached", lambda : ParagonIE_Sodium_Core32_Curve25519_Ge_Cached())
         r.YplusX = self.fe_add(p.Y, p.X)
         r.YminusX = self.fe_sub(p.Y, p.X)
         r.Z = self.fe_copy(p.Z)
-        r.T2d = self.fe_mul(p.T, d2)
+        r.T2d = self.fe_mul(p.T, ge_p3_to_cached.d2)
         return r
     # end def ge_p3_to_cached
     #// 
@@ -1637,14 +1637,14 @@ class ParagonIE_Sodium_Core32_Curve25519(ParagonIE_Sodium_Core32_Curve25519_H):
     @classmethod
     def ge_select(self, pos=0, b=0):
         
-        base = None
-        if base == None:
-            base = Array()
-            for i,bas in self.base:
+        ge_select.base = None
+        if ge_select.base == None:
+            ge_select.base = Array()
+            for i,bas in self.ge_select.base:
                 j = 0
                 while j < 8:
                     
-                    base[i][j] = php_new_class("ParagonIE_Sodium_Core32_Curve25519_Ge_Precomp", lambda : ParagonIE_Sodium_Core32_Curve25519_Ge_Precomp(ParagonIE_Sodium_Core32_Curve25519_Fe.fromarray(Array(ParagonIE_Sodium_Core32_Int32.fromint(bas[j][0][0]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][0][1]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][0][2]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][0][3]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][0][4]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][0][5]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][0][6]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][0][7]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][0][8]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][0][9]))), ParagonIE_Sodium_Core32_Curve25519_Fe.fromarray(Array(ParagonIE_Sodium_Core32_Int32.fromint(bas[j][1][0]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][1][1]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][1][2]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][1][3]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][1][4]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][1][5]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][1][6]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][1][7]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][1][8]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][1][9]))), ParagonIE_Sodium_Core32_Curve25519_Fe.fromarray(Array(ParagonIE_Sodium_Core32_Int32.fromint(bas[j][2][0]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][2][1]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][2][2]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][2][3]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][2][4]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][2][5]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][2][6]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][2][7]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][2][8]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][2][9])))))
+                    ge_select.base[i][j] = php_new_class("ParagonIE_Sodium_Core32_Curve25519_Ge_Precomp", lambda : ParagonIE_Sodium_Core32_Curve25519_Ge_Precomp(ParagonIE_Sodium_Core32_Curve25519_Fe.fromarray(Array(ParagonIE_Sodium_Core32_Int32.fromint(bas[j][0][0]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][0][1]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][0][2]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][0][3]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][0][4]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][0][5]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][0][6]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][0][7]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][0][8]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][0][9]))), ParagonIE_Sodium_Core32_Curve25519_Fe.fromarray(Array(ParagonIE_Sodium_Core32_Int32.fromint(bas[j][1][0]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][1][1]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][1][2]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][1][3]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][1][4]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][1][5]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][1][6]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][1][7]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][1][8]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][1][9]))), ParagonIE_Sodium_Core32_Curve25519_Fe.fromarray(Array(ParagonIE_Sodium_Core32_Int32.fromint(bas[j][2][0]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][2][1]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][2][2]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][2][3]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][2][4]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][2][5]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][2][6]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][2][7]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][2][8]), ParagonIE_Sodium_Core32_Int32.fromint(bas[j][2][9])))))
                     j += 1
                 # end while
             # end for
@@ -1662,7 +1662,7 @@ class ParagonIE_Sodium_Core32_Curve25519(ParagonIE_Sodium_Core32_Curve25519_H):
         i = 0
         while i < 8:
             
-            t = self.cmov(t, base[pos][i], self.equal(babs, i + 1))
+            t = self.cmov(t, ge_select.base[pos][i], self.equal(babs, i + 1))
             i += 1
         # end while
         minusT = php_new_class("ParagonIE_Sodium_Core32_Curve25519_Ge_Precomp", lambda : ParagonIE_Sodium_Core32_Curve25519_Ge_Precomp(self.fe_copy(t.yminusx), self.fe_copy(t.yplusx), self.fe_neg(t.xy2d)))
@@ -1732,13 +1732,13 @@ class ParagonIE_Sodium_Core32_Curve25519(ParagonIE_Sodium_Core32_Curve25519_H):
         
         #// @var array<int, ParagonIE_Sodium_Core32_Curve25519_Ge_Cached> $Ai
         Ai = Array()
-        Bi = Array()
+        ge_double_scalarmult_vartime.Bi = Array()
         #// @var array<int, ParagonIE_Sodium_Core32_Curve25519_Ge_Precomp> $Bi
-        if (not Bi):
+        if (not ge_double_scalarmult_vartime.Bi):
             i = 0
             while i < 8:
                 
-                Bi[i] = php_new_class("ParagonIE_Sodium_Core32_Curve25519_Ge_Precomp", lambda : ParagonIE_Sodium_Core32_Curve25519_Ge_Precomp(ParagonIE_Sodium_Core32_Curve25519_Fe.fromarray(Array(ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][0][0]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][0][1]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][0][2]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][0][3]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][0][4]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][0][5]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][0][6]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][0][7]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][0][8]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][0][9]))), ParagonIE_Sodium_Core32_Curve25519_Fe.fromarray(Array(ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][1][0]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][1][1]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][1][2]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][1][3]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][1][4]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][1][5]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][1][6]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][1][7]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][1][8]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][1][9]))), ParagonIE_Sodium_Core32_Curve25519_Fe.fromarray(Array(ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][2][0]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][2][1]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][2][2]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][2][3]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][2][4]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][2][5]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][2][6]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][2][7]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][2][8]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][2][9])))))
+                ge_double_scalarmult_vartime.Bi[i] = php_new_class("ParagonIE_Sodium_Core32_Curve25519_Ge_Precomp", lambda : ParagonIE_Sodium_Core32_Curve25519_Ge_Precomp(ParagonIE_Sodium_Core32_Curve25519_Fe.fromarray(Array(ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][0][0]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][0][1]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][0][2]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][0][3]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][0][4]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][0][5]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][0][6]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][0][7]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][0][8]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][0][9]))), ParagonIE_Sodium_Core32_Curve25519_Fe.fromarray(Array(ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][1][0]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][1][1]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][1][2]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][1][3]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][1][4]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][1][5]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][1][6]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][1][7]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][1][8]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][1][9]))), ParagonIE_Sodium_Core32_Curve25519_Fe.fromarray(Array(ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][2][0]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][2][1]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][2][2]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][2][3]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][2][4]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][2][5]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][2][6]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][2][7]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][2][8]), ParagonIE_Sodium_Core32_Int32.fromint(self.base2[i][2][9])))))
                 i += 1
             # end while
         # end if
@@ -1815,7 +1815,7 @@ class ParagonIE_Sodium_Core32_Curve25519(ParagonIE_Sodium_Core32_Curve25519_H):
                 #// @var int $index
                 index = php_int(floor(bslide[i] / 2))
                 #// @var ParagonIE_Sodium_Core32_Curve25519_Ge_Precomp $thisB
-                thisB = Bi[index]
+                thisB = ge_double_scalarmult_vartime.Bi[index]
                 t = self.ge_madd(t, u, thisB)
                 pass
             elif bslide[i] < 0:
@@ -1825,7 +1825,7 @@ class ParagonIE_Sodium_Core32_Curve25519(ParagonIE_Sodium_Core32_Curve25519_H):
                 #// @var int $index
                 index = php_int(floor(-bslide[i] / 2))
                 #// @var ParagonIE_Sodium_Core32_Curve25519_Ge_Precomp $thisB
-                thisB = Bi[index]
+                thisB = ge_double_scalarmult_vartime.Bi[index]
                 t = self.ge_msub(t, u, thisB)
             # end if
             #// # ge_p1p1_to_p2(r,&t);

@@ -289,8 +289,8 @@ def wp_default_packages(scripts=None, *args_):
 #//
 def wp_scripts_get_suffix(type="", *args_):
     
-    suffixes = None
-    if None == suffixes:
+    wp_scripts_get_suffix.suffixes = None
+    if None == wp_scripts_get_suffix.suffixes:
         #// Include an unmodified $wp_version.
         php_include_file(ABSPATH + WPINC + "/version.php", once=False)
         develop_src = False != php_strpos(wp_version, "-src")
@@ -299,12 +299,12 @@ def wp_scripts_get_suffix(type="", *args_):
         # end if
         suffix = "" if SCRIPT_DEBUG else ".min"
         dev_suffix = "" if develop_src else ".min"
-        suffixes = Array({"suffix": suffix, "dev_suffix": dev_suffix})
+        wp_scripts_get_suffix.suffixes = Array({"suffix": suffix, "dev_suffix": dev_suffix})
     # end if
     if "dev" == type:
-        return suffixes["dev_suffix"]
+        return wp_scripts_get_suffix.suffixes["dev_suffix"]
     # end if
-    return suffixes["suffix"]
+    return wp_scripts_get_suffix.suffixes["suffix"]
 # end def wp_scripts_get_suffix
 #// 
 #// Register all WordPress scripts.

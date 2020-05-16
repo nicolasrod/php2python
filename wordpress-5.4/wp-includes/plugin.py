@@ -693,15 +693,15 @@ def wp_register_plugin_realpath(file=None, *args_):
     
     global wp_plugin_paths
     php_check_if_defined("wp_plugin_paths")
-    wp_plugin_path = None
-    wpmu_plugin_path = None
-    if (not (php_isset(lambda : wp_plugin_path))):
-        wp_plugin_path = wp_normalize_path(WP_PLUGIN_DIR)
-        wpmu_plugin_path = wp_normalize_path(WPMU_PLUGIN_DIR)
+    wp_register_plugin_realpath.wp_plugin_path = None
+    wp_register_plugin_realpath.wpmu_plugin_path = None
+    if (not (php_isset(lambda : wp_register_plugin_realpath.wp_plugin_path))):
+        wp_register_plugin_realpath.wp_plugin_path = wp_normalize_path(WP_PLUGIN_DIR)
+        wp_register_plugin_realpath.wpmu_plugin_path = wp_normalize_path(WPMU_PLUGIN_DIR)
     # end if
     plugin_path = wp_normalize_path(php_dirname(file))
     plugin_realpath = wp_normalize_path(php_dirname(php_realpath(file)))
-    if plugin_path == wp_plugin_path or plugin_path == wpmu_plugin_path:
+    if plugin_path == wp_register_plugin_realpath.wp_plugin_path or plugin_path == wp_register_plugin_realpath.wpmu_plugin_path:
         return False
     # end if
     if plugin_path != plugin_realpath:

@@ -123,13 +123,13 @@ class WP_Customize_Widgets():
     #//
     def get_setting_type(self, setting_id=None):
         
-        cache = Array()
-        if (php_isset(lambda : cache[setting_id])):
-            return cache[setting_id]
+        get_setting_type.cache = Array()
+        if (php_isset(lambda : get_setting_type.cache[setting_id])):
+            return get_setting_type.cache[setting_id]
         # end if
         for type,pattern in self.setting_id_patterns:
             if php_preg_match(pattern, setting_id):
-                cache[setting_id] = type
+                get_setting_type.cache[setting_id] = type
                 return type
             # end if
         # end for
@@ -731,9 +731,9 @@ class WP_Customize_Widgets():
     #//
     def get_available_widgets(self):
         
-        available_widgets = Array()
-        if (not php_empty(lambda : available_widgets)):
-            return available_widgets
+        get_available_widgets.available_widgets = Array()
+        if (not php_empty(lambda : get_available_widgets.available_widgets)):
+            return get_available_widgets.available_widgets
         # end if
         global wp_registered_widgets,wp_registered_widget_controls
         php_check_if_defined("wp_registered_widgets","wp_registered_widget_controls")
@@ -773,9 +773,9 @@ class WP_Customize_Widgets():
             control_tpl = self.get_widget_control(list_widget_controls_args)
             #// The properties here are mapped to the Backbone Widget model.
             available_widget = php_array_merge(available_widget, Array({"temp_id": args["_temp_id"] if (php_isset(lambda : args["_temp_id"])) else None, "is_multi": is_multi_widget, "control_tpl": control_tpl, "multi_number": args["_multi_num"] if "multi" == args["_add"] else False, "is_disabled": is_disabled, "id_base": id_base, "transport": "postMessage" if self.is_widget_selective_refreshable(id_base) else "refresh", "width": wp_registered_widget_controls[widget["id"]]["width"], "height": wp_registered_widget_controls[widget["id"]]["height"], "is_wide": self.is_wide_widget(widget["id"])}))
-            available_widgets[-1] = available_widget
+            get_available_widgets.available_widgets[-1] = available_widget
         # end for
-        return available_widgets
+        return get_available_widgets.available_widgets
     # end def get_available_widgets
     #// 
     #// Naturally orders available widgets by name.

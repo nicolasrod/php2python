@@ -519,15 +519,15 @@ def wp_iframe(content_func=None, *args):
 #//
 def media_buttons(editor_id="content", *args_):
     
-    instance = 0
-    instance += 1
+    media_buttons.instance = 0
+    media_buttons.instance += 1
     post = get_post()
     if (not post) and (not php_empty(lambda : PHP_GLOBALS["post_ID"])):
         post = PHP_GLOBALS["post_ID"]
     # end if
     wp_enqueue_media(Array({"post": post}))
     img = "<span class=\"wp-media-buttons-icon\"></span> "
-    id_attribute = " id=\"insert-media-button\"" if 1 == instance else ""
+    id_attribute = " id=\"insert-media-button\"" if 1 == media_buttons.instance else ""
     printf("<button type=\"button\"%s class=\"button insert-media add_media\" data-editor=\"%s\">%s</button>", id_attribute, esc_attr(editor_id), img + __("Add Media"))
     #// 
     #// Filters the legacy (pre-3.5.0) media buttons.

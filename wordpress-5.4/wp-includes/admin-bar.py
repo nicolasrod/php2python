@@ -84,8 +84,8 @@ def wp_admin_bar_render(*args_):
     
     global wp_admin_bar
     php_check_if_defined("wp_admin_bar")
-    rendered = False
-    if rendered:
+    wp_admin_bar_render.rendered = False
+    if wp_admin_bar_render.rendered:
         return
     # end if
     if (not is_admin_bar_showing()) or (not php_is_object(wp_admin_bar)):
@@ -114,7 +114,7 @@ def wp_admin_bar_render(*args_):
     #// @since 3.1.0
     #//
     do_action("wp_after_admin_bar_render")
-    rendered = True
+    wp_admin_bar_render.rendered = True
 # end def wp_admin_bar_render
 #// 
 #// Add the WordPress logo menu.

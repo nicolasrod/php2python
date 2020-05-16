@@ -253,9 +253,9 @@ class WP_Comments_List_Table(WP_List_Table):
         
         global comment_status,comment_type
         php_check_if_defined("comment_status","comment_type")
-        has_items = None
-        if (not (php_isset(lambda : has_items))):
-            has_items = self.has_items()
+        extra_tablenav.has_items = None
+        if (not (php_isset(lambda : extra_tablenav.has_items))):
+            extra_tablenav.has_items = self.has_items()
         # end if
         php_print("     <div class=\"alignleft actions\">\n     ")
         if "top" == which:
@@ -284,7 +284,7 @@ class WP_Comments_List_Table(WP_List_Table):
             do_action("restrict_manage_comments")
             submit_button(__("Filter"), "", "filter_action", False, Array({"id": "post-query-submit"}))
         # end if
-        if "spam" == comment_status or "trash" == comment_status and current_user_can("moderate_comments") and has_items:
+        if "spam" == comment_status or "trash" == comment_status and current_user_can("moderate_comments") and extra_tablenav.has_items:
             wp_nonce_field("bulk-destroy", "_destroy_nonce")
             title = esc_attr__("Empty Spam") if "spam" == comment_status else esc_attr__("Empty Trash")
             submit_button(title, "apply", "delete_all", False)

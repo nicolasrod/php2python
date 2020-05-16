@@ -77,13 +77,13 @@ def wp_get_themes(args=Array(), *args_):
         # end if
     # end if
     themes = Array()
-    _themes = Array()
+    wp_get_themes._themes = Array()
     for theme,theme_root in theme_directories:
-        if (php_isset(lambda : _themes[theme_root["theme_root"] + "/" + theme])):
-            themes[theme] = _themes[theme_root["theme_root"] + "/" + theme]
+        if (php_isset(lambda : wp_get_themes._themes[theme_root["theme_root"] + "/" + theme])):
+            themes[theme] = wp_get_themes._themes[theme_root["theme_root"] + "/" + theme]
         else:
             themes[theme] = php_new_class("WP_Theme", lambda : WP_Theme(theme, theme_root["theme_root"]))
-            _themes[theme_root["theme_root"] + "/" + theme] = themes[theme]
+            wp_get_themes._themes[theme_root["theme_root"] + "/" + theme] = themes[theme]
         # end if
     # end for
     if None != args["errors"]:
@@ -424,14 +424,14 @@ def search_theme_directories(force=False, *args_):
     
     global wp_theme_directories
     php_check_if_defined("wp_theme_directories")
-    found_themes = None
+    search_theme_directories.found_themes = None
     if php_empty(lambda : wp_theme_directories):
         return False
     # end if
-    if (not force) and (php_isset(lambda : found_themes)):
-        return found_themes
+    if (not force) and (php_isset(lambda : search_theme_directories.found_themes)):
+        return search_theme_directories.found_themes
     # end if
-    found_themes = Array()
+    search_theme_directories.found_themes = Array()
     wp_theme_directories = wp_theme_directories
     relative_theme_roots = Array()
     #// 
@@ -463,9 +463,9 @@ def search_theme_directories(force=False, *args_):
                 if (not (php_isset(lambda : relative_theme_roots[theme_root]))):
                     continue
                 # end if
-                found_themes[theme_dir] = Array({"theme_file": theme_dir + "/style.css", "theme_root": relative_theme_roots[theme_root]})
+                search_theme_directories.found_themes[theme_dir] = Array({"theme_file": theme_dir + "/style.css", "theme_root": relative_theme_roots[theme_root]})
             # end for
-            return found_themes
+            return search_theme_directories.found_themes
         # end if
         if (not php_is_int(cache_expiration)):
             cache_expiration = 30 * MINUTE_IN_SECONDS
@@ -488,7 +488,7 @@ def search_theme_directories(force=False, *args_):
             if php_file_exists(theme_root + "/" + dir + "/style.css"):
                 #// wp-content/themes/a-single-theme
                 #// wp-content/themes is $theme_root, a-single-theme is $dir.
-                found_themes[dir] = Array({"theme_file": dir + "/style.css", "theme_root": theme_root})
+                search_theme_directories.found_themes[dir] = Array({"theme_file": dir + "/style.css", "theme_root": theme_root})
             else:
                 found_theme = False
                 #// wp-content/themes/a-folder-of-themes
@@ -505,28 +505,28 @@ def search_theme_directories(force=False, *args_):
                     if (not php_file_exists(theme_root + "/" + dir + "/" + sub_dir + "/style.css")):
                         continue
                     # end if
-                    found_themes[dir + "/" + sub_dir] = Array({"theme_file": dir + "/" + sub_dir + "/style.css", "theme_root": theme_root})
+                    search_theme_directories.found_themes[dir + "/" + sub_dir] = Array({"theme_file": dir + "/" + sub_dir + "/style.css", "theme_root": theme_root})
                     found_theme = True
                 # end for
                 #// Never mind the above, it's just a theme missing a style.css.
                 #// Return it; WP_Theme will catch the error.
                 if (not found_theme):
-                    found_themes[dir] = Array({"theme_file": dir + "/style.css", "theme_root": theme_root})
+                    search_theme_directories.found_themes[dir] = Array({"theme_file": dir + "/style.css", "theme_root": theme_root})
                 # end if
             # end if
         # end for
     # end for
-    asort(found_themes)
+    asort(search_theme_directories.found_themes)
     theme_roots = Array()
     relative_theme_roots = php_array_flip(relative_theme_roots)
-    for theme_dir,theme_data in found_themes:
+    for theme_dir,theme_data in search_theme_directories.found_themes:
         theme_roots[theme_dir] = relative_theme_roots[theme_data["theme_root"]]
         pass
     # end for
     if get_site_transient("theme_roots") != theme_roots:
         set_site_transient("theme_roots", theme_roots, cache_expiration)
     # end if
-    return found_themes
+    return search_theme_directories.found_themes
 # end def search_theme_directories
 #// 
 #// Retrieve path to themes directory.
@@ -1083,8 +1083,8 @@ def the_header_image_tag(attr=Array(), *args_):
 #//
 def _get_random_header_data(*args_):
     
-    _wp_random_header = None
-    if php_empty(lambda : _wp_random_header):
+    _get_random_header_data._wp_random_header = None
+    if php_empty(lambda : _get_random_header_data._wp_random_header):
         global _wp_default_headers
         php_check_if_defined("_wp_default_headers")
         header_image_mod = get_theme_mod("header_image", "")
@@ -1103,11 +1103,11 @@ def _get_random_header_data(*args_):
         if php_empty(lambda : headers):
             return php_new_class("stdClass", lambda : stdClass())
         # end if
-        _wp_random_header = headers[php_array_rand(headers)]
-        _wp_random_header.url = php_sprintf(_wp_random_header.url, get_template_directory_uri(), get_stylesheet_directory_uri())
-        _wp_random_header.thumbnail_url = php_sprintf(_wp_random_header.thumbnail_url, get_template_directory_uri(), get_stylesheet_directory_uri())
+        _get_random_header_data._wp_random_header = headers[php_array_rand(headers)]
+        _get_random_header_data._wp_random_header.url = php_sprintf(_get_random_header_data._wp_random_header.url, get_template_directory_uri(), get_stylesheet_directory_uri())
+        _get_random_header_data._wp_random_header.thumbnail_url = php_sprintf(_get_random_header_data._wp_random_header.thumbnail_url, get_template_directory_uri(), get_stylesheet_directory_uri())
     # end if
-    return _wp_random_header
+    return _get_random_header_data._wp_random_header
 # end def _get_random_header_data
 #// 
 #// Get random header image url from registered images in theme.

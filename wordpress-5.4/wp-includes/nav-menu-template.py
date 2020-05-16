@@ -59,7 +59,7 @@ php_include_file(ABSPATH + WPINC + "/class-walker-nav-menu.php", once=True)
 #//
 def wp_nav_menu(args=Array(), *args_):
     
-    menu_id_slugs = Array()
+    wp_nav_menu.menu_id_slugs = Array()
     defaults = Array({"menu": "", "container": "div", "container_class": "", "container_id": "", "menu_class": "menu", "menu_id": "", "echo": True, "fallback_cb": "wp_page_menu", "before": "", "after": "", "link_before": "", "link_after": "", "items_wrap": "<ul id=\"%1$s\" class=\"%2$s\">%3$s</ul>", "item_spacing": "preserve", "depth": 0, "walker": "", "theme_location": ""})
     args = wp_parse_args(args, defaults)
     if (not php_in_array(args["item_spacing"], Array("preserve", "discard"), True)):
@@ -196,7 +196,7 @@ def wp_nav_menu(args=Array(), *args_):
         wrap_id = "menu-" + menu.slug
         while True:
             
-            if not (php_in_array(wrap_id, menu_id_slugs)):
+            if not (php_in_array(wrap_id, wp_nav_menu.menu_id_slugs)):
                 break
             # end if
             if php_preg_match("#-(\\d+)$#", wrap_id, matches):
@@ -207,7 +207,7 @@ def wp_nav_menu(args=Array(), *args_):
             # end if
         # end while
     # end if
-    menu_id_slugs[-1] = wrap_id
+    wp_nav_menu.menu_id_slugs[-1] = wrap_id
     wrap_class = args.menu_class if args.menu_class else ""
     #// 
     #// Filters the HTML list content for navigation menus.
@@ -501,10 +501,10 @@ def walk_nav_menu_tree(items=None, depth=None, r=None, *args_):
 #//
 def _nav_menu_item_id_use_once(id=None, item=None, *args_):
     
-    _used_ids = Array()
-    if php_in_array(item.ID, _used_ids):
+    _nav_menu_item_id_use_once._used_ids = Array()
+    if php_in_array(item.ID, _nav_menu_item_id_use_once._used_ids):
         return ""
     # end if
-    _used_ids[-1] = item.ID
+    _nav_menu_item_id_use_once._used_ids[-1] = item.ID
     return id
 # end def _nav_menu_item_id_use_once

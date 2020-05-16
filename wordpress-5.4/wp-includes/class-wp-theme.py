@@ -209,8 +209,8 @@ class WP_Theme():
     #//
     def __isset(self, offset=None):
         
-        properties = Array("name", "title", "version", "parent_theme", "template_dir", "stylesheet_dir", "template", "stylesheet", "screenshot", "description", "author", "tags", "theme_root", "theme_root_uri")
-        return php_in_array(offset, properties)
+        __isset.properties = Array("name", "title", "version", "parent_theme", "template_dir", "stylesheet_dir", "template", "stylesheet", "screenshot", "description", "author", "tags", "theme_root", "theme_root_uri")
+        return php_in_array(offset, __isset.properties)
     # end def __isset
     #// 
     #// __get() magic method for properties formerly returned by current_theme_info()
@@ -305,8 +305,8 @@ class WP_Theme():
     #//
     def offsetexists(self, offset=None):
         
-        keys = Array("Name", "Version", "Status", "Title", "Author", "Author Name", "Author URI", "Description", "Template", "Stylesheet", "Template Files", "Stylesheet Files", "Template Dir", "Stylesheet Dir", "Screenshot", "Tags", "Theme Root", "Theme Root URI", "Parent Theme")
-        return php_in_array(offset, keys)
+        offsetexists.keys = Array("Name", "Version", "Status", "Title", "Author", "Author Name", "Author URI", "Description", "Template", "Stylesheet", "Template Files", "Stylesheet Files", "Template Dir", "Stylesheet Dir", "Screenshot", "Tags", "Theme Root", "Theme Root URI", "Parent Theme")
+        return php_in_array(offset, offsetexists.keys)
     # end def offsetexists
     #// 
     #// Method to implement ArrayAccess for keys formerly returned by get_themes().
@@ -570,16 +570,16 @@ class WP_Theme():
                 # end if
             # end if
             if case("Name"):
-                header_tags = Array({"abbr": Array({"title": True})}, {"acronym": Array({"title": True})}, {"code": True, "em": True, "strong": True})
-                value = wp_kses(value, header_tags)
+                sanitize_header.header_tags = Array({"abbr": Array({"title": True})}, {"acronym": Array({"title": True})}, {"code": True, "em": True, "strong": True})
+                value = wp_kses(value, sanitize_header.header_tags)
                 break
             # end if
             if case("Author"):
                 pass
             # end if
             if case("Description"):
-                header_tags_with_a = Array({"a": Array({"href": True, "title": True})}, {"abbr": Array({"title": True})}, {"acronym": Array({"title": True})}, {"code": True, "em": True, "strong": True})
-                value = wp_kses(value, header_tags_with_a)
+                sanitize_header.header_tags_with_a = Array({"a": Array({"href": True, "title": True})}, {"abbr": Array({"title": True})}, {"acronym": Array({"title": True})}, {"code": True, "em": True, "strong": True})
+                value = wp_kses(value, sanitize_header.header_tags_with_a)
                 break
             # end if
             if case("ThemeURI"):
@@ -640,12 +640,12 @@ class WP_Theme():
                 break
             # end if
             if case("Tags"):
-                comma = None
-                if (not (php_isset(lambda : comma))):
+                markup_header.comma = None
+                if (not (php_isset(lambda : markup_header.comma))):
                     #// translators: Used between list items, there is a space after the comma.
-                    comma = __(", ")
+                    markup_header.comma = __(", ")
                 # end if
-                value = php_implode(comma, value)
+                value = php_implode(markup_header.comma, value)
                 break
             # end if
             if case("ThemeURI"):
@@ -685,20 +685,20 @@ class WP_Theme():
                 if php_empty(lambda : value) or (not php_function_exists("get_theme_feature_list")):
                     return value
                 # end if
-                tags_list = None
-                if (not (php_isset(lambda : tags_list))):
-                    tags_list = Array({"black": __("Black"), "blue": __("Blue"), "brown": __("Brown"), "gray": __("Gray"), "green": __("Green"), "orange": __("Orange"), "pink": __("Pink"), "purple": __("Purple"), "red": __("Red"), "silver": __("Silver"), "tan": __("Tan"), "white": __("White"), "yellow": __("Yellow"), "dark": __("Dark"), "light": __("Light"), "fixed-layout": __("Fixed Layout"), "fluid-layout": __("Fluid Layout"), "responsive-layout": __("Responsive Layout"), "blavatar": __("Blavatar"), "photoblogging": __("Photoblogging"), "seasonal": __("Seasonal")})
+                translate_header.tags_list = None
+                if (not (php_isset(lambda : translate_header.tags_list))):
+                    translate_header.tags_list = Array({"black": __("Black"), "blue": __("Blue"), "brown": __("Brown"), "gray": __("Gray"), "green": __("Green"), "orange": __("Orange"), "pink": __("Pink"), "purple": __("Purple"), "red": __("Red"), "silver": __("Silver"), "tan": __("Tan"), "white": __("White"), "yellow": __("Yellow"), "dark": __("Dark"), "light": __("Light"), "fixed-layout": __("Fixed Layout"), "fluid-layout": __("Fluid Layout"), "responsive-layout": __("Responsive Layout"), "blavatar": __("Blavatar"), "photoblogging": __("Photoblogging"), "seasonal": __("Seasonal")})
                     feature_list = get_theme_feature_list(False)
                     #// No API.
                     for tags in feature_list:
-                        tags_list += tags
+                        translate_header.tags_list += tags
                     # end for
                 # end if
                 for tag in value:
-                    if (php_isset(lambda : tags_list[tag])):
-                        tag = tags_list[tag]
+                    if (php_isset(lambda : translate_header.tags_list[tag])):
+                        tag = translate_header.tags_list[tag]
                     elif (php_isset(lambda : self.tag_map[tag])):
-                        tag = tags_list[self.tag_map[tag]]
+                        tag = translate_header.tags_list[self.tag_map[tag]]
                     # end if
                 # end for
                 return value
@@ -1162,9 +1162,9 @@ class WP_Theme():
     @classmethod
     def get_allowed_on_network(self):
         
-        allowed_themes = None
-        if (not (php_isset(lambda : allowed_themes))):
-            allowed_themes = get_site_option("allowedthemes")
+        get_allowed_on_network.allowed_themes = None
+        if (not (php_isset(lambda : get_allowed_on_network.allowed_themes))):
+            get_allowed_on_network.allowed_themes = get_site_option("allowedthemes")
         # end if
         #// 
         #// Filters the array of themes allowed on the network.
@@ -1173,8 +1173,8 @@ class WP_Theme():
         #// 
         #// @param string[] $allowed_themes An array of theme stylesheet names.
         #//
-        allowed_themes = apply_filters("allowed_themes", allowed_themes)
-        return allowed_themes
+        get_allowed_on_network.allowed_themes = apply_filters("allowed_themes", get_allowed_on_network.allowed_themes)
+        return get_allowed_on_network.allowed_themes
     # end def get_allowed_on_network
     #// 
     #// Returns array of stylesheet names of themes allowed on the site.
@@ -1189,11 +1189,11 @@ class WP_Theme():
     @classmethod
     def get_allowed_on_site(self, blog_id=None):
         
-        allowed_themes = Array()
+        get_allowed_on_site.allowed_themes = Array()
         if (not blog_id) or (not is_multisite()):
             blog_id = get_current_blog_id()
         # end if
-        if (php_isset(lambda : allowed_themes[blog_id])):
+        if (php_isset(lambda : get_allowed_on_site.allowed_themes[blog_id])):
             #// 
             #// Filters the array of themes allowed on the site.
             #// 
@@ -1202,53 +1202,53 @@ class WP_Theme():
             #// @param string[] $allowed_themes An array of theme stylesheet names.
             #// @param int      $blog_id        ID of the site. Defaults to current site.
             #//
-            return apply_filters("site_allowed_themes", allowed_themes[blog_id], blog_id)
+            return apply_filters("site_allowed_themes", get_allowed_on_site.allowed_themes[blog_id], blog_id)
         # end if
         current = get_current_blog_id() == blog_id
         if current:
-            allowed_themes[blog_id] = get_option("allowedthemes")
+            get_allowed_on_site.allowed_themes[blog_id] = get_option("allowedthemes")
         else:
             switch_to_blog(blog_id)
-            allowed_themes[blog_id] = get_option("allowedthemes")
+            get_allowed_on_site.allowed_themes[blog_id] = get_option("allowedthemes")
             restore_current_blog()
         # end if
         #// This is all super old MU back compat joy.
         #// 'allowedthemes' keys things by stylesheet. 'allowed_themes' keyed things by name.
-        if False == allowed_themes[blog_id]:
+        if False == get_allowed_on_site.allowed_themes[blog_id]:
             if current:
-                allowed_themes[blog_id] = get_option("allowed_themes")
+                get_allowed_on_site.allowed_themes[blog_id] = get_option("allowed_themes")
             else:
                 switch_to_blog(blog_id)
-                allowed_themes[blog_id] = get_option("allowed_themes")
+                get_allowed_on_site.allowed_themes[blog_id] = get_option("allowed_themes")
                 restore_current_blog()
             # end if
-            if (not php_is_array(allowed_themes[blog_id])) or php_empty(lambda : allowed_themes[blog_id]):
-                allowed_themes[blog_id] = Array()
+            if (not php_is_array(get_allowed_on_site.allowed_themes[blog_id])) or php_empty(lambda : get_allowed_on_site.allowed_themes[blog_id]):
+                get_allowed_on_site.allowed_themes[blog_id] = Array()
             else:
                 converted = Array()
                 themes = wp_get_themes()
                 for stylesheet,theme_data in themes:
-                    if (php_isset(lambda : allowed_themes[blog_id][theme_data.get("Name")])):
+                    if (php_isset(lambda : get_allowed_on_site.allowed_themes[blog_id][theme_data.get("Name")])):
                         converted[stylesheet] = True
                     # end if
                 # end for
-                allowed_themes[blog_id] = converted
+                get_allowed_on_site.allowed_themes[blog_id] = converted
             # end if
             #// Set the option so we never have to go through this pain again.
-            if is_admin() and allowed_themes[blog_id]:
+            if is_admin() and get_allowed_on_site.allowed_themes[blog_id]:
                 if current:
-                    update_option("allowedthemes", allowed_themes[blog_id])
+                    update_option("allowedthemes", get_allowed_on_site.allowed_themes[blog_id])
                     delete_option("allowed_themes")
                 else:
                     switch_to_blog(blog_id)
-                    update_option("allowedthemes", allowed_themes[blog_id])
+                    update_option("allowedthemes", get_allowed_on_site.allowed_themes[blog_id])
                     delete_option("allowed_themes")
                     restore_current_blog()
                 # end if
             # end if
         # end if
         #// This filter is documented in wp-includes/class-wp-theme.php
-        return apply_filters("site_allowed_themes", allowed_themes[blog_id], blog_id)
+        return apply_filters("site_allowed_themes", get_allowed_on_site.allowed_themes[blog_id], blog_id)
     # end def get_allowed_on_site
     #// 
     #// Enables a theme for all sites on the current network.
@@ -1266,11 +1266,11 @@ class WP_Theme():
         if (not php_is_array(stylesheets)):
             stylesheets = Array(stylesheets)
         # end if
-        allowed_themes = get_site_option("allowedthemes")
+        network_enable_theme.allowed_themes = get_site_option("allowedthemes")
         for stylesheet in stylesheets:
-            allowed_themes[stylesheet] = True
+            network_enable_theme.allowed_themes[stylesheet] = True
         # end for
-        update_site_option("allowedthemes", allowed_themes)
+        update_site_option("allowedthemes", network_enable_theme.allowed_themes)
     # end def network_enable_theme
     #// 
     #// Disables a theme for all sites on the current network.
@@ -1288,13 +1288,13 @@ class WP_Theme():
         if (not php_is_array(stylesheets)):
             stylesheets = Array(stylesheets)
         # end if
-        allowed_themes = get_site_option("allowedthemes")
+        network_disable_theme.allowed_themes = get_site_option("allowedthemes")
         for stylesheet in stylesheets:
-            if (php_isset(lambda : allowed_themes[stylesheet])):
-                allowed_themes[stylesheet] = None
+            if (php_isset(lambda : network_disable_theme.allowed_themes[stylesheet])):
+                network_disable_theme.allowed_themes[stylesheet] = None
             # end if
         # end for
-        update_site_option("allowedthemes", allowed_themes)
+        update_site_option("allowedthemes", network_disable_theme.allowed_themes)
     # end def network_disable_theme
     #// 
     #// Sorts themes by name.

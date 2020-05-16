@@ -33,11 +33,11 @@ if '__PHP2PY_LOADED__' not in globals():
 #//
 def _wp_http_get_object(*args_):
     
-    http = None
-    if is_null(http):
-        http = php_new_class("WP_Http", lambda : WP_Http())
+    _wp_http_get_object.http = None
+    if is_null(_wp_http_get_object.http):
+        _wp_http_get_object.http = php_new_class("WP_Http", lambda : WP_Http())
     # end if
-    return http
+    return _wp_http_get_object.http
 # end def _wp_http_get_object
 #// 
 #// Retrieve the raw response from a safe HTTP request.
@@ -57,8 +57,8 @@ def _wp_http_get_object(*args_):
 def wp_safe_remote_request(url=None, args=Array(), *args_):
     
     args["reject_unsafe_urls"] = True
-    http = _wp_http_get_object()
-    return http.request(url, args)
+    wp_safe_remote_request.http = _wp_http_get_object()
+    return wp_safe_remote_request.http.request(url, args)
 # end def wp_safe_remote_request
 #// 
 #// Retrieve the raw response from a safe HTTP request using the GET method.
@@ -78,8 +78,8 @@ def wp_safe_remote_request(url=None, args=Array(), *args_):
 def wp_safe_remote_get(url=None, args=Array(), *args_):
     
     args["reject_unsafe_urls"] = True
-    http = _wp_http_get_object()
-    return http.get(url, args)
+    wp_safe_remote_get.http = _wp_http_get_object()
+    return wp_safe_remote_get.http.get(url, args)
 # end def wp_safe_remote_get
 #// 
 #// Retrieve the raw response from a safe HTTP request using the POST method.
@@ -99,8 +99,8 @@ def wp_safe_remote_get(url=None, args=Array(), *args_):
 def wp_safe_remote_post(url=None, args=Array(), *args_):
     
     args["reject_unsafe_urls"] = True
-    http = _wp_http_get_object()
-    return http.post(url, args)
+    wp_safe_remote_post.http = _wp_http_get_object()
+    return wp_safe_remote_post.http.post(url, args)
 # end def wp_safe_remote_post
 #// 
 #// Retrieve the raw response from a safe HTTP request using the HEAD method.
@@ -120,8 +120,8 @@ def wp_safe_remote_post(url=None, args=Array(), *args_):
 def wp_safe_remote_head(url=None, args=Array(), *args_):
     
     args["reject_unsafe_urls"] = True
-    http = _wp_http_get_object()
-    return http.head(url, args)
+    wp_safe_remote_head.http = _wp_http_get_object()
+    return wp_safe_remote_head.http.head(url, args)
 # end def wp_safe_remote_head
 #// 
 #// Performs an HTTP request and returns its response.
@@ -155,8 +155,8 @@ def wp_safe_remote_head(url=None, args=Array(), *args_):
 #//
 def wp_remote_request(url=None, args=Array(), *args_):
     
-    http = _wp_http_get_object()
-    return http.request(url, args)
+    wp_remote_request.http = _wp_http_get_object()
+    return wp_remote_request.http.request(url, args)
 # end def wp_remote_request
 #// 
 #// Performs an HTTP request using the GET method and returns its response.
@@ -172,8 +172,8 @@ def wp_remote_request(url=None, args=Array(), *args_):
 #//
 def wp_remote_get(url=None, args=Array(), *args_):
     
-    http = _wp_http_get_object()
-    return http.get(url, args)
+    wp_remote_get.http = _wp_http_get_object()
+    return wp_remote_get.http.get(url, args)
 # end def wp_remote_get
 #// 
 #// Performs an HTTP request using the POST method and returns its response.
@@ -189,8 +189,8 @@ def wp_remote_get(url=None, args=Array(), *args_):
 #//
 def wp_remote_post(url=None, args=Array(), *args_):
     
-    http = _wp_http_get_object()
-    return http.post(url, args)
+    wp_remote_post.http = _wp_http_get_object()
+    return wp_remote_post.http.post(url, args)
 # end def wp_remote_post
 #// 
 #// Performs an HTTP request using the HEAD method and returns its response.
@@ -206,8 +206,8 @@ def wp_remote_post(url=None, args=Array(), *args_):
 #//
 def wp_remote_head(url=None, args=Array(), *args_):
     
-    http = _wp_http_get_object()
-    return http.head(url, args)
+    wp_remote_head.http = _wp_http_get_object()
+    return wp_remote_head.http.head(url, args)
 # end def wp_remote_head
 #// 
 #// Retrieve only the headers from the raw response.
@@ -362,7 +362,7 @@ def wp_remote_retrieve_cookie_value(response=None, name=None, *args_):
 #//
 def wp_http_supports(capabilities=Array(), url=None, *args_):
     
-    http = _wp_http_get_object()
+    wp_http_supports.http = _wp_http_get_object()
     capabilities = wp_parse_args(capabilities)
     count = php_count(capabilities)
     #// If we have a numeric $capabilities array, spoof a wp_remote_request() associative $args array.
@@ -375,7 +375,7 @@ def wp_http_supports(capabilities=Array(), url=None, *args_):
             capabilities["ssl"] = True
         # end if
     # end if
-    return php_bool(http._get_first_available_transport(capabilities))
+    return php_bool(wp_http_supports.http._get_first_available_transport(capabilities))
 # end def wp_http_supports
 #// 
 #// Get the HTTP Origin of the current request.
@@ -596,18 +596,18 @@ def ms_allowed_http_request_hosts(is_external=None, host=None, *args_):
     
     global wpdb
     php_check_if_defined("wpdb")
-    queried = Array()
+    ms_allowed_http_request_hosts.queried = Array()
     if is_external:
         return is_external
     # end if
     if get_network().domain == host:
         return True
     # end if
-    if (php_isset(lambda : queried[host])):
-        return queried[host]
+    if (php_isset(lambda : ms_allowed_http_request_hosts.queried[host])):
+        return ms_allowed_http_request_hosts.queried[host]
     # end if
-    queried[host] = php_bool(wpdb.get_var(wpdb.prepare(str("SELECT domain FROM ") + str(wpdb.blogs) + str(" WHERE domain = %s LIMIT 1"), host)))
-    return queried[host]
+    ms_allowed_http_request_hosts.queried[host] = php_bool(wpdb.get_var(wpdb.prepare(str("SELECT domain FROM ") + str(wpdb.blogs) + str(" WHERE domain = %s LIMIT 1"), host)))
+    return ms_allowed_http_request_hosts.queried[host]
 # end def ms_allowed_http_request_hosts
 #// 
 #// A wrapper for PHP's parse_url() function that handles consistency in the return

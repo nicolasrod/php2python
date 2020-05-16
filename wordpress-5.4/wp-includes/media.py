@@ -1625,8 +1625,8 @@ add_shortcode("gallery", "gallery_shortcode")
 def gallery_shortcode(attr=None, *args_):
     
     post = get_post()
-    instance = 0
-    instance += 1
+    gallery_shortcode.instance = 0
+    gallery_shortcode.instance += 1
     if (not php_empty(lambda : attr["ids"])):
         #// 'ids' is explicitly ordered, unless you specify otherwise.
         if php_empty(lambda : attr["orderby"]):
@@ -1649,7 +1649,7 @@ def gallery_shortcode(attr=None, *args_):
     #// @param array  $attr     Attributes of the gallery shortcode.
     #// @param int    $instance Unique numeric ID of this gallery shortcode instance.
     #//
-    output = apply_filters("post_gallery", "", attr, instance)
+    output = apply_filters("post_gallery", "", attr, gallery_shortcode.instance)
     if (not php_empty(lambda : output)):
         return output
     # end if
@@ -1693,7 +1693,7 @@ def gallery_shortcode(attr=None, *args_):
     columns = php_intval(atts["columns"])
     itemwidth = floor(100 / columns) if columns > 0 else 100
     float = "right" if is_rtl() else "left"
-    selector = str("gallery-") + str(instance)
+    selector = str("gallery-") + str(gallery_shortcode.instance)
     gallery_style = ""
     #// 
     #// Filters whether to print default gallery styles.
@@ -1855,8 +1855,8 @@ def wp_playlist_shortcode(attr=None, *args_):
     global content_width
     php_check_if_defined("content_width")
     post = get_post()
-    instance = 0
-    instance += 1
+    wp_playlist_shortcode.instance = 0
+    wp_playlist_shortcode.instance += 1
     if (not php_empty(lambda : attr["ids"])):
         #// 'ids' is explicitly ordered, unless you specify otherwise.
         if php_empty(lambda : attr["orderby"]):
@@ -1877,7 +1877,7 @@ def wp_playlist_shortcode(attr=None, *args_):
     #// @param array  $attr     An array of shortcode attributes.
     #// @param int    $instance Unique numeric ID of this playlist shortcode instance.
     #//
-    output = apply_filters("post_playlist", "", attr, instance)
+    output = apply_filters("post_playlist", "", attr, wp_playlist_shortcode.instance)
     if (not php_empty(lambda : output)):
         return output
     # end if
@@ -1965,7 +1965,7 @@ def wp_playlist_shortcode(attr=None, *args_):
     safe_type = esc_attr(atts["type"])
     safe_style = esc_attr(atts["style"])
     ob_start()
-    if 1 == instance:
+    if 1 == wp_playlist_shortcode.instance:
         #// 
         #// Prints and enqueues playlist scripts, styles, and JavaScript templates.
         #// 
@@ -2105,8 +2105,8 @@ def wp_get_attachment_id3_keys(attachment=None, context="display", *args_):
 def wp_audio_shortcode(attr=None, content="", *args_):
     
     post_id = get_the_ID() if get_post() else 0
-    instance = 0
-    instance += 1
+    wp_audio_shortcode.instance = 0
+    wp_audio_shortcode.instance += 1
     #// 
     #// Filters the default audio shortcode output.
     #// 
@@ -2119,7 +2119,7 @@ def wp_audio_shortcode(attr=None, content="", *args_):
     #// @param string $content  Shortcode content.
     #// @param int    $instance Unique numeric ID of this audio shortcode instance.
     #//
-    override = apply_filters("wp_audio_shortcode_override", "", attr, content, instance)
+    override = apply_filters("wp_audio_shortcode_override", "", attr, content, wp_audio_shortcode.instance)
     if "" != override:
         return override
     # end if
@@ -2182,7 +2182,7 @@ def wp_audio_shortcode(attr=None, content="", *args_):
     #// @param array  $atts  Array of audio shortcode attributes.
     #//
     atts["class"] = apply_filters("wp_audio_shortcode_class", atts["class"], atts)
-    html_atts = Array({"class": atts["class"], "id": php_sprintf("audio-%d-%d", post_id, instance), "loop": wp_validate_boolean(atts["loop"]), "autoplay": wp_validate_boolean(atts["autoplay"]), "preload": atts["preload"], "style": atts["style"]})
+    html_atts = Array({"class": atts["class"], "id": php_sprintf("audio-%d-%d", post_id, wp_audio_shortcode.instance), "loop": wp_validate_boolean(atts["loop"]), "autoplay": wp_validate_boolean(atts["autoplay"]), "preload": atts["preload"], "style": atts["style"]})
     #// These ones should just be omitted altogether if they are blank.
     for a in Array("loop", "autoplay", "preload"):
         if php_empty(lambda : html_atts[a]):
@@ -2194,7 +2194,7 @@ def wp_audio_shortcode(attr=None, content="", *args_):
         attr_strings[-1] = k + "=\"" + esc_attr(v) + "\""
     # end for
     html = ""
-    if "mediaelement" == library and 1 == instance:
+    if "mediaelement" == library and 1 == wp_audio_shortcode.instance:
         html += "<!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->\n"
     # end if
     html += php_sprintf("<audio %s controls=\"controls\">", join(" ", attr_strings))
@@ -2206,7 +2206,7 @@ def wp_audio_shortcode(attr=None, content="", *args_):
                 fileurl = atts[fallback]
             # end if
             type = wp_check_filetype(atts[fallback], wp_get_mime_types())
-            url = add_query_arg("_", instance, atts[fallback])
+            url = add_query_arg("_", wp_audio_shortcode.instance, atts[fallback])
             html += php_sprintf(source, type["type"], esc_url(url))
         # end if
     # end for
@@ -2280,8 +2280,8 @@ def wp_video_shortcode(attr=None, content="", *args_):
     global content_width
     php_check_if_defined("content_width")
     post_id = get_the_ID() if get_post() else 0
-    instance = 0
-    instance += 1
+    wp_video_shortcode.instance = 0
+    wp_video_shortcode.instance += 1
     #// 
     #// Filters the default video shortcode output.
     #// 
@@ -2297,7 +2297,7 @@ def wp_video_shortcode(attr=None, content="", *args_):
     #// @param string $content  Video shortcode content.
     #// @param int    $instance Unique numeric ID of this video shortcode instance.
     #//
-    override = apply_filters("wp_video_shortcode_override", "", attr, content, instance)
+    override = apply_filters("wp_video_shortcode_override", "", attr, content, wp_video_shortcode.instance)
     if "" != override:
         return override
     # end if
@@ -2401,7 +2401,7 @@ def wp_video_shortcode(attr=None, content="", *args_):
     #// @param array  $atts  Array of video shortcode attributes.
     #//
     atts["class"] = apply_filters("wp_video_shortcode_class", atts["class"], atts)
-    html_atts = Array({"class": atts["class"], "id": php_sprintf("video-%d-%d", post_id, instance), "width": absint(atts["width"]), "height": absint(atts["height"]), "poster": esc_url(atts["poster"]), "loop": wp_validate_boolean(atts["loop"]), "autoplay": wp_validate_boolean(atts["autoplay"]), "preload": atts["preload"]})
+    html_atts = Array({"class": atts["class"], "id": php_sprintf("video-%d-%d", post_id, wp_video_shortcode.instance), "width": absint(atts["width"]), "height": absint(atts["height"]), "poster": esc_url(atts["poster"]), "loop": wp_validate_boolean(atts["loop"]), "autoplay": wp_validate_boolean(atts["autoplay"]), "preload": atts["preload"]})
     #// These ones should just be omitted altogether if they are blank.
     for a in Array("poster", "loop", "autoplay", "preload"):
         if php_empty(lambda : html_atts[a]):
@@ -2413,7 +2413,7 @@ def wp_video_shortcode(attr=None, content="", *args_):
         attr_strings[-1] = k + "=\"" + esc_attr(v) + "\""
     # end for
     html = ""
-    if "mediaelement" == library and 1 == instance:
+    if "mediaelement" == library and 1 == wp_video_shortcode.instance:
         html += "<!--[if lt IE 9]><script>document.createElement('video');</script><![endif]-->\n"
     # end if
     html += php_sprintf("<video %s controls=\"controls\">", join(" ", attr_strings))
@@ -2431,7 +2431,7 @@ def wp_video_shortcode(attr=None, content="", *args_):
             else:
                 type = wp_check_filetype(atts[fallback], wp_get_mime_types())
             # end if
-            url = add_query_arg("_", instance, atts[fallback])
+            url = add_query_arg("_", wp_video_shortcode.instance, atts[fallback])
             html += php_sprintf(source, type["type"], esc_url(url))
         # end if
     # end for

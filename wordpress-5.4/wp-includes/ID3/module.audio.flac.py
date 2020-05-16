@@ -416,8 +416,8 @@ class getid3_flac(getid3_handler):
     @classmethod
     def metablocktypelookup(self, blocktype=None):
         
-        lookup = Array({0: "STREAMINFO", 1: "PADDING", 2: "APPLICATION", 3: "SEEKTABLE", 4: "VORBIS_COMMENT", 5: "CUESHEET", 6: "PICTURE"})
-        return lookup[blocktype] if (php_isset(lambda : lookup[blocktype])) else "reserved"
+        metablocktypelookup.lookup = Array({0: "STREAMINFO", 1: "PADDING", 2: "APPLICATION", 3: "SEEKTABLE", 4: "VORBIS_COMMENT", 5: "CUESHEET", 6: "PICTURE"})
+        return metablocktypelookup.lookup[blocktype] if (php_isset(lambda : metablocktypelookup.lookup[blocktype])) else "reserved"
     # end def metablocktypelookup
     #// 
     #// @param int $applicationid
@@ -427,8 +427,8 @@ class getid3_flac(getid3_handler):
     @classmethod
     def applicationidlookup(self, applicationid=None):
         
-        lookup = Array({1096041288: "FlacFile", 1112756044: "beSolo", 1112885075: "Bugs Player", 1131767155: "GoldWave cue points (specification)", 1181311841: "CUE Splitter", 1182035820: "flac-tools", 1297044546: "MOTB MetaCzar", 1297109829: "MP3 Stream Editor", 1299533132: "MusicML: Music Metadata Language", 1380533830: "Sound Devices RIFF chunk storage", 1397114444: "Sound Font FLAC", 1397706329: "Sony Creative Software", 1397835098: "flacsqueeze", 1416910710: "TwistedWave", 1430869075: "UITS Embedding tools", 1634297446: "FLAC AIFF chunk storage", 1768776039: "flac-image application for storing arbitrary files in APPLICATION metadata blocks", 1885693293: "Parseable Embedded Extensible Metadata (specification)", 1902539636: "QFLAC Studio", 1919510118: "FLAC RIFF chunk storage", 1953853029: "TagTuner", 2019713396: "XBAT", 2020434788: "xmcd"})
-        return lookup[applicationid] if (php_isset(lambda : lookup[applicationid])) else "reserved"
+        applicationidlookup.lookup = Array({1096041288: "FlacFile", 1112756044: "beSolo", 1112885075: "Bugs Player", 1131767155: "GoldWave cue points (specification)", 1181311841: "CUE Splitter", 1182035820: "flac-tools", 1297044546: "MOTB MetaCzar", 1297109829: "MP3 Stream Editor", 1299533132: "MusicML: Music Metadata Language", 1380533830: "Sound Devices RIFF chunk storage", 1397114444: "Sound Font FLAC", 1397706329: "Sony Creative Software", 1397835098: "flacsqueeze", 1416910710: "TwistedWave", 1430869075: "UITS Embedding tools", 1634297446: "FLAC AIFF chunk storage", 1768776039: "flac-image application for storing arbitrary files in APPLICATION metadata blocks", 1885693293: "Parseable Embedded Extensible Metadata (specification)", 1902539636: "QFLAC Studio", 1919510118: "FLAC RIFF chunk storage", 1953853029: "TagTuner", 2019713396: "XBAT", 2020434788: "xmcd"})
+        return applicationidlookup.lookup[applicationid] if (php_isset(lambda : applicationidlookup.lookup[applicationid])) else "reserved"
     # end def applicationidlookup
     #// 
     #// @param int $type_id
@@ -438,7 +438,7 @@ class getid3_flac(getid3_handler):
     @classmethod
     def picturetypelookup(self, type_id=None):
         
-        lookup = Array({0: "Other", 1: "32x32 pixels 'file icon' (PNG only)", 2: "Other file icon", 3: "Cover (front)", 4: "Cover (back)", 5: "Leaflet page", 6: "Media (e.g. label side of CD)", 7: "Lead artist/lead performer/soloist", 8: "Artist/performer", 9: "Conductor", 10: "Band/Orchestra", 11: "Composer", 12: "Lyricist/text writer", 13: "Recording Location", 14: "During recording", 15: "During performance", 16: "Movie/video screen capture", 17: "A bright coloured fish", 18: "Illustration", 19: "Band/artist logotype", 20: "Publisher/Studio logotype"})
-        return lookup[type_id] if (php_isset(lambda : lookup[type_id])) else "reserved"
+        picturetypelookup.lookup = Array({0: "Other", 1: "32x32 pixels 'file icon' (PNG only)", 2: "Other file icon", 3: "Cover (front)", 4: "Cover (back)", 5: "Leaflet page", 6: "Media (e.g. label side of CD)", 7: "Lead artist/lead performer/soloist", 8: "Artist/performer", 9: "Conductor", 10: "Band/Orchestra", 11: "Composer", 12: "Lyricist/text writer", 13: "Recording Location", 14: "During recording", 15: "During performance", 16: "Movie/video screen capture", 17: "A bright coloured fish", 18: "Illustration", 19: "Band/artist logotype", 20: "Publisher/Studio logotype"})
+        return picturetypelookup.lookup[type_id] if (php_isset(lambda : picturetypelookup.lookup[type_id])) else "reserved"
     # end def picturetypelookup
 # end class getid3_flac

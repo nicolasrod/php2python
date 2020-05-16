@@ -132,11 +132,11 @@ def wp_oembed_get(url=None, args="", *args_):
 #//
 def _wp_oembed_get_object(*args_):
     
-    wp_oembed = None
-    if is_null(wp_oembed):
-        wp_oembed = php_new_class("WP_oEmbed", lambda : WP_oEmbed())
+    _wp_oembed_get_object.wp_oembed = None
+    if is_null(_wp_oembed_get_object.wp_oembed):
+        _wp_oembed_get_object.wp_oembed = php_new_class("WP_oEmbed", lambda : WP_oEmbed())
     # end if
-    return wp_oembed
+    return _wp_oembed_get_object.wp_oembed
 # end def _wp_oembed_get_object
 #// 
 #// Adds a URL format and oEmbed provider URL pair.
@@ -751,9 +751,9 @@ def wp_filter_oembed_result(result=None, data=None, url=None, *args_):
     if False == result or (not php_in_array(data.type, Array("rich", "video"))):
         return result
     # end if
-    wp_oembed = _wp_oembed_get_object()
+    wp_filter_oembed_result.wp_oembed = _wp_oembed_get_object()
     #// Don't modify the HTML for trusted providers.
-    if False != wp_oembed.get_provider(url, Array({"discover": False})):
+    if False != wp_filter_oembed_result.wp_oembed.get_provider(url, Array({"discover": False})):
         return result
     # end if
     allowed_html = Array({"a": Array({"href": True})}, {"blockquote": Array(), "iframe": Array({"src": True, "width": True, "height": True, "frameborder": True, "marginwidth": True, "marginheight": True, "scrolling": True, "title": True})})

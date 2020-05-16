@@ -26,11 +26,11 @@ if '__PHP2PY_LOADED__' not in globals():
 #//
 def render_block_core_categories(attributes=None, *args_):
     
-    block_id = 0
-    block_id += 1
+    render_block_core_categories.block_id = 0
+    render_block_core_categories.block_id += 1
     args = Array({"echo": False, "hierarchical": (not php_empty(lambda : attributes["showHierarchy"])), "orderby": "name", "show_count": (not php_empty(lambda : attributes["showPostCounts"])), "title_li": ""})
     if (not php_empty(lambda : attributes["displayAsDropdown"])):
-        id = "wp-block-categories-" + block_id
+        id = "wp-block-categories-" + render_block_core_categories.block_id
         args["id"] = id
         args["show_option_none"] = __("Select Category")
         wrapper_markup = "<div class=\"%1$s\">%2$s</div>"

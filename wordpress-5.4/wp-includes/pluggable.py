@@ -1987,8 +1987,8 @@ if (not php_function_exists("wp_salt")):
     #//
     def wp_salt(scheme="auth", *args_):
         
-        cached_salts = Array()
-        if (php_isset(lambda : cached_salts[scheme])):
+        wp_salt.cached_salts = Array()
+        if (php_isset(lambda : wp_salt.cached_salts[scheme])):
             #// 
             #// Filters the WordPress salt.
             #// 
@@ -1998,32 +1998,32 @@ if (not php_function_exists("wp_salt")):
             #// @param string $scheme      Authentication scheme. Values include 'auth',
             #// 'secure_auth', 'logged_in', and 'nonce'.
             #//
-            return apply_filters("salt", cached_salts[scheme], scheme)
+            return apply_filters("salt", wp_salt.cached_salts[scheme], scheme)
         # end if
-        duplicated_keys = None
-        if None == duplicated_keys:
-            duplicated_keys = Array({"put your unique phrase here": True})
+        wp_salt.duplicated_keys = None
+        if None == wp_salt.duplicated_keys:
+            wp_salt.duplicated_keys = Array({"put your unique phrase here": True})
             for first in Array("AUTH", "SECURE_AUTH", "LOGGED_IN", "NONCE", "SECRET"):
                 for second in Array("KEY", "SALT"):
                     if (not php_defined(str(first) + str("_") + str(second))):
                         continue
                     # end if
                     value = constant(str(first) + str("_") + str(second))
-                    duplicated_keys[value] = (php_isset(lambda : duplicated_keys[value]))
+                    wp_salt.duplicated_keys[value] = (php_isset(lambda : wp_salt.duplicated_keys[value]))
                 # end for
             # end for
         # end if
         values = Array({"key": "", "salt": ""})
-        if php_defined("SECRET_KEY") and SECRET_KEY and php_empty(lambda : duplicated_keys[SECRET_KEY]):
+        if php_defined("SECRET_KEY") and SECRET_KEY and php_empty(lambda : wp_salt.duplicated_keys[SECRET_KEY]):
             values["key"] = SECRET_KEY
         # end if
-        if "auth" == scheme and php_defined("SECRET_SALT") and SECRET_SALT and php_empty(lambda : duplicated_keys[SECRET_SALT]):
+        if "auth" == scheme and php_defined("SECRET_SALT") and SECRET_SALT and php_empty(lambda : wp_salt.duplicated_keys[SECRET_SALT]):
             values["salt"] = SECRET_SALT
         # end if
         if php_in_array(scheme, Array("auth", "secure_auth", "logged_in", "nonce")):
             for type in Array("key", "salt"):
                 const = php_strtoupper(str(scheme) + str("_") + str(type))
-                if php_defined(const) and constant(const) and php_empty(lambda : duplicated_keys[constant(const)]):
+                if php_defined(const) and constant(const) and php_empty(lambda : wp_salt.duplicated_keys[constant(const)]):
                     values[type] = constant(const)
                 elif (not values[type]):
                     values[type] = get_site_option(str(scheme) + str("_") + str(type))
@@ -2043,9 +2043,9 @@ if (not php_function_exists("wp_salt")):
             # end if
             values["salt"] = hash_hmac("md5", scheme, values["key"])
         # end if
-        cached_salts[scheme] = values["key"] + values["salt"]
+        wp_salt.cached_salts[scheme] = values["key"] + values["salt"]
         #// This filter is documented in wp-includes/pluggable.php
-        return apply_filters("salt", cached_salts[scheme], scheme)
+        return apply_filters("salt", wp_salt.cached_salts[scheme], scheme)
     # end def wp_salt
 # end if
 if (not php_function_exists("wp_hash")):
@@ -2221,8 +2221,8 @@ if (not php_function_exists("wp_rand")):
         #// We only handle ints, floats are truncated to their integer value.
         min = php_int(min)
         max = php_int(max)
-        use_random_int_functionality = True
-        if use_random_int_functionality:
+        wp_rand.use_random_int_functionality = True
+        if wp_rand.use_random_int_functionality:
             try: 
                 _max = max if 0 != max else max_random_number
                 #// wp_rand() can accept arguments in either order, PHP cannot.
@@ -2232,28 +2232,28 @@ if (not php_function_exists("wp_rand")):
                 if False != val:
                     return absint(val)
                 else:
-                    use_random_int_functionality = False
+                    wp_rand.use_random_int_functionality = False
                 # end if
             except Error as e:
-                use_random_int_functionality = False
+                wp_rand.use_random_int_functionality = False
             except Exception as e:
-                use_random_int_functionality = False
+                wp_rand.use_random_int_functionality = False
             # end try
         # end if
         #// Reset $rnd_value after 14 uses.
         #// 32 (md5) + 40 (sha1) + 40 (sha1) / 8 = 14 random numbers from $rnd_value.
         if php_strlen(rnd_value) < 8:
             if php_defined("WP_SETUP_CONFIG"):
-                seed = ""
+                wp_rand.seed = ""
             else:
-                seed = get_transient("random_seed")
+                wp_rand.seed = get_transient("random_seed")
             # end if
-            rnd_value = php_md5(uniqid(php_microtime() + mt_rand(), True) + seed)
+            rnd_value = php_md5(uniqid(php_microtime() + mt_rand(), True) + wp_rand.seed)
             rnd_value += sha1(rnd_value)
-            rnd_value += sha1(rnd_value + seed)
-            seed = php_md5(seed + rnd_value)
+            rnd_value += sha1(rnd_value + wp_rand.seed)
+            wp_rand.seed = php_md5(wp_rand.seed + rnd_value)
             if (not php_defined("WP_SETUP_CONFIG")) and (not php_defined("WP_INSTALLING")):
-                set_transient("random_seed", seed)
+                set_transient("random_seed", wp_rand.seed)
             # end if
         # end if
         #// Take the first 8 digits for our value.

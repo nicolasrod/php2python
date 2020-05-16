@@ -849,9 +849,9 @@ class WP_List_Table():
             current_order = "asc"
         # end if
         if (not php_empty(lambda : columns["cb"])):
-            cb_counter = 1
-            columns["cb"] = "<label class=\"screen-reader-text\" for=\"cb-select-all-" + cb_counter + "\">" + __("Select All") + "</label>" + "<input id=\"cb-select-all-" + cb_counter + "\" type=\"checkbox\" />"
-            cb_counter += 1
+            print_column_headers.cb_counter = 1
+            columns["cb"] = "<label class=\"screen-reader-text\" for=\"cb-select-all-" + print_column_headers.cb_counter + "\">" + __("Select All") + "</label>" + "<input id=\"cb-select-all-" + print_column_headers.cb_counter + "\" type=\"checkbox\" />"
+            print_column_headers.cb_counter += 1
         # end if
         for column_key,column_display_name in columns:
             class_ = Array("manage-column", str("column-") + str(column_key))

@@ -26,9 +26,9 @@ if '__PHP2PY_LOADED__' not in globals():
 #//
 def render_block_core_search(attributes=None, *args_):
     
-    instance_id = 0
-    instance_id += 1
-    input_id = "wp-block-search__input-" + instance_id
+    render_block_core_search.instance_id = 0
+    render_block_core_search.instance_id += 1
+    input_id = "wp-block-search__input-" + render_block_core_search.instance_id
     label_markup = ""
     button_markup = ""
     if (not php_empty(lambda : attributes["label"])):

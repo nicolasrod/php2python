@@ -1887,26 +1887,26 @@ def wp_normalize_path(path=None, *args_):
 #//
 def get_temp_dir(*args_):
     
-    temp = ""
+    get_temp_dir.temp = ""
     if php_defined("WP_TEMP_DIR"):
         return trailingslashit(WP_TEMP_DIR)
     # end if
-    if temp:
-        return trailingslashit(temp)
+    if get_temp_dir.temp:
+        return trailingslashit(get_temp_dir.temp)
     # end if
     if php_function_exists("sys_get_temp_dir"):
-        temp = php_sys_get_temp_dir()
-        if php_no_error(lambda: php_is_dir(temp)) and wp_is_writable(temp):
-            return trailingslashit(temp)
+        get_temp_dir.temp = php_sys_get_temp_dir()
+        if php_no_error(lambda: php_is_dir(get_temp_dir.temp)) and wp_is_writable(get_temp_dir.temp):
+            return trailingslashit(get_temp_dir.temp)
         # end if
     # end if
-    temp = php_ini_get("upload_tmp_dir")
-    if php_no_error(lambda: php_is_dir(temp)) and wp_is_writable(temp):
-        return trailingslashit(temp)
+    get_temp_dir.temp = php_ini_get("upload_tmp_dir")
+    if php_no_error(lambda: php_is_dir(get_temp_dir.temp)) and wp_is_writable(get_temp_dir.temp):
+        return trailingslashit(get_temp_dir.temp)
     # end if
-    temp = WP_CONTENT_DIR + "/"
-    if php_is_dir(temp) and wp_is_writable(temp):
-        return temp
+    get_temp_dir.temp = WP_CONTENT_DIR + "/"
+    if php_is_dir(get_temp_dir.temp) and wp_is_writable(get_temp_dir.temp):
+        return get_temp_dir.temp
     # end if
     return "/tmp/"
 # end def get_temp_dir
@@ -2027,11 +2027,11 @@ def wp_get_upload_dir(*args_):
 #//
 def wp_upload_dir(time=None, create_dir=True, refresh_cache=False, *args_):
     
-    cache = Array()
-    tested_paths = Array()
+    wp_upload_dir.cache = Array()
+    wp_upload_dir.tested_paths = Array()
     key = php_sprintf("%d-%s", get_current_blog_id(), php_str(time))
-    if refresh_cache or php_empty(lambda : cache[key]):
-        cache[key] = _wp_upload_dir(time)
+    if refresh_cache or php_empty(lambda : wp_upload_dir.cache[key]):
+        wp_upload_dir.cache[key] = _wp_upload_dir(time)
     # end if
     #// 
     #// Filters the uploads directory data.
@@ -2049,11 +2049,11 @@ def wp_upload_dir(time=None, create_dir=True, refresh_cache=False, *args_):
     #// @type string|false $error   False or error message.
     #// }
     #//
-    uploads = apply_filters("upload_dir", cache[key])
+    uploads = apply_filters("upload_dir", wp_upload_dir.cache[key])
     if create_dir:
         path = uploads["path"]
-        if php_array_key_exists(path, tested_paths):
-            uploads["error"] = tested_paths[path]
+        if php_array_key_exists(path, wp_upload_dir.tested_paths):
+            uploads["error"] = wp_upload_dir.tested_paths[path]
         else:
             if (not wp_mkdir_p(path)):
                 if 0 == php_strpos(uploads["basedir"], ABSPATH):
@@ -2063,7 +2063,7 @@ def wp_upload_dir(time=None, create_dir=True, refresh_cache=False, *args_):
                 # end if
                 uploads["error"] = php_sprintf(__("Unable to create directory %s. Is its parent directory writable by the server?"), esc_html(error_path))
             # end if
-            tested_paths[path] = uploads["error"]
+            wp_upload_dir.tested_paths[path] = uploads["error"]
         # end if
     # end if
     return uploads
@@ -3369,11 +3369,11 @@ def _wp_json_sanity_check(data=None, depth=None, *args_):
 #//
 def _wp_json_convert_string(string=None, *args_):
     
-    use_mb = None
-    if is_null(use_mb):
-        use_mb = php_function_exists("mb_convert_encoding")
+    _wp_json_convert_string.use_mb = None
+    if is_null(_wp_json_convert_string.use_mb):
+        _wp_json_convert_string.use_mb = php_function_exists("mb_convert_encoding")
     # end if
-    if use_mb:
+    if _wp_json_convert_string.use_mb:
         encoding = mb_detect_encoding(string, mb_detect_order(), True)
         if encoding:
             return mb_convert_encoding(string, "UTF-8", encoding)
@@ -4441,13 +4441,13 @@ def validate_file(file=None, allowed_files=Array(), *args_):
 #//
 def force_ssl_admin(force=None, *args_):
     
-    forced = False
+    force_ssl_admin.forced = False
     if (not is_null(force)):
-        old_forced = forced
-        forced = force
+        old_forced = force_ssl_admin.forced
+        force_ssl_admin.forced = force
         return old_forced
     # end if
-    return forced
+    return force_ssl_admin.forced
 # end def force_ssl_admin
 #// 
 #// Guess the URL for the site.
@@ -4513,11 +4513,11 @@ def wp_guess_url(*args_):
 #//
 def wp_suspend_cache_addition(suspend=None, *args_):
     
-    _suspend = False
+    wp_suspend_cache_addition._suspend = False
     if php_is_bool(suspend):
-        _suspend = suspend
+        wp_suspend_cache_addition._suspend = suspend
     # end if
-    return _suspend
+    return wp_suspend_cache_addition._suspend
 # end def wp_suspend_cache_addition
 #// 
 #// Suspend cache invalidation.
@@ -4648,8 +4648,8 @@ def global_terms_enabled(*args_):
     if (not is_multisite()):
         return False
     # end if
-    global_terms = None
-    if is_null(global_terms):
+    global_terms_enabled.global_terms = None
+    if is_null(global_terms_enabled.global_terms):
         #// 
         #// Filters whether global terms are enabled.
         #// 
@@ -4662,12 +4662,12 @@ def global_terms_enabled(*args_):
         #//
         filter = apply_filters("global_terms_enabled", None)
         if (not is_null(filter)):
-            global_terms = php_bool(filter)
+            global_terms_enabled.global_terms = php_bool(filter)
         else:
-            global_terms = php_bool(get_site_option("global_terms_enabled", False))
+            global_terms_enabled.global_terms = php_bool(get_site_option("global_terms_enabled", False))
         # end if
     # end if
-    return global_terms
+    return global_terms_enabled.global_terms
 # end def global_terms_enabled
 #// 
 #// Determines whether site meta is enabled.
@@ -4782,16 +4782,16 @@ def _wp_timezone_choice_usort_callback(a=None, b=None, *args_):
 #//
 def wp_timezone_choice(selected_zone=None, locale=None, *args_):
     
-    mo_loaded = False
-    locale_loaded = None
+    wp_timezone_choice.mo_loaded = False
+    wp_timezone_choice.locale_loaded = None
     continents = Array("Africa", "America", "Antarctica", "Arctic", "Asia", "Atlantic", "Australia", "Europe", "Indian", "Pacific")
     #// Load translations for continents and cities.
-    if (not mo_loaded) or locale != locale_loaded:
-        locale_loaded = locale if locale else get_locale()
-        mofile = WP_LANG_DIR + "/continents-cities-" + locale_loaded + ".mo"
+    if (not wp_timezone_choice.mo_loaded) or locale != wp_timezone_choice.locale_loaded:
+        wp_timezone_choice.locale_loaded = locale if locale else get_locale()
+        mofile = WP_LANG_DIR + "/continents-cities-" + wp_timezone_choice.locale_loaded + ".mo"
         unload_textdomain("continents-cities")
         load_textdomain("continents-cities", mofile)
-        mo_loaded = True
+        wp_timezone_choice.mo_loaded = True
     # end if
     zonen = Array()
     for zone in timezone_identifiers_list():
@@ -5236,9 +5236,9 @@ def send_frame_options_header(*args_):
 #//
 def wp_allowed_protocols(*args_):
     
-    protocols = Array()
-    if php_empty(lambda : protocols):
-        protocols = Array("http", "https", "ftp", "ftps", "mailto", "news", "irc", "gopher", "nntp", "feed", "telnet", "mms", "rtsp", "sms", "svn", "tel", "fax", "xmpp", "webcal", "urn")
+    wp_allowed_protocols.protocols = Array()
+    if php_empty(lambda : wp_allowed_protocols.protocols):
+        wp_allowed_protocols.protocols = Array("http", "https", "ftp", "ftps", "mailto", "news", "irc", "gopher", "nntp", "feed", "telnet", "mms", "rtsp", "sms", "svn", "tel", "fax", "xmpp", "webcal", "urn")
     # end if
     if (not did_action("wp_loaded")):
         #// 
@@ -5248,9 +5248,9 @@ def wp_allowed_protocols(*args_):
         #// 
         #// @param string[] $protocols Array of allowed protocols e.g. 'http', 'ftp', 'tel', and more.
         #//
-        protocols = array_unique(apply_filters("kses_allowed_protocols", protocols))
+        wp_allowed_protocols.protocols = array_unique(apply_filters("kses_allowed_protocols", wp_allowed_protocols.protocols))
     # end if
-    return protocols
+    return wp_allowed_protocols.protocols
 # end def wp_allowed_protocols
 #// 
 #// Return a comma-separated string of functions that have been called to get
@@ -5273,14 +5273,14 @@ def wp_allowed_protocols(*args_):
 #//
 def wp_debug_backtrace_summary(ignore_class=None, skip_frames=0, pretty=True, *args_):
     
-    truncate_paths = None
+    wp_debug_backtrace_summary.truncate_paths = None
     trace = debug_backtrace(False)
     caller = Array()
     check_class = (not is_null(ignore_class))
     skip_frames += 1
     #// Skip this function.
-    if (not (php_isset(lambda : truncate_paths))):
-        truncate_paths = Array(wp_normalize_path(WP_CONTENT_DIR), wp_normalize_path(ABSPATH))
+    if (not (php_isset(lambda : wp_debug_backtrace_summary.truncate_paths))):
+        wp_debug_backtrace_summary.truncate_paths = Array(wp_normalize_path(WP_CONTENT_DIR), wp_normalize_path(ABSPATH))
     # end if
     for call in trace:
         if skip_frames > 0:
@@ -5296,7 +5296,7 @@ def wp_debug_backtrace_summary(ignore_class=None, skip_frames=0, pretty=True, *a
                 caller[-1] = str(call["function"]) + str("('") + str(call["args"][0]) + str("')")
             elif php_in_array(call["function"], Array("include", "include_once", "require", "require_once")):
                 filename = call["args"][0] if (php_isset(lambda : call["args"][0])) else ""
-                caller[-1] = call["function"] + "('" + php_str_replace(truncate_paths, "", wp_normalize_path(filename)) + "')"
+                caller[-1] = call["function"] + "('" + php_str_replace(wp_debug_backtrace_summary.truncate_paths, "", wp_normalize_path(filename)) + "')"
             else:
                 caller[-1] = call["function"]
             # end if
@@ -5569,21 +5569,21 @@ def _canonical_charset(charset=None, *args_):
 #//
 def mbstring_binary_safe_encoding(reset=False, *args_):
     
-    encodings = Array()
-    overloaded = None
-    if is_null(overloaded):
-        overloaded = php_function_exists("mb_internal_encoding") and php_ini_get("mbstring.func_overload") & 2
+    mbstring_binary_safe_encoding.encodings = Array()
+    mbstring_binary_safe_encoding.overloaded = None
+    if is_null(mbstring_binary_safe_encoding.overloaded):
+        mbstring_binary_safe_encoding.overloaded = php_function_exists("mb_internal_encoding") and php_ini_get("mbstring.func_overload") & 2
     # end if
-    if False == overloaded:
+    if False == mbstring_binary_safe_encoding.overloaded:
         return
     # end if
     if (not reset):
         encoding = mb_internal_encoding()
-        php_array_push(encodings, encoding)
+        php_array_push(mbstring_binary_safe_encoding.encodings, encoding)
         mb_internal_encoding("ISO-8859-1")
     # end if
-    if reset and encodings:
-        encoding = php_array_pop(encodings)
+    if reset and mbstring_binary_safe_encoding.encodings:
+        encoding = php_array_pop(mbstring_binary_safe_encoding.encodings)
         mb_internal_encoding(encoding)
     # end if
 # end def mbstring_binary_safe_encoding
@@ -5875,9 +5875,9 @@ def wp_is_uuid(uuid=None, version=None, *args_):
 #//
 def wp_unique_id(prefix="", *args_):
     
-    id_counter = 0
-    id_counter += 1
-    return prefix + php_str(id_counter)
+    wp_unique_id.id_counter = 0
+    wp_unique_id.id_counter += 1
+    return prefix + php_str(wp_unique_id.id_counter)
 # end def wp_unique_id
 #// 
 #// Get last changed date for the specified cache group.

@@ -47,7 +47,7 @@ def list_core_update(update=None, *args_):
     
     global wp_local_package,wpdb
     php_check_if_defined("wp_local_package","wpdb")
-    first_pass = True
+    list_core_update.first_pass = True
     wp_version = get_bloginfo("version")
     version_string = php_sprintf("%s&ndash;<strong>%s</strong>", update.current, update.locale)
     if "en_US" == update.locale and "en_US" == get_locale():
@@ -112,9 +112,9 @@ def list_core_update(update=None, *args_):
     php_print("<input name=\"version\" value=\"" + esc_attr(update.current) + "\" type=\"hidden\"/>")
     php_print("<input name=\"locale\" value=\"" + esc_attr(update.locale) + "\" type=\"hidden\"/>")
     if show_buttons:
-        if first_pass:
+        if list_core_update.first_pass:
             submit_button(submit, "" if current else "primary regular", "upgrade", False)
-            first_pass = False
+            list_core_update.first_pass = False
         else:
             submit_button(submit, "", "upgrade", False)
         # end if

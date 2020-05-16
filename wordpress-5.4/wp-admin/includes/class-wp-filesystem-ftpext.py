@@ -531,11 +531,11 @@ class WP_Filesystem_FTPext(WP_Filesystem_Base):
     #//
     def parselisting(self, line=None):
         
-        is_windows = None
-        if is_null(is_windows):
-            is_windows = php_stripos(ftp_systype(self.link), "win") != False
+        parselisting.is_windows = None
+        if is_null(parselisting.is_windows):
+            parselisting.is_windows = php_stripos(ftp_systype(self.link), "win") != False
         # end if
-        if is_windows and php_preg_match("/([0-9]{2})-([0-9]{2})-([0-9]{2}) +([0-9]{2}):([0-9]{2})(AM|PM) +([0-9]+|<DIR>) +(.+)/", line, lucifer):
+        if parselisting.is_windows and php_preg_match("/([0-9]{2})-([0-9]{2})-([0-9]{2}) +([0-9]{2}):([0-9]{2})(AM|PM) +([0-9]+|<DIR>) +(.+)/", line, lucifer):
             b = Array()
             if lucifer[3] < 70:
                 lucifer[3] += 2000
@@ -558,7 +558,7 @@ class WP_Filesystem_FTPext(WP_Filesystem_Base):
             b["time"] = mktime(lucifer[4] + 12 if strcasecmp(lucifer[6], "PM") == 0 else 0, lucifer[5], 0, lucifer[1], lucifer[2], lucifer[3])
             b["am/pm"] = lucifer[6]
             b["name"] = lucifer[8]
-        elif (not is_windows):
+        elif (not parselisting.is_windows):
             lucifer = php_preg_split("/[ ]/", line, 9, PREG_SPLIT_NO_EMPTY)
             if lucifer:
                 #// echo $line."\n";

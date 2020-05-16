@@ -1067,14 +1067,14 @@ def _load_textdomain_just_in_time(domain=None, *args_):
 #//
 def _get_path_to_translation(domain=None, reset=False, *args_):
     
-    available_translations = Array()
+    _get_path_to_translation.available_translations = Array()
     if True == reset:
-        available_translations = Array()
+        _get_path_to_translation.available_translations = Array()
     # end if
-    if (not (php_isset(lambda : available_translations[domain]))):
-        available_translations[domain] = _get_path_to_translation_from_lang_dir(domain)
+    if (not (php_isset(lambda : _get_path_to_translation.available_translations[domain]))):
+        _get_path_to_translation.available_translations[domain] = _get_path_to_translation_from_lang_dir(domain)
     # end if
-    return available_translations[domain]
+    return _get_path_to_translation.available_translations[domain]
 # end def _get_path_to_translation
 #// 
 #// Gets the path to a translation file in the languages directory for the current locale.
@@ -1092,25 +1092,25 @@ def _get_path_to_translation(domain=None, reset=False, *args_):
 #//
 def _get_path_to_translation_from_lang_dir(domain=None, *args_):
     
-    cached_mofiles = None
-    if None == cached_mofiles:
-        cached_mofiles = Array()
+    _get_path_to_translation_from_lang_dir.cached_mofiles = None
+    if None == _get_path_to_translation_from_lang_dir.cached_mofiles:
+        _get_path_to_translation_from_lang_dir.cached_mofiles = Array()
         locations = Array(WP_LANG_DIR + "/plugins", WP_LANG_DIR + "/themes")
         for location in locations:
             mofiles = glob(location + "/*.mo")
             if mofiles:
-                cached_mofiles = php_array_merge(cached_mofiles, mofiles)
+                _get_path_to_translation_from_lang_dir.cached_mofiles = php_array_merge(_get_path_to_translation_from_lang_dir.cached_mofiles, mofiles)
             # end if
         # end for
     # end if
     locale = determine_locale()
     mofile = str(domain) + str("-") + str(locale) + str(".mo")
     path = WP_LANG_DIR + "/plugins/" + mofile
-    if php_in_array(path, cached_mofiles):
+    if php_in_array(path, _get_path_to_translation_from_lang_dir.cached_mofiles):
         return path
     # end if
     path = WP_LANG_DIR + "/themes/" + mofile
-    if php_in_array(path, cached_mofiles):
+    if php_in_array(path, _get_path_to_translation_from_lang_dir.cached_mofiles):
         return path
     # end if
     return False
@@ -1135,11 +1135,11 @@ def get_translations_for_domain(domain=None, *args_):
     if (php_isset(lambda : l10n[domain])) or _load_textdomain_just_in_time(domain) and (php_isset(lambda : l10n[domain])):
         return l10n[domain]
     # end if
-    noop_translations = None
-    if None == noop_translations:
-        noop_translations = php_new_class("NOOP_Translations", lambda : NOOP_Translations())
+    get_translations_for_domain.noop_translations = None
+    if None == get_translations_for_domain.noop_translations:
+        get_translations_for_domain.noop_translations = php_new_class("NOOP_Translations", lambda : NOOP_Translations())
     # end if
-    return noop_translations
+    return get_translations_for_domain.noop_translations
 # end def get_translations_for_domain
 #// 
 #// Whether there are translations for the text domain.

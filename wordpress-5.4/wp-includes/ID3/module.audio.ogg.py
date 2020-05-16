@@ -753,13 +753,13 @@ class getid3_ogg(getid3_handler):
     @classmethod
     def speexbandmodelookup(self, mode=None):
         
-        SpeexBandModeLookup = Array()
-        if php_empty(lambda : SpeexBandModeLookup):
-            SpeexBandModeLookup[0] = "narrow"
-            SpeexBandModeLookup[1] = "wide"
-            SpeexBandModeLookup[2] = "ultra-wide"
+        speexbandmodelookup.SpeexBandModeLookup = Array()
+        if php_empty(lambda : speexbandmodelookup.SpeexBandModeLookup):
+            speexbandmodelookup.SpeexBandModeLookup[0] = "narrow"
+            speexbandmodelookup.SpeexBandModeLookup[1] = "wide"
+            speexbandmodelookup.SpeexBandModeLookup[2] = "ultra-wide"
         # end if
-        return SpeexBandModeLookup[mode] if (php_isset(lambda : SpeexBandModeLookup[mode])) else None
+        return speexbandmodelookup.SpeexBandModeLookup[mode] if (php_isset(lambda : speexbandmodelookup.SpeexBandModeLookup[mode])) else None
     # end def speexbandmodelookup
     #// 
     #// @param array $OggInfoArray
@@ -821,14 +821,14 @@ class getid3_ogg(getid3_handler):
     @classmethod
     def theoracolorspace(self, colorspace_id=None):
         
-        TheoraColorSpaceLookup = Array()
-        if php_empty(lambda : TheoraColorSpaceLookup):
-            TheoraColorSpaceLookup[0] = "Undefined"
-            TheoraColorSpaceLookup[1] = "Rec. 470M"
-            TheoraColorSpaceLookup[2] = "Rec. 470BG"
-            TheoraColorSpaceLookup[3] = "Reserved"
+        theoracolorspace.TheoraColorSpaceLookup = Array()
+        if php_empty(lambda : theoracolorspace.TheoraColorSpaceLookup):
+            theoracolorspace.TheoraColorSpaceLookup[0] = "Undefined"
+            theoracolorspace.TheoraColorSpaceLookup[1] = "Rec. 470M"
+            theoracolorspace.TheoraColorSpaceLookup[2] = "Rec. 470BG"
+            theoracolorspace.TheoraColorSpaceLookup[3] = "Reserved"
         # end if
-        return TheoraColorSpaceLookup[colorspace_id] if (php_isset(lambda : TheoraColorSpaceLookup[colorspace_id])) else None
+        return theoracolorspace.TheoraColorSpaceLookup[colorspace_id] if (php_isset(lambda : theoracolorspace.TheoraColorSpaceLookup[colorspace_id])) else None
     # end def theoracolorspace
     #// 
     #// @param int $pixelformat_id
@@ -838,13 +838,13 @@ class getid3_ogg(getid3_handler):
     @classmethod
     def theorapixelformat(self, pixelformat_id=None):
         
-        TheoraPixelFormatLookup = Array()
-        if php_empty(lambda : TheoraPixelFormatLookup):
-            TheoraPixelFormatLookup[0] = "4:2:0"
-            TheoraPixelFormatLookup[1] = "Reserved"
-            TheoraPixelFormatLookup[2] = "4:2:2"
-            TheoraPixelFormatLookup[3] = "4:4:4"
+        theorapixelformat.TheoraPixelFormatLookup = Array()
+        if php_empty(lambda : theorapixelformat.TheoraPixelFormatLookup):
+            theorapixelformat.TheoraPixelFormatLookup[0] = "4:2:0"
+            theorapixelformat.TheoraPixelFormatLookup[1] = "Reserved"
+            theorapixelformat.TheoraPixelFormatLookup[2] = "4:2:2"
+            theorapixelformat.TheoraPixelFormatLookup[3] = "4:4:4"
         # end if
-        return TheoraPixelFormatLookup[pixelformat_id] if (php_isset(lambda : TheoraPixelFormatLookup[pixelformat_id])) else None
+        return theorapixelformat.TheoraPixelFormatLookup[pixelformat_id] if (php_isset(lambda : theorapixelformat.TheoraPixelFormatLookup[pixelformat_id])) else None
     # end def theorapixelformat
 # end class getid3_ogg

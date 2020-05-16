@@ -1331,16 +1331,16 @@ class WP_Rewrite():
     #//
     def flush_rules(self, hard=True):
         
-        do_hard_later = None
+        flush_rules.do_hard_later = None
         #// Prevent this action from running before everyone has registered their rewrites.
         if (not did_action("wp_loaded")):
             add_action("wp_loaded", Array(self, "flush_rules"))
-            do_hard_later = do_hard_later or hard if (php_isset(lambda : do_hard_later)) else hard
+            flush_rules.do_hard_later = flush_rules.do_hard_later or hard if (php_isset(lambda : flush_rules.do_hard_later)) else hard
             return
         # end if
-        if (php_isset(lambda : do_hard_later)):
-            hard = do_hard_later
-            do_hard_later = None
+        if (php_isset(lambda : flush_rules.do_hard_later)):
+            hard = flush_rules.do_hard_later
+            flush_rules.do_hard_later = None
         # end if
         update_option("rewrite_rules", "")
         self.wp_rewrite_rules()

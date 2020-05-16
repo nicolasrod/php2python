@@ -61,14 +61,14 @@ def twentynineteen_is_comment_by_post_author(comment=None, *args_):
 #//
 def twentynineteen_get_discussion_data(*args_):
     
-    discussion = None
-    post_id = None
+    twentynineteen_get_discussion_data.discussion = None
+    twentynineteen_get_discussion_data.post_id = None
     current_post_id = get_the_ID()
-    if current_post_id == post_id:
-        return discussion
+    if current_post_id == twentynineteen_get_discussion_data.post_id:
+        return twentynineteen_get_discussion_data.discussion
         pass
     else:
-        post_id = current_post_id
+        twentynineteen_get_discussion_data.post_id = current_post_id
     # end if
     comments = get_comments(Array({"post_id": current_post_id, "orderby": "comment_date_gmt", "order": get_option("comment_order", "asc"), "status": "approve", "number": 20}))
     authors = Array()
@@ -76,8 +76,8 @@ def twentynineteen_get_discussion_data(*args_):
         authors[-1] = php_int(comment.user_id) if php_int(comment.user_id) > 0 else comment.comment_author_email
     # end for
     authors = array_unique(authors)
-    discussion = Array({"authors": php_array_slice(authors, 0, 6), "responses": get_comments_number(current_post_id)})
-    return discussion
+    twentynineteen_get_discussion_data.discussion = Array({"authors": php_array_slice(authors, 0, 6), "responses": get_comments_number(current_post_id)})
+    return twentynineteen_get_discussion_data.discussion
 # end def twentynineteen_get_discussion_data
 #// 
 #// Converts HSL to HEX colors.

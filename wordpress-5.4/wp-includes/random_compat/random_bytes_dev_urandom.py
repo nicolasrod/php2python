@@ -57,24 +57,24 @@ if (not php_is_callable("random_bytes")):
     #//
     def random_bytes(bytes=None, *args_):
         
-        fp = None
+        random_bytes.fp = None
         #// 
         #// This block should only be run once
         #//
-        if php_empty(lambda : fp):
+        if php_empty(lambda : random_bytes.fp):
             #// 
             #// We use /dev/urandom if it is a char device.
             #// We never fall back to /dev/random
             #//
-            fp = fopen("/dev/urandom", "rb")
-            if (not php_empty(lambda : fp)):
-                st = fstat(fp)
+            random_bytes.fp = fopen("/dev/urandom", "rb")
+            if (not php_empty(lambda : random_bytes.fp)):
+                st = fstat(random_bytes.fp)
                 if st["mode"] & 61440 != 8192:
-                    php_fclose(fp)
-                    fp = False
+                    php_fclose(random_bytes.fp)
+                    random_bytes.fp = False
                 # end if
             # end if
-            if (not php_empty(lambda : fp)):
+            if (not php_empty(lambda : random_bytes.fp)):
                 #// 
                 #// stream_set_read_buffer() does not exist in HHVM
                 #// 
@@ -84,10 +84,10 @@ if (not php_is_callable("random_bytes")):
                 #// stream_set_read_buffer returns 0 on success
                 #//
                 if php_is_callable("stream_set_read_buffer"):
-                    stream_set_read_buffer(fp, RANDOM_COMPAT_READ_BUFFER)
+                    stream_set_read_buffer(random_bytes.fp, RANDOM_COMPAT_READ_BUFFER)
                 # end if
                 if php_is_callable("stream_set_chunk_size"):
-                    stream_set_chunk_size(fp, RANDOM_COMPAT_READ_BUFFER)
+                    stream_set_chunk_size(random_bytes.fp, RANDOM_COMPAT_READ_BUFFER)
                 # end if
             # end if
         # end if
@@ -106,7 +106,7 @@ if (not php_is_callable("random_bytes")):
         #// if (empty($fp)) line is logic that should only be run once per
         #// page load.
         #//
-        if (not php_empty(lambda : fp)):
+        if (not php_empty(lambda : random_bytes.fp)):
             #// 
             #// @var int
             #//
@@ -122,7 +122,7 @@ if (not php_is_callable("random_bytes")):
                 #// 
                 #// @var string|bool
                 #//
-                read = fread(fp, remaining)
+                read = fread(random_bytes.fp, remaining)
                 if (not php_is_string(read)):
                     if read == False:
                         #// 

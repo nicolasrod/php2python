@@ -68,10 +68,10 @@ if (not php_class_exists("TwentyTwenty_SVG_Icons")):
         @classmethod
         def get_social_link_svg(self, uri=None):
             
-            regex_map = None
+            get_social_link_svg.regex_map = None
             #// Only compute regex map once, for performance.
-            if (not (php_isset(lambda : regex_map))):
-                regex_map = Array()
+            if (not (php_isset(lambda : get_social_link_svg.regex_map))):
+                get_social_link_svg.regex_map = Array()
                 map = self.social_icons_map
                 #// Use reference instead of copy, to save memory.
                 for icon in php_array_keys(self.social_icons):
@@ -79,10 +79,10 @@ if (not php_class_exists("TwentyTwenty_SVG_Icons")):
                     domains = php_array_map("trim", domains)
                     #// Remove leading/trailing spaces, to prevent regex from failing to match.
                     domains = php_array_map("preg_quote", domains)
-                    regex_map[icon] = php_sprintf("/(%s)/i", php_implode("|", domains))
+                    get_social_link_svg.regex_map[icon] = php_sprintf("/(%s)/i", php_implode("|", domains))
                 # end for
             # end if
-            for icon,regex in regex_map:
+            for icon,regex in get_social_link_svg.regex_map:
                 if php_preg_match(regex, uri):
                     return twentytwenty_get_theme_svg(icon, "social")
                 # end if

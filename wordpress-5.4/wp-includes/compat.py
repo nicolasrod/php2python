@@ -41,15 +41,15 @@ if (not php_function_exists("_")):
 #//
 def _wp_can_use_pcre_u(set=None, *args_):
     
-    utf8_pcre = "reset"
+    _wp_can_use_pcre_u.utf8_pcre = "reset"
     if None != set:
-        utf8_pcre = set
+        _wp_can_use_pcre_u.utf8_pcre = set
     # end if
-    if "reset" == utf8_pcre:
+    if "reset" == _wp_can_use_pcre_u.utf8_pcre:
         #// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- intentional error generated to detect PCRE/u support.
-        utf8_pcre = php_no_error(lambda: php_preg_match("/^./u", "a"))
+        _wp_can_use_pcre_u.utf8_pcre = php_no_error(lambda: php_preg_match("/^./u", "a"))
     # end if
-    return utf8_pcre
+    return _wp_can_use_pcre_u.utf8_pcre
 # end def _wp_can_use_pcre_u
 if (not php_function_exists("mb_substr")):
     #// 
@@ -216,9 +216,9 @@ def _mb_strlen(str=None, encoding=None, *args_):
         # end if
     # end while
     #// Fencepost: preg_split() always returns one extra item in the array.
-# end def _mb_strlen
     count -= 1
-    return count 
+    return count
+# end def _mb_strlen
 if (not php_function_exists("hash_hmac")):
     #// 
     #// Compat function to mimic hash_hmac().

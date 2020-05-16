@@ -947,14 +947,14 @@ if (not php_class_exists("SimplePie", False)):
                 return False
                 #// Then check the xml extension is sane (i.e., libxml 2.7.x issue on PHP < 5.2.9 and libxml 2.7.0 to 2.7.2 on any version) if we don't have xmlreader.
             elif (not php_extension_loaded("xmlreader")):
-                xml_is_sane = None
-                if xml_is_sane == None:
+                init.xml_is_sane = None
+                if init.xml_is_sane == None:
                     parser_check = xml_parser_create()
                     xml_parse_into_struct(parser_check, "<foo>&amp;</foo>", values)
                     xml_parser_free(parser_check)
-                    xml_is_sane = (php_isset(lambda : values[0]["value"]))
+                    init.xml_is_sane = (php_isset(lambda : values[0]["value"]))
                 # end if
-                if (not xml_is_sane):
+                if (not init.xml_is_sane):
                     return False
                 # end if
             # end if

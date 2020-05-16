@@ -67,29 +67,29 @@ def wptexturize(text=None, reset=False, *args_):
     
     global wp_cockneyreplace,shortcode_tags
     php_check_if_defined("wp_cockneyreplace","shortcode_tags")
-    static_characters = None
-    static_replacements = None
-    dynamic_characters = None
-    dynamic_replacements = None
-    default_no_texturize_tags = None
-    default_no_texturize_shortcodes = None
-    run_texturize = True
-    apos = None
-    prime = None
-    double_prime = None
-    opening_quote = None
-    closing_quote = None
-    opening_single_quote = None
-    closing_single_quote = None
-    open_q_flag = "<!--oq-->"
-    open_sq_flag = "<!--osq-->"
-    apos_flag = "<!--apos-->"
+    wptexturize.static_characters = None
+    wptexturize.static_replacements = None
+    wptexturize.dynamic_characters = None
+    wptexturize.dynamic_replacements = None
+    wptexturize.default_no_texturize_tags = None
+    wptexturize.default_no_texturize_shortcodes = None
+    wptexturize.run_texturize = True
+    wptexturize.apos = None
+    wptexturize.prime = None
+    wptexturize.double_prime = None
+    wptexturize.opening_quote = None
+    wptexturize.closing_quote = None
+    wptexturize.opening_single_quote = None
+    wptexturize.closing_single_quote = None
+    wptexturize.open_q_flag = "<!--oq-->"
+    wptexturize.open_sq_flag = "<!--osq-->"
+    wptexturize.apos_flag = "<!--apos-->"
     #// If there's nothing to do, just stop.
-    if php_empty(lambda : text) or False == run_texturize:
+    if php_empty(lambda : text) or False == wptexturize.run_texturize:
         return text
     # end if
     #// Set up static variables. Run once only.
-    if reset or (not (php_isset(lambda : static_characters))):
+    if reset or (not (php_isset(lambda : wptexturize.static_characters))):
         #// 
         #// Filters whether to skip running wptexturize().
         #// 
@@ -104,30 +104,30 @@ def wptexturize(text=None, reset=False, *args_):
         #// 
         #// @param bool $run_texturize Whether to short-circuit wptexturize().
         #//
-        run_texturize = apply_filters("run_wptexturize", run_texturize)
-        if False == run_texturize:
+        wptexturize.run_texturize = apply_filters("run_wptexturize", wptexturize.run_texturize)
+        if False == wptexturize.run_texturize:
             return text
         # end if
         #// translators: Opening curly double quote.
-        opening_quote = _x("&#8220;", "opening curly double quote")
+        wptexturize.opening_quote = _x("&#8220;", "opening curly double quote")
         #// translators: Closing curly double quote.
-        closing_quote = _x("&#8221;", "closing curly double quote")
+        wptexturize.closing_quote = _x("&#8221;", "closing curly double quote")
         #// translators: Apostrophe, for example in 'cause or can't.
-        apos = _x("&#8217;", "apostrophe")
+        wptexturize.apos = _x("&#8217;", "apostrophe")
         #// translators: Prime, for example in 9' (nine feet).
-        prime = _x("&#8242;", "prime")
+        wptexturize.prime = _x("&#8242;", "prime")
         #// translators: Double prime, for example in 9" (nine inches).
-        double_prime = _x("&#8243;", "double prime")
+        wptexturize.double_prime = _x("&#8243;", "double prime")
         #// translators: Opening curly single quote.
-        opening_single_quote = _x("&#8216;", "opening curly single quote")
+        wptexturize.opening_single_quote = _x("&#8216;", "opening curly single quote")
         #// translators: Closing curly single quote.
-        closing_single_quote = _x("&#8217;", "closing curly single quote")
+        wptexturize.closing_single_quote = _x("&#8217;", "closing curly single quote")
         #// translators: En dash.
         en_dash = _x("&#8211;", "en dash")
         #// translators: Em dash.
         em_dash = _x("&#8212;", "em dash")
-        default_no_texturize_tags = Array("pre", "code", "kbd", "style", "script", "tt")
-        default_no_texturize_shortcodes = Array("code")
+        wptexturize.default_no_texturize_tags = Array("pre", "code", "kbd", "style", "script", "tt")
+        wptexturize.default_no_texturize_shortcodes = Array("code")
         #// If a plugin has provided an autocorrect array, use it.
         if (php_isset(lambda : wp_cockneyreplace)):
             cockney = php_array_keys(wp_cockneyreplace)
@@ -141,58 +141,58 @@ def wptexturize(text=None, reset=False, *args_):
             cockney = php_explode(",", _x("'tain't,'twere,'twas,'tis,'twill,'til,'bout,'nuff,'round,'cause,'em", "Comma-separated list of words to texturize in your language"))
             cockneyreplace = php_explode(",", _x("&#8217;tain&#8217;t,&#8217;twere,&#8217;twas,&#8217;tis,&#8217;twill,&#8217;til,&#8217;bout,&#8217;nuff,&#8217;round,&#8217;cause,&#8217;em", "Comma-separated list of replacement words in your language"))
         # end if
-        static_characters = php_array_merge(Array("...", "``", "''", " (tm)"), cockney)
-        static_replacements = php_array_merge(Array("&#8230;", opening_quote, closing_quote, " &#8482;"), cockneyreplace)
+        wptexturize.static_characters = php_array_merge(Array("...", "``", "''", " (tm)"), cockney)
+        wptexturize.static_replacements = php_array_merge(Array("&#8230;", wptexturize.opening_quote, wptexturize.closing_quote, " &#8482;"), cockneyreplace)
         #// Pattern-based replacements of characters.
         #// Sort the remaining patterns into several arrays for performance tuning.
-        dynamic_characters = Array({"apos": Array(), "quote": Array(), "dash": Array()})
-        dynamic_replacements = Array({"apos": Array(), "quote": Array(), "dash": Array()})
+        wptexturize.dynamic_characters = Array({"apos": Array(), "quote": Array(), "dash": Array()})
+        wptexturize.dynamic_replacements = Array({"apos": Array(), "quote": Array(), "dash": Array()})
         dynamic = Array()
         spaces = wp_spaces_regexp()
         #// '99' and '99" are ambiguous among other patterns; assume it's an abbreviated year at the end of a quotation.
-        if "'" != apos or "'" != closing_single_quote:
-            dynamic["/'(\\d\\d)'(?=\\Z|[.,:;!?)}\\-\\]]|&gt;|" + spaces + ")/"] = apos_flag + "$1" + closing_single_quote
+        if "'" != wptexturize.apos or "'" != wptexturize.closing_single_quote:
+            dynamic["/'(\\d\\d)'(?=\\Z|[.,:;!?)}\\-\\]]|&gt;|" + spaces + ")/"] = wptexturize.apos_flag + "$1" + wptexturize.closing_single_quote
         # end if
-        if "'" != apos or "\"" != closing_quote:
-            dynamic["/'(\\d\\d)\"(?=\\Z|[.,:;!?)}\\-\\]]|&gt;|" + spaces + ")/"] = apos_flag + "$1" + closing_quote
+        if "'" != wptexturize.apos or "\"" != wptexturize.closing_quote:
+            dynamic["/'(\\d\\d)\"(?=\\Z|[.,:;!?)}\\-\\]]|&gt;|" + spaces + ")/"] = wptexturize.apos_flag + "$1" + wptexturize.closing_quote
         # end if
         #// '99 '99s '99's (apostrophe)  But never '9 or '99% or '999 or '99.0.
-        if "'" != apos:
-            dynamic["/'(?=\\d\\d(?:\\Z|(?![%\\d]|[.,]\\d)))/"] = apos_flag
+        if "'" != wptexturize.apos:
+            dynamic["/'(?=\\d\\d(?:\\Z|(?![%\\d]|[.,]\\d)))/"] = wptexturize.apos_flag
         # end if
         #// Quoted numbers like '0.42'.
-        if "'" != opening_single_quote and "'" != closing_single_quote:
-            dynamic["/(?<=\\A|" + spaces + ")'(\\d[.,\\d]*)'/"] = open_sq_flag + "$1" + closing_single_quote
+        if "'" != wptexturize.opening_single_quote and "'" != wptexturize.closing_single_quote:
+            dynamic["/(?<=\\A|" + spaces + ")'(\\d[.,\\d]*)'/"] = wptexturize.open_sq_flag + "$1" + wptexturize.closing_single_quote
         # end if
         #// Single quote at start, or preceded by (, {, <, [, ", -, or spaces.
-        if "'" != opening_single_quote:
-            dynamic["/(?<=\\A|[([{\"\\-]|&lt;|" + spaces + ")'/"] = open_sq_flag
+        if "'" != wptexturize.opening_single_quote:
+            dynamic["/(?<=\\A|[([{\"\\-]|&lt;|" + spaces + ")'/"] = wptexturize.open_sq_flag
         # end if
         #// Apostrophe in a word. No spaces, double apostrophes, or other punctuation.
-        if "'" != apos:
-            dynamic["/(?<!" + spaces + ")'(?!\\Z|[.,:;!?\"'(){}[\\]\\-]|&[lg]t;|" + spaces + ")/"] = apos_flag
+        if "'" != wptexturize.apos:
+            dynamic["/(?<!" + spaces + ")'(?!\\Z|[.,:;!?\"'(){}[\\]\\-]|&[lg]t;|" + spaces + ")/"] = wptexturize.apos_flag
         # end if
-        dynamic_characters["apos"] = php_array_keys(dynamic)
-        dynamic_replacements["apos"] = php_array_values(dynamic)
+        wptexturize.dynamic_characters["apos"] = php_array_keys(dynamic)
+        wptexturize.dynamic_replacements["apos"] = php_array_values(dynamic)
         dynamic = Array()
         #// Quoted numbers like "42".
-        if "\"" != opening_quote and "\"" != closing_quote:
-            dynamic["/(?<=\\A|" + spaces + ")\"(\\d[.,\\d]*)\"/"] = open_q_flag + "$1" + closing_quote
+        if "\"" != wptexturize.opening_quote and "\"" != wptexturize.closing_quote:
+            dynamic["/(?<=\\A|" + spaces + ")\"(\\d[.,\\d]*)\"/"] = wptexturize.open_q_flag + "$1" + wptexturize.closing_quote
         # end if
         #// Double quote at start, or preceded by (, {, <, [, -, or spaces, and not followed by spaces.
-        if "\"" != opening_quote:
-            dynamic["/(?<=\\A|[([{\\-]|&lt;|" + spaces + ")\"(?!" + spaces + ")/"] = open_q_flag
+        if "\"" != wptexturize.opening_quote:
+            dynamic["/(?<=\\A|[([{\\-]|&lt;|" + spaces + ")\"(?!" + spaces + ")/"] = wptexturize.open_q_flag
         # end if
-        dynamic_characters["quote"] = php_array_keys(dynamic)
-        dynamic_replacements["quote"] = php_array_values(dynamic)
+        wptexturize.dynamic_characters["quote"] = php_array_keys(dynamic)
+        wptexturize.dynamic_replacements["quote"] = php_array_values(dynamic)
         dynamic = Array()
         #// Dashes and spaces.
         dynamic["/---/"] = em_dash
         dynamic["/(?<=^|" + spaces + ")--(?=$|" + spaces + ")/"] = em_dash
         dynamic["/(?<!xn)--/"] = en_dash
         dynamic["/(?<=^|" + spaces + ")-(?=$|" + spaces + ")/"] = en_dash
-        dynamic_characters["dash"] = php_array_keys(dynamic)
-        dynamic_replacements["dash"] = php_array_values(dynamic)
+        wptexturize.dynamic_characters["dash"] = php_array_keys(dynamic)
+        wptexturize.dynamic_replacements["dash"] = php_array_values(dynamic)
     # end if
     #// Must do this every time in case plugins use these filters in a context sensitive manner.
     #// 
@@ -202,7 +202,7 @@ def wptexturize(text=None, reset=False, *args_):
     #// 
     #// @param string[] $default_no_texturize_tags An array of HTML element names.
     #//
-    no_texturize_tags = apply_filters("no_texturize_tags", default_no_texturize_tags)
+    no_texturize_tags = apply_filters("no_texturize_tags", wptexturize.default_no_texturize_tags)
     #// 
     #// Filters the list of shortcodes not to texturize.
     #// 
@@ -210,7 +210,7 @@ def wptexturize(text=None, reset=False, *args_):
     #// 
     #// @param string[] $default_no_texturize_shortcodes An array of shortcode names.
     #//
-    no_texturize_shortcodes = apply_filters("no_texturize_shortcodes", default_no_texturize_shortcodes)
+    no_texturize_shortcodes = apply_filters("no_texturize_shortcodes", wptexturize.default_no_texturize_shortcodes)
     no_texturize_tags_stack = Array()
     no_texturize_shortcodes_stack = Array()
     #// Look for shortcodes and HTML elements.
@@ -244,20 +244,20 @@ def wptexturize(text=None, reset=False, *args_):
             # end if
         elif php_empty(lambda : no_texturize_shortcodes_stack) and php_empty(lambda : no_texturize_tags_stack):
             #// This is neither a delimiter, nor is this content inside of no_texturize pairs. Do texturize.
-            curl = php_str_replace(static_characters, static_replacements, curl)
+            curl = php_str_replace(wptexturize.static_characters, wptexturize.static_replacements, curl)
             if False != php_strpos(curl, "'"):
-                curl = php_preg_replace(dynamic_characters["apos"], dynamic_replacements["apos"], curl)
-                curl = wptexturize_primes(curl, "'", prime, open_sq_flag, closing_single_quote)
-                curl = php_str_replace(apos_flag, apos, curl)
-                curl = php_str_replace(open_sq_flag, opening_single_quote, curl)
+                curl = php_preg_replace(wptexturize.dynamic_characters["apos"], wptexturize.dynamic_replacements["apos"], curl)
+                curl = wptexturize_primes(curl, "'", wptexturize.prime, wptexturize.open_sq_flag, wptexturize.closing_single_quote)
+                curl = php_str_replace(wptexturize.apos_flag, wptexturize.apos, curl)
+                curl = php_str_replace(wptexturize.open_sq_flag, wptexturize.opening_single_quote, curl)
             # end if
             if False != php_strpos(curl, "\""):
-                curl = php_preg_replace(dynamic_characters["quote"], dynamic_replacements["quote"], curl)
-                curl = wptexturize_primes(curl, "\"", double_prime, open_q_flag, closing_quote)
-                curl = php_str_replace(open_q_flag, opening_quote, curl)
+                curl = php_preg_replace(wptexturize.dynamic_characters["quote"], wptexturize.dynamic_replacements["quote"], curl)
+                curl = wptexturize_primes(curl, "\"", wptexturize.double_prime, wptexturize.open_q_flag, wptexturize.closing_quote)
+                curl = php_str_replace(wptexturize.open_q_flag, wptexturize.opening_quote, curl)
             # end if
             if False != php_strpos(curl, "-"):
-                curl = php_preg_replace(dynamic_characters["dash"], dynamic_replacements["dash"], curl)
+                curl = php_preg_replace(wptexturize.dynamic_characters["dash"], wptexturize.dynamic_replacements["dash"], curl)
             # end if
             #// 9x9 (times), but never 0x9999.
             if 1 == php_preg_match("/(?<=\\d)x\\d/", curl):
@@ -284,7 +284,7 @@ def wptexturize(text=None, reset=False, *args_):
 #// @param string $close_quote The closing quote char to use for replacement.
 #// @return string The $haystack value after primes and quotes replacements.
 #//
-def wptexturize_primes(haystack=None, needle=None, prime=None, open_quote=None, close_quote=None, *args_):
+def wptexturize_primes(haystack=None, needle=None, wptexturize_primes.prime=None, open_quote=None, close_quote=None, *args_):
     
     spaces = wp_spaces_regexp()
     flag = "<!--wp-prime-or-quote-->"
@@ -315,19 +315,19 @@ def wptexturize_primes(haystack=None, needle=None, prime=None, open_quote=None, 
                     sentence = php_substr_replace(sentence, close_quote, pos, php_strlen(flag))
                 # end if
                 #// Use conventional replacement on any remaining primes and quotes.
-                sentence = php_preg_replace(prime_pattern, prime, sentence)
-                sentence = php_preg_replace(flag_after_digit, prime, sentence)
+                sentence = php_preg_replace(prime_pattern, wptexturize_primes.prime, sentence)
+                sentence = php_preg_replace(flag_after_digit, wptexturize_primes.prime, sentence)
                 sentence = php_str_replace(flag, close_quote, sentence)
             elif 1 == count:
                 #// Found only one closing quote candidate, so give it priority over primes.
                 sentence = php_str_replace(flag, close_quote, sentence)
-                sentence = php_preg_replace(prime_pattern, prime, sentence)
+                sentence = php_preg_replace(prime_pattern, wptexturize_primes.prime, sentence)
             else:
                 #// No closing quotes found. Just run primes pattern.
-                sentence = php_preg_replace(prime_pattern, prime, sentence)
+                sentence = php_preg_replace(prime_pattern, wptexturize_primes.prime, sentence)
             # end if
         else:
-            sentence = php_preg_replace(prime_pattern, prime, sentence)
+            sentence = php_preg_replace(prime_pattern, wptexturize_primes.prime, sentence)
             sentence = php_preg_replace(quote_pattern, close_quote, sentence)
         # end if
         if "\"" == needle and False != php_strpos(sentence, "\""):
@@ -547,18 +547,18 @@ def wp_html_split(input=None, *args_):
 #//
 def get_html_split_regex(*args_):
     
-    regex = None
-    if (not (php_isset(lambda : regex))):
+    get_html_split_regex.regex = None
+    if (not (php_isset(lambda : get_html_split_regex.regex))):
         #// phpcs:disable Squiz.Strings.ConcatenationSpacing.PaddingFound -- don't remove regex indentation
         comments = "!" + "(?:" + "-(?!->)" + "[^\\-]*+" + ")*+" + "(?:-->)?"
         #// End of comment. If not found, match all input.
         cdata = "!\\[CDATA\\[" + "[^\\]]*+" + "(?:" + "](?!]>)" + "[^\\]]*+" + ")*+" + "(?:]]>)?"
         #// End of comment. If not found, match all input.
         escaped = "(?=" + "!--" + "|" + "!\\[CDATA\\[" + ")" + "(?(?=!-)" + comments + "|" + cdata + ")"
-        regex = "/(" + "<" + "(?" + escaped + "|" + "[^>]*>?" + ")" + ")/"
+        get_html_split_regex.regex = "/(" + "<" + "(?" + escaped + "|" + "[^>]*>?" + ")" + ")/"
         pass
     # end if
-    return regex
+    return get_html_split_regex.regex
 # end def get_html_split_regex
 #// 
 #// Retrieve the combined regular expression for HTML and shortcodes.
@@ -575,20 +575,20 @@ def get_html_split_regex(*args_):
 #//
 def _get_wptexturize_split_regex(shortcode_regex="", *args_):
     
-    html_regex = None
-    if (not (php_isset(lambda : html_regex))):
+    _get_wptexturize_split_regex.html_regex = None
+    if (not (php_isset(lambda : _get_wptexturize_split_regex.html_regex))):
         #// phpcs:disable Squiz.Strings.ConcatenationSpacing.PaddingFound -- don't remove regex indentation
         comment_regex = "!" + "(?:" + "-(?!->)" + "[^\\-]*+" + ")*+" + "(?:-->)?"
         #// End of comment. If not found, match all input.
-        html_regex = "<" + "(?(?=!--)" + comment_regex + "|" + "[^>]*>?" + ")"
+        _get_wptexturize_split_regex.html_regex = "<" + "(?(?=!--)" + comment_regex + "|" + "[^>]*>?" + ")"
         pass
     # end if
     if php_empty(lambda : shortcode_regex):
-        regex = "/(" + html_regex + ")/"
+        _get_wptexturize_split_regex.regex = "/(" + _get_wptexturize_split_regex.html_regex + ")/"
     else:
-        regex = "/(" + html_regex + "|" + shortcode_regex + ")/"
+        _get_wptexturize_split_regex.regex = "/(" + _get_wptexturize_split_regex.html_regex + "|" + shortcode_regex + ")/"
     # end if
-    return regex
+    return _get_wptexturize_split_regex.regex
 # end def _get_wptexturize_split_regex
 #// 
 #// Retrieve the regular expression for shortcodes.
@@ -606,10 +606,10 @@ def _get_wptexturize_shortcode_regex(tagnames=None, *args_):
     tagregexp = str("(?:") + str(tagregexp) + str(")(?=[\\s\\]\\/])")
     #// Excerpt of get_shortcode_regex().
     #// phpcs:disable Squiz.Strings.ConcatenationSpacing.PaddingFound -- don't remove regex indentation
-    regex = "\\[" + "[\\/\\[]?" + tagregexp + "(?:" + "[^\\[\\]<>]+" + "|" + "<[^\\[\\]>]*>" + ")*+" + "\\]" + "\\]?"
+    _get_wptexturize_shortcode_regex.regex = "\\[" + "[\\/\\[]?" + tagregexp + "(?:" + "[^\\[\\]<>]+" + "|" + "<[^\\[\\]>]*>" + ")*+" + "\\]" + "\\]?"
     #// Shortcodes may end with ]].
     #// phpcs:enable
-    return regex
+    return _get_wptexturize_shortcode_regex.regex
 # end def _get_wptexturize_shortcode_regex
 #// 
 #// Replace characters or phrases within HTML elements only.
@@ -802,12 +802,12 @@ def _wp_specialchars(string=None, quote_style=ENT_NOQUOTES, charset=False, doubl
     # end if
     #// Store the site charset as a static to avoid multiple calls to wp_load_alloptions().
     if (not charset):
-        _charset = None
-        if (not (php_isset(lambda : _charset))):
+        _wp_specialchars._charset = None
+        if (not (php_isset(lambda : _wp_specialchars._charset))):
             alloptions = wp_load_alloptions()
-            _charset = alloptions["blog_charset"] if (php_isset(lambda : alloptions["blog_charset"])) else ""
+            _wp_specialchars._charset = alloptions["blog_charset"] if (php_isset(lambda : alloptions["blog_charset"])) else ""
         # end if
-        charset = _charset
+        charset = _wp_specialchars._charset
     # end if
     if php_in_array(charset, Array("utf8", "utf-8", "UTF8")):
         charset = "UTF-8"
@@ -910,20 +910,20 @@ def wp_check_invalid_utf8(string=None, strip=False, *args_):
     if 0 == php_strlen(string):
         return ""
     # end if
-    is_utf8 = None
-    if (not (php_isset(lambda : is_utf8))):
-        is_utf8 = php_in_array(get_option("blog_charset"), Array("utf8", "utf-8", "UTF8", "UTF-8"))
+    wp_check_invalid_utf8.is_utf8 = None
+    if (not (php_isset(lambda : wp_check_invalid_utf8.is_utf8))):
+        wp_check_invalid_utf8.is_utf8 = php_in_array(get_option("blog_charset"), Array("utf8", "utf-8", "UTF8", "UTF-8"))
     # end if
-    if (not is_utf8):
+    if (not wp_check_invalid_utf8.is_utf8):
         return string
     # end if
-    utf8_pcre = None
-    if (not (php_isset(lambda : utf8_pcre))):
+    wp_check_invalid_utf8.utf8_pcre = None
+    if (not (php_isset(lambda : wp_check_invalid_utf8.utf8_pcre))):
         #// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-        utf8_pcre = php_no_error(lambda: php_preg_match("/^./u", "a"))
+        wp_check_invalid_utf8.utf8_pcre = php_no_error(lambda: php_preg_match("/^./u", "a"))
     # end if
     #// We can't demand utf8 in the PCRE installation, so just return the string in those cases.
-    if (not utf8_pcre):
+    if (not wp_check_invalid_utf8.utf8_pcre):
         return string
     # end if
     #// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- preg_match fails when it encounters invalid UTF8 in $string.
@@ -1829,16 +1829,16 @@ def force_balance_tags(text=None, *args_):
     tag_pattern = "#<" + "(/?)" + "(" + "(?:[a-z](?:[a-z0-9._]*)-(?:[a-z0-9._-]+)+)" + "|" + "(?:[\\w:]+)" + ")" + "(?:" + "\\s*" + "(/?)" + "|" + "(\\s+)" + "([^>]*)" + ")" + ">#"
     while True:
         
-        if not (php_preg_match(tag_pattern, text, regex)):
+        if not (php_preg_match(tag_pattern, text, force_balance_tags.regex)):
             break
         # end if
-        full_match = regex[0]
-        has_leading_slash = (not php_empty(lambda : regex[1]))
-        tag_name = regex[2]
+        full_match = force_balance_tags.regex[0]
+        has_leading_slash = (not php_empty(lambda : force_balance_tags.regex[1]))
+        tag_name = force_balance_tags.regex[2]
         tag = php_strtolower(tag_name)
         is_single_tag = php_in_array(tag, single_tags, True)
-        pre_attribute_ws = regex[4] if (php_isset(lambda : regex[4])) else ""
-        attributes = php_trim(regex[5] if (php_isset(lambda : regex[5])) else regex[3])
+        pre_attribute_ws = force_balance_tags.regex[4] if (php_isset(lambda : force_balance_tags.regex[4])) else ""
+        attributes = php_trim(force_balance_tags.regex[5] if (php_isset(lambda : force_balance_tags.regex[5])) else force_balance_tags.regex[3])
         has_self_closer = "/" == php_substr(attributes, -1)
         newtext += tagqueue
         i = php_strpos(text, full_match)
@@ -4346,11 +4346,11 @@ def capital_P_dangit(text=None, *args_):
     if "the_title" == current_filter or "wp_title" == current_filter:
         return php_str_replace("Wordpress", "WordPress", text)
     # end if
-    dblq = False
-    if False == dblq:
-        dblq = _x("&#8220;", "opening curly double quote")
+    capital_P_dangit.dblq = False
+    if False == capital_P_dangit.dblq:
+        capital_P_dangit.dblq = _x("&#8220;", "opening curly double quote")
     # end if
-    return php_str_replace(Array(" Wordpress", "&#8216;Wordpress", dblq + "Wordpress", ">Wordpress", "(Wordpress"), Array(" WordPress", "&#8216;WordPress", dblq + "WordPress", ">WordPress", "(WordPress"), text)
+    return php_str_replace(Array(" Wordpress", "&#8216;Wordpress", capital_P_dangit.dblq + "Wordpress", ">Wordpress", "(Wordpress"), Array(" WordPress", "&#8216;WordPress", capital_P_dangit.dblq + "WordPress", ">WordPress", "(WordPress"), text)
 # end def capital_P_dangit
 #// phpcs:enable
 #// 
@@ -4506,8 +4506,8 @@ def get_url_in_content(content=None, *args_):
 #//
 def wp_spaces_regexp(*args_):
     
-    spaces = ""
-    if php_empty(lambda : spaces):
+    wp_spaces_regexp.spaces = ""
+    if php_empty(lambda : wp_spaces_regexp.spaces):
         #// 
         #// Filters the regexp for common whitespace characters.
         #// 
@@ -4520,9 +4520,9 @@ def wp_spaces_regexp(*args_):
         #// 
         #// @param string $spaces Regexp pattern for matching common whitespace characters.
         #//
-        spaces = apply_filters("wp_spaces_regexp", "[\\r\\n\\t ]|\\xC2\\xA0|&nbsp;")
+        wp_spaces_regexp.spaces = apply_filters("wp_spaces_regexp", "[\\r\\n\\t ]|\\xC2\\xA0|&nbsp;")
     # end if
-    return spaces
+    return wp_spaces_regexp.spaces
 # end def wp_spaces_regexp
 #// 
 #// Print the important emoji-related styles.
@@ -4533,11 +4533,11 @@ def wp_spaces_regexp(*args_):
 #//
 def print_emoji_styles(*args_):
     
-    printed = False
-    if printed:
+    print_emoji_styles.printed = False
+    if print_emoji_styles.printed:
         return
     # end if
-    printed = True
+    print_emoji_styles.printed = True
     type_attr = "" if current_theme_supports("html5", "style") else " type=\"text/css\""
     php_print("<style")
     php_print(type_attr)
@@ -4565,11 +4565,11 @@ def print_emoji_styles(*args_):
 #//
 def print_emoji_detection_script(*args_):
     
-    printed = False
-    if printed:
+    print_emoji_detection_script.printed = False
+    if print_emoji_detection_script.printed:
         return
     # end if
-    printed = True
+    print_emoji_detection_script.printed = True
     _print_emoji_detection_script()
 # end def print_emoji_detection_script
 #// 

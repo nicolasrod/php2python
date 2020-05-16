@@ -123,17 +123,17 @@ class getid3_lib():
     @classmethod
     def intvaluesupported(self, num=None):
         
-        hasINT64 = None
-        if hasINT64 == None:
+        intvaluesupported.hasINT64 = None
+        if intvaluesupported.hasINT64 == None:
             #// 10x faster than is_null()
-            hasINT64 = php_is_int(pow(2, 31))
+            intvaluesupported.hasINT64 = php_is_int(pow(2, 31))
             #// 32-bit int are limited to (2^31)-1
-            if (not hasINT64) and (not php_defined("PHP_INT_MIN")):
+            if (not intvaluesupported.hasINT64) and (not php_defined("PHP_INT_MIN")):
                 php_define("PHP_INT_MIN", (1 << (PHP_INT_MAX).bit_length()) - 1 - PHP_INT_MAX)
             # end if
         # end if
         #// if integers are 64-bit - no other check required
-        if hasINT64 or num <= PHP_INT_MAX and num >= PHP_INT_MIN:
+        if intvaluesupported.hasINT64 or num <= PHP_INT_MAX and num >= PHP_INT_MIN:
             return True
         # end if
         return False
@@ -1379,25 +1379,25 @@ class getid3_lib():
             #// and return an empty string, but returning the unconverted string is more useful
             return string
         # end if
-        ConversionFunctionList = Array()
-        if php_empty(lambda : ConversionFunctionList):
-            ConversionFunctionList["ISO-8859-1"]["UTF-8"] = "iconv_fallback_iso88591_utf8"
-            ConversionFunctionList["ISO-8859-1"]["UTF-16"] = "iconv_fallback_iso88591_utf16"
-            ConversionFunctionList["ISO-8859-1"]["UTF-16BE"] = "iconv_fallback_iso88591_utf16be"
-            ConversionFunctionList["ISO-8859-1"]["UTF-16LE"] = "iconv_fallback_iso88591_utf16le"
-            ConversionFunctionList["UTF-8"]["ISO-8859-1"] = "iconv_fallback_utf8_iso88591"
-            ConversionFunctionList["UTF-8"]["UTF-16"] = "iconv_fallback_utf8_utf16"
-            ConversionFunctionList["UTF-8"]["UTF-16BE"] = "iconv_fallback_utf8_utf16be"
-            ConversionFunctionList["UTF-8"]["UTF-16LE"] = "iconv_fallback_utf8_utf16le"
-            ConversionFunctionList["UTF-16"]["ISO-8859-1"] = "iconv_fallback_utf16_iso88591"
-            ConversionFunctionList["UTF-16"]["UTF-8"] = "iconv_fallback_utf16_utf8"
-            ConversionFunctionList["UTF-16LE"]["ISO-8859-1"] = "iconv_fallback_utf16le_iso88591"
-            ConversionFunctionList["UTF-16LE"]["UTF-8"] = "iconv_fallback_utf16le_utf8"
-            ConversionFunctionList["UTF-16BE"]["ISO-8859-1"] = "iconv_fallback_utf16be_iso88591"
-            ConversionFunctionList["UTF-16BE"]["UTF-8"] = "iconv_fallback_utf16be_utf8"
+        iconv_fallback.ConversionFunctionList = Array()
+        if php_empty(lambda : iconv_fallback.ConversionFunctionList):
+            iconv_fallback.ConversionFunctionList["ISO-8859-1"]["UTF-8"] = "iconv_fallback_iso88591_utf8"
+            iconv_fallback.ConversionFunctionList["ISO-8859-1"]["UTF-16"] = "iconv_fallback_iso88591_utf16"
+            iconv_fallback.ConversionFunctionList["ISO-8859-1"]["UTF-16BE"] = "iconv_fallback_iso88591_utf16be"
+            iconv_fallback.ConversionFunctionList["ISO-8859-1"]["UTF-16LE"] = "iconv_fallback_iso88591_utf16le"
+            iconv_fallback.ConversionFunctionList["UTF-8"]["ISO-8859-1"] = "iconv_fallback_utf8_iso88591"
+            iconv_fallback.ConversionFunctionList["UTF-8"]["UTF-16"] = "iconv_fallback_utf8_utf16"
+            iconv_fallback.ConversionFunctionList["UTF-8"]["UTF-16BE"] = "iconv_fallback_utf8_utf16be"
+            iconv_fallback.ConversionFunctionList["UTF-8"]["UTF-16LE"] = "iconv_fallback_utf8_utf16le"
+            iconv_fallback.ConversionFunctionList["UTF-16"]["ISO-8859-1"] = "iconv_fallback_utf16_iso88591"
+            iconv_fallback.ConversionFunctionList["UTF-16"]["UTF-8"] = "iconv_fallback_utf16_utf8"
+            iconv_fallback.ConversionFunctionList["UTF-16LE"]["ISO-8859-1"] = "iconv_fallback_utf16le_iso88591"
+            iconv_fallback.ConversionFunctionList["UTF-16LE"]["UTF-8"] = "iconv_fallback_utf16le_utf8"
+            iconv_fallback.ConversionFunctionList["UTF-16BE"]["ISO-8859-1"] = "iconv_fallback_utf16be_iso88591"
+            iconv_fallback.ConversionFunctionList["UTF-16BE"]["UTF-8"] = "iconv_fallback_utf16be_utf8"
         # end if
-        if (php_isset(lambda : ConversionFunctionList[php_strtoupper(in_charset)][php_strtoupper(out_charset)])):
-            ConversionFunction = ConversionFunctionList[php_strtoupper(in_charset)][php_strtoupper(out_charset)]
+        if (php_isset(lambda : iconv_fallback.ConversionFunctionList[php_strtoupper(in_charset)][php_strtoupper(out_charset)])):
+            ConversionFunction = iconv_fallback.ConversionFunctionList[php_strtoupper(in_charset)][php_strtoupper(out_charset)]
             return self.conversionfunction(string)
         # end if
         raise php_new_class("Exception", lambda : Exception("PHP does not has mb_convert_encoding() or iconv() support - cannot convert from " + in_charset + " to " + out_charset))
@@ -1598,13 +1598,13 @@ class getid3_lib():
     @classmethod
     def rgadnamelookup(self, namecode=None):
         
-        RGADname = Array()
-        if php_empty(lambda : RGADname):
-            RGADname[0] = "not set"
-            RGADname[1] = "Track Gain Adjustment"
-            RGADname[2] = "Album Gain Adjustment"
+        rgadnamelookup.RGADname = Array()
+        if php_empty(lambda : rgadnamelookup.RGADname):
+            rgadnamelookup.RGADname[0] = "not set"
+            rgadnamelookup.RGADname[1] = "Track Gain Adjustment"
+            rgadnamelookup.RGADname[2] = "Album Gain Adjustment"
         # end if
-        return RGADname[namecode] if (php_isset(lambda : RGADname[namecode])) else ""
+        return rgadnamelookup.RGADname[namecode] if (php_isset(lambda : rgadnamelookup.RGADname[namecode])) else ""
     # end def rgadnamelookup
     #// 
     #// @param int $originatorcode
@@ -1614,14 +1614,14 @@ class getid3_lib():
     @classmethod
     def rgadoriginatorlookup(self, originatorcode=None):
         
-        RGADoriginator = Array()
-        if php_empty(lambda : RGADoriginator):
-            RGADoriginator[0] = "unspecified"
-            RGADoriginator[1] = "pre-set by artist/producer/mastering engineer"
-            RGADoriginator[2] = "set by user"
-            RGADoriginator[3] = "determined automatically"
+        rgadoriginatorlookup.RGADoriginator = Array()
+        if php_empty(lambda : rgadoriginatorlookup.RGADoriginator):
+            rgadoriginatorlookup.RGADoriginator[0] = "unspecified"
+            rgadoriginatorlookup.RGADoriginator[1] = "pre-set by artist/producer/mastering engineer"
+            rgadoriginatorlookup.RGADoriginator[2] = "set by user"
+            rgadoriginatorlookup.RGADoriginator[3] = "determined automatically"
         # end if
-        return RGADoriginator[originatorcode] if (php_isset(lambda : RGADoriginator[originatorcode])) else ""
+        return rgadoriginatorlookup.RGADoriginator[originatorcode] if (php_isset(lambda : rgadoriginatorlookup.RGADoriginator[originatorcode])) else ""
     # end def rgadoriginatorlookup
     #// 
     #// @param int $rawadjustment
@@ -1679,19 +1679,19 @@ class getid3_lib():
     @classmethod
     def getdataimagesize(self, imgData=None, imageinfo=Array()):
         
-        tempdir = ""
-        if php_empty(lambda : tempdir):
+        getdataimagesize.tempdir = ""
+        if php_empty(lambda : getdataimagesize.tempdir):
             if php_function_exists("sys_get_temp_dir"):
-                tempdir = php_sys_get_temp_dir()
+                getdataimagesize.tempdir = php_sys_get_temp_dir()
                 pass
             # end if
             #// yes this is ugly, feel free to suggest a better way
             if php_include_file(php_dirname(__FILE__) + "/getid3.php", once=False):
                 getid3_temp = php_new_class("getID3", lambda : getID3())
                 if getid3_temp:
-                    getid3_temp_tempdir = getid3_temp.tempdir
+                    getid3_temp_tempdir = getid3_temp.getdataimagesize.tempdir
                     if getid3_temp_tempdir:
-                        tempdir = getid3_temp_tempdir
+                        getdataimagesize.tempdir = getid3_temp_tempdir
                     # end if
                     getid3_temp = None
                     getid3_temp_tempdir = None
@@ -1699,7 +1699,7 @@ class getid3_lib():
             # end if
         # end if
         GetDataImageSize = False
-        tempfilename = php_tempnam(tempdir, "gI3")
+        tempfilename = php_tempnam(getdataimagesize.tempdir, "gI3")
         if tempfilename:
             tmp = fopen(tempfilename, "wb")
             if php_is_writable(tempfilename) and php_is_file(tempfilename) and tmp:
@@ -1815,9 +1815,9 @@ class getid3_lib():
     @classmethod
     def embeddedlookup(self, key=None, begin=None, end_=None, file=None, name=None):
         
-        cache = None
-        if (php_isset(lambda : cache[file][name])):
-            return cache[file][name][key] if (php_isset(lambda : cache[file][name][key])) else ""
+        embeddedlookup.cache = None
+        if (php_isset(lambda : embeddedlookup.cache[file][name])):
+            return embeddedlookup.cache[file][name][key] if (php_isset(lambda : embeddedlookup.cache[file][name][key])) else ""
         # end if
         #// Init
         keylength = php_strlen(key)
@@ -1851,11 +1851,11 @@ class getid3_lib():
             explodedLine = php_explode("    ", line, 2)
             ThisKey = explodedLine[0] if (php_isset(lambda : explodedLine[0])) else ""
             ThisValue = explodedLine[1] if (php_isset(lambda : explodedLine[1])) else ""
-            cache[file][name][ThisKey] = php_trim(ThisValue)
+            embeddedlookup.cache[file][name][ThisKey] = php_trim(ThisValue)
         # end while
         #// Close and return
         php_fclose(fp)
-        return cache[file][name][key] if (php_isset(lambda : cache[file][name][key])) else ""
+        return embeddedlookup.cache[file][name][key] if (php_isset(lambda : embeddedlookup.cache[file][name][key])) else ""
     # end def embeddedlookup
     #// 
     #// @param string $filename

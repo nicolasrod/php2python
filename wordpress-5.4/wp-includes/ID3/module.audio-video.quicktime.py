@@ -2005,14 +2005,14 @@ class getid3_quicktime(getid3_handler):
                     break
                 # end if
                 if case("data"):
-                    metaDATAkey = 1
+                    quicktimeparseatom.metaDATAkey = 1
                     #// real ugly, but so is the QuickTime structure that stores keys and values in different multinested locations that are hard to relate to each other
                     #// seems to be 2 bytes language code (ASCII), 2 bytes unknown (set to 0x10B5 in sample I have), remainder is useful data
                     atom_structure["language"] = php_substr(atom_data, 4 + 0, 2)
                     atom_structure["unknown"] = getid3_lib.bigendian2int(php_substr(atom_data, 4 + 2, 2))
                     atom_structure["data"] = php_substr(atom_data, 4 + 4)
-                    atom_structure["key_name"] = php_no_error(lambda: info["quicktime"]["temp_meta_key_names"][metaDATAkey])
-                    metaDATAkey += 1
+                    atom_structure["key_name"] = php_no_error(lambda: info["quicktime"]["temp_meta_key_names"][quicktimeparseatom.metaDATAkey])
+                    quicktimeparseatom.metaDATAkey += 1
                     if atom_structure["key_name"] and atom_structure["data"]:
                         php_no_error(lambda: info["quicktime"]["comments"][php_str_replace("com.apple.quicktime.", "", atom_structure["key_name"])][-1] = atom_structure["data"])
                     # end if
@@ -2312,119 +2312,119 @@ class getid3_quicktime(getid3_handler):
     #//
     def quicktimelanguagelookup(self, languageid=None):
         
-        QuicktimeLanguageLookup = Array()
-        if php_empty(lambda : QuicktimeLanguageLookup):
-            QuicktimeLanguageLookup[0] = "English"
-            QuicktimeLanguageLookup[1] = "French"
-            QuicktimeLanguageLookup[2] = "German"
-            QuicktimeLanguageLookup[3] = "Italian"
-            QuicktimeLanguageLookup[4] = "Dutch"
-            QuicktimeLanguageLookup[5] = "Swedish"
-            QuicktimeLanguageLookup[6] = "Spanish"
-            QuicktimeLanguageLookup[7] = "Danish"
-            QuicktimeLanguageLookup[8] = "Portuguese"
-            QuicktimeLanguageLookup[9] = "Norwegian"
-            QuicktimeLanguageLookup[10] = "Hebrew"
-            QuicktimeLanguageLookup[11] = "Japanese"
-            QuicktimeLanguageLookup[12] = "Arabic"
-            QuicktimeLanguageLookup[13] = "Finnish"
-            QuicktimeLanguageLookup[14] = "Greek"
-            QuicktimeLanguageLookup[15] = "Icelandic"
-            QuicktimeLanguageLookup[16] = "Maltese"
-            QuicktimeLanguageLookup[17] = "Turkish"
-            QuicktimeLanguageLookup[18] = "Croatian"
-            QuicktimeLanguageLookup[19] = "Chinese (Traditional)"
-            QuicktimeLanguageLookup[20] = "Urdu"
-            QuicktimeLanguageLookup[21] = "Hindi"
-            QuicktimeLanguageLookup[22] = "Thai"
-            QuicktimeLanguageLookup[23] = "Korean"
-            QuicktimeLanguageLookup[24] = "Lithuanian"
-            QuicktimeLanguageLookup[25] = "Polish"
-            QuicktimeLanguageLookup[26] = "Hungarian"
-            QuicktimeLanguageLookup[27] = "Estonian"
-            QuicktimeLanguageLookup[28] = "Lettish"
-            QuicktimeLanguageLookup[28] = "Latvian"
-            QuicktimeLanguageLookup[29] = "Saamisk"
-            QuicktimeLanguageLookup[29] = "Lappish"
-            QuicktimeLanguageLookup[30] = "Faeroese"
-            QuicktimeLanguageLookup[31] = "Farsi"
-            QuicktimeLanguageLookup[31] = "Persian"
-            QuicktimeLanguageLookup[32] = "Russian"
-            QuicktimeLanguageLookup[33] = "Chinese (Simplified)"
-            QuicktimeLanguageLookup[34] = "Flemish"
-            QuicktimeLanguageLookup[35] = "Irish"
-            QuicktimeLanguageLookup[36] = "Albanian"
-            QuicktimeLanguageLookup[37] = "Romanian"
-            QuicktimeLanguageLookup[38] = "Czech"
-            QuicktimeLanguageLookup[39] = "Slovak"
-            QuicktimeLanguageLookup[40] = "Slovenian"
-            QuicktimeLanguageLookup[41] = "Yiddish"
-            QuicktimeLanguageLookup[42] = "Serbian"
-            QuicktimeLanguageLookup[43] = "Macedonian"
-            QuicktimeLanguageLookup[44] = "Bulgarian"
-            QuicktimeLanguageLookup[45] = "Ukrainian"
-            QuicktimeLanguageLookup[46] = "Byelorussian"
-            QuicktimeLanguageLookup[47] = "Uzbek"
-            QuicktimeLanguageLookup[48] = "Kazakh"
-            QuicktimeLanguageLookup[49] = "Azerbaijani"
-            QuicktimeLanguageLookup[50] = "AzerbaijanAr"
-            QuicktimeLanguageLookup[51] = "Armenian"
-            QuicktimeLanguageLookup[52] = "Georgian"
-            QuicktimeLanguageLookup[53] = "Moldavian"
-            QuicktimeLanguageLookup[54] = "Kirghiz"
-            QuicktimeLanguageLookup[55] = "Tajiki"
-            QuicktimeLanguageLookup[56] = "Turkmen"
-            QuicktimeLanguageLookup[57] = "Mongolian"
-            QuicktimeLanguageLookup[58] = "MongolianCyr"
-            QuicktimeLanguageLookup[59] = "Pashto"
-            QuicktimeLanguageLookup[60] = "Kurdish"
-            QuicktimeLanguageLookup[61] = "Kashmiri"
-            QuicktimeLanguageLookup[62] = "Sindhi"
-            QuicktimeLanguageLookup[63] = "Tibetan"
-            QuicktimeLanguageLookup[64] = "Nepali"
-            QuicktimeLanguageLookup[65] = "Sanskrit"
-            QuicktimeLanguageLookup[66] = "Marathi"
-            QuicktimeLanguageLookup[67] = "Bengali"
-            QuicktimeLanguageLookup[68] = "Assamese"
-            QuicktimeLanguageLookup[69] = "Gujarati"
-            QuicktimeLanguageLookup[70] = "Punjabi"
-            QuicktimeLanguageLookup[71] = "Oriya"
-            QuicktimeLanguageLookup[72] = "Malayalam"
-            QuicktimeLanguageLookup[73] = "Kannada"
-            QuicktimeLanguageLookup[74] = "Tamil"
-            QuicktimeLanguageLookup[75] = "Telugu"
-            QuicktimeLanguageLookup[76] = "Sinhalese"
-            QuicktimeLanguageLookup[77] = "Burmese"
-            QuicktimeLanguageLookup[78] = "Khmer"
-            QuicktimeLanguageLookup[79] = "Lao"
-            QuicktimeLanguageLookup[80] = "Vietnamese"
-            QuicktimeLanguageLookup[81] = "Indonesian"
-            QuicktimeLanguageLookup[82] = "Tagalog"
-            QuicktimeLanguageLookup[83] = "MalayRoman"
-            QuicktimeLanguageLookup[84] = "MalayArabic"
-            QuicktimeLanguageLookup[85] = "Amharic"
-            QuicktimeLanguageLookup[86] = "Tigrinya"
-            QuicktimeLanguageLookup[87] = "Galla"
-            QuicktimeLanguageLookup[87] = "Oromo"
-            QuicktimeLanguageLookup[88] = "Somali"
-            QuicktimeLanguageLookup[89] = "Swahili"
-            QuicktimeLanguageLookup[90] = "Ruanda"
-            QuicktimeLanguageLookup[91] = "Rundi"
-            QuicktimeLanguageLookup[92] = "Chewa"
-            QuicktimeLanguageLookup[93] = "Malagasy"
-            QuicktimeLanguageLookup[94] = "Esperanto"
-            QuicktimeLanguageLookup[128] = "Welsh"
-            QuicktimeLanguageLookup[129] = "Basque"
-            QuicktimeLanguageLookup[130] = "Catalan"
-            QuicktimeLanguageLookup[131] = "Latin"
-            QuicktimeLanguageLookup[132] = "Quechua"
-            QuicktimeLanguageLookup[133] = "Guarani"
-            QuicktimeLanguageLookup[134] = "Aymara"
-            QuicktimeLanguageLookup[135] = "Tatar"
-            QuicktimeLanguageLookup[136] = "Uighur"
-            QuicktimeLanguageLookup[137] = "Dzongkha"
-            QuicktimeLanguageLookup[138] = "JavaneseRom"
-            QuicktimeLanguageLookup[32767] = "Unspecified"
+        quicktimelanguagelookup.QuicktimeLanguageLookup = Array()
+        if php_empty(lambda : quicktimelanguagelookup.QuicktimeLanguageLookup):
+            quicktimelanguagelookup.QuicktimeLanguageLookup[0] = "English"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[1] = "French"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[2] = "German"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[3] = "Italian"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[4] = "Dutch"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[5] = "Swedish"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[6] = "Spanish"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[7] = "Danish"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[8] = "Portuguese"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[9] = "Norwegian"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[10] = "Hebrew"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[11] = "Japanese"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[12] = "Arabic"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[13] = "Finnish"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[14] = "Greek"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[15] = "Icelandic"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[16] = "Maltese"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[17] = "Turkish"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[18] = "Croatian"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[19] = "Chinese (Traditional)"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[20] = "Urdu"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[21] = "Hindi"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[22] = "Thai"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[23] = "Korean"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[24] = "Lithuanian"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[25] = "Polish"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[26] = "Hungarian"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[27] = "Estonian"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[28] = "Lettish"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[28] = "Latvian"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[29] = "Saamisk"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[29] = "Lappish"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[30] = "Faeroese"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[31] = "Farsi"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[31] = "Persian"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[32] = "Russian"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[33] = "Chinese (Simplified)"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[34] = "Flemish"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[35] = "Irish"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[36] = "Albanian"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[37] = "Romanian"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[38] = "Czech"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[39] = "Slovak"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[40] = "Slovenian"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[41] = "Yiddish"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[42] = "Serbian"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[43] = "Macedonian"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[44] = "Bulgarian"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[45] = "Ukrainian"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[46] = "Byelorussian"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[47] = "Uzbek"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[48] = "Kazakh"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[49] = "Azerbaijani"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[50] = "AzerbaijanAr"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[51] = "Armenian"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[52] = "Georgian"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[53] = "Moldavian"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[54] = "Kirghiz"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[55] = "Tajiki"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[56] = "Turkmen"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[57] = "Mongolian"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[58] = "MongolianCyr"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[59] = "Pashto"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[60] = "Kurdish"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[61] = "Kashmiri"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[62] = "Sindhi"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[63] = "Tibetan"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[64] = "Nepali"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[65] = "Sanskrit"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[66] = "Marathi"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[67] = "Bengali"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[68] = "Assamese"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[69] = "Gujarati"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[70] = "Punjabi"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[71] = "Oriya"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[72] = "Malayalam"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[73] = "Kannada"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[74] = "Tamil"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[75] = "Telugu"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[76] = "Sinhalese"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[77] = "Burmese"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[78] = "Khmer"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[79] = "Lao"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[80] = "Vietnamese"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[81] = "Indonesian"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[82] = "Tagalog"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[83] = "MalayRoman"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[84] = "MalayArabic"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[85] = "Amharic"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[86] = "Tigrinya"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[87] = "Galla"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[87] = "Oromo"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[88] = "Somali"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[89] = "Swahili"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[90] = "Ruanda"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[91] = "Rundi"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[92] = "Chewa"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[93] = "Malagasy"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[94] = "Esperanto"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[128] = "Welsh"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[129] = "Basque"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[130] = "Catalan"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[131] = "Latin"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[132] = "Quechua"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[133] = "Guarani"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[134] = "Aymara"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[135] = "Tatar"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[136] = "Uighur"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[137] = "Dzongkha"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[138] = "JavaneseRom"
+            quicktimelanguagelookup.QuicktimeLanguageLookup[32767] = "Unspecified"
         # end if
         if languageid > 138 and languageid < 32767:
             #// 
@@ -2441,9 +2441,9 @@ class getid3_quicktime(getid3_handler):
             iso_language_id += chr(languageid & 31744 >> 10 + 96)
             iso_language_id += chr(languageid & 992 >> 5 + 96)
             iso_language_id += chr(languageid & 31 >> 0 + 96)
-            QuicktimeLanguageLookup[languageid] = getid3_id3v2.languagelookup(iso_language_id)
+            quicktimelanguagelookup.QuicktimeLanguageLookup[languageid] = getid3_id3v2.languagelookup(iso_language_id)
         # end if
-        return QuicktimeLanguageLookup[languageid] if (php_isset(lambda : QuicktimeLanguageLookup[languageid])) else "invalid"
+        return quicktimelanguagelookup.QuicktimeLanguageLookup[languageid] if (php_isset(lambda : quicktimelanguagelookup.QuicktimeLanguageLookup[languageid])) else "invalid"
     # end def quicktimelanguagelookup
     #// 
     #// @param string $codecid
@@ -2452,62 +2452,62 @@ class getid3_quicktime(getid3_handler):
     #//
     def quicktimevideocodeclookup(self, codecid=None):
         
-        QuicktimeVideoCodecLookup = Array()
-        if php_empty(lambda : QuicktimeVideoCodecLookup):
-            QuicktimeVideoCodecLookup[".SGI"] = "SGI"
-            QuicktimeVideoCodecLookup["3IV1"] = "3ivx MPEG-4 v1"
-            QuicktimeVideoCodecLookup["3IV2"] = "3ivx MPEG-4 v2"
-            QuicktimeVideoCodecLookup["3IVX"] = "3ivx MPEG-4"
-            QuicktimeVideoCodecLookup["8BPS"] = "Planar RGB"
-            QuicktimeVideoCodecLookup["avc1"] = "H.264/MPEG-4 AVC"
-            QuicktimeVideoCodecLookup["avr "] = "AVR-JPEG"
-            QuicktimeVideoCodecLookup["b16g"] = "16Gray"
-            QuicktimeVideoCodecLookup["b32a"] = "32AlphaGray"
-            QuicktimeVideoCodecLookup["b48r"] = "48RGB"
-            QuicktimeVideoCodecLookup["b64a"] = "64ARGB"
-            QuicktimeVideoCodecLookup["base"] = "Base"
-            QuicktimeVideoCodecLookup["clou"] = "Cloud"
-            QuicktimeVideoCodecLookup["cmyk"] = "CMYK"
-            QuicktimeVideoCodecLookup["cvid"] = "Cinepak"
-            QuicktimeVideoCodecLookup["dmb1"] = "OpenDML JPEG"
-            QuicktimeVideoCodecLookup["dvc "] = "DVC-NTSC"
-            QuicktimeVideoCodecLookup["dvcp"] = "DVC-PAL"
-            QuicktimeVideoCodecLookup["dvpn"] = "DVCPro-NTSC"
-            QuicktimeVideoCodecLookup["dvpp"] = "DVCPro-PAL"
-            QuicktimeVideoCodecLookup["fire"] = "Fire"
-            QuicktimeVideoCodecLookup["flic"] = "FLC"
-            QuicktimeVideoCodecLookup["gif "] = "GIF"
-            QuicktimeVideoCodecLookup["h261"] = "H261"
-            QuicktimeVideoCodecLookup["h263"] = "H263"
-            QuicktimeVideoCodecLookup["IV41"] = "Indeo4"
-            QuicktimeVideoCodecLookup["jpeg"] = "JPEG"
-            QuicktimeVideoCodecLookup["kpcd"] = "PhotoCD"
-            QuicktimeVideoCodecLookup["mjpa"] = "Motion JPEG-A"
-            QuicktimeVideoCodecLookup["mjpb"] = "Motion JPEG-B"
-            QuicktimeVideoCodecLookup["msvc"] = "Microsoft Video1"
-            QuicktimeVideoCodecLookup["myuv"] = "MPEG YUV420"
-            QuicktimeVideoCodecLookup["path"] = "Vector"
-            QuicktimeVideoCodecLookup["png "] = "PNG"
-            QuicktimeVideoCodecLookup["PNTG"] = "MacPaint"
-            QuicktimeVideoCodecLookup["qdgx"] = "QuickDrawGX"
-            QuicktimeVideoCodecLookup["qdrw"] = "QuickDraw"
-            QuicktimeVideoCodecLookup["raw "] = "RAW"
-            QuicktimeVideoCodecLookup["ripl"] = "WaterRipple"
-            QuicktimeVideoCodecLookup["rpza"] = "Video"
-            QuicktimeVideoCodecLookup["smc "] = "Graphics"
-            QuicktimeVideoCodecLookup["SVQ1"] = "Sorenson Video 1"
-            QuicktimeVideoCodecLookup["SVQ1"] = "Sorenson Video 3"
-            QuicktimeVideoCodecLookup["syv9"] = "Sorenson YUV9"
-            QuicktimeVideoCodecLookup["tga "] = "Targa"
-            QuicktimeVideoCodecLookup["tiff"] = "TIFF"
-            QuicktimeVideoCodecLookup["WRAW"] = "Windows RAW"
-            QuicktimeVideoCodecLookup["WRLE"] = "BMP"
-            QuicktimeVideoCodecLookup["y420"] = "YUV420"
-            QuicktimeVideoCodecLookup["yuv2"] = "ComponentVideo"
-            QuicktimeVideoCodecLookup["yuvs"] = "ComponentVideoUnsigned"
-            QuicktimeVideoCodecLookup["yuvu"] = "ComponentVideoSigned"
+        quicktimevideocodeclookup.QuicktimeVideoCodecLookup = Array()
+        if php_empty(lambda : quicktimevideocodeclookup.QuicktimeVideoCodecLookup):
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup[".SGI"] = "SGI"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["3IV1"] = "3ivx MPEG-4 v1"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["3IV2"] = "3ivx MPEG-4 v2"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["3IVX"] = "3ivx MPEG-4"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["8BPS"] = "Planar RGB"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["avc1"] = "H.264/MPEG-4 AVC"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["avr "] = "AVR-JPEG"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["b16g"] = "16Gray"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["b32a"] = "32AlphaGray"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["b48r"] = "48RGB"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["b64a"] = "64ARGB"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["base"] = "Base"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["clou"] = "Cloud"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["cmyk"] = "CMYK"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["cvid"] = "Cinepak"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["dmb1"] = "OpenDML JPEG"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["dvc "] = "DVC-NTSC"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["dvcp"] = "DVC-PAL"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["dvpn"] = "DVCPro-NTSC"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["dvpp"] = "DVCPro-PAL"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["fire"] = "Fire"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["flic"] = "FLC"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["gif "] = "GIF"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["h261"] = "H261"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["h263"] = "H263"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["IV41"] = "Indeo4"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["jpeg"] = "JPEG"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["kpcd"] = "PhotoCD"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["mjpa"] = "Motion JPEG-A"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["mjpb"] = "Motion JPEG-B"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["msvc"] = "Microsoft Video1"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["myuv"] = "MPEG YUV420"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["path"] = "Vector"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["png "] = "PNG"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["PNTG"] = "MacPaint"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["qdgx"] = "QuickDrawGX"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["qdrw"] = "QuickDraw"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["raw "] = "RAW"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["ripl"] = "WaterRipple"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["rpza"] = "Video"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["smc "] = "Graphics"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["SVQ1"] = "Sorenson Video 1"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["SVQ1"] = "Sorenson Video 3"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["syv9"] = "Sorenson YUV9"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["tga "] = "Targa"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["tiff"] = "TIFF"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["WRAW"] = "Windows RAW"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["WRLE"] = "BMP"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["y420"] = "YUV420"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["yuv2"] = "ComponentVideo"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["yuvs"] = "ComponentVideoUnsigned"
+            quicktimevideocodeclookup.QuicktimeVideoCodecLookup["yuvu"] = "ComponentVideoSigned"
         # end if
-        return QuicktimeVideoCodecLookup[codecid] if (php_isset(lambda : QuicktimeVideoCodecLookup[codecid])) else ""
+        return quicktimevideocodeclookup.QuicktimeVideoCodecLookup[codecid] if (php_isset(lambda : quicktimevideocodeclookup.QuicktimeVideoCodecLookup[codecid])) else ""
     # end def quicktimevideocodeclookup
     #// 
     #// @param string $codecid
@@ -2516,48 +2516,48 @@ class getid3_quicktime(getid3_handler):
     #//
     def quicktimeaudiocodeclookup(self, codecid=None):
         
-        QuicktimeAudioCodecLookup = Array()
-        if php_empty(lambda : QuicktimeAudioCodecLookup):
-            QuicktimeAudioCodecLookup[".mp3"] = "Fraunhofer MPEG Layer-III alias"
-            QuicktimeAudioCodecLookup["aac "] = "ISO/IEC 14496-3 AAC"
-            QuicktimeAudioCodecLookup["agsm"] = "Apple GSM 10:1"
-            QuicktimeAudioCodecLookup["alac"] = "Apple Lossless Audio Codec"
-            QuicktimeAudioCodecLookup["alaw"] = "A-law 2:1"
-            QuicktimeAudioCodecLookup["conv"] = "Sample Format"
-            QuicktimeAudioCodecLookup["dvca"] = "DV"
-            QuicktimeAudioCodecLookup["dvi "] = "DV 4:1"
-            QuicktimeAudioCodecLookup["eqal"] = "Frequency Equalizer"
-            QuicktimeAudioCodecLookup["fl32"] = "32-bit Floating Point"
-            QuicktimeAudioCodecLookup["fl64"] = "64-bit Floating Point"
-            QuicktimeAudioCodecLookup["ima4"] = "Interactive Multimedia Association 4:1"
-            QuicktimeAudioCodecLookup["in24"] = "24-bit Integer"
-            QuicktimeAudioCodecLookup["in32"] = "32-bit Integer"
-            QuicktimeAudioCodecLookup["lpc "] = "LPC 23:1"
-            QuicktimeAudioCodecLookup["MAC3"] = "Macintosh Audio Compression/Expansion (MACE) 3:1"
-            QuicktimeAudioCodecLookup["MAC6"] = "Macintosh Audio Compression/Expansion (MACE) 6:1"
-            QuicktimeAudioCodecLookup["mixb"] = "8-bit Mixer"
-            QuicktimeAudioCodecLookup["mixw"] = "16-bit Mixer"
-            QuicktimeAudioCodecLookup["mp4a"] = "ISO/IEC 14496-3 AAC"
-            QuicktimeAudioCodecLookup["MS" + " "] = "Microsoft ADPCM"
-            QuicktimeAudioCodecLookup["MS" + " "] = "DV IMA"
-            QuicktimeAudioCodecLookup["MS" + " U"] = "Fraunhofer MPEG Layer III"
-            QuicktimeAudioCodecLookup["NONE"] = "No Encoding"
-            QuicktimeAudioCodecLookup["Qclp"] = "Qualcomm PureVoice"
-            QuicktimeAudioCodecLookup["QDM2"] = "QDesign Music 2"
-            QuicktimeAudioCodecLookup["QDMC"] = "QDesign Music 1"
-            QuicktimeAudioCodecLookup["ratb"] = "8-bit Rate"
-            QuicktimeAudioCodecLookup["ratw"] = "16-bit Rate"
-            QuicktimeAudioCodecLookup["raw "] = "raw PCM"
-            QuicktimeAudioCodecLookup["sour"] = "Sound Source"
-            QuicktimeAudioCodecLookup["sowt"] = "signed/two's complement (Little Endian)"
-            QuicktimeAudioCodecLookup["str1"] = "Iomega MPEG layer II"
-            QuicktimeAudioCodecLookup["str2"] = "Iomega MPEG *layer II"
-            QuicktimeAudioCodecLookup["str3"] = "Iomega MPEG **layer II"
-            QuicktimeAudioCodecLookup["str4"] = "Iomega MPEG ***layer II"
-            QuicktimeAudioCodecLookup["twos"] = "signed/two's complement (Big Endian)"
-            QuicktimeAudioCodecLookup["ulaw"] = "mu-law 2:1"
+        quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup = Array()
+        if php_empty(lambda : quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup):
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup[".mp3"] = "Fraunhofer MPEG Layer-III alias"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["aac "] = "ISO/IEC 14496-3 AAC"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["agsm"] = "Apple GSM 10:1"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["alac"] = "Apple Lossless Audio Codec"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["alaw"] = "A-law 2:1"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["conv"] = "Sample Format"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["dvca"] = "DV"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["dvi "] = "DV 4:1"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["eqal"] = "Frequency Equalizer"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["fl32"] = "32-bit Floating Point"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["fl64"] = "64-bit Floating Point"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["ima4"] = "Interactive Multimedia Association 4:1"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["in24"] = "24-bit Integer"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["in32"] = "32-bit Integer"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["lpc "] = "LPC 23:1"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["MAC3"] = "Macintosh Audio Compression/Expansion (MACE) 3:1"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["MAC6"] = "Macintosh Audio Compression/Expansion (MACE) 6:1"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["mixb"] = "8-bit Mixer"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["mixw"] = "16-bit Mixer"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["mp4a"] = "ISO/IEC 14496-3 AAC"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["MS" + " "] = "Microsoft ADPCM"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["MS" + " "] = "DV IMA"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["MS" + " U"] = "Fraunhofer MPEG Layer III"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["NONE"] = "No Encoding"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["Qclp"] = "Qualcomm PureVoice"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["QDM2"] = "QDesign Music 2"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["QDMC"] = "QDesign Music 1"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["ratb"] = "8-bit Rate"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["ratw"] = "16-bit Rate"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["raw "] = "raw PCM"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["sour"] = "Sound Source"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["sowt"] = "signed/two's complement (Little Endian)"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["str1"] = "Iomega MPEG layer II"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["str2"] = "Iomega MPEG *layer II"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["str3"] = "Iomega MPEG **layer II"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["str4"] = "Iomega MPEG ***layer II"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["twos"] = "signed/two's complement (Big Endian)"
+            quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup["ulaw"] = "mu-law 2:1"
         # end if
-        return QuicktimeAudioCodecLookup[codecid] if (php_isset(lambda : QuicktimeAudioCodecLookup[codecid])) else ""
+        return quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup[codecid] if (php_isset(lambda : quicktimeaudiocodeclookup.QuicktimeAudioCodecLookup[codecid])) else ""
     # end def quicktimeaudiocodeclookup
     #// 
     #// @param string $compressionid
@@ -2566,12 +2566,12 @@ class getid3_quicktime(getid3_handler):
     #//
     def quicktimedcomlookup(self, compressionid=None):
         
-        QuicktimeDCOMLookup = Array()
-        if php_empty(lambda : QuicktimeDCOMLookup):
-            QuicktimeDCOMLookup["zlib"] = "ZLib Deflate"
-            QuicktimeDCOMLookup["adec"] = "Apple Compression"
+        quicktimedcomlookup.QuicktimeDCOMLookup = Array()
+        if php_empty(lambda : quicktimedcomlookup.QuicktimeDCOMLookup):
+            quicktimedcomlookup.QuicktimeDCOMLookup["zlib"] = "ZLib Deflate"
+            quicktimedcomlookup.QuicktimeDCOMLookup["adec"] = "Apple Compression"
         # end if
-        return QuicktimeDCOMLookup[compressionid] if (php_isset(lambda : QuicktimeDCOMLookup[compressionid])) else ""
+        return quicktimedcomlookup.QuicktimeDCOMLookup[compressionid] if (php_isset(lambda : quicktimedcomlookup.QuicktimeDCOMLookup[compressionid])) else ""
     # end def quicktimedcomlookup
     #// 
     #// @param int $colordepthid
@@ -2580,21 +2580,21 @@ class getid3_quicktime(getid3_handler):
     #//
     def quicktimecolornamelookup(self, colordepthid=None):
         
-        QuicktimeColorNameLookup = Array()
-        if php_empty(lambda : QuicktimeColorNameLookup):
-            QuicktimeColorNameLookup[1] = "2-color (monochrome)"
-            QuicktimeColorNameLookup[2] = "4-color"
-            QuicktimeColorNameLookup[4] = "16-color"
-            QuicktimeColorNameLookup[8] = "256-color"
-            QuicktimeColorNameLookup[16] = "thousands (16-bit color)"
-            QuicktimeColorNameLookup[24] = "millions (24-bit color)"
-            QuicktimeColorNameLookup[32] = "millions+ (32-bit color)"
-            QuicktimeColorNameLookup[33] = "black & white"
-            QuicktimeColorNameLookup[34] = "4-gray"
-            QuicktimeColorNameLookup[36] = "16-gray"
-            QuicktimeColorNameLookup[40] = "256-gray"
+        quicktimecolornamelookup.QuicktimeColorNameLookup = Array()
+        if php_empty(lambda : quicktimecolornamelookup.QuicktimeColorNameLookup):
+            quicktimecolornamelookup.QuicktimeColorNameLookup[1] = "2-color (monochrome)"
+            quicktimecolornamelookup.QuicktimeColorNameLookup[2] = "4-color"
+            quicktimecolornamelookup.QuicktimeColorNameLookup[4] = "16-color"
+            quicktimecolornamelookup.QuicktimeColorNameLookup[8] = "256-color"
+            quicktimecolornamelookup.QuicktimeColorNameLookup[16] = "thousands (16-bit color)"
+            quicktimecolornamelookup.QuicktimeColorNameLookup[24] = "millions (24-bit color)"
+            quicktimecolornamelookup.QuicktimeColorNameLookup[32] = "millions+ (32-bit color)"
+            quicktimecolornamelookup.QuicktimeColorNameLookup[33] = "black & white"
+            quicktimecolornamelookup.QuicktimeColorNameLookup[34] = "4-gray"
+            quicktimecolornamelookup.QuicktimeColorNameLookup[36] = "16-gray"
+            quicktimecolornamelookup.QuicktimeColorNameLookup[40] = "256-gray"
         # end if
-        return QuicktimeColorNameLookup[colordepthid] if (php_isset(lambda : QuicktimeColorNameLookup[colordepthid])) else "invalid"
+        return quicktimecolornamelookup.QuicktimeColorNameLookup[colordepthid] if (php_isset(lambda : quicktimecolornamelookup.QuicktimeColorNameLookup[colordepthid])) else "invalid"
     # end def quicktimecolornamelookup
     #// 
     #// @param int $stik
@@ -2603,20 +2603,20 @@ class getid3_quicktime(getid3_handler):
     #//
     def quicktimestiklookup(self, stik=None):
         
-        QuicktimeSTIKLookup = Array()
-        if php_empty(lambda : QuicktimeSTIKLookup):
-            QuicktimeSTIKLookup[0] = "Movie"
-            QuicktimeSTIKLookup[1] = "Normal"
-            QuicktimeSTIKLookup[2] = "Audiobook"
-            QuicktimeSTIKLookup[5] = "Whacked Bookmark"
-            QuicktimeSTIKLookup[6] = "Music Video"
-            QuicktimeSTIKLookup[9] = "Short Film"
-            QuicktimeSTIKLookup[10] = "TV Show"
-            QuicktimeSTIKLookup[11] = "Booklet"
-            QuicktimeSTIKLookup[14] = "Ringtone"
-            QuicktimeSTIKLookup[21] = "Podcast"
+        quicktimestiklookup.QuicktimeSTIKLookup = Array()
+        if php_empty(lambda : quicktimestiklookup.QuicktimeSTIKLookup):
+            quicktimestiklookup.QuicktimeSTIKLookup[0] = "Movie"
+            quicktimestiklookup.QuicktimeSTIKLookup[1] = "Normal"
+            quicktimestiklookup.QuicktimeSTIKLookup[2] = "Audiobook"
+            quicktimestiklookup.QuicktimeSTIKLookup[5] = "Whacked Bookmark"
+            quicktimestiklookup.QuicktimeSTIKLookup[6] = "Music Video"
+            quicktimestiklookup.QuicktimeSTIKLookup[9] = "Short Film"
+            quicktimestiklookup.QuicktimeSTIKLookup[10] = "TV Show"
+            quicktimestiklookup.QuicktimeSTIKLookup[11] = "Booklet"
+            quicktimestiklookup.QuicktimeSTIKLookup[14] = "Ringtone"
+            quicktimestiklookup.QuicktimeSTIKLookup[21] = "Podcast"
         # end if
-        return QuicktimeSTIKLookup[stik] if (php_isset(lambda : QuicktimeSTIKLookup[stik])) else "invalid"
+        return quicktimestiklookup.QuicktimeSTIKLookup[stik] if (php_isset(lambda : quicktimestiklookup.QuicktimeSTIKLookup[stik])) else "invalid"
     # end def quicktimestiklookup
     #// 
     #// @param int $audio_profile_id
@@ -2625,11 +2625,11 @@ class getid3_quicktime(getid3_handler):
     #//
     def quicktimeiodsaudioprofilename(self, audio_profile_id=None):
         
-        QuicktimeIODSaudioProfileNameLookup = Array()
-        if php_empty(lambda : QuicktimeIODSaudioProfileNameLookup):
-            QuicktimeIODSaudioProfileNameLookup = Array({0: "ISO Reserved (0x00)", 1: "Main Audio Profile @ Level 1", 2: "Main Audio Profile @ Level 2", 3: "Main Audio Profile @ Level 3", 4: "Main Audio Profile @ Level 4", 5: "Scalable Audio Profile @ Level 1", 6: "Scalable Audio Profile @ Level 2", 7: "Scalable Audio Profile @ Level 3", 8: "Scalable Audio Profile @ Level 4", 9: "Speech Audio Profile @ Level 1", 10: "Speech Audio Profile @ Level 2", 11: "Synthetic Audio Profile @ Level 1", 12: "Synthetic Audio Profile @ Level 2", 13: "Synthetic Audio Profile @ Level 3", 14: "High Quality Audio Profile @ Level 1", 15: "High Quality Audio Profile @ Level 2", 16: "High Quality Audio Profile @ Level 3", 17: "High Quality Audio Profile @ Level 4", 18: "High Quality Audio Profile @ Level 5", 19: "High Quality Audio Profile @ Level 6", 20: "High Quality Audio Profile @ Level 7", 21: "High Quality Audio Profile @ Level 8", 22: "Low Delay Audio Profile @ Level 1", 23: "Low Delay Audio Profile @ Level 2", 24: "Low Delay Audio Profile @ Level 3", 25: "Low Delay Audio Profile @ Level 4", 26: "Low Delay Audio Profile @ Level 5", 27: "Low Delay Audio Profile @ Level 6", 28: "Low Delay Audio Profile @ Level 7", 29: "Low Delay Audio Profile @ Level 8", 30: "Natural Audio Profile @ Level 1", 31: "Natural Audio Profile @ Level 2", 32: "Natural Audio Profile @ Level 3", 33: "Natural Audio Profile @ Level 4", 34: "Mobile Audio Internetworking Profile @ Level 1", 35: "Mobile Audio Internetworking Profile @ Level 2", 36: "Mobile Audio Internetworking Profile @ Level 3", 37: "Mobile Audio Internetworking Profile @ Level 4", 38: "Mobile Audio Internetworking Profile @ Level 5", 39: "Mobile Audio Internetworking Profile @ Level 6", 40: "AAC Profile @ Level 1", 41: "AAC Profile @ Level 2", 42: "AAC Profile @ Level 4", 43: "AAC Profile @ Level 5", 44: "High Efficiency AAC Profile @ Level 2", 45: "High Efficiency AAC Profile @ Level 3", 46: "High Efficiency AAC Profile @ Level 4", 47: "High Efficiency AAC Profile @ Level 5", 254: "Not part of MPEG-4 audio profiles", 255: "No audio capability required"})
+        quicktimeiodsaudioprofilename.QuicktimeIODSaudioProfileNameLookup = Array()
+        if php_empty(lambda : quicktimeiodsaudioprofilename.QuicktimeIODSaudioProfileNameLookup):
+            quicktimeiodsaudioprofilename.QuicktimeIODSaudioProfileNameLookup = Array({0: "ISO Reserved (0x00)", 1: "Main Audio Profile @ Level 1", 2: "Main Audio Profile @ Level 2", 3: "Main Audio Profile @ Level 3", 4: "Main Audio Profile @ Level 4", 5: "Scalable Audio Profile @ Level 1", 6: "Scalable Audio Profile @ Level 2", 7: "Scalable Audio Profile @ Level 3", 8: "Scalable Audio Profile @ Level 4", 9: "Speech Audio Profile @ Level 1", 10: "Speech Audio Profile @ Level 2", 11: "Synthetic Audio Profile @ Level 1", 12: "Synthetic Audio Profile @ Level 2", 13: "Synthetic Audio Profile @ Level 3", 14: "High Quality Audio Profile @ Level 1", 15: "High Quality Audio Profile @ Level 2", 16: "High Quality Audio Profile @ Level 3", 17: "High Quality Audio Profile @ Level 4", 18: "High Quality Audio Profile @ Level 5", 19: "High Quality Audio Profile @ Level 6", 20: "High Quality Audio Profile @ Level 7", 21: "High Quality Audio Profile @ Level 8", 22: "Low Delay Audio Profile @ Level 1", 23: "Low Delay Audio Profile @ Level 2", 24: "Low Delay Audio Profile @ Level 3", 25: "Low Delay Audio Profile @ Level 4", 26: "Low Delay Audio Profile @ Level 5", 27: "Low Delay Audio Profile @ Level 6", 28: "Low Delay Audio Profile @ Level 7", 29: "Low Delay Audio Profile @ Level 8", 30: "Natural Audio Profile @ Level 1", 31: "Natural Audio Profile @ Level 2", 32: "Natural Audio Profile @ Level 3", 33: "Natural Audio Profile @ Level 4", 34: "Mobile Audio Internetworking Profile @ Level 1", 35: "Mobile Audio Internetworking Profile @ Level 2", 36: "Mobile Audio Internetworking Profile @ Level 3", 37: "Mobile Audio Internetworking Profile @ Level 4", 38: "Mobile Audio Internetworking Profile @ Level 5", 39: "Mobile Audio Internetworking Profile @ Level 6", 40: "AAC Profile @ Level 1", 41: "AAC Profile @ Level 2", 42: "AAC Profile @ Level 4", 43: "AAC Profile @ Level 5", 44: "High Efficiency AAC Profile @ Level 2", 45: "High Efficiency AAC Profile @ Level 3", 46: "High Efficiency AAC Profile @ Level 4", 47: "High Efficiency AAC Profile @ Level 5", 254: "Not part of MPEG-4 audio profiles", 255: "No audio capability required"})
         # end if
-        return QuicktimeIODSaudioProfileNameLookup[audio_profile_id] if (php_isset(lambda : QuicktimeIODSaudioProfileNameLookup[audio_profile_id])) else "ISO Reserved / User Private"
+        return quicktimeiodsaudioprofilename.QuicktimeIODSaudioProfileNameLookup[audio_profile_id] if (php_isset(lambda : quicktimeiodsaudioprofilename.QuicktimeIODSaudioProfileNameLookup[audio_profile_id])) else "ISO Reserved / User Private"
     # end def quicktimeiodsaudioprofilename
     #// 
     #// @param int $video_profile_id
@@ -2638,11 +2638,11 @@ class getid3_quicktime(getid3_handler):
     #//
     def quicktimeiodsvideoprofilename(self, video_profile_id=None):
         
-        QuicktimeIODSvideoProfileNameLookup = Array()
-        if php_empty(lambda : QuicktimeIODSvideoProfileNameLookup):
-            QuicktimeIODSvideoProfileNameLookup = Array({0: "Reserved (0x00) Profile", 1: "Simple Profile @ Level 1", 2: "Simple Profile @ Level 2", 3: "Simple Profile @ Level 3", 8: "Simple Profile @ Level 0", 16: "Simple Scalable Profile @ Level 0", 17: "Simple Scalable Profile @ Level 1", 18: "Simple Scalable Profile @ Level 2", 21: "AVC/H264 Profile", 33: "Core Profile @ Level 1", 34: "Core Profile @ Level 2", 50: "Main Profile @ Level 2", 51: "Main Profile @ Level 3", 52: "Main Profile @ Level 4", 66: "N-bit Profile @ Level 2", 81: "Scalable Texture Profile @ Level 1", 97: "Simple Face Animation Profile @ Level 1", 98: "Simple Face Animation Profile @ Level 2", 99: "Simple FBA Profile @ Level 1", 100: "Simple FBA Profile @ Level 2", 113: "Basic Animated Texture Profile @ Level 1", 114: "Basic Animated Texture Profile @ Level 2", 129: "Hybrid Profile @ Level 1", 130: "Hybrid Profile @ Level 2", 145: "Advanced Real Time Simple Profile @ Level 1", 146: "Advanced Real Time Simple Profile @ Level 2", 147: "Advanced Real Time Simple Profile @ Level 3", 148: "Advanced Real Time Simple Profile @ Level 4", 161: "Core Scalable Profile @ Level1", 162: "Core Scalable Profile @ Level2", 163: "Core Scalable Profile @ Level3", 177: "Advanced Coding Efficiency Profile @ Level 1", 178: "Advanced Coding Efficiency Profile @ Level 2", 179: "Advanced Coding Efficiency Profile @ Level 3", 180: "Advanced Coding Efficiency Profile @ Level 4", 193: "Advanced Core Profile @ Level 1", 194: "Advanced Core Profile @ Level 2", 209: "Advanced Scalable Texture @ Level1", 210: "Advanced Scalable Texture @ Level2", 225: "Simple Studio Profile @ Level 1", 226: "Simple Studio Profile @ Level 2", 227: "Simple Studio Profile @ Level 3", 228: "Simple Studio Profile @ Level 4", 229: "Core Studio Profile @ Level 1", 230: "Core Studio Profile @ Level 2", 231: "Core Studio Profile @ Level 3", 232: "Core Studio Profile @ Level 4", 240: "Advanced Simple Profile @ Level 0", 241: "Advanced Simple Profile @ Level 1", 242: "Advanced Simple Profile @ Level 2", 243: "Advanced Simple Profile @ Level 3", 244: "Advanced Simple Profile @ Level 4", 245: "Advanced Simple Profile @ Level 5", 247: "Advanced Simple Profile @ Level 3b", 248: "Fine Granularity Scalable Profile @ Level 0", 249: "Fine Granularity Scalable Profile @ Level 1", 250: "Fine Granularity Scalable Profile @ Level 2", 251: "Fine Granularity Scalable Profile @ Level 3", 252: "Fine Granularity Scalable Profile @ Level 4", 253: "Fine Granularity Scalable Profile @ Level 5", 254: "Not part of MPEG-4 Visual profiles", 255: "No visual capability required"})
+        quicktimeiodsvideoprofilename.QuicktimeIODSvideoProfileNameLookup = Array()
+        if php_empty(lambda : quicktimeiodsvideoprofilename.QuicktimeIODSvideoProfileNameLookup):
+            quicktimeiodsvideoprofilename.QuicktimeIODSvideoProfileNameLookup = Array({0: "Reserved (0x00) Profile", 1: "Simple Profile @ Level 1", 2: "Simple Profile @ Level 2", 3: "Simple Profile @ Level 3", 8: "Simple Profile @ Level 0", 16: "Simple Scalable Profile @ Level 0", 17: "Simple Scalable Profile @ Level 1", 18: "Simple Scalable Profile @ Level 2", 21: "AVC/H264 Profile", 33: "Core Profile @ Level 1", 34: "Core Profile @ Level 2", 50: "Main Profile @ Level 2", 51: "Main Profile @ Level 3", 52: "Main Profile @ Level 4", 66: "N-bit Profile @ Level 2", 81: "Scalable Texture Profile @ Level 1", 97: "Simple Face Animation Profile @ Level 1", 98: "Simple Face Animation Profile @ Level 2", 99: "Simple FBA Profile @ Level 1", 100: "Simple FBA Profile @ Level 2", 113: "Basic Animated Texture Profile @ Level 1", 114: "Basic Animated Texture Profile @ Level 2", 129: "Hybrid Profile @ Level 1", 130: "Hybrid Profile @ Level 2", 145: "Advanced Real Time Simple Profile @ Level 1", 146: "Advanced Real Time Simple Profile @ Level 2", 147: "Advanced Real Time Simple Profile @ Level 3", 148: "Advanced Real Time Simple Profile @ Level 4", 161: "Core Scalable Profile @ Level1", 162: "Core Scalable Profile @ Level2", 163: "Core Scalable Profile @ Level3", 177: "Advanced Coding Efficiency Profile @ Level 1", 178: "Advanced Coding Efficiency Profile @ Level 2", 179: "Advanced Coding Efficiency Profile @ Level 3", 180: "Advanced Coding Efficiency Profile @ Level 4", 193: "Advanced Core Profile @ Level 1", 194: "Advanced Core Profile @ Level 2", 209: "Advanced Scalable Texture @ Level1", 210: "Advanced Scalable Texture @ Level2", 225: "Simple Studio Profile @ Level 1", 226: "Simple Studio Profile @ Level 2", 227: "Simple Studio Profile @ Level 3", 228: "Simple Studio Profile @ Level 4", 229: "Core Studio Profile @ Level 1", 230: "Core Studio Profile @ Level 2", 231: "Core Studio Profile @ Level 3", 232: "Core Studio Profile @ Level 4", 240: "Advanced Simple Profile @ Level 0", 241: "Advanced Simple Profile @ Level 1", 242: "Advanced Simple Profile @ Level 2", 243: "Advanced Simple Profile @ Level 3", 244: "Advanced Simple Profile @ Level 4", 245: "Advanced Simple Profile @ Level 5", 247: "Advanced Simple Profile @ Level 3b", 248: "Fine Granularity Scalable Profile @ Level 0", 249: "Fine Granularity Scalable Profile @ Level 1", 250: "Fine Granularity Scalable Profile @ Level 2", 251: "Fine Granularity Scalable Profile @ Level 3", 252: "Fine Granularity Scalable Profile @ Level 4", 253: "Fine Granularity Scalable Profile @ Level 5", 254: "Not part of MPEG-4 Visual profiles", 255: "No visual capability required"})
         # end if
-        return QuicktimeIODSvideoProfileNameLookup[video_profile_id] if (php_isset(lambda : QuicktimeIODSvideoProfileNameLookup[video_profile_id])) else "ISO Reserved Profile"
+        return quicktimeiodsvideoprofilename.QuicktimeIODSvideoProfileNameLookup[video_profile_id] if (php_isset(lambda : quicktimeiodsvideoprofilename.QuicktimeIODSvideoProfileNameLookup[video_profile_id])) else "ISO Reserved Profile"
     # end def quicktimeiodsvideoprofilename
     #// 
     #// @param int $rtng
@@ -2651,13 +2651,13 @@ class getid3_quicktime(getid3_handler):
     #//
     def quicktimecontentratinglookup(self, rtng=None):
         
-        QuicktimeContentRatingLookup = Array()
-        if php_empty(lambda : QuicktimeContentRatingLookup):
-            QuicktimeContentRatingLookup[0] = "None"
-            QuicktimeContentRatingLookup[2] = "Clean"
-            QuicktimeContentRatingLookup[4] = "Explicit"
+        quicktimecontentratinglookup.QuicktimeContentRatingLookup = Array()
+        if php_empty(lambda : quicktimecontentratinglookup.QuicktimeContentRatingLookup):
+            quicktimecontentratinglookup.QuicktimeContentRatingLookup[0] = "None"
+            quicktimecontentratinglookup.QuicktimeContentRatingLookup[2] = "Clean"
+            quicktimecontentratinglookup.QuicktimeContentRatingLookup[4] = "Explicit"
         # end if
-        return QuicktimeContentRatingLookup[rtng] if (php_isset(lambda : QuicktimeContentRatingLookup[rtng])) else "invalid"
+        return quicktimecontentratinglookup.QuicktimeContentRatingLookup[rtng] if (php_isset(lambda : quicktimecontentratinglookup.QuicktimeContentRatingLookup[rtng])) else "invalid"
     # end def quicktimecontentratinglookup
     #// 
     #// @param int $akid
@@ -2666,12 +2666,12 @@ class getid3_quicktime(getid3_handler):
     #//
     def quicktimestoreaccounttypelookup(self, akid=None):
         
-        QuicktimeStoreAccountTypeLookup = Array()
-        if php_empty(lambda : QuicktimeStoreAccountTypeLookup):
-            QuicktimeStoreAccountTypeLookup[0] = "iTunes"
-            QuicktimeStoreAccountTypeLookup[1] = "AOL"
+        quicktimestoreaccounttypelookup.QuicktimeStoreAccountTypeLookup = Array()
+        if php_empty(lambda : quicktimestoreaccounttypelookup.QuicktimeStoreAccountTypeLookup):
+            quicktimestoreaccounttypelookup.QuicktimeStoreAccountTypeLookup[0] = "iTunes"
+            quicktimestoreaccounttypelookup.QuicktimeStoreAccountTypeLookup[1] = "AOL"
         # end if
-        return QuicktimeStoreAccountTypeLookup[akid] if (php_isset(lambda : QuicktimeStoreAccountTypeLookup[akid])) else "invalid"
+        return quicktimestoreaccounttypelookup.QuicktimeStoreAccountTypeLookup[akid] if (php_isset(lambda : quicktimestoreaccounttypelookup.QuicktimeStoreAccountTypeLookup[akid])) else "invalid"
     # end def quicktimestoreaccounttypelookup
     #// 
     #// @param int $sfid
@@ -2680,32 +2680,32 @@ class getid3_quicktime(getid3_handler):
     #//
     def quicktimestorefrontcodelookup(self, sfid=None):
         
-        QuicktimeStoreFrontCodeLookup = Array()
-        if php_empty(lambda : QuicktimeStoreFrontCodeLookup):
-            QuicktimeStoreFrontCodeLookup[143460] = "Australia"
-            QuicktimeStoreFrontCodeLookup[143445] = "Austria"
-            QuicktimeStoreFrontCodeLookup[143446] = "Belgium"
-            QuicktimeStoreFrontCodeLookup[143455] = "Canada"
-            QuicktimeStoreFrontCodeLookup[143458] = "Denmark"
-            QuicktimeStoreFrontCodeLookup[143447] = "Finland"
-            QuicktimeStoreFrontCodeLookup[143442] = "France"
-            QuicktimeStoreFrontCodeLookup[143443] = "Germany"
-            QuicktimeStoreFrontCodeLookup[143448] = "Greece"
-            QuicktimeStoreFrontCodeLookup[143449] = "Ireland"
-            QuicktimeStoreFrontCodeLookup[143450] = "Italy"
-            QuicktimeStoreFrontCodeLookup[143462] = "Japan"
-            QuicktimeStoreFrontCodeLookup[143451] = "Luxembourg"
-            QuicktimeStoreFrontCodeLookup[143452] = "Netherlands"
-            QuicktimeStoreFrontCodeLookup[143461] = "New Zealand"
-            QuicktimeStoreFrontCodeLookup[143457] = "Norway"
-            QuicktimeStoreFrontCodeLookup[143453] = "Portugal"
-            QuicktimeStoreFrontCodeLookup[143454] = "Spain"
-            QuicktimeStoreFrontCodeLookup[143456] = "Sweden"
-            QuicktimeStoreFrontCodeLookup[143459] = "Switzerland"
-            QuicktimeStoreFrontCodeLookup[143444] = "United Kingdom"
-            QuicktimeStoreFrontCodeLookup[143441] = "United States"
+        quicktimestorefrontcodelookup.QuicktimeStoreFrontCodeLookup = Array()
+        if php_empty(lambda : quicktimestorefrontcodelookup.QuicktimeStoreFrontCodeLookup):
+            quicktimestorefrontcodelookup.QuicktimeStoreFrontCodeLookup[143460] = "Australia"
+            quicktimestorefrontcodelookup.QuicktimeStoreFrontCodeLookup[143445] = "Austria"
+            quicktimestorefrontcodelookup.QuicktimeStoreFrontCodeLookup[143446] = "Belgium"
+            quicktimestorefrontcodelookup.QuicktimeStoreFrontCodeLookup[143455] = "Canada"
+            quicktimestorefrontcodelookup.QuicktimeStoreFrontCodeLookup[143458] = "Denmark"
+            quicktimestorefrontcodelookup.QuicktimeStoreFrontCodeLookup[143447] = "Finland"
+            quicktimestorefrontcodelookup.QuicktimeStoreFrontCodeLookup[143442] = "France"
+            quicktimestorefrontcodelookup.QuicktimeStoreFrontCodeLookup[143443] = "Germany"
+            quicktimestorefrontcodelookup.QuicktimeStoreFrontCodeLookup[143448] = "Greece"
+            quicktimestorefrontcodelookup.QuicktimeStoreFrontCodeLookup[143449] = "Ireland"
+            quicktimestorefrontcodelookup.QuicktimeStoreFrontCodeLookup[143450] = "Italy"
+            quicktimestorefrontcodelookup.QuicktimeStoreFrontCodeLookup[143462] = "Japan"
+            quicktimestorefrontcodelookup.QuicktimeStoreFrontCodeLookup[143451] = "Luxembourg"
+            quicktimestorefrontcodelookup.QuicktimeStoreFrontCodeLookup[143452] = "Netherlands"
+            quicktimestorefrontcodelookup.QuicktimeStoreFrontCodeLookup[143461] = "New Zealand"
+            quicktimestorefrontcodelookup.QuicktimeStoreFrontCodeLookup[143457] = "Norway"
+            quicktimestorefrontcodelookup.QuicktimeStoreFrontCodeLookup[143453] = "Portugal"
+            quicktimestorefrontcodelookup.QuicktimeStoreFrontCodeLookup[143454] = "Spain"
+            quicktimestorefrontcodelookup.QuicktimeStoreFrontCodeLookup[143456] = "Sweden"
+            quicktimestorefrontcodelookup.QuicktimeStoreFrontCodeLookup[143459] = "Switzerland"
+            quicktimestorefrontcodelookup.QuicktimeStoreFrontCodeLookup[143444] = "United Kingdom"
+            quicktimestorefrontcodelookup.QuicktimeStoreFrontCodeLookup[143441] = "United States"
         # end if
-        return QuicktimeStoreFrontCodeLookup[sfid] if (php_isset(lambda : QuicktimeStoreFrontCodeLookup[sfid])) else "invalid"
+        return quicktimestorefrontcodelookup.QuicktimeStoreFrontCodeLookup[sfid] if (php_isset(lambda : quicktimestorefrontcodelookup.QuicktimeStoreFrontCodeLookup[sfid])) else "invalid"
     # end def quicktimestorefrontcodelookup
     #// 
     #// @param string $atom_data
@@ -2904,130 +2904,130 @@ class getid3_quicktime(getid3_handler):
     #//
     def copytoappropriatecommentssection(self, keyname=None, data=None, boxname=""):
         
-        handyatomtranslatorarray = Array()
-        if php_empty(lambda : handyatomtranslatorarray):
+        copytoappropriatecommentssection.handyatomtranslatorarray = Array()
+        if php_empty(lambda : copytoappropriatecommentssection.handyatomtranslatorarray):
             #// http://www.geocities.com/xhelmboyx/quicktime/formats/qtm-layout.txt
             #// http://www.geocities.com/xhelmboyx/quicktime/formats/mp4-layout.txt
             #// http://atomicparsley.sourceforge.net/mpeg-4files.html
             #// https://code.google.com/p/mp4v2/wiki/iTunesMetadata
-            handyatomtranslatorarray["©" + "alb"] = "album"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "alb"] = "album"
             #// iTunes 4.0
-            handyatomtranslatorarray["©" + "ART"] = "artist"
-            handyatomtranslatorarray["©" + "art"] = "artist"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "ART"] = "artist"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "art"] = "artist"
             #// iTunes 4.0
-            handyatomtranslatorarray["©" + "aut"] = "author"
-            handyatomtranslatorarray["©" + "cmt"] = "comment"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "aut"] = "author"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "cmt"] = "comment"
             #// iTunes 4.0
-            handyatomtranslatorarray["©" + "com"] = "comment"
-            handyatomtranslatorarray["©" + "cpy"] = "copyright"
-            handyatomtranslatorarray["©" + "day"] = "creation_date"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "com"] = "comment"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "cpy"] = "copyright"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "day"] = "creation_date"
             #// iTunes 4.0
-            handyatomtranslatorarray["©" + "dir"] = "director"
-            handyatomtranslatorarray["©" + "ed1"] = "edit1"
-            handyatomtranslatorarray["©" + "ed2"] = "edit2"
-            handyatomtranslatorarray["©" + "ed3"] = "edit3"
-            handyatomtranslatorarray["©" + "ed4"] = "edit4"
-            handyatomtranslatorarray["©" + "ed5"] = "edit5"
-            handyatomtranslatorarray["©" + "ed6"] = "edit6"
-            handyatomtranslatorarray["©" + "ed7"] = "edit7"
-            handyatomtranslatorarray["©" + "ed8"] = "edit8"
-            handyatomtranslatorarray["©" + "ed9"] = "edit9"
-            handyatomtranslatorarray["©" + "enc"] = "encoded_by"
-            handyatomtranslatorarray["©" + "fmt"] = "format"
-            handyatomtranslatorarray["©" + "gen"] = "genre"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "dir"] = "director"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "ed1"] = "edit1"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "ed2"] = "edit2"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "ed3"] = "edit3"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "ed4"] = "edit4"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "ed5"] = "edit5"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "ed6"] = "edit6"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "ed7"] = "edit7"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "ed8"] = "edit8"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "ed9"] = "edit9"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "enc"] = "encoded_by"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "fmt"] = "format"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "gen"] = "genre"
             #// iTunes 4.0
-            handyatomtranslatorarray["©" + "grp"] = "grouping"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "grp"] = "grouping"
             #// iTunes 4.2
-            handyatomtranslatorarray["©" + "hst"] = "host_computer"
-            handyatomtranslatorarray["©" + "inf"] = "information"
-            handyatomtranslatorarray["©" + "lyr"] = "lyrics"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "hst"] = "host_computer"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "inf"] = "information"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "lyr"] = "lyrics"
             #// iTunes 5.0
-            handyatomtranslatorarray["©" + "mak"] = "make"
-            handyatomtranslatorarray["©" + "mod"] = "model"
-            handyatomtranslatorarray["©" + "nam"] = "title"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "mak"] = "make"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "mod"] = "model"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "nam"] = "title"
             #// iTunes 4.0
-            handyatomtranslatorarray["©" + "ope"] = "composer"
-            handyatomtranslatorarray["©" + "prd"] = "producer"
-            handyatomtranslatorarray["©" + "PRD"] = "product"
-            handyatomtranslatorarray["©" + "prf"] = "performers"
-            handyatomtranslatorarray["©" + "req"] = "system_requirements"
-            handyatomtranslatorarray["©" + "src"] = "source_credit"
-            handyatomtranslatorarray["©" + "swr"] = "software"
-            handyatomtranslatorarray["©" + "too"] = "encoding_tool"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "ope"] = "composer"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "prd"] = "producer"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "PRD"] = "product"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "prf"] = "performers"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "req"] = "system_requirements"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "src"] = "source_credit"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "swr"] = "software"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "too"] = "encoding_tool"
             #// iTunes 4.0
-            handyatomtranslatorarray["©" + "trk"] = "track_number"
-            handyatomtranslatorarray["©" + "url"] = "url"
-            handyatomtranslatorarray["©" + "wrn"] = "warning"
-            handyatomtranslatorarray["©" + "wrt"] = "composer"
-            handyatomtranslatorarray["aART"] = "album_artist"
-            handyatomtranslatorarray["apID"] = "purchase_account"
-            handyatomtranslatorarray["catg"] = "category"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "trk"] = "track_number"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "url"] = "url"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "wrn"] = "warning"
+            copytoappropriatecommentssection.handyatomtranslatorarray["©" + "wrt"] = "composer"
+            copytoappropriatecommentssection.handyatomtranslatorarray["aART"] = "album_artist"
+            copytoappropriatecommentssection.handyatomtranslatorarray["apID"] = "purchase_account"
+            copytoappropriatecommentssection.handyatomtranslatorarray["catg"] = "category"
             #// iTunes 4.9
-            handyatomtranslatorarray["covr"] = "picture"
+            copytoappropriatecommentssection.handyatomtranslatorarray["covr"] = "picture"
             #// iTunes 4.0
-            handyatomtranslatorarray["cpil"] = "compilation"
+            copytoappropriatecommentssection.handyatomtranslatorarray["cpil"] = "compilation"
             #// iTunes 4.0
-            handyatomtranslatorarray["cprt"] = "copyright"
+            copytoappropriatecommentssection.handyatomtranslatorarray["cprt"] = "copyright"
             #// iTunes 4.0?
-            handyatomtranslatorarray["desc"] = "description"
+            copytoappropriatecommentssection.handyatomtranslatorarray["desc"] = "description"
             #// iTunes 5.0
-            handyatomtranslatorarray["disk"] = "disc_number"
+            copytoappropriatecommentssection.handyatomtranslatorarray["disk"] = "disc_number"
             #// iTunes 4.0
-            handyatomtranslatorarray["egid"] = "episode_guid"
+            copytoappropriatecommentssection.handyatomtranslatorarray["egid"] = "episode_guid"
             #// iTunes 4.9
-            handyatomtranslatorarray["gnre"] = "genre"
+            copytoappropriatecommentssection.handyatomtranslatorarray["gnre"] = "genre"
             #// iTunes 4.0
-            handyatomtranslatorarray["hdvd"] = "hd_video"
+            copytoappropriatecommentssection.handyatomtranslatorarray["hdvd"] = "hd_video"
             #// iTunes 4.0
-            handyatomtranslatorarray["ldes"] = "description_long"
+            copytoappropriatecommentssection.handyatomtranslatorarray["ldes"] = "description_long"
             #//
-            handyatomtranslatorarray["keyw"] = "keyword"
+            copytoappropriatecommentssection.handyatomtranslatorarray["keyw"] = "keyword"
             #// iTunes 4.9
-            handyatomtranslatorarray["pcst"] = "podcast"
+            copytoappropriatecommentssection.handyatomtranslatorarray["pcst"] = "podcast"
             #// iTunes 4.9
-            handyatomtranslatorarray["pgap"] = "gapless_playback"
+            copytoappropriatecommentssection.handyatomtranslatorarray["pgap"] = "gapless_playback"
             #// iTunes 7.0
-            handyatomtranslatorarray["purd"] = "purchase_date"
+            copytoappropriatecommentssection.handyatomtranslatorarray["purd"] = "purchase_date"
             #// iTunes 6.0.2
-            handyatomtranslatorarray["purl"] = "podcast_url"
+            copytoappropriatecommentssection.handyatomtranslatorarray["purl"] = "podcast_url"
             #// iTunes 4.9
-            handyatomtranslatorarray["rtng"] = "rating"
+            copytoappropriatecommentssection.handyatomtranslatorarray["rtng"] = "rating"
             #// iTunes 4.0
-            handyatomtranslatorarray["soaa"] = "sort_album_artist"
+            copytoappropriatecommentssection.handyatomtranslatorarray["soaa"] = "sort_album_artist"
             #//
-            handyatomtranslatorarray["soal"] = "sort_album"
+            copytoappropriatecommentssection.handyatomtranslatorarray["soal"] = "sort_album"
             #//
-            handyatomtranslatorarray["soar"] = "sort_artist"
+            copytoappropriatecommentssection.handyatomtranslatorarray["soar"] = "sort_artist"
             #//
-            handyatomtranslatorarray["soco"] = "sort_composer"
+            copytoappropriatecommentssection.handyatomtranslatorarray["soco"] = "sort_composer"
             #//
-            handyatomtranslatorarray["sonm"] = "sort_title"
+            copytoappropriatecommentssection.handyatomtranslatorarray["sonm"] = "sort_title"
             #//
-            handyatomtranslatorarray["sosn"] = "sort_show"
+            copytoappropriatecommentssection.handyatomtranslatorarray["sosn"] = "sort_show"
             #//
-            handyatomtranslatorarray["stik"] = "stik"
+            copytoappropriatecommentssection.handyatomtranslatorarray["stik"] = "stik"
             #// iTunes 4.9
-            handyatomtranslatorarray["tmpo"] = "bpm"
+            copytoappropriatecommentssection.handyatomtranslatorarray["tmpo"] = "bpm"
             #// iTunes 4.0
-            handyatomtranslatorarray["trkn"] = "track_number"
+            copytoappropriatecommentssection.handyatomtranslatorarray["trkn"] = "track_number"
             #// iTunes 4.0
-            handyatomtranslatorarray["tven"] = "tv_episode_id"
+            copytoappropriatecommentssection.handyatomtranslatorarray["tven"] = "tv_episode_id"
             #//
-            handyatomtranslatorarray["tves"] = "tv_episode"
+            copytoappropriatecommentssection.handyatomtranslatorarray["tves"] = "tv_episode"
             #// iTunes 6.0
-            handyatomtranslatorarray["tvnn"] = "tv_network_name"
+            copytoappropriatecommentssection.handyatomtranslatorarray["tvnn"] = "tv_network_name"
             #// iTunes 6.0
-            handyatomtranslatorarray["tvsh"] = "tv_show_name"
+            copytoappropriatecommentssection.handyatomtranslatorarray["tvsh"] = "tv_show_name"
             #// iTunes 6.0
-            handyatomtranslatorarray["tvsn"] = "tv_season"
+            copytoappropriatecommentssection.handyatomtranslatorarray["tvsn"] = "tv_season"
             pass
         # end if
         info = self.getid3.info
         comment_key = ""
         if boxname and boxname != keyname:
-            comment_key = handyatomtranslatorarray[boxname] if (php_isset(lambda : handyatomtranslatorarray[boxname])) else boxname
-        elif (php_isset(lambda : handyatomtranslatorarray[keyname])):
-            comment_key = handyatomtranslatorarray[keyname]
+            comment_key = copytoappropriatecommentssection.handyatomtranslatorarray[boxname] if (php_isset(lambda : copytoappropriatecommentssection.handyatomtranslatorarray[boxname])) else boxname
+        elif (php_isset(lambda : copytoappropriatecommentssection.handyatomtranslatorarray[keyname])):
+            comment_key = copytoappropriatecommentssection.handyatomtranslatorarray[keyname]
         # end if
         if comment_key:
             if comment_key == "picture":
