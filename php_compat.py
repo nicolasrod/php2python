@@ -25,31 +25,6 @@ _HEADERS = {}
 _HEADERS_PRINTED = False
 _AUTOLOAD_FN = None
 
-"""
-_PHP_INI_FILE = Array({
-    "max_execution_time": 36000,
-    "memory_limit": "128000000",
-    "allow_url_fopen": False,
-    "safe_mode": True,
-    "upload_tmp_dir": "/tmp",
-    "open_basedir": "",
-    "disable_functions": "",
-    "upload_max_filesize": "1000000000",
-    "post_max_size": "1000000000",
-    "sendmail_path": "",
-    "sendmail_from": "",
-    "zlib.output_compression": False,
-    "output_handler": "",
-    "error_reporting": "",
-    "error_log": "",
-    "user_agent": "",
-    "disable_classes": "",
-    "register_globals": False
-})
-"""
-
-
-
 
 def php_yield(var_):
     try:
