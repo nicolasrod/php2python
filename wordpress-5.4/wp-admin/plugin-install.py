@@ -38,7 +38,7 @@ pagenum = wp_list_table.get_pagenum()
 if (not php_empty(lambda : PHP_REQUEST["_wp_http_referer"])):
     location = remove_query_arg("_wp_http_referer", wp_unslash(PHP_SERVER["REQUEST_URI"]))
     if (not php_empty(lambda : PHP_REQUEST["paged"])):
-        location = add_query_arg("paged", int(PHP_REQUEST["paged"]), location)
+        location = add_query_arg("paged", php_int(PHP_REQUEST["paged"]), location)
     # end if
     wp_redirect(location)
     php_exit(0)
