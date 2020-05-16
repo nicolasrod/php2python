@@ -136,9 +136,9 @@ do_meta_boxes(None, "advanced", link)
 php_print("</div>\n")
 if link_id:
     php_print("<input type=\"hidden\" name=\"action\" value=\"save\" />\n<input type=\"hidden\" name=\"link_id\" value=\"")
-    php_print(int(link_id))
+    php_print(php_int(link_id))
     php_print("\" />\n<input type=\"hidden\" name=\"cat_id\" value=\"")
-    php_print(int(cat_id))
+    php_print(php_int(cat_id))
     php_print("\" />\n")
 else:
     php_print("<input type=\"hidden\" name=\"action\" value=\"add\" />\n")

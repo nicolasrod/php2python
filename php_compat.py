@@ -16,6 +16,7 @@ import base64
 from datetime import datetime
 from urllib.parse import urlparse
 from contextlib import redirect_stdout
+import json
 
 _PHP_INCLUDES = {}
 __DIR__ = os.getcwd()
@@ -23,7 +24,9 @@ __FILE__ = os.path.join(__DIR__, os.path.basename(__file__))
 _HEADERS = {}
 _HEADERS_PRINTED = False
 _AUTOLOAD_FN = None
-_PHP_INI_FILE = {
+
+"""
+_PHP_INI_FILE = Array({
     "max_execution_time": 36000,
     "memory_limit": "128000000",
     "allow_url_fopen": False,
@@ -42,7 +45,10 @@ _PHP_INI_FILE = {
     "user_agent": "",
     "disable_classes": "",
     "register_globals": False
-}
+})
+"""
+
+
 
 
 def php_yield(var_):
@@ -168,6 +174,11 @@ class Array():
             self.data[k] = Array()
         return self.data[k]
 
+    def get(self, k, def_):
+        if self.has_key(k):
+            return self.__getitem__(k)
+        return def_
+
     def __setitem__(self, k, v=None):
         if v is None:
             self.data[self.get_next_idx()] = k
@@ -281,6 +292,19 @@ class Array():
 class HandleObj:
     pass
 
+# =============================================================0
+# Load "PHP" INI file
+
+_src = os.path.dirname(os.getenv('PHP2PY_COMPAT', __file__))
+
+with open(os.path.join(_src, 'php_compat.ini'), 'r') as f:
+    data = f.read()
+    _ini_json = json.loads(data)
+
+_PHP_INI_FILE = Array(_ini_json)
+_PHP_INI_FILE_DETAILS = Array(dict(
+    [(k, Array({'global_value': v, 'local_value': v, 'access': 7})) 
+    for k, v in _ini_json.items()]))
 
 # =============================================================0
 
@@ -432,6 +456,7 @@ class Switch(object):
 
 def php_new_class(klass, ctr):
     if not klass in globals():
+        print(">>>", _AUTOLOAD_FN, klass, ctr)
         php_call_user_func(_AUTOLOAD_FN, klass)
 
     return ctr()
@@ -1246,7 +1271,9 @@ def php_ini_get(_varname):
 
 
 def php_ini_get_all(_extension=None, _details=True):
-    return Array(_PHP_INI_FILE)
+    if _details:
+        return _PHP_INI_FILE_DETAILS
+    return _PHP_INI_FILE
 
 
 def php_ini_set(_varname, _newvalue):
@@ -1298,7 +1325,7 @@ def php_is_link(_filename):
     return os.path.islink(_filename)
 
 
-def php_is_null(_var):
+def php_is_None(_var):
     return _var is None
 
 
@@ -1367,9 +1394,9 @@ def php_ltrim(_str, _character_mask=None):
 
 def php_max(_values, *args):    
     """
-    >>> php_max(2, 3, 1, 6, 7)
+    >> php_max(2, 3, 1, 6, 7)
     7
-    >>> php_max(Array(2, 4, 5))
+    >> php_max(Array(2, 4, 5))
     5
 
     >> php_max(0, 'hello')
@@ -1390,7 +1417,7 @@ def php_max(_values, *args):
     // as comparisons treat arrays as greater than any other value
     $val = max('string', array(2, 5, 7), 42);   // array(2, 5, 7)
 
-    // If one argument is NULL or a boolean, it will be compared against
+    // If one argument is None or a boolean, it will be compared against
     // other values using the rule FALSE < TRUE regardless of the other types involved
     // In the below example, -10 is treated as TRUE in the comparison
     $val = max(-10, FALSE); // -10
@@ -1967,6 +1994,68 @@ def php_strncmp(s1, s2, l):
         return 1
 
     return 0
+
+
+def php_bool(v):
+    pass
+
+def php_float(v):
+    return float(v)
+
+def php_int(v, base=10):
+    """
+    >>> php_int(42)
+    42
+    >>> php_int(4.2)
+    4
+    >>> php_int('42')
+    42
+    >>> php_int('+42')
+    42
+    >>> php_int('-42')
+    -42
+    >>> php_int('042')
+    42
+    >>> php_int(0x1A)
+    26
+    >>> php_int(42000000)
+    42000000
+    >>> php_int(42, 8)
+    42
+    >>> php_int('42', 8)
+    34
+    >>> php_int(Array())
+    0
+    >>> php_int(Array('foo', 'bar'))
+    1
+    >>> php_int(False)
+    0
+    >>> php_int(True)
+    1
+    
+    php_int(042) => 34
+    php_int('1e10'); => 1
+    # TODO: handle overflow!
+    php_int(420000000000000000000) => 0
+    php_int('420000000000000000000') => 2147483647
+    """
+    if isinstance(v, bool):
+        return 1 if v else 0
+    if isinstance(v, Array):
+        return 0 if len(v) == 0 else 1
+
+    if base != 10:
+        if not isinstance(v, str):
+            return int(v)
+        return int(v, base)
+
+    try:
+        return int(v)
+    except:
+        return int(''.join([x for x in str(v) if not x.isalpha()]))
+
+def php_str(v):
+    return str(v)
 
 # ========================================================================================
 

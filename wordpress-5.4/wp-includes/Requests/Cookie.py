@@ -222,7 +222,7 @@ class Requests_Cookie():
                 if (not php_preg_match("/^-?\\d+$/", value)):
                     return None
                 # end if
-                delta_seconds = int(value)
+                delta_seconds = php_int(value)
                 if delta_seconds <= 0:
                     expiry_time = 0
                 else:

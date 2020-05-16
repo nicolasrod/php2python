@@ -421,7 +421,7 @@ class WP_Customize_Nav_Menu_Item_Setting(WP_Customize_Setting):
         if "post_type" == post.type and (not php_empty(lambda : post.object_id)):
             post.url = get_permalink(post.object_id)
         elif "taxonomy" == post.type and (not php_empty(lambda : post.object)) and (not php_empty(lambda : post.object_id)):
-            post.url = get_term_link(int(post.object_id), post.object)
+            post.url = get_term_link(php_int(post.object_id), post.object)
         elif "post_type_archive" == post.type and (not php_empty(lambda : post.object)):
             post.url = get_post_type_archive_link(post.object)
         # end if
@@ -494,7 +494,7 @@ class WP_Customize_Nav_Menu_Item_Setting(WP_Customize_Setting):
         if "publish" != menu_item_value["status"]:
             menu_item_value["status"] = "draft"
         # end if
-        menu_item_value["_invalid"] = bool(menu_item_value["_invalid"])
+        menu_item_value["_invalid"] = php_bool(menu_item_value["_invalid"])
         #// This filter is documented in wp-includes/class-wp-customize-setting.php
         return apply_filters(str("customize_sanitize_") + str(self.id), menu_item_value, self)
     # end def sanitize

@@ -103,7 +103,7 @@ class WP_Http_Streams():
         # end if
         proxy = php_new_class("WP_HTTP_Proxy", lambda : WP_HTTP_Proxy())
         context = stream_context_create(Array({"ssl": Array({"verify_peer": ssl_verify, "capture_peer_cert": ssl_verify, "SNI_enabled": True, "cafile": parsed_args["sslcertificates"], "allow_self_signed": (not ssl_verify)})}))
-        timeout = int(floor(parsed_args["timeout"]))
+        timeout = php_int(floor(parsed_args["timeout"]))
         utimeout = 0 if timeout == parsed_args["timeout"] else 1000000 * parsed_args["timeout"] % 1000000
         connect_timeout = php_max(timeout, 1)
         #// Store error number.
@@ -173,7 +173,7 @@ class WP_Http_Streams():
             strHeaders += proxy.authentication_header() + "\r\n"
         # end if
         strHeaders += "\r\n"
-        if (not php_is_null(parsed_args["body"])):
+        if (not is_null(parsed_args["body"])):
             strHeaders += parsed_args["body"]
         # end if
         fwrite(handle, strHeaders)

@@ -149,7 +149,7 @@ def register_sidebars(number=1, args=Array(), *args_):
     
     global wp_registered_sidebars
     php_check_if_defined("wp_registered_sidebars")
-    number = int(number)
+    number = php_int(number)
     if php_is_string(args):
         parse_str(args, args)
     # end if
@@ -477,8 +477,8 @@ def wp_register_widget_control(id=None, name=None, control_callback=None, option
     defaults = Array({"width": 250, "height": 200})
     #// Height is never used.
     options = wp_parse_args(options, defaults)
-    options["width"] = int(options["width"])
-    options["height"] = int(options["height"])
+    options["width"] = php_int(options["width"])
+    options["height"] = php_int(options["height"])
     widget = Array({"name": name, "id": id, "callback": control_callback, "params": params})
     widget = php_array_merge(widget, options)
     wp_registered_widget_controls[id] = widget
@@ -553,8 +553,8 @@ def _register_widget_form_callback(id=None, name=None, form_callback=None, optio
     # end if
     defaults = Array({"width": 250, "height": 200})
     options = wp_parse_args(options, defaults)
-    options["width"] = int(options["width"])
-    options["height"] = int(options["height"])
+    options["width"] = php_int(options["width"])
+    options["height"] = php_int(options["height"])
     widget = Array({"name": name, "id": id, "callback": form_callback, "params": params})
     widget = php_array_merge(widget, options)
     wp_registered_widget_controls[id] = widget
@@ -1115,7 +1115,7 @@ def retrieve_widgets(theme_changed=False, *args_):
     for key,widget_id in lost_widgets:
         number = php_preg_replace("/.+?-([0-9]+)$/", "$1", widget_id)
         #// Only keep active and default widgets.
-        if php_is_numeric(number) and int(number) < 2:
+        if php_is_numeric(number) and php_int(number) < 2:
             lost_widgets[key] = None
         # end if
     # end for
@@ -1310,13 +1310,13 @@ def wp_widget_rss_output(rss=None, args=Array(), *args_):
     # end if
     default_args = Array({"show_author": 0, "show_date": 0, "show_summary": 0, "items": 0})
     args = wp_parse_args(args, default_args)
-    items = int(args["items"])
+    items = php_int(args["items"])
     if items < 1 or 20 < items:
         items = 10
     # end if
-    show_summary = int(args["show_summary"])
-    show_author = int(args["show_author"])
-    show_date = int(args["show_date"])
+    show_summary = php_int(args["show_summary"])
+    show_author = php_int(args["show_author"])
+    show_date = php_int(args["show_date"])
     if (not rss.get_item_quantity()):
         php_print("<ul><li>" + __("An error has occurred, which probably means the feed is down. Try again later.") + "</li></ul>")
         rss.__del__()
@@ -1394,13 +1394,13 @@ def wp_widget_rss_form(args=None, inputs=None, *args_):
     inputs = wp_parse_args(inputs, default_inputs)
     args["title"] = args["title"] if (php_isset(lambda : args["title"])) else ""
     args["url"] = args["url"] if (php_isset(lambda : args["url"])) else ""
-    args["items"] = int(args["items"]) if (php_isset(lambda : args["items"])) else 0
+    args["items"] = php_int(args["items"]) if (php_isset(lambda : args["items"])) else 0
     if args["items"] < 1 or 20 < args["items"]:
         args["items"] = 10
     # end if
-    args["show_summary"] = int(args["show_summary"]) if (php_isset(lambda : args["show_summary"])) else int(inputs["show_summary"])
-    args["show_author"] = int(args["show_author"]) if (php_isset(lambda : args["show_author"])) else int(inputs["show_author"])
-    args["show_date"] = int(args["show_date"]) if (php_isset(lambda : args["show_date"])) else int(inputs["show_date"])
+    args["show_summary"] = php_int(args["show_summary"]) if (php_isset(lambda : args["show_summary"])) else php_int(inputs["show_summary"])
+    args["show_author"] = php_int(args["show_author"]) if (php_isset(lambda : args["show_author"])) else php_int(inputs["show_author"])
+    args["show_date"] = php_int(args["show_date"]) if (php_isset(lambda : args["show_date"])) else php_int(inputs["show_date"])
     if (not php_empty(lambda : args["error"])):
         php_print("<p class=\"widget-error\"><strong>" + __("RSS Error:") + "</strong> " + args["error"] + "</p>")
     # end if
@@ -1523,15 +1523,15 @@ def wp_widget_rss_form(args=None, inputs=None, *args_):
 #//
 def wp_widget_rss_process(widget_rss=None, check_feed=True, *args_):
     
-    items = int(widget_rss["items"])
+    items = php_int(widget_rss["items"])
     if items < 1 or 20 < items:
         items = 10
     # end if
     url = esc_url_raw(strip_tags(widget_rss["url"]))
     title = php_trim(strip_tags(widget_rss["title"])) if (php_isset(lambda : widget_rss["title"])) else ""
-    show_summary = int(widget_rss["show_summary"]) if (php_isset(lambda : widget_rss["show_summary"])) else 0
-    show_author = int(widget_rss["show_author"]) if (php_isset(lambda : widget_rss["show_author"])) else 0
-    show_date = int(widget_rss["show_date"]) if (php_isset(lambda : widget_rss["show_date"])) else 0
+    show_summary = php_int(widget_rss["show_summary"]) if (php_isset(lambda : widget_rss["show_summary"])) else 0
+    show_author = php_int(widget_rss["show_author"]) if (php_isset(lambda : widget_rss["show_author"])) else 0
+    show_date = php_int(widget_rss["show_date"]) if (php_isset(lambda : widget_rss["show_date"])) else 0
     if check_feed:
         rss = fetch_feed(url)
         error = False

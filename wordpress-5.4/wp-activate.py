@@ -156,8 +156,8 @@ else:
         # end if
         php_print("         ")
     else:
-        url = get_home_url(int(result["blog_id"])) if (php_isset(lambda : result["blog_id"])) else ""
-        user = get_userdata(int(result["user_id"]))
+        url = get_home_url(php_int(result["blog_id"])) if (php_isset(lambda : result["blog_id"])) else ""
+        user = get_userdata(php_int(result["user_id"]))
         php_print("         <h2>")
         _e("Your account is now active!")
         php_print("""</h2>
@@ -174,7 +174,7 @@ else:
         </div>
         """)
         if url and network_home_url("", "http") != url:
-            switch_to_blog(int(result["blog_id"]))
+            switch_to_blog(php_int(result["blog_id"]))
             login_url = wp_login_url()
             restore_current_blog()
             php_print("             <p class=\"view\">\n                ")

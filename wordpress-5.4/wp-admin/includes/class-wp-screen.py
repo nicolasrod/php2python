@@ -133,12 +133,12 @@ class WP_Screen():
             # end if
             for case in Switch(base):
                 if case("post"):
-                    if (php_isset(lambda : PHP_REQUEST["post"])) and (php_isset(lambda : PHP_POST["post_ID"])) and int(PHP_REQUEST["post"]) != int(PHP_POST["post_ID"]):
+                    if (php_isset(lambda : PHP_REQUEST["post"])) and (php_isset(lambda : PHP_POST["post_ID"])) and php_int(PHP_REQUEST["post"]) != php_int(PHP_POST["post_ID"]):
                         wp_die(__("A post ID mismatch has been detected."), __("Sorry, you are not allowed to edit this item."), 400)
                     elif (php_isset(lambda : PHP_REQUEST["post"])):
-                        post_id = int(PHP_REQUEST["post"])
+                        post_id = php_int(PHP_REQUEST["post"])
                     elif (php_isset(lambda : PHP_POST["post_ID"])):
-                        post_id = int(PHP_POST["post_ID"])
+                        post_id = php_int(PHP_POST["post_ID"])
                     else:
                         post_id = 0
                     # end if
@@ -225,8 +225,8 @@ class WP_Screen():
         # end if
         screen.base = base
         screen.action = action
-        screen.post_type = str(post_type)
-        screen.taxonomy = str(taxonomy)
+        screen.post_type = php_str(post_type)
+        screen.taxonomy = php_str(taxonomy)
         screen.is_user = "user" == in_admin
         screen.is_network = "network" == in_admin
         screen.in_admin = in_admin
@@ -281,7 +281,7 @@ class WP_Screen():
     def in_admin(self, admin=None):
         
         if php_empty(lambda : admin):
-            return bool(self.in_admin)
+            return php_bool(self.in_admin)
         # end if
         return admin == self.in_admin
     # end def in_admin
@@ -296,7 +296,7 @@ class WP_Screen():
     def is_block_editor(self, set=None):
         
         if None != set:
-            self.is_block_editor = bool(set)
+            self.is_block_editor = php_bool(set)
         # end if
         return self.is_block_editor
     # end def is_block_editor
@@ -732,7 +732,7 @@ class WP_Screen():
             self.add_option("layout_columns", Array({"max": columns[self.id]}))
         # end if
         if self.get_option("layout_columns"):
-            self.columns = int(get_user_option(str("screen_layout_") + str(self.id)))
+            self.columns = php_int(get_user_option(str("screen_layout_") + str(self.id)))
             if (not self.columns) and self.get_option("layout_columns", "default"):
                 self.columns = self.get_option("layout_columns", "default")
             # end if
@@ -885,7 +885,7 @@ class WP_Screen():
                 # end if
             # end if
             php_print("<label for=\"wp_welcome_panel-hide\">")
-            php_print("<input type=\"checkbox\" id=\"wp_welcome_panel-hide\"" + checked(bool(welcome_checked), True, False) + " />")
+            php_print("<input type=\"checkbox\" id=\"wp_welcome_panel-hide\"" + checked(php_bool(welcome_checked), True, False) + " />")
             php_print(_x("Welcome", "Welcome panel") + "</label>\n")
         # end if
         php_print("     </fieldset>\n       ")
@@ -977,7 +977,7 @@ class WP_Screen():
         if (not option):
             option = php_str_replace("-", "_", str(self.id) + str("_per_page"))
         # end if
-        per_page = int(get_user_option(option))
+        per_page = php_int(get_user_option(option))
         if php_empty(lambda : per_page) or per_page < 1:
             per_page = self.get_option("per_page", "default")
             if (not per_page):

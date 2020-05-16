@@ -121,11 +121,11 @@ class ParagonIE_Sodium_Core32_Curve25519_Fe():
         if (not type(value).__name__ == "ParagonIE_Sodium_Core32_Int32"):
             raise php_new_class("InvalidArgumentException", lambda : InvalidArgumentException("Expected an instance of ParagonIE_Sodium_Core32_Int32"))
         # end if
-        if php_is_null(offset):
+        if is_null(offset):
             self.container[-1] = value
         else:
             ParagonIE_Sodium_Core32_Util.declarescalartype(offset, "int", 1)
-            self.container[int(offset)] = value
+            self.container[php_int(offset)] = value
         # end if
     # end def offsetset
     #// 
@@ -160,7 +160,7 @@ class ParagonIE_Sodium_Core32_Curve25519_Fe():
     def offsetget(self, offset=None):
         
         if (not (php_isset(lambda : self.container[offset]))):
-            self.container[int(offset)] = php_new_class("ParagonIE_Sodium_Core32_Int32", lambda : ParagonIE_Sodium_Core32_Int32())
+            self.container[php_int(offset)] = php_new_class("ParagonIE_Sodium_Core32_Int32", lambda : ParagonIE_Sodium_Core32_Int32())
         # end if
         #// @var ParagonIE_Sodium_Core32_Int32 $get
         get = self.container[offset]
@@ -176,7 +176,7 @@ class ParagonIE_Sodium_Core32_Curve25519_Fe():
         if php_empty(lambda : self.container):
             return Array()
         # end if
-        c = Array(int(self.container[0].toint()), int(self.container[1].toint()), int(self.container[2].toint()), int(self.container[3].toint()), int(self.container[4].toint()), int(self.container[5].toint()), int(self.container[6].toint()), int(self.container[7].toint()), int(self.container[8].toint()), int(self.container[9].toint()))
+        c = Array(php_int(self.container[0].toint()), php_int(self.container[1].toint()), php_int(self.container[2].toint()), php_int(self.container[3].toint()), php_int(self.container[4].toint()), php_int(self.container[5].toint()), php_int(self.container[6].toint()), php_int(self.container[7].toint()), php_int(self.container[8].toint()), php_int(self.container[9].toint()))
         return Array(php_implode(", ", c))
     # end def __debuginfo
 # end class ParagonIE_Sodium_Core32_Curve25519_Fe

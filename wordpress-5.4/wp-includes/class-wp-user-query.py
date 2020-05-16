@@ -495,7 +495,7 @@ class WP_User_Query():
                 #// @param WP_User_Query $this The current WP_User_Query instance.
                 #//
                 found_users_query = apply_filters("found_users_query", "SELECT FOUND_ROWS()", self)
-                self.total_users = int(wpdb.get_var(found_users_query))
+                self.total_users = php_int(wpdb.get_var(found_users_query))
             # end if
         # end if
         if (not self.results):

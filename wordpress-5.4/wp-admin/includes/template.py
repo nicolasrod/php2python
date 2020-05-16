@@ -98,7 +98,7 @@ def wp_terms_checklist(post_id=0, args=Array(), *args_):
         walker = parsed_args["walker"]
     # end if
     taxonomy = parsed_args["taxonomy"]
-    descendants_and_self = int(parsed_args["descendants_and_self"])
+    descendants_and_self = php_int(parsed_args["descendants_and_self"])
     args = Array({"taxonomy": taxonomy})
     tax = get_taxonomy(taxonomy)
     args["disabled"] = (not current_user_can(tax.cap.assign_terms))
@@ -185,7 +185,7 @@ def wp_popular_terms_checklist(taxonomy=None, default=0, number=10, echo=True, *
         php_print("\" type=\"checkbox\" ")
         php_print(checked)
         php_print(" value=\"")
-        php_print(int(term.term_id))
+        php_print(php_int(term.term_id))
         php_print("\" ")
         disabled((not current_user_can(tax.cap.assign_terms)))
         php_print(" />\n                ")
@@ -519,7 +519,7 @@ def _list_meta_row(entry=None, count=None, *args_):
     entry["meta_key"] = esc_attr(entry["meta_key"])
     entry["meta_value"] = esc_textarea(entry["meta_value"])
     #// Using a <textarea />.
-    entry["meta_id"] = int(entry["meta_id"])
+    entry["meta_id"] = php_int(entry["meta_id"])
     delete_nonce = wp_create_nonce("delete-meta_" + entry["meta_id"])
     r += str("\n    <tr id='meta-") + str(entry["meta_id"]) + str("'>")
     r += str("\n        <td class='left'><label class='screen-reader-text' for='meta-") + str(entry["meta_id"]) + str("-key'>") + __("Key") + str("</label><input name='meta[") + str(entry["meta_id"]) + str("][key]' id='meta-") + str(entry["meta_id"]) + str("-key' type='text' size='20' value='") + str(entry["meta_key"]) + str("' />")
@@ -655,7 +655,7 @@ def touch_time(edit=1, for_post=1, tab_index=0, multi=0, *args_):
         edit = (not php_in_array(post.post_status, Array("draft", "pending")) and (not post.post_date_gmt) or "0000-00-00 00:00:00" == post.post_date_gmt)
     # end if
     tab_index_attribute = ""
-    if int(tab_index) > 0:
+    if php_int(tab_index) > 0:
         tab_index_attribute = str(" tabindex=\"") + str(tab_index) + str("\"")
     # end if
     #// @todo Remove this?
@@ -1076,7 +1076,7 @@ def do_meta_boxes(screen=None, context=None, object=None, *args_):
                             continue
                         # end if
                         if (php_isset(lambda : box["args"]["__block_editor_compatible_meta_box"])):
-                            block_compatible = bool(box["args"]["__block_editor_compatible_meta_box"])
+                            block_compatible = php_bool(box["args"]["__block_editor_compatible_meta_box"])
                             box["args"]["__block_editor_compatible_meta_box"] = None
                         # end if
                         #// If the meta box is declared as incompatible with the block editor, override the callback function.
@@ -1085,7 +1085,7 @@ def do_meta_boxes(screen=None, context=None, object=None, *args_):
                             box["callback"] = "do_block_editor_incompatible_meta_box"
                         # end if
                         if (php_isset(lambda : box["args"]["__back_compat_meta_box"])):
-                            block_compatible = block_compatible or bool(box["args"]["__back_compat_meta_box"])
+                            block_compatible = block_compatible or php_bool(box["args"]["__back_compat_meta_box"])
                             box["args"]["__back_compat_meta_box"] = None
                         # end if
                     # end if
@@ -1685,7 +1685,7 @@ def iframe_header(title="", deprecated=False, *args_):
     php_print("',\n decimalPoint = '")
     php_print(addslashes(wp_locale.number_format["decimal_point"]))
     php_print("',\n isRtl = ")
-    php_print(int(is_rtl()))
+    php_print(php_int(is_rtl()))
     php_print(";\n</script>\n   ")
     #// This action is documented in wp-admin/admin-header.php
     do_action("admin_enqueue_scripts", hook_suffix)
@@ -2172,7 +2172,7 @@ def wp_star_rating(args=Array(), *args_):
     defaults = Array({"rating": 0, "type": "rating", "number": 0, "echo": True})
     parsed_args = wp_parse_args(args, defaults)
     #// Non-English decimal places when the $rating is coming from a string.
-    rating = float(php_str_replace(",", ".", parsed_args["rating"]))
+    rating = php_float(php_str_replace(",", ".", parsed_args["rating"]))
     #// Convert percentage to star rating, 0..5 in .5 increments.
     if "percent" == parsed_args["type"]:
         rating = round(rating / 10, 0) / 2

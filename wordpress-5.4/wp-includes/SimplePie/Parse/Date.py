@@ -217,7 +217,7 @@ class SimplePie_Parse_Date():
     #//
     def remove_rfc2822_comments(self, string=None):
         
-        string = str(string)
+        string = php_str(string)
         position = 0
         length = php_strlen(string)
         depth = 0

@@ -254,7 +254,7 @@ php_print("""</form>
 <br class=\"clear\" />
 </div>
 """)
-dismissed_pointers = php_explode(",", str(get_user_meta(get_current_user_id(), "dismissed_wp_pointers", True)))
+dismissed_pointers = php_explode(",", php_str(get_user_meta(get_current_user_id(), "dismissed_wp_pointers", True)))
 if (not php_in_array("plugin_editor_notice", dismissed_pointers, True)):
     #// Get a back URL.
     referer = wp_get_referer()

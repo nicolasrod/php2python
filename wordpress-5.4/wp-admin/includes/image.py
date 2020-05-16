@@ -102,8 +102,8 @@ def wp_get_missing_image_subsizes(attachment_id=None, *args_):
         full_width = imagesize[0]
         full_height = imagesize[1]
     else:
-        full_width = int(image_meta["width"])
-        full_height = int(image_meta["height"])
+        full_width = php_int(image_meta["width"])
+        full_height = php_int(image_meta["height"])
     # end if
     possible_sizes = Array()
     #// Skip registered sizes that are too large for the uploaded image.
@@ -245,7 +245,7 @@ def wp_create_image_subsizes(file=None, attachment_id=None, *args_):
         #// @param string $file          Full path to the uploaded image file.
         #// @param int    $attachment_id Attachment post ID.
         #//
-        threshold = int(apply_filters("big_image_size_threshold", 2560, imagesize, file, attachment_id))
+        threshold = php_int(apply_filters("big_image_size_threshold", 2560, imagesize, file, attachment_id))
         #// If the original image's dimensions are over the threshold,
         #// scale the image and use it as the "full" size.
         if threshold and image_meta["width"] > threshold or image_meta["height"] > threshold:
@@ -278,7 +278,7 @@ def wp_create_image_subsizes(file=None, attachment_id=None, *args_):
             else:
                 pass
             # end if
-        elif (not php_empty(lambda : exif_meta["orientation"])) and 1 != int(exif_meta["orientation"]):
+        elif (not php_empty(lambda : exif_meta["orientation"])) and 1 != php_int(exif_meta["orientation"]):
             #// Rotate the whole original image if there is EXIF data and "orientation" is not 1.
             editor = wp_get_image_editor(file)
             if is_wp_error(editor):
@@ -689,14 +689,14 @@ def wp_read_image_metadata(file=None, *args_):
             meta["created_timestamp"] = wp_exif_date2ts(exif["DateTimeDigitized"])
         # end if
         if (not php_empty(lambda : exif["FocalLength"])):
-            meta["focal_length"] = str(wp_exif_frac2dec(exif["FocalLength"]))
+            meta["focal_length"] = php_str(wp_exif_frac2dec(exif["FocalLength"]))
         # end if
         if (not php_empty(lambda : exif["ISOSpeedRatings"])):
             meta["iso"] = reset(exif["ISOSpeedRatings"]) if php_is_array(exif["ISOSpeedRatings"]) else exif["ISOSpeedRatings"]
             meta["iso"] = php_trim(meta["iso"])
         # end if
         if (not php_empty(lambda : exif["ExposureTime"])):
-            meta["shutter_speed"] = str(wp_exif_frac2dec(exif["ExposureTime"]))
+            meta["shutter_speed"] = php_str(wp_exif_frac2dec(exif["ExposureTime"]))
         # end if
         if (not php_empty(lambda : exif["Orientation"])):
             meta["orientation"] = exif["Orientation"]

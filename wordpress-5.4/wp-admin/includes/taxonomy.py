@@ -132,13 +132,13 @@ def wp_insert_category(catarr=None, wp_error=False, *args_):
             return php_new_class("WP_Error", lambda : WP_Error("cat_name", __("You did not enter a category name.")))
         # end if
     # end if
-    catarr["cat_ID"] = int(catarr["cat_ID"])
+    catarr["cat_ID"] = php_int(catarr["cat_ID"])
     #// Are we updating or creating?
     update = (not php_empty(lambda : catarr["cat_ID"]))
     name = catarr["cat_name"]
     description = catarr["category_description"]
     slug = catarr["category_nicename"]
-    parent = int(catarr["category_parent"])
+    parent = php_int(catarr["category_parent"])
     if parent < 0:
         parent = 0
     # end if
@@ -173,7 +173,7 @@ def wp_insert_category(catarr=None, wp_error=False, *args_):
 #//
 def wp_update_category(catarr=None, *args_):
     
-    cat_ID = int(catarr["cat_ID"])
+    cat_ID = php_int(catarr["cat_ID"])
     if (php_isset(lambda : catarr["category_parent"])) and cat_ID == catarr["category_parent"]:
         return False
     # end if
@@ -237,7 +237,7 @@ def get_tags_to_edit(post_id=None, taxonomy="post_tag", *args_):
 #//
 def get_terms_to_edit(post_id=None, taxonomy="post_tag", *args_):
     
-    post_id = int(post_id)
+    post_id = php_int(post_id)
     if (not post_id):
         return False
     # end if

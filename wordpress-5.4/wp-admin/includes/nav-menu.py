@@ -43,7 +43,7 @@ def _wp_ajax_menu_quick_search(request=Array(), *args_):
     if "get-post-item" == type:
         if post_type_exists(object_type):
             if (php_isset(lambda : request["ID"])):
-                object_id = int(request["ID"])
+                object_id = php_int(request["ID"])
                 if "markup" == response_format:
                     php_print(walk_nav_menu_tree(php_array_map("wp_setup_nav_menu_item", Array(get_post(object_id))), 0, args))
                 elif "json" == response_format:
@@ -53,7 +53,7 @@ def _wp_ajax_menu_quick_search(request=Array(), *args_):
             # end if
         elif taxonomy_exists(object_type):
             if (php_isset(lambda : request["ID"])):
-                object_id = int(request["ID"])
+                object_id = php_int(request["ID"])
                 if "markup" == response_format:
                     php_print(walk_nav_menu_tree(php_array_map("wp_setup_nav_menu_item", Array(get_term(object_id, object_type))), 0, args))
                 elif "json" == response_format:
@@ -312,7 +312,7 @@ def wp_nav_menu_item_post_type_meta_box(object=None, box=None, *args_):
     if "page" == post_type_name:
         suppress_page_ids = Array()
         #// Insert Front Page or custom Home link.
-        front_page = int(get_option("page_on_front")) if "page" == get_option("show_on_front") else 0
+        front_page = php_int(get_option("page_on_front")) if "page" == get_option("show_on_front") else 0
         front_page_obj = None
         if (not php_empty(lambda : front_page)):
             front_page_obj = get_post(front_page)
@@ -325,7 +325,7 @@ def wp_nav_menu_item_post_type_meta_box(object=None, box=None, *args_):
             important_pages[-1] = front_page_obj
         # end if
         #// Insert Posts Page.
-        posts_page = int(get_option("page_for_posts")) if "page" == get_option("show_on_front") else 0
+        posts_page = php_int(get_option("page_for_posts")) if "page" == get_option("show_on_front") else 0
         if (not php_empty(lambda : posts_page)):
             posts_page_obj = get_post(posts_page)
             posts_page_obj.posts_page = True
@@ -333,7 +333,7 @@ def wp_nav_menu_item_post_type_meta_box(object=None, box=None, *args_):
             suppress_page_ids[-1] = posts_page_obj.ID
         # end if
         #// Insert Privacy Policy Page.
-        privacy_policy_page_id = int(get_option("wp_page_for_privacy_policy"))
+        privacy_policy_page_id = php_int(get_option("wp_page_for_privacy_policy"))
         if (not php_empty(lambda : privacy_policy_page_id)):
             privacy_policy_page = get_post(privacy_policy_page_id)
             if type(privacy_policy_page).__name__ == "WP_Post" and "publish" == privacy_policy_page.post_status:
@@ -792,7 +792,7 @@ def wp_nav_menu_item_taxonomy_meta_box(object=None, box=None, *args_):
 #//
 def wp_save_nav_menu_items(menu_id=0, menu_data=Array(), *args_):
     
-    menu_id = int(menu_id)
+    menu_id = php_int(menu_id)
     items_saved = Array()
     if 0 == menu_id or is_nav_menu(menu_id):
         #// Loop through all the menu items' POST values.
@@ -804,7 +804,7 @@ def wp_save_nav_menu_items(menu_id=0, menu_data=Array(), *args_):
             if php_empty(lambda : _item_object_data["menu-item-db-id"]) or 0 > _possible_db_id or _possible_db_id != _item_object_data["menu-item-db-id"]:
                 _actual_db_id = 0
             else:
-                _actual_db_id = int(_item_object_data["menu-item-db-id"])
+                _actual_db_id = php_int(_item_object_data["menu-item-db-id"])
             # end if
             args = Array({"menu-item-db-id": _item_object_data["menu-item-db-id"] if (php_isset(lambda : _item_object_data["menu-item-db-id"])) else "", "menu-item-object-id": _item_object_data["menu-item-object-id"] if (php_isset(lambda : _item_object_data["menu-item-object-id"])) else "", "menu-item-object": _item_object_data["menu-item-object"] if (php_isset(lambda : _item_object_data["menu-item-object"])) else "", "menu-item-parent-id": _item_object_data["menu-item-parent-id"] if (php_isset(lambda : _item_object_data["menu-item-parent-id"])) else "", "menu-item-position": _item_object_data["menu-item-position"] if (php_isset(lambda : _item_object_data["menu-item-position"])) else "", "menu-item-type": _item_object_data["menu-item-type"] if (php_isset(lambda : _item_object_data["menu-item-type"])) else "", "menu-item-title": _item_object_data["menu-item-title"] if (php_isset(lambda : _item_object_data["menu-item-title"])) else "", "menu-item-url": _item_object_data["menu-item-url"] if (php_isset(lambda : _item_object_data["menu-item-url"])) else "", "menu-item-description": _item_object_data["menu-item-description"] if (php_isset(lambda : _item_object_data["menu-item-description"])) else "", "menu-item-attr-title": _item_object_data["menu-item-attr-title"] if (php_isset(lambda : _item_object_data["menu-item-attr-title"])) else "", "menu-item-target": _item_object_data["menu-item-target"] if (php_isset(lambda : _item_object_data["menu-item-target"])) else "", "menu-item-classes": _item_object_data["menu-item-classes"] if (php_isset(lambda : _item_object_data["menu-item-classes"])) else "", "menu-item-xfn": _item_object_data["menu-item-xfn"] if (php_isset(lambda : _item_object_data["menu-item-xfn"])) else ""})
             items_saved[-1] = wp_update_nav_menu_item(menu_id, _actual_db_id, args)
@@ -1017,7 +1017,7 @@ def _wp_expand_nav_menu_post_data(*args_):
         return
     # end if
     data = php_json_decode(stripslashes(PHP_POST["nav-menu-data"]))
-    if (not php_is_null(data)) and data:
+    if (not is_null(data)) and data:
         for post_input_data in data:
             #// For input names that are arrays (e.g. `menu-item-db-id[3][4][5]`),
             #// derive the array path keys via regex and set the value in $_POST.

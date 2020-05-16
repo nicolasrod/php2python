@@ -438,10 +438,10 @@ class SimplePie_Source():
         
         return_ = self.get_source_tags(SIMPLEPIE_NAMESPACE_W3C_BASIC_GEO, "lat")
         if return_:
-            return float(return_[0]["data"])
+            return php_float(return_[0]["data"])
         elif self.get_source_tags(SIMPLEPIE_NAMESPACE_GEORSS, "point") and php_preg_match("/^((?:-)?[0-9]+(?:\\.[0-9]+)) ((?:-)?[0-9]+(?:\\.[0-9]+))$/", php_trim(return_[0]["data"]), match):
             return_ = self.get_source_tags(SIMPLEPIE_NAMESPACE_GEORSS, "point")
-            return float(match[1])
+            return php_float(match[1])
         else:
             return None
         # end if
@@ -450,13 +450,13 @@ class SimplePie_Source():
         
         return_ = self.get_source_tags(SIMPLEPIE_NAMESPACE_W3C_BASIC_GEO, "long")
         if return_:
-            return float(return_[0]["data"])
+            return php_float(return_[0]["data"])
         elif self.get_source_tags(SIMPLEPIE_NAMESPACE_W3C_BASIC_GEO, "lon"):
             return_ = self.get_source_tags(SIMPLEPIE_NAMESPACE_W3C_BASIC_GEO, "lon")
-            return float(return_[0]["data"])
+            return php_float(return_[0]["data"])
         elif self.get_source_tags(SIMPLEPIE_NAMESPACE_GEORSS, "point") and php_preg_match("/^((?:-)?[0-9]+(?:\\.[0-9]+)) ((?:-)?[0-9]+(?:\\.[0-9]+))$/", php_trim(return_[0]["data"]), match):
             return_ = self.get_source_tags(SIMPLEPIE_NAMESPACE_GEORSS, "point")
-            return float(match[2])
+            return php_float(match[2])
         else:
             return None
         # end if

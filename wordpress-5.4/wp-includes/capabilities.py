@@ -146,7 +146,7 @@ def map_meta_cap(cap=None, user_id=None, *args):
             #// Setting the privacy policy page requires `manage_privacy_options`,
             #// so deleting it should require that too.
             #//
-            if int(get_option("wp_page_for_privacy_policy")) == post.ID:
+            if php_int(get_option("wp_page_for_privacy_policy")) == post.ID:
                 caps = php_array_merge(caps, map_meta_cap("manage_privacy_options", user_id))
             # end if
             break
@@ -212,7 +212,7 @@ def map_meta_cap(cap=None, user_id=None, *args):
             #// Setting the privacy policy page requires `manage_privacy_options`,
             #// so editing it should require that too.
             #//
-            if int(get_option("wp_page_for_privacy_policy")) == post.ID:
+            if php_int(get_option("wp_page_for_privacy_policy")) == post.ID:
                 caps = php_array_merge(caps, map_meta_cap("manage_privacy_options", user_id))
             # end if
             break
@@ -319,7 +319,7 @@ def map_meta_cap(cap=None, user_id=None, *args):
         # end if
         if case("add_user_meta"):
             _, object_type, _ = php_explode("_", cap)
-            object_id = int(args[0])
+            object_id = php_int(args[0])
             object_subtype = get_object_subtype(object_type, object_id)
             if php_empty(lambda : object_subtype):
                 caps[-1] = "do_not_allow"
@@ -588,7 +588,7 @@ def map_meta_cap(cap=None, user_id=None, *args):
             pass
         # end if
         if case("assign_term"):
-            term_id = int(args[0])
+            term_id = php_int(args[0])
             term = get_term(term_id)
             if (not term) or is_wp_error(term):
                 caps[-1] = "do_not_allow"

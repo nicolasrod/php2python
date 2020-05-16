@@ -317,7 +317,7 @@ def wp_debug_mode(*args_):
         elif None != WP_DEBUG_DISPLAY:
             php_ini_set("display_errors", 0)
         # end if
-        if php_in_array(php_strtolower(str(WP_DEBUG_LOG)), Array("true", "1"), True):
+        if php_in_array(php_strtolower(php_str(WP_DEBUG_LOG)), Array("true", "1"), True):
             log_path = WP_CONTENT_DIR + "/debug.log"
         elif php_is_string(WP_DEBUG_LOG):
             log_path = WP_DEBUG_LOG
@@ -745,7 +745,7 @@ def is_protected_endpoint(*args_):
     #// 
     #// @param bool $is_protected_endpoint Whether the currently requested endpoint is protected. Default false.
     #//
-    return bool(apply_filters("is_protected_endpoint", False))
+    return php_bool(apply_filters("is_protected_endpoint", False))
 # end def is_protected_endpoint
 #// 
 #// Determines whether we are currently handling an AJAX action that should be protected against WSODs.
@@ -818,10 +818,10 @@ def wp_magic_quotes(*args_):
     #// Among other things, this preserves compatibility of WP with PHPUnit Code Coverage generation.
     #//
     if (php_isset(lambda : PHP_SERVER["REQUEST_TIME"])):
-        PHP_SERVER["REQUEST_TIME"] = int(PHP_SERVER["REQUEST_TIME"])
+        PHP_SERVER["REQUEST_TIME"] = php_int(PHP_SERVER["REQUEST_TIME"])
     # end if
     if (php_isset(lambda : PHP_SERVER["REQUEST_TIME_FLOAT"])):
-        PHP_SERVER["REQUEST_TIME_FLOAT"] = float(PHP_SERVER["REQUEST_TIME_FLOAT"])
+        PHP_SERVER["REQUEST_TIME_FLOAT"] = php_float(PHP_SERVER["REQUEST_TIME_FLOAT"])
     # end if
     #// Force REQUEST to be GET + POST.
     PHP_REQUEST = php_array_merge(PHP_REQUEST, PHP_POST)
@@ -1109,15 +1109,15 @@ def wp_installing(is_installing=None, *args_):
     
     installing = None
     #// Support for the `WP_INSTALLING` constant, defined before WP is loaded.
-    if php_is_null(installing):
+    if is_null(installing):
         installing = php_defined("WP_INSTALLING") and WP_INSTALLING
     # end if
-    if (not php_is_null(is_installing)):
+    if (not is_null(is_installing)):
         old_installing = installing
         installing = is_installing
-        return bool(old_installing)
+        return php_bool(old_installing)
     # end if
-    return bool(installing)
+    return php_bool(installing)
 # end def wp_installing
 #// 
 #// Determines if SSL is used.
@@ -1156,7 +1156,7 @@ def is_ssl(*args_):
 def wp_convert_hr_to_bytes(value=None, *args_):
     
     value = php_strtolower(php_trim(value))
-    bytes = int(value)
+    bytes = php_int(value)
     if False != php_strpos(value, "g"):
         bytes *= GB_IN_BYTES
     elif False != php_strpos(value, "m"):

@@ -48,7 +48,7 @@ if "upgrade_db" == step:
 #//
 global wp_version,required_php_version,required_mysql_version
 php_check_if_defined("wp_version","required_php_version","required_mysql_version")
-step = int(step)
+step = php_int(step)
 php_version = php_phpversion()
 mysql_version = wpdb.db_version()
 php_compat = php_version_compare(php_version, required_php_version, ">=")

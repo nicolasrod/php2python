@@ -223,7 +223,7 @@ class Text_Diff_Engine_native():
                     i += 1
                 # end while
             # end if
-            x1 = xoff + int(numer + xlim - xoff * chunk / nchunks)
+            x1 = xoff + php_int(numer + xlim - xoff * chunk / nchunks)
             while x < x1:
                 
                 line = self.yv[x] if flip else self.xv[x]
@@ -273,7 +273,7 @@ class Text_Diff_Engine_native():
         n = 0
         while n < nchunks - 1:
             
-            x1 = xoff + int(numer + xlim - xoff * n / nchunks)
+            x1 = xoff + php_int(numer + xlim - xoff * n / nchunks)
             y1 = ymid[n] + 1
             seps[-1] = Array(y1, x1) if flip else Array(x1, y1)
             n += 1
@@ -297,7 +297,7 @@ class Text_Diff_Engine_native():
             if not (beg < end_):
                 break
             # end if
-            mid = int(beg + end_ / 2)
+            mid = php_int(beg + end_ / 2)
             if ypos > self.seq[mid]:
                 beg = mid + 1
             else:

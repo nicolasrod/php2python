@@ -101,7 +101,7 @@ if (php_isset(lambda : PHP_REQUEST["action"])):
         if case("delete_sites"):
             check_admin_referer("ms-delete-sites")
             for site_id in PHP_POST["site_ids"]:
-                site_id = int(site_id)
+                site_id = php_int(site_id)
                 if get_network().site_id == site_id:
                     continue
                 # end if
@@ -141,7 +141,7 @@ if (php_isset(lambda : PHP_REQUEST["action"])):
                                     php_print("                                             <li>\n                                                  ")
                                     php_print(site_address)
                                     php_print("                                                 <input type=\"hidden\" name=\"site_ids[]\" value=\"")
-                                    php_print(int(site_id))
+                                    php_print(php_int(site_id))
                                     php_print("\" />\n                                              </li>\n                                         ")
                                 # end for
                                 php_print("                                     </ul>\n                                     ")

@@ -41,7 +41,7 @@ messages = Array()
 #// Container that stores the name of the active menu.
 nav_menu_selected_title = ""
 #// The menu id of the current menu being edited.
-nav_menu_selected_id = int(PHP_REQUEST["menu"]) if (php_isset(lambda : PHP_REQUEST["menu"])) else 0
+nav_menu_selected_id = php_int(PHP_REQUEST["menu"]) if (php_isset(lambda : PHP_REQUEST["menu"])) else 0
 #// Get existing menu locations assignments.
 locations = get_registered_nav_menus()
 menu_locations = get_nav_menu_locations()
@@ -66,11 +66,11 @@ for case in Switch(action):
     if case("move-down-menu-item"):
         #// Moving down a menu item is the same as moving up the next in order.
         check_admin_referer("move-menu_item")
-        menu_item_id = int(PHP_REQUEST["menu-item"]) if (php_isset(lambda : PHP_REQUEST["menu-item"])) else 0
+        menu_item_id = php_int(PHP_REQUEST["menu-item"]) if (php_isset(lambda : PHP_REQUEST["menu-item"])) else 0
         if is_nav_menu_item(menu_item_id):
-            menus = Array(int(PHP_REQUEST["menu"])) if (php_isset(lambda : PHP_REQUEST["menu"])) else wp_get_object_terms(menu_item_id, "nav_menu", Array({"fields": "ids"}))
+            menus = Array(php_int(PHP_REQUEST["menu"])) if (php_isset(lambda : PHP_REQUEST["menu"])) else wp_get_object_terms(menu_item_id, "nav_menu", Array({"fields": "ids"}))
             if (not is_wp_error(menus)) and (not php_empty(lambda : menus[0])):
-                menu_id = int(menus[0])
+                menu_id = php_int(menus[0])
                 ordered_menu_items = wp_get_nav_menu_items(menu_id)
                 menu_item_data = wp_setup_nav_menu_item(get_post(menu_item_id))
                 #// Set up the data we need in one pass through the array of menu items.
@@ -90,26 +90,26 @@ for case in Switch(action):
                     next_item_data = wp_setup_nav_menu_item(get_post(next_item_id))
                     #// If not siblings of same parent, bubble menu item up but keep order.
                     if (not php_empty(lambda : menu_item_data["menu_item_parent"])) and php_empty(lambda : next_item_data["menu_item_parent"]) or next_item_data["menu_item_parent"] != menu_item_data["menu_item_parent"]:
-                        parent_db_id = int(menu_item_data["menu_item_parent"]) if php_in_array(menu_item_data["menu_item_parent"], orders_to_dbids) else 0
+                        parent_db_id = php_int(menu_item_data["menu_item_parent"]) if php_in_array(menu_item_data["menu_item_parent"], orders_to_dbids) else 0
                         parent_object = wp_setup_nav_menu_item(get_post(parent_db_id))
                         if (not is_wp_error(parent_object)):
                             parent_data = parent_object
                             menu_item_data["menu_item_parent"] = parent_data["menu_item_parent"]
-                            update_post_meta(menu_item_data["ID"], "_menu_item_menu_item_parent", int(menu_item_data["menu_item_parent"]))
+                            update_post_meta(menu_item_data["ID"], "_menu_item_menu_item_parent", php_int(menu_item_data["menu_item_parent"]))
                         # end if
                         pass
                     else:
                         next_item_data["menu_order"] = next_item_data["menu_order"] - 1
                         menu_item_data["menu_order"] = menu_item_data["menu_order"] + 1
                         menu_item_data["menu_item_parent"] = next_item_data["ID"]
-                        update_post_meta(menu_item_data["ID"], "_menu_item_menu_item_parent", int(menu_item_data["menu_item_parent"]))
+                        update_post_meta(menu_item_data["ID"], "_menu_item_menu_item_parent", php_int(menu_item_data["menu_item_parent"]))
                         wp_update_post(menu_item_data)
                         wp_update_post(next_item_data)
                     # end if
                     pass
                 elif (not php_empty(lambda : menu_item_data["menu_item_parent"])) and php_in_array(menu_item_data["menu_item_parent"], orders_to_dbids):
-                    menu_item_data["menu_item_parent"] = int(get_post_meta(menu_item_data["menu_item_parent"], "_menu_item_menu_item_parent", True))
-                    update_post_meta(menu_item_data["ID"], "_menu_item_menu_item_parent", int(menu_item_data["menu_item_parent"]))
+                    menu_item_data["menu_item_parent"] = php_int(get_post_meta(menu_item_data["menu_item_parent"], "_menu_item_menu_item_parent", True))
+                    update_post_meta(menu_item_data["ID"], "_menu_item_menu_item_parent", php_int(menu_item_data["menu_item_parent"]))
                 # end if
             # end if
         # end if
@@ -117,11 +117,11 @@ for case in Switch(action):
     # end if
     if case("move-up-menu-item"):
         check_admin_referer("move-menu_item")
-        menu_item_id = int(PHP_REQUEST["menu-item"]) if (php_isset(lambda : PHP_REQUEST["menu-item"])) else 0
+        menu_item_id = php_int(PHP_REQUEST["menu-item"]) if (php_isset(lambda : PHP_REQUEST["menu-item"])) else 0
         if is_nav_menu_item(menu_item_id):
-            menus = Array(int(PHP_REQUEST["menu"])) if (php_isset(lambda : PHP_REQUEST["menu"])) else wp_get_object_terms(menu_item_id, "nav_menu", Array({"fields": "ids"}))
+            menus = Array(php_int(PHP_REQUEST["menu"])) if (php_isset(lambda : PHP_REQUEST["menu"])) else wp_get_object_terms(menu_item_id, "nav_menu", Array({"fields": "ids"}))
             if (not is_wp_error(menus)) and (not php_empty(lambda : menus[0])):
-                menu_id = int(menus[0])
+                menu_id = php_int(menus[0])
                 ordered_menu_items = wp_get_nav_menu_items(menu_id)
                 menu_item_data = wp_setup_nav_menu_item(get_post(menu_item_id))
                 #// Set up the data we need in one pass through the array of menu items.
@@ -139,7 +139,7 @@ for case in Switch(action):
                 if (not php_empty(lambda : dbids_to_orders[menu_item_id])) and (not php_empty(lambda : orders_to_dbids[dbids_to_orders[menu_item_id] - 1])):
                     #// If this menu item is a child of the previous.
                     if (not php_empty(lambda : menu_item_data["menu_item_parent"])) and php_in_array(menu_item_data["menu_item_parent"], php_array_keys(dbids_to_orders)) and (php_isset(lambda : orders_to_dbids[dbids_to_orders[menu_item_id] - 1])) and menu_item_data["menu_item_parent"] == orders_to_dbids[dbids_to_orders[menu_item_id] - 1]:
-                        parent_db_id = int(menu_item_data["menu_item_parent"]) if php_in_array(menu_item_data["menu_item_parent"], orders_to_dbids) else 0
+                        parent_db_id = php_int(menu_item_data["menu_item_parent"]) if php_in_array(menu_item_data["menu_item_parent"], orders_to_dbids) else 0
                         parent_object = wp_setup_nav_menu_item(get_post(parent_db_id))
                         if (not is_wp_error(parent_object)):
                             parent_data = parent_object
@@ -151,7 +151,7 @@ for case in Switch(action):
                                 menu_item_data["menu_item_parent"] = parent_data["menu_item_parent"]
                                 pass
                             elif (not php_empty(lambda : dbids_to_orders[parent_db_id])) and (not php_empty(lambda : orders_to_dbids[dbids_to_orders[parent_db_id] - 1])):
-                                _possible_parent_id = int(get_post_meta(orders_to_dbids[dbids_to_orders[parent_db_id] - 1], "_menu_item_menu_item_parent", True))
+                                _possible_parent_id = php_int(get_post_meta(orders_to_dbids[dbids_to_orders[parent_db_id] - 1], "_menu_item_menu_item_parent", True))
                                 if php_in_array(_possible_parent_id, php_array_keys(dbids_to_orders)):
                                     menu_item_data["menu_item_parent"] = _possible_parent_id
                                 else:
@@ -166,15 +166,15 @@ for case in Switch(action):
                             #// Set menu-item's [menu_order] to that of former parent.
                             menu_item_data["menu_order"] = menu_item_data["menu_order"] - 1
                             #// Save changes.
-                            update_post_meta(menu_item_data["ID"], "_menu_item_menu_item_parent", int(menu_item_data["menu_item_parent"]))
+                            update_post_meta(menu_item_data["ID"], "_menu_item_menu_item_parent", php_int(menu_item_data["menu_item_parent"]))
                             wp_update_post(menu_item_data)
                             wp_update_post(parent_data)
                         # end if
                         pass
                     elif php_empty(lambda : menu_item_data["menu_order"]) or php_empty(lambda : menu_item_data["menu_item_parent"]) or (not php_in_array(menu_item_data["menu_item_parent"], php_array_keys(dbids_to_orders))) or php_empty(lambda : orders_to_dbids[dbids_to_orders[menu_item_id] - 1]) or orders_to_dbids[dbids_to_orders[menu_item_id] - 1] != menu_item_data["menu_item_parent"]:
                         #// Just make it a child of the previous; keep the order.
-                        menu_item_data["menu_item_parent"] = int(orders_to_dbids[dbids_to_orders[menu_item_id] - 1])
-                        update_post_meta(menu_item_data["ID"], "_menu_item_menu_item_parent", int(menu_item_data["menu_item_parent"]))
+                        menu_item_data["menu_item_parent"] = php_int(orders_to_dbids[dbids_to_orders[menu_item_id] - 1])
+                        update_post_meta(menu_item_data["ID"], "_menu_item_menu_item_parent", php_int(menu_item_data["menu_item_parent"]))
                         wp_update_post(menu_item_data)
                     # end if
                 # end if
@@ -183,7 +183,7 @@ for case in Switch(action):
         break
     # end if
     if case("delete-menu-item"):
-        menu_item_id = int(PHP_REQUEST["menu-item"])
+        menu_item_id = php_int(PHP_REQUEST["menu-item"])
         check_admin_referer("delete-menu_item_" + menu_item_id)
         if is_nav_menu_item(menu_item_id) and wp_delete_post(menu_item_id, True):
             messages[-1] = "<div id=\"message\" class=\"updated notice is-dismissible\"><p>" + __("The menu item has been successfully deleted.") + "</p></div>"

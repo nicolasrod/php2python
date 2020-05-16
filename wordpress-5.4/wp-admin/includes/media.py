@@ -196,7 +196,7 @@ def image_add_caption(html=None, id=None, caption=None, title=None, align=None, 
     if php_empty(lambda : caption) or apply_filters("disable_captions", ""):
         return html
     # end if
-    id = "attachment_" + id if 0 < int(id) else ""
+    id = "attachment_" + id if 0 < php_int(id) else ""
     if (not php_preg_match("/width=[\"']([0-9]+)/", html, matches)):
         return html
     # end if
@@ -434,14 +434,14 @@ def wp_iframe(content_func=None, *args):
     php_print("</title>\n   ")
     wp_enqueue_style("colors")
     #// Check callback name for 'media'.
-    if php_is_array(content_func) and (not php_empty(lambda : content_func[1])) and 0 == php_strpos(str(content_func[1]), "media") or (not php_is_array(content_func)) and 0 == php_strpos(content_func, "media"):
+    if php_is_array(content_func) and (not php_empty(lambda : content_func[1])) and 0 == php_strpos(php_str(content_func[1]), "media") or (not php_is_array(content_func)) and 0 == php_strpos(content_func, "media"):
         wp_enqueue_style("deprecated-media")
     # end if
     wp_enqueue_style("ie")
     php_print(" <script type=\"text/javascript\">\n addLoadEvent = function(func){if(typeof jQuery!=\"undefined\")jQuery(document).ready(func);else if(typeof wpOnload!='function'){wpOnload=func;}else{var oldonload=wpOnload;wpOnload=function(){oldonload();func();}}};\n    var ajaxurl = '")
     php_print(admin_url("admin-ajax.php", "relative"))
     php_print("', pagenow = 'media-upload-popup', adminpage = 'media-upload-popup',\n   isRtl = ")
-    php_print(int(is_rtl()))
+    php_print(php_int(is_rtl()))
     php_print(";\n  </script>\n ")
     #// This action is documented in wp-admin/admin-header.php
     do_action("admin_enqueue_scripts", "media-upload-popup")
@@ -562,7 +562,7 @@ def get_upload_iframe_src(type=None, post_id=None, tab=None, *args_):
     if php_empty(lambda : post_id):
         post_id = post_ID
     # end if
-    upload_iframe_src = add_query_arg("post_id", int(post_id), admin_url("media-upload.php"))
+    upload_iframe_src = add_query_arg("post_id", php_int(post_id), admin_url("media-upload.php"))
     if type and "media" != type:
         upload_iframe_src = add_query_arg("type", type, upload_iframe_src)
     # end if
@@ -595,7 +595,7 @@ def media_upload_form_handler(*args_):
     errors = None
     if (php_isset(lambda : PHP_POST["send"])):
         keys = php_array_keys(PHP_POST["send"])
-        send_id = int(reset(keys))
+        send_id = php_int(reset(keys))
     # end if
     if (not php_empty(lambda : PHP_POST["attachments"])):
         for attachment_id,attachment in PHP_POST["attachments"]:
@@ -908,7 +908,7 @@ def image_align_input_fields(post=None, checked="", *args_):
         checked = get_user_setting("align", "none")
     # end if
     alignments = Array({"none": __("None"), "left": __("Left"), "center": __("Center"), "right": __("Right")})
-    if (not php_array_key_exists(str(checked), alignments)):
+    if (not php_array_key_exists(php_str(checked), alignments)):
         checked = "none"
     # end if
     out = Array()
@@ -1243,7 +1243,7 @@ def get_media_item(attachment_id=None, args=None, *args_):
         # end if
     # end if
     post = get_post(attachment_id)
-    current_post_id = int(PHP_REQUEST["post_id"]) if (not php_empty(lambda : PHP_REQUEST["post_id"])) else 0
+    current_post_id = php_int(PHP_REQUEST["post_id"]) if (not php_empty(lambda : PHP_REQUEST["post_id"])) else 0
     default_args = Array({"errors": None, "send": post_type_supports(get_post_type(current_post_id), "editor") if current_post_id else True, "delete": True, "toggle": True, "show_title": True})
     parsed_args = wp_parse_args(args, default_args)
     #// 
@@ -1412,7 +1412,7 @@ def get_media_item(attachment_id=None, args=None, *args_):
         item += str("   <input type='hidden' name='") + str(name) + str("' id='") + str(name) + str("' value='") + esc_attr(value) + "' />\n"
     # end for
     if post.post_parent < 1 and (php_isset(lambda : PHP_REQUEST["post_id"])):
-        parent = int(PHP_REQUEST["post_id"])
+        parent = php_int(PHP_REQUEST["post_id"])
         parent_name = str("attachments[") + str(attachment_id) + str("][post_parent]")
         item += str("   <input type='hidden' name='") + str(parent_name) + str("' id='") + str(parent_name) + str("' value='") + str(parent) + str("' />\n")
     # end if
@@ -1780,7 +1780,7 @@ def media_upload_type_form(type="file", errors=None, id=None, *args_):
     php_print("-form\">\n       ")
     submit_button("", "hidden", "save", False)
     php_print(" <input type=\"hidden\" name=\"post_id\" id=\"post_id\" value=\"")
-    php_print(int(post_id))
+    php_print(php_int(post_id))
     php_print("\" />\n      ")
     wp_nonce_field("media-form")
     php_print("\n   <h3 class=\"media-title\">")
@@ -1844,7 +1844,7 @@ def media_upload_type_url_form(type=None, errors=None, id=None, *args_):
     php_print("\" id=\"")
     php_print(type)
     php_print("-form\">\n   <input type=\"hidden\" name=\"post_id\" id=\"post_id\" value=\"")
-    php_print(int(post_id))
+    php_print(php_int(post_id))
     php_print("\" />\n      ")
     wp_nonce_field("media-form")
     php_print("\n   <h3 class=\"media-title\">")
@@ -2020,7 +2020,7 @@ if ( preloaded.length > 0 ) {
     """)
     submit_button(__("Save all changes"), "savebutton", "save", False, Array({"id": "save-all", "style": "display: none;"}))
     php_print(" <input type=\"hidden\" name=\"post_id\" id=\"post_id\" value=\"")
-    php_print(int(post_id))
+    php_print(php_int(post_id))
     php_print("\" />\n  <input type=\"hidden\" name=\"type\" value=\"")
     php_print(esc_attr(PHP_GLOBALS["type"]))
     php_print("\" />\n  <input type=\"hidden\" name=\"tab\" value=\"")
@@ -2169,7 +2169,7 @@ def media_upload_library_form(errors=None, *args_):
     php_print("\" />\n  <input type=\"hidden\" name=\"tab\" value=\"")
     php_print(esc_attr(tab))
     php_print("\" />\n  <input type=\"hidden\" name=\"post_id\" value=\"")
-    php_print(int(post_id))
+    php_print(php_int(post_id))
     php_print("\" />\n  <input type=\"hidden\" name=\"post_mime_type\" value=\"")
     php_print(esc_attr(PHP_REQUEST["post_mime_type"]) if (php_isset(lambda : PHP_REQUEST["post_mime_type"])) else "")
     php_print("\" />\n  <input type=\"hidden\" name=\"context\" value=\"")
@@ -2296,7 +2296,7 @@ if ( preloaded.length > 0 ) {
     php_print(" </div>\n    <p class=\"ml-submit\">\n       ")
     submit_button(__("Save all changes"), "savebutton", "save", False)
     php_print(" <input type=\"hidden\" name=\"post_id\" id=\"post_id\" value=\"")
-    php_print(int(post_id))
+    php_print(php_int(post_id))
     php_print("""\" />
     </p>
     </form>
@@ -2437,7 +2437,7 @@ def media_upload_max_image_resize(*args_):
     php_print(checked)
     php_print(" />\n    ")
     #// translators: 1: Link start tag, 2: Link end tag, 3: Width, 4: Height.
-    printf(__("Scale images to match the large size selected in %1$simage options%2$s (%3$d &times; %4$d)."), a, end_, int(get_option("large_size_w", "1024")), int(get_option("large_size_h", "1024")))
+    printf(__("Scale images to match the large size selected in %1$simage options%2$s (%3$d &times; %4$d)."), a, end_, php_int(get_option("large_size_w", "1024")), php_int(get_option("large_size_h", "1024")))
     php_print(" </label></p>\n  ")
 # end def media_upload_max_image_resize
 #// 
@@ -2789,28 +2789,28 @@ def wp_read_video_metadata(file=None, *args_):
         metadata["lossless"] = data["video"]["lossless"]
     # end if
     if (not php_empty(lambda : data["video"]["bitrate"])):
-        metadata["bitrate"] = int(data["video"]["bitrate"])
+        metadata["bitrate"] = php_int(data["video"]["bitrate"])
     # end if
     if (not php_empty(lambda : data["video"]["bitrate_mode"])):
         metadata["bitrate_mode"] = data["video"]["bitrate_mode"]
     # end if
     if (not php_empty(lambda : data["filesize"])):
-        metadata["filesize"] = int(data["filesize"])
+        metadata["filesize"] = php_int(data["filesize"])
     # end if
     if (not php_empty(lambda : data["mime_type"])):
         metadata["mime_type"] = data["mime_type"]
     # end if
     if (not php_empty(lambda : data["playtime_seconds"])):
-        metadata["length"] = int(round(data["playtime_seconds"]))
+        metadata["length"] = php_int(round(data["playtime_seconds"]))
     # end if
     if (not php_empty(lambda : data["playtime_string"])):
         metadata["length_formatted"] = data["playtime_string"]
     # end if
     if (not php_empty(lambda : data["video"]["resolution_x"])):
-        metadata["width"] = int(data["video"]["resolution_x"])
+        metadata["width"] = php_int(data["video"]["resolution_x"])
     # end if
     if (not php_empty(lambda : data["video"]["resolution_y"])):
-        metadata["height"] = int(data["video"]["resolution_y"])
+        metadata["height"] = php_int(data["video"]["resolution_y"])
     # end if
     if (not php_empty(lambda : data["fileformat"])):
         metadata["fileformat"] = data["fileformat"]
@@ -2881,13 +2881,13 @@ def wp_read_audio_metadata(file=None, *args_):
         metadata["fileformat"] = data["fileformat"]
     # end if
     if (not php_empty(lambda : data["filesize"])):
-        metadata["filesize"] = int(data["filesize"])
+        metadata["filesize"] = php_int(data["filesize"])
     # end if
     if (not php_empty(lambda : data["mime_type"])):
         metadata["mime_type"] = data["mime_type"]
     # end if
     if (not php_empty(lambda : data["playtime_seconds"])):
-        metadata["length"] = int(round(data["playtime_seconds"]))
+        metadata["length"] = php_int(round(data["playtime_seconds"]))
     # end if
     if (not php_empty(lambda : data["playtime_string"])):
         metadata["length_formatted"] = data["playtime_string"]
@@ -2924,7 +2924,7 @@ def wp_get_media_creation_timestamp(metadata=None, *args_):
     for case in Switch(metadata["fileformat"]):
         if case("asf"):
             if (php_isset(lambda : metadata["asf"]["file_properties_object"]["creation_date_unix"])):
-                creation_date = int(metadata["asf"]["file_properties_object"]["creation_date_unix"])
+                creation_date = php_int(metadata["asf"]["file_properties_object"]["creation_date_unix"])
             # end if
             break
         # end if
@@ -2935,7 +2935,7 @@ def wp_get_media_creation_timestamp(metadata=None, *args_):
             if (php_isset(lambda : metadata["matroska"]["comments"]["creation_time"]["0"])):
                 creation_date = strtotime(metadata["matroska"]["comments"]["creation_time"]["0"])
             elif (php_isset(lambda : metadata["matroska"]["info"]["0"]["DateUTC_unix"])):
-                creation_date = int(metadata["matroska"]["info"]["0"]["DateUTC_unix"])
+                creation_date = php_int(metadata["matroska"]["info"]["0"]["DateUTC_unix"])
             # end if
             break
         # end if
@@ -2944,7 +2944,7 @@ def wp_get_media_creation_timestamp(metadata=None, *args_):
         # end if
         if case("mp4"):
             if (php_isset(lambda : metadata["quicktime"]["moov"]["subatoms"]["0"]["creation_time_unix"])):
-                creation_date = int(metadata["quicktime"]["moov"]["subatoms"]["0"]["creation_time_unix"])
+                creation_date = php_int(metadata["quicktime"]["moov"]["subatoms"]["0"]["creation_time_unix"])
             # end if
             break
         # end if
@@ -2974,7 +2974,7 @@ def wp_media_attach_action(parent_id=None, action="attach", *args_):
     # end if
     ids = Array()
     for att_id in PHP_REQUEST["media"]:
-        att_id = int(att_id)
+        att_id = php_int(att_id)
         if (not current_user_can("edit_post", att_id)):
             continue
         # end if

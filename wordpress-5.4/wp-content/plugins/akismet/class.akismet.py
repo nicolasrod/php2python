@@ -195,7 +195,7 @@ class Akismet():
             # end if
         # end for
         post = get_post(comment["comment_post_ID"])
-        if (not php_is_null(post)):
+        if (not is_null(post)):
             #// $post can technically be null, although in the past, it's always been an indicator of another plugin interfering.
             comment["comment_post_modified_gmt"] = post.post_modified_gmt
         # end if
@@ -267,7 +267,7 @@ class Akismet():
     @classmethod
     def set_last_comment(self, comment=None):
         
-        if php_is_null(comment):
+        if is_null(comment):
             self.last_comment = None
         else:
             #// We filter it here so that it matches the filtered comment data that we'll have to compare against later.
@@ -440,10 +440,10 @@ class Akismet():
         global wpdb
         php_check_if_defined("wpdb")
         if (not php_empty(lambda : user_id)):
-            return int(wpdb.get_var(wpdb.prepare(str("SELECT COUNT(*) FROM ") + str(wpdb.comments) + str(" WHERE user_id = %d AND comment_approved = 1"), user_id)))
+            return php_int(wpdb.get_var(wpdb.prepare(str("SELECT COUNT(*) FROM ") + str(wpdb.comments) + str(" WHERE user_id = %d AND comment_approved = 1"), user_id)))
         # end if
         if (not php_empty(lambda : comment_author_email)):
-            return int(wpdb.get_var(wpdb.prepare(str("SELECT COUNT(*) FROM ") + str(wpdb.comments) + str(" WHERE comment_author_email = %s AND comment_author = %s AND comment_author_url = %s AND comment_approved = 1"), comment_author_email, comment_author, comment_author_url)))
+            return php_int(wpdb.get_var(wpdb.prepare(str("SELECT COUNT(*) FROM ") + str(wpdb.comments) + str(" WHERE comment_author_email = %s AND comment_author = %s AND comment_author_url = %s AND comment_approved = 1"), comment_author_email, comment_author, comment_author_url)))
         # end if
         return 0
     # end def get_user_comments_approved
@@ -605,7 +605,7 @@ class Akismet():
         #// determine why the transition_comment_status action was triggered.  And there are several different ways by which
         #// to spam and unspam comments: bulk actions, ajax, links in moderation emails, the dashboard, and perhaps others.
         #// We'll assume that this is an explicit user action if certain POST/GET variables exist.
-        if (php_isset(lambda : PHP_POST["status"])) and php_in_array(PHP_POST["status"], Array("spam", "unspam", "approved")) or (php_isset(lambda : PHP_POST["spam"])) and int(PHP_POST["spam"]) == 1 or (php_isset(lambda : PHP_POST["unspam"])) and int(PHP_POST["unspam"]) == 1 or (php_isset(lambda : PHP_POST["comment_status"])) and php_in_array(PHP_POST["comment_status"], Array("spam", "unspam")) or (php_isset(lambda : PHP_REQUEST["action"])) and php_in_array(PHP_REQUEST["action"], Array("spam", "unspam", "spamcomment", "unspamcomment")) or (php_isset(lambda : PHP_POST["action"])) and php_in_array(PHP_POST["action"], Array("editedcomment")) or (php_isset(lambda : PHP_REQUEST["for"])) and "jetpack" == PHP_REQUEST["for"] and (not php_defined("IS_WPCOM")) or (not IS_WPCOM) or php_defined("REST_API_REQUEST") and REST_API_REQUEST or php_defined("REST_REQUEST") and REST_REQUEST:
+        if (php_isset(lambda : PHP_POST["status"])) and php_in_array(PHP_POST["status"], Array("spam", "unspam", "approved")) or (php_isset(lambda : PHP_POST["spam"])) and php_int(PHP_POST["spam"]) == 1 or (php_isset(lambda : PHP_POST["unspam"])) and php_int(PHP_POST["unspam"]) == 1 or (php_isset(lambda : PHP_POST["comment_status"])) and php_in_array(PHP_POST["comment_status"], Array("spam", "unspam")) or (php_isset(lambda : PHP_REQUEST["action"])) and php_in_array(PHP_REQUEST["action"], Array("spam", "unspam", "spamcomment", "unspamcomment")) or (php_isset(lambda : PHP_POST["action"])) and php_in_array(PHP_POST["action"], Array("editedcomment")) or (php_isset(lambda : PHP_REQUEST["for"])) and "jetpack" == PHP_REQUEST["for"] and (not php_defined("IS_WPCOM")) or (not IS_WPCOM) or php_defined("REST_API_REQUEST") and REST_API_REQUEST or php_defined("REST_REQUEST") and REST_REQUEST:
             if new_status == "spam" and old_status == "approved" or old_status == "unapproved" or (not old_status):
                 return self.submit_spam_comment(comment.comment_ID)
             elif old_status == "spam" and new_status == "approved" or new_status == "unapproved":
@@ -619,7 +619,7 @@ class Akismet():
         
         global wpdb,current_user,current_site
         php_check_if_defined("wpdb","current_user","current_site")
-        comment_id = int(comment_id)
+        comment_id = php_int(comment_id)
         comment = wpdb.get_row(wpdb.prepare(str("SELECT * FROM ") + str(wpdb.comments) + str(" WHERE comment_ID = %d"), comment_id))
         if (not comment):
             #// it was deleted
@@ -656,7 +656,7 @@ class Akismet():
             comment.is_test = "true"
         # end if
         post = get_post(comment.comment_post_ID)
-        if (not php_is_null(post)):
+        if (not is_null(post)):
             comment.comment_post_modified_gmt = post.post_modified_gmt
         # end if
         response = Akismet.http_post(Akismet.build_query(comment), "submit-spam")
@@ -671,7 +671,7 @@ class Akismet():
         
         global wpdb,current_user,current_site
         php_check_if_defined("wpdb","current_user","current_site")
-        comment_id = int(comment_id)
+        comment_id = php_int(comment_id)
         comment = wpdb.get_row(wpdb.prepare(str("SELECT * FROM ") + str(wpdb.comments) + str(" WHERE comment_ID = %d"), comment_id))
         if (not comment):
             #// it was deleted
@@ -705,7 +705,7 @@ class Akismet():
             comment.is_test = "true"
         # end if
         post = get_post(comment.comment_post_ID)
-        if (not php_is_null(post)):
+        if (not is_null(post)):
             comment.comment_post_modified_gmt = post.post_modified_gmt
         # end if
         response = self.http_post(Akismet.build_query(comment), "submit-ham")
@@ -921,7 +921,7 @@ class Akismet():
     @classmethod
     def last_comment_status(self, approved=None, comment=None):
         
-        if php_is_null(self.last_comment_result):
+        if is_null(self.last_comment_result):
             #// We didn't have reason to store the result of the last check.
             return approved
         # end if

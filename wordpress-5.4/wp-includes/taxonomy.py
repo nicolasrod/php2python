@@ -734,13 +734,13 @@ def get_term_by(field=None, value=None, taxonomy="", output=OBJECT, filter="raw"
     # end if
     #// No need to perform a query for empty 'slug' or 'name'.
     if "slug" == field or "name" == field:
-        value = str(value)
+        value = php_str(value)
         if 0 == php_strlen(value):
             return False
         # end if
     # end if
     if "id" == field or "term_id" == field:
-        term = get_term(int(value), taxonomy, output, filter)
+        term = get_term(php_int(value), taxonomy, output, filter)
         if is_wp_error(term) or None == term:
             term = False
         # end if
@@ -1156,7 +1156,7 @@ def term_exists(term=None, taxonomy="", parent=None, *args_):
     limit = "LIMIT 1"
     if (not php_empty(lambda : taxonomy)):
         if php_is_numeric(parent):
-            parent = int(parent)
+            parent = php_int(parent)
             where_fields[-1] = parent
             else_where_fields[-1] = parent
             where += " AND tt.parent = %d"
@@ -1273,7 +1273,7 @@ def sanitize_term_field(field=None, value=None, term_id=None, taxonomy=None, con
     
     int_fields = Array("parent", "term_id", "count", "term_group", "term_taxonomy_id", "object_id")
     if php_in_array(field, int_fields):
-        value = int(value)
+        value = php_int(value)
         if value < 0:
             value = 0
         # end if
@@ -1446,7 +1446,7 @@ def wp_count_terms(taxonomy=None, args=Array(), *args_):
 #//
 def wp_delete_object_term_relationships(object_id=None, taxonomies=None, *args_):
     
-    object_id = int(object_id)
+    object_id = php_int(object_id)
     if (not php_is_array(taxonomies)):
         taxonomies = Array(taxonomies)
     # end if
@@ -1487,7 +1487,7 @@ def wp_delete_term(term=None, taxonomy=None, args=Array(), *args_):
     
     global wpdb
     php_check_if_defined("wpdb")
-    term = int(term)
+    term = php_int(term)
     ids = term_exists(term, taxonomy)
     if (not ids):
         return False
@@ -1498,7 +1498,7 @@ def wp_delete_term(term=None, taxonomy=None, args=Array(), *args_):
     tt_id = ids["term_taxonomy_id"]
     defaults = Array()
     if "category" == taxonomy:
-        defaults["default"] = int(get_option("default_category"))
+        defaults["default"] = php_int(get_option("default_category"))
         if defaults["default"] == term:
             return 0
             pass
@@ -1506,7 +1506,7 @@ def wp_delete_term(term=None, taxonomy=None, args=Array(), *args_):
     # end if
     args = wp_parse_args(args, defaults)
     if (php_isset(lambda : args["default"])):
-        default = int(args["default"])
+        default = php_int(args["default"])
         if (not term_exists(default, taxonomy)):
             default = None
         # end if
@@ -1530,7 +1530,7 @@ def wp_delete_term(term=None, taxonomy=None, args=Array(), *args_):
             return term_obj
         # end if
         parent = term_obj.parent
-        edit_ids = wpdb.get_results(str("SELECT term_id, term_taxonomy_id FROM ") + str(wpdb.term_taxonomy) + str(" WHERE `parent` = ") + int(term_obj.term_id))
+        edit_ids = wpdb.get_results(str("SELECT term_id, term_taxonomy_id FROM ") + str(wpdb.term_taxonomy) + str(" WHERE `parent` = ") + php_int(term_obj.term_id))
         edit_tt_ids = wp_list_pluck(edit_ids, "term_taxonomy_id")
         #// 
         #// Fires immediately before a term to delete's children are reassigned a parent.
@@ -1821,18 +1821,18 @@ def wp_insert_term(term=None, taxonomy=None, args=Array(), *args_):
     # end if
     defaults = Array({"alias_of": "", "description": "", "parent": 0, "slug": ""})
     args = wp_parse_args(args, defaults)
-    if args["parent"] > 0 and (not term_exists(int(args["parent"]))):
+    if args["parent"] > 0 and (not term_exists(php_int(args["parent"]))):
         return php_new_class("WP_Error", lambda : WP_Error("missing_parent", __("Parent term does not exist.")))
     # end if
     args["name"] = term
     args["taxonomy"] = taxonomy
     #// Coerce null description to strings, to avoid database errors.
-    args["description"] = str(args["description"])
+    args["description"] = php_str(args["description"])
     args = sanitize_term(args, taxonomy, "db")
     #// expected_slashed ($name)
     name = wp_unslash(args["name"])
     description = wp_unslash(args["description"])
-    parent = int(args["parent"])
+    parent = php_int(args["parent"])
     slug_provided = (not php_empty(lambda : args["slug"]))
     if (not slug_provided):
         slug = sanitize_title(name)
@@ -1906,7 +1906,7 @@ def wp_insert_term(term=None, taxonomy=None, args=Array(), *args_):
     if False == wpdb.insert(wpdb.terms, data):
         return php_new_class("WP_Error", lambda : WP_Error("db_insert_error", __("Could not insert term into the database."), wpdb.last_error))
     # end if
-    term_id = int(wpdb.insert_id)
+    term_id = php_int(wpdb.insert_id)
     #// Seems unreachable. However, is used in the case that a term name is provided, which sanitizes to an empty string.
     if php_empty(lambda : slug):
         slug = sanitize_title(slug, term_id)
@@ -1923,7 +1923,7 @@ def wp_insert_term(term=None, taxonomy=None, args=Array(), *args_):
     if False == wpdb.insert(wpdb.term_taxonomy, compact("term_id", "taxonomy", "description", "parent") + Array({"count": 0})):
         return php_new_class("WP_Error", lambda : WP_Error("db_insert_error", __("Could not insert term taxonomy into the database."), wpdb.last_error))
     # end if
-    tt_id = int(wpdb.insert_id)
+    tt_id = php_int(wpdb.insert_id)
     #// 
     #// Sanity check: if we just created a term with the same parent + taxonomy + slug but a higher term_id than
     #// an existing term, then we have unwittingly created a duplicate term. Delete the dupe, and use the term_id
@@ -1951,8 +1951,8 @@ def wp_insert_term(term=None, taxonomy=None, args=Array(), *args_):
     if duplicate_term:
         wpdb.delete(wpdb.terms, Array({"term_id": term_id}))
         wpdb.delete(wpdb.term_taxonomy, Array({"term_taxonomy_id": tt_id}))
-        term_id = int(duplicate_term.term_id)
-        tt_id = int(duplicate_term.term_taxonomy_id)
+        term_id = php_int(duplicate_term.term_id)
+        tt_id = php_int(duplicate_term.term_taxonomy_id)
         clean_term_cache(term_id, taxonomy)
         return Array({"term_id": term_id, "term_taxonomy_id": tt_id})
     # end if
@@ -2039,7 +2039,7 @@ def wp_set_object_terms(object_id=None, terms=None, taxonomy=None, append=False,
     
     global wpdb
     php_check_if_defined("wpdb")
-    object_id = int(object_id)
+    object_id = php_int(object_id)
     if (not taxonomy_exists(taxonomy)):
         return php_new_class("WP_Error", lambda : WP_Error("invalid_taxonomy", __("Invalid taxonomy.")))
     # end if
@@ -2179,7 +2179,7 @@ def wp_remove_object_terms(object_id=None, terms=None, taxonomy=None, *args_):
     
     global wpdb
     php_check_if_defined("wpdb")
-    object_id = int(object_id)
+    object_id = php_int(object_id)
     if (not taxonomy_exists(taxonomy)):
         return php_new_class("WP_Error", lambda : WP_Error("invalid_taxonomy", __("Invalid taxonomy.")))
     # end if
@@ -2231,7 +2231,7 @@ def wp_remove_object_terms(object_id=None, terms=None, taxonomy=None, *args_):
         #//
         do_action("deleted_term_relationships", object_id, tt_ids, taxonomy)
         wp_update_term_count(tt_ids, taxonomy)
-        return bool(deleted)
+        return php_bool(deleted)
     # end if
     return False
 # end def wp_remove_object_terms
@@ -2376,7 +2376,7 @@ def wp_update_term(term_id=None, taxonomy=None, args=Array(), *args_):
     if (not taxonomy_exists(taxonomy)):
         return php_new_class("WP_Error", lambda : WP_Error("invalid_taxonomy", __("Invalid taxonomy.")))
     # end if
-    term_id = int(term_id)
+    term_id = php_int(term_id)
     #// First, get all of the original args.
     term = get_term(term_id, taxonomy)
     if is_wp_error(term):
@@ -2402,7 +2402,7 @@ def wp_update_term(term_id=None, taxonomy=None, args=Array(), *args_):
     if "" == php_trim(name):
         return php_new_class("WP_Error", lambda : WP_Error("empty_term_name", __("A name is required for this term.")))
     # end if
-    if parsed_args["parent"] > 0 and (not term_exists(int(parsed_args["parent"]))):
+    if parsed_args["parent"] > 0 and (not term_exists(php_int(parsed_args["parent"]))):
         return php_new_class("WP_Error", lambda : WP_Error("missing_parent", __("Parent term does not exist.")))
     # end if
     empty_slug = False
@@ -2442,20 +2442,20 @@ def wp_update_term(term_id=None, taxonomy=None, args=Array(), *args_):
     #// @param array  $parsed_args An array of potentially altered update arguments for the given term.
     #// @param array  $args        An array of update arguments for the given term.
     #//
-    parent = int(apply_filters("wp_update_term_parent", args["parent"], term_id, taxonomy, parsed_args, args))
+    parent = php_int(apply_filters("wp_update_term_parent", args["parent"], term_id, taxonomy, parsed_args, args))
     #// Check for duplicate slug.
     duplicate = get_term_by("slug", slug, taxonomy)
     if duplicate and duplicate.term_id != term_id:
         #// If an empty slug was passed or the parent changed, reset the slug to something unique.
         #// Otherwise, bail.
-        if empty_slug or parent != int(term["parent"]):
+        if empty_slug or parent != php_int(term["parent"]):
             slug = wp_unique_term_slug(slug, args)
         else:
             #// translators: %s: Taxonomy term slug.
             return php_new_class("WP_Error", lambda : WP_Error("duplicate_term_slug", php_sprintf(__("The slug &#8220;%s&#8221; is already in use by another term."), slug)))
         # end if
     # end if
-    tt_id = int(wpdb.get_var(wpdb.prepare(str("SELECT tt.term_taxonomy_id FROM ") + str(wpdb.term_taxonomy) + str(" AS tt INNER JOIN ") + str(wpdb.terms) + str(" AS t ON tt.term_id = t.term_id WHERE tt.taxonomy = %s AND t.term_id = %d"), taxonomy, term_id)))
+    tt_id = php_int(wpdb.get_var(wpdb.prepare(str("SELECT tt.term_taxonomy_id FROM ") + str(wpdb.term_taxonomy) + str(" AS tt INNER JOIN ") + str(wpdb.terms) + str(" AS t ON tt.term_id = t.term_id WHERE tt.taxonomy = %s AND t.term_id = %d"), taxonomy, term_id)))
     #// Check whether this is a shared term that needs splitting.
     _term_id = _split_shared_term(term_id, tt_id)
     if (not is_wp_error(_term_id)):
@@ -2969,7 +2969,7 @@ def _get_term_children(term_id=None, terms=None, taxonomy=None, ancestors=Array(
     if php_empty(lambda : terms):
         return empty_array
     # end if
-    term_id = int(term_id)
+    term_id = php_int(term_id)
     term_list = Array()
     has_children = _get_term_hierarchy(taxonomy)
     if term_id and (not (php_isset(lambda : has_children[term_id]))):
@@ -2992,7 +2992,7 @@ def _get_term_children(term_id=None, terms=None, taxonomy=None, ancestors=Array(
         if (php_isset(lambda : ancestors[term.term_id])):
             continue
         # end if
-        if int(term.parent) == term_id:
+        if php_int(term.parent) == term_id:
             if use_id:
                 term_list[-1] = term.term_id
             else:
@@ -3143,11 +3143,11 @@ def _update_post_term_count(terms=None, taxonomy=None, *args_):
         count = 0
         #// Attachments can be 'inherit' status, we need to base count off the parent's status if so.
         if check_attachments:
-            count += int(wpdb.get_var(wpdb.prepare(str("SELECT COUNT(*) FROM ") + str(wpdb.term_relationships) + str(", ") + str(wpdb.posts) + str(" p1 WHERE p1.ID = ") + str(wpdb.term_relationships) + str(".object_id AND ( post_status = 'publish' OR ( post_status = 'inherit' AND post_parent > 0 AND ( SELECT post_status FROM ") + str(wpdb.posts) + str(" WHERE ID = p1.post_parent ) = 'publish' ) ) AND post_type = 'attachment' AND term_taxonomy_id = %d"), term)))
+            count += php_int(wpdb.get_var(wpdb.prepare(str("SELECT COUNT(*) FROM ") + str(wpdb.term_relationships) + str(", ") + str(wpdb.posts) + str(" p1 WHERE p1.ID = ") + str(wpdb.term_relationships) + str(".object_id AND ( post_status = 'publish' OR ( post_status = 'inherit' AND post_parent > 0 AND ( SELECT post_status FROM ") + str(wpdb.posts) + str(" WHERE ID = p1.post_parent ) = 'publish' ) ) AND post_type = 'attachment' AND term_taxonomy_id = %d"), term)))
         # end if
         if object_types:
             #// phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.QuotedDynamicPlaceholderGeneration
-            count += int(wpdb.get_var(wpdb.prepare(str("SELECT COUNT(*) FROM ") + str(wpdb.term_relationships) + str(", ") + str(wpdb.posts) + str(" WHERE ") + str(wpdb.posts) + str(".ID = ") + str(wpdb.term_relationships) + str(".object_id AND post_status = 'publish' AND post_type IN ('") + php_implode("', '", object_types) + "') AND term_taxonomy_id = %d", term)))
+            count += php_int(wpdb.get_var(wpdb.prepare(str("SELECT COUNT(*) FROM ") + str(wpdb.term_relationships) + str(", ") + str(wpdb.posts) + str(" WHERE ") + str(wpdb.posts) + str(".ID = ") + str(wpdb.term_relationships) + str(".object_id AND post_status = 'publish' AND post_type IN ('") + php_implode("', '", object_types) + "') AND term_taxonomy_id = %d", term)))
         # end if
         #// This action is documented in wp-includes/taxonomy.php
         do_action("edit_term_taxonomy", term, taxonomy.name)
@@ -3217,7 +3217,7 @@ def _split_shared_term(term_id=None, term_taxonomy_id=None, record=True, *args_)
         term_taxonomy_id = php_intval(term_taxonomy.term_taxonomy_id)
     # end if
     #// If there are no shared term_taxonomy rows, there's nothing to do here.
-    shared_tt_count = int(wpdb.get_var(wpdb.prepare(str("SELECT COUNT(*) FROM ") + str(wpdb.term_taxonomy) + str(" tt WHERE tt.term_id = %d AND tt.term_taxonomy_id != %d"), term_id, term_taxonomy_id)))
+    shared_tt_count = php_int(wpdb.get_var(wpdb.prepare(str("SELECT COUNT(*) FROM ") + str(wpdb.term_taxonomy) + str(" tt WHERE tt.term_id = %d AND tt.term_taxonomy_id != %d"), term_id, term_taxonomy_id)))
     if (not shared_tt_count):
         return term_id
     # end if
@@ -3225,7 +3225,7 @@ def _split_shared_term(term_id=None, term_taxonomy_id=None, record=True, *args_)
     #// Verify that the term_taxonomy_id passed to the function is actually associated with the term_id.
     #// If there's a mismatch, it may mean that the term is already split. Return the actual term_id from the db.
     #//
-    check_term_id = int(wpdb.get_var(wpdb.prepare(str("SELECT term_id FROM ") + str(wpdb.term_taxonomy) + str(" WHERE term_taxonomy_id = %d"), term_taxonomy_id)))
+    check_term_id = php_int(wpdb.get_var(wpdb.prepare(str("SELECT term_id FROM ") + str(wpdb.term_taxonomy) + str(" WHERE term_taxonomy_id = %d"), term_taxonomy_id)))
     if check_term_id != term_id:
         return check_term_id
     # end if
@@ -3237,7 +3237,7 @@ def _split_shared_term(term_id=None, term_taxonomy_id=None, record=True, *args_)
     if False == wpdb.insert(wpdb.terms, new_term_data):
         return php_new_class("WP_Error", lambda : WP_Error("db_insert_error", __("Could not split shared term."), wpdb.last_error))
     # end if
-    new_term_id = int(wpdb.insert_id)
+    new_term_id = php_int(wpdb.insert_id)
     #// Update the existing term_taxonomy to point to the newly created term.
     wpdb.update(wpdb.term_taxonomy, Array({"term_id": new_term_id}), Array({"term_taxonomy_id": term_taxonomy_id}))
     #// Reassign child terms to the new parent.
@@ -3248,7 +3248,7 @@ def _split_shared_term(term_id=None, term_taxonomy_id=None, record=True, *args_)
     if (not php_empty(lambda : children_tt_ids)):
         for child_tt_id in children_tt_ids:
             wpdb.update(wpdb.term_taxonomy, Array({"parent": new_term_id}), Array({"term_taxonomy_id": child_tt_id}))
-            clean_term_cache(int(child_tt_id), "", False)
+            clean_term_cache(php_int(child_tt_id), "", False)
         # end for
     else:
         #// If the term has no children, we must force its taxonomy cache to be rebuilt separately.
@@ -3396,7 +3396,7 @@ def _wp_check_split_default_terms(term_id=None, new_term_id=None, term_taxonomy_
         return
     # end if
     for option in Array("default_category", "default_link_category", "default_email_category"):
-        if int(get_option(option, -1)) == term_id:
+        if php_int(get_option(option, -1)) == term_id:
             update_option(option, new_term_id)
         # end if
     # end for
@@ -3483,7 +3483,7 @@ def wp_get_split_term(old_term_id=None, taxonomy=None, *args_):
     split_terms = wp_get_split_terms(old_term_id)
     term_id = False
     if (php_isset(lambda : split_terms[taxonomy])):
-        term_id = int(split_terms[taxonomy])
+        term_id = php_int(split_terms[taxonomy])
     # end if
     return term_id
 # end def wp_get_split_term
@@ -3719,7 +3719,7 @@ def get_post_taxonomies(post=0, *args_):
 #//
 def is_object_in_term(object_id=None, taxonomy=None, terms=None, *args_):
     
-    object_id = int(object_id)
+    object_id = php_int(object_id)
     if (not object_id):
         return php_new_class("WP_Error", lambda : WP_Error("invalid_object", __("Invalid object ID.")))
     # end if
@@ -3800,7 +3800,7 @@ def is_object_in_taxonomy(object_type=None, taxonomy=None, *args_):
 #//
 def get_ancestors(object_id=0, object_type="", resource_type="", *args_):
     
-    object_id = int(object_id)
+    object_id = php_int(object_id)
     ancestors = Array()
     if php_empty(lambda : object_id):
         #// This filter is documented in wp-includes/taxonomy.php
@@ -3820,7 +3820,7 @@ def get_ancestors(object_id=0, object_type="", resource_type="", *args_):
             if not ((not is_wp_error(term)) and (not php_empty(lambda : term.parent)) and (not php_in_array(term.parent, ancestors))):
                 break
             # end if
-            ancestors[-1] = int(term.parent)
+            ancestors[-1] = php_int(term.parent)
             term = get_term(term.parent, object_type)
         # end while
     elif "post_type" == resource_type:
@@ -3854,7 +3854,7 @@ def wp_get_term_taxonomy_parent_id(term_id=None, taxonomy=None, *args_):
     if (not term) or is_wp_error(term):
         return False
     # end if
-    return int(term.parent)
+    return php_int(term.parent)
 # end def wp_get_term_taxonomy_parent_id
 #// 
 #// Checks the given subset of the term hierarchy for hierarchy loops.

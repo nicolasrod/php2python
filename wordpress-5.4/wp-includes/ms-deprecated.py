@@ -578,7 +578,7 @@ def install_blog(blog_id=None, blog_title="", *args_):
     php_check_if_defined("wpdb","wp_roles")
     _deprecated_function(__FUNCTION__, "5.1.0")
     #// Cast for security.
-    blog_id = int(blog_id)
+    blog_id = php_int(blog_id)
     php_include_file(ABSPATH + "wp-admin/includes/upgrade.php", once=True)
     suppress = wpdb.suppress_errors()
     if wpdb.get_results(str("DESCRIBE ") + str(wpdb.posts)):

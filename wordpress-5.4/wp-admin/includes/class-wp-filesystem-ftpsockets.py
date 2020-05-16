@@ -46,7 +46,7 @@ class WP_Filesystem_ftpsockets(WP_Filesystem_Base):
         if php_empty(lambda : opt["port"]):
             self.options["port"] = 21
         else:
-            self.options["port"] = int(opt["port"])
+            self.options["port"] = php_int(opt["port"])
         # end if
         if php_empty(lambda : opt["hostname"]):
             self.errors.add("empty_hostname", __("FTP hostname is required"))

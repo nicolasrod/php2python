@@ -89,7 +89,7 @@ class Walker_Nav_Menu_Checklist(Walker_Nav_Menu):
         php_check_if_defined("_nav_menu_placeholder","nav_menu_selected_id")
         _nav_menu_placeholder = php_intval(_nav_menu_placeholder) - 1 if 0 > _nav_menu_placeholder else -1
         possible_object_id = item.object_id if (php_isset(lambda : item.post_type)) and "nav_menu_item" == item.post_type else _nav_menu_placeholder
-        possible_db_id = int(item.ID) if (not php_empty(lambda : item.ID)) and 0 < possible_object_id else 0
+        possible_db_id = php_int(item.ID) if (not php_empty(lambda : item.ID)) and 0 < possible_object_id else 0
         indent = php_str_repeat("   ", depth) if depth else ""
         output += indent + "<li>"
         output += "<label class=\"menu-item-title\">"

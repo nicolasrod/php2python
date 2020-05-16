@@ -55,7 +55,7 @@ class WP_Network():
         
         global wpdb
         php_check_if_defined("wpdb")
-        network_id = int(network_id)
+        network_id = php_int(network_id)
         if (not network_id):
             return False
         # end if
@@ -104,10 +104,10 @@ class WP_Network():
         
         for case in Switch(key):
             if case("id"):
-                return int(self.id)
+                return php_int(self.id)
             # end if
             if case("blog_id"):
-                return str(self.get_main_site_id())
+                return php_str(self.get_main_site_id())
             # end if
             if case("site_id"):
                 return self.get_main_site_id()
@@ -154,14 +154,14 @@ class WP_Network():
         
         for case in Switch(key):
             if case("id"):
-                self.id = int(value)
+                self.id = php_int(value)
                 break
             # end if
             if case("blog_id"):
                 pass
             # end if
             if case("site_id"):
-                self.blog_id = str(value)
+                self.blog_id = php_str(value)
                 break
             # end if
             if case():
@@ -191,27 +191,27 @@ class WP_Network():
         #// @param int|null   $main_site_id If a positive integer is returned, it is interpreted as the main site ID.
         #// @param WP_Network $network      The network object for which the main site was detected.
         #//
-        main_site_id = int(apply_filters("pre_get_main_site_id", None, self))
+        main_site_id = php_int(apply_filters("pre_get_main_site_id", None, self))
         if 0 < main_site_id:
             return main_site_id
         # end if
-        if 0 < int(self.blog_id):
-            return int(self.blog_id)
+        if 0 < php_int(self.blog_id):
+            return php_int(self.blog_id)
         # end if
         if php_defined("DOMAIN_CURRENT_SITE") and php_defined("PATH_CURRENT_SITE") and DOMAIN_CURRENT_SITE == self.domain and PATH_CURRENT_SITE == self.path or php_defined("SITE_ID_CURRENT_SITE") and SITE_ID_CURRENT_SITE == self.id:
             if php_defined("BLOG_ID_CURRENT_SITE"):
-                self.blog_id = str(BLOG_ID_CURRENT_SITE)
-                return int(self.blog_id)
+                self.blog_id = php_str(BLOG_ID_CURRENT_SITE)
+                return php_int(self.blog_id)
             # end if
             if php_defined("BLOGID_CURRENT_SITE"):
                 #// Deprecated.
-                self.blog_id = str(BLOGID_CURRENT_SITE)
-                return int(self.blog_id)
+                self.blog_id = php_str(BLOGID_CURRENT_SITE)
+                return php_int(self.blog_id)
             # end if
         # end if
         site = get_site()
         if site.domain == self.domain and site.path == self.path:
-            main_site_id = int(site.id)
+            main_site_id = php_int(site.id)
         else:
             cache_key = "network:" + self.id + ":main_site"
             main_site_id = wp_cache_get(cache_key, "site-options")
@@ -221,8 +221,8 @@ class WP_Network():
                 wp_cache_add(cache_key, main_site_id, "site-options")
             # end if
         # end if
-        self.blog_id = str(main_site_id)
-        return int(self.blog_id)
+        self.blog_id = php_str(main_site_id)
+        return php_int(self.blog_id)
     # end def get_main_site_id
     #// 
     #// Set the site name assigned to the network if one has not been populated.

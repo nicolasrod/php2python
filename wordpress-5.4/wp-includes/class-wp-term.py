@@ -56,7 +56,7 @@ class WP_Term():
         
         global wpdb
         php_check_if_defined("wpdb")
-        term_id = int(term_id)
+        term_id = php_int(term_id)
         if (not term_id):
             return False
         # end if

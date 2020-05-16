@@ -81,7 +81,7 @@ class WP_Http_Curl():
         #// CURLOPT_TIMEOUT and CURLOPT_CONNECTTIMEOUT expect integers. Have to use ceil since.
         #// a value of 0 will allow an unlimited timeout.
         #//
-        timeout = int(ceil(parsed_args["timeout"]))
+        timeout = php_int(ceil(parsed_args["timeout"]))
         curl_setopt(handle, CURLOPT_CONNECTTIMEOUT, timeout)
         curl_setopt(handle, CURLOPT_TIMEOUT, timeout)
         curl_setopt(handle, CURLOPT_URL, url)
@@ -115,7 +115,7 @@ class WP_Http_Curl():
             # end if
             if case():
                 curl_setopt(handle, CURLOPT_CUSTOMREQUEST, parsed_args["method"])
-                if (not php_is_null(parsed_args["body"])):
+                if (not is_null(parsed_args["body"])):
                     curl_setopt(handle, CURLOPT_POSTFIELDS, parsed_args["body"])
                 # end if
                 break

@@ -286,7 +286,7 @@ class ftp_base():
     # end def _settype
     def passive(self, pasv=None):
         
-        if php_is_null(pasv):
+        if is_null(pasv):
             self._passive = (not self._passive)
         else:
             self._passive = pasv
@@ -428,12 +428,12 @@ class ftp_base():
     # end def quit
     def login(self, user=None, pass_=None):
         
-        if (not php_is_null(user)):
+        if (not is_null(user)):
             self._login = user
         else:
             self._login = "anonymous"
         # end if
-        if (not php_is_null(pass_)):
+        if (not is_null(pass_)):
             self._password = pass_
         else:
             self._password = "anon@anon.com"
@@ -720,7 +720,7 @@ class ftp_base():
     # end def fget
     def get(self, remotefile=None, localfile=None, rest=0):
         
-        if php_is_null(localfile):
+        if is_null(localfile):
             localfile = remotefile
         # end if
         if php_no_error(lambda: php_file_exists(localfile)):
@@ -805,7 +805,7 @@ class ftp_base():
     # end def fput
     def put(self, localfile=None, remotefile=None, rest=0):
         
-        if php_is_null(remotefile):
+        if is_null(remotefile):
             remotefile = localfile
         # end if
         if (not php_file_exists(localfile)):

@@ -87,7 +87,7 @@ class SimplePie_Cache_Memcache(SimplePie_Cache_Base):
         self.options["extras"] = php_array_merge(self.options["extras"], parsed["extras"])
         self.name = self.options["extras"]["prefix"] + php_md5(str(name) + str(":") + str(type))
         self.cache = php_new_class("Memcache", lambda : Memcache())
-        self.cache.addserver(self.options["host"], int(self.options["port"]))
+        self.cache.addserver(self.options["host"], php_int(self.options["port"]))
     # end def __init__
     #// 
     #// Save data to the cache
@@ -100,7 +100,7 @@ class SimplePie_Cache_Memcache(SimplePie_Cache_Base):
         if type(data).__name__ == "SimplePie":
             data = data.data
         # end if
-        return self.cache.set(self.name, serialize(data), MEMCACHE_COMPRESSED, int(self.options["extras"]["timeout"]))
+        return self.cache.set(self.name, serialize(data), MEMCACHE_COMPRESSED, php_int(self.options["extras"]["timeout"]))
     # end def save
     #// 
     #// Retrieve the data saved to the cache
@@ -138,7 +138,7 @@ class SimplePie_Cache_Memcache(SimplePie_Cache_Base):
         
         data = self.cache.get(self.name)
         if data != False:
-            return self.cache.set(self.name, data, MEMCACHE_COMPRESSED, int(self.duration))
+            return self.cache.set(self.name, data, MEMCACHE_COMPRESSED, php_int(self.duration))
         # end if
         return False
     # end def touch

@@ -43,7 +43,7 @@ def get_header(name=None, *args_):
     #//
     do_action("get_header", name)
     templates = Array()
-    name = str(name)
+    name = php_str(name)
     if "" != name:
         templates[-1] = str("header-") + str(name) + str(".php")
     # end if
@@ -75,7 +75,7 @@ def get_footer(name=None, *args_):
     #//
     do_action("get_footer", name)
     templates = Array()
-    name = str(name)
+    name = php_str(name)
     if "" != name:
         templates[-1] = str("footer-") + str(name) + str(".php")
     # end if
@@ -107,7 +107,7 @@ def get_sidebar(name=None, *args_):
     #//
     do_action("get_sidebar", name)
     templates = Array()
-    name = str(name)
+    name = php_str(name)
     if "" != name:
         templates[-1] = str("sidebar-") + str(name) + str(".php")
     # end if
@@ -150,7 +150,7 @@ def get_template_part(slug=None, name=None, *args_):
     #//
     do_action(str("get_template_part_") + str(slug), slug, name)
     templates = Array()
-    name = str(name)
+    name = php_str(name)
     if "" != name:
         templates[-1] = str(slug) + str("-") + str(name) + str(".php")
     # end if
@@ -215,7 +215,7 @@ def get_search_form(args=Array(), *args_):
         #// function as expected, we handle a value for the boolean $echo param removed
         #// in 5.2.0. Then we deal with the $args array and cast its defaults.
         #//
-        echo = bool(args)
+        echo = php_bool(args)
         #// Set an empty array and allow default arguments to take over.
         args = Array()
     # end if
@@ -783,7 +783,7 @@ def get_bloginfo(show="", filter="raw", *args_):
 def get_site_icon_url(size=512, url="", blog_id=0, *args_):
     
     switched_blog = False
-    if is_multisite() and (not php_empty(lambda : blog_id)) and get_current_blog_id() != int(blog_id):
+    if is_multisite() and (not php_empty(lambda : blog_id)) and get_current_blog_id() != php_int(blog_id):
         switch_to_blog(blog_id)
         switched_blog = True
     # end if
@@ -833,7 +833,7 @@ def site_icon_url(size=512, url="", blog_id=0, *args_):
 #//
 def has_site_icon(blog_id=0, *args_):
     
-    return bool(get_site_icon_url(512, "", blog_id))
+    return php_bool(get_site_icon_url(512, "", blog_id))
 # end def has_site_icon
 #// 
 #// Determines whether the site has a custom logo.
@@ -846,7 +846,7 @@ def has_site_icon(blog_id=0, *args_):
 def has_custom_logo(blog_id=0, *args_):
     
     switched_blog = False
-    if is_multisite() and (not php_empty(lambda : blog_id)) and get_current_blog_id() != int(blog_id):
+    if is_multisite() and (not php_empty(lambda : blog_id)) and get_current_blog_id() != php_int(blog_id):
         switch_to_blog(blog_id)
         switched_blog = True
     # end if
@@ -854,7 +854,7 @@ def has_custom_logo(blog_id=0, *args_):
     if switched_blog:
         restore_current_blog()
     # end if
-    return bool(custom_logo_id)
+    return php_bool(custom_logo_id)
 # end def has_custom_logo
 #// 
 #// Returns a custom logo, linked to home.
@@ -868,7 +868,7 @@ def get_custom_logo(blog_id=0, *args_):
     
     html = ""
     switched_blog = False
-    if is_multisite() and (not php_empty(lambda : blog_id)) and get_current_blog_id() != int(blog_id):
+    if is_multisite() and (not php_empty(lambda : blog_id)) and get_current_blog_id() != php_int(blog_id):
         switch_to_blog(blog_id)
         switched_blog = True
     # end if
@@ -1716,7 +1716,7 @@ def wp_get_archives(args="", *args_):
                 if parsed_args["show_post_count"]:
                     parsed_args["after"] = "&nbsp;(" + result.posts + ")" + after
                 # end if
-                selected = is_archive() and str(parsed_args["year"]) == result.year and str(parsed_args["monthnum"]) == result.month
+                selected = is_archive() and php_str(parsed_args["year"]) == result.year and php_str(parsed_args["monthnum"]) == result.month
                 output += get_archives_link(url, text, parsed_args["format"], parsed_args["before"], parsed_args["after"], selected)
             # end for
         # end if
@@ -1740,7 +1740,7 @@ def wp_get_archives(args="", *args_):
                 if parsed_args["show_post_count"]:
                     parsed_args["after"] = "&nbsp;(" + result.posts + ")" + after
                 # end if
-                selected = is_archive() and str(parsed_args["year"]) == result.year
+                selected = is_archive() and php_str(parsed_args["year"]) == result.year
                 output += get_archives_link(url, text, parsed_args["format"], parsed_args["before"], parsed_args["after"], selected)
             # end for
         # end if
@@ -1765,7 +1765,7 @@ def wp_get_archives(args="", *args_):
                 if parsed_args["show_post_count"]:
                     parsed_args["after"] = "&nbsp;(" + result.posts + ")" + after
                 # end if
-                selected = is_archive() and str(parsed_args["year"]) == result.year and str(parsed_args["monthnum"]) == result.month and str(parsed_args["day"]) == result.dayofmonth
+                selected = is_archive() and php_str(parsed_args["year"]) == result.year and php_str(parsed_args["monthnum"]) == result.month and php_str(parsed_args["day"]) == result.dayofmonth
                 output += get_archives_link(url, text, parsed_args["format"], parsed_args["before"], parsed_args["after"], selected)
             # end for
         # end if
@@ -1797,7 +1797,7 @@ def wp_get_archives(args="", *args_):
                     if parsed_args["show_post_count"]:
                         parsed_args["after"] = "&nbsp;(" + result.posts + ")" + after
                     # end if
-                    selected = is_archive() and str(parsed_args["year"]) == result.yr and str(parsed_args["w"]) == result.week
+                    selected = is_archive() and php_str(parsed_args["year"]) == result.yr and php_str(parsed_args["w"]) == result.week
                     output += get_archives_link(url, text, parsed_args["format"], parsed_args["before"], parsed_args["after"], selected)
                 # end if
             # end for
@@ -1894,26 +1894,26 @@ def get_calendar(initial=True, echo=True, *args_):
         # end if
     # end if
     if (php_isset(lambda : PHP_REQUEST["w"])):
-        w = int(PHP_REQUEST["w"])
+        w = php_int(PHP_REQUEST["w"])
     # end if
     #// week_begins = 0 stands for Sunday.
-    week_begins = int(get_option("start_of_week"))
+    week_begins = php_int(get_option("start_of_week"))
     #// Let's figure out when we are.
     if (not php_empty(lambda : monthnum)) and (not php_empty(lambda : year)):
         thismonth = zeroise(php_intval(monthnum), 2)
-        thisyear = int(year)
+        thisyear = php_int(year)
     elif (not php_empty(lambda : w)):
         #// We need to get the month from MySQL.
-        thisyear = int(php_substr(m, 0, 4))
+        thisyear = php_int(php_substr(m, 0, 4))
         #// It seems MySQL's weeks disagree with PHP's.
         d = w - 1 * 7 + 6
         thismonth = wpdb.get_var(str("SELECT DATE_FORMAT((DATE_ADD('") + str(thisyear) + str("0101', INTERVAL ") + str(d) + str(" DAY) ), '%m')"))
     elif (not php_empty(lambda : m)):
-        thisyear = int(php_substr(m, 0, 4))
+        thisyear = php_int(php_substr(m, 0, 4))
         if php_strlen(m) < 6:
             thismonth = "01"
         else:
-            thismonth = zeroise(int(php_substr(m, 4, 2)), 2)
+            thismonth = zeroise(php_int(php_substr(m, 4, 2)), 2)
         # end if
     else:
         thisyear = current_time("Y")
@@ -1958,7 +1958,7 @@ def get_calendar(initial=True, echo=True, *args_):
         calendar_output += "\n      " + "<td colspan=\"" + esc_attr(pad) + "\" class=\"pad\">&nbsp;</td>"
     # end if
     newrow = False
-    daysinmonth = int(gmdate("t", unixmonth))
+    daysinmonth = php_int(gmdate("t", unixmonth))
     day = 1
     while day <= daysinmonth:
         
@@ -3599,17 +3599,17 @@ def paginate_links(args="", *args_):
         args["add_args"] = php_array_merge(args["add_args"], urlencode_deep(url_query_args))
     # end if
     #// Who knows what else people pass in $args.
-    total = int(args["total"])
+    total = php_int(args["total"])
     if total < 2:
         return
     # end if
-    current = int(args["current"])
-    end_size = int(args["end_size"])
+    current = php_int(args["current"])
+    end_size = php_int(args["end_size"])
     #// Out of bounds? Make it the default.
     if end_size < 1:
         end_size = 1
     # end if
-    mid_size = int(args["mid_size"])
+    mid_size = php_int(args["mid_size"])
     if mid_size < 0:
         mid_size = 2
     # end if
@@ -4050,7 +4050,7 @@ def readonly(readonly=None, current=True, echo=True, *args_):
 def __checked_selected_helper(helper=None, current=None, echo=None, type=None, *args_):
     
     #// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionDoubleUnderscore,PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
-    if str(helper) == str(current):
+    if php_str(helper) == php_str(current):
         result = str(" ") + str(type) + str("='") + str(type) + str("'")
     else:
         result = ""

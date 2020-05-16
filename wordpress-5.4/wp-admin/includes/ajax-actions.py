@@ -135,7 +135,7 @@ def wp_ajax_ajax_tag_search(*args_):
     #// @param WP_Taxonomy $tax        The taxonomy object.
     #// @param string      $s          The search term.
     #//
-    term_search_min_chars = int(apply_filters("term_search_min_chars", 2, tax, s))
+    term_search_min_chars = php_int(apply_filters("term_search_min_chars", 2, tax, s))
     #// 
     #// Require $term_search_min_chars chars for matching (default: 2)
     #// ensure it's a non-negative, non-zero integer.
@@ -357,9 +357,9 @@ def wp_ajax_logged_in(*args_):
 #//
 def _wp_ajax_delete_comment_response(comment_id=None, delta=-1, *args_):
     
-    total = int(PHP_POST["_total"]) if (php_isset(lambda : PHP_POST["_total"])) else 0
-    per_page = int(PHP_POST["_per_page"]) if (php_isset(lambda : PHP_POST["_per_page"])) else 0
-    page = int(PHP_POST["_page"]) if (php_isset(lambda : PHP_POST["_page"])) else 0
+    total = php_int(PHP_POST["_total"]) if (php_isset(lambda : PHP_POST["_total"])) else 0
+    per_page = php_int(PHP_POST["_per_page"]) if (php_isset(lambda : PHP_POST["_per_page"])) else 0
+    page = php_int(PHP_POST["_page"]) if (php_isset(lambda : PHP_POST["_page"])) else 0
     url = esc_url_raw(PHP_POST["_url"]) if (php_isset(lambda : PHP_POST["_url"])) else ""
     #// JS didn't send us everything we need to know. Just die with success message.
     if (not total) or (not per_page) or (not page) or (not url):
@@ -370,7 +370,7 @@ def _wp_ajax_delete_comment_response(comment_id=None, delta=-1, *args_):
         if comment:
             comment_status = comment.comment_approved
         # end if
-        if 1 == int(comment_status):
+        if 1 == php_int(comment_status):
             comment_link = get_comment_link(comment)
         # end if
         counts = wp_count_comments()
@@ -393,7 +393,7 @@ def _wp_ajax_delete_comment_response(comment_id=None, delta=-1, *args_):
                 status = query_vars["comment_status"]
             # end if
             if (not php_empty(lambda : query_vars["p"])):
-                post_id = int(query_vars["p"])
+                post_id = php_int(query_vars["p"])
             # end if
             if (not php_empty(lambda : query_vars["comment_type"])):
                 type = query_vars["comment_type"]
@@ -434,7 +434,7 @@ def _wp_ajax_add_hierarchical_term(*args_):
         wp_die(-1)
     # end if
     names = php_explode(",", PHP_POST["new" + taxonomy.name])
-    parent = int(PHP_POST["new" + taxonomy.name + "_parent"]) if (php_isset(lambda : PHP_POST["new" + taxonomy.name + "_parent"])) else 0
+    parent = php_int(PHP_POST["new" + taxonomy.name + "_parent"]) if (php_isset(lambda : PHP_POST["new" + taxonomy.name + "_parent"])) else 0
     if 0 > parent:
         parent = 0
     # end if
@@ -501,7 +501,7 @@ def _wp_ajax_add_hierarchical_term(*args_):
 #//
 def wp_ajax_delete_comment(*args_):
     
-    id = int(PHP_POST["id"]) if (php_isset(lambda : PHP_POST["id"])) else 0
+    id = php_int(PHP_POST["id"]) if (php_isset(lambda : PHP_POST["id"])) else 0
     comment = get_comment(id)
     if (not comment):
         wp_die(time())
@@ -558,7 +558,7 @@ def wp_ajax_delete_comment(*args_):
 #//
 def wp_ajax_delete_tag(*args_):
     
-    tag_id = int(PHP_POST["tag_ID"])
+    tag_id = php_int(PHP_POST["tag_ID"])
     check_ajax_referer(str("delete-tag_") + str(tag_id))
     if (not current_user_can("delete_term", tag_id)):
         wp_die(-1)
@@ -581,7 +581,7 @@ def wp_ajax_delete_tag(*args_):
 #//
 def wp_ajax_delete_link(*args_):
     
-    id = int(PHP_POST["id"]) if (php_isset(lambda : PHP_POST["id"])) else 0
+    id = php_int(PHP_POST["id"]) if (php_isset(lambda : PHP_POST["id"])) else 0
     check_ajax_referer(str("delete-bookmark_") + str(id))
     if (not current_user_can("manage_links")):
         wp_die(-1)
@@ -603,7 +603,7 @@ def wp_ajax_delete_link(*args_):
 #//
 def wp_ajax_delete_meta(*args_):
     
-    id = int(PHP_POST["id"]) if (php_isset(lambda : PHP_POST["id"])) else 0
+    id = php_int(PHP_POST["id"]) if (php_isset(lambda : PHP_POST["id"])) else 0
     check_ajax_referer(str("delete-meta_") + str(id))
     meta = get_metadata_by_mid("post", id)
     if (not meta):
@@ -629,7 +629,7 @@ def wp_ajax_delete_post(action=None, *args_):
     if php_empty(lambda : action):
         action = "delete-post"
     # end if
-    id = int(PHP_POST["id"]) if (php_isset(lambda : PHP_POST["id"])) else 0
+    id = php_int(PHP_POST["id"]) if (php_isset(lambda : PHP_POST["id"])) else 0
     check_ajax_referer(str(action) + str("_") + str(id))
     if (not current_user_can("delete_post", id)):
         wp_die(-1)
@@ -655,7 +655,7 @@ def wp_ajax_trash_post(action=None, *args_):
     if php_empty(lambda : action):
         action = "trash-post"
     # end if
-    id = int(PHP_POST["id"]) if (php_isset(lambda : PHP_POST["id"])) else 0
+    id = php_int(PHP_POST["id"]) if (php_isset(lambda : PHP_POST["id"])) else 0
     check_ajax_referer(str(action) + str("_") + str(id))
     if (not current_user_can("delete_post", id)):
         wp_die(-1)
@@ -699,7 +699,7 @@ def wp_ajax_delete_page(action=None, *args_):
     if php_empty(lambda : action):
         action = "delete-page"
     # end if
-    id = int(PHP_POST["id"]) if (php_isset(lambda : PHP_POST["id"])) else 0
+    id = php_int(PHP_POST["id"]) if (php_isset(lambda : PHP_POST["id"])) else 0
     check_ajax_referer(str(action) + str("_") + str(id))
     if (not current_user_can("delete_page", id)):
         wp_die(-1)
@@ -720,7 +720,7 @@ def wp_ajax_delete_page(action=None, *args_):
 #//
 def wp_ajax_dim_comment(*args_):
     
-    id = int(PHP_POST["id"]) if (php_isset(lambda : PHP_POST["id"])) else 0
+    id = php_int(PHP_POST["id"]) if (php_isset(lambda : PHP_POST["id"])) else 0
     comment = get_comment(id)
     if (not comment):
         x = php_new_class("WP_Ajax_Response", lambda : WP_Ajax_Response(Array({"what": "comment", "id": php_new_class("WP_Error", lambda : WP_Error("invalid_comment", php_sprintf(__("Comment %d does not exist"), id)))})))
@@ -922,7 +922,7 @@ def wp_ajax_replyto_comment(action=None, *args_):
         action = "replyto-comment"
     # end if
     check_ajax_referer(action, "_ajax_nonce-replyto-comment")
-    comment_post_ID = int(PHP_POST["comment_post_ID"])
+    comment_post_ID = php_int(PHP_POST["comment_post_ID"])
     post = get_post(comment_post_ID)
     if (not post):
         wp_die(-1)
@@ -988,7 +988,7 @@ def wp_ajax_replyto_comment(action=None, *args_):
     if (not comment):
         wp_die(1)
     # end if
-    position = int(PHP_POST["position"]) if (php_isset(lambda : PHP_POST["position"])) and int(PHP_POST["position"]) else "-1"
+    position = php_int(PHP_POST["position"]) if (php_isset(lambda : PHP_POST["position"])) and php_int(PHP_POST["position"]) else "-1"
     ob_start()
     if (php_isset(lambda : PHP_REQUEST["mode"])) and "dashboard" == PHP_REQUEST["mode"]:
         php_include_file(ABSPATH + "wp-admin/includes/dashboard.php", once=True)
@@ -1021,7 +1021,7 @@ def wp_ajax_replyto_comment(action=None, *args_):
 def wp_ajax_edit_comment(*args_):
     global PHP_POST
     check_ajax_referer("replyto-comment", "_ajax_nonce-replyto-comment")
-    comment_id = int(PHP_POST["comment_ID"])
+    comment_id = php_int(PHP_POST["comment_ID"])
     if (not current_user_can("edit_comment", comment_id)):
         wp_die(-1)
     # end if
@@ -1032,7 +1032,7 @@ def wp_ajax_edit_comment(*args_):
         PHP_POST["comment_status"] = PHP_POST["status"]
     # end if
     edit_comment()
-    position = int(PHP_POST["position"]) if (php_isset(lambda : PHP_POST["position"])) and int(PHP_POST["position"]) else "-1"
+    position = php_int(PHP_POST["position"]) if (php_isset(lambda : PHP_POST["position"])) and php_int(PHP_POST["position"]) else "-1"
     checkbox = 1 if (php_isset(lambda : PHP_POST["checkbox"])) and True == PHP_POST["checkbox"] else 0
     wp_list_table = _get_list_table("WP_Comments_List_Table" if checkbox else "WP_Post_Comments_List_Table", Array({"screen": "edit-comments"}))
     comment = get_comment(comment_id)
@@ -1119,7 +1119,7 @@ def wp_ajax_add_meta(*args_):
     
     check_ajax_referer("add-meta", "_ajax_nonce-add-meta")
     c = 0
-    pid = int(PHP_POST["post_id"])
+    pid = php_int(PHP_POST["post_id"])
     post = get_post(pid)
     if (php_isset(lambda : PHP_POST["metakeyselect"])) or (php_isset(lambda : PHP_POST["metakeyinput"])):
         if (not current_user_can("edit_post", pid)):
@@ -1159,12 +1159,12 @@ def wp_ajax_add_meta(*args_):
             # end if
         # end if
         meta = get_metadata_by_mid("post", mid)
-        pid = int(meta.post_id)
+        pid = php_int(meta.post_id)
         meta = get_object_vars(meta)
         x = php_new_class("WP_Ajax_Response", lambda : WP_Ajax_Response(Array({"what": "meta", "id": mid, "data": _list_meta_row(meta, c), "position": 1, "supplemental": Array({"postid": pid})})))
     else:
         #// Update?
-        mid = int(key(PHP_POST["meta"]))
+        mid = php_int(key(PHP_POST["meta"]))
         key = wp_unslash(PHP_POST["meta"][mid]["key"])
         value = wp_unslash(PHP_POST["meta"][mid]["value"])
         if "" == php_trim(key):
@@ -1369,7 +1369,7 @@ def wp_ajax_meta_box_order(*args_):
     order = PHP_POST["order"] if (php_isset(lambda : PHP_POST["order"])) else False
     page_columns = PHP_POST["page_columns"] if (php_isset(lambda : PHP_POST["page_columns"])) else "auto"
     if "auto" != page_columns:
-        page_columns = int(page_columns)
+        page_columns = php_int(page_columns)
     # end if
     page = PHP_POST["page"] if (php_isset(lambda : PHP_POST["page"])) else ""
     if sanitize_key(page) != page:
@@ -1437,10 +1437,10 @@ def wp_ajax_inline_save(*args_):
     global mode
     php_check_if_defined("mode")
     check_ajax_referer("inlineeditnonce", "_inline_edit")
-    if (not (php_isset(lambda : PHP_POST["post_ID"]))) or (not int(PHP_POST["post_ID"])):
+    if (not (php_isset(lambda : PHP_POST["post_ID"]))) or (not php_int(PHP_POST["post_ID"])):
         wp_die()
     # end if
-    post_ID = int(PHP_POST["post_ID"])
+    post_ID = php_int(PHP_POST["post_ID"])
     if "page" == PHP_POST["post_type"]:
         if (not current_user_can("edit_page", post_ID)):
             wp_die(__("Sorry, you are not allowed to edit this page."))
@@ -1536,10 +1536,10 @@ def wp_ajax_inline_save_tax(*args_):
     if (not tax):
         wp_die(0)
     # end if
-    if (not (php_isset(lambda : PHP_POST["tax_ID"]))) or (not int(PHP_POST["tax_ID"])):
+    if (not (php_isset(lambda : PHP_POST["tax_ID"]))) or (not php_int(PHP_POST["tax_ID"])):
         wp_die(-1)
     # end if
-    id = int(PHP_POST["tax_ID"])
+    id = php_int(PHP_POST["tax_ID"])
     if (not current_user_can("edit_term", id)):
         wp_die(-1)
     # end if
@@ -1706,7 +1706,7 @@ def wp_ajax_save_widget(*args_):
     id_base = wp_unslash(PHP_POST["id_base"])
     widget_id = wp_unslash(PHP_POST["widget-id"])
     sidebar_id = PHP_POST["sidebar"]
-    multi_number = int(PHP_POST["multi_number"]) if (not php_empty(lambda : PHP_POST["multi_number"])) else 0
+    multi_number = php_int(PHP_POST["multi_number"]) if (not php_empty(lambda : PHP_POST["multi_number"])) else 0
     settings = PHP_POST["widget-" + id_base] if (php_isset(lambda : PHP_POST["widget-" + id_base])) and php_is_array(PHP_POST["widget-" + id_base]) else False
     error = "<p>" + __("An error has occurred. Please reload the page and try again.") + "</p>"
     sidebars = wp_get_sidebars_widgets()
@@ -1816,7 +1816,7 @@ def wp_ajax_media_create_image_subsizes(*args_):
     if php_empty(lambda : PHP_POST["attachment_id"]):
         wp_send_json_error(Array({"message": __("Upload failed. Please reload and try again.")}))
     # end if
-    attachment_id = int(PHP_POST["attachment_id"])
+    attachment_id = php_int(PHP_POST["attachment_id"])
     if (not php_empty(lambda : PHP_POST["_wp_upload_failed_cleanup"])):
         #// Upload failed. Cleanup.
         if wp_attachment_is_image(attachment_id) and current_user_can("delete_post", attachment_id):
@@ -2005,7 +2005,7 @@ def wp_ajax_set_attachment_thumbnail(*args_):
     if php_empty(lambda : PHP_POST["urls"]) or (not php_is_array(PHP_POST["urls"])):
         wp_send_json_error()
     # end if
-    thumbnail_id = int(PHP_POST["thumbnail_id"])
+    thumbnail_id = php_int(PHP_POST["thumbnail_id"])
     if php_empty(lambda : thumbnail_id):
         wp_send_json_error()
     # end if
@@ -2063,7 +2063,7 @@ def wp_ajax_time_format(*args_):
 #//
 def wp_ajax_wp_fullscreen_save_post(*args_):
     
-    post_id = int(PHP_POST["post_ID"]) if (php_isset(lambda : PHP_POST["post_ID"])) else 0
+    post_id = php_int(PHP_POST["post_ID"]) if (php_isset(lambda : PHP_POST["post_ID"])) else 0
     post = None
     if post_id:
         post = get_post(post_id)
@@ -2101,7 +2101,7 @@ def wp_ajax_wp_remove_post_lock(*args_):
     if php_empty(lambda : PHP_POST["post_ID"]) or php_empty(lambda : PHP_POST["active_post_lock"]):
         wp_die(0)
     # end if
-    post_id = int(PHP_POST["post_ID"])
+    post_id = php_int(PHP_POST["post_ID"])
     post = get_post(post_id)
     if (not post):
         wp_die(0)
@@ -2138,7 +2138,7 @@ def wp_ajax_dismiss_wp_pointer(*args_):
         wp_die(0)
     # end if
     #// check_ajax_referer( 'dismiss-pointer_' . $pointer );
-    dismissed = php_array_filter(php_explode(",", str(get_user_meta(get_current_user_id(), "dismissed_wp_pointers", True))))
+    dismissed = php_array_filter(php_explode(",", php_str(get_user_meta(get_current_user_id(), "dismissed_wp_pointers", True))))
     if php_in_array(pointer, dismissed):
         wp_die(0)
     # end if
@@ -2577,7 +2577,7 @@ def wp_ajax_heartbeat(*args_):
 def wp_ajax_get_revision_diffs(*args_):
     
     php_include_file(ABSPATH + "wp-admin/includes/revision.php", once=False)
-    post = get_post(int(PHP_REQUEST["post_id"]))
+    post = get_post(php_int(PHP_REQUEST["post_id"]))
     if (not post):
         wp_send_json_error()
     # end if
@@ -2790,7 +2790,7 @@ def wp_ajax_parse_media_shortcode(*args_):
     # end if
     shortcode = wp_unslash(PHP_POST["shortcode"])
     if (not php_empty(lambda : PHP_POST["post_ID"])):
-        post = get_post(int(PHP_POST["post_ID"]))
+        post = get_post(php_int(PHP_POST["post_ID"]))
     # end if
     #// The embed shortcode requires a post.
     if (not post) or (not current_user_can("edit_post", post.ID)):
@@ -2829,7 +2829,7 @@ def wp_ajax_parse_media_shortcode(*args_):
 #//
 def wp_ajax_destroy_sessions(*args_):
     
-    user = get_userdata(int(PHP_POST["user_id"]))
+    user = get_userdata(php_int(PHP_POST["user_id"]))
     if user:
         if (not current_user_can("edit_user", user.ID)):
             user = False
@@ -3012,7 +3012,7 @@ def wp_ajax_install_theme(*args_):
     elif skin.get_errors().has_errors():
         status["errorMessage"] = skin.get_error_messages()
         wp_send_json_error(status)
-    elif php_is_null(result):
+    elif is_null(result):
         global wp_filesystem
         php_check_if_defined("wp_filesystem")
         status["errorCode"] = "unable_to_connect_to_filesystem"
@@ -3206,7 +3206,7 @@ def wp_ajax_install_plugin(*args_):
     elif skin.get_errors().has_errors():
         status["errorMessage"] = skin.get_error_messages()
         wp_send_json_error(status)
-    elif php_is_null(result):
+    elif is_null(result):
         global wp_filesystem
         php_check_if_defined("wp_filesystem")
         status["errorCode"] = "unable_to_connect_to_filesystem"
@@ -3417,7 +3417,7 @@ def wp_ajax_search_install_plugins(*args_):
     wp_list_table.prepare_items()
     ob_start()
     wp_list_table.display()
-    status["count"] = int(wp_list_table.get_pagination_arg("total_items"))
+    status["count"] = php_int(wp_list_table.get_pagination_arg("total_items"))
     status["items"] = ob_get_clean()
     wp_send_json_success(status)
 # end def wp_ajax_search_install_plugins
@@ -3447,7 +3447,7 @@ def wp_ajax_wp_privacy_export_personal_data(*args_):
     if php_empty(lambda : PHP_POST["id"]):
         wp_send_json_error(__("Missing request ID."))
     # end if
-    request_id = int(PHP_POST["id"])
+    request_id = php_int(PHP_POST["id"])
     if request_id < 1:
         wp_send_json_error(__("Invalid request ID."))
     # end if
@@ -3467,11 +3467,11 @@ def wp_ajax_wp_privacy_export_personal_data(*args_):
     if (not (php_isset(lambda : PHP_POST["exporter"]))):
         wp_send_json_error(__("Missing exporter index."))
     # end if
-    exporter_index = int(PHP_POST["exporter"])
+    exporter_index = php_int(PHP_POST["exporter"])
     if (not (php_isset(lambda : PHP_POST["page"]))):
         wp_send_json_error(__("Missing page index."))
     # end if
-    page = int(PHP_POST["page"])
+    page = php_int(PHP_POST["page"])
     send_as_email = "true" == PHP_POST["sendAsEmail"] if (php_isset(lambda : PHP_POST["sendAsEmail"])) else False
     #// 
     #// Filters the array of exporter callbacks.
@@ -3576,7 +3576,7 @@ def wp_ajax_wp_privacy_erase_personal_data(*args_):
     if php_empty(lambda : PHP_POST["id"]):
         wp_send_json_error(__("Missing request ID."))
     # end if
-    request_id = int(PHP_POST["id"])
+    request_id = php_int(PHP_POST["id"])
     if request_id < 1:
         wp_send_json_error(__("Invalid request ID."))
     # end if
@@ -3597,11 +3597,11 @@ def wp_ajax_wp_privacy_erase_personal_data(*args_):
     if (not (php_isset(lambda : PHP_POST["eraser"]))):
         wp_send_json_error(__("Missing eraser index."))
     # end if
-    eraser_index = int(PHP_POST["eraser"])
+    eraser_index = php_int(PHP_POST["eraser"])
     if (not (php_isset(lambda : PHP_POST["page"]))):
         wp_send_json_error(__("Missing page index."))
     # end if
-    page = int(PHP_POST["page"])
+    page = php_int(PHP_POST["page"])
     #// 
     #// Filters the array of personal data eraser callbacks.
     #// 
@@ -3805,18 +3805,18 @@ def wp_ajax_health_check_get_sizes(*args_):
             if php_is_string(value["size"]):
                 data["size"] = sanitize_text_field(value["size"])
             else:
-                data["size"] = int(value["size"])
+                data["size"] = php_int(value["size"])
             # end if
         # end if
         if (php_isset(lambda : value["debug"])):
             if php_is_string(value["debug"]):
                 data["debug"] = sanitize_text_field(value["debug"])
             else:
-                data["debug"] = int(value["debug"])
+                data["debug"] = php_int(value["debug"])
             # end if
         # end if
         if (not php_empty(lambda : value["raw"])):
-            data["raw"] = int(value["raw"])
+            data["raw"] = php_int(value["raw"])
         # end if
         all_sizes[name] = data
     # end for

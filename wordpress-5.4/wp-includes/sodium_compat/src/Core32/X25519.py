@@ -35,26 +35,26 @@ class ParagonIE_Sodium_Core32_X25519(ParagonIE_Sodium_Core32_Curve25519):
     @classmethod
     def fe_cswap(self, f=None, g=None, b=0):
         
-        f0 = int(f[0].toint())
-        f1 = int(f[1].toint())
-        f2 = int(f[2].toint())
-        f3 = int(f[3].toint())
-        f4 = int(f[4].toint())
-        f5 = int(f[5].toint())
-        f6 = int(f[6].toint())
-        f7 = int(f[7].toint())
-        f8 = int(f[8].toint())
-        f9 = int(f[9].toint())
-        g0 = int(g[0].toint())
-        g1 = int(g[1].toint())
-        g2 = int(g[2].toint())
-        g3 = int(g[3].toint())
-        g4 = int(g[4].toint())
-        g5 = int(g[5].toint())
-        g6 = int(g[6].toint())
-        g7 = int(g[7].toint())
-        g8 = int(g[8].toint())
-        g9 = int(g[9].toint())
+        f0 = php_int(f[0].toint())
+        f1 = php_int(f[1].toint())
+        f2 = php_int(f[2].toint())
+        f3 = php_int(f[3].toint())
+        f4 = php_int(f[4].toint())
+        f5 = php_int(f[5].toint())
+        f6 = php_int(f[6].toint())
+        f7 = php_int(f[7].toint())
+        f8 = php_int(f[8].toint())
+        f9 = php_int(f[9].toint())
+        g0 = php_int(g[0].toint())
+        g1 = php_int(g[1].toint())
+        g2 = php_int(g[2].toint())
+        g3 = php_int(g[3].toint())
+        g4 = php_int(g[4].toint())
+        g5 = php_int(g[5].toint())
+        g6 = php_int(g[6].toint())
+        g7 = php_int(g[7].toint())
+        g8 = php_int(g[8].toint())
+        g9 = php_int(g[9].toint())
         b = -b
         #// @var int $x0
         x0 = f0 ^ g0 & b
@@ -198,7 +198,7 @@ class ParagonIE_Sodium_Core32_X25519(ParagonIE_Sodium_Core32_Curve25519):
             
             #// # b = e[pos / 8] >> (pos & 7);
             #// @var int $b
-            b = self.chrtoint(e[int(floor(pos / 8))]) >> pos & 7
+            b = self.chrtoint(e[php_int(floor(pos / 8))]) >> pos & 7
             #// # b &= 1;
             b &= 1
             #// # swap ^= b;
@@ -257,7 +257,7 @@ class ParagonIE_Sodium_Core32_X25519(ParagonIE_Sodium_Core32_Curve25519):
         #// # fe_mul(x2,x2,z2);
         x2 = self.fe_mul(x2, z2)
         #// # fe_tobytes(q,x2);
-        return str(self.fe_tobytes(x2))
+        return php_str(self.fe_tobytes(x2))
     # end def crypto_scalarmult_curve25519_ref10
     #// 
     #// @internal You should not use this directly from another application

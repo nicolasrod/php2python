@@ -1437,8 +1437,8 @@ def prepend_attachment(content=None, *args_):
         meta = wp_get_attachment_metadata(get_the_ID())
         atts = Array({"src": wp_get_attachment_url()})
         if (not php_empty(lambda : meta["width"])) and (not php_empty(lambda : meta["height"])):
-            atts["width"] = int(meta["width"])
-            atts["height"] = int(meta["height"])
+            atts["width"] = php_int(meta["width"])
+            atts["height"] = php_int(meta["height"])
         # end if
         if has_post_thumbnail():
             atts["poster"] = wp_get_attachment_url(get_post_thumbnail_id())
@@ -1518,7 +1518,7 @@ def is_page_template(template="", *args_):
     # end if
     page_template = get_page_template_slug(get_queried_object_id())
     if php_empty(lambda : template):
-        return bool(page_template)
+        return php_bool(page_template)
     # end if
     if template == page_template:
         return True

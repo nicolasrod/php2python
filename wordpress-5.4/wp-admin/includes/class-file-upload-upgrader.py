@@ -62,7 +62,7 @@ class File_Upload_Upgrader():
             wp_schedule_single_event(time() + 2 * HOUR_IN_SECONDS, "upgrader_scheduled_cleanup", Array(self.id))
         elif php_is_numeric(PHP_REQUEST[urlholder]):
             #// Numeric Package = previously uploaded file, see above.
-            self.id = int(PHP_REQUEST[urlholder])
+            self.id = php_int(PHP_REQUEST[urlholder])
             attachment = get_post(self.id)
             if php_empty(lambda : attachment):
                 wp_die(__("Please select a file"))

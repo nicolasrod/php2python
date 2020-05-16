@@ -170,7 +170,7 @@ class ParagonIE_Sodium_Compat():
         #// Type checks:
         ParagonIE_Sodium_Core_Util.declarescalartype(encoded, "string", 1)
         #// @var string $encoded
-        encoded = str(encoded)
+        encoded = php_str(encoded)
         if ParagonIE_Sodium_Core_Util.strlen(encoded) == 0:
             return ""
         # end if
@@ -215,7 +215,7 @@ class ParagonIE_Sodium_Compat():
         #// Type checks:
         ParagonIE_Sodium_Core_Util.declarescalartype(decoded, "string", 1)
         #// @var string $decoded
-        decoded = str(decoded)
+        decoded = php_str(decoded)
         if ParagonIE_Sodium_Core_Util.strlen(decoded) == 0:
             return ""
         # end if
@@ -252,10 +252,10 @@ class ParagonIE_Sodium_Compat():
         #// Type checks:
         ParagonIE_Sodium_Core_Util.declarescalartype(string, "string", 1)
         if self.usenewsodiumapi():
-            return str(sodium_bin2hex(string))
+            return php_str(sodium_bin2hex(string))
         # end if
         if self.use_fallback("bin2hex"):
-            return str(php_call_user_func("\\Sodium\\bin2hex", string))
+            return php_str(php_call_user_func("\\Sodium\\bin2hex", string))
         # end if
         return ParagonIE_Sodium_Core_Util.bin2hex(string)
     # end def bin2hex
@@ -279,10 +279,10 @@ class ParagonIE_Sodium_Compat():
         ParagonIE_Sodium_Core_Util.declarescalartype(left, "string", 1)
         ParagonIE_Sodium_Core_Util.declarescalartype(right, "string", 2)
         if self.usenewsodiumapi():
-            return int(sodium_compare(left, right))
+            return php_int(sodium_compare(left, right))
         # end if
         if self.use_fallback("compare"):
-            return int(php_call_user_func("\\Sodium\\compare", left, right))
+            return php_int(php_call_user_func("\\Sodium\\compare", left, right))
         # end if
         return ParagonIE_Sodium_Core_Util.compare(left, right)
     # end def compare
@@ -311,7 +311,7 @@ class ParagonIE_Sodium_Compat():
             #// OpenSSL isn't installed
             return False
         # end if
-        return bool(php_in_array("aes-256-gcm", openssl_get_cipher_methods()))
+        return php_bool(php_in_array("aes-256-gcm", openssl_get_cipher_methods()))
     # end def crypto_aead_aes256gcm_is_available
     #// 
     #// Authenticated Encryption with Associated Data: Decryption
@@ -507,10 +507,10 @@ class ParagonIE_Sodium_Compat():
             raise php_new_class("SodiumException", lambda : SodiumException("Key must be CRYPTO_AEAD_CHACHA20POLY1305_KEYBYTES long"))
         # end if
         if self.usenewsodiumapi():
-            return str(sodium_crypto_aead_chacha20poly1305_encrypt(plaintext, assocData, nonce, key))
+            return php_str(sodium_crypto_aead_chacha20poly1305_encrypt(plaintext, assocData, nonce, key))
         # end if
         if self.use_fallback("crypto_aead_chacha20poly1305_encrypt"):
-            return str(php_call_user_func("\\Sodium\\crypto_aead_chacha20poly1305_encrypt", plaintext, assocData, nonce, key))
+            return php_str(php_call_user_func("\\Sodium\\crypto_aead_chacha20poly1305_encrypt", plaintext, assocData, nonce, key))
         # end if
         if PHP_INT_SIZE == 4:
             return ParagonIE_Sodium_Crypto32.aead_chacha20poly1305_encrypt(plaintext, assocData, nonce, key)
@@ -620,10 +620,10 @@ class ParagonIE_Sodium_Compat():
             raise php_new_class("SodiumException", lambda : SodiumException("Key must be CRYPTO_AEAD_CHACHA20POLY1305_KEYBYTES long"))
         # end if
         if self.usenewsodiumapi():
-            return str(sodium_crypto_aead_chacha20poly1305_ietf_encrypt(plaintext, assocData, nonce, key))
+            return php_str(sodium_crypto_aead_chacha20poly1305_ietf_encrypt(plaintext, assocData, nonce, key))
         # end if
         if self.use_fallback("crypto_aead_chacha20poly1305_ietf_encrypt"):
-            return str(php_call_user_func("\\Sodium\\crypto_aead_chacha20poly1305_ietf_encrypt", plaintext, assocData, nonce, key))
+            return php_str(php_call_user_func("\\Sodium\\crypto_aead_chacha20poly1305_ietf_encrypt", plaintext, assocData, nonce, key))
         # end if
         if PHP_INT_SIZE == 4:
             return ParagonIE_Sodium_Crypto32.aead_chacha20poly1305_ietf_encrypt(plaintext, assocData, nonce, key)
@@ -778,10 +778,10 @@ class ParagonIE_Sodium_Compat():
             raise php_new_class("SodiumException", lambda : SodiumException("Argument 2 must be CRYPTO_AUTH_KEYBYTES long."))
         # end if
         if self.usenewsodiumapi():
-            return str(sodium_crypto_auth(message, key))
+            return php_str(sodium_crypto_auth(message, key))
         # end if
         if self.use_fallback("crypto_auth"):
-            return str(php_call_user_func("\\Sodium\\crypto_auth", message, key))
+            return php_str(php_call_user_func("\\Sodium\\crypto_auth", message, key))
         # end if
         if PHP_INT_SIZE == 4:
             return ParagonIE_Sodium_Crypto32.auth(message, key)
@@ -825,10 +825,10 @@ class ParagonIE_Sodium_Compat():
             raise php_new_class("SodiumException", lambda : SodiumException("Argument 3 must be CRYPTO_AUTH_KEYBYTES long."))
         # end if
         if self.usenewsodiumapi():
-            return bool(sodium_crypto_auth_verify(mac, message, key))
+            return php_bool(sodium_crypto_auth_verify(mac, message, key))
         # end if
         if self.use_fallback("crypto_auth_verify"):
-            return bool(php_call_user_func("\\Sodium\\crypto_auth_verify", mac, message, key))
+            return php_bool(php_call_user_func("\\Sodium\\crypto_auth_verify", mac, message, key))
         # end if
         if PHP_INT_SIZE == 4:
             return ParagonIE_Sodium_Crypto32.auth_verify(mac, message, key)
@@ -867,10 +867,10 @@ class ParagonIE_Sodium_Compat():
             raise php_new_class("SodiumException", lambda : SodiumException("Argument 3 must be CRYPTO_BOX_KEYPAIRBYTES long."))
         # end if
         if self.usenewsodiumapi():
-            return str(sodium_crypto_box(plaintext, nonce, keypair))
+            return php_str(sodium_crypto_box(plaintext, nonce, keypair))
         # end if
         if self.use_fallback("crypto_box"):
-            return str(php_call_user_func("\\Sodium\\crypto_box", plaintext, nonce, keypair))
+            return php_str(php_call_user_func("\\Sodium\\crypto_box", plaintext, nonce, keypair))
         # end if
         if PHP_INT_SIZE == 4:
             return ParagonIE_Sodium_Crypto32.box(plaintext, nonce, keypair)
@@ -905,10 +905,10 @@ class ParagonIE_Sodium_Compat():
             raise php_new_class("SodiumException", lambda : SodiumException("Argument 2 must be CRYPTO_BOX_PUBLICKEYBYTES long."))
         # end if
         if self.usenewsodiumapi():
-            return str(sodium_crypto_box_seal(plaintext, publicKey))
+            return php_str(sodium_crypto_box_seal(plaintext, publicKey))
         # end if
         if self.use_fallback("crypto_box_seal"):
-            return str(php_call_user_func("\\Sodium\\crypto_box_seal", plaintext, publicKey))
+            return php_str(php_call_user_func("\\Sodium\\crypto_box_seal", plaintext, publicKey))
         # end if
         if PHP_INT_SIZE == 4:
             return ParagonIE_Sodium_Crypto32.box_seal(plaintext, publicKey)
@@ -970,10 +970,10 @@ class ParagonIE_Sodium_Compat():
     def crypto_box_keypair(self):
         
         if self.usenewsodiumapi():
-            return str(sodium_crypto_box_keypair())
+            return php_str(sodium_crypto_box_keypair())
         # end if
         if self.use_fallback("crypto_box_keypair"):
-            return str(php_call_user_func("\\Sodium\\crypto_box_keypair"))
+            return php_str(php_call_user_func("\\Sodium\\crypto_box_keypair"))
         # end if
         if PHP_INT_SIZE == 4:
             return ParagonIE_Sodium_Crypto32.box_keypair()
@@ -1005,10 +1005,10 @@ class ParagonIE_Sodium_Compat():
             raise php_new_class("SodiumException", lambda : SodiumException("Argument 2 must be CRYPTO_BOX_PUBLICKEYBYTES long."))
         # end if
         if self.usenewsodiumapi():
-            return str(sodium_crypto_box_keypair_from_secretkey_and_publickey(secretKey, publicKey))
+            return php_str(sodium_crypto_box_keypair_from_secretkey_and_publickey(secretKey, publicKey))
         # end if
         if self.use_fallback("crypto_box_keypair_from_secretkey_and_publickey"):
-            return str(php_call_user_func("\\Sodium\\crypto_box_keypair_from_secretkey_and_publickey", secretKey, publicKey))
+            return php_str(php_call_user_func("\\Sodium\\crypto_box_keypair_from_secretkey_and_publickey", secretKey, publicKey))
         # end if
         if PHP_INT_SIZE == 4:
             return ParagonIE_Sodium_Crypto32.box_keypair_from_secretkey_and_publickey(secretKey, publicKey)
@@ -1079,10 +1079,10 @@ class ParagonIE_Sodium_Compat():
             raise php_new_class("SodiumException", lambda : SodiumException("Argument 1 must be CRYPTO_BOX_KEYPAIRBYTES long."))
         # end if
         if self.usenewsodiumapi():
-            return str(sodium_crypto_box_publickey(keypair))
+            return php_str(sodium_crypto_box_publickey(keypair))
         # end if
         if self.use_fallback("crypto_box_publickey"):
-            return str(php_call_user_func("\\Sodium\\crypto_box_publickey", keypair))
+            return php_str(php_call_user_func("\\Sodium\\crypto_box_publickey", keypair))
         # end if
         if PHP_INT_SIZE == 4:
             return ParagonIE_Sodium_Crypto32.box_publickey(keypair)
@@ -1108,10 +1108,10 @@ class ParagonIE_Sodium_Compat():
             raise php_new_class("SodiumException", lambda : SodiumException("Argument 1 must be CRYPTO_BOX_SECRETKEYBYTES long."))
         # end if
         if self.usenewsodiumapi():
-            return str(sodium_crypto_box_publickey_from_secretkey(secretKey))
+            return php_str(sodium_crypto_box_publickey_from_secretkey(secretKey))
         # end if
         if self.use_fallback("crypto_box_publickey_from_secretkey"):
-            return str(php_call_user_func("\\Sodium\\crypto_box_publickey_from_secretkey", secretKey))
+            return php_str(php_call_user_func("\\Sodium\\crypto_box_publickey_from_secretkey", secretKey))
         # end if
         if PHP_INT_SIZE == 4:
             return ParagonIE_Sodium_Crypto32.box_publickey_from_secretkey(secretKey)
@@ -1137,10 +1137,10 @@ class ParagonIE_Sodium_Compat():
             raise php_new_class("SodiumException", lambda : SodiumException("Argument 1 must be CRYPTO_BOX_KEYPAIRBYTES long."))
         # end if
         if self.usenewsodiumapi():
-            return str(sodium_crypto_box_secretkey(keypair))
+            return php_str(sodium_crypto_box_secretkey(keypair))
         # end if
         if self.use_fallback("crypto_box_secretkey"):
-            return str(php_call_user_func("\\Sodium\\crypto_box_secretkey", keypair))
+            return php_str(php_call_user_func("\\Sodium\\crypto_box_secretkey", keypair))
         # end if
         if PHP_INT_SIZE == 4:
             return ParagonIE_Sodium_Crypto32.box_secretkey(keypair)
@@ -1163,10 +1163,10 @@ class ParagonIE_Sodium_Compat():
         #// Type checks:
         ParagonIE_Sodium_Core_Util.declarescalartype(seed, "string", 1)
         if self.usenewsodiumapi():
-            return str(sodium_crypto_box_seed_keypair(seed))
+            return php_str(sodium_crypto_box_seed_keypair(seed))
         # end if
         if self.use_fallback("crypto_box_seed_keypair"):
-            return str(php_call_user_func("\\Sodium\\crypto_box_seed_keypair", seed))
+            return php_str(php_call_user_func("\\Sodium\\crypto_box_seed_keypair", seed))
         # end if
         if PHP_INT_SIZE == 4:
             return ParagonIE_Sodium_Crypto32.box_seed_keypair(seed)
@@ -1191,7 +1191,7 @@ class ParagonIE_Sodium_Compat():
         
         #// Type checks:
         ParagonIE_Sodium_Core_Util.declarescalartype(message, "string", 1)
-        if php_is_null(key):
+        if is_null(key):
             key = ""
         # end if
         ParagonIE_Sodium_Core_Util.declarescalartype(key, "string", 2)
@@ -1206,10 +1206,10 @@ class ParagonIE_Sodium_Compat():
             # end if
         # end if
         if self.usenewsodiumapi():
-            return str(sodium_crypto_generichash(message, key, length))
+            return php_str(sodium_crypto_generichash(message, key, length))
         # end if
         if self.use_fallback("crypto_generichash"):
-            return str(php_call_user_func("\\Sodium\\crypto_generichash", message, key, length))
+            return php_str(php_call_user_func("\\Sodium\\crypto_generichash", message, key, length))
         # end if
         if PHP_INT_SIZE == 4:
             return ParagonIE_Sodium_Crypto32.generichash(message, key, length)
@@ -1239,7 +1239,7 @@ class ParagonIE_Sodium_Compat():
         # end if
         if self.use_fallback("crypto_generichash_final"):
             func = "\\Sodium\\crypto_generichash_final"
-            return str(func(ctx, length))
+            return php_str(func(ctx, length))
         # end if
         if length < 1:
             try: 
@@ -1276,7 +1276,7 @@ class ParagonIE_Sodium_Compat():
     def crypto_generichash_init(self, key="", length=self.CRYPTO_GENERICHASH_BYTES):
         
         #// Type checks:
-        if php_is_null(key):
+        if is_null(key):
             key = ""
         # end if
         ParagonIE_Sodium_Core_Util.declarescalartype(key, "string", 1)
@@ -1294,7 +1294,7 @@ class ParagonIE_Sodium_Compat():
             return sodium_crypto_generichash_init(key, length)
         # end if
         if self.use_fallback("crypto_generichash_init"):
-            return str(php_call_user_func("\\Sodium\\crypto_generichash_init", key, length))
+            return php_str(php_call_user_func("\\Sodium\\crypto_generichash_init", key, length))
         # end if
         if PHP_INT_SIZE == 4:
             return ParagonIE_Sodium_Crypto32.generichash_init(key, length)
@@ -1318,7 +1318,7 @@ class ParagonIE_Sodium_Compat():
     def crypto_generichash_init_salt_personal(self, key="", length=self.CRYPTO_GENERICHASH_BYTES, salt="", personal=""):
         
         #// Type checks:
-        if php_is_null(key):
+        if is_null(key):
             key = ""
         # end if
         ParagonIE_Sodium_Core_Util.declarescalartype(key, "string", 1)
@@ -1402,10 +1402,10 @@ class ParagonIE_Sodium_Compat():
         ParagonIE_Sodium_Core_Util.declarescalartype(subkey_id, "int", 2)
         ParagonIE_Sodium_Core_Util.declarescalartype(context, "string", 3)
         ParagonIE_Sodium_Core_Util.declarescalartype(key, "string", 4)
-        subkey_id = int(subkey_id)
-        subkey_len = int(subkey_len)
-        context = str(context)
-        key = str(key)
+        subkey_id = php_int(subkey_id)
+        subkey_len = php_int(subkey_len)
+        context = php_str(context)
+        key = php_str(key)
         if subkey_len < self.CRYPTO_KDF_BYTES_MIN:
             raise php_new_class("SodiumException", lambda : SodiumException("subkey cannot be smaller than SODIUM_CRYPTO_KDF_BYTES_MIN"))
         # end if
@@ -1487,11 +1487,11 @@ class ParagonIE_Sodium_Compat():
         # end if
         if self.usenewsodiumapi():
             if php_is_callable("sodium_crypto_kx"):
-                return str(sodium_crypto_kx(my_secret, their_public, client_public, server_public))
+                return php_str(sodium_crypto_kx(my_secret, their_public, client_public, server_public))
             # end if
         # end if
         if self.use_fallback("crypto_kx"):
-            return str(php_call_user_func("\\Sodium\\crypto_kx", my_secret, their_public, client_public, server_public))
+            return php_str(php_call_user_func("\\Sodium\\crypto_kx", my_secret, their_public, client_public, server_public))
         # end if
         if PHP_INT_SIZE == 4:
             return ParagonIE_Sodium_Crypto32.keyexchange(my_secret, their_public, client_public, server_public)
@@ -1507,7 +1507,7 @@ class ParagonIE_Sodium_Compat():
     def crypto_kx_seed_keypair(self, seed=None):
         
         ParagonIE_Sodium_Core_Util.declarescalartype(seed, "string", 1)
-        seed = str(seed)
+        seed = php_str(seed)
         if ParagonIE_Sodium_Core_Util.strlen(seed) != self.CRYPTO_KX_SEEDBYTES:
             raise php_new_class("SodiumException", lambda : SodiumException("seed must be SODIUM_CRYPTO_KX_SEEDBYTES bytes"))
         # end if
@@ -1537,8 +1537,8 @@ class ParagonIE_Sodium_Compat():
         
         ParagonIE_Sodium_Core_Util.declarescalartype(keypair, "string", 1)
         ParagonIE_Sodium_Core_Util.declarescalartype(serverPublicKey, "string", 2)
-        keypair = str(keypair)
-        serverPublicKey = str(serverPublicKey)
+        keypair = php_str(keypair)
+        serverPublicKey = php_str(serverPublicKey)
         if ParagonIE_Sodium_Core_Util.strlen(keypair) != self.CRYPTO_KX_KEYPAIRBYTES:
             raise php_new_class("SodiumException", lambda : SodiumException("keypair should be SODIUM_CRYPTO_KX_KEYPAIRBYTES bytes"))
         # end if
@@ -1565,8 +1565,8 @@ class ParagonIE_Sodium_Compat():
         
         ParagonIE_Sodium_Core_Util.declarescalartype(keypair, "string", 1)
         ParagonIE_Sodium_Core_Util.declarescalartype(clientPublicKey, "string", 2)
-        keypair = str(keypair)
-        clientPublicKey = str(clientPublicKey)
+        keypair = php_str(keypair)
+        clientPublicKey = php_str(clientPublicKey)
         if ParagonIE_Sodium_Core_Util.strlen(keypair) != self.CRYPTO_KX_KEYPAIRBYTES:
             raise php_new_class("SodiumException", lambda : SodiumException("keypair should be SODIUM_CRYPTO_KX_KEYPAIRBYTES bytes"))
         # end if
@@ -1623,14 +1623,14 @@ class ParagonIE_Sodium_Compat():
         ParagonIE_Sodium_Core_Util.declarescalartype(opslimit, "int", 4)
         ParagonIE_Sodium_Core_Util.declarescalartype(memlimit, "int", 5)
         if self.usenewsodiumapi():
-            if (not php_is_null(alg)):
+            if (not is_null(alg)):
                 ParagonIE_Sodium_Core_Util.declarescalartype(alg, "int", 6)
                 return sodium_crypto_pwhash(outlen, passwd, salt, opslimit, memlimit, alg)
             # end if
             return sodium_crypto_pwhash(outlen, passwd, salt, opslimit, memlimit)
         # end if
         if self.use_fallback("crypto_pwhash"):
-            return str(php_call_user_func("\\Sodium\\crypto_pwhash", outlen, passwd, salt, opslimit, memlimit))
+            return php_str(php_call_user_func("\\Sodium\\crypto_pwhash", outlen, passwd, salt, opslimit, memlimit))
         # end if
         raise php_new_class("SodiumException", lambda : SodiumException("This is not implemented, as it is not possible to implement Argon2i with acceptable performance in pure-PHP"))
     # end def crypto_pwhash
@@ -1672,7 +1672,7 @@ class ParagonIE_Sodium_Compat():
             return sodium_crypto_pwhash_str(passwd, opslimit, memlimit)
         # end if
         if self.use_fallback("crypto_pwhash_str"):
-            return str(php_call_user_func("\\Sodium\\crypto_pwhash_str", passwd, opslimit, memlimit))
+            return php_str(php_call_user_func("\\Sodium\\crypto_pwhash_str", passwd, opslimit, memlimit))
         # end if
         raise php_new_class("SodiumException", lambda : SodiumException("This is not implemented, as it is not possible to implement Argon2i with acceptable performance in pure-PHP"))
     # end def crypto_pwhash_str
@@ -1692,13 +1692,13 @@ class ParagonIE_Sodium_Compat():
         ParagonIE_Sodium_Core_Util.declarescalartype(opslimit, "int", 2)
         ParagonIE_Sodium_Core_Util.declarescalartype(memlimit, "int", 3)
         #// Just grab the first 4 pieces.
-        pieces = php_explode("$", str(hash))
+        pieces = php_explode("$", php_str(hash))
         prefix = php_implode("$", php_array_slice(pieces, 0, 4))
         #// Rebuild the expected header.
         #// @var int $ops
-        ops = int(opslimit)
+        ops = php_int(opslimit)
         #// @var int $mem
-        mem = int(memlimit) >> 10
+        mem = php_int(memlimit) >> 10
         encoded = self.CRYPTO_PWHASH_STRPREFIX + "v=19$m=" + mem + ",t=" + ops + ",p=1"
         #// Do they match? If so, we don't need to rehash, so return false.
         return (not ParagonIE_Sodium_Core_Util.hashequals(encoded, prefix))
@@ -1717,10 +1717,10 @@ class ParagonIE_Sodium_Compat():
         ParagonIE_Sodium_Core_Util.declarescalartype(passwd, "string", 1)
         ParagonIE_Sodium_Core_Util.declarescalartype(hash, "string", 2)
         if self.usenewsodiumapi():
-            return bool(sodium_crypto_pwhash_str_verify(passwd, hash))
+            return php_bool(sodium_crypto_pwhash_str_verify(passwd, hash))
         # end if
         if self.use_fallback("crypto_pwhash_str_verify"):
-            return bool(php_call_user_func("\\Sodium\\crypto_pwhash_str_verify", passwd, hash))
+            return php_bool(php_call_user_func("\\Sodium\\crypto_pwhash_str_verify", passwd, hash))
         # end if
         raise php_new_class("SodiumException", lambda : SodiumException("This is not implemented, as it is not possible to implement Argon2i with acceptable performance in pure-PHP"))
     # end def crypto_pwhash_str_verify
@@ -1743,10 +1743,10 @@ class ParagonIE_Sodium_Compat():
         ParagonIE_Sodium_Core_Util.declarescalartype(opslimit, "int", 4)
         ParagonIE_Sodium_Core_Util.declarescalartype(memlimit, "int", 5)
         if self.usenewsodiumapi():
-            return str(sodium_crypto_pwhash_scryptsalsa208sha256(int(outlen), str(passwd), str(salt), int(opslimit), int(memlimit)))
+            return php_str(sodium_crypto_pwhash_scryptsalsa208sha256(php_int(outlen), php_str(passwd), php_str(salt), php_int(opslimit), php_int(memlimit)))
         # end if
         if self.use_fallback("crypto_pwhash_scryptsalsa208sha256"):
-            return str(php_call_user_func("\\Sodium\\crypto_pwhash_scryptsalsa208sha256", int(outlen), str(passwd), str(salt), int(opslimit), int(memlimit)))
+            return php_str(php_call_user_func("\\Sodium\\crypto_pwhash_scryptsalsa208sha256", php_int(outlen), php_str(passwd), php_str(salt), php_int(opslimit), php_int(memlimit)))
         # end if
         raise php_new_class("SodiumException", lambda : SodiumException("This is not implemented, as it is not possible to implement Scrypt with acceptable performance in pure-PHP"))
     # end def crypto_pwhash_scryptsalsa208sha256
@@ -1784,10 +1784,10 @@ class ParagonIE_Sodium_Compat():
         ParagonIE_Sodium_Core_Util.declarescalartype(opslimit, "int", 2)
         ParagonIE_Sodium_Core_Util.declarescalartype(memlimit, "int", 3)
         if self.usenewsodiumapi():
-            return str(sodium_crypto_pwhash_scryptsalsa208sha256_str(str(passwd), int(opslimit), int(memlimit)))
+            return php_str(sodium_crypto_pwhash_scryptsalsa208sha256_str(php_str(passwd), php_int(opslimit), php_int(memlimit)))
         # end if
         if self.use_fallback("crypto_pwhash_scryptsalsa208sha256_str"):
-            return str(php_call_user_func("\\Sodium\\crypto_pwhash_scryptsalsa208sha256_str", str(passwd), int(opslimit), int(memlimit)))
+            return php_str(php_call_user_func("\\Sodium\\crypto_pwhash_scryptsalsa208sha256_str", php_str(passwd), php_int(opslimit), php_int(memlimit)))
         # end if
         raise php_new_class("SodiumException", lambda : SodiumException("This is not implemented, as it is not possible to implement Scrypt with acceptable performance in pure-PHP"))
     # end def crypto_pwhash_scryptsalsa208sha256_str
@@ -1804,10 +1804,10 @@ class ParagonIE_Sodium_Compat():
         ParagonIE_Sodium_Core_Util.declarescalartype(passwd, "string", 1)
         ParagonIE_Sodium_Core_Util.declarescalartype(hash, "string", 2)
         if self.usenewsodiumapi():
-            return bool(sodium_crypto_pwhash_scryptsalsa208sha256_str_verify(str(passwd), str(hash)))
+            return php_bool(sodium_crypto_pwhash_scryptsalsa208sha256_str_verify(php_str(passwd), php_str(hash)))
         # end if
         if self.use_fallback("crypto_pwhash_scryptsalsa208sha256_str_verify"):
-            return bool(php_call_user_func("\\Sodium\\crypto_pwhash_scryptsalsa208sha256_str_verify", str(passwd), str(hash)))
+            return php_bool(php_call_user_func("\\Sodium\\crypto_pwhash_scryptsalsa208sha256_str_verify", php_str(passwd), php_str(hash)))
         # end if
         raise php_new_class("SodiumException", lambda : SodiumException("This is not implemented, as it is not possible to implement Scrypt with acceptable performance in pure-PHP"))
     # end def crypto_pwhash_scryptsalsa208sha256_str_verify
@@ -1841,7 +1841,7 @@ class ParagonIE_Sodium_Compat():
             return sodium_crypto_scalarmult(secretKey, publicKey)
         # end if
         if self.use_fallback("crypto_scalarmult"):
-            return str(php_call_user_func("\\Sodium\\crypto_scalarmult", secretKey, publicKey))
+            return php_str(php_call_user_func("\\Sodium\\crypto_scalarmult", secretKey, publicKey))
         # end if
         #// Output validation: Forbid all-zero keys
         if ParagonIE_Sodium_Core_Util.hashequals(secretKey, php_str_repeat(" ", self.CRYPTO_BOX_SECRETKEYBYTES)):
@@ -1878,7 +1878,7 @@ class ParagonIE_Sodium_Compat():
             return sodium_crypto_scalarmult_base(secretKey)
         # end if
         if self.use_fallback("crypto_scalarmult_base"):
-            return str(php_call_user_func("\\Sodium\\crypto_scalarmult_base", secretKey))
+            return php_str(php_call_user_func("\\Sodium\\crypto_scalarmult_base", secretKey))
         # end if
         if ParagonIE_Sodium_Core_Util.hashequals(secretKey, php_str_repeat(" ", self.CRYPTO_BOX_SECRETKEYBYTES)):
             raise php_new_class("SodiumException", lambda : SodiumException("Zero secret key is not allowed"))
@@ -1919,7 +1919,7 @@ class ParagonIE_Sodium_Compat():
             return sodium_crypto_secretbox(plaintext, nonce, key)
         # end if
         if self.use_fallback("crypto_secretbox"):
-            return str(php_call_user_func("\\Sodium\\crypto_secretbox", plaintext, nonce, key))
+            return php_str(php_call_user_func("\\Sodium\\crypto_secretbox", plaintext, nonce, key))
         # end if
         if PHP_INT_SIZE == 4:
             return ParagonIE_Sodium_Crypto32.secretbox(plaintext, nonce, key)
@@ -2153,7 +2153,7 @@ class ParagonIE_Sodium_Compat():
             return sodium_crypto_shorthash(message, key)
         # end if
         if self.use_fallback("crypto_shorthash"):
-            return str(php_call_user_func("\\Sodium\\crypto_shorthash", message, key))
+            return php_str(php_call_user_func("\\Sodium\\crypto_shorthash", message, key))
         # end if
         if PHP_INT_SIZE == 4:
             return ParagonIE_Sodium_Core32_SipHash.siphash24(message, key)
@@ -2201,7 +2201,7 @@ class ParagonIE_Sodium_Compat():
             return sodium_crypto_sign(message, secretKey)
         # end if
         if self.use_fallback("crypto_sign"):
-            return str(php_call_user_func("\\Sodium\\crypto_sign", message, secretKey))
+            return php_str(php_call_user_func("\\Sodium\\crypto_sign", message, secretKey))
         # end if
         if PHP_INT_SIZE == 4:
             return ParagonIE_Sodium_Crypto32.sign(message, secretKey)
@@ -2263,7 +2263,7 @@ class ParagonIE_Sodium_Compat():
             return sodium_crypto_sign_keypair()
         # end if
         if self.use_fallback("crypto_sign_keypair"):
-            return str(php_call_user_func("\\Sodium\\crypto_sign_keypair"))
+            return php_str(php_call_user_func("\\Sodium\\crypto_sign_keypair"))
         # end if
         if PHP_INT_SIZE == 4:
             return ParagonIE_Sodium_Core32_Ed25519.keypair()
@@ -2281,8 +2281,8 @@ class ParagonIE_Sodium_Compat():
         
         ParagonIE_Sodium_Core_Util.declarescalartype(sk, "string", 1)
         ParagonIE_Sodium_Core_Util.declarescalartype(pk, "string", 1)
-        sk = str(sk)
-        pk = str(pk)
+        sk = php_str(sk)
+        pk = php_str(pk)
         if ParagonIE_Sodium_Core_Util.strlen(sk) != self.CRYPTO_SIGN_SECRETKEYBYTES:
             raise php_new_class("SodiumException", lambda : SodiumException("secretkey should be SODIUM_CRYPTO_SIGN_SECRETKEYBYTES bytes"))
         # end if
@@ -2311,7 +2311,7 @@ class ParagonIE_Sodium_Compat():
             return sodium_crypto_sign_seed_keypair(seed)
         # end if
         if self.use_fallback("crypto_sign_keypair"):
-            return str(php_call_user_func("\\Sodium\\crypto_sign_seed_keypair", seed))
+            return php_str(php_call_user_func("\\Sodium\\crypto_sign_seed_keypair", seed))
         # end if
         publicKey = ""
         secretKey = ""
@@ -2344,7 +2344,7 @@ class ParagonIE_Sodium_Compat():
             return sodium_crypto_sign_publickey(keypair)
         # end if
         if self.use_fallback("crypto_sign_publickey"):
-            return str(php_call_user_func("\\Sodium\\crypto_sign_publickey", keypair))
+            return php_str(php_call_user_func("\\Sodium\\crypto_sign_publickey", keypair))
         # end if
         if PHP_INT_SIZE == 4:
             return ParagonIE_Sodium_Core32_Ed25519.publickey(keypair)
@@ -2373,7 +2373,7 @@ class ParagonIE_Sodium_Compat():
             return sodium_crypto_sign_publickey_from_secretkey(secretKey)
         # end if
         if self.use_fallback("crypto_sign_publickey_from_secretkey"):
-            return str(php_call_user_func("\\Sodium\\crypto_sign_publickey_from_secretkey", secretKey))
+            return php_str(php_call_user_func("\\Sodium\\crypto_sign_publickey_from_secretkey", secretKey))
         # end if
         if PHP_INT_SIZE == 4:
             return ParagonIE_Sodium_Core32_Ed25519.publickey_from_secretkey(secretKey)
@@ -2402,7 +2402,7 @@ class ParagonIE_Sodium_Compat():
             return sodium_crypto_sign_secretkey(keypair)
         # end if
         if self.use_fallback("crypto_sign_secretkey"):
-            return str(php_call_user_func("\\Sodium\\crypto_sign_secretkey", keypair))
+            return php_str(php_call_user_func("\\Sodium\\crypto_sign_secretkey", keypair))
         # end if
         if PHP_INT_SIZE == 4:
             return ParagonIE_Sodium_Core32_Ed25519.secretkey(keypair)
@@ -2435,7 +2435,7 @@ class ParagonIE_Sodium_Compat():
             return sodium_crypto_sign_detached(message, secretKey)
         # end if
         if self.use_fallback("crypto_sign_detached"):
-            return str(php_call_user_func("\\Sodium\\crypto_sign_detached", message, secretKey))
+            return php_str(php_call_user_func("\\Sodium\\crypto_sign_detached", message, secretKey))
         # end if
         if PHP_INT_SIZE == 4:
             return ParagonIE_Sodium_Crypto32.sign_detached(message, secretKey)
@@ -2472,7 +2472,7 @@ class ParagonIE_Sodium_Compat():
             return sodium_crypto_sign_verify_detached(signature, message, publicKey)
         # end if
         if self.use_fallback("crypto_sign_verify_detached"):
-            return bool(php_call_user_func("\\Sodium\\crypto_sign_verify_detached", signature, message, publicKey))
+            return php_bool(php_call_user_func("\\Sodium\\crypto_sign_verify_detached", signature, message, publicKey))
         # end if
         if PHP_INT_SIZE == 4:
             return ParagonIE_Sodium_Crypto32.sign_verify_detached(signature, message, publicKey)
@@ -2499,11 +2499,11 @@ class ParagonIE_Sodium_Compat():
         # end if
         if self.usenewsodiumapi():
             if php_is_callable("crypto_sign_ed25519_pk_to_curve25519"):
-                return str(sodium_crypto_sign_ed25519_pk_to_curve25519(pk))
+                return php_str(sodium_crypto_sign_ed25519_pk_to_curve25519(pk))
             # end if
         # end if
         if self.use_fallback("crypto_sign_ed25519_pk_to_curve25519"):
-            return str(php_call_user_func("\\Sodium\\crypto_sign_ed25519_pk_to_curve25519", pk))
+            return php_str(php_call_user_func("\\Sodium\\crypto_sign_ed25519_pk_to_curve25519", pk))
         # end if
         if PHP_INT_SIZE == 4:
             return ParagonIE_Sodium_Core32_Ed25519.pk_to_curve25519(pk)
@@ -2534,7 +2534,7 @@ class ParagonIE_Sodium_Compat():
             # end if
         # end if
         if self.use_fallback("crypto_sign_ed25519_sk_to_curve25519"):
-            return str(php_call_user_func("\\Sodium\\crypto_sign_ed25519_sk_to_curve25519", sk))
+            return php_str(php_call_user_func("\\Sodium\\crypto_sign_ed25519_sk_to_curve25519", sk))
         # end if
         h = hash("sha512", ParagonIE_Sodium_Core_Util.substr(sk, 0, 32), True)
         h[0] = ParagonIE_Sodium_Core_Util.inttochr(ParagonIE_Sodium_Core_Util.chrtoint(h[0]) & 248)
@@ -2573,7 +2573,7 @@ class ParagonIE_Sodium_Compat():
             return sodium_crypto_stream(len, nonce, key)
         # end if
         if self.use_fallback("crypto_stream"):
-            return str(php_call_user_func("\\Sodium\\crypto_stream", len, nonce, key))
+            return php_str(php_call_user_func("\\Sodium\\crypto_stream", len, nonce, key))
         # end if
         if PHP_INT_SIZE == 4:
             return ParagonIE_Sodium_Core32_XSalsa20.xsalsa20(len, nonce, key)
@@ -2618,7 +2618,7 @@ class ParagonIE_Sodium_Compat():
             return sodium_crypto_stream_xor(message, nonce, key)
         # end if
         if self.use_fallback("crypto_stream_xor"):
-            return str(php_call_user_func("\\Sodium\\crypto_stream_xor", message, nonce, key))
+            return php_str(php_call_user_func("\\Sodium\\crypto_stream_xor", message, nonce, key))
         # end if
         if PHP_INT_SIZE == 4:
             return ParagonIE_Sodium_Core32_XSalsa20.xsalsa20_xor(message, nonce, key)
@@ -2654,11 +2654,11 @@ class ParagonIE_Sodium_Compat():
         ParagonIE_Sodium_Core_Util.declarescalartype(string, "string", 1)
         if self.usenewsodiumapi():
             if php_is_callable("sodium_hex2bin"):
-                return str(sodium_hex2bin(string))
+                return php_str(sodium_hex2bin(string))
             # end if
         # end if
         if self.use_fallback("hex2bin"):
-            return str(php_call_user_func("\\Sodium\\hex2bin", string))
+            return php_str(php_call_user_func("\\Sodium\\hex2bin", string))
         # end if
         return ParagonIE_Sodium_Core_Util.hex2bin(string)
     # end def hex2bin
@@ -2714,7 +2714,7 @@ class ParagonIE_Sodium_Compat():
             return sodium_library_version_major()
         # end if
         if self.use_fallback("library_version_major"):
-            return int(php_call_user_func("\\Sodium\\library_version_major"))
+            return php_int(php_call_user_func("\\Sodium\\library_version_major"))
         # end if
         return self.LIBRARY_VERSION_MAJOR
     # end def library_version_major
@@ -2733,7 +2733,7 @@ class ParagonIE_Sodium_Compat():
             return sodium_library_version_minor()
         # end if
         if self.use_fallback("library_version_minor"):
-            return int(php_call_user_func("\\Sodium\\library_version_minor"))
+            return php_int(php_call_user_func("\\Sodium\\library_version_minor"))
         # end if
         return self.LIBRARY_VERSION_MINOR
     # end def library_version_minor
@@ -2757,7 +2757,7 @@ class ParagonIE_Sodium_Compat():
             return sodium_memcmp(left, right)
         # end if
         if self.use_fallback("memcmp"):
-            return int(php_call_user_func("\\Sodium\\memcmp", left, right))
+            return php_int(php_call_user_func("\\Sodium\\memcmp", left, right))
         # end if
         #// @var string $left
         #// @var string $right
@@ -2807,10 +2807,10 @@ class ParagonIE_Sodium_Compat():
         #// Type checks:
         ParagonIE_Sodium_Core_Util.declarescalartype(unpadded, "string", 1)
         ParagonIE_Sodium_Core_Util.declarescalartype(blockSize, "int", 2)
-        unpadded = str(unpadded)
-        blockSize = int(blockSize)
+        unpadded = php_str(unpadded)
+        blockSize = php_int(blockSize)
         if self.usenewsodiumapi() and (not dontFallback):
-            return str(sodium_pad(unpadded, blockSize))
+            return php_str(sodium_pad(unpadded, blockSize))
         # end if
         if blockSize <= 0:
             raise php_new_class("SodiumException", lambda : SodiumException("block size cannot be less than 1"))
@@ -2831,9 +2831,9 @@ class ParagonIE_Sodium_Compat():
             j = 0
             while j <= xpadded_len:
                 
-                i = int(i)
-                k = int(k)
-                st = int(st)
+                i = php_int(i)
+                k = php_int(k)
+                st = php_int(st)
                 if j >= unpadded_len:
                     padded[j] = " "
                 else:
@@ -2841,7 +2841,7 @@ class ParagonIE_Sodium_Compat():
                 # end if
                 #// @var int $k
                 k -= st
-                st = int((1 << (k >> 48 | k >> 32 | k >> 16 | k - 1 >> 16).bit_length()) - 1 - k >> 48 | k >> 32 | k >> 16 | k - 1 >> 16) & 1
+                st = php_int((1 << (k >> 48 | k >> 32 | k >> 16 | k - 1 >> 16).bit_length()) - 1 - k >> 48 | k >> 32 | k >> 16 | k - 1 >> 16) & 1
                 i += st
                 j += 1
             # end while
@@ -2875,10 +2875,10 @@ class ParagonIE_Sodium_Compat():
         #// Type checks:
         ParagonIE_Sodium_Core_Util.declarescalartype(padded, "string", 1)
         ParagonIE_Sodium_Core_Util.declarescalartype(blockSize, "int", 2)
-        padded = str(padded)
-        blockSize = int(blockSize)
+        padded = php_str(padded)
+        blockSize = php_int(blockSize)
         if self.usenewsodiumapi() and (not dontFallback):
-            return str(sodium_unpad(padded, blockSize))
+            return php_str(sodium_unpad(padded, blockSize))
         # end if
         if blockSize <= 0:
             raise php_new_class("SodiumException", lambda : SodiumException("block size cannot be less than 1"))
@@ -2949,13 +2949,13 @@ class ParagonIE_Sodium_Compat():
         #// Type checks:
         if (not php_is_int(numBytes)):
             if php_is_numeric(numBytes):
-                numBytes = int(numBytes)
+                numBytes = php_int(numBytes)
             else:
                 raise php_new_class("TypeError", lambda : TypeError("Argument 1 must be an integer, " + gettype(numBytes) + " given."))
             # end if
         # end if
         if self.use_fallback("randombytes_buf"):
-            return str(php_call_user_func("\\Sodium\\randombytes_buf", numBytes))
+            return php_str(php_call_user_func("\\Sodium\\randombytes_buf", numBytes))
         # end if
         return random_bytes(numBytes)
     # end def randombytes_buf
@@ -2974,13 +2974,13 @@ class ParagonIE_Sodium_Compat():
         #// Type checks:
         if (not php_is_int(range)):
             if php_is_numeric(range):
-                range = int(range)
+                range = php_int(range)
             else:
                 raise php_new_class("TypeError", lambda : TypeError("Argument 1 must be an integer, " + gettype(range) + " given."))
             # end if
         # end if
         if self.use_fallback("randombytes_uniform"):
-            return int(php_call_user_func("\\Sodium\\randombytes_uniform", range))
+            return php_int(php_call_user_func("\\Sodium\\randombytes_uniform", range))
         # end if
         return random_int(0, range - 1)
     # end def randombytes_uniform
@@ -2996,7 +2996,7 @@ class ParagonIE_Sodium_Compat():
     def randombytes_random16(self):
         
         if self.use_fallback("randombytes_random16"):
-            return int(php_call_user_func("\\Sodium\\randombytes_random16"))
+            return php_int(php_call_user_func("\\Sodium\\randombytes_random16"))
         # end if
         return random_int(0, 65535)
     # end def randombytes_random16
@@ -3036,7 +3036,7 @@ class ParagonIE_Sodium_Compat():
         #// @var float $end
         end_ = php_microtime(True)
         #// @var int $diff
-        diff = int(ceil(end_ - start * 1000))
+        diff = php_int(ceil(end_ - start * 1000))
         return diff < maxTimeout
     # end def runtime_speed_test
     #// 
@@ -3051,12 +3051,12 @@ class ParagonIE_Sodium_Compat():
     def version_string(self):
         
         if self.usenewsodiumapi():
-            return str(sodium_version_string())
+            return php_str(sodium_version_string())
         # end if
         if self.use_fallback("version_string"):
-            return str(php_call_user_func("\\Sodium\\version_string"))
+            return php_str(php_call_user_func("\\Sodium\\version_string"))
         # end if
-        return str(self.VERSION_STRING)
+        return php_str(self.VERSION_STRING)
     # end def version_string
     #// 
     #// Should we use the libsodium core function instead?
@@ -3106,6 +3106,6 @@ class ParagonIE_Sodium_Compat():
             #// Don't fallback. Use the PHP implementation.
             return False
         # end if
-        return bool(res)
+        return php_bool(res)
     # end def usenewsodiumapi
 # end class ParagonIE_Sodium_Compat

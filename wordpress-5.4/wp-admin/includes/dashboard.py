@@ -164,7 +164,7 @@ def wp_add_dashboard_widget(widget_id=None, widget_name=None, callback=None, con
     global wp_dashboard_control_callbacks
     php_check_if_defined("wp_dashboard_control_callbacks")
     private_callback_args = Array({"__widget_basename": widget_name})
-    if php_is_null(callback_args):
+    if is_null(callback_args):
         callback_args = private_callback_args
     elif php_is_array(callback_args):
         callback_args = php_array_merge(callback_args, private_callback_args)
@@ -449,14 +449,14 @@ def wp_dashboard_quick_press(error_msg=False, *args_):
         return
     # end if
     #// Check if a new auto-draft (= no new post_ID) is needed or if the old can be used
-    last_post_id = int(get_user_option("dashboard_quick_press_last_post_id"))
+    last_post_id = php_int(get_user_option("dashboard_quick_press_last_post_id"))
     #// Get the last post_ID.
     if last_post_id:
         post = get_post(last_post_id)
         if php_empty(lambda : post) or "auto-draft" != post.post_status:
             #// auto-draft doesn't exist anymore.
             post = get_default_post_to_edit("post", True)
-            update_user_option(get_current_user_id(), "dashboard_quick_press_last_post_id", int(post.ID))
+            update_user_option(get_current_user_id(), "dashboard_quick_press_last_post_id", php_int(post.ID))
             pass
         else:
             post.post_title = ""
@@ -467,11 +467,11 @@ def wp_dashboard_quick_press(error_msg=False, *args_):
         user_id = get_current_user_id()
         #// Don't create an option if this is a super admin who does not belong to this site.
         if php_in_array(get_current_blog_id(), php_array_keys(get_blogs_of_user(user_id))):
-            update_user_option(user_id, "dashboard_quick_press_last_post_id", int(post.ID))
+            update_user_option(user_id, "dashboard_quick_press_last_post_id", php_int(post.ID))
             pass
         # end if
     # end if
-    post_ID = int(post.ID)
+    post_ID = php_int(post.ID)
     php_print("\n   <form name=\"post\" action=\"")
     php_print(esc_url(admin_url("post.php")))
     php_print("\" method=\"post\" id=\"quick-press\" class=\"initial-form hide-if-no-js\">\n\n      ")

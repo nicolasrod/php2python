@@ -199,7 +199,7 @@ class WP_HTTP_Proxy():
         #// @param array     $home     Associative array result of parsing the site URL.
         #//
         result = apply_filters("pre_http_send_through_proxy", None, uri, check, home)
-        if (not php_is_null(result)):
+        if (not is_null(result)):
             return result
         # end if
         if "localhost" == check["host"] or (php_isset(lambda : home["host"])) and home["host"] == check["host"]:

@@ -523,7 +523,7 @@ def delete_option(option=None, *args_):
     wp_protect_special_option(option)
     #// Get the ID, if no ID then return.
     row = wpdb.get_row(wpdb.prepare(str("SELECT autoload FROM ") + str(wpdb.options) + str(" WHERE option_name = %s"), option))
-    if php_is_null(row):
+    if is_null(row):
         return False
     # end if
     #// 
@@ -695,7 +695,7 @@ def get_transient(transient=None, *args_):
 #//
 def set_transient(transient=None, value=None, expiration=0, *args_):
     
-    expiration = int(expiration)
+    expiration = php_int(expiration)
     #// 
     #// Filters a specific transient before its value is set.
     #// 
@@ -829,14 +829,14 @@ def wp_user_settings(*args_):
     if (not is_user_member_of_blog()):
         return
     # end if
-    settings = str(get_user_option("user-settings", user_id))
+    settings = php_str(get_user_option("user-settings", user_id))
     if (php_isset(lambda : PHP_COOKIE["wp-settings-" + user_id])):
         cookie = php_preg_replace("/[^A-Za-z0-9=&_]/", "", PHP_COOKIE["wp-settings-" + user_id])
         #// No change or both empty.
         if cookie == settings:
             return
         # end if
-        last_saved = int(get_user_option("user-settings-time", user_id))
+        last_saved = php_int(get_user_option("user-settings-time", user_id))
         current = php_preg_replace("/[^0-9]/", "", PHP_COOKIE["wp-settings-time-" + user_id]) if (php_isset(lambda : PHP_COOKIE["wp-settings-time-" + user_id])) else 0
         #// The cookie is newer than the saved value. Update the user_option and leave the cookie as-is.
         if current > last_saved:
@@ -1093,7 +1093,7 @@ def get_network_option(network_id=None, option=None, default=False, *args_):
     if network_id and (not php_is_numeric(network_id)):
         return False
     # end if
-    network_id = int(network_id)
+    network_id = php_int(network_id)
     #// Fallback to the current network if a network ID is not specified.
     if (not network_id):
         network_id = get_current_network_id()
@@ -1213,7 +1213,7 @@ def add_network_option(network_id=None, option=None, value=None, *args_):
     if network_id and (not php_is_numeric(network_id)):
         return False
     # end if
-    network_id = int(network_id)
+    network_id = php_int(network_id)
     #// Fallback to the current network if a network ID is not specified.
     if (not network_id):
         network_id = get_current_network_id()
@@ -1312,7 +1312,7 @@ def delete_network_option(network_id=None, option=None, *args_):
     if network_id and (not php_is_numeric(network_id)):
         return False
     # end if
-    network_id = int(network_id)
+    network_id = php_int(network_id)
     #// Fallback to the current network if a network ID is not specified.
     if (not network_id):
         network_id = get_current_network_id()
@@ -1334,7 +1334,7 @@ def delete_network_option(network_id=None, option=None, *args_):
         result = delete_option(option)
     else:
         row = wpdb.get_row(wpdb.prepare(str("SELECT meta_id FROM ") + str(wpdb.sitemeta) + str(" WHERE meta_key = %s AND site_id = %d"), option, network_id))
-        if php_is_null(row) or (not row.meta_id):
+        if is_null(row) or (not row.meta_id):
             return False
         # end if
         cache_key = str(network_id) + str(":") + str(option)
@@ -1390,7 +1390,7 @@ def update_network_option(network_id=None, option=None, value=None, *args_):
     if network_id and (not php_is_numeric(network_id)):
         return False
     # end if
-    network_id = int(network_id)
+    network_id = php_int(network_id)
     #// Fallback to the current network if a network ID is not specified.
     if (not network_id):
         network_id = get_current_network_id()
@@ -1616,7 +1616,7 @@ def set_site_transient(transient=None, value=None, expiration=0, *args_):
     #// @param string $transient Transient name.
     #//
     value = apply_filters(str("pre_set_site_transient_") + str(transient), value, transient)
-    expiration = int(expiration)
+    expiration = php_int(expiration)
     #// 
     #// Filters the expiration for a site transient before its value is set.
     #// 

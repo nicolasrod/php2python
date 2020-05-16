@@ -75,11 +75,11 @@ if (not php_is_callable("random_bytes")):
             while i < bytes:
                 
                 n = 1073741824 if bytes - i > 1073741824 else bytes - i
-                buf += Sodium.randombytes_buf(int(n))
+                buf += Sodium.randombytes_buf(php_int(n))
                 i += 1073741824
             # end while
         else:
-            buf += Sodium.randombytes_buf(int(bytes))
+            buf += Sodium.randombytes_buf(php_int(bytes))
         # end if
         if php_is_string(buf):
             if RandomCompat_strlen(buf) == bytes:

@@ -19,7 +19,7 @@ if '__PHP2PY_LOADED__' not in globals():
 #// @subpackage Twenty_Twenty
 #// @since Twenty Twenty 1.0
 #//
-if bool(get_the_author_meta("description")) and bool(get_theme_mod("show_author_bio", True)):
+if php_bool(get_the_author_meta("description")) and php_bool(get_theme_mod("show_author_bio", True)):
     php_print("""<div class=\"author-bio\">
     <div class=\"author-title-wrapper\">
     <div class=\"author-avatar vcard\">

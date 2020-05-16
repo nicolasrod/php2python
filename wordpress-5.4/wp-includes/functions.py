@@ -78,7 +78,7 @@ def current_time(type=None, gmt=0, *args_):
     
     #// Don't use non-GMT timestamp, unless you know the difference and really need to.
     if "timestamp" == type or "U" == type:
-        return time() if gmt else time() + int(get_option("gmt_offset") * HOUR_IN_SECONDS)
+        return time() if gmt else time() + php_int(get_option("gmt_offset") * HOUR_IN_SECONDS)
     # end if
     if "mysql" == type:
         type = "Y-m-d H:i:s"
@@ -114,8 +114,8 @@ def wp_timezone_string(*args_):
     if timezone_string:
         return timezone_string
     # end if
-    offset = float(get_option("gmt_offset"))
-    hours = int(offset)
+    offset = php_float(get_option("gmt_offset"))
+    hours = php_int(offset)
     minutes = offset - hours
     sign = "-" if offset < 0 else "+"
     abs_hour = abs(hours)
@@ -474,14 +474,14 @@ def human_readable_duration(duration="", *args_):
     second = None
     if 3 == duration_count:
         #// Validate HH:ii:ss duration format.
-        if (not bool(php_preg_match("/^([0-9]+):([0-5]?[0-9]):([0-5]?[0-9])$/", duration))):
+        if (not php_bool(php_preg_match("/^([0-9]+):([0-5]?[0-9]):([0-5]?[0-9])$/", duration))):
             return False
         # end if
         #// Three parts: hours, minutes & seconds.
         second, minute, hour = duration_parts
     elif 2 == duration_count:
         #// Validate ii:ss duration format.
-        if (not bool(php_preg_match("/^([0-5]?[0-9]):([0-5]?[0-9])$/", duration))):
+        if (not php_bool(php_preg_match("/^([0-5]?[0-9]):([0-5]?[0-9])$/", duration))):
             return False
         # end if
         #// Two parts: minutes & seconds.
@@ -493,17 +493,17 @@ def human_readable_duration(duration="", *args_):
     #// Add the hour part to the string.
     if php_is_numeric(hour):
         #// translators: %s: Time duration in hour or hours.
-        human_readable_duration[-1] = php_sprintf(_n("%s hour", "%s hours", hour), int(hour))
+        human_readable_duration[-1] = php_sprintf(_n("%s hour", "%s hours", hour), php_int(hour))
     # end if
     #// Add the minute part to the string.
     if php_is_numeric(minute):
         #// translators: %s: Time duration in minute or minutes.
-        human_readable_duration[-1] = php_sprintf(_n("%s minute", "%s minutes", minute), int(minute))
+        human_readable_duration[-1] = php_sprintf(_n("%s minute", "%s minutes", minute), php_int(minute))
     # end if
     #// Add the second part to the string.
     if php_is_numeric(second):
         #// translators: %s: Time duration in second or seconds.
-        human_readable_duration[-1] = php_sprintf(_n("%s second", "%s seconds", second), int(second))
+        human_readable_duration[-1] = php_sprintf(_n("%s second", "%s seconds", second), php_int(second))
     # end if
     return php_implode(", ", human_readable_duration)
 # end def human_readable_duration
@@ -619,7 +619,7 @@ def is_serialized(data=None, strict=True, *args_):
             pass
         # end if
         if case("O"):
-            return bool(php_preg_match(str("/^") + str(token) + str(":[0-9]+:/s"), data))
+            return php_bool(php_preg_match(str("/^") + str(token) + str(":[0-9]+:/s"), data))
         # end if
         if case("b"):
             pass
@@ -629,7 +629,7 @@ def is_serialized(data=None, strict=True, *args_):
         # end if
         if case("d"):
             end_ = "$" if strict else ""
-            return bool(php_preg_match(str("/^") + str(token) + str(":[0-9.E+-]+;") + str(end_) + str("/"), data))
+            return php_bool(php_preg_match(str("/^") + str(token) + str(":[0-9.E+-]+;") + str(end_) + str("/"), data))
         # end if
     # end for
     return False
@@ -837,7 +837,7 @@ def do_enclose(content=None, post=None, *args_):
         if "" != url and (not wpdb.get_var(wpdb.prepare(str("SELECT post_id FROM ") + str(wpdb.postmeta) + str(" WHERE post_id = %d AND meta_key = 'enclosure' AND meta_value LIKE %s"), post.ID, wpdb.esc_like(url) + "%"))):
             headers = wp_get_http_headers(url)
             if headers:
-                len = int(headers["content-length"]) if (php_isset(lambda : headers["content-length"])) else 0
+                len = php_int(headers["content-length"]) if (php_isset(lambda : headers["content-length"])) else 0
                 type = headers["content-type"] if (php_isset(lambda : headers["content-type"])) else ""
                 allowed_types = Array("video", "audio")
                 #// Check to see if we can figure out the mime type from the extension.
@@ -2029,7 +2029,7 @@ def wp_upload_dir(time=None, create_dir=True, refresh_cache=False, *args_):
     
     cache = Array()
     tested_paths = Array()
-    key = php_sprintf("%d-%s", get_current_blog_id(), str(time))
+    key = php_sprintf("%d-%s", get_current_blog_id(), php_str(time))
     if refresh_cache or php_empty(lambda : cache[key]):
         cache[key] = _wp_upload_dir(time)
     # end if
@@ -2218,7 +2218,7 @@ def wp_unique_filename(dir=None, filename=None, unique_filename_callback=None, *
                 if not (php_file_exists(dir + str("/") + str(filename)) or php_file_exists(dir + str("/") + str(filename2))):
                     break
                 # end if
-                new_number = int(number) + 1
+                new_number = php_int(number) + 1
                 filename = php_str_replace(Array(str("-") + str(number) + str(ext), str(number) + str(ext)), str("-") + str(new_number) + str(ext), filename)
                 filename2 = php_str_replace(Array(str("-") + str(number) + str(ext2), str(number) + str(ext2)), str("-") + str(new_number) + str(ext2), filename2)
                 number = new_number
@@ -2230,7 +2230,7 @@ def wp_unique_filename(dir=None, filename=None, unique_filename_callback=None, *
                 if not (php_file_exists(dir + str("/") + str(filename))):
                     break
                 # end if
-                new_number = int(number) + 1
+                new_number = php_int(number) + 1
                 if "" == str(number) + str(ext):
                     filename = str(filename) + str("-") + str(new_number)
                 else:
@@ -2262,7 +2262,7 @@ def wp_unique_filename(dir=None, filename=None, unique_filename_callback=None, *
                     if not (i <= count and _wp_check_existing_file_names(filename, files)):
                         break
                     # end if
-                    new_number = int(number) + 1
+                    new_number = php_int(number) + 1
                     filename = php_str_replace(Array(str("-") + str(number) + str(new_ext), str(number) + str(new_ext)), str("-") + str(new_number) + str(new_ext), filename)
                     number = new_number
                     i += 1
@@ -3044,7 +3044,7 @@ def _ajax_wp_die_handler(message=None, title="", args=Array(), *args_):
         nocache_headers()
     # end if
     if is_scalar(message):
-        message = str(message)
+        message = php_str(message)
     else:
         message = "0"
     # end if
@@ -3192,13 +3192,13 @@ def _scalar_wp_die_handler(message="", title="", args=Array(), *args_):
     message, title, parsed_args = _wp_die_process_input(message, title, args)
     if parsed_args["exit"]:
         if is_scalar(message):
-            php_print(str(message))
+            php_print(php_str(message))
             php_exit()
         # end if
         php_exit(0)
     # end if
     if is_scalar(message):
-        php_print(str(message))
+        php_print(php_str(message))
     # end if
 # end def _scalar_wp_die_handler
 #// 
@@ -3370,7 +3370,7 @@ def _wp_json_sanity_check(data=None, depth=None, *args_):
 def _wp_json_convert_string(string=None, *args_):
     
     use_mb = None
-    if php_is_null(use_mb):
+    if is_null(use_mb):
         use_mb = php_function_exists("mb_convert_encoding")
     # end if
     if use_mb:
@@ -4008,13 +4008,13 @@ def _deprecated_function(function=None, version=None, replacement=None, *args_):
     #//
     if WP_DEBUG and apply_filters("deprecated_function_trigger_error", True):
         if php_function_exists("__"):
-            if (not php_is_null(replacement)):
+            if (not is_null(replacement)):
                 trigger_error(php_sprintf(__("%1$s is <strong>deprecated</strong> since version %2$s! Use %3$s instead."), function, version, replacement), E_USER_DEPRECATED)
             else:
                 trigger_error(php_sprintf(__("%1$s is <strong>deprecated</strong> since version %2$s with no alternative available."), function, version), E_USER_DEPRECATED)
             # end if
         else:
-            if (not php_is_null(replacement)):
+            if (not is_null(replacement)):
                 trigger_error(php_sprintf("%1$s is <strong>deprecated</strong> since version %2$s! Use %3$s instead.", function, version, replacement), E_USER_DEPRECATED)
             else:
                 trigger_error(php_sprintf("%1$s is <strong>deprecated</strong> since version %2$s with no alternative available.", function, version), E_USER_DEPRECATED)
@@ -4124,13 +4124,13 @@ def _deprecated_file(file=None, version=None, replacement=None, message="", *arg
     if WP_DEBUG and apply_filters("deprecated_file_trigger_error", True):
         message = "" if php_empty(lambda : message) else " " + message
         if php_function_exists("__"):
-            if (not php_is_null(replacement)):
+            if (not is_null(replacement)):
                 trigger_error(php_sprintf(__("%1$s is <strong>deprecated</strong> since version %2$s! Use %3$s instead."), file, version, replacement) + message, E_USER_DEPRECATED)
             else:
                 trigger_error(php_sprintf(__("%1$s is <strong>deprecated</strong> since version %2$s with no alternative available."), file, version) + message, E_USER_DEPRECATED)
             # end if
         else:
-            if (not php_is_null(replacement)):
+            if (not is_null(replacement)):
                 trigger_error(php_sprintf("%1$s is <strong>deprecated</strong> since version %2$s! Use %3$s instead.", file, version, replacement) + message, E_USER_DEPRECATED)
             else:
                 trigger_error(php_sprintf("%1$s is <strong>deprecated</strong> since version %2$s with no alternative available.", file, version) + message, E_USER_DEPRECATED)
@@ -4185,13 +4185,13 @@ def _deprecated_argument(function=None, version=None, message=None, *args_):
     #//
     if WP_DEBUG and apply_filters("deprecated_argument_trigger_error", True):
         if php_function_exists("__"):
-            if (not php_is_null(message)):
+            if (not is_null(message)):
                 trigger_error(php_sprintf(__("%1$s was called with an argument that is <strong>deprecated</strong> since version %2$s! %3$s"), function, version, message), E_USER_DEPRECATED)
             else:
                 trigger_error(php_sprintf(__("%1$s was called with an argument that is <strong>deprecated</strong> since version %2$s with no alternative available."), function, version), E_USER_DEPRECATED)
             # end if
         else:
-            if (not php_is_null(message)):
+            if (not is_null(message)):
                 trigger_error(php_sprintf("%1$s was called with an argument that is <strong>deprecated</strong> since version %2$s! %3$s", function, version, message), E_USER_DEPRECATED)
             else:
                 trigger_error(php_sprintf("%1$s was called with an argument that is <strong>deprecated</strong> since version %2$s with no alternative available.", function, version), E_USER_DEPRECATED)
@@ -4242,7 +4242,7 @@ def _deprecated_hook(hook=None, version=None, replacement=None, message=None, *a
     #//
     if WP_DEBUG and apply_filters("deprecated_hook_trigger_error", True):
         message = "" if php_empty(lambda : message) else " " + message
-        if (not php_is_null(replacement)):
+        if (not is_null(replacement)):
             trigger_error(php_sprintf(__("%1$s is <strong>deprecated</strong> since version %2$s! Use %3$s instead."), hook, version, replacement) + message, E_USER_DEPRECATED)
         else:
             trigger_error(php_sprintf(__("%1$s is <strong>deprecated</strong> since version %2$s with no alternative available."), hook, version) + message, E_USER_DEPRECATED)
@@ -4290,7 +4290,7 @@ def _doing_it_wrong(function=None, message=None, version=None, *args_):
     #//
     if WP_DEBUG and apply_filters("doing_it_wrong_trigger_error", True, function, message, version):
         if php_function_exists("__"):
-            if php_is_null(version):
+            if is_null(version):
                 version = ""
             else:
                 #// translators: %s: Version number.
@@ -4299,7 +4299,7 @@ def _doing_it_wrong(function=None, message=None, version=None, *args_):
             message += " " + php_sprintf(__("Please see <a href=\"%s\">Debugging in WordPress</a> for more information."), __("https://wordpress.org/support/article/debugging-in-wordpress/"))
             trigger_error(php_sprintf(__("%1$s was called <strong>incorrectly</strong>. %2$s %3$s"), function, message, version), E_USER_NOTICE)
         else:
-            if php_is_null(version):
+            if is_null(version):
                 version = ""
             else:
                 version = php_sprintf("(This message was added in version %s.)", version)
@@ -4442,7 +4442,7 @@ def validate_file(file=None, allowed_files=Array(), *args_):
 def force_ssl_admin(force=None, *args_):
     
     forced = False
-    if (not php_is_null(force)):
+    if (not is_null(force)):
         old_forced = forced
         forced = force
         return old_forced
@@ -4561,7 +4561,7 @@ def is_main_site(site_id=None, network_id=None, *args_):
     if (not site_id):
         site_id = get_current_blog_id()
     # end if
-    site_id = int(site_id)
+    site_id = php_int(site_id)
     return get_main_site_id(network_id) == site_id
 # end def is_main_site
 #// 
@@ -4600,7 +4600,7 @@ def is_main_network(network_id=None, *args_):
     if None == network_id:
         network_id = get_current_network_id()
     # end if
-    network_id = int(network_id)
+    network_id = php_int(network_id)
     return get_main_network_id() == network_id
 # end def is_main_network
 #// 
@@ -4618,7 +4618,7 @@ def get_main_network_id(*args_):
     current_network = get_network()
     if php_defined("PRIMARY_NETWORK_ID"):
         main_network_id = PRIMARY_NETWORK_ID
-    elif (php_isset(lambda : current_network.id)) and 1 == int(current_network.id):
+    elif (php_isset(lambda : current_network.id)) and 1 == php_int(current_network.id):
         #// If the current network has an ID of 1, assume it is the main network.
         main_network_id = 1
     else:
@@ -4632,7 +4632,7 @@ def get_main_network_id(*args_):
     #// 
     #// @param int $main_network_id The ID of the main network.
     #//
-    return int(apply_filters("get_main_network_id", main_network_id))
+    return php_int(apply_filters("get_main_network_id", main_network_id))
 # end def get_main_network_id
 #// 
 #// Determine whether global terms are enabled.
@@ -4649,7 +4649,7 @@ def global_terms_enabled(*args_):
         return False
     # end if
     global_terms = None
-    if php_is_null(global_terms):
+    if is_null(global_terms):
         #// 
         #// Filters whether global terms are enabled.
         #// 
@@ -4661,10 +4661,10 @@ def global_terms_enabled(*args_):
         #// @param null $enabled Whether global terms are enabled.
         #//
         filter = apply_filters("global_terms_enabled", None)
-        if (not php_is_null(filter)):
-            global_terms = bool(filter)
+        if (not is_null(filter)):
+            global_terms = php_bool(filter)
         else:
-            global_terms = bool(get_site_option("global_terms_enabled", False))
+            global_terms = php_bool(get_site_option("global_terms_enabled", False))
         # end if
     # end if
     return global_terms
@@ -4695,7 +4695,7 @@ def is_site_meta_supported(*args_):
         supported = 1 if wpdb.get_var(str("SHOW TABLES LIKE '") + str(wpdb.blogmeta) + str("'")) else 0
         update_network_option(network_id, "site_meta_supported", supported)
     # end if
-    return bool(supported)
+    return php_bool(supported)
 # end def is_site_meta_supported
 #// 
 #// gmt_offset modification for smart timezone handling.
@@ -4862,7 +4862,7 @@ def wp_timezone_choice(selected_zone=None, locale=None, *args_):
         if 0 <= offset:
             offset_name = "+" + offset
         else:
-            offset_name = str(offset)
+            offset_name = php_str(offset)
         # end if
         offset_value = offset_name
         offset_name = php_str_replace(Array(".25", ".5", ".75"), Array(":15", ":30", ":45"), offset_name)
@@ -4909,7 +4909,7 @@ def wp_scheduled_delete(*args_):
     delete_timestamp = time() - DAY_IN_SECONDS * EMPTY_TRASH_DAYS
     posts_to_delete = wpdb.get_results(wpdb.prepare(str("SELECT post_id FROM ") + str(wpdb.postmeta) + str(" WHERE meta_key = '_wp_trash_meta_time' AND meta_value < %d"), delete_timestamp), ARRAY_A)
     for post in posts_to_delete:
-        post_id = int(post["post_id"])
+        post_id = php_int(post["post_id"])
         if (not post_id):
             continue
         # end if
@@ -4923,7 +4923,7 @@ def wp_scheduled_delete(*args_):
     # end for
     comments_to_delete = wpdb.get_results(wpdb.prepare(str("SELECT comment_id FROM ") + str(wpdb.commentmeta) + str(" WHERE meta_key = '_wp_trash_meta_time' AND meta_value < %d"), delete_timestamp), ARRAY_A)
     for comment in comments_to_delete:
-        comment_id = int(comment["comment_id"])
+        comment_id = php_int(comment["comment_id"])
         if (not comment_id):
             continue
         # end if
@@ -5106,7 +5106,7 @@ def send_nosniff_header(*args_):
 #//
 def _wp_mysql_week(column=None, *args_):
     
-    start_of_week = int(get_option("start_of_week"))
+    start_of_week = php_int(get_option("start_of_week"))
     for case in Switch(start_of_week):
         if case(1):
             return str("WEEK( ") + str(column) + str(", 1 )")
@@ -5149,7 +5149,7 @@ def _wp_mysql_week(column=None, *args_):
 #//
 def wp_find_hierarchy_loop(callback=None, start=None, start_parent=None, callback_args=Array(), *args_):
     
-    override = Array() if php_is_null(start_parent) else Array({start: start_parent})
+    override = Array() if is_null(start_parent) else Array({start: start_parent})
     arbitrary_loop_member = wp_find_hierarchy_loop_tortoise_hare(callback, start, override, callback_args)
     if (not arbitrary_loop_member):
         return Array()
@@ -5276,7 +5276,7 @@ def wp_debug_backtrace_summary(ignore_class=None, skip_frames=0, pretty=True, *a
     truncate_paths = None
     trace = debug_backtrace(False)
     caller = Array()
-    check_class = (not php_is_null(ignore_class))
+    check_class = (not is_null(ignore_class))
     skip_frames += 1
     #// Skip this function.
     if (not (php_isset(lambda : truncate_paths))):
@@ -5322,7 +5322,7 @@ def _get_non_cached_ids(object_ids=None, cache_key=None, *args_):
     
     clean = Array()
     for id in object_ids:
-        id = int(id)
+        id = php_int(id)
         if (not wp_cache_get(id, cache_key)):
             clean[-1] = id
         # end if
@@ -5571,7 +5571,7 @@ def mbstring_binary_safe_encoding(reset=False, *args_):
     
     encodings = Array()
     overloaded = None
-    if php_is_null(overloaded):
+    if is_null(overloaded):
         overloaded = php_function_exists("mb_internal_encoding") and php_ini_get("mbstring.func_overload") & 2
     # end if
     if False == overloaded:
@@ -5616,7 +5616,7 @@ def wp_validate_boolean(var=None, *args_):
     if php_is_string(var) and "false" == php_strtolower(var):
         return False
     # end if
-    return bool(var)
+    return php_bool(var)
 # end def wp_validate_boolean
 #// 
 #// Delete a file
@@ -5686,7 +5686,7 @@ def wp_post_preview_js(*args_):
         return
     # end if
     #// Has to match the window name used in post_submit_meta_box().
-    name = "wp-preview-" + int(post.ID)
+    name = "wp-preview-" + php_int(post.ID)
     php_print("""   <script>
     ( function() {
     var query = document.location.search;
@@ -5848,7 +5848,7 @@ def wp_is_uuid(uuid=None, version=None, *args_):
         return False
     # end if
     if php_is_numeric(version):
-        if 4 != int(version):
+        if 4 != php_int(version):
             _doing_it_wrong(__FUNCTION__, __("Only UUID V4 is supported at this time."), "4.9.0")
             return False
         # end if
@@ -5856,7 +5856,7 @@ def wp_is_uuid(uuid=None, version=None, *args_):
     else:
         regex = "/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/"
     # end if
-    return bool(php_preg_match(regex, uuid))
+    return php_bool(php_preg_match(regex, uuid))
 # end def wp_is_uuid
 #// 
 #// Get unique ID.
@@ -5877,7 +5877,7 @@ def wp_unique_id(prefix="", *args_):
     
     id_counter = 0
     id_counter += 1
-    return prefix + str(id_counter)
+    return prefix + php_str(id_counter)
 # end def wp_unique_id
 #// 
 #// Get last changed date for the specified cache group.
@@ -6452,5 +6452,5 @@ def is_php_version_compatible(required=None, *args_):
 #//
 def wp_fuzzy_number_match(expected=None, actual=None, precision=1, *args_):
     
-    return abs(float(expected) - float(actual)) <= precision
+    return abs(php_float(expected) - php_float(actual)) <= precision
 # end def wp_fuzzy_number_match

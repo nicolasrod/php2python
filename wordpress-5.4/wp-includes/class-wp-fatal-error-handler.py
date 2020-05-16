@@ -109,7 +109,7 @@ class WP_Fatal_Error_Handler():
         #// @param bool  $should_handle_error Whether the error should be handled by the fatal error handler.
         #// @param array $error               Error information retrieved from error_get_last().
         #//
-        return bool(apply_filters("wp_should_handle_php_error", False, error))
+        return php_bool(apply_filters("wp_should_handle_php_error", False, error))
     # end def should_handle_error
     #// 
     #// Displays the PHP error template and sends the HTTP status code, typically 500.

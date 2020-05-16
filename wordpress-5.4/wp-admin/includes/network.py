@@ -171,7 +171,7 @@ def network_step1(errors=False, *args_):
     _e("Fill in the information below and you&#8217;ll be on your way to creating a network of WordPress sites. We will create configuration files in the next step.")
     php_print("</p>\n   ")
     if (php_isset(lambda : PHP_POST["subdomain_install"])):
-        subdomain_install = bool(PHP_POST["subdomain_install"])
+        subdomain_install = php_bool(PHP_POST["subdomain_install"])
     elif apache_mod_loaded("mod_rewrite"):
         #// Assume nothing.
         subdomain_install = True
@@ -355,7 +355,7 @@ def network_step2(errors=False, *args_):
             _e("The original configuration steps are shown here for reference.")
             php_print("</p>\n           ")
         else:
-            subdomain_install = bool(wpdb.get_var(str("SELECT meta_value FROM ") + str(wpdb.sitemeta) + str(" WHERE site_id = 1 AND meta_key = 'subdomain_install'")))
+            subdomain_install = php_bool(wpdb.get_var(str("SELECT meta_value FROM ") + str(wpdb.sitemeta) + str(" WHERE site_id = 1 AND meta_key = 'subdomain_install'")))
             php_print(" <div class=\"error\"><p><strong>")
             _e("Warning:")
             php_print("</strong> ")

@@ -343,7 +343,7 @@ class ParagonIE_Sodium_Core_Ed25519(ParagonIE_Sodium_Core_Curve25519):
             j = 0
             while j < 32:
                 
-                c |= self.chrtoint(R[j]) ^ int(blacklist[i][j])
+                c |= self.chrtoint(R[j]) ^ php_int(blacklist[i][j])
                 j += 1
             # end while
             if c == 0:

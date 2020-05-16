@@ -67,7 +67,7 @@ class WP_Block_Type():
             return ""
         # end if
         attributes = self.prepare_attributes_for_render(attributes)
-        return str(php_call_user_func(self.render_callback, attributes, content))
+        return php_str(php_call_user_func(self.render_callback, attributes, content))
     # end def render
     #// 
     #// Returns true if the block type is dynamic, or false otherwise. A dynamic

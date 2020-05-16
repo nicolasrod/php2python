@@ -133,7 +133,7 @@ class WP_Importer():
     def set_blog(self, blog_id=None):
         
         if php_is_numeric(blog_id):
-            blog_id = int(blog_id)
+            blog_id = php_int(blog_id)
         else:
             blog = "http://" + php_preg_replace("#^https?://#", "", blog_id)
             parsed = php_parse_url(blog)
@@ -150,7 +150,7 @@ class WP_Importer():
                 php_exit(0)
             # end if
             blog = php_array_shift(blogs)
-            blog_id = int(blog.blog_id)
+            blog_id = php_int(blog.blog_id)
         # end if
         if php_function_exists("is_multisite"):
             if is_multisite():
@@ -166,9 +166,9 @@ class WP_Importer():
     def set_user(self, user_id=None):
         
         if php_is_numeric(user_id):
-            user_id = int(user_id)
+            user_id = php_int(user_id)
         else:
-            user_id = int(username_exists(user_id))
+            user_id = php_int(username_exists(user_id))
         # end if
         if (not user_id) or (not wp_set_current_user(user_id)):
             fwrite(STDERR, "Error: can not find user\n")
@@ -285,7 +285,7 @@ def get_cli_args(param=None, required=False, *args_):
     il
     while i < il:
         
-        if bool(php_preg_match("/^--(.+)/", args[i], match)):
+        if php_bool(php_preg_match("/^--(.+)/", args[i], match)):
             parts = php_explode("=", match[1])
             key = php_preg_replace("/[^a-z0-9]+/", "", parts[0])
             if (php_isset(lambda : parts[1])):
@@ -294,7 +294,7 @@ def get_cli_args(param=None, required=False, *args_):
                 out[key] = True
             # end if
             last_arg = key
-        elif bool(php_preg_match("/^-([a-zA-Z0-9]+)/", args[i], match)):
+        elif php_bool(php_preg_match("/^-([a-zA-Z0-9]+)/", args[i], match)):
             j = 0
             jl = php_strlen(match[1])
             while j < jl:

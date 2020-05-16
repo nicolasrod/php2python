@@ -450,7 +450,7 @@ class WP_Admin_Bar():
         is_root_top_item = "root-default" == node.parent
         is_top_secondary_item = "top-secondary" == node.parent
         #// Allow only numeric values, then casted to integers, and allow a tabindex value of `0` for a11y.
-        tabindex = int(node.meta["tabindex"]) if (php_isset(lambda : node.meta["tabindex"])) and php_is_numeric(node.meta["tabindex"]) else ""
+        tabindex = php_int(node.meta["tabindex"]) if (php_isset(lambda : node.meta["tabindex"])) and php_is_numeric(node.meta["tabindex"]) else ""
         aria_attributes = " tabindex=\"" + tabindex + "\"" if "" != tabindex else ""
         menuclass = ""
         arrow = ""

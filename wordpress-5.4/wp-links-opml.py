@@ -30,7 +30,7 @@ link_cat = ""
 if (not php_empty(lambda : PHP_REQUEST["link_cat"])):
     link_cat = PHP_REQUEST["link_cat"]
     if (not php_in_array(link_cat, Array("all", "0"), True)):
-        link_cat = absint(str(urldecode(link_cat)))
+        link_cat = absint(php_str(urldecode(link_cat)))
     # end if
 # end if
 php_print("<?xml version=\"1.0\"?" + ">\n")

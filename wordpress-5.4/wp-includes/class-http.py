@@ -231,7 +231,7 @@ class WP_Http():
                 return response
             # end if
         # end if
-        if php_is_null(parsed_args["headers"]):
+        if is_null(parsed_args["headers"]):
             parsed_args["headers"] = Array()
         # end if
         #// WP allows passing in headers as a string, weirdly.
@@ -682,7 +682,7 @@ class WP_Http():
             if not (True):
                 break
             # end if
-            has_chunk = bool(php_preg_match("/^([0-9a-f]+)[^\\r\\n]*\\r\\n/i", body, match))
+            has_chunk = php_bool(php_preg_match("/^([0-9a-f]+)[^\\r\\n]*\\r\\n/i", body, match))
             if (not has_chunk) or php_empty(lambda : match[1]):
                 return body_original
             # end if

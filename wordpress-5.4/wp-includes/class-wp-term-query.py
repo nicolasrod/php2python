@@ -329,7 +329,7 @@ class WP_Term_Query():
             exclusions = php_array_merge(wp_parse_id_list(exclude), exclusions)
         # end if
         #// 'childless' terms are those without an entry in the flattened term hierarchy.
-        childless = bool(args["childless"])
+        childless = php_bool(args["childless"])
         if childless:
             for _tax in taxonomies:
                 term_hierarchy = _get_term_hierarchy(_tax)
@@ -402,7 +402,7 @@ class WP_Term_Query():
             args["hide_empty"] = False
         # end if
         if "" != parent:
-            parent = int(parent)
+            parent = php_int(parent)
             self.sql_clauses["where"]["parent"] = str("tt.parent = '") + str(parent) + str("'")
         # end if
         hierarchical = args["hierarchical"]
@@ -634,11 +634,11 @@ class WP_Term_Query():
             # end for
         elif "ids" == _fields:
             for term in terms:
-                _terms[-1] = int(term.term_id)
+                _terms[-1] = php_int(term.term_id)
             # end for
         elif "tt_ids" == _fields:
             for term in terms:
-                _terms[-1] = int(term.term_taxonomy_id)
+                _terms[-1] = php_int(term.term_taxonomy_id)
             # end for
         elif "names" == _fields:
             for term in terms:

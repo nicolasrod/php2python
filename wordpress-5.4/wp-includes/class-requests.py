@@ -538,8 +538,8 @@ class Requests():
         if php_empty(lambda : matches):
             raise php_new_class("Requests_Exception", lambda : Requests_Exception("Response could not be parsed", "noversion", headers))
         # end if
-        return_.protocol_version = float(matches[1])
-        return_.status_code = int(matches[2])
+        return_.protocol_version = php_float(matches[1])
+        return_.status_code = php_int(matches[2])
         if return_.status_code >= 200 and return_.status_code < 300:
             return_.success = True
         # end if
@@ -628,7 +628,7 @@ class Requests():
             if not (True):
                 break
             # end if
-            is_chunked = bool(php_preg_match("/^([0-9a-f]+)(?:;(?:[\\w-]*)(?:=(?:(?:[\\w-]*)*|\"(?:[^\\r\\n])*\"))?)*\\r\\n/i", encoded, matches))
+            is_chunked = php_bool(php_preg_match("/^([0-9a-f]+)(?:;(?:[\\w-]*)(?:=(?:(?:[\\w-]*)*|\"(?:[^\\r\\n])*\"))?)*\\r\\n/i", encoded, matches))
             if (not is_chunked):
                 #// Looks like it's not chunked after all
                 return data

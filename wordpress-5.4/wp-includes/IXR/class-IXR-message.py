@@ -173,17 +173,17 @@ class IXR_Message():
                 pass
             # end if
             if case("i4"):
-                value = int(php_trim(self._currentTagContents))
+                value = php_int(php_trim(self._currentTagContents))
                 valueFlag = True
                 break
             # end if
             if case("double"):
-                value = float(php_trim(self._currentTagContents))
+                value = php_float(php_trim(self._currentTagContents))
                 valueFlag = True
                 break
             # end if
             if case("string"):
-                value = str(php_trim(self._currentTagContents))
+                value = php_str(php_trim(self._currentTagContents))
                 valueFlag = True
                 break
             # end if
@@ -195,13 +195,13 @@ class IXR_Message():
             if case("value"):
                 #// "If no type is indicated, the type is string."
                 if php_trim(self._currentTagContents) != "":
-                    value = str(self._currentTagContents)
+                    value = php_str(self._currentTagContents)
                     valueFlag = True
                 # end if
                 break
             # end if
             if case("boolean"):
-                value = bool(php_trim(self._currentTagContents))
+                value = php_bool(php_trim(self._currentTagContents))
                 valueFlag = True
                 break
             # end if

@@ -1082,7 +1082,7 @@ def _find_post_by_old_slug(post_type=None, *args_):
     if get_query_var("day"):
         query += wpdb.prepare(" AND DAYOFMONTH(post_date) = %d", get_query_var("day"))
     # end if
-    id = int(wpdb.get_var(query))
+    id = php_int(wpdb.get_var(query))
     return id
 # end def _find_post_by_old_slug
 #// 
@@ -1114,10 +1114,10 @@ def _find_post_by_old_date(post_type=None, *args_):
     # end if
     id = 0
     if date_query:
-        id = int(wpdb.get_var(wpdb.prepare(str("SELECT post_id FROM ") + str(wpdb.postmeta) + str(" AS pm_date, ") + str(wpdb.posts) + str(" WHERE ID = post_id AND post_type = %s AND meta_key = '_wp_old_date' AND post_name = %s") + date_query, post_type, get_query_var("name"))))
+        id = php_int(wpdb.get_var(wpdb.prepare(str("SELECT post_id FROM ") + str(wpdb.postmeta) + str(" AS pm_date, ") + str(wpdb.posts) + str(" WHERE ID = post_id AND post_type = %s AND meta_key = '_wp_old_date' AND post_name = %s") + date_query, post_type, get_query_var("name"))))
         if (not id):
             #// Check to see if an old slug matches the old date.
-            id = int(wpdb.get_var(wpdb.prepare(str("SELECT ID FROM ") + str(wpdb.posts) + str(", ") + str(wpdb.postmeta) + str(" AS pm_slug, ") + str(wpdb.postmeta) + str(" AS pm_date WHERE ID = pm_slug.post_id AND ID = pm_date.post_id AND post_type = %s AND pm_slug.meta_key = '_wp_old_slug' AND pm_slug.meta_value = %s AND pm_date.meta_key = '_wp_old_date'") + date_query, post_type, get_query_var("name"))))
+            id = php_int(wpdb.get_var(wpdb.prepare(str("SELECT ID FROM ") + str(wpdb.posts) + str(", ") + str(wpdb.postmeta) + str(" AS pm_slug, ") + str(wpdb.postmeta) + str(" AS pm_date WHERE ID = pm_slug.post_id AND ID = pm_date.post_id AND post_type = %s AND pm_slug.meta_key = '_wp_old_slug' AND pm_slug.meta_value = %s AND pm_date.meta_key = '_wp_old_date'") + date_query, post_type, get_query_var("name"))))
         # end if
     # end if
     return id

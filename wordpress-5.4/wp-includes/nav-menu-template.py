@@ -273,14 +273,14 @@ def _wp_menu_item_classes_by_context(menu_items=None, *args_):
     global wp_query,wp_rewrite
     php_check_if_defined("wp_query","wp_rewrite")
     queried_object = wp_query.get_queried_object()
-    queried_object_id = int(wp_query.queried_object_id)
+    queried_object_id = php_int(wp_query.queried_object_id)
     active_object = ""
     active_ancestor_item_ids = Array()
     active_parent_item_ids = Array()
     active_parent_object_ids = Array()
     possible_taxonomy_ancestors = Array()
     possible_object_parents = Array()
-    home_page_id = int(get_option("page_for_posts"))
+    home_page_id = php_int(get_option("page_for_posts"))
     if wp_query.is_singular and (not php_empty(lambda : queried_object.post_type)) and (not is_post_type_hierarchical(queried_object.post_type)):
         for taxonomy in get_object_taxonomies(queried_object.post_type):
             if is_taxonomy_hierarchical(taxonomy):
@@ -339,8 +339,8 @@ def _wp_menu_item_classes_by_context(menu_items=None, *args_):
     # end if
     possible_object_parents = php_array_filter(possible_object_parents)
     front_page_url = home_url()
-    front_page_id = int(get_option("page_on_front"))
-    privacy_policy_page_id = int(get_option("wp_page_for_privacy_policy"))
+    front_page_id = php_int(get_option("page_on_front"))
+    privacy_policy_page_id = php_int(get_option("wp_page_for_privacy_policy"))
     for key,menu_item in menu_items:
         menu_items[key].current = False
         classes = menu_item.classes
@@ -348,23 +348,23 @@ def _wp_menu_item_classes_by_context(menu_items=None, *args_):
         classes[-1] = "menu-item-type-" + menu_item.type
         classes[-1] = "menu-item-object-" + menu_item.object
         #// This menu item is set as the 'Front Page'.
-        if "post_type" == menu_item.type and front_page_id == int(menu_item.object_id):
+        if "post_type" == menu_item.type and front_page_id == php_int(menu_item.object_id):
             classes[-1] = "menu-item-home"
         # end if
         #// This menu item is set as the 'Privacy Policy Page'.
-        if "post_type" == menu_item.type and privacy_policy_page_id == int(menu_item.object_id):
+        if "post_type" == menu_item.type and privacy_policy_page_id == php_int(menu_item.object_id):
             classes[-1] = "menu-item-privacy-policy"
         # end if
         #// If the menu item corresponds to a taxonomy term for the currently queried non-hierarchical post object.
         if wp_query.is_singular and "taxonomy" == menu_item.type and php_in_array(menu_item.object_id, possible_object_parents):
-            active_parent_object_ids[-1] = int(menu_item.object_id)
-            active_parent_item_ids[-1] = int(menu_item.db_id)
+            active_parent_object_ids[-1] = php_int(menu_item.object_id)
+            active_parent_item_ids[-1] = php_int(menu_item.db_id)
             active_object = queried_object.post_type
             pass
         elif menu_item.object_id == queried_object_id and (not php_empty(lambda : home_page_id)) and "post_type" == menu_item.type and wp_query.is_home and home_page_id == menu_item.object_id or "post_type" == menu_item.type and wp_query.is_singular or "taxonomy" == menu_item.type and wp_query.is_category or wp_query.is_tag or wp_query.is_tax and queried_object.taxonomy == menu_item.object:
             classes[-1] = "current-menu-item"
             menu_items[key].current = True
-            _anc_id = int(menu_item.db_id)
+            _anc_id = php_int(menu_item.db_id)
             while True:
                 _anc_id = get_post_meta(_anc_id, "_menu_item_menu_item_parent", True)
                 if not (_anc_id and (not php_in_array(_anc_id, active_ancestor_item_ids))):
@@ -378,14 +378,14 @@ def _wp_menu_item_classes_by_context(menu_items=None, *args_):
                 classes[-1] = "page-item-" + menu_item.object_id
                 classes[-1] = "current_page_item"
             # end if
-            active_parent_item_ids[-1] = int(menu_item.menu_item_parent)
-            active_parent_object_ids[-1] = int(menu_item.post_parent)
+            active_parent_item_ids[-1] = php_int(menu_item.menu_item_parent)
+            active_parent_object_ids[-1] = php_int(menu_item.post_parent)
             active_object = menu_item.object
             pass
         elif "post_type_archive" == menu_item.type and is_post_type_archive(Array(menu_item.object)):
             classes[-1] = "current-menu-item"
             menu_items[key].current = True
-            _anc_id = int(menu_item.db_id)
+            _anc_id = php_int(menu_item.db_id)
             while True:
                 _anc_id = get_post_meta(_anc_id, "_menu_item_menu_item_parent", True)
                 if not (_anc_id and (not php_in_array(_anc_id, active_ancestor_item_ids))):
@@ -393,7 +393,7 @@ def _wp_menu_item_classes_by_context(menu_items=None, *args_):
                 # end if
                 active_ancestor_item_ids[-1] = _anc_id
             # end while
-            active_parent_item_ids[-1] = int(menu_item.menu_item_parent)
+            active_parent_item_ids[-1] = php_int(menu_item.menu_item_parent)
             pass
         elif "custom" == menu_item.object and (php_isset(lambda : PHP_SERVER["HTTP_HOST"])):
             _root_relative_current = untrailingslashit(PHP_SERVER["REQUEST_URI"])
@@ -409,7 +409,7 @@ def _wp_menu_item_classes_by_context(menu_items=None, *args_):
             if raw_item_url and php_in_array(item_url, matches):
                 classes[-1] = "current-menu-item"
                 menu_items[key].current = True
-                _anc_id = int(menu_item.db_id)
+                _anc_id = php_int(menu_item.db_id)
                 while True:
                     _anc_id = get_post_meta(_anc_id, "_menu_item_menu_item_parent", True)
                     if not (_anc_id and (not php_in_array(_anc_id, active_ancestor_item_ids))):
@@ -421,8 +421,8 @@ def _wp_menu_item_classes_by_context(menu_items=None, *args_):
                     #// Back compat for home link to match wp_page_menu().
                     classes[-1] = "current_page_item"
                 # end if
-                active_parent_item_ids[-1] = int(menu_item.menu_item_parent)
-                active_parent_object_ids[-1] = int(menu_item.post_parent)
+                active_parent_item_ids[-1] = php_int(menu_item.menu_item_parent)
+                active_parent_object_ids[-1] = php_int(menu_item.post_parent)
                 active_object = menu_item.object
                 pass
             elif item_url == front_page_url and is_front_page():

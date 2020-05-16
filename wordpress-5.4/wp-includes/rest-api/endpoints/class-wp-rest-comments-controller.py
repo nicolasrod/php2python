@@ -168,8 +168,8 @@ class WP_REST_Comments_Controller(WP_REST_Controller):
             data = self.prepare_item_for_response(comment, request)
             comments[-1] = self.prepare_response_for_collection(data)
         # end for
-        total_comments = int(query.found_comments)
-        max_pages = int(query.max_num_pages)
+        total_comments = php_int(query.found_comments)
+        max_pages = php_int(query.max_num_pages)
         if total_comments < 1:
             prepared_args["number"] = None
             prepared_args["offset"] = None
@@ -208,16 +208,16 @@ class WP_REST_Comments_Controller(WP_REST_Controller):
     def get_comment(self, id=None):
         
         error = php_new_class("WP_Error", lambda : WP_Error("rest_comment_invalid_id", __("Invalid comment ID."), Array({"status": 404})))
-        if int(id) <= 0:
+        if php_int(id) <= 0:
             return error
         # end if
-        id = int(id)
+        id = php_int(id)
         comment = get_comment(id)
         if php_empty(lambda : comment):
             return error
         # end if
         if (not php_empty(lambda : comment.comment_post_ID)):
-            post = get_post(int(comment.comment_post_ID))
+            post = get_post(php_int(comment.comment_post_ID))
             if php_empty(lambda : post):
                 return php_new_class("WP_Error", lambda : WP_Error("rest_post_invalid_id", __("Invalid post ID."), Array({"status": 404})))
             # end if
@@ -314,7 +314,7 @@ class WP_REST_Comments_Controller(WP_REST_Controller):
         if php_empty(lambda : request["post"]):
             return php_new_class("WP_Error", lambda : WP_Error("rest_comment_invalid_post_id", __("Sorry, you are not allowed to create this comment without a post."), Array({"status": 403})))
         # end if
-        post = get_post(int(request["post"]))
+        post = get_post(php_int(request["post"]))
         if (not post):
             return php_new_class("WP_Error", lambda : WP_Error("rest_comment_invalid_post_id", __("Sorry, you are not allowed to create this comment without a post."), Array({"status": 403})))
         # end if
@@ -599,7 +599,7 @@ class WP_REST_Comments_Controller(WP_REST_Controller):
         if is_wp_error(comment):
             return comment
         # end if
-        force = bool(request["force"]) if (php_isset(lambda : request["force"])) else False
+        force = php_bool(request["force"]) if (php_isset(lambda : request["force"])) else False
         #// 
         #// Filters whether a comment can be trashed.
         #// 
@@ -658,16 +658,16 @@ class WP_REST_Comments_Controller(WP_REST_Controller):
         fields = self.get_fields_for_response(request)
         data = Array()
         if php_in_array("id", fields, True):
-            data["id"] = int(comment.comment_ID)
+            data["id"] = php_int(comment.comment_ID)
         # end if
         if php_in_array("post", fields, True):
-            data["post"] = int(comment.comment_post_ID)
+            data["post"] = php_int(comment.comment_post_ID)
         # end if
         if php_in_array("parent", fields, True):
-            data["parent"] = int(comment.comment_parent)
+            data["parent"] = php_int(comment.comment_parent)
         # end if
         if php_in_array("author", fields, True):
-            data["author"] = int(comment.user_id)
+            data["author"] = php_int(comment.user_id)
         # end if
         if php_in_array("author_name", fields, True):
             data["author_name"] = comment.comment_author
@@ -738,10 +738,10 @@ class WP_REST_Comments_Controller(WP_REST_Controller):
     def prepare_links(self, comment=None):
         
         links = Array({"self": Array({"href": rest_url(php_sprintf("%s/%s/%d", self.namespace, self.rest_base, comment.comment_ID))})}, {"collection": Array({"href": rest_url(php_sprintf("%s/%s", self.namespace, self.rest_base))})})
-        if 0 != int(comment.user_id):
+        if 0 != php_int(comment.user_id):
             links["author"] = Array({"href": rest_url("wp/v2/users/" + comment.user_id), "embeddable": True})
         # end if
-        if 0 != int(comment.comment_post_ID):
+        if 0 != php_int(comment.comment_post_ID):
             post = get_post(comment.comment_post_ID)
             if (not php_empty(lambda : post.ID)):
                 obj = get_post_type_object(post.post_type)
@@ -749,7 +749,7 @@ class WP_REST_Comments_Controller(WP_REST_Controller):
                 links["up"] = Array({"href": rest_url("wp/v2/" + base + "/" + comment.comment_post_ID), "embeddable": True, "post_type": post.post_type})
             # end if
         # end if
-        if 0 != int(comment.comment_parent):
+        if 0 != php_int(comment.comment_parent):
             links["in-reply-to"] = Array({"href": rest_url(php_sprintf("%s/%s/%d", self.namespace, self.rest_base, comment.comment_parent)), "embeddable": True})
         # end if
         #// Only grab one comment to verify the comment has children.
@@ -855,7 +855,7 @@ class WP_REST_Comments_Controller(WP_REST_Controller):
             prepared_comment["comment_content"] = request["content"]["raw"]
         # end if
         if (php_isset(lambda : request["post"])):
-            prepared_comment["comment_post_ID"] = int(request["post"])
+            prepared_comment["comment_post_ID"] = php_int(request["post"])
         # end if
         if (php_isset(lambda : request["parent"])):
             prepared_comment["comment_parent"] = request["parent"]
@@ -1092,7 +1092,7 @@ class WP_REST_Comments_Controller(WP_REST_Controller):
         if (not php_empty(lambda : comment.comment_post_ID)):
             post = get_post(comment.comment_post_ID)
             if post:
-                if self.check_read_post_permission(post, request) and 1 == int(comment.comment_approved):
+                if self.check_read_post_permission(post, request) and 1 == php_int(comment.comment_approved):
                     return True
                 # end if
             # end if
@@ -1103,7 +1103,7 @@ class WP_REST_Comments_Controller(WP_REST_Controller):
         if php_empty(lambda : comment.comment_post_ID) and (not current_user_can("moderate_comments")):
             return False
         # end if
-        if (not php_empty(lambda : comment.user_id)) and get_current_user_id() == int(comment.user_id):
+        if (not php_empty(lambda : comment.user_id)) and get_current_user_id() == php_int(comment.user_id):
             return True
         # end if
         return current_user_can("edit_comment", comment.comment_ID)
@@ -1118,7 +1118,7 @@ class WP_REST_Comments_Controller(WP_REST_Controller):
     #//
     def check_edit_permission(self, comment=None):
         
-        if 0 == int(get_current_user_id()):
+        if 0 == php_int(get_current_user_id()):
             return False
         # end if
         if current_user_can("moderate_comments"):
@@ -1143,7 +1143,7 @@ class WP_REST_Comments_Controller(WP_REST_Controller):
     #//
     def check_comment_author_email(self, value=None, request=None, param=None):
         
-        email = str(value)
+        email = php_str(value)
         if php_empty(lambda : email):
             return email
         # end if

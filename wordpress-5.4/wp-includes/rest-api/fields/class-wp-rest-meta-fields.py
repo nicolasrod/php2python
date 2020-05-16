@@ -145,7 +145,7 @@ class WP_REST_Meta_Fields():
             #// A null value means reset the field, which is essentially deleting it
             #// from the database and then relying on the default value.
             #//
-            if php_is_null(meta[name]):
+            if is_null(meta[name]):
                 args = self.get_registered_fields()[meta_key]
                 if args["single"]:
                     current = get_metadata(self.get_meta_type(), object_id, meta_key, True)
@@ -278,7 +278,7 @@ class WP_REST_Meta_Fields():
             sanitized = sanitize_meta(meta_key, value, meta_type, subtype)
             if php_in_array(args["type"], Array("string", "number", "integer", "boolean"), True):
                 #// The return value of get_metadata will always be a string for scalar types.
-                sanitized = str(sanitized)
+                sanitized = php_str(sanitized)
             # end if
             if sanitized == old_value[0]:
                 return True

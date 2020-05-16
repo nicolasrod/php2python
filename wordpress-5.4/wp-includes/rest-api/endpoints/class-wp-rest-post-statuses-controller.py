@@ -170,19 +170,19 @@ class WP_REST_Post_Statuses_Controller(WP_REST_Controller):
             data["name"] = status.label
         # end if
         if php_in_array("private", fields, True):
-            data["private"] = bool(status.private)
+            data["private"] = php_bool(status.private)
         # end if
         if php_in_array("protected", fields, True):
-            data["protected"] = bool(status.protected)
+            data["protected"] = php_bool(status.protected)
         # end if
         if php_in_array("public", fields, True):
-            data["public"] = bool(status.public)
+            data["public"] = php_bool(status.public)
         # end if
         if php_in_array("queryable", fields, True):
-            data["queryable"] = bool(status.publicly_queryable)
+            data["queryable"] = php_bool(status.publicly_queryable)
         # end if
         if php_in_array("show_in_list", fields, True):
-            data["show_in_list"] = bool(status.show_in_admin_all_list)
+            data["show_in_list"] = php_bool(status.show_in_admin_all_list)
         # end if
         if php_in_array("slug", fields, True):
             data["slug"] = status.name

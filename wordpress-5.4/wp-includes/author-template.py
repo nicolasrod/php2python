@@ -325,7 +325,7 @@ def get_author_posts_url(author_id=None, author_nicename="", *args_):
     
     global wp_rewrite
     php_check_if_defined("wp_rewrite")
-    auth_ID = int(author_id)
+    auth_ID = php_int(author_id)
     link = wp_rewrite.get_author_permastruct()
     if php_empty(lambda : link):
         file = home_url("/")
@@ -492,7 +492,7 @@ def is_multi_author(*args_):
     #// 
     #// @param bool $is_multi_author Whether $is_multi_author should evaluate as true.
     #//
-    return apply_filters("is_multi_author", bool(is_multi_author))
+    return apply_filters("is_multi_author", php_bool(is_multi_author))
 # end def is_multi_author
 #// 
 #// Helper function to clear the cache for number of authors.

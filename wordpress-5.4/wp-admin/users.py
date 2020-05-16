@@ -76,7 +76,7 @@ for case in Switch(wp_list_table.current_action()):
         userids = PHP_REQUEST["users"]
         update = "promote"
         for id in userids:
-            id = int(id)
+            id = php_int(id)
             if (not current_user_can("promote_user", id)):
                 wp_die(__("Sorry, you are not allowed to edit this user."), 403)
             # end if
@@ -170,7 +170,7 @@ for case in Switch(wp_list_table.current_action()):
         #// @param boolean $users_have_additional_content Whether the users have additional content. Default false.
         #// @param int[]   $userids                       Array of IDs for users being deleted.
         #//
-        users_have_content = bool(apply_filters("users_have_additional_content", False, userids))
+        users_have_content = php_bool(apply_filters("users_have_additional_content", False, userids))
         if userids and (not users_have_content):
             if wpdb.get_var(str("SELECT ID FROM ") + str(wpdb.posts) + str(" WHERE post_author IN( ") + php_implode(",", userids) + " ) LIMIT 1"):
                 users_have_content = True
@@ -277,7 +277,7 @@ for case in Switch(wp_list_table.current_action()):
         userids = PHP_REQUEST["users"]
         update = "remove"
         for id in userids:
-            id = int(id)
+            id = php_int(id)
             if (not current_user_can("remove_user", id)):
                 update = "err_admin_remove"
                 continue
@@ -325,7 +325,7 @@ for case in Switch(wp_list_table.current_action()):
         php_print("\n<ul>\n     ")
         go_remove = False
         for id in userids:
-            id = int(id)
+            id = php_int(id)
             user = get_userdata(id)
             if (not current_user_can("remove_user", id)):
                 #// translators: 1: User ID, 2: User login.
@@ -378,7 +378,7 @@ for case in Switch(wp_list_table.current_action()):
                     pass
                 # end if
                 if case("del_many"):
-                    delete_count = int(PHP_REQUEST["delete_count"]) if (php_isset(lambda : PHP_REQUEST["delete_count"])) else 0
+                    delete_count = php_int(PHP_REQUEST["delete_count"]) if (php_isset(lambda : PHP_REQUEST["delete_count"])) else 0
                     if 1 == delete_count:
                         message = __("User deleted.")
                     else:

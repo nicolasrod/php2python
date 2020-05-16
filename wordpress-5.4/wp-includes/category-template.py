@@ -31,7 +31,7 @@ if '__PHP2PY_LOADED__' not in globals():
 def get_category_link(category=None, *args_):
     
     if (not php_is_object(category)):
-        category = int(category)
+        category = php_int(category)
     # end if
     category = get_term_link(category)
     if is_wp_error(category):
@@ -106,7 +106,7 @@ def get_the_category(id=False, *args_):
 def get_the_category_by_ID(cat_ID=None, *args_):
     
     #// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
-    cat_ID = int(cat_ID)
+    cat_ID = php_int(cat_ID)
     category = get_term(cat_ID)
     if is_wp_error(category):
         return category
@@ -342,7 +342,7 @@ def wp_dropdown_categories(args="", *args_):
     # end if
     tab_index = parsed_args["tab_index"]
     tab_index_attribute = ""
-    if int(tab_index) > 0:
+    if php_int(tab_index) > 0:
         tab_index_attribute = str(" tabindex=\"") + str(tab_index) + str("\"")
     # end if
     #// Avoid clashes with the 'name' param of get_terms().

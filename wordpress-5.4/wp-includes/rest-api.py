@@ -1013,7 +1013,7 @@ def rest_sanitize_boolean(value=None, *args_):
         # end if
     # end if
     #// Everything else will map nicely to boolean.
-    return bool(value)
+    return php_bool(value)
 # end def rest_sanitize_boolean
 #// 
 #// Determines if a given value is boolean-like.
@@ -1104,7 +1104,7 @@ def rest_validate_value_from_schema(value=None, args=None, param="", *args_):
         return php_new_class("WP_Error", lambda : WP_Error("rest_invalid_param", php_sprintf(__("%1$s is not of type %2$s."), param, php_implode(",", args["type"]))))
     # end if
     if "array" == args["type"]:
-        if (not php_is_null(value)):
+        if (not is_null(value)):
             value = wp_parse_list(value)
         # end if
         if (not wp_is_numeric_array(value)):
@@ -1314,10 +1314,10 @@ def rest_sanitize_value_from_schema(value=None, args=None, *args_):
         return None
     # end if
     if "integer" == args["type"]:
-        return int(value)
+        return php_int(value)
     # end if
     if "number" == args["type"]:
-        return float(value)
+        return php_float(value)
     # end if
     if "boolean" == args["type"]:
         return rest_sanitize_boolean(value)

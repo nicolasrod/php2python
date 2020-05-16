@@ -199,7 +199,7 @@ def get_cat_ID(cat_name=None, *args_):
 #//
 def get_cat_name(cat_id=None, *args_):
     
-    cat_id = int(cat_id)
+    cat_id = php_int(cat_id)
     category = get_term(cat_id, "category")
     if (not category) or is_wp_error(category):
         return ""

@@ -236,7 +236,7 @@ def remove_user_from_blog(user_id=None, blog_id=0, reassign=0, *args_):
     global wpdb
     php_check_if_defined("wpdb")
     switch_to_blog(blog_id)
-    user_id = int(user_id)
+    user_id = php_int(user_id)
     #// 
     #// Fires before a user is removed from a site.
     #// 
@@ -279,7 +279,7 @@ def remove_user_from_blog(user_id=None, blog_id=0, reassign=0, *args_):
         update_user_meta(user_id, "source_domain", "")
     # end if
     if reassign:
-        reassign = int(reassign)
+        reassign = php_int(reassign)
         post_ids = wpdb.get_col(wpdb.prepare(str("SELECT ID FROM ") + str(wpdb.posts) + str(" WHERE post_author = %d"), user_id))
         link_ids = wpdb.get_col(wpdb.prepare(str("SELECT link_id FROM ") + str(wpdb.links) + str(" WHERE link_owner = %d"), user_id))
         if (not php_empty(lambda : post_ids)):
@@ -335,7 +335,7 @@ def get_blog_id_from_url(domain=None, path="/", *args_):
         #// Blog does not exist.
         return 0
     elif id:
-        return int(id)
+        return php_int(id)
     # end if
     args = Array({"domain": domain, "path": path, "fields": "ids", "number": 1, "update_site_meta_cache": False})
     result = get_sites(args)
@@ -1052,7 +1052,7 @@ def wpmu_create_blog(domain=None, path=None, title=None, user_id=None, options=A
     defaults = Array({"public": 0})
     options = wp_parse_args(options, defaults)
     title = strip_tags(title)
-    user_id = int(user_id)
+    user_id = php_int(user_id)
     #// Check if the domain has been used already. We should return an error message.
     if domain_exists(domain, path, network_id):
         return php_new_class("WP_Error", lambda : WP_Error("blog_taken", __("Sorry, that site already exists!")))
@@ -1409,7 +1409,7 @@ def get_most_recent_post_of_user(user_id=None, *args_):
     
     global wpdb
     php_check_if_defined("wpdb")
-    user_blogs = get_blogs_of_user(int(user_id))
+    user_blogs = get_blogs_of_user(php_int(user_id))
     most_recent_post = Array()
     #// Walk through each blog and get the most recent post
     #// published by $user_id.
@@ -1479,7 +1479,7 @@ def update_posts_count(deprecated="", *args_):
     
     global wpdb
     php_check_if_defined("wpdb")
-    update_option("post_count", int(wpdb.get_var(str("SELECT COUNT(ID) FROM ") + str(wpdb.posts) + str(" WHERE post_status = 'publish' and post_type = 'post'"))))
+    update_option("post_count", php_int(wpdb.get_var(str("SELECT COUNT(ID) FROM ") + str(wpdb.posts) + str(" WHERE post_status = 'publish' and post_type = 'post'"))))
 # end def update_posts_count
 #// 
 #// Logs the user email, IP, and registration date of a new site.
@@ -1502,7 +1502,7 @@ def wpmu_log_new_registrations(blog_id=None, user_id=None, *args_):
     if php_is_array(user_id):
         user_id = user_id["user_id"] if (not php_empty(lambda : user_id["user_id"])) else 0
     # end if
-    user = get_userdata(int(user_id))
+    user = get_userdata(php_int(user_id))
     if user:
         wpdb.insert(wpdb.registration_log, Array({"email": user.user_email, "IP": php_preg_replace("/[^0-9., ]/", "", wp_unslash(PHP_SERVER["REMOTE_ADDR"])), "blog_id": blog_id, "date_registered": current_time("mysql")}))
     # end if
@@ -1797,7 +1797,7 @@ def is_user_spammy(user=None, *args_):
 #//
 def update_blog_public(old_value=None, value=None, *args_):
     
-    update_blog_status(get_current_blog_id(), "public", int(value))
+    update_blog_status(get_current_blog_id(), "public", php_int(value))
 # end def update_blog_public
 #// 
 #// Check whether users can self-register, based on Network settings.
@@ -1964,7 +1964,7 @@ def wp_maybe_update_network_user_counts(network_id=None, *args_):
 #//
 def wp_update_network_site_counts(network_id=None, *args_):
     
-    network_id = int(network_id)
+    network_id = php_int(network_id)
     if (not network_id):
         network_id = get_current_network_id()
     # end if
@@ -2070,7 +2070,7 @@ def is_upload_space_available(*args_):
     if get_site_option("upload_space_check_disabled"):
         return True
     # end if
-    return bool(get_upload_space_available())
+    return php_bool(get_upload_space_available())
 # end def is_upload_space_available
 #// 
 #// Filters the maximum upload file size allowed, in bytes.
@@ -2103,7 +2103,7 @@ def upload_size_limit_filter(size=None, *args_):
 #//
 def wp_is_large_network(using="sites", network_id=None, *args_):
     
-    network_id = int(network_id)
+    network_id = php_int(network_id)
     if (not network_id):
         network_id = get_current_network_id()
     # end if

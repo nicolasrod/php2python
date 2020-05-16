@@ -16,7 +16,7 @@ php_include_file(php_dirname(php_dirname(__FILE__)) + "/autoload.php", once=True
 if PHP_VERSION_ID < 50300:
     sys.exit(-1)
 # end if
-def _closure_520f7d48(class_ = None):
+def _closure_bec7b677(class_ = None):
     
     if class_[0] == "\\":
         class_ = php_substr(class_, 1)
@@ -39,7 +39,7 @@ def _closure_520f7d48(class_ = None):
         return True
     # end if
     return False
-# end def _closure_520f7d48
+# end def _closure_bec7b677
 #// 
 #// This file is just for convenience, to allow developers to reduce verbosity when
 #// they add this project to their libraries.
@@ -54,4 +54,4 @@ def _closure_520f7d48(class_ = None):
 #// 
 #// $x = Compat::crypto_aead_xchacha20poly1305_encrypt(...$args);
 #//
-php_spl_autoload_register((lambda *args, **kwargs: _closure_520f7d48(*args, **kwargs)))
+php_spl_autoload_register((lambda *args, **kwargs: _closure_bec7b677(*args, **kwargs)))

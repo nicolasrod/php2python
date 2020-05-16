@@ -32,7 +32,7 @@ if doaction and (php_isset(lambda : PHP_REQUEST["linkcheck"])):
     bulklinks = PHP_REQUEST["linkcheck"]
     if "delete" == doaction:
         for link_id in bulklinks:
-            link_id = int(link_id)
+            link_id = php_int(link_id)
             wp_delete_link(link_id)
         # end for
         redirect_to = add_query_arg("deleted", php_count(bulklinks), redirect_to)
@@ -77,7 +77,7 @@ php_print("""
 """)
 if (php_isset(lambda : PHP_REQUEST["deleted"])):
     php_print("<div id=\"message\" class=\"updated notice is-dismissible\"><p>")
-    deleted = int(PHP_REQUEST["deleted"])
+    deleted = php_int(PHP_REQUEST["deleted"])
     #// translators: %s: Number of links.
     printf(_n("%s link deleted.", "%s links deleted.", deleted), deleted)
     php_print("</p></div>")

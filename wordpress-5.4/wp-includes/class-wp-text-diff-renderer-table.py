@@ -325,8 +325,8 @@ class WP_Text_Diff_Renderer_Table(Text_Diff_Renderer):
         final_matches = Array()
         for keys,difference in matches:
             o, f = php_explode(",", keys)
-            o = int(o)
-            f = int(f)
+            o = php_int(o)
+            f = php_int(f)
             #// Already have better matches for these guys.
             if (php_isset(lambda : orig_matches[o])) and (php_isset(lambda : final_matches[f])):
                 continue
@@ -356,7 +356,7 @@ class WP_Text_Diff_Renderer_Table(Text_Diff_Renderer):
         #// We may end up with some extraneous blank rows, but we'll just ignore them later.
         for orig_row in orig_rows_copy:
             final_pos = php_array_search(orig_matches[orig_row], final_rows, True)
-            orig_pos = int(php_array_search(orig_row, orig_rows, True))
+            orig_pos = php_int(php_array_search(orig_row, orig_rows, True))
             if False == final_pos:
                 #// This orig is paired with a blank final.
                 array_splice(final_rows, orig_pos, 0, -1)

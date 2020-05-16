@@ -61,10 +61,10 @@ if (php_isset(lambda : PHP_REQUEST["download"])):
     elif "posts" == PHP_REQUEST["content"]:
         args["content"] = "post"
         if PHP_REQUEST["cat"]:
-            args["category"] = int(PHP_REQUEST["cat"])
+            args["category"] = php_int(PHP_REQUEST["cat"])
         # end if
         if PHP_REQUEST["post_author"]:
-            args["author"] = int(PHP_REQUEST["post_author"])
+            args["author"] = php_int(PHP_REQUEST["post_author"])
         # end if
         if PHP_REQUEST["post_start_date"] or PHP_REQUEST["post_end_date"]:
             args["start_date"] = PHP_REQUEST["post_start_date"]
@@ -76,7 +76,7 @@ if (php_isset(lambda : PHP_REQUEST["download"])):
     elif "pages" == PHP_REQUEST["content"]:
         args["content"] = "page"
         if PHP_REQUEST["page_author"]:
-            args["author"] = int(PHP_REQUEST["page_author"])
+            args["author"] = php_int(PHP_REQUEST["page_author"])
         # end if
         if PHP_REQUEST["page_start_date"] or PHP_REQUEST["page_end_date"]:
             args["start_date"] = PHP_REQUEST["page_start_date"]

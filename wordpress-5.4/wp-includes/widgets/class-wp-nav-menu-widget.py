@@ -97,7 +97,7 @@ class WP_Nav_Menu_Widget(WP_Widget):
             instance["title"] = sanitize_text_field(new_instance["title"])
         # end if
         if (not php_empty(lambda : new_instance["nav_menu"])):
-            instance["nav_menu"] = int(new_instance["nav_menu"])
+            instance["nav_menu"] = php_int(new_instance["nav_menu"])
         # end if
         return instance
     # end def update

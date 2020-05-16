@@ -63,7 +63,7 @@ class WP_Privacy_Policy_Content():
     @classmethod
     def text_change_check(self):
         
-        policy_page_id = int(get_option("wp_page_for_privacy_policy"))
+        policy_page_id = php_int(get_option("wp_page_for_privacy_policy"))
         #// The site doesn't have a privacy policy.
         if php_empty(lambda : policy_page_id):
             return False
@@ -140,8 +140,8 @@ class WP_Privacy_Policy_Content():
     @classmethod
     def _policy_page_updated(self, post_id=None):
         
-        policy_page_id = int(get_option("wp_page_for_privacy_policy"))
-        if (not policy_page_id) or policy_page_id != int(post_id):
+        policy_page_id = php_int(get_option("wp_page_for_privacy_policy"))
+        if (not policy_page_id) or policy_page_id != php_int(post_id):
             return
         # end if
         #// Remove updated|removed status.
@@ -182,7 +182,7 @@ class WP_Privacy_Policy_Content():
     @classmethod
     def get_suggested_policy_text(self):
         
-        policy_page_id = int(get_option("wp_page_for_privacy_policy"))
+        policy_page_id = php_int(get_option("wp_page_for_privacy_policy"))
         checked = Array()
         time = time()
         update_cache = False
@@ -262,7 +262,7 @@ class WP_Privacy_Policy_Content():
     @classmethod
     def notice(self, post=None):
         
-        if php_is_null(post):
+        if is_null(post):
             global post
             php_check_if_defined("post")
         else:
@@ -275,7 +275,7 @@ class WP_Privacy_Policy_Content():
             return
         # end if
         current_screen = get_current_screen()
-        policy_page_id = int(get_option("wp_page_for_privacy_policy"))
+        policy_page_id = php_int(get_option("wp_page_for_privacy_policy"))
         if "post" != current_screen.base or policy_page_id != post.ID:
             return
         # end if

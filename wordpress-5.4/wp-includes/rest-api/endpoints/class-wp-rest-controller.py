@@ -442,7 +442,7 @@ class WP_REST_Controller():
         for field_name,field_options in additional_fields:
             #// For back-compat, include any field with an empty schema
             #// because it won't be present in $this->get_item_schema().
-            if php_is_null(field_options["schema"]):
+            if is_null(field_options["schema"]):
                 properties[field_name] = field_options
             # end if
         # end for
@@ -469,7 +469,7 @@ class WP_REST_Controller():
         if php_in_array("id", fields, True):
             requested_fields[-1] = "id"
         # end if
-        def _closure_1c55c861(response_fields = None, field = None):
+        def _closure_6d5ecd5a(response_fields = None, field = None):
             
             if php_in_array(field, fields, True):
                 response_fields[-1] = field
@@ -483,12 +483,12 @@ class WP_REST_Controller():
                 response_fields[-1] = field
             # end if
             return response_fields
-        # end def _closure_1c55c861
+        # end def _closure_6d5ecd5a
         #// Return the list of all requested fields which appear in the schema.
         response_fields[-1] = field
         nested_fields = php_explode(".", field)
         response_fields[-1] = field
-        return array_reduce(requested_fields, (lambda *args, **kwargs: _closure_1c55c861(*args, **kwargs)), Array())
+        return array_reduce(requested_fields, (lambda *args, **kwargs: _closure_6d5ecd5a(*args, **kwargs)), Array())
     # end def get_fields_for_response
     #// 
     #// Retrieves an array of endpoint arguments from the item schema for the controller.

@@ -108,7 +108,7 @@ class getid3_ogg(getid3_handler):
             info["speex"]["speex_version"] = php_trim(info["ogg"]["pageheader"][oggpageinfo["page_seqno"]]["speex_version"])
             info["speex"]["sample_rate"] = info["ogg"]["pageheader"][oggpageinfo["page_seqno"]]["rate"]
             info["speex"]["channels"] = info["ogg"]["pageheader"][oggpageinfo["page_seqno"]]["nb_channels"]
-            info["speex"]["vbr"] = bool(info["ogg"]["pageheader"][oggpageinfo["page_seqno"]]["vbr"])
+            info["speex"]["vbr"] = php_bool(info["ogg"]["pageheader"][oggpageinfo["page_seqno"]]["vbr"])
             info["speex"]["band_type"] = self.speexbandmodelookup(info["ogg"]["pageheader"][oggpageinfo["page_seqno"]]["mode"])
             info["audio"]["sample_rate"] = info["speex"]["sample_rate"]
             info["audio"]["channels"] = info["speex"]["channels"]
@@ -166,10 +166,10 @@ class getid3_ogg(getid3_handler):
             info["video"]["resolution_x"] = info["ogg"]["pageheader"]["theora"]["resolution_x"]
             info["video"]["resolution_y"] = info["ogg"]["pageheader"]["theora"]["resolution_y"]
             if info["ogg"]["pageheader"]["theora"]["frame_rate_denominator"] > 0:
-                info["video"]["frame_rate"] = float(info["ogg"]["pageheader"]["theora"]["frame_rate_numerator"]) / info["ogg"]["pageheader"]["theora"]["frame_rate_denominator"]
+                info["video"]["frame_rate"] = php_float(info["ogg"]["pageheader"]["theora"]["frame_rate_numerator"]) / info["ogg"]["pageheader"]["theora"]["frame_rate_denominator"]
             # end if
             if info["ogg"]["pageheader"]["theora"]["pixel_aspect_denominator"] > 0:
-                info["video"]["pixel_aspect_ratio"] = float(info["ogg"]["pageheader"]["theora"]["pixel_aspect_numerator"]) / info["ogg"]["pageheader"]["theora"]["pixel_aspect_denominator"]
+                info["video"]["pixel_aspect_ratio"] = php_float(info["ogg"]["pageheader"]["theora"]["pixel_aspect_numerator"]) / info["ogg"]["pageheader"]["theora"]["pixel_aspect_denominator"]
             # end if
             self.warning("Ogg Theora (v3) not fully supported in this version of getID3 [" + self.getid3.version() + "] -- bitrate, playtime and all audio data are currently unavailable")
         elif php_substr(filedata, 0, 8) == "fishead ":
@@ -340,7 +340,7 @@ class getid3_ogg(getid3_handler):
                 self.error("Corrupt Ogg file: bitrate_audio == zero")
                 return False
             # end if
-            info["playtime_seconds"] = float(info["avdataend"] - info["avdataoffset"] * 8 / info["audio"]["bitrate"])
+            info["playtime_seconds"] = php_float(info["avdataend"] - info["avdataoffset"] * 8 / info["audio"]["bitrate"])
         # end if
         if (php_isset(lambda : info["ogg"]["vendor"])):
             info["audio"]["encoder"] = php_preg_replace("/^Encoded with /", "", info["ogg"]["vendor"])
@@ -505,11 +505,11 @@ class getid3_ogg(getid3_handler):
         filedataoffset += 1
         oggheader["flags_raw"] = getid3_lib.littleendian2int(php_substr(filedata, filedataoffset, 1))
         filedataoffset += 1
-        oggheader["flags"]["fresh"] = bool(oggheader["flags_raw"] & 1)
+        oggheader["flags"]["fresh"] = php_bool(oggheader["flags_raw"] & 1)
         #// fresh packet
-        oggheader["flags"]["bos"] = bool(oggheader["flags_raw"] & 2)
+        oggheader["flags"]["bos"] = php_bool(oggheader["flags_raw"] & 2)
         #// first page of logical bitstream (bos)
-        oggheader["flags"]["eos"] = bool(oggheader["flags_raw"] & 4)
+        oggheader["flags"]["eos"] = php_bool(oggheader["flags_raw"] & 4)
         #// last page of logical bitstream (eos)
         oggheader["pcm_abs_position"] = getid3_lib.littleendian2int(php_substr(filedata, filedataoffset, 8))
         filedataoffset += 8
@@ -706,7 +706,7 @@ class getid3_ogg(getid3_handler):
                         pass
                     # end if
                     if case("replaygain_album_gain"):
-                        info["replay_gain"]["album"]["adjustment"] = float(commentvalue[0])
+                        info["replay_gain"]["album"]["adjustment"] = php_float(commentvalue[0])
                         info["ogg"]["comments"][index] = None
                         break
                     # end if
@@ -714,12 +714,12 @@ class getid3_ogg(getid3_handler):
                         pass
                     # end if
                     if case("replaygain_track_gain"):
-                        info["replay_gain"]["track"]["adjustment"] = float(commentvalue[0])
+                        info["replay_gain"]["track"]["adjustment"] = php_float(commentvalue[0])
                         info["ogg"]["comments"][index] = None
                         break
                     # end if
                     if case("replaygain_album_peak"):
-                        info["replay_gain"]["album"]["peak"] = float(commentvalue[0])
+                        info["replay_gain"]["album"]["peak"] = php_float(commentvalue[0])
                         info["ogg"]["comments"][index] = None
                         break
                     # end if
@@ -727,12 +727,12 @@ class getid3_ogg(getid3_handler):
                         pass
                     # end if
                     if case("replaygain_track_peak"):
-                        info["replay_gain"]["track"]["peak"] = float(commentvalue[0])
+                        info["replay_gain"]["track"]["peak"] = php_float(commentvalue[0])
                         info["ogg"]["comments"][index] = None
                         break
                     # end if
                     if case("replaygain_reference_loudness"):
-                        info["replay_gain"]["reference_volume"] = float(commentvalue[0])
+                        info["replay_gain"]["reference_volume"] = php_float(commentvalue[0])
                         info["ogg"]["comments"][index] = None
                         break
                     # end if

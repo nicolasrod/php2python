@@ -243,7 +243,7 @@ class WP_Hook():
                 elif the_["accepted_args"] >= num_args:
                     value = call_user_func_array(the_["function"], args)
                 else:
-                    value = call_user_func_array(the_["function"], php_array_slice(args, 0, int(the_["accepted_args"])))
+                    value = call_user_func_array(the_["function"], php_array_slice(args, 0, php_int(the_["accepted_args"])))
                 # end if
             # end for
             
@@ -381,7 +381,7 @@ class WP_Hook():
     #//
     def offsetset(self, offset=None, value=None):
         
-        if php_is_null(offset):
+        if is_null(offset):
             self.callbacks[-1] = value
         else:
             self.callbacks[offset] = value

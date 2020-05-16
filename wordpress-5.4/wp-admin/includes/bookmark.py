@@ -205,7 +205,7 @@ def wp_insert_link(linkdata=None, wp_error=False, *args_):
                 return 0
             # end if
         # end if
-        link_id = int(wpdb.insert_id)
+        link_id = php_int(wpdb.insert_id)
     # end if
     wp_set_link_cats(link_id, link_category)
     if update:
@@ -259,7 +259,7 @@ def wp_set_link_cats(link_id=0, link_categories=Array(), *args_):
 #//
 def wp_update_link(linkdata=None, *args_):
     
-    link_id = int(linkdata["link_id"])
+    link_id = php_int(linkdata["link_id"])
     link = get_bookmark(link_id, ARRAY_A)
     #// Escape data pulled from DB.
     link = wp_slash(link)

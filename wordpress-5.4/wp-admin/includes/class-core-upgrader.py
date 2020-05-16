@@ -225,7 +225,7 @@ class Core_Upgrader(WP_Upgrader):
         #// x.y
         new_branch = php_implode(".", php_array_slice(php_preg_split("/[.-]/", offered_ver), 0, 2))
         #// x.y
-        current_is_development_version = bool(php_strpos(wp_version, "-"))
+        current_is_development_version = php_bool(php_strpos(wp_version, "-"))
         #// Defaults:
         upgrade_dev = True
         upgrade_minor = True

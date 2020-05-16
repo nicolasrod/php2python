@@ -722,7 +722,7 @@ class WP_Comment_Query():
             #// @param WP_Comment_Query $comment_query        The `WP_Comment_Query` instance.
             #//
             found_comments_query = apply_filters("found_comments_query", "SELECT FOUND_ROWS()", self)
-            self.found_comments = int(wpdb.get_var(found_comments_query))
+            self.found_comments = php_int(wpdb.get_var(found_comments_query))
         # end if
     # end def set_found_comments
     #// 

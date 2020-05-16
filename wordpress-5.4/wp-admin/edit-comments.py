@@ -176,7 +176,7 @@ php_print("""
 <hr class=\"wp-header-end\">
 """)
 if (php_isset(lambda : PHP_REQUEST["error"])):
-    error = int(PHP_REQUEST["error"])
+    error = php_int(PHP_REQUEST["error"])
     error_msg = ""
     for case in Switch(error):
         if case(1):
@@ -193,13 +193,13 @@ if (php_isset(lambda : PHP_REQUEST["error"])):
     # end if
 # end if
 if (php_isset(lambda : PHP_REQUEST["approved"])) or (php_isset(lambda : PHP_REQUEST["deleted"])) or (php_isset(lambda : PHP_REQUEST["trashed"])) or (php_isset(lambda : PHP_REQUEST["untrashed"])) or (php_isset(lambda : PHP_REQUEST["spammed"])) or (php_isset(lambda : PHP_REQUEST["unspammed"])) or (php_isset(lambda : PHP_REQUEST["same"])):
-    approved = int(PHP_REQUEST["approved"]) if (php_isset(lambda : PHP_REQUEST["approved"])) else 0
-    deleted = int(PHP_REQUEST["deleted"]) if (php_isset(lambda : PHP_REQUEST["deleted"])) else 0
-    trashed = int(PHP_REQUEST["trashed"]) if (php_isset(lambda : PHP_REQUEST["trashed"])) else 0
-    untrashed = int(PHP_REQUEST["untrashed"]) if (php_isset(lambda : PHP_REQUEST["untrashed"])) else 0
-    spammed = int(PHP_REQUEST["spammed"]) if (php_isset(lambda : PHP_REQUEST["spammed"])) else 0
-    unspammed = int(PHP_REQUEST["unspammed"]) if (php_isset(lambda : PHP_REQUEST["unspammed"])) else 0
-    same = int(PHP_REQUEST["same"]) if (php_isset(lambda : PHP_REQUEST["same"])) else 0
+    approved = php_int(PHP_REQUEST["approved"]) if (php_isset(lambda : PHP_REQUEST["approved"])) else 0
+    deleted = php_int(PHP_REQUEST["deleted"]) if (php_isset(lambda : PHP_REQUEST["deleted"])) else 0
+    trashed = php_int(PHP_REQUEST["trashed"]) if (php_isset(lambda : PHP_REQUEST["trashed"])) else 0
+    untrashed = php_int(PHP_REQUEST["untrashed"]) if (php_isset(lambda : PHP_REQUEST["untrashed"])) else 0
+    spammed = php_int(PHP_REQUEST["spammed"]) if (php_isset(lambda : PHP_REQUEST["spammed"])) else 0
+    unspammed = php_int(PHP_REQUEST["unspammed"]) if (php_isset(lambda : PHP_REQUEST["unspammed"])) else 0
+    same = php_int(PHP_REQUEST["same"]) if (php_isset(lambda : PHP_REQUEST["same"])) else 0
     if approved > 0 or deleted > 0 or trashed > 0 or untrashed > 0 or spammed > 0 or unspammed > 0 or same > 0:
         if approved > 0:
             #// translators: %s: Number of comments.

@@ -55,7 +55,7 @@ class WP_REST_Post_Search_Handler(WP_REST_Search_Handler):
         if php_in_array(WP_REST_Search_Controller.TYPE_ANY, post_types, True):
             post_types = self.subtypes
         # end if
-        query_args = Array({"post_type": post_types, "post_status": "publish", "paged": int(request["page"]), "posts_per_page": int(request["per_page"]), "ignore_sticky_posts": True, "fields": "ids"})
+        query_args = Array({"post_type": post_types, "post_status": "publish", "paged": php_int(request["page"]), "posts_per_page": php_int(request["per_page"]), "ignore_sticky_posts": True, "fields": "ids"})
         if (not php_empty(lambda : request["search"])):
             query_args["s"] = request["search"]
         # end if
@@ -89,7 +89,7 @@ class WP_REST_Post_Search_Handler(WP_REST_Search_Handler):
         post = get_post(id)
         data = Array()
         if php_in_array(WP_REST_Search_Controller.PROP_ID, fields, True):
-            data[WP_REST_Search_Controller.PROP_ID] = int(post.ID)
+            data[WP_REST_Search_Controller.PROP_ID] = php_int(post.ID)
         # end if
         if php_in_array(WP_REST_Search_Controller.PROP_TITLE, fields, True):
             if post_type_supports(post.post_type, "title"):

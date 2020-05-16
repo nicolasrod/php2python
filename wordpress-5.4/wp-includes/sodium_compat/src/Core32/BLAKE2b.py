@@ -125,9 +125,9 @@ class ParagonIE_Sodium_Core32_BLAKE2b(ParagonIE_Sodium_Core_Util):
     def load64(self, x=None, i=None):
         
         #// @var int $l
-        l = int(x[i]) | int(x[i + 1]) << 8 | int(x[i + 2]) << 16 | int(x[i + 3]) << 24
+        l = php_int(x[i]) | php_int(x[i + 1]) << 8 | php_int(x[i + 2]) << 16 | php_int(x[i + 3]) << 24
         #// @var int $h
-        h = int(x[i + 4]) | int(x[i + 5]) << 8 | int(x[i + 6]) << 16 | int(x[i + 7]) << 24
+        h = php_int(x[i + 4]) | php_int(x[i + 5]) << 8 | php_int(x[i + 6]) << 16 | php_int(x[i + 7]) << 24
         return self.new64(h, l)
     # end def load64
     #// 
@@ -470,7 +470,7 @@ class ParagonIE_Sodium_Core32_BLAKE2b(ParagonIE_Sodium_Core_Util):
             
         # end while
         self.compress(ctx, ctx[3])
-        i = int(out.getsize() - 1 / 8)
+        i = php_int(out.getsize() - 1 / 8)
         while i >= 0:
             
             self.store64(out, i << 3, ctx[0][i])
@@ -530,7 +530,7 @@ class ParagonIE_Sodium_Core32_BLAKE2b(ParagonIE_Sodium_Core_Util):
             i = 0
             while i < 16:
                 
-                p[32 + i] = int(salt[i])
+                p[32 + i] = php_int(salt[i])
                 i += 1
             # end while
         # end if
@@ -539,7 +539,7 @@ class ParagonIE_Sodium_Core32_BLAKE2b(ParagonIE_Sodium_Core_Util):
             i = 0
             while i < 16:
                 
-                p[48 + i] = int(personal[i])
+                p[48 + i] = php_int(personal[i])
                 i += 1
             # end while
         # end if
@@ -603,7 +603,7 @@ class ParagonIE_Sodium_Core32_BLAKE2b(ParagonIE_Sodium_Core_Util):
         arr = a.toarray()
         c = a.count()
         array_unshift(arr, php_str_repeat("C", c))
-        return str(call_user_func_array("pack", arr))
+        return php_str(call_user_func_array("pack", arr))
     # end def splfixedarraytostring
     #// 
     #// @internal You should not use this directly from another application

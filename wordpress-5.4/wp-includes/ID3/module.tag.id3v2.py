@@ -78,29 +78,29 @@ class getid3_id3v2(getid3_handler):
         for case in Switch(id3v2_majorversion):
             if case(2):
                 #// %ab000000 in v2.2
-                thisfile_id3v2_flags["unsynch"] = bool(id3_flags & 128)
+                thisfile_id3v2_flags["unsynch"] = php_bool(id3_flags & 128)
                 #// a - Unsynchronisation
-                thisfile_id3v2_flags["compression"] = bool(id3_flags & 64)
+                thisfile_id3v2_flags["compression"] = php_bool(id3_flags & 64)
                 break
             # end if
             if case(3):
                 #// %abc00000 in v2.3
-                thisfile_id3v2_flags["unsynch"] = bool(id3_flags & 128)
+                thisfile_id3v2_flags["unsynch"] = php_bool(id3_flags & 128)
                 #// a - Unsynchronisation
-                thisfile_id3v2_flags["exthead"] = bool(id3_flags & 64)
+                thisfile_id3v2_flags["exthead"] = php_bool(id3_flags & 64)
                 #// b - Extended header
-                thisfile_id3v2_flags["experim"] = bool(id3_flags & 32)
+                thisfile_id3v2_flags["experim"] = php_bool(id3_flags & 32)
                 break
             # end if
             if case(4):
                 #// %abcd0000 in v2.4
-                thisfile_id3v2_flags["unsynch"] = bool(id3_flags & 128)
+                thisfile_id3v2_flags["unsynch"] = php_bool(id3_flags & 128)
                 #// a - Unsynchronisation
-                thisfile_id3v2_flags["exthead"] = bool(id3_flags & 64)
+                thisfile_id3v2_flags["exthead"] = php_bool(id3_flags & 64)
                 #// b - Extended header
-                thisfile_id3v2_flags["experim"] = bool(id3_flags & 32)
+                thisfile_id3v2_flags["experim"] = php_bool(id3_flags & 32)
                 #// c - Experimental indicator
-                thisfile_id3v2_flags["isfooter"] = bool(id3_flags & 16)
+                thisfile_id3v2_flags["isfooter"] = php_bool(id3_flags & 16)
                 break
             # end if
         # end for
@@ -159,7 +159,7 @@ class getid3_id3v2(getid3_handler):
                     thisfile_id3v2["exthead"]["flag_bytes"] = 2
                     thisfile_id3v2["exthead"]["flag_raw"] = getid3_lib.bigendian2int(php_substr(framedata, extended_header_offset, thisfile_id3v2["exthead"]["flag_bytes"]))
                     extended_header_offset += thisfile_id3v2["exthead"]["flag_bytes"]
-                    thisfile_id3v2["exthead"]["flags"]["crc"] = bool(thisfile_id3v2["exthead"]["flag_raw"] & 32768)
+                    thisfile_id3v2["exthead"]["flags"]["crc"] = php_bool(thisfile_id3v2["exthead"]["flag_raw"] & 32768)
                     thisfile_id3v2["exthead"]["padding_size"] = getid3_lib.bigendian2int(php_substr(framedata, extended_header_offset, 4))
                     extended_header_offset += 4
                     if thisfile_id3v2["exthead"]["flags"]["crc"]:
@@ -187,9 +187,9 @@ class getid3_id3v2(getid3_handler):
                     extended_header_offset += 1
                     thisfile_id3v2["exthead"]["flag_raw"] = getid3_lib.bigendian2int(php_substr(framedata, extended_header_offset, thisfile_id3v2["exthead"]["flag_bytes"]))
                     extended_header_offset += thisfile_id3v2["exthead"]["flag_bytes"]
-                    thisfile_id3v2["exthead"]["flags"]["update"] = bool(thisfile_id3v2["exthead"]["flag_raw"] & 64)
-                    thisfile_id3v2["exthead"]["flags"]["crc"] = bool(thisfile_id3v2["exthead"]["flag_raw"] & 32)
-                    thisfile_id3v2["exthead"]["flags"]["restrictions"] = bool(thisfile_id3v2["exthead"]["flag_raw"] & 16)
+                    thisfile_id3v2["exthead"]["flags"]["update"] = php_bool(thisfile_id3v2["exthead"]["flag_raw"] & 64)
+                    thisfile_id3v2["exthead"]["flags"]["crc"] = php_bool(thisfile_id3v2["exthead"]["flag_raw"] & 32)
+                    thisfile_id3v2["exthead"]["flags"]["restrictions"] = php_bool(thisfile_id3v2["exthead"]["flag_raw"] & 16)
                     if thisfile_id3v2["exthead"]["flags"]["update"]:
                         ext_header_chunk_length = getid3_lib.bigendian2int(php_substr(framedata, extended_header_offset, 1))
                         #// should be 0
@@ -416,10 +416,10 @@ class getid3_id3v2(getid3_handler):
             # end if
             if thisfile_id3v2["majorversion_footer"] <= 4:
                 id3_flags = php_ord(footer[5])
-                thisfile_id3v2_flags["unsynch_footer"] = bool(id3_flags & 128)
-                thisfile_id3v2_flags["extfoot_footer"] = bool(id3_flags & 64)
-                thisfile_id3v2_flags["experim_footer"] = bool(id3_flags & 32)
-                thisfile_id3v2_flags["isfooter_footer"] = bool(id3_flags & 16)
+                thisfile_id3v2_flags["unsynch_footer"] = php_bool(id3_flags & 128)
+                thisfile_id3v2_flags["extfoot_footer"] = php_bool(id3_flags & 64)
+                thisfile_id3v2_flags["experim_footer"] = php_bool(id3_flags & 32)
+                thisfile_id3v2_flags["isfooter_footer"] = php_bool(id3_flags & 16)
                 thisfile_id3v2["footerlength"] = getid3_lib.bigendian2int(php_substr(footer, 6, 4), 1)
             # end if
         # end if
@@ -543,36 +543,36 @@ class getid3_id3v2(getid3_handler):
             if id3v2_majorversion == 3:
                 #// Frame Header Flags
                 #// %abc00000 %ijk00000
-                parsedFrame["flags"]["TagAlterPreservation"] = bool(parsedFrame["frame_flags_raw"] & 32768)
+                parsedFrame["flags"]["TagAlterPreservation"] = php_bool(parsedFrame["frame_flags_raw"] & 32768)
                 #// a - Tag alter preservation
-                parsedFrame["flags"]["FileAlterPreservation"] = bool(parsedFrame["frame_flags_raw"] & 16384)
+                parsedFrame["flags"]["FileAlterPreservation"] = php_bool(parsedFrame["frame_flags_raw"] & 16384)
                 #// b - File alter preservation
-                parsedFrame["flags"]["ReadOnly"] = bool(parsedFrame["frame_flags_raw"] & 8192)
+                parsedFrame["flags"]["ReadOnly"] = php_bool(parsedFrame["frame_flags_raw"] & 8192)
                 #// c - Read only
-                parsedFrame["flags"]["compression"] = bool(parsedFrame["frame_flags_raw"] & 128)
+                parsedFrame["flags"]["compression"] = php_bool(parsedFrame["frame_flags_raw"] & 128)
                 #// i - Compression
-                parsedFrame["flags"]["Encryption"] = bool(parsedFrame["frame_flags_raw"] & 64)
+                parsedFrame["flags"]["Encryption"] = php_bool(parsedFrame["frame_flags_raw"] & 64)
                 #// j - Encryption
-                parsedFrame["flags"]["GroupingIdentity"] = bool(parsedFrame["frame_flags_raw"] & 32)
+                parsedFrame["flags"]["GroupingIdentity"] = php_bool(parsedFrame["frame_flags_raw"] & 32)
                 pass
             elif id3v2_majorversion == 4:
                 #// Frame Header Flags
                 #// %0abc0000 %0h00kmnp
-                parsedFrame["flags"]["TagAlterPreservation"] = bool(parsedFrame["frame_flags_raw"] & 16384)
+                parsedFrame["flags"]["TagAlterPreservation"] = php_bool(parsedFrame["frame_flags_raw"] & 16384)
                 #// a - Tag alter preservation
-                parsedFrame["flags"]["FileAlterPreservation"] = bool(parsedFrame["frame_flags_raw"] & 8192)
+                parsedFrame["flags"]["FileAlterPreservation"] = php_bool(parsedFrame["frame_flags_raw"] & 8192)
                 #// b - File alter preservation
-                parsedFrame["flags"]["ReadOnly"] = bool(parsedFrame["frame_flags_raw"] & 4096)
+                parsedFrame["flags"]["ReadOnly"] = php_bool(parsedFrame["frame_flags_raw"] & 4096)
                 #// c - Read only
-                parsedFrame["flags"]["GroupingIdentity"] = bool(parsedFrame["frame_flags_raw"] & 64)
+                parsedFrame["flags"]["GroupingIdentity"] = php_bool(parsedFrame["frame_flags_raw"] & 64)
                 #// h - Grouping identity
-                parsedFrame["flags"]["compression"] = bool(parsedFrame["frame_flags_raw"] & 8)
+                parsedFrame["flags"]["compression"] = php_bool(parsedFrame["frame_flags_raw"] & 8)
                 #// k - Compression
-                parsedFrame["flags"]["Encryption"] = bool(parsedFrame["frame_flags_raw"] & 4)
+                parsedFrame["flags"]["Encryption"] = php_bool(parsedFrame["frame_flags_raw"] & 4)
                 #// m - Encryption
-                parsedFrame["flags"]["Unsynchronisation"] = bool(parsedFrame["frame_flags_raw"] & 2)
+                parsedFrame["flags"]["Unsynchronisation"] = php_bool(parsedFrame["frame_flags_raw"] & 2)
                 #// n - Unsynchronisation
-                parsedFrame["flags"]["DataLengthIndicator"] = bool(parsedFrame["frame_flags_raw"] & 1)
+                parsedFrame["flags"]["DataLengthIndicator"] = php_bool(parsedFrame["frame_flags_raw"] & 1)
                 #// p - Data length indicator
                 #// Frame-level de-unsynchronisation - ID3v2.4
                 if parsedFrame["flags"]["Unsynchronisation"]:
@@ -677,7 +677,7 @@ class getid3_id3v2(getid3_handler):
             if id3v2_majorversion <= 3 and frame_textencoding > 1 or id3v2_majorversion == 4 and frame_textencoding > 3:
                 self.warning("Invalid text encoding byte (" + frame_textencoding + ") in frame \"" + parsedFrame["frame_name"] + "\" - defaulting to ISO-8859-1 encoding")
             # end if
-            parsedFrame["data"] = str(php_substr(parsedFrame["data"], frame_offset))
+            parsedFrame["data"] = php_str(php_substr(parsedFrame["data"], frame_offset))
             parsedFrame["data"] = self.removestringterminator(parsedFrame["data"], self.textencodingterminatorlookup(frame_textencoding))
             parsedFrame["encodingid"] = frame_textencoding
             parsedFrame["encoding"] = self.textencodingnamelookup(frame_textencoding)
@@ -794,7 +794,7 @@ class getid3_id3v2(getid3_handler):
             # end if
             parsedFrame["encodingid"] = frame_textencoding
             parsedFrame["encoding"] = self.textencodingnamelookup(parsedFrame["encodingid"])
-            parsedFrame["data_raw"] = str(php_substr(parsedFrame["data"], frame_offset))
+            parsedFrame["data_raw"] = php_str(php_substr(parsedFrame["data"], frame_offset))
             #// https://www.getid3.org/phpBB3/viewtopic.php?t=1369
             #// "this tag typically contains null terminated strings, which are associated in pairs"
             #// "there are users that use the tag incorrectly"
@@ -1090,7 +1090,7 @@ class getid3_id3v2(getid3_handler):
                 # end if
                 parsedFrame["description"] = php_substr(parsedFrame["data"], frame_offset, frame_terminatorpos - frame_offset)
                 parsedFrame["description"] = self.makeutf16emptystringempty(parsedFrame["description"])
-                frame_text = str(php_substr(parsedFrame["data"], frame_terminatorpos + php_strlen(frame_textencoding_terminator)))
+                frame_text = php_str(php_substr(parsedFrame["data"], frame_terminatorpos + php_strlen(frame_textencoding_terminator)))
                 frame_text = self.removestringterminator(frame_text, frame_textencoding_terminator)
                 parsedFrame["encodingid"] = frame_textencoding
                 parsedFrame["encoding"] = self.textencodingnamelookup(frame_textencoding)
@@ -1177,8 +1177,8 @@ class getid3_id3v2(getid3_handler):
             frame_offset = 0
             frame_incrdecrflags = getid3_lib.bigendian2bin(php_substr(parsedFrame["data"], frame_offset, 1))
             frame_offset += 1
-            parsedFrame["incdec"]["right"] = bool(php_substr(frame_incrdecrflags, 6, 1))
-            parsedFrame["incdec"]["left"] = bool(php_substr(frame_incrdecrflags, 7, 1))
+            parsedFrame["incdec"]["right"] = php_bool(php_substr(frame_incrdecrflags, 6, 1))
+            parsedFrame["incdec"]["left"] = php_bool(php_substr(frame_incrdecrflags, 7, 1))
             parsedFrame["bitsvolume"] = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
             frame_offset += 1
             frame_bytesvolume = ceil(parsedFrame["bitsvolume"] / 8)
@@ -1199,8 +1199,8 @@ class getid3_id3v2(getid3_handler):
             if id3v2_majorversion == 3:
                 parsedFrame["data"] = php_substr(parsedFrame["data"], frame_offset)
                 if php_strlen(parsedFrame["data"]) > 0:
-                    parsedFrame["incdec"]["rightrear"] = bool(php_substr(frame_incrdecrflags, 4, 1))
-                    parsedFrame["incdec"]["leftrear"] = bool(php_substr(frame_incrdecrflags, 5, 1))
+                    parsedFrame["incdec"]["rightrear"] = php_bool(php_substr(frame_incrdecrflags, 4, 1))
+                    parsedFrame["incdec"]["leftrear"] = php_bool(php_substr(frame_incrdecrflags, 5, 1))
                     parsedFrame["volumechange"]["rightrear"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, frame_bytesvolume))
                     if parsedFrame["incdec"]["rightrear"] == False:
                         parsedFrame["volumechange"]["rightrear"] *= -1
@@ -1218,7 +1218,7 @@ class getid3_id3v2(getid3_handler):
                 # end if
                 parsedFrame["data"] = php_substr(parsedFrame["data"], frame_offset)
                 if php_strlen(parsedFrame["data"]) > 0:
-                    parsedFrame["incdec"]["center"] = bool(php_substr(frame_incrdecrflags, 3, 1))
+                    parsedFrame["incdec"]["center"] = php_bool(php_substr(frame_incrdecrflags, 3, 1))
                     parsedFrame["volumechange"]["center"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, frame_bytesvolume))
                     if parsedFrame["incdec"]["center"] == False:
                         parsedFrame["volumechange"]["center"] *= -1
@@ -1229,7 +1229,7 @@ class getid3_id3v2(getid3_handler):
                 # end if
                 parsedFrame["data"] = php_substr(parsedFrame["data"], frame_offset)
                 if php_strlen(parsedFrame["data"]) > 0:
-                    parsedFrame["incdec"]["bass"] = bool(php_substr(frame_incrdecrflags, 2, 1))
+                    parsedFrame["incdec"]["bass"] = php_bool(php_substr(frame_incrdecrflags, 2, 1))
                     parsedFrame["volumechange"]["bass"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, frame_bytesvolume))
                     if parsedFrame["incdec"]["bass"] == False:
                         parsedFrame["volumechange"]["bass"] *= -1
@@ -1288,14 +1288,14 @@ class getid3_id3v2(getid3_handler):
             parsedFrame["adjustmentbits"] = php_substr(parsedFrame["data"], frame_offset, 1)
             frame_offset += 1
             frame_adjustmentbytes = ceil(parsedFrame["adjustmentbits"] / 8)
-            frame_remainingdata = str(php_substr(parsedFrame["data"], frame_offset))
+            frame_remainingdata = php_str(php_substr(parsedFrame["data"], frame_offset))
             while True:
                 
                 if not (php_strlen(frame_remainingdata) > 0):
                     break
                 # end if
                 frame_frequencystr = getid3_lib.bigendian2bin(php_substr(frame_remainingdata, 0, 2))
-                frame_incdec = bool(php_substr(frame_frequencystr, 0, 1))
+                frame_incdec = php_bool(php_substr(frame_frequencystr, 0, 1))
                 frame_frequency = bindec(php_substr(frame_frequencystr, 1, 15))
                 parsedFrame[frame_frequency]["incdec"] = frame_incdec
                 parsedFrame[frame_frequency]["adjustment"] = getid3_lib.bigendian2int(php_substr(frame_remainingdata, 2, frame_adjustmentbytes))
@@ -1515,7 +1515,7 @@ class getid3_id3v2(getid3_handler):
             parsedFrame["description"] = php_substr(parsedFrame["data"], frame_offset, frame_terminatorpos - frame_offset)
             parsedFrame["description"] = self.makeutf16emptystringempty(parsedFrame["description"])
             frame_offset = frame_terminatorpos + php_strlen(frame_textencoding_terminator)
-            parsedFrame["objectdata"] = str(php_substr(parsedFrame["data"], frame_offset))
+            parsedFrame["objectdata"] = php_str(php_substr(parsedFrame["data"], frame_offset))
             parsedFrame["encodingid"] = frame_textencoding
             parsedFrame["encoding"] = self.textencodingnamelookup(frame_textencoding)
             parsedFrame["mime"] = frame_mimetype
@@ -1562,7 +1562,7 @@ class getid3_id3v2(getid3_handler):
             frame_offset += 3
             frame_embeddedinfoflags = getid3_lib.bigendian2bin(php_substr(parsedFrame["data"], frame_offset, 1))
             frame_offset += 1
-            parsedFrame["flags"]["embededinfo"] = bool(php_substr(frame_embeddedinfoflags, 7, 1))
+            parsedFrame["flags"]["embededinfo"] = php_bool(php_substr(frame_embeddedinfoflags, 7, 1))
             parsedFrame["nexttagoffset"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, 4))
             parsedFrame["data"] = None
         elif id3v2_majorversion == 2 and parsedFrame["frame_name"] == "CRM":
@@ -1582,7 +1582,7 @@ class getid3_id3v2(getid3_handler):
             parsedFrame["description"] = self.makeutf16emptystringempty(parsedFrame["description"])
             frame_offset = frame_terminatorpos + php_strlen(" ")
             parsedFrame["ownerid"] = frame_ownerid
-            parsedFrame["data"] = str(php_substr(parsedFrame["data"], frame_offset))
+            parsedFrame["data"] = php_str(php_substr(parsedFrame["data"], frame_offset))
             parsedFrame["data"] = None
         elif id3v2_majorversion >= 3 and parsedFrame["frame_name"] == "AENC" or id3v2_majorversion == 2 and parsedFrame["frame_name"] == "CRA":
             #// 4.21  CRA  Audio encryption
@@ -1605,7 +1605,7 @@ class getid3_id3v2(getid3_handler):
             frame_offset += 2
             parsedFrame["previewlength"] = getid3_lib.bigendian2int(php_substr(parsedFrame["data"], frame_offset, 2))
             frame_offset += 2
-            parsedFrame["encryptioninfo"] = str(php_substr(parsedFrame["data"], frame_offset))
+            parsedFrame["encryptioninfo"] = php_str(php_substr(parsedFrame["data"], frame_offset))
             parsedFrame["data"] = None
         elif id3v2_majorversion >= 3 and parsedFrame["frame_name"] == "LINK" or id3v2_majorversion == 2 and parsedFrame["frame_name"] == "LNK":
             #// 4.22  LNK  Linked information
@@ -1631,7 +1631,7 @@ class getid3_id3v2(getid3_handler):
             # end if
             frame_offset = frame_terminatorpos + php_strlen(" ")
             parsedFrame["url"] = frame_url
-            parsedFrame["additionaldata"] = str(php_substr(parsedFrame["data"], frame_offset))
+            parsedFrame["additionaldata"] = php_str(php_substr(parsedFrame["data"], frame_offset))
             if (not php_empty(lambda : parsedFrame["framenameshort"])) and parsedFrame["url"]:
                 info["id3v2"]["comments"][parsedFrame["framenameshort"]][-1] = getid3_lib.iconv_fallback_iso88591_utf8(parsedFrame["url"])
             # end if
@@ -1667,7 +1667,7 @@ class getid3_id3v2(getid3_handler):
             parsedFrame["languagename"] = self.languagelookup(frame_language, False)
             parsedFrame["encodingid"] = frame_textencoding
             parsedFrame["encoding"] = self.textencodingnamelookup(frame_textencoding)
-            parsedFrame["data"] = str(php_substr(parsedFrame["data"], frame_offset))
+            parsedFrame["data"] = php_str(php_substr(parsedFrame["data"], frame_offset))
             parsedFrame["data"] = self.removestringterminator(parsedFrame["data"], self.textencodingterminatorlookup(frame_textencoding))
             if (not php_empty(lambda : parsedFrame["framenameshort"])) and (not php_empty(lambda : parsedFrame["data"])):
                 info["id3v2"]["comments"][parsedFrame["framenameshort"]][-1] = getid3_lib.iconv_fallback(parsedFrame["encoding"], info["id3v2"]["encoding"], parsedFrame["data"])
@@ -1700,7 +1700,7 @@ class getid3_id3v2(getid3_handler):
                 parsedFrame["purchasedateunix"] = mktime(0, 0, 0, php_substr(parsedFrame["purchasedate"], 4, 2), php_substr(parsedFrame["purchasedate"], 6, 2), php_substr(parsedFrame["purchasedate"], 0, 4))
             # end if
             frame_offset += 8
-            parsedFrame["seller"] = str(php_substr(parsedFrame["data"], frame_offset))
+            parsedFrame["seller"] = php_str(php_substr(parsedFrame["data"], frame_offset))
             parsedFrame["seller"] = self.removestringterminator(parsedFrame["seller"], self.textencodingterminatorlookup(frame_textencoding))
             parsedFrame["data"] = None
         elif id3v2_majorversion >= 3 and parsedFrame["frame_name"] == "COMR":
@@ -1792,7 +1792,7 @@ class getid3_id3v2(getid3_handler):
             parsedFrame["ownerid"] = frame_ownerid
             parsedFrame["methodsymbol"] = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
             frame_offset += 1
-            parsedFrame["data"] = str(php_substr(parsedFrame["data"], frame_offset))
+            parsedFrame["data"] = php_str(php_substr(parsedFrame["data"], frame_offset))
         elif id3v2_majorversion >= 3 and parsedFrame["frame_name"] == "GRID":
             #// 4.26  GRID Group identification registration (ID3v2.3+ only)
             #// There may be several 'GRID' frames in a tag,
@@ -1812,7 +1812,7 @@ class getid3_id3v2(getid3_handler):
             parsedFrame["ownerid"] = frame_ownerid
             parsedFrame["groupsymbol"] = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
             frame_offset += 1
-            parsedFrame["data"] = str(php_substr(parsedFrame["data"], frame_offset))
+            parsedFrame["data"] = php_str(php_substr(parsedFrame["data"], frame_offset))
         elif id3v2_majorversion >= 3 and parsedFrame["frame_name"] == "PRIV":
             #// 4.27  PRIV Private frame (ID3v2.3+ only)
             #// The tag may contain more than one 'PRIV' frame
@@ -1828,7 +1828,7 @@ class getid3_id3v2(getid3_handler):
             # end if
             frame_offset = frame_terminatorpos + php_strlen(" ")
             parsedFrame["ownerid"] = frame_ownerid
-            parsedFrame["data"] = str(php_substr(parsedFrame["data"], frame_offset))
+            parsedFrame["data"] = php_str(php_substr(parsedFrame["data"], frame_offset))
         elif id3v2_majorversion >= 4 and parsedFrame["frame_name"] == "SIGN":
             #// 4.28  SIGN Signature frame (ID3v2.4+ only)
             #// There may be more than one 'signature frame' in a tag,
@@ -1839,7 +1839,7 @@ class getid3_id3v2(getid3_handler):
             frame_offset = 0
             parsedFrame["groupsymbol"] = php_ord(php_substr(parsedFrame["data"], frame_offset, 1))
             frame_offset += 1
-            parsedFrame["data"] = str(php_substr(parsedFrame["data"], frame_offset))
+            parsedFrame["data"] = php_str(php_substr(parsedFrame["data"], frame_offset))
         elif id3v2_majorversion >= 4 and parsedFrame["frame_name"] == "SEEK":
             #// 4.29  SEEK Seek frame (ID3v2.4+ only)
             #// There may only be one 'seek frame' in a tag
@@ -2081,8 +2081,8 @@ class getid3_id3v2(getid3_handler):
                 frame_offset = terminator_position + 1
                 i += 1
             # end while
-            parsedFrame["ctoc_flags"]["ordered"] = bool(ctoc_flags_raw & 1)
-            parsedFrame["ctoc_flags"]["top_level"] = bool(ctoc_flags_raw & 3)
+            parsedFrame["ctoc_flags"]["ordered"] = php_bool(ctoc_flags_raw & 1)
+            parsedFrame["ctoc_flags"]["top_level"] = php_bool(ctoc_flags_raw & 3)
             ctoc_flags_raw = None
             terminator_position = None
             if frame_offset < php_strlen(parsedFrame["data"]):

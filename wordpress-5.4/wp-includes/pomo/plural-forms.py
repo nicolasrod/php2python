@@ -310,6 +310,6 @@ class Plural_Forms():
         if php_count(stack) != 1:
             raise php_new_class("Exception", lambda : Exception("Too many values remaining on the stack"))
         # end if
-        return int(stack[0])
+        return php_int(stack[0])
     # end def execute
 # end class Plural_Forms

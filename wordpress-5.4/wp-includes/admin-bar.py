@@ -668,7 +668,7 @@ def show_admin_bar(show=None, *args_):
     
     global show_admin_bar
     php_check_if_defined("show_admin_bar")
-    show_admin_bar = bool(show)
+    show_admin_bar = php_bool(show)
 # end def show_admin_bar
 #// 
 #// Determines whether the admin bar should be showing.

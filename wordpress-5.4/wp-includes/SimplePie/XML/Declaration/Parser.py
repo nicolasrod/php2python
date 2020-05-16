@@ -113,7 +113,7 @@ class SimplePie_XML_Declaration_Parser():
     #//
     def has_data(self):
         
-        return bool(self.position < self.data_length)
+        return php_bool(self.position < self.data_length)
     # end def has_data
     #// 
     #// Advance past any whitespace

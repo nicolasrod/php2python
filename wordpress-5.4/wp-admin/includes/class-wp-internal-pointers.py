@@ -82,7 +82,7 @@ class WP_Internal_Pointers():
         #//
         caps_required = Array()
         #// Get dismissed pointers.
-        dismissed = php_explode(",", str(get_user_meta(get_current_user_id(), "dismissed_wp_pointers", True)))
+        dismissed = php_explode(",", php_str(get_user_meta(get_current_user_id(), "dismissed_wp_pointers", True)))
         got_pointers = False
         for pointer in php_array_diff(pointers, dismissed):
             if (php_isset(lambda : caps_required[pointer])):

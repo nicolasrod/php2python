@@ -99,12 +99,12 @@ def _mb_substr(str=None, start=None, length=None, encoding=None, *args_):
     #// charset just use built-in substr().
     #//
     if (not php_in_array(encoding, Array("utf8", "utf-8", "UTF8", "UTF-8"))):
-        return php_substr(str, start) if php_is_null(length) else php_substr(str, start, length)
+        return php_substr(str, start) if is_null(length) else php_substr(str, start, length)
     # end if
     if _wp_can_use_pcre_u():
         #// Use the regex unicode support to separate the UTF-8 characters into an array.
         preg_match_all("/./us", str, match)
-        chars = php_array_slice(match[0], start) if php_is_null(length) else php_array_slice(match[0], start, length)
+        chars = php_array_slice(match[0], start) if is_null(length) else php_array_slice(match[0], start, length)
         return php_implode("", chars)
     # end if
     regex = """/(
@@ -216,8 +216,9 @@ def _mb_strlen(str=None, encoding=None, *args_):
         # end if
     # end while
     #// Fencepost: preg_split() always returns one extra item in the array.
-    return count -= 1
 # end def _mb_strlen
+    count -= 1
+    return count 
 if (not php_function_exists("hash_hmac")):
     #// 
     #// Compat function to mimic hash_hmac().

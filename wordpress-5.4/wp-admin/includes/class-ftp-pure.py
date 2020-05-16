@@ -94,7 +94,7 @@ class ftp_pure(ftp_base):
         if self.LocalEcho:
             php_print("GET < " + php_rtrim(self._message, CRLF) + CRLF)
         # end if
-        self._code = int(regs[1])
+        self._code = php_int(regs[1])
         return result
     # end def _readmsg
     def _exec(self, cmd=None, fnction="_exec"):
@@ -133,7 +133,7 @@ class ftp_pure(ftp_base):
             # end if
             ip_port = php_explode(",", php_preg_replace("/^.+ \\(?([0-9]{1,3},[0-9]{1,3},[0-9]{1,3},[0-9]{1,3},[0-9]+,[0-9]+)\\)?.*$/s", "\\1", self._message))
             self._datahost = ip_port[0] + "." + ip_port[1] + "." + ip_port[2] + "." + ip_port[3]
-            self._dataport = int(ip_port[4]) << 8 + int(ip_port[5])
+            self._dataport = php_int(ip_port[4]) << 8 + php_int(ip_port[5])
             self.sendmsg("Connecting to " + self._datahost + ":" + self._dataport)
             self._ftp_data_sock = php_no_error(lambda: fsockopen(self._datahost, self._dataport, errno, errstr, self._timeout))
             if (not self._ftp_data_sock):

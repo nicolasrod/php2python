@@ -38,7 +38,7 @@ class ParagonIE_Sodium_Core_SipHash(ParagonIE_Sodium_Core_Util):
         v[2] ^= v[0]
         v[3] ^= v[1]
         #// #  v0=ROTL(v0,32);
-        v[0], v[1] = self.rotl_64(int(v[0]), int(v[1]), 32)
+        v[0], v[1] = self.rotl_64(php_int(v[0]), php_int(v[1]), 32)
         #// # v2 += v3;
         v[4], v[5] = self.add(Array(v[4], v[5]), Array(v[6], v[7]))
         #// # v3=ROTL(v3,16);
@@ -47,21 +47,21 @@ class ParagonIE_Sodium_Core_SipHash(ParagonIE_Sodium_Core_Util):
         v[6] ^= v[4]
         v[7] ^= v[5]
         #// # v0 += v3;
-        v[0], v[1] = self.add(Array(int(v[0]), int(v[1])), Array(int(v[6]), int(v[7])))
+        v[0], v[1] = self.add(Array(php_int(v[0]), php_int(v[1])), Array(php_int(v[6]), php_int(v[7])))
         #// # v3=ROTL(v3,21);
-        v[6], v[7] = self.rotl_64(int(v[6]), int(v[7]), 21)
+        v[6], v[7] = self.rotl_64(php_int(v[6]), php_int(v[7]), 21)
         #// # v3 ^= v0;
         v[6] ^= v[0]
         v[7] ^= v[1]
         #// # v2 += v1;
-        v[4], v[5] = self.add(Array(int(v[4]), int(v[5])), Array(int(v[2]), int(v[3])))
+        v[4], v[5] = self.add(Array(php_int(v[4]), php_int(v[5])), Array(php_int(v[2]), php_int(v[3])))
         #// # v1=ROTL(v1,17);
-        v[2], v[3] = self.rotl_64(int(v[2]), int(v[3]), 17)
+        v[2], v[3] = self.rotl_64(php_int(v[2]), php_int(v[3]), 17)
         #// #  v1 ^= v2;;
         v[2] ^= v[4]
         v[3] ^= v[5]
         #// # v2=ROTL(v2,32)
-        v[4], v[5] = self.rotl_64(int(v[4]), int(v[5]), 32)
+        v[4], v[5] = self.rotl_64(php_int(v[4]), php_int(v[5]), 32)
         return v
     # end def sipround
     #// 

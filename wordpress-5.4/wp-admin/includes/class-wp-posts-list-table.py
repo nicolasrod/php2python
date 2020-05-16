@@ -751,20 +751,20 @@ class WP_Posts_List_Table(WP_List_Table):
         global mode
         php_check_if_defined("mode")
         if self.hierarchical_display:
-            if 0 == self.current_level and int(post.post_parent) > 0:
+            if 0 == self.current_level and php_int(post.post_parent) > 0:
                 #// Sent level 0 by accident, by default, or because we don't know the actual level.
-                find_main_page = int(post.post_parent)
+                find_main_page = php_int(post.post_parent)
                 while True:
                     
                     if not (find_main_page > 0):
                         break
                     # end if
                     parent = get_post(find_main_page)
-                    if php_is_null(parent):
+                    if is_null(parent):
                         break
                     # end if
                     self.current_level += 1
-                    find_main_page = int(parent.post_parent)
+                    find_main_page = php_int(parent.post_parent)
                     if (not (php_isset(lambda : parent_name))):
                         #// This filter is documented in wp-includes/post-template.php
                         parent_name = apply_filters("the_title", parent.post_title, parent.ID)

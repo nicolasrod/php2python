@@ -186,7 +186,7 @@ class WP_REST_Taxonomies_Controller(WP_REST_Controller):
             data["rest_base"] = base
         # end if
         if php_in_array("visibility", fields, True):
-            data["visibility"] = Array({"public": bool(taxonomy.public), "publicly_queryable": bool(taxonomy.publicly_queryable), "show_admin_column": bool(taxonomy.show_admin_column), "show_in_nav_menus": bool(taxonomy.show_in_nav_menus), "show_in_quick_edit": bool(taxonomy.show_in_quick_edit), "show_ui": bool(taxonomy.show_ui)})
+            data["visibility"] = Array({"public": php_bool(taxonomy.public), "publicly_queryable": php_bool(taxonomy.publicly_queryable), "show_admin_column": php_bool(taxonomy.show_admin_column), "show_in_nav_menus": php_bool(taxonomy.show_in_nav_menus), "show_in_quick_edit": php_bool(taxonomy.show_in_quick_edit), "show_ui": php_bool(taxonomy.show_ui)})
         # end if
         context = request["context"] if (not php_empty(lambda : request["context"])) else "view"
         data = self.add_additional_fields_to_object(data, request)

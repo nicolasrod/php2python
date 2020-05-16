@@ -72,7 +72,7 @@ class ParagonIE_Sodium_Core_Curve25519_Fe():
         if (not php_is_int(value)):
             raise php_new_class("InvalidArgumentException", lambda : InvalidArgumentException("Expected an integer"))
         # end if
-        if php_is_null(offset):
+        if is_null(offset):
             self.container[-1] = value
         else:
             self.container[offset] = value
@@ -112,7 +112,7 @@ class ParagonIE_Sodium_Core_Curve25519_Fe():
         if (not (php_isset(lambda : self.container[offset]))):
             self.container[offset] = 0
         # end if
-        return int(self.container[offset])
+        return php_int(self.container[offset])
     # end def offsetget
     #// 
     #// @internal You should not use this directly from another application

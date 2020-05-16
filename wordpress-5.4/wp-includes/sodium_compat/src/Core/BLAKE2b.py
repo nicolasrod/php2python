@@ -74,7 +74,7 @@ class ParagonIE_Sodium_Core_BLAKE2b(ParagonIE_Sodium_Core_Util):
     def add64(self, x=None, y=None):
         
         l = x[1] + y[1] & 4294967295
-        return self.new64(int(x[0] + y[0] + 1 if l < x[1] else 0), int(l))
+        return self.new64(php_int(x[0] + y[0] + 1 if l < x[1] else 0), php_int(l))
     # end def add64
     #// 
     #// @internal You should not use this directly from another application
@@ -111,7 +111,7 @@ class ParagonIE_Sodium_Core_BLAKE2b(ParagonIE_Sodium_Core_Util):
         if (not php_is_numeric(y[1])):
             raise php_new_class("SodiumException", lambda : SodiumException("y[1] is not an integer"))
         # end if
-        return self.new64(int(x[0] ^ y[0] & 4294967295), int(x[1] ^ y[1] & 4294967295))
+        return self.new64(php_int(x[0] ^ y[0] & 4294967295), php_int(x[1] ^ y[1] & 4294967295))
     # end def xor64
     #// 
     #// @internal You should not use this directly from another application
@@ -141,23 +141,23 @@ class ParagonIE_Sodium_Core_BLAKE2b(ParagonIE_Sodium_Core_Util):
         c = 64 - c
         if c < 32:
             #// @var int $h0
-            h0 = int(x[0]) << c | int(x[1]) & 1 << c - 1 << 32 - c >> 32 - c
+            h0 = php_int(x[0]) << c | php_int(x[1]) & 1 << c - 1 << 32 - c >> 32 - c
             #// @var int $l0
-            l0 = int(x[1]) << c
+            l0 = php_int(x[1]) << c
         else:
             #// @var int $h0
-            h0 = int(x[1]) << c - 32
+            h0 = php_int(x[1]) << c - 32
         # end if
         h1 = 0
         c1 = 64 - c
         if c1 < 32:
             #// @var int $h1
-            h1 = int(x[0]) >> c1
+            h1 = php_int(x[0]) >> c1
             #// @var int $l1
-            l1 = int(x[1]) >> c1 | int(x[0]) & 1 << c1 - 1 << 32 - c1
+            l1 = php_int(x[1]) >> c1 | php_int(x[0]) & 1 << c1 - 1 << 32 - c1
         else:
             #// @var int $l1
-            l1 = int(x[0]) >> c1 - 32
+            l1 = php_int(x[0]) >> c1 - 32
         # end if
         return self.new64(h0 | h1, l0 | l1)
     # end def rotr64
@@ -170,7 +170,7 @@ class ParagonIE_Sodium_Core_BLAKE2b(ParagonIE_Sodium_Core_Util):
     #//
     def flatten64(self, x=None):
         
-        return int(x[0] * 4294967296 + x[1])
+        return php_int(x[0] * 4294967296 + x[1])
     # end def flatten64
     #// 
     #// @internal You should not use this directly from another application
@@ -184,9 +184,9 @@ class ParagonIE_Sodium_Core_BLAKE2b(ParagonIE_Sodium_Core_Util):
     def load64(self, x=None, i=None):
         
         #// @var int $l
-        l = int(x[i]) | int(x[i + 1]) << 8 | int(x[i + 2]) << 16 | int(x[i + 3]) << 24
+        l = php_int(x[i]) | php_int(x[i + 1]) << 8 | php_int(x[i + 2]) << 16 | php_int(x[i + 3]) << 24
         #// @var int $h
-        h = int(x[i + 4]) | int(x[i + 5]) << 8 | int(x[i + 6]) << 16 | int(x[i + 7]) << 24
+        h = php_int(x[i + 4]) | php_int(x[i + 5]) << 8 | php_int(x[i + 6]) << 16 | php_int(x[i + 7]) << 24
         return self.new64(h, l)
     # end def load64
     #// 
@@ -211,7 +211,7 @@ class ParagonIE_Sodium_Core_BLAKE2b(ParagonIE_Sodium_Core_Util):
             #// 
             #// @var int $uIdx
             uIdx = 7 - j & 4 >> 2
-            x[i] = int(u[uIdx]) & 255
+            x[i] = php_int(u[uIdx]) & 255
             i += 1
             if i > maxLength:
                 return
@@ -514,7 +514,7 @@ class ParagonIE_Sodium_Core_BLAKE2b(ParagonIE_Sodium_Core_Util):
             
         # end while
         self.compress(ctx, ctx[3])
-        i = int(out.getsize() - 1 / 8)
+        i = php_int(out.getsize() - 1 / 8)
         while i >= 0:
             
             self.store64(out, i << 3, ctx[0][i])
@@ -574,7 +574,7 @@ class ParagonIE_Sodium_Core_BLAKE2b(ParagonIE_Sodium_Core_Util):
             i = 0
             while i < 16:
                 
-                p[32 + i] = int(salt[i])
+                p[32 + i] = php_int(salt[i])
                 i += 1
             # end while
         # end if
@@ -583,7 +583,7 @@ class ParagonIE_Sodium_Core_BLAKE2b(ParagonIE_Sodium_Core_Util):
             i = 0
             while i < 16:
                 
-                p[48 + i] = int(personal[i])
+                p[48 + i] = php_int(personal[i])
                 i += 1
             # end while
         # end if
@@ -648,7 +648,7 @@ class ParagonIE_Sodium_Core_BLAKE2b(ParagonIE_Sodium_Core_Util):
         arr = a.toarray()
         c = a.count()
         array_unshift(arr, php_str_repeat("C", c))
-        return str(call_user_func_array("pack", arr))
+        return php_str(call_user_func_array("pack", arr))
     # end def splfixedarraytostring
     #// 
     #// @internal You should not use this directly from another application
@@ -692,7 +692,7 @@ class ParagonIE_Sodium_Core_BLAKE2b(ParagonIE_Sodium_Core_Util):
         #// # uint8_t buf[2 * 128];
         str += self.splfixedarraytostring(ctx[3])
         #// @var int $ctx4
-        ctx4 = int(ctx[4])
+        ctx4 = php_int(ctx[4])
         #// # size_t buflen;
         str += php_implode("", Array(self.inttochr(ctx4 & 255), self.inttochr(ctx4 >> 8 & 255), self.inttochr(ctx4 >> 16 & 255), self.inttochr(ctx4 >> 24 & 255), self.inttochr(ctx4 >> 32 & 255), self.inttochr(ctx4 >> 40 & 255), self.inttochr(ctx4 >> 48 & 255), self.inttochr(ctx4 >> 56 & 255)))
         #// # uint8_t last_node;

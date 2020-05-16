@@ -68,8 +68,8 @@ if wp_is_mobile():
 #// @name $post_ID
 #// @var int
 #//
-post_ID = int(post_ID) if (php_isset(lambda : post_ID)) else 0
-user_ID = int(user_ID) if (php_isset(lambda : user_ID)) else 0
+post_ID = php_int(post_ID) if (php_isset(lambda : post_ID)) else 0
+user_ID = php_int(user_ID) if (php_isset(lambda : user_ID)) else 0
 action = action if (php_isset(lambda : action)) else ""
 if get_option("page_for_posts") == post_ID and php_empty(lambda : post.post_content):
     add_action("edit_form_after_title", "_wp_posts_page_notice")
@@ -120,8 +120,8 @@ if viewable:
     view_page_link_html = php_sprintf(" <a href=\"%1$s\">%2$s</a>", esc_url(permalink), __("View page"))
 # end if
 scheduled_date = php_sprintf(__("%1$s at %2$s"), date_i18n(_x("M j, Y", "publish box date format"), strtotime(post.post_date)), date_i18n(_x("H:i", "publish box time format"), strtotime(post.post_date)))
-messages["post"] = Array({0: "", 1: __("Post updated.") + view_post_link_html, 2: __("Custom field updated."), 3: __("Custom field deleted."), 4: __("Post updated."), 5: php_sprintf(__("Post restored to revision from %s."), wp_post_revision_title(int(PHP_REQUEST["revision"]), False)) if (php_isset(lambda : PHP_REQUEST["revision"])) else False, 6: __("Post published.") + view_post_link_html, 7: __("Post saved."), 8: __("Post submitted.") + preview_post_link_html, 9: php_sprintf(__("Post scheduled for: %s."), "<strong>" + scheduled_date + "</strong>") + scheduled_post_link_html, 10: __("Post draft updated.") + preview_post_link_html})
-messages["page"] = Array({0: "", 1: __("Page updated.") + view_page_link_html, 2: __("Custom field updated."), 3: __("Custom field deleted."), 4: __("Page updated."), 5: php_sprintf(__("Page restored to revision from %s."), wp_post_revision_title(int(PHP_REQUEST["revision"]), False)) if (php_isset(lambda : PHP_REQUEST["revision"])) else False, 6: __("Page published.") + view_page_link_html, 7: __("Page saved."), 8: __("Page submitted.") + preview_page_link_html, 9: php_sprintf(__("Page scheduled for: %s."), "<strong>" + scheduled_date + "</strong>") + scheduled_page_link_html, 10: __("Page draft updated.") + preview_page_link_html})
+messages["post"] = Array({0: "", 1: __("Post updated.") + view_post_link_html, 2: __("Custom field updated."), 3: __("Custom field deleted."), 4: __("Post updated."), 5: php_sprintf(__("Post restored to revision from %s."), wp_post_revision_title(php_int(PHP_REQUEST["revision"]), False)) if (php_isset(lambda : PHP_REQUEST["revision"])) else False, 6: __("Post published.") + view_post_link_html, 7: __("Post saved."), 8: __("Post submitted.") + preview_post_link_html, 9: php_sprintf(__("Post scheduled for: %s."), "<strong>" + scheduled_date + "</strong>") + scheduled_post_link_html, 10: __("Post draft updated.") + preview_post_link_html})
+messages["page"] = Array({0: "", 1: __("Page updated.") + view_page_link_html, 2: __("Custom field updated."), 3: __("Custom field deleted."), 4: __("Page updated."), 5: php_sprintf(__("Page restored to revision from %s."), wp_post_revision_title(php_int(PHP_REQUEST["revision"]), False)) if (php_isset(lambda : PHP_REQUEST["revision"])) else False, 6: __("Page published.") + view_page_link_html, 7: __("Page saved."), 8: __("Page submitted.") + preview_page_link_html, 9: php_sprintf(__("Page scheduled for: %s."), "<strong>" + scheduled_date + "</strong>") + scheduled_page_link_html, 10: __("Page draft updated.") + preview_page_link_html})
 messages["attachment"] = array_fill(1, 10, __("Media file updated."))
 #// Hack, for now.
 #// 
@@ -262,7 +262,7 @@ referer = wp_get_referer()
 php_print(">\n")
 wp_nonce_field(nonce_action)
 php_print("<input type=\"hidden\" id=\"user-id\" name=\"user_ID\" value=\"")
-php_print(int(user_ID))
+php_print(php_int(user_ID))
 php_print("\" />\n<input type=\"hidden\" id=\"hiddenaction\" name=\"action\" value=\"")
 php_print(esc_attr(form_action))
 php_print("\" />\n<input type=\"hidden\" id=\"originalaction\" name=\"originalaction\" value=\"")

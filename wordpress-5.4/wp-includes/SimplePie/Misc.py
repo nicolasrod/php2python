@@ -211,7 +211,7 @@ class SimplePie_Misc():
     def parse_url(self, url=None):
         
         iri = php_new_class("SimplePie_IRI", lambda : SimplePie_IRI(url))
-        return Array({"scheme": str(iri.scheme), "authority": str(iri.authority), "path": str(iri.path), "query": str(iri.query), "fragment": str(iri.fragment)})
+        return Array({"scheme": php_str(iri.scheme), "authority": php_str(iri.authority), "path": php_str(iri.path), "query": php_str(iri.query), "fragment": php_str(iri.fragment)})
     # end def parse_url
     @classmethod
     def compress_parse_url(self, scheme="", authority="", path="", query="", fragment=""):
@@ -2836,7 +2836,7 @@ class SimplePie_Misc():
     @classmethod
     def uncomment_rfc822(self, string=None):
         
-        string = str(string)
+        string = php_str(string)
         position = 0
         length = php_strlen(string)
         depth = 0
@@ -2977,7 +2977,7 @@ class SimplePie_Misc():
     @classmethod
     def is_isegment_nz_nc(self, string=None):
         
-        return bool(php_preg_match("/^([A-Za-z0-9\\-._~\\x{A0}-\\x{D7FF}\\x{F900}-\\x{FDCF}\\x{FDF0}-\\x{FFEF}\\x{10000}-\\x{1FFFD}\\x{20000}-\\x{2FFFD}\\x{30000}-\\x{3FFFD}\\x{40000}-\\x{4FFFD}\\x{50000}-\\x{5FFFD}\\x{60000}-\\x{6FFFD}\\x{70000}-\\x{7FFFD}\\x{80000}-\\x{8FFFD}\\x{90000}-\\x{9FFFD}\\x{A0000}-\\x{AFFFD}\\x{B0000}-\\x{BFFFD}\\x{C0000}-\\x{CFFFD}\\x{D0000}-\\x{DFFFD}\\x{E1000}-\\x{EFFFD}!$&'()*+,;=@]|(%[0-9ABCDEF]{2}))+$/u", string))
+        return php_bool(php_preg_match("/^([A-Za-z0-9\\-._~\\x{A0}-\\x{D7FF}\\x{F900}-\\x{FDCF}\\x{FDF0}-\\x{FFEF}\\x{10000}-\\x{1FFFD}\\x{20000}-\\x{2FFFD}\\x{30000}-\\x{3FFFD}\\x{40000}-\\x{4FFFD}\\x{50000}-\\x{5FFFD}\\x{60000}-\\x{6FFFD}\\x{70000}-\\x{7FFFD}\\x{80000}-\\x{8FFFD}\\x{90000}-\\x{9FFFD}\\x{A0000}-\\x{AFFFD}\\x{B0000}-\\x{BFFFD}\\x{C0000}-\\x{CFFFD}\\x{D0000}-\\x{DFFFD}\\x{E1000}-\\x{EFFFD}!$&'()*+,;=@]|(%[0-9ABCDEF]{2}))+$/u", string))
     # end def is_isegment_nz_nc
     @classmethod
     def space_seperated_tokens(self, string=None):
@@ -3008,7 +3008,7 @@ class SimplePie_Misc():
     @classmethod
     def codepoint_to_utf8(self, codepoint=None):
         
-        codepoint = int(codepoint)
+        codepoint = php_int(codepoint)
         if codepoint < 0:
             return False
         else:

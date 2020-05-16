@@ -433,7 +433,7 @@ def wp_constrain_dimensions(current_width=None, current_height=None, max_width=0
     #// Calculate the larger/smaller ratios.
     smaller_ratio = php_min(width_ratio, height_ratio)
     larger_ratio = php_max(width_ratio, height_ratio)
-    if int(round(current_width * larger_ratio)) > max_width or int(round(current_height * larger_ratio)) > max_height:
+    if php_int(round(current_width * larger_ratio)) > max_width or php_int(round(current_height * larger_ratio)) > max_height:
         #// The larger ratio is too big. It would result in an overflow.
         ratio = smaller_ratio
     else:
@@ -441,8 +441,8 @@ def wp_constrain_dimensions(current_width=None, current_height=None, max_width=0
         ratio = larger_ratio
     # end if
     #// Very small dimensions may result in 0, 1 should be the minimum.
-    w = php_max(1, int(round(current_width * ratio)))
-    h = php_max(1, int(round(current_height * ratio)))
+    w = php_max(1, php_int(round(current_width * ratio)))
+    h = php_max(1, php_int(round(current_height * ratio)))
     #// 
     #// Sometimes, due to rounding, we'll end up with a result like this:
     #// 465x700 in a 177x177 box is 117x176... a pixel short.
@@ -558,10 +558,10 @@ def image_resize_dimensions(orig_w=None, orig_h=None, dest_w=None, dest_h=None, 
         new_w = php_min(dest_w, orig_w)
         new_h = php_min(dest_h, orig_h)
         if (not new_w):
-            new_w = int(round(new_h * aspect_ratio))
+            new_w = php_int(round(new_h * aspect_ratio))
         # end if
         if (not new_h):
-            new_h = int(round(new_w / aspect_ratio))
+            new_h = php_int(round(new_w / aspect_ratio))
         # end if
         size_ratio = php_max(new_w / orig_w, new_h / orig_h)
         crop_w = round(new_w / size_ratio)
@@ -604,14 +604,14 @@ def image_resize_dimensions(orig_w=None, orig_h=None, dest_w=None, dest_h=None, 
         #// @param int  $orig_w  Original image width.
         #// @param int  $orig_h  Original image height.
         #//
-        proceed = bool(apply_filters("wp_image_resize_identical_dimensions", False, orig_w, orig_h))
+        proceed = php_bool(apply_filters("wp_image_resize_identical_dimensions", False, orig_w, orig_h))
         if (not proceed):
             return False
         # end if
     # end if
     #// The return array matches the parameters to imagecopyresampled().
     #// int dst_x, int dst_y, int src_x, int src_y, int dst_w, int dst_h, int src_w, int src_h
-    return Array(0, 0, int(s_x), int(s_y), int(new_w), int(new_h), int(crop_w), int(crop_h))
+    return Array(0, 0, php_int(s_x), php_int(s_y), php_int(new_w), php_int(new_h), php_int(crop_w), php_int(crop_h))
 # end def image_resize_dimensions
 #// 
 #// Resizes an image to make a thumbnail or intermediate size.
@@ -843,7 +843,7 @@ def wp_get_registered_image_subsizes(*args_):
             size_data["crop"] = get_option(str(size_name) + str("_crop"))
         # end if
         if (not php_is_array(size_data["crop"])) or php_empty(lambda : size_data["crop"]):
-            size_data["crop"] = bool(size_data["crop"])
+            size_data["crop"] = php_bool(size_data["crop"])
         # end if
         all_sizes[size_name] = size_data
     # end for
@@ -1106,8 +1106,8 @@ def wp_calculate_image_srcset(size_array=None, image_src=None, image_meta=None, 
     # end if
     image_sizes = image_meta["sizes"]
     #// Get the width and height of the image.
-    image_width = int(size_array[0])
-    image_height = int(size_array[1])
+    image_width = php_int(size_array[0])
+    image_height = php_int(size_array[1])
     #// Bail early if error/no width.
     if image_width < 1:
         return False
@@ -1389,8 +1389,8 @@ def wp_image_add_srcset_and_sizes(image=None, image_meta=None, attachment_id=Non
     if php_preg_match("/-e[0-9]{13}/", image_meta["file"], img_edit_hash) and php_strpos(wp_basename(image_src), img_edit_hash[0]) == False:
         return image
     # end if
-    width = int(match_width[1]) if php_preg_match("/ width=\"([0-9]+)\"/", image, match_width) else 0
-    height = int(match_height[1]) if php_preg_match("/ height=\"([0-9]+)\"/", image, match_height) else 0
+    width = php_int(match_width[1]) if php_preg_match("/ width=\"([0-9]+)\"/", image, match_width) else 0
+    height = php_int(match_height[1]) if php_preg_match("/ height=\"([0-9]+)\"/", image, match_height) else 0
     if (not width) or (not height):
         #// 
         #// If attempts to parse the size value failed, attempt to use the image meta data to match
@@ -1398,13 +1398,13 @@ def wp_image_add_srcset_and_sizes(image=None, image_meta=None, attachment_id=Non
         #//
         image_filename = wp_basename(image_src)
         if wp_basename(image_meta["file"]) == image_filename:
-            width = int(image_meta["width"])
-            height = int(image_meta["height"])
+            width = php_int(image_meta["width"])
+            height = php_int(image_meta["height"])
         else:
             for image_size_data in image_meta["sizes"]:
                 if image_filename == image_size_data["file"]:
-                    width = int(image_size_data["width"])
-                    height = int(image_size_data["height"])
+                    width = php_int(image_size_data["width"])
+                    height = php_int(image_size_data["height"])
                     break
                 # end if
             # end for
@@ -1536,7 +1536,7 @@ def img_caption_shortcode(attr=None, content=None, *args_):
         return output
     # end if
     atts = shortcode_atts(Array({"id": "", "caption_id": "", "align": "alignnone", "width": "", "caption": "", "class": ""}), attr, "caption")
-    atts["width"] = int(atts["width"])
+    atts["width"] = php_int(atts["width"])
     if atts["width"] < 1 or php_empty(lambda : atts["caption"]):
         return content
     # end if
@@ -1578,7 +1578,7 @@ def img_caption_shortcode(attr=None, content=None, *args_):
     caption_width = apply_filters("img_caption_shortcode_width", width, atts, content)
     style = ""
     if caption_width:
-        style = "style=\"width: " + int(caption_width) + "px\" "
+        style = "style=\"width: " + php_int(caption_width) + "px\" "
     # end if
     if html5:
         html = php_sprintf("<figure %s%s%sclass=\"%s\">%s%s</figure>", id, describedby, style, esc_attr(class_), do_shortcode(content), php_sprintf("<figcaption %sclass=\"wp-caption-text\">%s</figcaption>", caption_id, atts["caption"]))
@@ -1987,10 +1987,10 @@ def wp_playlist_shortcode(attr=None, *args_):
     php_print(" <")
     php_print(safe_type)
     php_print(" controls=\"controls\" preload=\"none\" width=\"\n               ")
-    php_print(int(theme_width))
+    php_print(php_int(theme_width))
     php_print(" \"\n    ")
     if "video" == safe_type:
-        php_print(" height=\"", int(theme_height), "\"")
+        php_print(" height=\"", php_int(theme_height), "\"")
     # end if
     php_print(" ></")
     php_print(safe_type)
@@ -2661,10 +2661,10 @@ def wp_imagecreatetruecolor(width=None, height=None, *args_):
 #//
 def wp_expand_dimensions(example_width=None, example_height=None, max_width=None, max_height=None, *args_):
     
-    example_width = int(example_width)
-    example_height = int(example_height)
-    max_width = int(max_width)
-    max_height = int(max_height)
+    example_width = php_int(example_width)
+    example_height = php_int(example_height)
+    max_width = php_int(max_width)
+    max_height = php_int(max_height)
     return wp_constrain_dimensions(example_width * 1000000, example_height * 1000000, max_width, max_height)
 # end def wp_expand_dimensions
 #// 
@@ -2733,7 +2733,7 @@ def wp_get_image_editor(path=None, args=Array(), *args_):
 #//
 def wp_image_editor_supports(args=Array(), *args_):
     
-    return bool(_wp_image_editor_choose(args))
+    return php_bool(_wp_image_editor_choose(args))
 # end def wp_image_editor_supports
 #// 
 #// Tests which editors are capable of supporting the request.
@@ -2946,10 +2946,10 @@ def wp_prepare_attachment_for_js(attachment=None, *args_):
     # end if
     if meta and "video" == type:
         if (php_isset(lambda : meta["width"])):
-            response["width"] = int(meta["width"])
+            response["width"] = php_int(meta["width"])
         # end if
         if (php_isset(lambda : meta["height"])):
-            response["height"] = int(meta["height"])
+            response["height"] = php_int(meta["height"])
         # end if
     # end if
     if meta and "audio" == type or "video" == type:
@@ -3367,7 +3367,7 @@ def wp_maybe_generate_attachment_metadata(attachment=None, *args_):
     if php_empty(lambda : attachment) or php_empty(lambda : attachment.ID):
         return
     # end if
-    attachment_id = int(attachment.ID)
+    attachment_id = php_int(attachment.ID)
     file = get_attached_file(attachment_id)
     meta = wp_get_attachment_metadata(attachment_id)
     if php_empty(lambda : meta) and php_file_exists(file):
@@ -3428,7 +3428,7 @@ def attachment_url_to_postid(url=None, *args_):
     #// @param int|null $post_id The post_id (if any) found by the function.
     #// @param string   $url     The URL being looked up.
     #//
-    return int(apply_filters("attachment_url_to_postid", post_id, url))
+    return php_int(apply_filters("attachment_url_to_postid", post_id, url))
 # end def attachment_url_to_postid
 #// 
 #// Returns the URLs for CSS files used in an iframe-sandbox'd TinyMCE media view.
@@ -3468,7 +3468,7 @@ def wp_media_personal_data_exporter(email_address=None, page=1, *args_):
     
     #// Limit us to 50 attachments at a time to avoid timing out.
     number = 50
-    page = int(page)
+    page = php_int(page)
     data_to_export = Array()
     user = get_user_by("email", email_address)
     if False == user:

@@ -88,7 +88,7 @@ class WP_REST_Settings_Controller(WP_REST_Controller):
             #// @param array  $args   Arguments passed to register_setting() for this setting.
             #//
             response[name] = apply_filters("rest_pre_get_setting", None, name, args)
-            if php_is_null(response[name]):
+            if is_null(response[name]):
                 #// Default to a null value as "null" in the response means "not set".
                 response[name] = get_option(args["option_name"], args["schema"]["default"])
             # end if
@@ -160,7 +160,7 @@ class WP_REST_Settings_Controller(WP_REST_Controller):
             #// deleting the option from the database, and relying on the
             #// default value.
             #//
-            if php_is_null(request[name]):
+            if is_null(request[name]):
                 #// 
                 #// A null value is returned in the response for any option
                 #// that has a non-scalar value.
@@ -258,7 +258,7 @@ class WP_REST_Settings_Controller(WP_REST_Controller):
     #//
     def sanitize_callback(self, value=None, request=None, param=None):
         
-        if php_is_null(value):
+        if is_null(value):
             return value
         # end if
         return rest_parse_request_arg(value, request, param)

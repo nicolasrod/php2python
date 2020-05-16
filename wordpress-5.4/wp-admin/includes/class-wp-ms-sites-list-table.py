@@ -178,7 +178,7 @@ class WP_MS_Sites_List_Table(WP_List_Table):
         url = "sites.php"
         for status,label_count in statuses:
             current_link_attributes = " class=\"current\" aria-current=\"page\"" if requested_status == status or "" == requested_status and "all" == status else ""
-            if int(counts[status]) > 0:
+            if php_int(counts[status]) > 0:
                 label = php_sprintf(translate_nooped_plural(label_count, counts[status]), number_format_i18n(counts[status]))
                 full_url = url if "all" == status else add_query_arg("status", status, url)
                 view_links[status] = php_sprintf("<a href=\"%1$s\"%2$s>%3$s</a>", esc_url(full_url), current_link_attributes, label)

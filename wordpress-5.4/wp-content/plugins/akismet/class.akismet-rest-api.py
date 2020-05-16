@@ -96,7 +96,7 @@ class Akismet_REST_API():
         
         for setting_key in Array("akismet_strictness", "akismet_show_user_comments_approved"):
             setting_value = request.get_param(setting_key)
-            if php_is_null(setting_value):
+            if is_null(setting_value):
                 continue
             # end if
             #// From 4.7+, WP core will ensure that these are always boolean
@@ -142,7 +142,7 @@ class Akismet_REST_API():
                 return False
             # end if
             if case():
-                return bool(value)
+                return php_bool(value)
             # end if
         # end for
     # end def parse_boolean

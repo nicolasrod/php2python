@@ -40,7 +40,7 @@ if (not php_empty(lambda : notices)):
     php_print("     ")
 # end if
 php_print("     ")
-if stat_totals and (php_isset(lambda : stat_totals["all"])) and int(stat_totals["all"].spam) > 0:
+if stat_totals and (php_isset(lambda : stat_totals["all"])) and php_int(stat_totals["all"].spam) > 0:
     php_print("""           <div class=\"akismet-card\">
     <div class=\"akismet-section-header\">
     <div class=\"akismet-section-header__label\">

@@ -1547,7 +1547,7 @@ def request_filesystem_credentials(form_post=None, type="", error=False, context
     if "direct" == type:
         return True
     # end if
-    if php_is_null(extra_fields):
+    if is_null(extra_fields):
         extra_fields = Array("version", "locale")
     # end if
     credentials = get_option("ftp_credentials", Array({"hostname": "", "username": ""}))

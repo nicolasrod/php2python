@@ -105,8 +105,8 @@ class getid3_flv(getid3_handler):
             info["fileformat"] = None
             return False
         # end if
-        info["flv"]["header"]["hasAudio"] = bool(TypeFlags & 4)
-        info["flv"]["header"]["hasVideo"] = bool(TypeFlags & 1)
+        info["flv"]["header"]["hasAudio"] = php_bool(TypeFlags & 4)
+        info["flv"]["header"]["hasVideo"] = php_bool(TypeFlags & 1)
         FrameSizeDataLength = getid3_lib.bigendian2int(self.fread(4))
         FLVheaderFrameLength = 9
         if FrameSizeDataLength > FLVheaderFrameLength:
@@ -640,7 +640,7 @@ class AMFReader():
                 break
             # end if
             if php_is_numeric(key):
-                key = int(key)
+                key = php_int(key)
             # end if
             data[key] = self.readdata()
         # end while
@@ -793,7 +793,7 @@ class AVCSequenceParameterSetReader():
     def skipbits(self, bits=None):
         
         newBits = self.currentBits + bits
-        self.currentBytes += int(floor(newBits / 8))
+        self.currentBytes += php_int(floor(newBits / 8))
         self.currentBits = newBits % 8
     # end def skipbits
     #// 

@@ -61,7 +61,7 @@ class SplFixedArray(Countable):
         self = php_new_class("SplFixedArray", lambda : SplFixedArray(php_count(array)))
         if save_indexes:
             for key,value in array:
-                self[int(key)] = value
+                self[php_int(key)] = value
             # end for
         else:
             i = 0
@@ -94,7 +94,7 @@ class SplFixedArray(Countable):
     #//
     def offsetexists(self, index=None):
         
-        return php_array_key_exists(int(index), self.internalArray)
+        return php_array_key_exists(php_int(index), self.internalArray)
     # end def offsetexists
     #// 
     #// @param string|int $index
@@ -102,7 +102,7 @@ class SplFixedArray(Countable):
     #//
     def offsetget(self, index=None):
         
-        return self.internalArray[int(index)]
+        return self.internalArray[php_int(index)]
     # end def offsetget
     #// 
     #// @param string|int $index
@@ -111,14 +111,14 @@ class SplFixedArray(Countable):
     #//
     def offsetset(self, index=None, newval=None):
         
-        self.internalArray[int(index)] = newval
+        self.internalArray[php_int(index)] = newval
     # end def offsetset
     #// 
     #// @param string|int $index
     #//
     def offsetunset(self, index=None):
         
-        self.internalArray[int(index)] = None
+        self.internalArray[php_int(index)] = None
     # end def offsetunset
     #// 
     #// Rewind iterator back to the start

@@ -82,7 +82,7 @@ def wp_embed_unregister_handler(id=None, priority=10, *args_):
 def wp_embed_defaults(url="", *args_):
     
     if (not php_empty(lambda : PHP_GLOBALS["content_width"])):
-        width = int(PHP_GLOBALS["content_width"])
+        width = php_int(PHP_GLOBALS["content_width"])
     # end if
     if php_empty(lambda : width):
         width = 500
@@ -133,7 +133,7 @@ def wp_oembed_get(url=None, args="", *args_):
 def _wp_oembed_get_object(*args_):
     
     wp_oembed = None
-    if php_is_null(wp_oembed):
+    if is_null(wp_oembed):
         wp_oembed = php_new_class("WP_oEmbed", lambda : WP_oEmbed())
     # end if
     return wp_oembed
@@ -300,8 +300,8 @@ def wp_embed_handler_video(matches=None, attr=None, url=None, rawattr=None, *arg
     
     dimensions = ""
     if (not php_empty(lambda : rawattr["width"])) and (not php_empty(lambda : rawattr["height"])):
-        dimensions += php_sprintf("width=\"%d\" ", int(rawattr["width"]))
-        dimensions += php_sprintf("height=\"%d\" ", int(rawattr["height"]))
+        dimensions += php_sprintf("width=\"%d\" ", php_int(rawattr["width"]))
+        dimensions += php_sprintf("height=\"%d\" ", php_int(rawattr["height"]))
     # end if
     video = php_sprintf("[video %s src=\"%s\" /]", dimensions, esc_url(url))
     #// 
@@ -542,7 +542,7 @@ def get_oembed_response_data_for_url(url=None, args=None, *args_):
         # end if
         sites = get_sites(qv)
         site = reset(sites)
-        if site and get_current_blog_id() != int(site.blog_id):
+        if site and get_current_blog_id() != php_int(site.blog_id):
             switch_to_blog(site.blog_id)
             switched_blog = True
         # end if

@@ -558,7 +558,7 @@ class WP_Debug_Data():
                 size += row["Data_length"] + row["Index_length"]
             # end for
         # end if
-        return int(size)
+        return php_int(size)
     # end def get_database_size
     #// 
     #// Fetch the sizes of the WordPress directories: `wordpress` (ABSPATH), `plugins`, `themes`, and `uploads`.

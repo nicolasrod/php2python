@@ -378,7 +378,7 @@ def validate_another_blog_signup(*args_):
         signup_another_blog(blogname, blog_title, errors)
         return False
     # end if
-    public = int(PHP_POST["blog_public"])
+    public = php_int(PHP_POST["blog_public"])
     blog_meta_defaults = Array({"lang_id": 1, "public": public})
     #// Handle the language setting for the new site.
     if (not php_empty(lambda : PHP_POST["WPLANG"])):
@@ -658,7 +658,7 @@ def validate_blog_signup(*args_):
         signup_blog(user_name, user_email, blogname, blog_title, errors)
         return False
     # end if
-    public = int(PHP_POST["blog_public"])
+    public = php_int(PHP_POST["blog_public"])
     signup_meta = Array({"lang_id": 1, "public": public})
     #// Handle the language setting for the new site.
     if (not php_empty(lambda : PHP_POST["WPLANG"])):

@@ -171,8 +171,8 @@ class WP_REST_Users_Controller(WP_REST_Controller):
         # end for
         response = rest_ensure_response(users)
         #// Store pagination values for headers then unset for count query.
-        per_page = int(prepared_args["number"])
-        page = ceil(int(prepared_args["offset"]) / per_page + 1)
+        per_page = php_int(prepared_args["number"])
+        page = ceil(php_int(prepared_args["offset"]) / per_page + 1)
         prepared_args["fields"] = "ID"
         total_users = query.get_total()
         if total_users < 1:
@@ -181,9 +181,9 @@ class WP_REST_Users_Controller(WP_REST_Controller):
             count_query = php_new_class("WP_User_Query", lambda : WP_User_Query(prepared_args))
             total_users = count_query.get_total()
         # end if
-        response.header("X-WP-Total", int(total_users))
+        response.header("X-WP-Total", php_int(total_users))
         max_pages = ceil(total_users / per_page)
-        response.header("X-WP-TotalPages", int(max_pages))
+        response.header("X-WP-TotalPages", php_int(max_pages))
         base = add_query_arg(urlencode_deep(request.get_query_params()), rest_url(php_sprintf("%s/%s", self.namespace, self.rest_base)))
         if page > 1:
             prev_page = page - 1
@@ -211,10 +211,10 @@ class WP_REST_Users_Controller(WP_REST_Controller):
     def get_user(self, id=None):
         
         error = php_new_class("WP_Error", lambda : WP_Error("rest_user_invalid_id", __("Invalid user ID."), Array({"status": 404})))
-        if int(id) <= 0:
+        if php_int(id) <= 0:
             return error
         # end if
-        user = get_userdata(int(id))
+        user = get_userdata(php_int(id))
         if php_empty(lambda : user) or (not user.exists()):
             return error
         # end if
@@ -561,7 +561,7 @@ class WP_REST_Users_Controller(WP_REST_Controller):
         # end if
         id = user.ID
         reassign = None if False == request["reassign"] else absint(request["reassign"])
-        force = bool(request["force"]) if (php_isset(lambda : request["force"])) else False
+        force = php_bool(request["force"]) if (php_isset(lambda : request["force"])) else False
         #// We don't support trashing for users.
         if (not force):
             return php_new_class("WP_Error", lambda : WP_Error("rest_trash_not_supported", php_sprintf(__("Users do not support trashing. Set '%s' to delete."), "force=true"), Array({"status": 501})))
@@ -831,7 +831,7 @@ class WP_REST_Users_Controller(WP_REST_Controller):
     #//
     def check_username(self, value=None, request=None, param=None):
         
-        username = str(value)
+        username = php_str(value)
         if (not validate_username(username)):
             return php_new_class("WP_Error", lambda : WP_Error("rest_user_invalid_username", __("Username contains invalid characters."), Array({"status": 400})))
         # end if
@@ -856,7 +856,7 @@ class WP_REST_Users_Controller(WP_REST_Controller):
     #//
     def check_user_password(self, value=None, request=None, param=None):
         
-        password = str(value)
+        password = php_str(value)
         if php_empty(lambda : password):
             return php_new_class("WP_Error", lambda : WP_Error("rest_user_invalid_password", __("Passwords cannot be empty."), Array({"status": 400})))
         # end if

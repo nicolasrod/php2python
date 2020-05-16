@@ -55,7 +55,7 @@ class Walker_CategoryDropdown(Walker):
         # end if
         output += str(" <option class=\"level-") + str(depth) + str("\" value=\"") + esc_attr(category.value_field) + "\""
         #// Type-juggling causes false matches, so we force everything to a string.
-        if str(category.value_field) == str(args["selected"]):
+        if php_str(category.value_field) == php_str(args["selected"]):
             output += " selected=\"selected\""
         # end if
         output += ">"

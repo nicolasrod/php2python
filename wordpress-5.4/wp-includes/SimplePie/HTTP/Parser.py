@@ -116,7 +116,7 @@ class SimplePie_HTTP_Parser():
     #//
     def has_data(self):
         
-        return bool(self.position < self.data_length)
+        return php_bool(self.position < self.data_length)
     # end def has_data
     #// 
     #// See if the next character is LWS
@@ -125,7 +125,7 @@ class SimplePie_HTTP_Parser():
     #//
     def is_linear_whitespace(self):
         
-        return bool(self.data[self.position] == "   " or self.data[self.position] == " " or self.data[self.position] == "\n" and (php_isset(lambda : self.data[self.position + 1])) and self.data[self.position + 1] == "   " or self.data[self.position + 1] == " ")
+        return php_bool(self.data[self.position] == "   " or self.data[self.position] == " " or self.data[self.position] == "\n" and (php_isset(lambda : self.data[self.position + 1])) and self.data[self.position + 1] == "   " or self.data[self.position + 1] == " ")
     # end def is_linear_whitespace
     #// 
     #// Parse the HTTP version
@@ -137,7 +137,7 @@ class SimplePie_HTTP_Parser():
             self.http_version = php_substr(self.data, 5, len)
             self.position += 5 + len
             if php_substr_count(self.http_version, ".") <= 1:
-                self.http_version = float(self.http_version)
+                self.http_version = php_float(self.http_version)
                 self.position += strspn(self.data, "     ", self.position)
                 self.state = "status"
             else:
@@ -154,7 +154,7 @@ class SimplePie_HTTP_Parser():
         
         len = strspn(self.data, "0123456789", self.position)
         if len:
-            self.status_code = int(php_substr(self.data, self.position, len))
+            self.status_code = php_int(php_substr(self.data, self.position, len))
             self.position += len
             self.state = "reason"
         else:
@@ -359,7 +359,7 @@ class SimplePie_HTTP_Parser():
             if not (True):
                 break
             # end if
-            is_chunked = bool(php_preg_match("/^([0-9a-f]+)[^\\r\\n]*\\r\\n/i", encoded, matches))
+            is_chunked = php_bool(php_preg_match("/^([0-9a-f]+)[^\\r\\n]*\\r\\n/i", encoded, matches))
             if (not is_chunked):
                 #// Looks like it's not chunked after all
                 self.state = "emit"

@@ -492,7 +492,7 @@ def populate_network(network_id=1, domain="", email="", site_name="", path="/", 
     #// Check for network collision.
     network_exists = False
     if is_multisite():
-        if get_network(int(network_id)):
+        if get_network(php_int(network_id)):
             errors.add("siteid_exists", __("The network already exists."))
         # end if
     else:
@@ -513,7 +513,7 @@ def populate_network(network_id=1, domain="", email="", site_name="", path="/", 
         wpdb.insert(wpdb.site, Array({"domain": domain, "path": path, "id": network_id}))
     # end if
     populate_network_meta(network_id, Array({"admin_email": email, "site_name": site_name, "subdomain_install": subdomain_install}))
-    site_user = get_userdata(int(wpdb.get_var(wpdb.prepare(str("SELECT meta_value FROM ") + str(wpdb.sitemeta) + str(" WHERE meta_key = %s AND site_id = %d"), "admin_user_id", network_id))))
+    site_user = get_userdata(php_int(wpdb.get_var(wpdb.prepare(str("SELECT meta_value FROM ") + str(wpdb.sitemeta) + str(" WHERE meta_key = %s AND site_id = %d"), "admin_user_id", network_id))))
     #// 
     #// When upgrading from single to multisite, assume the current site will
     #// become the main site of the network. When using populate_network()
@@ -579,9 +579,9 @@ def populate_network_meta(network_id=None, meta=Array(), *args_):
     
     global wpdb,wp_db_version
     php_check_if_defined("wpdb","wp_db_version")
-    network_id = int(network_id)
+    network_id = php_int(network_id)
     email = meta["admin_email"] if (not php_empty(lambda : meta["admin_email"])) else ""
-    subdomain_install = int(meta["subdomain_install"]) if (php_isset(lambda : meta["subdomain_install"])) else 0
+    subdomain_install = php_int(meta["subdomain_install"]) if (php_isset(lambda : meta["subdomain_install"])) else 0
     #// If a user with the provided email does not exist, default to the current user as the new network admin.
     site_user = get_user_by("email", email) if (not php_empty(lambda : email)) else False
     if False == site_user:
@@ -679,7 +679,7 @@ def populate_site_meta(site_id=None, meta=Array(), *args_):
     
     global wpdb
     php_check_if_defined("wpdb")
-    site_id = int(site_id)
+    site_id = php_int(site_id)
     if (not is_site_meta_supported()):
         return
     # end if

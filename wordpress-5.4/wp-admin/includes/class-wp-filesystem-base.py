@@ -391,7 +391,7 @@ class WP_Filesystem_Base():
     #//
     def is_binary(self, text=None):
         
-        return bool(php_preg_match("|[^\\x20-\\x7E]|", text))
+        return php_bool(php_preg_match("|[^\\x20-\\x7E]|", text))
         pass
     # end def is_binary
     #// 

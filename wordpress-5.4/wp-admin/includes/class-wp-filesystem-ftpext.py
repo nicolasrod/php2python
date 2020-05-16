@@ -245,9 +245,9 @@ class WP_Filesystem_FTPext(WP_Filesystem_Base):
         # end if
         #// chmod the file or directory.
         if (not php_function_exists("ftp_chmod")):
-            return bool(ftp_site(self.link, php_sprintf("CHMOD %o %s", mode, file)))
+            return php_bool(ftp_site(self.link, php_sprintf("CHMOD %o %s", mode, file)))
         # end if
-        return bool(ftp_chmod(self.link, mode, file))
+        return php_bool(ftp_chmod(self.link, mode, file))
     # end def chmod
     #// 
     #// Gets the file owner.
@@ -532,7 +532,7 @@ class WP_Filesystem_FTPext(WP_Filesystem_Base):
     def parselisting(self, line=None):
         
         is_windows = None
-        if php_is_null(is_windows):
+        if is_null(is_windows):
             is_windows = php_stripos(ftp_systype(self.link), "win") != False
         # end if
         if is_windows and php_preg_match("/([0-9]{2})-([0-9]{2})-([0-9]{2}) +([0-9]{2}):([0-9]{2})(AM|PM) +([0-9]+|<DIR>) +(.+)/", line, lucifer):

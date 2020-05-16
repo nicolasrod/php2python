@@ -50,7 +50,7 @@ php_include_file(ABSPATH + "wp-admin/includes/translation-install.php", once=Tru
 #// Load wpdb
 php_include_file(ABSPATH + WPINC + "/wp-db.php", once=True)
 nocache_headers()
-step = int(PHP_REQUEST["step"]) if (php_isset(lambda : PHP_REQUEST["step"])) else 0
+step = php_int(PHP_REQUEST["step"]) if (php_isset(lambda : PHP_REQUEST["step"])) else 0
 #// 
 #// Display installation header.
 #// 
@@ -110,7 +110,7 @@ def display_setup_form(error=None, *args_):
     weblog_title = php_trim(wp_unslash(PHP_POST["weblog_title"])) if (php_isset(lambda : PHP_POST["weblog_title"])) else ""
     user_name = php_trim(wp_unslash(PHP_POST["user_name"])) if (php_isset(lambda : PHP_POST["user_name"])) else ""
     admin_email = php_trim(wp_unslash(PHP_POST["admin_email"])) if (php_isset(lambda : PHP_POST["admin_email"])) else ""
-    if (not php_is_null(error)):
+    if (not is_null(error)):
         php_print("<h1>")
         _ex("Welcome", "Howdy")
         php_print("</h1>\n<p class=\"message\">")
@@ -156,7 +156,7 @@ def display_setup_form(error=None, *args_):
         php_print("                 <input type=\"password\" name=\"admin_password\" id=\"pass1\" class=\"regular-text\" autocomplete=\"off\" data-reveal=\"1\" data-pw=\"")
         php_print(esc_attr(initial_password))
         php_print("\" aria-describedby=\"pass-strength-result\" />\n                    <button type=\"button\" class=\"button wp-hide-pw hide-if-no-js\" data-start-masked=\"")
-        php_print(int((php_isset(lambda : PHP_POST["admin_password"]))))
+        php_print(php_int((php_isset(lambda : PHP_POST["admin_password"]))))
         php_print("\" data-toggle=\"0\" aria-label=\"")
         esc_attr_e("Hide password")
         php_print("\">\n                        <span class=\"dashicons dashicons-hidden\"></span>\n                        <span class=\"text\">")
@@ -370,7 +370,7 @@ for case in Switch(step):
         admin_password = wp_unslash(PHP_POST["admin_password"]) if (php_isset(lambda : PHP_POST["admin_password"])) else ""
         admin_password_check = wp_unslash(PHP_POST["admin_password2"]) if (php_isset(lambda : PHP_POST["admin_password2"])) else ""
         admin_email = php_trim(wp_unslash(PHP_POST["admin_email"])) if (php_isset(lambda : PHP_POST["admin_email"])) else ""
-        public = int(PHP_POST["blog_public"]) if (php_isset(lambda : PHP_POST["blog_public"])) else 1
+        public = php_int(PHP_POST["blog_public"]) if (php_isset(lambda : PHP_POST["blog_public"])) else 1
         #// Check email address.
         error = False
         if php_empty(lambda : user_name):

@@ -88,7 +88,7 @@ class WP_Customize_Custom_CSS_Setting(WP_Customize_Setting):
         
         if stylesheet == self.stylesheet:
             customized_value = self.post_value(None)
-            if (not php_is_null(customized_value)):
+            if (not is_null(customized_value)):
                 css = customized_value
             # end if
         # end if

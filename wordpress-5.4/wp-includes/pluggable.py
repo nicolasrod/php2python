@@ -1881,9 +1881,9 @@ if (not php_function_exists("wp_verify_nonce")):
     #//
     def wp_verify_nonce(nonce=None, action=-1, *args_):
         
-        nonce = str(nonce)
+        nonce = php_str(nonce)
         user = wp_get_current_user()
-        uid = int(user.ID)
+        uid = php_int(user.ID)
         if (not uid):
             #// 
             #// Filters whether the user who generated the nonce is logged out.
@@ -1939,7 +1939,7 @@ if (not php_function_exists("wp_create_nonce")):
     def wp_create_nonce(action=-1, *args_):
         
         user = wp_get_current_user()
-        uid = int(user.ID)
+        uid = php_int(user.ID)
         if (not uid):
             #// This filter is documented in wp-includes/pluggable.php
             uid = apply_filters("nonce_user_logged_out", uid, action)
@@ -2216,11 +2216,11 @@ if (not php_function_exists("wp_rand")):
         php_check_if_defined("rnd_value")
         #// Some misconfigured 32-bit environments (Entropy PHP, for example)
         #// truncate integers larger than PHP_INT_MAX to PHP_INT_MAX rather than overflowing them to floats.
-        max_random_number = float("4294967295") if 3000000000 == 2147483647 else 4294967295
+        max_random_number = php_float("4294967295") if 3000000000 == 2147483647 else 4294967295
         #// 4294967295 = 0xffffffff
         #// We only handle ints, floats are truncated to their integer value.
-        min = int(min)
-        max = int(max)
+        min = php_int(min)
+        max = php_int(max)
         use_random_int_functionality = True
         if use_random_int_functionality:
             try: 
@@ -2336,7 +2336,7 @@ if (not php_function_exists("get_avatar")):
         if php_empty(lambda : args):
             args = Array()
         # end if
-        args["size"] = int(size)
+        args["size"] = php_int(size)
         args["default"] = default
         args["alt"] = alt
         args = wp_parse_args(args, defaults)
@@ -2363,7 +2363,7 @@ if (not php_function_exists("get_avatar")):
         #// @param array       $args        Arguments passed to get_avatar_url(), after processing.
         #//
         avatar = apply_filters("pre_get_avatar", None, id_or_email, args)
-        if (not php_is_null(avatar)):
+        if (not is_null(avatar)):
             #// This filter is documented in wp-includes/pluggable.php
             return apply_filters("get_avatar", avatar, id_or_email, args["size"], args["default"], args["alt"], args)
         # end if
@@ -2376,7 +2376,7 @@ if (not php_function_exists("get_avatar")):
         if (not url) or is_wp_error(url):
             return False
         # end if
-        class_ = Array("avatar", "avatar-" + int(args["size"]), "photo")
+        class_ = Array("avatar", "avatar-" + php_int(args["size"]), "photo")
         if (not args["found_avatar"]) or args["force_default"]:
             class_[-1] = "avatar-default"
         # end if
@@ -2387,7 +2387,7 @@ if (not php_function_exists("get_avatar")):
                 class_[-1] = args["class"]
             # end if
         # end if
-        avatar = php_sprintf("<img alt='%s' src='%s' srcset='%s' class='%s' height='%d' width='%d' %s/>", esc_attr(args["alt"]), esc_url(url), esc_url(url2x) + " 2x", esc_attr(join(" ", class_)), int(args["height"]), int(args["width"]), args["extra_attr"])
+        avatar = php_sprintf("<img alt='%s' src='%s' srcset='%s' class='%s' height='%d' width='%d' %s/>", esc_attr(args["alt"]), esc_url(url), esc_url(url2x) + " 2x", esc_attr(join(" ", class_)), php_int(args["height"]), php_int(args["width"]), args["extra_attr"])
         #// 
         #// Filters the avatar to retrieve.
         #// 

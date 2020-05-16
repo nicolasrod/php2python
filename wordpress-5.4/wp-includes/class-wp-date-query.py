@@ -652,7 +652,7 @@ class WP_Date_Query():
                 if (not php_is_numeric(value)):
                     return False
                 # end if
-                return int(value)
+                return php_int(value)
             # end if
         # end for
     # end def build_value
@@ -711,7 +711,7 @@ class WP_Date_Query():
             datetime["month"] = 12 if default_to_max else 1
         # end if
         if (not (php_isset(lambda : datetime["day"]))):
-            datetime["day"] = int(gmdate("t", mktime(0, 0, 0, datetime["month"], 1, datetime["year"]))) if default_to_max else 1
+            datetime["day"] = php_int(gmdate("t", mktime(0, 0, 0, datetime["month"], 1, datetime["year"]))) if default_to_max else 1
         # end if
         if (not (php_isset(lambda : datetime["hour"]))):
             datetime["hour"] = 23 if default_to_max else 0

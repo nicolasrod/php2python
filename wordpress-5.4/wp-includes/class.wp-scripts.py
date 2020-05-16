@@ -360,7 +360,7 @@ class WP_Scripts(WP_Dependencies):
             if (not is_scalar(value)):
                 continue
             # end if
-            l10n[key] = html_entity_decode(str(value), ENT_QUOTES, "UTF-8")
+            l10n[key] = html_entity_decode(php_str(value), ENT_QUOTES, "UTF-8")
         # end for
         script = str("var ") + str(object_name) + str(" = ") + wp_json_encode(l10n) + ";"
         if (not php_empty(lambda : after)):
@@ -390,7 +390,7 @@ class WP_Scripts(WP_Dependencies):
         if (php_isset(lambda : self.registered[handle].args)) and 1 == self.registered[handle].args:
             grp = 1
         else:
-            grp = int(self.get_data(handle, "group"))
+            grp = php_int(self.get_data(handle, "group"))
         # end if
         if False != group and grp > group:
             grp = group

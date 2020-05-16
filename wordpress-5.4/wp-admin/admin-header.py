@@ -94,7 +94,7 @@ php_print(addslashes(wp_locale.number_format["thousands_sep"]))
 php_print("',\n decimalPoint = '")
 php_print(addslashes(wp_locale.number_format["decimal_point"]))
 php_print("',\n isRtl = ")
-php_print(int(is_rtl()))
+php_print(php_int(is_rtl()))
 php_print(""";
 </script>
 <meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0\">

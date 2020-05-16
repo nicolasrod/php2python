@@ -497,7 +497,7 @@ for case in Switch(action):
         #// 
         #// @param int $interval Interval time (in seconds). Default is 3 days.
         #//
-        remind_interval = int(apply_filters("admin_email_remind_interval", 3 * DAY_IN_SECONDS))
+        remind_interval = php_int(apply_filters("admin_email_remind_interval", 3 * DAY_IN_SECONDS))
         if (not php_empty(lambda : PHP_REQUEST["remind_me_later"])):
             if (not wp_verify_nonce(PHP_REQUEST["remind_me_later"], "remind_me_later_nonce")):
                 wp_safe_redirect(wp_login_url())
@@ -523,7 +523,7 @@ for case in Switch(action):
             #// 
             #// @param int $interval Interval time (in seconds). Default is 6 months.
             #//
-            admin_email_check_interval = int(apply_filters("admin_email_check_interval", 6 * MONTH_IN_SECONDS))
+            admin_email_check_interval = php_int(apply_filters("admin_email_check_interval", 6 * MONTH_IN_SECONDS))
             if admin_email_check_interval > 0:
                 update_option("admin_email_lifespan", time() + admin_email_check_interval)
             # end if
@@ -946,7 +946,7 @@ for case in Switch(action):
         if (not (php_isset(lambda : PHP_REQUEST["confirm_key"]))):
             wp_die(__("Missing confirm key."))
         # end if
-        request_id = int(PHP_REQUEST["request_id"])
+        request_id = php_int(PHP_REQUEST["request_id"])
         key = sanitize_text_field(wp_unslash(PHP_REQUEST["confirm_key"]))
         result = wp_validate_user_request_key(request_id, key)
         if is_wp_error(result):
@@ -1042,11 +1042,11 @@ for case in Switch(action):
             # end if
             #// Check if it is time to add a redirect to the admin email confirmation screen.
             if php_is_a(user, "WP_User") and user.exists() and user.has_cap("manage_options"):
-                admin_email_lifespan = int(get_option("admin_email_lifespan"))
+                admin_email_lifespan = php_int(get_option("admin_email_lifespan"))
                 #// If `0` (or anything "falsey" as it is cast to int) is returned, the user will not be redirected
                 #// to the admin email confirmation screen.
                 #// This filter is documented in wp-login.php
-                admin_email_check_interval = int(apply_filters("admin_email_check_interval", 6 * MONTH_IN_SECONDS))
+                admin_email_check_interval = php_int(apply_filters("admin_email_check_interval", 6 * MONTH_IN_SECONDS))
                 if admin_email_check_interval > 0 and time() > admin_email_lifespan:
                     redirect_to = add_query_arg(Array({"action": "confirm_admin_email", "wp_lang": get_user_locale(user)}), wp_login_url(redirect_to))
                 # end if

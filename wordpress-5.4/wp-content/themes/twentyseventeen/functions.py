@@ -421,7 +421,7 @@ def twentyseventeen_unique_id(prefix="", *args_):
         return wp_unique_id(prefix)
     # end if
     id_counter += 1
-    return prefix + str(id_counter)
+    return prefix + php_str(id_counter)
 # end def twentyseventeen_unique_id
 #// 
 #// Implement the Custom Header feature.

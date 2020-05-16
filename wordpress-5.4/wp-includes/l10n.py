@@ -1196,7 +1196,7 @@ def translate_user_role(name=None, domain="default", *args_):
 def get_available_languages(dir=None, *args_):
     
     languages = Array()
-    lang_files = glob(WP_LANG_DIR if php_is_null(dir) else dir + "/*.mo")
+    lang_files = glob(WP_LANG_DIR if is_null(dir) else dir + "/*.mo")
     if lang_files:
         for lang_file in lang_files:
             lang_file = php_basename(lang_file, ".mo")

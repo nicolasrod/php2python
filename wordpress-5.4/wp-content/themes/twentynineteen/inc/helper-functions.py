@@ -73,7 +73,7 @@ def twentynineteen_get_discussion_data(*args_):
     comments = get_comments(Array({"post_id": current_post_id, "orderby": "comment_date_gmt", "order": get_option("comment_order", "asc"), "status": "approve", "number": 20}))
     authors = Array()
     for comment in comments:
-        authors[-1] = int(comment.user_id) if int(comment.user_id) > 0 else comment.comment_author_email
+        authors[-1] = php_int(comment.user_id) if php_int(comment.user_id) > 0 else comment.comment_author_email
     # end for
     authors = array_unique(authors)
     discussion = Array({"authors": php_array_slice(authors, 0, 6), "responses": get_comments_number(current_post_id)})

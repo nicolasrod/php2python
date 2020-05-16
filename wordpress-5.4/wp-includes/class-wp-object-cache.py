@@ -129,7 +129,7 @@ class WP_Object_Cache():
         if self._exists(id, group):
             return False
         # end if
-        return self.set(key, data, group, int(expire))
+        return self.set(key, data, group, php_int(expire))
     # end def add
     #// 
     #// Sets the list of global cache groups.
@@ -168,7 +168,7 @@ class WP_Object_Cache():
         if (not php_is_numeric(self.cache[group][key])):
             self.cache[group][key] = 0
         # end if
-        offset = int(offset)
+        offset = php_int(offset)
         self.cache[group][key] -= offset
         if self.cache[group][key] < 0:
             self.cache[group][key] = 0
@@ -277,7 +277,7 @@ class WP_Object_Cache():
         if (not php_is_numeric(self.cache[group][key])):
             self.cache[group][key] = 0
         # end if
-        offset = int(offset)
+        offset = php_int(offset)
         self.cache[group][key] += offset
         if self.cache[group][key] < 0:
             self.cache[group][key] = 0
@@ -309,7 +309,7 @@ class WP_Object_Cache():
         if (not self._exists(id, group)):
             return False
         # end if
-        return self.set(key, data, group, int(expire))
+        return self.set(key, data, group, php_int(expire))
     # end def replace
     #// 
     #// Resets cache keys.
@@ -394,7 +394,7 @@ class WP_Object_Cache():
     #//
     def switch_to_blog(self, blog_id=None):
         
-        blog_id = int(blog_id)
+        blog_id = php_int(blog_id)
         self.blog_prefix = blog_id + ":" if self.multisite else ""
     # end def switch_to_blog
     #// 

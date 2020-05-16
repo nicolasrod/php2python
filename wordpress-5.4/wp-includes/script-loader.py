@@ -94,7 +94,7 @@ def wp_default_packages_vendor(scripts=None, *args_):
     scripts.add("wp-polyfill", None, Array("wp-polyfill"))
     did_action("init") and scripts.add_inline_script("wp-polyfill", wp_get_script_polyfill(scripts, Array({"'fetch' in window": "wp-polyfill-fetch", "document.contains": "wp-polyfill-node-contains", "window.DOMRect": "wp-polyfill-dom-rect", "window.URL && window.URL.prototype && window.URLSearchParams": "wp-polyfill-url", "window.FormData && window.FormData.prototype.keys": "wp-polyfill-formdata", "Element.prototype.matches && Element.prototype.closest": "wp-polyfill-element-closest"})))
     did_action("init") and scripts.add_inline_script("lodash", "window.lodash = _.noConflict();")
-    did_action("init") and scripts.add_inline_script("moment", php_sprintf("moment.locale( '%s', %s );", get_user_locale(), wp_json_encode(Array({"months": php_array_values(wp_locale.month), "monthsShort": php_array_values(wp_locale.month_abbrev), "weekdays": php_array_values(wp_locale.weekday), "weekdaysShort": php_array_values(wp_locale.weekday_abbrev), "week": Array({"dow": int(get_option("start_of_week", 0))})}, {"longDateFormat": Array({"LT": get_option("time_format", __("g:i a", "default")), "LTS": None, "L": None, "LL": get_option("date_format", __("F j, Y", "default")), "LLL": __("F j, Y g:i a", "default"), "LLLL": None})}))), "after")
+    did_action("init") and scripts.add_inline_script("moment", php_sprintf("moment.locale( '%s', %s );", get_user_locale(), wp_json_encode(Array({"months": php_array_values(wp_locale.month), "monthsShort": php_array_values(wp_locale.month_abbrev), "weekdays": php_array_values(wp_locale.weekday), "weekdaysShort": php_array_values(wp_locale.weekday_abbrev), "week": Array({"dow": php_int(get_option("start_of_week", 0))})}, {"longDateFormat": Array({"LT": get_option("time_format", __("g:i a", "default")), "LTS": None, "L": None, "LL": get_option("date_format", __("F j, Y", "default")), "LLL": __("F j, Y g:i a", "default"), "LLLL": None})}))), "after")
 # end def wp_default_packages_vendor
 #// 
 #// Returns contents of an inline script used in appending polyfill scripts for
@@ -331,7 +331,7 @@ def wp_default_scripts(scripts=None, *args_):
     scripts.default_version = get_bloginfo("version")
     scripts.default_dirs = Array("/wp-admin/js/", "/wp-includes/js/")
     scripts.add("utils", str("/wp-includes/js/utils") + str(suffix) + str(".js"))
-    did_action("init") and scripts.localize("utils", "userSettings", Array({"url": str(SITECOOKIEPATH), "uid": str(get_current_user_id()), "time": str(time()), "secure": str("https" == php_parse_url(site_url(), PHP_URL_SCHEME))}))
+    did_action("init") and scripts.localize("utils", "userSettings", Array({"url": php_str(SITECOOKIEPATH), "uid": php_str(get_current_user_id()), "time": php_str(time()), "secure": php_str("https" == php_parse_url(site_url(), PHP_URL_SCHEME))}))
     scripts.add("common", str("/wp-admin/js/common") + str(suffix) + str(".js"), Array("jquery", "hoverIntent", "utils"), False, 1)
     did_action("init") and scripts.localize("common", "commonL10n", Array({"warnDelete": __("You are about to permanently delete these items from your site.\nThis action cannot be undone.\n 'Cancel' to stop, 'OK' to delete."), "dismiss": __("Dismiss this notice."), "collapseMenu": __("Collapse Main menu"), "expandMenu": __("Expand Main menu")}))
     scripts.add("wp-sanitize", str("/wp-includes/js/wp-sanitize") + str(suffix) + str(".js"), Array(), False, 1)
@@ -487,7 +487,7 @@ def wp_default_scripts(scripts=None, *args_):
     scripts.add("user-suggest", str("/wp-admin/js/user-suggest") + str(suffix) + str(".js"), Array("jquery-ui-autocomplete"), False, 1)
     scripts.add("admin-bar", str("/wp-includes/js/admin-bar") + str(suffix) + str(".js"), Array("hoverintent-js"), False, 1)
     scripts.add("wplink", str("/wp-includes/js/wplink") + str(suffix) + str(".js"), Array("jquery", "wp-a11y"), False, 1)
-    did_action("init") and scripts.localize("wplink", "wpLinkL10n", Array({"title": __("Insert/edit link"), "update": __("Update"), "save": __("Add Link"), "noTitle": __("(no title)"), "noMatchesFound": __("No results found."), "linkSelected": __("Link selected."), "linkInserted": __("Link inserted."), "minInputLength": int(_x("3", "minimum input length for searching post links"))}))
+    did_action("init") and scripts.localize("wplink", "wpLinkL10n", Array({"title": __("Insert/edit link"), "update": __("Update"), "save": __("Add Link"), "noTitle": __("(no title)"), "noMatchesFound": __("No results found."), "linkSelected": __("Link selected."), "linkInserted": __("Link inserted."), "minInputLength": php_int(_x("3", "minimum input length for searching post links"))}))
     scripts.add("wpdialogs", str("/wp-includes/js/wpdialog") + str(suffix) + str(".js"), Array("jquery-ui-dialog"), False, 1)
     scripts.add("word-count", str("/wp-admin/js/word-count") + str(suffix) + str(".js"), Array(), False, 1)
     scripts.add("media-upload", str("/wp-admin/js/media-upload") + str(suffix) + str(".js"), Array("thickbox", "shortcode"), False, 1)

@@ -227,8 +227,8 @@ class SimplePie_Net_IPv6():
             # end for
             if php_count(ipv4) == 4:
                 for ipv4_part in ipv4:
-                    value = int(ipv4_part)
-                    if str(value) != ipv4_part or value < 0 or value > 255:
+                    value = php_int(ipv4_part)
+                    if php_str(value) != ipv4_part or value < 0 or value > 255:
                         return False
                     # end if
                 # end for

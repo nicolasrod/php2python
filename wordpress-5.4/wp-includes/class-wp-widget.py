@@ -349,7 +349,7 @@ class WP_Widget():
             if (php_isset(lambda : PHP_POST["widget-" + self.id_base])) and php_is_array(PHP_POST["widget-" + self.id_base]):
                 settings = PHP_POST["widget-" + self.id_base]
             elif (php_isset(lambda : PHP_POST["id_base"])) and PHP_POST["id_base"] == self.id_base:
-                num = int(PHP_POST["multi_number"]) if PHP_POST["multi_number"] else int(PHP_POST["widget_number"])
+                num = php_int(PHP_POST["multi_number"]) if PHP_POST["multi_number"] else php_int(PHP_POST["widget_number"])
                 settings = Array({num: Array()})
             else:
                 return

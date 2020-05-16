@@ -195,7 +195,7 @@ class WP_Theme():
     #//
     def __tostring(self):
         
-        return str(self.display("Name"))
+        return php_str(self.display("Name"))
     # end def __tostring
     #// 
     #// __isset() magic method for properties formerly returned by current_theme_info()

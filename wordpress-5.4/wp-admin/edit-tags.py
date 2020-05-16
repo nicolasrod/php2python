@@ -80,7 +80,7 @@ for case in Switch(wp_list_table.current_action()):
         if (not (php_isset(lambda : PHP_REQUEST["tag_ID"]))):
             break
         # end if
-        tag_ID = int(PHP_REQUEST["tag_ID"])
+        tag_ID = php_int(PHP_REQUEST["tag_ID"])
         check_admin_referer("delete-tag_" + tag_ID)
         if (not current_user_can("delete_term", tag_ID)):
             wp_die("<h1>" + __("You need a higher level of permission.") + "</h1>" + "<p>" + __("Sorry, you are not allowed to delete this item.") + "</p>", 403)
@@ -107,7 +107,7 @@ for case in Switch(wp_list_table.current_action()):
         if (not (php_isset(lambda : PHP_REQUEST["tag_ID"]))):
             break
         # end if
-        term_id = int(PHP_REQUEST["tag_ID"])
+        term_id = php_int(PHP_REQUEST["tag_ID"])
         term = get_term(term_id)
         if (not type(term).__name__ == "WP_Term"):
             wp_die(__("You attempted to edit an item that doesn&#8217;t exist. Perhaps it was deleted?"))
@@ -116,7 +116,7 @@ for case in Switch(wp_list_table.current_action()):
         php_exit(0)
     # end if
     if case("editedtag"):
-        tag_ID = int(PHP_POST["tag_ID"])
+        tag_ID = php_int(PHP_POST["tag_ID"])
         check_admin_referer("update-tag_" + tag_ID)
         if (not current_user_can("edit_term", tag_ID)):
             wp_die("<h1>" + __("You need a higher level of permission.") + "</h1>" + "<p>" + __("Sorry, you are not allowed to edit this item.") + "</p>", 403)

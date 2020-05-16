@@ -101,7 +101,7 @@ def add_metadata(meta_type=None, object_id=None, meta_key=None, meta_value=None,
     if (not result):
         return False
     # end if
-    mid = int(wpdb.insert_id)
+    mid = php_int(wpdb.insert_id)
     wp_cache_delete(object_id, meta_type + "_meta")
     #// 
     #// Fires immediately after meta of a specific type is added.
@@ -179,7 +179,7 @@ def update_metadata(meta_type=None, object_id=None, meta_key=None, meta_value=No
     #//
     check = apply_filters(str("update_") + str(meta_type) + str("_metadata"), None, object_id, meta_key, meta_value, prev_value)
     if None != check:
-        return bool(check)
+        return php_bool(check)
     # end if
     #// Compare existing value to new value if no prev value given and the key exists only once.
     if php_empty(lambda : prev_value):
@@ -330,7 +330,7 @@ def delete_metadata(meta_type=None, object_id=None, meta_key=None, meta_value=""
     #//
     check = apply_filters(str("delete_") + str(meta_type) + str("_metadata"), None, object_id, meta_key, meta_value, delete_all)
     if None != check:
-        return bool(check)
+        return php_bool(check)
     # end if
     _meta_value = meta_value
     meta_value = maybe_serialize(meta_value)
@@ -510,7 +510,7 @@ def metadata_exists(meta_type=None, object_id=None, meta_key=None, *args_):
     #// This filter is documented in wp-includes/meta.php
     check = apply_filters(str("get_") + str(meta_type) + str("_metadata"), None, object_id, meta_key, True)
     if None != check:
-        return bool(check)
+        return php_bool(check)
     # end if
     meta_cache = wp_cache_get(object_id, meta_type + "_meta")
     if (not meta_cache):
@@ -623,7 +623,7 @@ def update_metadata_by_mid(meta_type=None, meta_id=None, meta_value=None, meta_k
     #//
     check = apply_filters(str("update_") + str(meta_type) + str("_metadata_by_mid"), None, meta_id, meta_value, meta_key)
     if None != check:
-        return bool(check)
+        return php_bool(check)
     # end if
     #// Fetch the meta and go on if it's found.
     meta = get_metadata_by_mid(meta_type, meta_id)
@@ -716,12 +716,12 @@ def delete_metadata_by_mid(meta_type=None, meta_id=None, *args_):
     #//
     check = apply_filters(str("delete_") + str(meta_type) + str("_metadata_by_mid"), None, meta_id)
     if None != check:
-        return bool(check)
+        return php_bool(check)
     # end if
     #// Fetch the meta and go on if it's found.
     meta = get_metadata_by_mid(meta_type, meta_id)
     if meta:
-        object_id = int(meta.column)
+        object_id = php_int(meta.column)
         #// This action is documented in wp-includes/meta.php
         do_action(str("delete_") + str(meta_type) + str("_meta"), meta_id, object_id, meta.meta_key, meta.meta_value)
         #// Old-style action.
@@ -739,7 +739,7 @@ def delete_metadata_by_mid(meta_type=None, meta_id=None, *args_):
             do_action(str("delete_") + str(meta_type) + str("meta"), meta_id)
         # end if
         #// Run the query, will return true if deleted, false otherwise.
-        result = bool(wpdb.delete(table, Array({id_column: meta_id})))
+        result = php_bool(wpdb.delete(table, Array({id_column: meta_id})))
         #// Clear the caches.
         wp_cache_delete(object_id, meta_type + "_meta")
         #// This action is documented in wp-includes/meta.php
@@ -806,7 +806,7 @@ def update_meta_cache(meta_type=None, object_ids=None, *args_):
     #//
     check = apply_filters(str("update_") + str(meta_type) + str("_metadata_cache"), None, object_ids)
     if None != check:
-        return bool(check)
+        return php_bool(check)
     # end if
     cache_key = meta_type + "_meta"
     ids = Array()
@@ -1247,7 +1247,7 @@ def _wp_register_meta_args_whitelist(args=None, default_args=None, *args_):
 #//
 def get_object_subtype(object_type=None, object_id=None, *args_):
     
-    object_id = int(object_id)
+    object_id = php_int(object_id)
     object_subtype = ""
     for case in Switch(object_type):
         if case("post"):

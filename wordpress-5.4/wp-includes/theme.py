@@ -989,7 +989,7 @@ def display_header_text(*args_):
 #//
 def has_header_image(*args_):
     
-    return bool(get_header_image())
+    return php_bool(get_header_image())
 # end def has_header_image
 #// 
 #// Retrieve header image for custom header.
@@ -1290,7 +1290,7 @@ def unregister_default_headers(header=None, *args_):
 #//
 def has_header_video(*args_):
     
-    return bool(get_header_video_url())
+    return php_bool(get_header_video_url())
 # end def has_header_video
 #// 
 #// Retrieve header video URL for custom header.
@@ -1993,7 +1993,7 @@ def add_theme_support(feature=None, *args):
             defaults = Array({"width": None, "height": None, "flex-width": False, "flex-height": False, "header-text": ""})
             args[0] = wp_parse_args(php_array_intersect_key(args[0], defaults), defaults)
             #// Allow full flexibility if no size is specified.
-            if php_is_null(args[0]["width"]) and php_is_null(args[0]["height"]):
+            if is_null(args[0]["width"]) and is_null(args[0]["height"]):
                 args[0]["flex-width"] = True
                 args[0]["flex-height"] = True
             # end if
@@ -2032,14 +2032,14 @@ def add_theme_support(feature=None, *args):
                 php_define("NO_HEADER_TEXT", php_empty(lambda : args[0]["header-text"]))
             # end if
             if php_defined("HEADER_IMAGE_WIDTH"):
-                args[0]["width"] = int(HEADER_IMAGE_WIDTH)
+                args[0]["width"] = php_int(HEADER_IMAGE_WIDTH)
             elif (php_isset(lambda : args[0]["width"])):
-                php_define("HEADER_IMAGE_WIDTH", int(args[0]["width"]))
+                php_define("HEADER_IMAGE_WIDTH", php_int(args[0]["width"]))
             # end if
             if php_defined("HEADER_IMAGE_HEIGHT"):
-                args[0]["height"] = int(HEADER_IMAGE_HEIGHT)
+                args[0]["height"] = php_int(HEADER_IMAGE_HEIGHT)
             elif (php_isset(lambda : args[0]["height"])):
-                php_define("HEADER_IMAGE_HEIGHT", int(args[0]["height"]))
+                php_define("HEADER_IMAGE_HEIGHT", php_int(args[0]["height"]))
             # end if
             if php_defined("HEADER_TEXTCOLOR"):
                 args[0]["default-text-color"] = HEADER_TEXTCOLOR

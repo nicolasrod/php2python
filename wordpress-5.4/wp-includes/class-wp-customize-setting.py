@@ -448,7 +448,7 @@ class WP_Customize_Setting():
         if is_wp_error(value):
             return value
         # end if
-        if php_is_null(value):
+        if is_null(value):
             return php_new_class("WP_Error", lambda : WP_Error("invalid_value", __("Invalid value.")))
         # end if
         validity = php_new_class("WP_Error", lambda : WP_Error())

@@ -276,7 +276,7 @@ class Walker():
             self.max_pages = 1
         else:
             paging = True
-            start = int(page_num) - 1 * int(per_page)
+            start = php_int(page_num) - 1 * php_int(per_page)
             end_ = start + per_page
             if -1 == max_depth:
                 self.max_pages = ceil(total_top / per_page)

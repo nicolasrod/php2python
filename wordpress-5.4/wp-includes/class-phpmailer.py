@@ -127,7 +127,7 @@ class PHPMailer():
     def __init__(self, exceptions=None):
         
         if exceptions != None:
-            self.exceptions = bool(exceptions)
+            self.exceptions = php_bool(exceptions)
         # end if
         #// Pick an appropriate debug output format automatically
         self.Debugoutput = "echo" if php_strpos(PHP_SAPI, "cli") != False else "html"
@@ -163,7 +163,7 @@ class PHPMailer():
         # end if
         #// Can't use additional_parameters in safe_mode, calling mail() with null params breaks
         #// @link http://php.net/manual/en/function.mail.php
-        if php_ini_get("safe_mode") or (not self.UseSendmailOptions) or php_is_null(params):
+        if php_ini_get("safe_mode") or (not self.UseSendmailOptions) or is_null(params):
             result = php_no_error(lambda: mail(to, subject, body, header))
         else:
             result = php_no_error(lambda: mail(to, subject, body, header, params))
@@ -511,7 +511,7 @@ class PHPMailer():
     @classmethod
     def validateaddress(self, address=None, patternselect=None):
         
-        if php_is_null(patternselect):
+        if is_null(patternselect):
             patternselect = self.validator
         # end if
         if php_is_callable(patternselect):
@@ -551,18 +551,18 @@ class PHPMailer():
                 #// @copyright 2009-2010 Michael Rushton
                 #// Feel free to use and redistribute this code. But please keep this copyright notice.
                 #//
-                return bool(php_preg_match("/^(?!(?>(?1)\"?(?>\\\\[ -~]|[^\"])\"?(?1)){255,})(?!(?>(?1)\"?(?>\\\\[ -~]|[^\"])\"?(?1)){65,}@)" + "((?>(?>(?>((?>(?>(?>\\x0D\\x0A)?[\\t ])+|(?>[\\t ]*\\x0D\\x0A)?[\\t ]+)?)(\\((?>(?2)" + "(?>[\\x01-\\x08\\x0B\\x0C\\x0E-'*-\\[\\]-\\x7F]|\\\\[\\x00-\\x7F]|(?3)))*(?2)\\)))+(?2))|(?2))?)" + "([!#-'*+\\/-9=?^-~-]+|\"(?>(?2)(?>[\\x01-\\x08\\x0B\\x0C\\x0E-!#-\\[\\]-\\x7F]|\\\\[\\x00-\\x7F]))*" + "(?2)\")(?>(?1)\\.(?1)(?4))*(?1)@(?!(?1)[a-z0-9-]{64,})(?1)(?>([a-z0-9](?>[a-z0-9-]*[a-z0-9])?)" + "(?>(?1)\\.(?!(?1)[a-z0-9-]{64,})(?1)(?5)){0,126}|\\[(?:(?>IPv6:(?>([a-f0-9]{1,4})(?>:(?6)){7}" + "|(?!(?:.*[a-f0-9][:\\]]){8,})((?6)(?>:(?6)){0,6})?::(?7)?))|(?>(?>IPv6:(?>(?6)(?>:(?6)){5}:" + "|(?!(?:.*[a-f0-9]:){6,})(?8)?::(?>((?6)(?>:(?6)){0,4}):)?))?(25[0-5]|2[0-4][0-9]|1[0-9]{2}" + "|[1-9]?[0-9])(?>\\.(?9)){3}))\\])(?1)$/isD", address))
+                return php_bool(php_preg_match("/^(?!(?>(?1)\"?(?>\\\\[ -~]|[^\"])\"?(?1)){255,})(?!(?>(?1)\"?(?>\\\\[ -~]|[^\"])\"?(?1)){65,}@)" + "((?>(?>(?>((?>(?>(?>\\x0D\\x0A)?[\\t ])+|(?>[\\t ]*\\x0D\\x0A)?[\\t ]+)?)(\\((?>(?2)" + "(?>[\\x01-\\x08\\x0B\\x0C\\x0E-'*-\\[\\]-\\x7F]|\\\\[\\x00-\\x7F]|(?3)))*(?2)\\)))+(?2))|(?2))?)" + "([!#-'*+\\/-9=?^-~-]+|\"(?>(?2)(?>[\\x01-\\x08\\x0B\\x0C\\x0E-!#-\\[\\]-\\x7F]|\\\\[\\x00-\\x7F]))*" + "(?2)\")(?>(?1)\\.(?1)(?4))*(?1)@(?!(?1)[a-z0-9-]{64,})(?1)(?>([a-z0-9](?>[a-z0-9-]*[a-z0-9])?)" + "(?>(?1)\\.(?!(?1)[a-z0-9-]{64,})(?1)(?5)){0,126}|\\[(?:(?>IPv6:(?>([a-f0-9]{1,4})(?>:(?6)){7}" + "|(?!(?:.*[a-f0-9][:\\]]){8,})((?6)(?>:(?6)){0,6})?::(?7)?))|(?>(?>IPv6:(?>(?6)(?>:(?6)){5}:" + "|(?!(?:.*[a-f0-9]:){6,})(?8)?::(?>((?6)(?>:(?6)){0,4}):)?))?(25[0-5]|2[0-4][0-9]|1[0-9]{2}" + "|[1-9]?[0-9])(?>\\.(?9)){3}))\\])(?1)$/isD", address))
             # end if
             if case("pcre"):
                 #// An older regex that doesn't need a recent PCRE
-                return bool(php_preg_match("/^(?!(?>\"?(?>\\\\[ -~]|[^\"])\"?){255,})(?!(?>\"?(?>\\\\[ -~]|[^\"])\"?){65,}@)(?>" + "[!#-'*+\\/-9=?^-~-]+|\"(?>(?>[\\x01-\\x08\\x0B\\x0C\\x0E-!#-\\[\\]-\\x7F]|\\\\[\\x00-\\xFF]))*\")" + "(?>\\.(?>[!#-'*+\\/-9=?^-~-]+|\"(?>(?>[\\x01-\\x08\\x0B\\x0C\\x0E-!#-\\[\\]-\\x7F]|\\\\[\\x00-\\xFF]))*\"))*" + "@(?>(?![a-z0-9-]{64,})(?>[a-z0-9](?>[a-z0-9-]*[a-z0-9])?)(?>\\.(?![a-z0-9-]{64,})" + "(?>[a-z0-9](?>[a-z0-9-]*[a-z0-9])?)){0,126}|\\[(?:(?>IPv6:(?>(?>[a-f0-9]{1,4})(?>:" + "[a-f0-9]{1,4}){7}|(?!(?:.*[a-f0-9][:\\]]){8,})(?>[a-f0-9]{1,4}(?>:[a-f0-9]{1,4}){0,6})?" + "::(?>[a-f0-9]{1,4}(?>:[a-f0-9]{1,4}){0,6})?))|(?>(?>IPv6:(?>[a-f0-9]{1,4}(?>:" + "[a-f0-9]{1,4}){5}:|(?!(?:.*[a-f0-9]:){6,})(?>[a-f0-9]{1,4}(?>:[a-f0-9]{1,4}){0,4})?" + "::(?>(?:[a-f0-9]{1,4}(?>:[a-f0-9]{1,4}){0,4}):)?))?(?>25[0-5]|2[0-4][0-9]|1[0-9]{2}" + "|[1-9]?[0-9])(?>\\.(?>25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}))\\])$/isD", address))
+                return php_bool(php_preg_match("/^(?!(?>\"?(?>\\\\[ -~]|[^\"])\"?){255,})(?!(?>\"?(?>\\\\[ -~]|[^\"])\"?){65,}@)(?>" + "[!#-'*+\\/-9=?^-~-]+|\"(?>(?>[\\x01-\\x08\\x0B\\x0C\\x0E-!#-\\[\\]-\\x7F]|\\\\[\\x00-\\xFF]))*\")" + "(?>\\.(?>[!#-'*+\\/-9=?^-~-]+|\"(?>(?>[\\x01-\\x08\\x0B\\x0C\\x0E-!#-\\[\\]-\\x7F]|\\\\[\\x00-\\xFF]))*\"))*" + "@(?>(?![a-z0-9-]{64,})(?>[a-z0-9](?>[a-z0-9-]*[a-z0-9])?)(?>\\.(?![a-z0-9-]{64,})" + "(?>[a-z0-9](?>[a-z0-9-]*[a-z0-9])?)){0,126}|\\[(?:(?>IPv6:(?>(?>[a-f0-9]{1,4})(?>:" + "[a-f0-9]{1,4}){7}|(?!(?:.*[a-f0-9][:\\]]){8,})(?>[a-f0-9]{1,4}(?>:[a-f0-9]{1,4}){0,6})?" + "::(?>[a-f0-9]{1,4}(?>:[a-f0-9]{1,4}){0,6})?))|(?>(?>IPv6:(?>[a-f0-9]{1,4}(?>:" + "[a-f0-9]{1,4}){5}:|(?!(?:.*[a-f0-9]:){6,})(?>[a-f0-9]{1,4}(?>:[a-f0-9]{1,4}){0,4})?" + "::(?>(?:[a-f0-9]{1,4}(?>:[a-f0-9]{1,4}){0,4}):)?))?(?>25[0-5]|2[0-4][0-9]|1[0-9]{2}" + "|[1-9]?[0-9])(?>\\.(?>25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}))\\])$/isD", address))
             # end if
             if case("html5"):
                 #// 
                 #// This is the pattern used in the HTML5 spec for validation of 'email' type form input elements.
                 #// @link http://www.whatwg.org/specs/web-apps/current-work/#e-mail-state-(type=email)
                 #//
-                return bool(php_preg_match("/^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}" + "[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/sD", address))
+                return php_bool(php_preg_match("/^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}" + "[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/sD", address))
             # end if
             if case("noregex"):
                 #// No PCRE! Do something _very_ approximate!
@@ -573,7 +573,7 @@ class PHPMailer():
                 pass
             # end if
             if case():
-                return bool(filter_var(address, FILTER_VALIDATE_EMAIL))
+                return php_bool(filter_var(address, FILTER_VALIDATE_EMAIL))
             # end if
         # end for
     # end def validateaddress
@@ -982,11 +982,11 @@ class PHPMailer():
     #//
     def smtpconnect(self, options=None):
         
-        if php_is_null(self.smtp):
+        if is_null(self.smtp):
             self.smtp = self.getsmtpinstance()
         # end if
         #// If no options are provided, use whatever is set in the instance
-        if php_is_null(options):
+        if is_null(options):
             options = self.SMTPOptions
         # end if
         #// Already connected?
@@ -1034,7 +1034,7 @@ class PHPMailer():
             # end if
             host = hostinfo[3]
             port = self.Port
-            tport = int(hostinfo[4])
+            tport = php_int(hostinfo[4])
             if tport > 0 and tport < 65536:
                 port = tport
             # end if
@@ -1078,7 +1078,7 @@ class PHPMailer():
         #// If we get here, all connection attempts have failed, so close connection hard
         self.smtp.close()
         #// As we've caught all exceptions, just report whatever the last one was
-        if self.exceptions and (not php_is_null(lastexception)):
+        if self.exceptions and (not is_null(lastexception)):
             raise lastexception
         # end if
         return False
@@ -1136,7 +1136,7 @@ class PHPMailer():
             # end if
         # end if
         self.language = PHPMAILER_LANG
-        return bool(foundlang)
+        return php_bool(foundlang)
         pass
     # end def setlanguage
     #// 
@@ -1411,7 +1411,7 @@ class PHPMailer():
             self.lastMessageID = php_sprintf("<%s@%s>", self.uniqueid, self.serverhostname())
         # end if
         result += self.headerline("Message-ID", self.lastMessageID)
-        if (not php_is_null(self.Priority)):
+        if (not is_null(self.Priority)):
             result += self.headerline("X-Priority", self.Priority)
         # end if
         if self.XMailer == "":
@@ -2111,7 +2111,7 @@ class PHPMailer():
     #//
     def has8bitchars(self, text=None):
         
-        return bool(php_preg_match("/[\\x80-\\xFF]/", text))
+        return php_bool(php_preg_match("/[\\x80-\\xFF]/", text))
     # end def has8bitchars
     #// 
     #// Encode and wrap long multibyte strings for mail headers
@@ -2452,7 +2452,7 @@ class PHPMailer():
     def seterror(self, msg=None):
         
         self.error_count += 1
-        if self.Mailer == "smtp" and (not php_is_null(self.smtp)):
+        if self.Mailer == "smtp" and (not is_null(self.smtp)):
             lasterror = self.smtp.geterror()
             if (not php_empty(lambda : lasterror["error"])):
                 msg += self.lang("smtp_error") + lasterror["error"]
@@ -2631,7 +2631,7 @@ class PHPMailer():
                     if php_strlen(directory) > 1 and php_substr(directory, -1) != "/":
                         directory += "/"
                     # end if
-                    if self.addembeddedimage(basedir + directory + filename, cid, filename, "base64", self._mime_types(str(self.mb_pathinfo(filename, PATHINFO_EXTENSION)))):
+                    if self.addembeddedimage(basedir + directory + filename, cid, filename, "base64", self._mime_types(php_str(self.mb_pathinfo(filename, PATHINFO_EXTENSION)))):
                         message = php_preg_replace("/" + images[1][imgindex] + "=[\"']" + preg_quote(url, "/") + "[\"']/Ui", images[1][imgindex] + "=\"cid:" + cid + "\"", message)
                     # end if
                 # end if
@@ -3014,7 +3014,7 @@ class PHPMailer():
     def haslinelongerthanmax(self, str=None):
         
         #// +2 to include CRLF line break for a 1000 total
-        return bool(php_preg_match("/^(.{" + self.MAX_LINE_LENGTH + 2 + ",})/m", str))
+        return php_bool(php_preg_match("/^(.{" + self.MAX_LINE_LENGTH + 2 + ",})/m", str))
     # end def haslinelongerthanmax
     #// 
     #// Allows for public read access to 'to' property.

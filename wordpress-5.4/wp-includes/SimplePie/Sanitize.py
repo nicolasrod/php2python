@@ -86,12 +86,12 @@ class SimplePie_Sanitize():
     # end def __init__
     def remove_div(self, enable=True):
         
-        self.remove_div = bool(enable)
+        self.remove_div = php_bool(enable)
     # end def remove_div
     def set_image_handler(self, page=False):
         
         if page:
-            self.image_handler = str(page)
+            self.image_handler = php_str(page)
         else:
             self.image_handler = False
         # end if
@@ -103,25 +103,25 @@ class SimplePie_Sanitize():
     def pass_cache_data(self, enable_cache=True, cache_location="./cache", cache_name_function="md5", cache_class="SimplePie_Cache"):
         
         if (php_isset(lambda : enable_cache)):
-            self.enable_cache = bool(enable_cache)
+            self.enable_cache = php_bool(enable_cache)
         # end if
         if cache_location:
-            self.cache_location = str(cache_location)
+            self.cache_location = php_str(cache_location)
         # end if
         if cache_name_function:
-            self.cache_name_function = str(cache_name_function)
+            self.cache_name_function = php_str(cache_name_function)
         # end if
     # end def pass_cache_data
     def pass_file_data(self, file_class="SimplePie_File", timeout=10, useragent="", force_fsockopen=False):
         
         if timeout:
-            self.timeout = str(timeout)
+            self.timeout = php_str(timeout)
         # end if
         if useragent:
-            self.useragent = str(useragent)
+            self.useragent = php_str(useragent)
         # end if
         if force_fsockopen:
-            self.force_fsockopen = str(force_fsockopen)
+            self.force_fsockopen = php_str(force_fsockopen)
         # end if
     # end def pass_file_data
     def strip_htmltags(self, tags=Array("base", "blink", "body", "doctype", "embed", "font", "form", "frame", "frameset", "html", "iframe", "input", "marquee", "meta", "noscript", "object", "param", "script", "style")):
@@ -138,7 +138,7 @@ class SimplePie_Sanitize():
     # end def strip_htmltags
     def encode_instead_of_strip(self, encode=False):
         
-        self.encode_instead_of_strip = bool(encode)
+        self.encode_instead_of_strip = php_bool(encode)
     # end def encode_instead_of_strip
     def strip_attributes(self, attribs=Array("bgsound", "class", "expr", "id", "style", "onclick", "onerror", "onfinish", "onmouseover", "onmouseout", "onfocus", "onblur", "lowsrc", "dynsrc")):
         
@@ -154,11 +154,11 @@ class SimplePie_Sanitize():
     # end def strip_attributes
     def strip_comments(self, strip=False):
         
-        self.strip_comments = bool(strip)
+        self.strip_comments = php_bool(strip)
     # end def strip_comments
     def set_output_encoding(self, encoding="UTF-8"):
         
-        self.output_encoding = str(encoding)
+        self.output_encoding = php_str(encoding)
     # end def set_output_encoding
     #// 
     #// Set element/attribute key/value pairs of HTML attributes
@@ -230,7 +230,7 @@ class SimplePie_Sanitize():
                     self.replace_urls(document, element, attributes)
                 # end for
                 #// If image handling (caching, etc.) is enabled, cache and rewrite all the image tags.
-                if (php_isset(lambda : self.image_handler)) and str(self.image_handler) != "" and self.enable_cache:
+                if (php_isset(lambda : self.image_handler)) and php_str(self.image_handler) != "" and self.enable_cache:
                     images = document.getelementsbytagname("img")
                     for img in images:
                         if img.hasattribute("src"):

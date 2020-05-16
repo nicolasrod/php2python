@@ -79,7 +79,7 @@ if (not php_is_callable("random_int")):
             raise php_new_class("Error", lambda : Error("Minimum value must be less than or equal to the maximum value"))
         # end if
         if max == min:
-            return int(min)
+            return php_int(min)
         # end if
         #// 
         #// Initialize variables to 0
@@ -178,6 +178,6 @@ if (not php_is_callable("random_int")):
                 break
             # end if
         # end while
-        return int(val)
+        return php_int(val)
     # end def random_int
 # end if

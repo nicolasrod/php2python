@@ -163,7 +163,7 @@ class WP_REST_Autosaves_Controller(WP_REST_Revisions_Controller):
     #//
     def get_item(self, request=None):
         
-        parent_id = int(request.get_param("parent"))
+        parent_id = php_int(request.get_param("parent"))
         if parent_id <= 0:
             return php_new_class("WP_Error", lambda : WP_Error("rest_post_invalid_id", __("Invalid post parent ID."), Array({"status": 404})))
         # end if
@@ -230,7 +230,7 @@ class WP_REST_Autosaves_Controller(WP_REST_Revisions_Controller):
     #//
     def create_post_autosave(self, post_data=None):
         
-        post_id = int(post_data["ID"])
+        post_id = php_int(post_data["ID"])
         post = get_post(post_id)
         if is_wp_error(post):
             return post

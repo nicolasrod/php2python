@@ -61,7 +61,7 @@ def redirect_canonical(requested_url=None, do_redirect=True, *args_):
     #// If we're not in wp-admin and the post has been published and preview nonce
     #// is non-existent or invalid then no need for preview in query.
     if is_preview() and get_query_var("p") and "publish" == get_post_status(get_query_var("p")):
-        if (not (php_isset(lambda : PHP_REQUEST["preview_id"]))) or (not (php_isset(lambda : PHP_REQUEST["preview_nonce"]))) or (not wp_verify_nonce(PHP_REQUEST["preview_nonce"], "post_preview_" + int(PHP_REQUEST["preview_id"]))):
+        if (not (php_isset(lambda : PHP_REQUEST["preview_id"]))) or (not (php_isset(lambda : PHP_REQUEST["preview_nonce"]))) or (not wp_verify_nonce(PHP_REQUEST["preview_nonce"], "post_preview_" + php_int(PHP_REQUEST["preview_id"]))):
             wp_query.is_preview = False
         # end if
     # end if
@@ -150,7 +150,7 @@ def redirect_canonical(requested_url=None, do_redirect=True, *args_):
             # end if
         # end if
         if get_query_var("page") and wp_query.post and False != php_strpos(wp_query.post.post_content, "<!--nextpage-->"):
-            redirect["path"] = php_rtrim(redirect["path"], int(get_query_var("page")) + "/")
+            redirect["path"] = php_rtrim(redirect["path"], php_int(get_query_var("page")) + "/")
             redirect["query"] = remove_query_arg("page", redirect["query"])
             redirect_url = get_permalink(wp_query.post.ID)
         # end if
@@ -241,7 +241,7 @@ def redirect_canonical(requested_url=None, do_redirect=True, *args_):
             # end for
             obj = wp_query.get_queried_object()
             if term_count <= 1 and (not php_empty(lambda : obj.term_id)):
-                tax_url = get_term_link(int(obj.term_id), obj.taxonomy)
+                tax_url = get_term_link(php_int(obj.term_id), obj.taxonomy)
                 if tax_url and (not is_wp_error(tax_url)):
                     if (not php_empty(lambda : redirect["query"])):
                         #// Strip taxonomy query vars off the URL.

@@ -167,11 +167,11 @@ class WP_REST_Terms_Controller(WP_REST_Controller):
         # end for
         response = rest_ensure_response(response)
         #// Store pagination values for headers.
-        per_page = int(prepared_args["number"])
-        page = ceil(int(prepared_args["offset"]) / per_page + 1)
-        response.header("X-WP-Total", int(total_terms))
+        per_page = php_int(prepared_args["number"])
+        page = ceil(php_int(prepared_args["offset"]) / per_page + 1)
+        response.header("X-WP-Total", php_int(total_terms))
         max_pages = ceil(total_terms / per_page)
-        response.header("X-WP-TotalPages", int(max_pages))
+        response.header("X-WP-TotalPages", php_int(max_pages))
         base = add_query_arg(urlencode_deep(request.get_query_params()), rest_url(self.namespace + "/" + self.rest_base))
         if page > 1:
             prev_page = page - 1
@@ -202,10 +202,10 @@ class WP_REST_Terms_Controller(WP_REST_Controller):
         if (not self.check_is_taxonomy_allowed(self.taxonomy)):
             return error
         # end if
-        if int(id) <= 0:
+        if php_int(id) <= 0:
             return error
         # end if
-        term = get_term(int(id), self.taxonomy)
+        term = get_term(php_int(id), self.taxonomy)
         if php_empty(lambda : term) or term.taxonomy != self.taxonomy:
             return error
         # end if
@@ -280,7 +280,7 @@ class WP_REST_Terms_Controller(WP_REST_Controller):
             if (not is_taxonomy_hierarchical(self.taxonomy)):
                 return php_new_class("WP_Error", lambda : WP_Error("rest_taxonomy_not_hierarchical", __("Cannot set parent term, taxonomy is not hierarchical."), Array({"status": 400})))
             # end if
-            parent = get_term(int(request["parent"]), self.taxonomy)
+            parent = get_term(php_int(request["parent"]), self.taxonomy)
             if (not parent):
                 return php_new_class("WP_Error", lambda : WP_Error("rest_term_invalid", __("Parent term does not exist."), Array({"status": 400})))
             # end if
@@ -380,7 +380,7 @@ class WP_REST_Terms_Controller(WP_REST_Controller):
             if (not is_taxonomy_hierarchical(self.taxonomy)):
                 return php_new_class("WP_Error", lambda : WP_Error("rest_taxonomy_not_hierarchical", __("Cannot set parent term, taxonomy is not hierarchical."), Array({"status": 400})))
             # end if
-            parent = get_term(int(request["parent"]), self.taxonomy)
+            parent = get_term(php_int(request["parent"]), self.taxonomy)
             if (not parent):
                 return php_new_class("WP_Error", lambda : WP_Error("rest_term_invalid", __("Parent term does not exist."), Array({"status": 400})))
             # end if
@@ -446,7 +446,7 @@ class WP_REST_Terms_Controller(WP_REST_Controller):
         if is_wp_error(term):
             return term
         # end if
-        force = bool(request["force"]) if (php_isset(lambda : request["force"])) else False
+        force = php_bool(request["force"]) if (php_isset(lambda : request["force"])) else False
         #// We don't support trashing for terms.
         if (not force):
             return php_new_class("WP_Error", lambda : WP_Error("rest_trash_not_supported", php_sprintf(__("Terms do not support trashing. Set '%s' to delete."), "force=true"), Array({"status": 501})))
@@ -499,7 +499,7 @@ class WP_REST_Terms_Controller(WP_REST_Controller):
         # end if
         if (php_isset(lambda : request["parent"])) and (not php_empty(lambda : schema["properties"]["parent"])):
             parent_term_id = 0
-            requested_parent = int(request["parent"])
+            requested_parent = php_int(request["parent"])
             if requested_parent:
                 parent_term = get_term(requested_parent, self.taxonomy)
                 if type(parent_term).__name__ == "WP_Term":
@@ -534,10 +534,10 @@ class WP_REST_Terms_Controller(WP_REST_Controller):
         fields = self.get_fields_for_response(request)
         data = Array()
         if php_in_array("id", fields, True):
-            data["id"] = int(item.term_id)
+            data["id"] = php_int(item.term_id)
         # end if
         if php_in_array("count", fields, True):
-            data["count"] = int(item.count)
+            data["count"] = php_int(item.count)
         # end if
         if php_in_array("description", fields, True):
             data["description"] = item.description
@@ -555,7 +555,7 @@ class WP_REST_Terms_Controller(WP_REST_Controller):
             data["taxonomy"] = item.taxonomy
         # end if
         if php_in_array("parent", fields, True):
-            data["parent"] = int(item.parent)
+            data["parent"] = php_int(item.parent)
         # end if
         if php_in_array("meta", fields, True):
             data["meta"] = self.meta.get_value(item.term_id, request)
@@ -593,7 +593,7 @@ class WP_REST_Terms_Controller(WP_REST_Controller):
         base = self.namespace + "/" + self.rest_base
         links = Array({"self": Array({"href": rest_url(trailingslashit(base) + term.term_id)})}, {"collection": Array({"href": rest_url(base)})}, {"about": Array({"href": rest_url(php_sprintf("wp/v2/taxonomies/%s", self.taxonomy))})})
         if term.parent:
-            parent_term = get_term(int(term.parent), term.taxonomy)
+            parent_term = get_term(php_int(term.parent), term.taxonomy)
             if parent_term:
                 links["up"] = Array({"href": rest_url(trailingslashit(base) + parent_term.term_id), "embeddable": True})
             # end if

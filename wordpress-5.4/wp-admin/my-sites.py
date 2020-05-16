@@ -31,9 +31,9 @@ blogs = get_blogs_of_user(current_user.ID)
 updated = False
 if "updateblogsettings" == action and (php_isset(lambda : PHP_POST["primary_blog"])):
     check_admin_referer("update-my-sites")
-    blog = get_site(int(PHP_POST["primary_blog"]))
+    blog = get_site(php_int(PHP_POST["primary_blog"]))
     if blog and (php_isset(lambda : blog.domain)):
-        update_user_option(current_user.ID, "primary_blog", int(PHP_POST["primary_blog"]), True)
+        update_user_option(current_user.ID, "primary_blog", php_int(PHP_POST["primary_blog"]), True)
         updated = True
     else:
         wp_die(__("The primary site you chose does not exist."))

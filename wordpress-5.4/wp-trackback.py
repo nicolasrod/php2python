@@ -114,7 +114,7 @@ if (not php_empty(lambda : tb_url)) and (not php_empty(lambda : title)):
     # end if
     title = wp_html_excerpt(title, 250, "&#8230;")
     excerpt = wp_html_excerpt(excerpt, 252, "&#8230;")
-    comment_post_ID = int(tb_id)
+    comment_post_ID = php_int(tb_id)
     comment_author = blog_name
     comment_author_email = ""
     comment_author_url = tb_url

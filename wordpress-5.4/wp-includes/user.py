@@ -385,7 +385,7 @@ def get_current_user_id(*args_):
         return 0
     # end if
     user = wp_get_current_user()
-    return int(user.ID) if (php_isset(lambda : user.ID)) else 0
+    return php_int(user.ID) if (php_isset(lambda : user.ID)) else 0
 # end def get_current_user_id
 #// 
 #// Retrieve user option that can be either per Site or per Network.
@@ -535,7 +535,7 @@ def get_blogs_of_user(user_id=None, all=False, *args_):
     
     global wpdb
     php_check_if_defined("wpdb")
-    user_id = int(user_id)
+    user_id = php_int(user_id)
     #// Logged out users can't have sites.
     if php_empty(lambda : user_id):
         return Array()
@@ -592,7 +592,7 @@ def get_blogs_of_user(user_id=None, all=False, *args_):
         if (not php_is_numeric(site_id)):
             continue
         # end if
-        site_ids[-1] = int(site_id)
+        site_ids[-1] = php_int(site_id)
     # end for
     sites = Array()
     if (not php_empty(lambda : site_ids)):
@@ -634,8 +634,8 @@ def is_user_member_of_blog(user_id=0, blog_id=0, *args_):
     
     global wpdb
     php_check_if_defined("wpdb")
-    user_id = int(user_id)
-    blog_id = int(blog_id)
+    user_id = php_int(user_id)
+    blog_id = php_int(blog_id)
     if php_empty(lambda : user_id):
         user_id = get_current_user_id()
     # end if
@@ -814,16 +814,16 @@ def count_users(strategy="time", site_id=None, *args_):
         col = 0
         role_counts = Array()
         for this_role,name in avail_roles:
-            count = int(row[col])
+            count = php_int(row[col])
             col += 1
             if count > 0:
                 role_counts[this_role] = count
             # end if
         # end for
-        role_counts["none"] = int(row[col])
+        role_counts["none"] = php_int(row[col])
         col += 1
         #// Get the meta_value index from the end of the result set.
-        total_users = int(row[col])
+        total_users = php_int(row[col])
         result["total_users"] = total_users
         result["avail_roles"] = role_counts
     else:
@@ -888,8 +888,8 @@ def setup_userdata(for_user_id=0, *args_):
         user_identity = ""
         return
     # end if
-    user_ID = int(user.ID)
-    user_level = int(user.user_level)
+    user_ID = php_int(user.ID)
+    user_level = php_int(user.user_level)
     userdata = user
     user_login = user.user_login
     user_email = user.user_email
@@ -1004,9 +1004,9 @@ def wp_dropdown_users(args="", *args_):
         # end if
         if parsed_args["include_selected"] and parsed_args["selected"] > 0:
             found_selected = False
-            parsed_args["selected"] = int(parsed_args["selected"])
+            parsed_args["selected"] = php_int(parsed_args["selected"])
             for user in users:
-                user.ID = int(user.ID)
+                user.ID = php_int(user.ID)
                 if user.ID == parsed_args["selected"]:
                     found_selected = True
                 # end if
@@ -1062,7 +1062,7 @@ def sanitize_user_field(field=None, value=None, user_id=None, context=None, *arg
     
     int_fields = Array("ID")
     if php_in_array(field, int_fields):
-        value = int(value)
+        value = php_int(value)
     # end if
     if "raw" == context:
         return value
@@ -1341,7 +1341,7 @@ def wp_insert_user(userdata=None, *args_):
     # end if
     #// Are we updating or creating?
     if (not php_empty(lambda : userdata["ID"])):
-        ID = int(userdata["ID"])
+        ID = php_int(userdata["ID"])
         update = True
         old_user_data = get_userdata(ID)
         if (not old_user_data):
@@ -1455,7 +1455,7 @@ def wp_insert_user(userdata=None, *args_):
     if (not php_empty(lambda : userdata["spam"])) and (not is_multisite()):
         return php_new_class("WP_Error", lambda : WP_Error("no_spam", __("Sorry, marking a user as spam is only supported on Multisite.")))
     # end if
-    spam = 0 if php_empty(lambda : userdata["spam"]) else bool(userdata["spam"])
+    spam = 0 if php_empty(lambda : userdata["spam"]) else php_bool(userdata["spam"])
     #// Store values to save in user meta.
     meta = Array()
     nickname = user_login if php_empty(lambda : userdata["nickname"]) else userdata["nickname"]
@@ -1523,7 +1523,7 @@ def wp_insert_user(userdata=None, *args_):
     meta["comment_shortcuts"] = "false" if php_empty(lambda : userdata["comment_shortcuts"]) or "false" == userdata["comment_shortcuts"] else "true"
     admin_color = "fresh" if php_empty(lambda : userdata["admin_color"]) else userdata["admin_color"]
     meta["admin_color"] = php_preg_replace("|[^a-z0-9 _.\\-@]|i", "", admin_color)
-    meta["use_ssl"] = 0 if php_empty(lambda : userdata["use_ssl"]) else bool(userdata["use_ssl"])
+    meta["use_ssl"] = 0 if php_empty(lambda : userdata["use_ssl"]) else php_bool(userdata["use_ssl"])
     meta["show_admin_bar_front"] = "true" if php_empty(lambda : userdata["show_admin_bar_front"]) else userdata["show_admin_bar_front"]
     meta["locale"] = userdata["locale"] if (php_isset(lambda : userdata["locale"])) else ""
     compacted = compact("user_pass", "user_nicename", "user_email", "user_url", "user_registered", "user_activation_key", "display_name")
@@ -1556,7 +1556,7 @@ def wp_insert_user(userdata=None, *args_):
     #// @param bool     $update Whether the user is being updated rather than created.
     #// @param int|null $id     ID of the user to be updated, or NULL if the user is being created.
     #//
-    data = apply_filters("wp_pre_insert_user_data", data, update, int(ID) if update else None)
+    data = apply_filters("wp_pre_insert_user_data", data, update, php_int(ID) if update else None)
     if php_empty(lambda : data) or (not php_is_array(data)):
         return php_new_class("WP_Error", lambda : WP_Error("empty_data", __("Not enough data to create this user.")))
     # end if
@@ -1565,10 +1565,10 @@ def wp_insert_user(userdata=None, *args_):
             data["user_activation_key"] = ""
         # end if
         wpdb.update(wpdb.users, data, compact("ID"))
-        user_id = int(ID)
+        user_id = php_int(ID)
     else:
         wpdb.insert(wpdb.users, data)
-        user_id = int(wpdb.insert_id)
+        user_id = php_int(wpdb.insert_id)
     # end if
     user = php_new_class("WP_User", lambda : WP_User(user_id))
     #// 
@@ -1681,7 +1681,7 @@ def wp_update_user(userdata=None, *args_):
     elif type(userdata).__name__ == "WP_User":
         userdata = userdata.to_array()
     # end if
-    ID = int(userdata["ID"]) if (php_isset(lambda : userdata["ID"])) else 0
+    ID = php_int(userdata["ID"]) if (php_isset(lambda : userdata["ID"])) else 0
     if (not ID):
         return php_new_class("WP_Error", lambda : WP_Error("invalid_user_id", __("Invalid user ID.")))
     # end if
@@ -2677,7 +2677,7 @@ def _wp_privacy_send_request_confirmation_notification(request_id=None, *args_):
     if (not php_is_a(request, "WP_User_Request")) or "request-confirmed" != request.status:
         return
     # end if
-    already_notified = bool(get_post_meta(request_id, "_wp_admin_notified", True))
+    already_notified = php_bool(get_post_meta(request_id, "_wp_admin_notified", True))
     if already_notified:
         return
     # end if
@@ -2810,7 +2810,7 @@ def _wp_privacy_send_erasure_fulfillment_notification(request_id=None, *args_):
     if (not php_is_a(request, "WP_User_Request")) or "request-completed" != request.status:
         return
     # end if
-    already_notified = bool(get_post_meta(request_id, "_wp_user_notified", True))
+    already_notified = php_bool(get_post_meta(request_id, "_wp_user_notified", True))
     if already_notified:
         return
     # end if
@@ -3217,7 +3217,7 @@ def wp_validate_user_request_key(request_id=None, key=None, *args_):
     #// 
     #// @param int $expiration The expiration time in seconds.
     #//
-    expiration_duration = int(apply_filters("user_request_key_expiration", DAY_IN_SECONDS))
+    expiration_duration = php_int(apply_filters("user_request_key_expiration", DAY_IN_SECONDS))
     expiration_time = key_request_time + expiration_duration
     if (not wp_hasher.checkpassword(key, saved_key)):
         return php_new_class("WP_Error", lambda : WP_Error("invalid_key", __("Invalid key.")))

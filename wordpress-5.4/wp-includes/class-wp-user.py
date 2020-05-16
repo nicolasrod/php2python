@@ -107,7 +107,7 @@ class WP_User():
     def init(self, data=None, site_id=""):
         
         self.data = data
-        self.ID = int(data.ID)
+        self.ID = php_int(data.ID)
         self.for_site(site_id)
     # end def init
     #// 

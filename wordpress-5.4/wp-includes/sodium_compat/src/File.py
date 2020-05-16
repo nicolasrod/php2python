@@ -316,7 +316,7 @@ class ParagonIE_Sodium_File(ParagonIE_Sodium_Core_Util):
             raise php_new_class("TypeError", lambda : TypeError("Argument 1 must be a string, " + gettype(filePath) + " given."))
         # end if
         if (not php_is_string(key)):
-            if php_is_null(key):
+            if is_null(key):
                 key = ""
             else:
                 raise php_new_class("TypeError", lambda : TypeError("Argument 2 must be a string, " + gettype(key) + " given."))
@@ -326,7 +326,7 @@ class ParagonIE_Sodium_File(ParagonIE_Sodium_Core_Util):
             if (not php_is_numeric(outputLength)):
                 raise php_new_class("TypeError", lambda : TypeError("Argument 3 must be an integer, " + gettype(outputLength) + " given."))
             # end if
-            outputLength = int(outputLength)
+            outputLength = php_int(outputLength)
         # end if
         #// Input validation:
         if (not php_empty(lambda : key)):
@@ -1275,6 +1275,6 @@ class ParagonIE_Sodium_File(ParagonIE_Sodium_Core_Util):
         if (not php_is_int(return_)):
             raise php_new_class("SodiumException", lambda : SodiumException("ftell() returned false"))
         # end if
-        return int(return_)
+        return php_int(return_)
     # end def ftell
 # end class ParagonIE_Sodium_File

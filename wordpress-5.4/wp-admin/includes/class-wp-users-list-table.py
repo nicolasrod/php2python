@@ -322,7 +322,7 @@ class WP_Users_List_Table(WP_List_Table):
     def single_row(self, user_object=None, style="", role="", numposts=0):
         
         if (not type(user_object).__name__ == "WP_User"):
-            user_object = get_userdata(int(user_object))
+            user_object = get_userdata(php_int(user_object))
         # end if
         user_object.filter = "display"
         email = user_object.user_email

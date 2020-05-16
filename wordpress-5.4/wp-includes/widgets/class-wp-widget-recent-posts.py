@@ -110,8 +110,8 @@ class WP_Widget_Recent_Posts(WP_Widget):
         
         instance = old_instance
         instance["title"] = sanitize_text_field(new_instance["title"])
-        instance["number"] = int(new_instance["number"])
-        instance["show_date"] = bool(new_instance["show_date"]) if (php_isset(lambda : new_instance["show_date"])) else False
+        instance["number"] = php_int(new_instance["number"])
+        instance["show_date"] = php_bool(new_instance["show_date"]) if (php_isset(lambda : new_instance["show_date"])) else False
         return instance
     # end def update
     #// 
@@ -125,7 +125,7 @@ class WP_Widget_Recent_Posts(WP_Widget):
         
         title = esc_attr(instance["title"]) if (php_isset(lambda : instance["title"])) else ""
         number = absint(instance["number"]) if (php_isset(lambda : instance["number"])) else 5
-        show_date = bool(instance["show_date"]) if (php_isset(lambda : instance["show_date"])) else False
+        show_date = php_bool(instance["show_date"]) if (php_isset(lambda : instance["show_date"])) else False
         php_print("     <p><label for=\"")
         php_print(self.get_field_id("title"))
         php_print("\">")

@@ -104,7 +104,7 @@ class WP_Widget_Tag_Cloud(WP_Widget):
         
         current_taxonomy = self._get_current_taxonomy(instance)
         title_id = self.get_field_id("title")
-        count = bool(instance["count"]) if (php_isset(lambda : instance["count"])) else False
+        count = php_bool(instance["count"]) if (php_isset(lambda : instance["count"])) else False
         instance["title"] = esc_attr(instance["title"]) if (not php_empty(lambda : instance["title"])) else ""
         php_print("<p><label for=\"" + title_id + "\">" + __("Title:") + "</label>\n            <input type=\"text\" class=\"widefat\" id=\"" + title_id + "\" name=\"" + self.get_field_name("title") + "\" value=\"" + instance["title"] + "\" />\n       </p>")
         taxonomies = get_taxonomies(Array({"show_tagcloud": True}), "object")

@@ -145,7 +145,7 @@ class WP_Customize_Widgets():
         widget_setting_ids = Array()
         incoming_setting_ids = php_array_keys(self.manager.unsanitized_post_values())
         for setting_id in incoming_setting_ids:
-            if (not php_is_null(self.get_setting_type(setting_id))):
+            if (not is_null(self.get_setting_type(setting_id))):
                 widget_setting_ids[-1] = setting_id
             # end if
         # end for
@@ -421,7 +421,7 @@ class WP_Customize_Widgets():
         
         parsed_widget_id = self.parse_widget_id(widget_id)
         setting_id = php_sprintf("widget_%s", parsed_widget_id["id_base"])
-        if (not php_is_null(parsed_widget_id["number"])):
+        if (not is_null(parsed_widget_id["number"])):
             setting_id += php_sprintf("[%d]", parsed_widget_id["number"])
         # end if
         return setting_id
@@ -1144,11 +1144,11 @@ class WP_Customize_Widgets():
                 return php_new_class("WP_Error", lambda : WP_Error("widget_setting_malformed"))
             # end if
             instance = self.sanitize_widget_instance(sanitized_widget_setting)
-            if php_is_null(instance):
+            if is_null(instance):
                 self.stop_capturing_option_updates()
                 return php_new_class("WP_Error", lambda : WP_Error("widget_setting_unsanitized"))
             # end if
-            if (not php_is_null(parsed_id["number"])):
+            if (not is_null(parsed_id["number"])):
                 value = Array()
                 value[parsed_id["number"]] = instance
                 key = "widget-" + parsed_id["id_base"]

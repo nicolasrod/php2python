@@ -75,7 +75,7 @@ class getid3_lib():
             truncatednumber = 0
         # end if
         if self.intvaluesupported(truncatednumber):
-            truncatednumber = int(truncatednumber)
+            truncatednumber = php_int(truncatednumber)
         # end if
         return truncatednumber
     # end def trunc
@@ -104,13 +104,13 @@ class getid3_lib():
     def castasint(self, floatnum=None):
         
         #// convert to float if not already
-        floatnum = float(floatnum)
+        floatnum = php_float(floatnum)
         #// convert a float to type int, only if possible
         if self.trunc(floatnum) == floatnum:
             #// it's not floating point
             if self.intvaluesupported(floatnum):
                 #// it's within int range
-                floatnum = int(floatnum)
+                floatnum = php_int(floatnum)
             # end if
         # end if
         return floatnum
@@ -194,7 +194,7 @@ class getid3_lib():
             # end if
         # end while
         binarypointnumber = php_str_pad(php_substr(binarypointnumber, 0, maxbits + 2), maxbits + 2, "0", STR_PAD_RIGHT)
-        return Array({"normalized": binarypointnumber, "exponent": int(exponent)})
+        return Array({"normalized": binarypointnumber, "exponent": php_int(exponent)})
     # end def normalizebinarypoint
     #// 
     #// @link http://www.scri.fsu.edu/~jac/MAD3401/Backgrnd/binary.html
@@ -217,7 +217,7 @@ class getid3_lib():
                 break
             # end if
             floatpart *= 2
-            pointbitstring += str(self.trunc(floatpart))
+            pointbitstring += php_str(self.trunc(floatpart))
             floatpart -= self.trunc(floatpart)
         # end while
         binarypointnumber = decbin(intpart) + "." + pointbitstring
@@ -358,7 +358,7 @@ class getid3_lib():
                 floatvalue *= -1
             # end if
         # end if
-        return float(floatvalue)
+        return php_float(floatvalue)
     # end def bigendian2float
     #// 
     #// @param string $byteword
@@ -520,7 +520,7 @@ class getid3_lib():
         i = 0
         while i < php_strlen(binstring):
             
-            decvalue += int(php_substr(binstring, php_strlen(binstring) - i - 1, 1)) * pow(2, i)
+            decvalue += php_int(php_substr(binstring, php_strlen(binstring) - i - 1, 1)) * pow(2, i)
             i += 1
         # end while
         return self.castasint(decvalue * signmult)
@@ -688,9 +688,9 @@ class getid3_lib():
         
         sign = "-" if seconds < 0 else ""
         seconds = round(abs(seconds))
-        H = int(floor(seconds / 3600))
-        M = int(floor(seconds - 3600 * H / 60))
-        S = int(round(seconds - 3600 * H - 60 * M))
+        H = php_int(floor(seconds / 3600))
+        M = php_int(floor(seconds - 3600 * H / 60))
+        S = php_int(round(seconds - 3600 * H - 60 * M))
         return sign + H + ":" if H else "" + php_str_pad(M, 2, "0", STR_PAD_LEFT) if H else php_intval(M) + ":" + php_str_pad(S, 2, 0, STR_PAD_LEFT)
     # end def playtimestring
     #// 
@@ -713,7 +713,7 @@ class getid3_lib():
     @classmethod
     def fixedpoint8_8(self, rawdata=None):
         
-        return self.bigendian2int(php_substr(rawdata, 0, 1)) + float(self.bigendian2int(php_substr(rawdata, 1, 1)) / pow(2, 8))
+        return self.bigendian2int(php_substr(rawdata, 0, 1)) + php_float(self.bigendian2int(php_substr(rawdata, 1, 1)) / pow(2, 8))
     # end def fixedpoint8_8
     #// 
     #// @param string $rawdata
@@ -723,7 +723,7 @@ class getid3_lib():
     @classmethod
     def fixedpoint16_16(self, rawdata=None):
         
-        return self.bigendian2int(php_substr(rawdata, 0, 2)) + float(self.bigendian2int(php_substr(rawdata, 2, 2)) / pow(2, 16))
+        return self.bigendian2int(php_substr(rawdata, 0, 2)) + php_float(self.bigendian2int(php_substr(rawdata, 2, 2)) / pow(2, 16))
     # end def fixedpoint16_16
     #// 
     #// @param string $rawdata
@@ -734,7 +734,7 @@ class getid3_lib():
     def fixedpoint2_30(self, rawdata=None):
         
         binarystring = self.bigendian2bin(rawdata)
-        return self.bin2dec(php_substr(binarystring, 0, 2)) + float(self.bin2dec(php_substr(binarystring, 2, 30)) / pow(2, 30))
+        return self.bin2dec(php_substr(binarystring, 0, 2)) + php_float(self.bin2dec(php_substr(binarystring, 2, 30)) / pow(2, 30))
     # end def fixedpoint2_30
     #// 
     #// @param string $ArrayPath
@@ -1432,7 +1432,7 @@ class getid3_lib():
     @classmethod
     def multibytecharstring2html(self, string=None, charset="ISO-8859-1"):
         
-        string = str(string)
+        string = php_str(string)
         #// in case trying to pass a numeric (float, int) string, would otherwise return an empty string
         HTMLstring = ""
         for case in Switch(php_strtolower(charset)):
@@ -1632,7 +1632,7 @@ class getid3_lib():
     @classmethod
     def rgadadjustmentlookup(self, rawadjustment=None, signbit=None):
         
-        adjustment = float(rawadjustment) / 10
+        adjustment = php_float(rawadjustment) / 10
         if signbit == 1:
             adjustment *= -1
         # end if
@@ -1922,7 +1922,7 @@ class getid3_lib():
         if (php_isset(lambda : commandline)):
             output = php_trim(os.system("commandline"))
             if ctype_digit(output):
-                filesize = float(output)
+                filesize = php_float(output)
             # end if
         # end if
         return filesize

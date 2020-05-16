@@ -33,8 +33,8 @@ messages["post_tag"] = Array({0: "", 1: __("Tag added."), 2: __("Tag deleted."),
 #//
 messages = apply_filters("term_updated_messages", messages)
 message = False
-if (php_isset(lambda : PHP_REQUEST["message"])) and int(PHP_REQUEST["message"]):
-    msg = int(PHP_REQUEST["message"])
+if (php_isset(lambda : PHP_REQUEST["message"])) and php_int(PHP_REQUEST["message"]):
+    msg = php_int(PHP_REQUEST["message"])
     if (php_isset(lambda : messages[taxonomy][msg])):
         message = messages[taxonomy][msg]
     elif (not (php_isset(lambda : messages[taxonomy]))) and (php_isset(lambda : messages["_item"][msg])):

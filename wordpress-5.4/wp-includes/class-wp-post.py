@@ -70,7 +70,7 @@ class WP_Post():
         
         global wpdb
         php_check_if_defined("wpdb")
-        post_id = int(post_id)
+        post_id = php_int(post_id)
         if (not post_id):
             return False
         # end if

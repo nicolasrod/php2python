@@ -34,7 +34,7 @@ if '__PHP2PY_LOADED__' not in globals():
 def _wp_http_get_object(*args_):
     
     http = None
-    if php_is_null(http):
+    if is_null(http):
         http = php_new_class("WP_Http", lambda : WP_Http())
     # end if
     return http
@@ -375,7 +375,7 @@ def wp_http_supports(capabilities=Array(), url=None, *args_):
             capabilities["ssl"] = True
         # end if
     # end if
-    return bool(http._get_first_available_transport(capabilities))
+    return php_bool(http._get_first_available_transport(capabilities))
 # end def wp_http_supports
 #// 
 #// Get the HTTP Origin of the current request.
@@ -606,7 +606,7 @@ def ms_allowed_http_request_hosts(is_external=None, host=None, *args_):
     if (php_isset(lambda : queried[host])):
         return queried[host]
     # end if
-    queried[host] = bool(wpdb.get_var(wpdb.prepare(str("SELECT domain FROM ") + str(wpdb.blogs) + str(" WHERE domain = %s LIMIT 1"), host)))
+    queried[host] = php_bool(wpdb.get_var(wpdb.prepare(str("SELECT domain FROM ") + str(wpdb.blogs) + str(" WHERE domain = %s LIMIT 1"), host)))
     return queried[host]
 # end def ms_allowed_http_request_hosts
 #// 

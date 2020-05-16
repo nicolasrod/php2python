@@ -119,7 +119,7 @@ if (php_isset(lambda : PHP_REQUEST["action"])):
             else:
                 location = network_admin_url("users.php")
                 if (not php_empty(lambda : PHP_REQUEST["paged"])):
-                    location = add_query_arg("paged", int(PHP_REQUEST["paged"]), location)
+                    location = add_query_arg("paged", php_int(PHP_REQUEST["paged"]), location)
                 # end if
                 wp_redirect(location)
             # end if
@@ -137,7 +137,7 @@ if (php_isset(lambda : PHP_REQUEST["action"])):
                             continue
                         # end if
                         if (not php_empty(lambda : PHP_POST["delete"])) and "reassign" == PHP_POST["delete"][blogid][id]:
-                            remove_user_from_blog(id, blogid, int(user_id))
+                            remove_user_from_blog(id, blogid, php_int(user_id))
                         else:
                             remove_user_from_blog(id, blogid)
                         # end if

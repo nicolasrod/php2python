@@ -53,7 +53,7 @@ def comment_exists(comment_author=None, comment_date=None, timezone="blog", *arg
 #//
 def edit_comment(*args_):
     global PHP_POST
-    if (not current_user_can("edit_comment", int(PHP_POST["comment_ID"]))):
+    if (not current_user_can("edit_comment", php_int(PHP_POST["comment_ID"]))):
         wp_die(__("Sorry, you are not allowed to edit comments on this post."))
     # end if
     if (php_isset(lambda : PHP_POST["newcomment_author"])):
@@ -72,7 +72,7 @@ def edit_comment(*args_):
         PHP_POST["comment_content"] = PHP_POST["content"]
     # end if
     if (php_isset(lambda : PHP_POST["comment_ID"])):
-        PHP_POST["comment_ID"] = int(PHP_POST["comment_ID"])
+        PHP_POST["comment_ID"] = php_int(PHP_POST["comment_ID"])
     # end if
     for timeunit in Array("aa", "mm", "jj", "hh", "mn"):
         if (not php_empty(lambda : PHP_POST["hidden_" + timeunit])) and PHP_POST["hidden_" + timeunit] != PHP_POST[timeunit]:
@@ -109,8 +109,8 @@ def get_comment_to_edit(id=None, *args_):
     if (not comment):
         return False
     # end if
-    comment.comment_ID = int(comment.comment_ID)
-    comment.comment_post_ID = int(comment.comment_post_ID)
+    comment.comment_ID = php_int(comment.comment_ID)
+    comment.comment_post_ID = php_int(comment.comment_post_ID)
     comment.comment_content = format_to_edit(comment.comment_content)
     #// 
     #// Filters the comment content before editing.

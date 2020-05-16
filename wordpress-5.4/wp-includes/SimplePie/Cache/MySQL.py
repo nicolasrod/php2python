@@ -237,9 +237,9 @@ class SimplePie_Cache_MySQL(SimplePie_Cache_DB):
         if query.execute() and row:
             data = unserialize(row[1])
             if (php_isset(lambda : self.options["items"][0])):
-                items = int(self.options["items"][0])
+                items = php_int(self.options["items"][0])
             else:
-                items = int(row[0])
+                items = php_int(row[0])
             # end if
             if items != 0:
                 if (php_isset(lambda : data["child"][SIMPLEPIE_NAMESPACE_ATOM_10]["feed"][0])):

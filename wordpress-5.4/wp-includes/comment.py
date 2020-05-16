@@ -364,7 +364,7 @@ def get_comment_count(post_id=0, *args_):
     
     global wpdb
     php_check_if_defined("wpdb")
-    post_id = int(post_id)
+    post_id = php_int(post_id)
     where = ""
     if post_id > 0:
         where = wpdb.prepare("WHERE comment_post_ID = %d", post_id)
@@ -888,10 +888,10 @@ def get_comment_pages_count(comments=None, per_page=None, threaded=None, *args_)
         return 1
     # end if
     if (not (php_isset(lambda : per_page))):
-        per_page = int(get_query_var("comments_per_page"))
+        per_page = php_int(get_query_var("comments_per_page"))
     # end if
     if 0 == per_page:
-        per_page = int(get_option("comments_per_page"))
+        per_page = php_int(get_option("comments_per_page"))
     # end if
     if 0 == per_page:
         return 1
@@ -1005,7 +1005,7 @@ def get_page_of_comment(comment_ID=None, args=Array(), *args_):
     #// }
     #// @param int $comment_ID ID of the comment.
     #//
-    return apply_filters("get_page_of_comment", int(page), args, original_args, comment_ID)
+    return apply_filters("get_page_of_comment", php_int(page), args, original_args, comment_ID)
 # end def get_page_of_comment
 #// 
 #// Retrieves the maximum character lengths for the comment form fields.
@@ -1029,10 +1029,10 @@ def wp_get_comment_fields_max_lengths(*args_):
             if is_wp_error(col_length):
                 break
             # end if
-            if (not php_is_array(col_length)) and int(col_length) > 0:
-                max_length = int(col_length)
+            if (not php_is_array(col_length)) and php_int(col_length) > 0:
+                max_length = php_int(col_length)
             elif php_is_array(col_length) and (php_isset(lambda : col_length["length"])) and php_intval(col_length["length"]) > 0:
-                max_length = int(col_length["length"])
+                max_length = php_int(col_length["length"])
                 if (not php_empty(lambda : col_length["type"])) and "byte" == col_length["type"]:
                     max_length = max_length - 10
                 # end if
@@ -1155,7 +1155,7 @@ def wp_blacklist_check(author=None, email=None, url=None, comment=None, user_ip=
 #//
 def wp_count_comments(post_id=0, *args_):
     
-    post_id = int(post_id)
+    post_id = php_int(post_id)
     #// 
     #// Filters the comments count for a given post or the whole site.
     #// 
@@ -1323,7 +1323,7 @@ def wp_untrash_comment(comment_id=None, *args_):
     #// @param WP_Comment $comment    The comment to be untrashed.
     #//
     do_action("untrash_comment", comment.comment_ID, comment)
-    status = str(get_comment_meta(comment.comment_ID, "_wp_trash_meta_status", True))
+    status = php_str(get_comment_meta(comment.comment_ID, "_wp_trash_meta_status", True))
     if php_empty(lambda : status):
         status = "0"
     # end if
@@ -1411,7 +1411,7 @@ def wp_unspam_comment(comment_id=None, *args_):
     #// @param WP_Comment $comment    The comment to be unmarked as spam.
     #//
     do_action("unspam_comment", comment.comment_ID, comment)
-    status = str(get_comment_meta(comment.comment_ID, "_wp_trash_meta_status", True))
+    status = php_str(get_comment_meta(comment.comment_ID, "_wp_trash_meta_status", True))
     if php_empty(lambda : status):
         status = "0"
     # end if
@@ -1614,7 +1614,7 @@ def wp_get_unapproved_comment_author_email(*args_):
     
     commenter_email = ""
     if (not php_empty(lambda : PHP_REQUEST["unapproved"])) and (not php_empty(lambda : PHP_REQUEST["moderation-hash"])):
-        comment_id = int(PHP_REQUEST["unapproved"])
+        comment_id = php_int(PHP_REQUEST["unapproved"])
         comment = get_comment(comment_id)
         if comment and hash_equals(PHP_REQUEST["moderation-hash"], wp_hash(comment.comment_date_gmt)):
             commenter_email = comment.comment_author_email
@@ -1684,7 +1684,7 @@ def wp_insert_comment(commentdata=None, *args_):
     if (not wpdb.insert(wpdb.comments, compacted)):
         return False
     # end if
-    id = int(wpdb.insert_id)
+    id = php_int(wpdb.insert_id)
     if 1 == comment_approved:
         wp_update_comment_count(comment_post_ID)
         for timezone in Array("server", "gmt", "blog"):
@@ -1843,10 +1843,10 @@ def wp_new_comment(commentdata=None, avoid_die=False, *args_):
     global wpdb
     php_check_if_defined("wpdb")
     if (php_isset(lambda : commentdata["user_ID"])):
-        commentdata["user_ID"] = int(commentdata["user_ID"])
+        commentdata["user_ID"] = php_int(commentdata["user_ID"])
         commentdata["user_id"] = commentdata["user_ID"]
     # end if
-    prefiltered_user_id = int(commentdata["user_id"]) if (php_isset(lambda : commentdata["user_id"])) else 0
+    prefiltered_user_id = php_int(commentdata["user_id"]) if (php_isset(lambda : commentdata["user_id"])) else 0
     #// 
     #// Filters a comment's data before it is sanitized and inserted into the database.
     #// 
@@ -1855,12 +1855,12 @@ def wp_new_comment(commentdata=None, avoid_die=False, *args_):
     #// @param array $commentdata Comment data.
     #//
     commentdata = apply_filters("preprocess_comment", commentdata)
-    commentdata["comment_post_ID"] = int(commentdata["comment_post_ID"])
-    if (php_isset(lambda : commentdata["user_ID"])) and prefiltered_user_id != int(commentdata["user_ID"]):
-        commentdata["user_ID"] = int(commentdata["user_ID"])
+    commentdata["comment_post_ID"] = php_int(commentdata["comment_post_ID"])
+    if (php_isset(lambda : commentdata["user_ID"])) and prefiltered_user_id != php_int(commentdata["user_ID"]):
+        commentdata["user_ID"] = php_int(commentdata["user_ID"])
         commentdata["user_id"] = commentdata["user_ID"]
     elif (php_isset(lambda : commentdata["user_id"])):
-        commentdata["user_id"] = int(commentdata["user_id"])
+        commentdata["user_id"] = php_int(commentdata["user_id"])
     # end if
     commentdata["comment_parent"] = absint(commentdata["comment_parent"]) if (php_isset(lambda : commentdata["comment_parent"])) else 0
     parent_status = wp_get_comment_status(commentdata["comment_parent"]) if 0 < commentdata["comment_parent"] else ""
@@ -2219,7 +2219,7 @@ def wp_update_comment_count_now(post_id=None, *args_):
     
     global wpdb
     php_check_if_defined("wpdb")
-    post_id = int(post_id)
+    post_id = php_int(post_id)
     if (not post_id):
         return False
     # end if
@@ -2229,7 +2229,7 @@ def wp_update_comment_count_now(post_id=None, *args_):
     if (not post):
         return False
     # end if
-    old = int(post.comment_count)
+    old = php_int(post.comment_count)
     #// 
     #// Filters a post's comment count before it is updated in the database.
     #// 
@@ -2240,10 +2240,10 @@ def wp_update_comment_count_now(post_id=None, *args_):
     #// @param int      $post_id Post ID.
     #//
     new = apply_filters("pre_wp_update_comment_count_now", None, old, post_id)
-    if php_is_null(new):
-        new = int(wpdb.get_var(wpdb.prepare(str("SELECT COUNT(*) FROM ") + str(wpdb.comments) + str(" WHERE comment_post_ID = %d AND comment_approved = '1'"), post_id)))
+    if is_null(new):
+        new = php_int(wpdb.get_var(wpdb.prepare(str("SELECT COUNT(*) FROM ") + str(wpdb.comments) + str(" WHERE comment_post_ID = %d AND comment_approved = '1'"), post_id)))
     else:
-        new = int(new)
+        new = php_int(new)
     # end if
     wpdb.update(wpdb.posts, Array({"comment_count": new}), Array({"ID": post_id}))
     clean_post_cache(post)
@@ -2608,7 +2608,7 @@ def weblog_ping(server="", path="", *args_):
 #//
 def pingback_ping_source_uri(source_uri=None, *args_):
     
-    return str(wp_http_validate_url(source_uri))
+    return php_str(wp_http_validate_url(source_uri))
 # end def pingback_ping_source_uri
 #// 
 #// Default filter attached to xmlrpc_pingback_error.
@@ -2732,7 +2732,7 @@ def _close_comments_for_old_posts(posts=None, query=None, *args_):
     if (not php_in_array(posts[0].post_type, post_types)):
         return posts
     # end if
-    days_old = int(get_option("close_comments_days_old"))
+    days_old = php_int(get_option("close_comments_days_old"))
     if (not days_old):
         return posts
     # end if
@@ -2760,7 +2760,7 @@ def _close_comments_for_old_post(open_=None, post_id=None, *args_):
     if (not get_option("close_comments_for_old_posts")):
         return open_
     # end if
-    days_old = int(get_option("close_comments_days_old"))
+    days_old = php_int(get_option("close_comments_days_old"))
     if (not days_old):
         return open_
     # end if
@@ -2810,7 +2810,7 @@ def wp_handle_comment_submission(comment_data=None, *args_):
     comment_author_url = None
     comment_content = None
     if (php_isset(lambda : comment_data["comment_post_ID"])):
-        comment_post_ID = int(comment_data["comment_post_ID"])
+        comment_post_ID = php_int(comment_data["comment_post_ID"])
     # end if
     if (php_isset(lambda : comment_data["author"])) and php_is_string(comment_data["author"]):
         comment_author = php_trim(strip_tags(comment_data["author"]))
@@ -2984,7 +2984,7 @@ def wp_comments_personal_data_exporter(email_address=None, page=1, *args_):
     
     #// Limit us to 500 comments at a time to avoid timing out.
     number = 500
-    page = int(page)
+    page = php_int(page)
     data_to_export = Array()
     comments = get_comments(Array({"author_email": email_address, "number": number, "paged": page, "order_by": "comment_ID", "order": "ASC", "update_comment_meta_cache": False}))
     comment_prop_to_export = Array({"comment_author": __("Comment Author"), "comment_author_email": __("Comment Author Email"), "comment_author_url": __("Comment Author URL"), "comment_author_IP": __("Comment Author IP"), "comment_agent": __("Comment Author User Agent"), "comment_date": __("Comment Date"), "comment_content": __("Comment Content"), "comment_link": __("Comment URL")})
@@ -3062,7 +3062,7 @@ def wp_comments_personal_data_eraser(email_address=None, page=1, *args_):
     # end if
     #// Limit us to 500 comments at a time to avoid timing out.
     number = 500
-    page = int(page)
+    page = php_int(page)
     items_removed = False
     items_retained = False
     comments = get_comments(Array({"author_email": email_address, "number": number, "paged": page, "order_by": "comment_ID", "order": "ASC", "include_unapproved": True}))
@@ -3077,7 +3077,7 @@ def wp_comments_personal_data_eraser(email_address=None, page=1, *args_):
         anonymized_comment["comment_author_IP"] = wp_privacy_anonymize_data("ip", comment.comment_author_IP)
         anonymized_comment["comment_author_url"] = ""
         anonymized_comment["user_id"] = 0
-        comment_id = int(comment.comment_ID)
+        comment_id = php_int(comment.comment_ID)
         #// 
         #// Filters whether to anonymize the comment.
         #// 

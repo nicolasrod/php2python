@@ -173,7 +173,7 @@ for field_key,field_label in attribute_fields:
     php_print("             <label><input type=\"checkbox\" name=\"blog[")
     php_print(field_key)
     php_print("]\" value=\"1\" ")
-    checked(bool(details.field_key), True)
+    checked(php_bool(details.field_key), True)
     php_print(" ")
     disabled((not php_in_array(details.field_key, Array(0, 1))))
     php_print(" />\n                ")

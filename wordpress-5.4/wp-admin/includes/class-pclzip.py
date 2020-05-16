@@ -1484,7 +1484,7 @@ class PclZip():
         #// ----- Get 'memory_limit' configuration value
         v_memory_limit = php_ini_get("memory_limit")
         v_memory_limit = php_trim(v_memory_limit)
-        v_memory_limit_int = int(v_memory_limit)
+        v_memory_limit_int = php_int(v_memory_limit)
         last = php_strtolower(php_substr(v_memory_limit, -1))
         if last == "g":
             #// $v_memory_limit_int = $v_memory_limit_int*1024*1024*1024;

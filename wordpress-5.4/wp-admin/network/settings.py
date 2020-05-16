@@ -332,7 +332,7 @@ php_print("""</h2>
 <th scope=\"row\">""")
 _e("Site upload space")
 php_print("</th>\n              <td>\n                  <label><input type=\"checkbox\" id=\"upload_space_check_disabled\" name=\"upload_space_check_disabled\" value=\"0\"")
-checked(bool(get_site_option("upload_space_check_disabled")), False)
+checked(php_bool(get_site_option("upload_space_check_disabled")), False)
 php_print("/>\n                     ")
 printf(__("Limit total size of files uploaded to %s MB"), "</label><label><input name=\"blog_upload_space\" type=\"number\" min=\"0\" style=\"width: 100px\" id=\"blog_upload_space\" aria-describedby=\"blog-upload-space-desc\" value=\"" + esc_attr(get_site_option("blog_upload_space", 100)) + "\" />")
 php_print("                 </label><br />\n                    <p class=\"screen-reader-text\" id=\"blog-upload-space-desc\">\n                        ")

@@ -53,9 +53,9 @@ class WP_Customize_Date_Time_Control(WP_Customize_Control):
         data = super().json()
         data["maxYear"] = php_intval(self.max_year)
         data["minYear"] = php_intval(self.min_year)
-        data["allowPastDate"] = bool(self.allow_past_date)
-        data["twelveHourFormat"] = bool(self.twelve_hour_format)
-        data["includeTime"] = bool(self.include_time)
+        data["allowPastDate"] = php_bool(self.allow_past_date)
+        data["twelveHourFormat"] = php_bool(self.twelve_hour_format)
+        data["includeTime"] = php_bool(self.include_time)
         return data
     # end def json
     #// 
@@ -233,9 +233,9 @@ class WP_Customize_Date_Time_Control(WP_Customize_Control):
     def format_gmt_offset(self, offset=None):
         
         if 0 <= offset:
-            formatted_offset = "+" + str(offset)
+            formatted_offset = "+" + php_str(offset)
         else:
-            formatted_offset = str(offset)
+            formatted_offset = php_str(offset)
         # end if
         formatted_offset = php_str_replace(Array(".25", ".5", ".75"), Array(":15", ":30", ":45"), formatted_offset)
         return formatted_offset

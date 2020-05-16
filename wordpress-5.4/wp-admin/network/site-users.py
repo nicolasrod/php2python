@@ -32,7 +32,7 @@ get_current_screen().set_screen_reader_content(Array({"heading_views": __("Filte
 PHP_SERVER["REQUEST_URI"] = remove_query_arg("update", PHP_SERVER["REQUEST_URI"])
 referer = remove_query_arg("update", wp_get_referer())
 if (not php_empty(lambda : PHP_REQUEST["paged"])):
-    referer = add_query_arg("paged", int(PHP_REQUEST["paged"]), referer)
+    referer = add_query_arg("paged", php_int(PHP_REQUEST["paged"]), referer)
 # end if
 id = php_intval(PHP_REQUEST["id"]) if (php_isset(lambda : PHP_REQUEST["id"])) else 0
 if (not id):
@@ -111,7 +111,7 @@ if action:
             if (php_isset(lambda : PHP_REQUEST["users"])):
                 userids = PHP_REQUEST["users"]
                 for user_id in userids:
-                    user_id = int(user_id)
+                    user_id = php_int(user_id)
                     remove_user_from_blog(user_id, id)
                 # end for
             elif (php_isset(lambda : PHP_REQUEST["user"])):
@@ -137,7 +137,7 @@ if action:
                 userids = PHP_REQUEST["users"]
                 update = "promote"
                 for user_id in userids:
-                    user_id = int(user_id)
+                    user_id = php_int(user_id)
                     #// If the user doesn't already belong to the blog, bail.
                     if (not is_user_member_of_blog(user_id)):
                         wp_die("<h1>" + __("Something went wrong.") + "</h1>" + "<p>" + __("One of the selected users is not a member of this site.") + "</p>", 403)

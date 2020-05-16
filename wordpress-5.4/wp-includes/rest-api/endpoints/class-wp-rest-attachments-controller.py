@@ -90,7 +90,7 @@ class WP_REST_Attachments_Controller(WP_REST_Posts_Controller):
         # end if
         #// Attaching media to a post requires ability to edit said post.
         if (not php_empty(lambda : request["post"])):
-            parent = get_post(int(request["post"]))
+            parent = get_post(php_int(request["post"]))
             post_parent_type = get_post_type_object(parent.post_type)
             if (not current_user_can(post_parent_type.cap.edit_post, request["post"])):
                 return php_new_class("WP_Error", lambda : WP_Error("rest_cannot_edit", __("Sorry, you are not allowed to upload media to this post."), Array({"status": rest_authorization_required_code()})))
@@ -324,7 +324,7 @@ class WP_REST_Attachments_Controller(WP_REST_Posts_Controller):
             # end if
         # end if
         if (php_isset(lambda : request["post"])):
-            prepared_attachment.post_parent = int(request["post"])
+            prepared_attachment.post_parent = php_int(request["post"])
         # end if
         return prepared_attachment
     # end def prepare_item_for_database
@@ -388,7 +388,7 @@ class WP_REST_Attachments_Controller(WP_REST_Posts_Controller):
             # end if
         # end if
         if php_in_array("post", fields, True):
-            data["post"] = int(post.post_parent) if (not php_empty(lambda : post.post_parent)) else None
+            data["post"] = php_int(post.post_parent) if (not php_empty(lambda : post.post_parent)) else None
         # end if
         if php_in_array("source_url", fields, True):
             data["source_url"] = wp_get_attachment_url(post.ID)

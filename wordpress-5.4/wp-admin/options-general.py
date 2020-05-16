@@ -205,7 +205,7 @@ php_print("</p>\n\n")
 if check_zone_info and tzstring:
     php_print("<p class=\"timezone-info\">\n<span>\n    ")
     now = php_new_class("DateTime", lambda : DateTime("now", php_new_class("DateTimeZone", lambda : DateTimeZone(tzstring))))
-    dst = bool(now.format("I"))
+    dst = php_bool(now.format("I"))
     if dst:
         _e("This timezone is currently in daylight saving time.")
     else:

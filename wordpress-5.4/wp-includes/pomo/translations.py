@@ -189,7 +189,7 @@ if (not php_class_exists("Translations", False)):
         #//
         def gettext_select_plural_form(self, count=None):
             
-            if (not (php_isset(lambda : self._gettext_select_plural_form))) or php_is_null(self._gettext_select_plural_form):
+            if (not (php_isset(lambda : self._gettext_select_plural_form))) or is_null(self._gettext_select_plural_form):
                 nplurals, expression = self.nplurals_and_expression_from_header(self.get_header("Plural-Forms"))
                 self._nplurals = nplurals
                 self._gettext_select_plural_form = self.make_plural_form_function(nplurals, expression)
@@ -203,7 +203,7 @@ if (not php_class_exists("Translations", False)):
         def nplurals_and_expression_from_header(self, header=None):
             
             if php_preg_match("/^\\s*nplurals\\s*=\\s*(\\d+)\\s*;\\s+plural\\s*=\\s*(.+)$/", header, matches):
-                nplurals = int(matches[1])
+                nplurals = php_int(matches[1])
                 expression = php_trim(matches[2])
                 return Array(nplurals, expression)
             else:

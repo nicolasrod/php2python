@@ -496,7 +496,7 @@ class WP_Site_Query():
             #// @param WP_Site_Query $site_query        The `WP_Site_Query` instance.
             #//
             found_sites_query = apply_filters("found_sites_query", "SELECT FOUND_ROWS()", self)
-            self.found_sites = int(wpdb.get_var(found_sites_query))
+            self.found_sites = php_int(wpdb.get_var(found_sites_query))
         # end if
     # end def set_found_sites
     #// 

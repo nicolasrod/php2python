@@ -203,7 +203,7 @@ def wp_dequeue_style(handle=None, *args_):
 def wp_style_is(handle=None, list="enqueued", *args_):
     
     _wp_scripts_maybe_doing_it_wrong(__FUNCTION__)
-    return bool(wp_styles().query(handle, list))
+    return php_bool(wp_styles().query(handle, list))
 # end def wp_style_is
 #// 
 #// Add metadata to a CSS stylesheet.

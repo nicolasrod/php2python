@@ -299,9 +299,9 @@ def wp_delete_nav_menu(menu=None, *args_):
 def wp_update_nav_menu_object(menu_id=0, menu_data=Array(), *args_):
     
     #// expected_slashed ($menu_data)
-    menu_id = int(menu_id)
+    menu_id = php_int(menu_id)
     _menu = wp_get_nav_menu_object(menu_id)
-    args = Array({"description": menu_data["description"] if (php_isset(lambda : menu_data["description"])) else "", "name": menu_data["menu-name"] if (php_isset(lambda : menu_data["menu-name"])) else "", "parent": int(menu_data["parent"]) if (php_isset(lambda : menu_data["parent"])) else 0, "slug": None})
+    args = Array({"description": menu_data["description"] if (php_isset(lambda : menu_data["description"])) else "", "name": menu_data["menu-name"] if (php_isset(lambda : menu_data["menu-name"])) else "", "parent": php_int(menu_data["parent"]) if (php_isset(lambda : menu_data["parent"])) else 0, "slug": None})
     #// Double-check that we're not going to have one menu take the name of another.
     _possible_existing = get_term_by("name", menu_data["menu-name"], "nav_menu")
     if _possible_existing and (not is_wp_error(_possible_existing)) and (php_isset(lambda : _possible_existing.term_id)) and _possible_existing.term_id != menu_id:
@@ -326,17 +326,17 @@ def wp_update_nav_menu_object(menu_id=0, menu_data=Array(), *args_):
         #// @param array $menu_data An array of menu data.
         #//
         do_action("wp_create_nav_menu", _menu["term_id"], menu_data)
-        return int(_menu["term_id"])
+        return php_int(_menu["term_id"])
     # end if
     if (not _menu) or (not (php_isset(lambda : _menu.term_id))):
         return 0
     # end if
-    menu_id = int(_menu.term_id)
+    menu_id = php_int(_menu.term_id)
     update_response = wp_update_term(menu_id, "nav_menu", args)
     if is_wp_error(update_response):
         return update_response
     # end if
-    menu_id = int(update_response["term_id"])
+    menu_id = php_int(update_response["term_id"])
     #// 
     #// Fires after a navigation menu has been successfully updated.
     #// 
@@ -363,8 +363,8 @@ def wp_update_nav_menu_object(menu_id=0, menu_data=Array(), *args_):
 #//
 def wp_update_nav_menu_item(menu_id=0, menu_item_db_id=0, menu_item_data=Array(), *args_):
     
-    menu_id = int(menu_id)
-    menu_item_db_id = int(menu_item_db_id)
+    menu_id = php_int(menu_id)
+    menu_item_db_id = php_int(menu_item_db_id)
     #// Make sure that we don't convert non-nav_menu_item objects into nav_menu_item objects.
     if (not php_empty(lambda : menu_item_db_id)) and (not is_nav_menu_item(menu_item_db_id)):
         return php_new_class("WP_Error", lambda : WP_Error("update_nav_menu_item_failed", __("The given object ID is not that of a menu item.")))
@@ -380,7 +380,7 @@ def wp_update_nav_menu_item(menu_id=0, menu_item_db_id=0, menu_item_data=Array()
     args = wp_parse_args(menu_item_data, defaults)
     if 0 == menu_id:
         args["menu-item-position"] = 1
-    elif 0 == int(args["menu-item-position"]):
+    elif 0 == php_int(args["menu-item-position"]):
         menu_items = Array() if 0 == menu_id else wp_get_nav_menu_items(menu_id, Array({"post_status": "publish,draft"}))
         last_item = php_array_pop(menu_items)
         args["menu-item-position"] = 1 + last_item.menu_order if last_item and (php_isset(lambda : last_item.menu_order)) else php_count(menu_items)
@@ -402,7 +402,7 @@ def wp_update_nav_menu_item(menu_id=0, menu_item_db_id=0, menu_item_data=Array()
             original_title = get_term_field("name", args["menu-item-object-id"], args["menu-item-object"], "raw")
         elif "post_type" == args["menu-item-type"]:
             original_object = get_post(args["menu-item-object-id"])
-            original_parent = int(original_object.post_parent)
+            original_parent = php_int(original_object.post_parent)
             original_title = original_object.post_title
         elif "post_type_archive" == args["menu-item-type"]:
             original_object = get_post_type_object(args["menu-item-object"])
@@ -444,17 +444,17 @@ def wp_update_nav_menu_item(menu_id=0, menu_item_db_id=0, menu_item_data=Array()
     # end if
     #// Associate the menu item with the menu term.
     #// Only set the menu term if it isn't set to avoid unnecessary wp_get_object_terms().
-    if menu_id and (not update) or (not is_object_in_term(menu_item_db_id, "nav_menu", int(menu.term_id))):
+    if menu_id and (not update) or (not is_object_in_term(menu_item_db_id, "nav_menu", php_int(menu.term_id))):
         wp_set_object_terms(menu_item_db_id, Array(menu.term_id), "nav_menu")
     # end if
     if "custom" == args["menu-item-type"]:
         args["menu-item-object-id"] = menu_item_db_id
         args["menu-item-object"] = "custom"
     # end if
-    menu_item_db_id = int(menu_item_db_id)
+    menu_item_db_id = php_int(menu_item_db_id)
     update_post_meta(menu_item_db_id, "_menu_item_type", sanitize_key(args["menu-item-type"]))
-    update_post_meta(menu_item_db_id, "_menu_item_menu_item_parent", php_strval(int(args["menu-item-parent-id"])))
-    update_post_meta(menu_item_db_id, "_menu_item_object_id", php_strval(int(args["menu-item-object-id"])))
+    update_post_meta(menu_item_db_id, "_menu_item_menu_item_parent", php_strval(php_int(args["menu-item-parent-id"])))
+    update_post_meta(menu_item_db_id, "_menu_item_object_id", php_strval(php_int(args["menu-item-object-id"])))
     update_post_meta(menu_item_db_id, "_menu_item_object", sanitize_key(args["menu-item-object"]))
     update_post_meta(menu_item_db_id, "_menu_item_target", sanitize_key(args["menu-item-target"]))
     args["menu-item-classes"] = php_array_map("sanitize_html_class", php_explode(" ", args["menu-item-classes"]))
@@ -463,7 +463,7 @@ def wp_update_nav_menu_item(menu_id=0, menu_item_db_id=0, menu_item_data=Array()
     update_post_meta(menu_item_db_id, "_menu_item_xfn", args["menu-item-xfn"])
     update_post_meta(menu_item_db_id, "_menu_item_url", esc_url_raw(args["menu-item-url"]))
     if 0 == menu_id:
-        update_post_meta(menu_item_db_id, "_menu_item_orphaned", str(time()))
+        update_post_meta(menu_item_db_id, "_menu_item_orphaned", php_str(time()))
     elif get_post_meta(menu_item_db_id, "_menu_item_orphaned"):
         delete_post_meta(menu_item_db_id, "_menu_item_orphaned")
     # end if
@@ -662,7 +662,7 @@ def wp_setup_nav_menu_item(menu_item=None, *args_):
     
     if (php_isset(lambda : menu_item.post_type)):
         if "nav_menu_item" == menu_item.post_type:
-            menu_item.db_id = int(menu_item.ID)
+            menu_item.db_id = php_int(menu_item.ID)
             menu_item.menu_item_parent = get_post_meta(menu_item.ID, "_menu_item_menu_item_parent", True) if (not (php_isset(lambda : menu_item.menu_item_parent))) else menu_item.menu_item_parent
             menu_item.object_id = get_post_meta(menu_item.ID, "_menu_item_object_id", True) if (not (php_isset(lambda : menu_item.object_id))) else menu_item.object_id
             menu_item.object = get_post_meta(menu_item.ID, "_menu_item_object", True) if (not (php_isset(lambda : menu_item.object))) else menu_item.object
@@ -722,9 +722,9 @@ def wp_setup_nav_menu_item(menu_item=None, *args_):
                     menu_item.type_label = menu_item.object
                     menu_item._invalid = True
                 # end if
-                original_object = get_term(int(menu_item.object_id), menu_item.object)
+                original_object = get_term(php_int(menu_item.object_id), menu_item.object)
                 if original_object and (not is_wp_error(original_object)):
-                    menu_item.url = get_term_link(int(menu_item.object_id), menu_item.object)
+                    menu_item.url = get_term_link(php_int(menu_item.object_id), menu_item.object)
                     original_title = original_object.name
                 else:
                     menu_item.url = ""
@@ -765,7 +765,7 @@ def wp_setup_nav_menu_item(menu_item=None, *args_):
         else:
             menu_item.db_id = 0
             menu_item.menu_item_parent = 0
-            menu_item.object_id = int(menu_item.ID)
+            menu_item.object_id = php_int(menu_item.ID)
             menu_item.type = "post_type"
             object = get_post_type_object(menu_item.post_type)
             menu_item.object = object.name
@@ -788,8 +788,8 @@ def wp_setup_nav_menu_item(menu_item=None, *args_):
         menu_item.ID = menu_item.term_id
         menu_item.db_id = 0
         menu_item.menu_item_parent = 0
-        menu_item.object_id = int(menu_item.term_id)
-        menu_item.post_parent = int(menu_item.parent)
+        menu_item.object_id = php_int(menu_item.term_id)
+        menu_item.post_parent = php_int(menu_item.parent)
         menu_item.type = "taxonomy"
         object = get_taxonomy(menu_item.taxonomy)
         menu_item.object = object.name
@@ -824,7 +824,7 @@ def wp_setup_nav_menu_item(menu_item=None, *args_):
 #//
 def wp_get_associated_nav_menu_items(object_id=0, object_type="post_type", taxonomy="", *args_):
     
-    object_id = int(object_id)
+    object_id = php_int(object_id)
     menu_item_ids = Array()
     query = php_new_class("WP_Query", lambda : WP_Query())
     menu_items = query.query(Array({"meta_key": "_menu_item_object_id", "meta_value": object_id, "post_status": "any", "post_type": "nav_menu_item", "posts_per_page": -1}))
@@ -832,9 +832,9 @@ def wp_get_associated_nav_menu_items(object_id=0, object_type="post_type", taxon
         if (php_isset(lambda : menu_item.ID)) and is_nav_menu_item(menu_item.ID):
             menu_item_type = get_post_meta(menu_item.ID, "_menu_item_type", True)
             if "post_type" == object_type and "post_type" == menu_item_type:
-                menu_item_ids[-1] = int(menu_item.ID)
+                menu_item_ids[-1] = php_int(menu_item.ID)
             elif "taxonomy" == object_type and "taxonomy" == menu_item_type and get_post_meta(menu_item.ID, "_menu_item_object", True) == taxonomy:
-                menu_item_ids[-1] = int(menu_item.ID)
+                menu_item_ids[-1] = php_int(menu_item.ID)
             # end if
         # end if
     # end for
@@ -850,7 +850,7 @@ def wp_get_associated_nav_menu_items(object_id=0, object_type="post_type", taxon
 #//
 def _wp_delete_post_menu_item(object_id=0, *args_):
     
-    object_id = int(object_id)
+    object_id = php_int(object_id)
     menu_item_ids = wp_get_associated_nav_menu_items(object_id, "post_type")
     for menu_item_id in menu_item_ids:
         wp_delete_post(menu_item_id, True)
@@ -868,7 +868,7 @@ def _wp_delete_post_menu_item(object_id=0, *args_):
 #//
 def _wp_delete_tax_menu_item(object_id=0, tt_id=None, taxonomy=None, *args_):
     
-    object_id = int(object_id)
+    object_id = php_int(object_id)
     menu_item_ids = wp_get_associated_nav_menu_items(object_id, "taxonomy", taxonomy)
     for menu_item_id in menu_item_ids:
         wp_delete_post(menu_item_id, True)

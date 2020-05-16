@@ -367,7 +367,7 @@ class WP_Network_Query():
             #// @param WP_Network_Query $network_query        The `WP_Network_Query` instance.
             #//
             found_networks_query = apply_filters("found_networks_query", "SELECT FOUND_ROWS()", self)
-            self.found_networks = int(wpdb.get_var(found_networks_query))
+            self.found_networks = php_int(wpdb.get_var(found_networks_query))
         # end if
     # end def set_found_networks
     #// 

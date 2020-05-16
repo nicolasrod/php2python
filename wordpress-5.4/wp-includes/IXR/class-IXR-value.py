@@ -147,7 +147,7 @@ class IXR_Value():
         
         expected = 0
         for key,value in array:
-            if str(key) != str(expected):
+            if php_str(key) != php_str(expected):
                 return True
             # end if
             expected += 1

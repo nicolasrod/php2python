@@ -492,7 +492,7 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def force_feed(self, enable=False):
             
-            self.force_feed = bool(enable)
+            self.force_feed = php_bool(enable)
         # end def force_feed
         #// 
         #// Set the URL of the feed you want to parse
@@ -563,7 +563,7 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def set_timeout(self, timeout=10):
             
-            self.timeout = int(timeout)
+            self.timeout = php_int(timeout)
         # end def set_timeout
         #// 
         #// Force SimplePie to use fsockopen() instead of cURL
@@ -573,7 +573,7 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def force_fsockopen(self, enable=False):
             
-            self.force_fsockopen = bool(enable)
+            self.force_fsockopen = php_bool(enable)
         # end def force_fsockopen
         #// 
         #// Enable/disable caching in SimplePie.
@@ -586,7 +586,7 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def enable_cache(self, enable=True):
             
-            self.cache = bool(enable)
+            self.cache = php_bool(enable)
         # end def enable_cache
         #// 
         #// Set the length of time (in seconds) that the contents of a feed will be
@@ -596,7 +596,7 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def set_cache_duration(self, seconds=3600):
             
-            self.cache_duration = int(seconds)
+            self.cache_duration = php_int(seconds)
         # end def set_cache_duration
         #// 
         #// Set the length of time (in seconds) that the autodiscovered feed URL will
@@ -606,7 +606,7 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def set_autodiscovery_cache_duration(self, seconds=604800):
             
-            self.autodiscovery_cache_duration = int(seconds)
+            self.autodiscovery_cache_duration = php_int(seconds)
         # end def set_autodiscovery_cache_duration
         #// 
         #// Set the file system location where the cached files should be stored
@@ -615,7 +615,7 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def set_cache_location(self, location="./cache"):
             
-            self.cache_location = str(location)
+            self.cache_location = php_str(location)
         # end def set_cache_location
         #// 
         #// Set whether feed items should be sorted into reverse chronological order
@@ -624,7 +624,7 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def enable_order_by_date(self, enable=True):
             
-            self.order_by_date = bool(enable)
+            self.order_by_date = php_bool(enable)
         # end def enable_order_by_date
         #// 
         #// Set the character encoding used to parse the feed
@@ -637,7 +637,7 @@ if (not php_class_exists("SimplePie", False)):
         def set_input_encoding(self, encoding=False):
             
             if encoding:
-                self.input_encoding = str(encoding)
+                self.input_encoding = php_str(encoding)
             else:
                 self.input_encoding = False
             # end if
@@ -656,7 +656,7 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def set_autodiscovery_level(self, level=SIMPLEPIE_LOCATOR_ALL):
             
-            self.autodiscovery = int(level)
+            self.autodiscovery = php_int(level)
         # end def set_autodiscovery_level
         #// 
         #// Get the class registry
@@ -797,7 +797,7 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def set_useragent(self, ua=SIMPLEPIE_USERAGENT):
             
-            self.useragent = str(ua)
+            self.useragent = php_str(ua)
         # end def set_useragent
         #// 
         #// Set callback function to create cache filename with
@@ -836,7 +836,7 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def set_max_checked_feeds(self, max=10):
             
-            self.max_checked_feeds = int(max)
+            self.max_checked_feeds = php_int(max)
         # end def set_max_checked_feeds
         def remove_div(self, enable=True):
             
@@ -929,7 +929,7 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def set_item_limit(self, limit=0):
             
-            self.item_limit = int(limit)
+            self.item_limit = php_int(limit)
         # end def set_item_limit
         #// 
         #// Initialize the feed object
@@ -980,7 +980,7 @@ if (not php_class_exists("SimplePie", False)):
                     # end if
                     i += 1
                 # end for
-                return bool(success)
+                return php_bool(success)
             elif self.feed_url == None and self.raw_data == None:
                 return False
             # end if
@@ -1997,10 +1997,10 @@ if (not php_class_exists("SimplePie", False)):
             
             return_ = self.get_channel_tags(SIMPLEPIE_NAMESPACE_W3C_BASIC_GEO, "lat")
             if return_:
-                return float(return_[0]["data"])
+                return php_float(return_[0]["data"])
             elif self.get_channel_tags(SIMPLEPIE_NAMESPACE_GEORSS, "point") and php_preg_match("/^((?:-)?[0-9]+(?:\\.[0-9]+)) ((?:-)?[0-9]+(?:\\.[0-9]+))$/", php_trim(return_[0]["data"]), match):
                 return_ = self.get_channel_tags(SIMPLEPIE_NAMESPACE_GEORSS, "point")
-                return float(match[1])
+                return php_float(match[1])
             else:
                 return None
             # end if
@@ -2021,13 +2021,13 @@ if (not php_class_exists("SimplePie", False)):
             
             return_ = self.get_channel_tags(SIMPLEPIE_NAMESPACE_W3C_BASIC_GEO, "long")
             if return_:
-                return float(return_[0]["data"])
+                return php_float(return_[0]["data"])
             elif self.get_channel_tags(SIMPLEPIE_NAMESPACE_W3C_BASIC_GEO, "lon"):
                 return_ = self.get_channel_tags(SIMPLEPIE_NAMESPACE_W3C_BASIC_GEO, "lon")
-                return float(return_[0]["data"])
+                return php_float(return_[0]["data"])
             elif self.get_channel_tags(SIMPLEPIE_NAMESPACE_GEORSS, "point") and php_preg_match("/^((?:-)?[0-9]+(?:\\.[0-9]+)) ((?:-)?[0-9]+(?:\\.[0-9]+))$/", php_trim(return_[0]["data"]), match):
                 return_ = self.get_channel_tags(SIMPLEPIE_NAMESPACE_GEORSS, "point")
-                return float(match[2])
+                return php_float(match[2])
             else:
                 return None
             # end if
@@ -2176,7 +2176,7 @@ if (not php_class_exists("SimplePie", False)):
         #//
         def get_item_quantity(self, max=0):
             
-            max = int(max)
+            max = php_int(max)
             qty = php_count(self.get_items())
             if max == 0:
                 return qty

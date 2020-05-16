@@ -205,7 +205,7 @@ class WP_REST_Posts_Controller(WP_REST_Controller):
         if "edit" == request["context"]:
             remove_filter("post_password_required", "__return_false")
         # end if
-        page = int(query_args["paged"])
+        page = php_int(query_args["paged"])
         total_posts = posts_query.found_posts
         if total_posts < 1:
             query_args["paged"] = None
@@ -213,13 +213,13 @@ class WP_REST_Posts_Controller(WP_REST_Controller):
             count_query.query(query_args)
             total_posts = count_query.found_posts
         # end if
-        max_pages = ceil(total_posts / int(posts_query.query_vars["posts_per_page"]))
+        max_pages = ceil(total_posts / php_int(posts_query.query_vars["posts_per_page"]))
         if page > max_pages and total_posts > 0:
             return php_new_class("WP_Error", lambda : WP_Error("rest_post_invalid_page_number", __("The page number requested is larger than the number of pages available."), Array({"status": 400})))
         # end if
         response = rest_ensure_response(posts)
-        response.header("X-WP-Total", int(total_posts))
-        response.header("X-WP-TotalPages", int(max_pages))
+        response.header("X-WP-Total", php_int(total_posts))
+        response.header("X-WP-TotalPages", php_int(max_pages))
         request_params = request.get_query_params()
         base = add_query_arg(urlencode_deep(request_params), rest_url(php_sprintf("%s/%s", self.namespace, self.rest_base)))
         if page > 1:
@@ -248,10 +248,10 @@ class WP_REST_Posts_Controller(WP_REST_Controller):
     def get_post(self, id=None):
         
         error = php_new_class("WP_Error", lambda : WP_Error("rest_post_invalid_id", __("Invalid post ID."), Array({"status": 404})))
-        if int(id) <= 0:
+        if php_int(id) <= 0:
             return error
         # end if
-        post = get_post(int(id))
+        post = get_post(php_int(id))
         if php_empty(lambda : post) or php_empty(lambda : post.ID) or self.post_type != post.post_type:
             return error
         # end if
@@ -595,7 +595,7 @@ class WP_REST_Posts_Controller(WP_REST_Controller):
             return post
         # end if
         id = post.ID
-        force = bool(request["force"])
+        force = php_bool(request["force"])
         supports_trash = EMPTY_TRASH_DAYS > 0
         if "attachment" == post.post_type:
             supports_trash = supports_trash and MEDIA_TRASH
@@ -805,7 +805,7 @@ class WP_REST_Posts_Controller(WP_REST_Controller):
         # end if
         #// Author.
         if (not php_empty(lambda : schema["properties"]["author"])) and (not php_empty(lambda : request["author"])):
-            post_author = int(request["author"])
+            post_author = php_int(request["author"])
             if get_current_user_id() != post_author:
                 user_obj = get_userdata(post_author)
                 if (not user_obj):
@@ -833,19 +833,19 @@ class WP_REST_Posts_Controller(WP_REST_Controller):
         # end if
         #// Parent.
         if (not php_empty(lambda : schema["properties"]["parent"])) and (php_isset(lambda : request["parent"])):
-            if 0 == int(request["parent"]):
+            if 0 == php_int(request["parent"]):
                 prepared_post.post_parent = 0
             else:
-                parent = get_post(int(request["parent"]))
+                parent = get_post(php_int(request["parent"]))
                 if php_empty(lambda : parent):
                     return php_new_class("WP_Error", lambda : WP_Error("rest_post_invalid_id", __("Invalid post parent ID."), Array({"status": 400})))
                 # end if
-                prepared_post.post_parent = int(parent.ID)
+                prepared_post.post_parent = php_int(parent.ID)
             # end if
         # end if
         #// Menu order.
         if (not php_empty(lambda : schema["properties"]["menu_order"])) and (php_isset(lambda : request["menu_order"])):
-            prepared_post.menu_order = int(request["menu_order"])
+            prepared_post.menu_order = php_int(request["menu_order"])
         # end if
         #// Comment status.
         if (not php_empty(lambda : schema["properties"]["comment_status"])) and (not php_empty(lambda : request["comment_status"])):
@@ -925,7 +925,7 @@ class WP_REST_Posts_Controller(WP_REST_Controller):
     #//
     def handle_featured_media(self, featured_media=None, post_id=None):
         
-        featured_media = int(featured_media)
+        featured_media = php_int(featured_media)
         if featured_media:
             result = set_post_thumbnail(post_id, featured_media)
             if result:
@@ -1028,7 +1028,7 @@ class WP_REST_Posts_Controller(WP_REST_Controller):
                 if (not get_term(term_id, taxonomy.name)):
                     continue
                 # end if
-                if (not current_user_can("assign_term", int(term_id))):
+                if (not current_user_can("assign_term", php_int(term_id))):
                     return False
                 # end if
             # end for
@@ -1239,7 +1239,7 @@ class WP_REST_Posts_Controller(WP_REST_Controller):
             data["content"]["rendered"] = "" if post_password_required(post) else apply_filters("the_content", post.post_content)
         # end if
         if rest_is_field_included("content.protected", fields):
-            data["content"]["protected"] = bool(post.post_password)
+            data["content"]["protected"] = php_bool(post.post_password)
         # end if
         if rest_is_field_included("content.block_version", fields):
             data["content"]["block_version"] = block_version(post.post_content)
@@ -1249,23 +1249,23 @@ class WP_REST_Posts_Controller(WP_REST_Controller):
             excerpt = apply_filters("get_the_excerpt", post.post_excerpt, post)
             #// This filter is documented in wp-includes/post-template.php
             excerpt = apply_filters("the_excerpt", excerpt)
-            data["excerpt"] = Array({"raw": post.post_excerpt, "rendered": "" if post_password_required(post) else excerpt, "protected": bool(post.post_password)})
+            data["excerpt"] = Array({"raw": post.post_excerpt, "rendered": "" if post_password_required(post) else excerpt, "protected": php_bool(post.post_password)})
         # end if
         if has_password_filter:
             #// Reset filter.
             remove_filter("post_password_required", "__return_false")
         # end if
         if rest_is_field_included("author", fields):
-            data["author"] = int(post.post_author)
+            data["author"] = php_int(post.post_author)
         # end if
         if rest_is_field_included("featured_media", fields):
-            data["featured_media"] = int(get_post_thumbnail_id(post.ID))
+            data["featured_media"] = php_int(get_post_thumbnail_id(post.ID))
         # end if
         if rest_is_field_included("parent", fields):
-            data["parent"] = int(post.post_parent)
+            data["parent"] = php_int(post.post_parent)
         # end if
         if rest_is_field_included("menu_order", fields):
-            data["menu_order"] = int(post.menu_order)
+            data["menu_order"] = php_int(post.menu_order)
         # end if
         if rest_is_field_included("comment_status", fields):
             data["comment_status"] = post.comment_status
@@ -1393,7 +1393,7 @@ class WP_REST_Posts_Controller(WP_REST_Controller):
         # end if
         post_type_obj = get_post_type_object(post.post_type)
         if post_type_obj.hierarchical and (not php_empty(lambda : post.post_parent)):
-            links["up"] = Array({"href": rest_url(trailingslashit(base) + int(post.post_parent)), "embeddable": True})
+            links["up"] = Array({"href": rest_url(trailingslashit(base) + php_int(post.post_parent)), "embeddable": True})
         # end if
         #// If we have a featured media, add that.
         featured_media = get_post_thumbnail_id(post.ID)

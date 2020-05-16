@@ -25,7 +25,7 @@ submenu_file = "upload.php"
 wp_reset_vars(Array("action"))
 for case in Switch(action):
     if case("editattachment"):
-        attachment_id = int(PHP_POST["attachment_id"])
+        attachment_id = php_int(PHP_POST["attachment_id"])
         check_admin_referer("media-form")
         if (not current_user_can("edit_post", attachment_id)):
             wp_die(__("Sorry, you are not allowed to edit this attachment."))
@@ -58,7 +58,7 @@ for case in Switch(action):
             wp_redirect(admin_url("upload.php"))
             php_exit(0)
         # end if
-        att_id = int(PHP_REQUEST["attachment_id"])
+        att_id = php_int(PHP_REQUEST["attachment_id"])
         if (not current_user_can("edit_post", att_id)):
             wp_die(__("Sorry, you are not allowed to edit this attachment."))
         # end if

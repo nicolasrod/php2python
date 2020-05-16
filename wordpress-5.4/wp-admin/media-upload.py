@@ -36,8 +36,8 @@ wp_enqueue_style("imgareaselect")
 wp_enqueue_script("media-gallery")
 php_header("Content-Type: " + get_option("html_type") + "; charset=" + get_option("blog_charset"))
 #// IDs should be integers.
-ID = int(ID) if (php_isset(lambda : ID)) else 0
-post_id = int(post_id) if (php_isset(lambda : post_id)) else 0
+ID = php_int(ID) if (php_isset(lambda : ID)) else 0
+post_id = php_int(post_id) if (php_isset(lambda : post_id)) else 0
 #// Require an ID for the edit screen.
 if (php_isset(lambda : action)) and "edit" == action and (not ID):
     wp_die("<h1>" + __("Something went wrong.") + "</h1>" + "<p>" + __("Invalid item ID.") + "</p>", 403)

@@ -617,7 +617,7 @@ def get_post_comments_feed_link(post_id=0, feed="", *args_):
         feed = get_default_feed()
     # end if
     post = get_post(post_id)
-    unattached = "attachment" == post.post_type and 0 == int(post.post_parent)
+    unattached = "attachment" == post.post_type and 0 == php_int(post.post_parent)
     if "" != get_option("permalink_structure"):
         if "page" == get_option("show_on_front") and get_option("page_on_front") == post_id:
             url = _get_page_link(post_id)
@@ -703,7 +703,7 @@ def post_comments_feed_link(link_text="", post_id="", feed="", *args_):
 #//
 def get_author_feed_link(author_id=None, feed="", *args_):
     
-    author_id = int(author_id)
+    author_id = php_int(author_id)
     permalink_structure = get_option("permalink_structure")
     if php_empty(lambda : feed):
         feed = get_default_feed()
@@ -763,7 +763,7 @@ def get_category_feed_link(cat_id=None, feed="", *args_):
 #//
 def get_term_feed_link(term_id=None, taxonomy="category", feed="", *args_):
     
-    term_id = int(term_id)
+    term_id = php_int(term_id)
     term = get_term(term_id, taxonomy)
     if php_empty(lambda : term) or is_wp_error(term):
         return False
@@ -942,7 +942,7 @@ def get_edit_term_link(term_id=None, taxonomy="", object_type="", *args_):
 #//
 def edit_term_link(link="", before="", after="", term=None, echo=True, *args_):
     
-    if php_is_null(term):
+    if is_null(term):
         term = get_queried_object()
     # end if
     if (not term):
@@ -1995,7 +1995,7 @@ def get_pagenum_link(pagenum=1, escape=True, *args_):
     
     global wp_rewrite
     php_check_if_defined("wp_rewrite")
-    pagenum = int(pagenum)
+    pagenum = php_int(pagenum)
     request = remove_query_arg("paged")
     home_root = php_parse_url(home_url())
     home_root = home_root["path"] if (php_isset(lambda : home_root["path"])) else ""
@@ -2490,7 +2490,7 @@ def get_comments_pagenum_link(pagenum=1, max_page=0, *args_):
     
     global wp_rewrite
     php_check_if_defined("wp_rewrite")
-    pagenum = int(pagenum)
+    pagenum = php_int(pagenum)
     result = get_permalink()
     if "newest" == get_option("default_comments_page"):
         if pagenum != max_page:
@@ -3261,7 +3261,7 @@ def set_url_scheme(url=None, scheme=None, *args_):
 #//
 def get_dashboard_url(user_id=0, path="", scheme="admin", *args_):
     
-    user_id = int(user_id) if user_id else get_current_user_id()
+    user_id = php_int(user_id) if user_id else get_current_user_id()
     blogs = get_blogs_of_user(user_id)
     if is_multisite() and (not user_can(user_id, "manage_network")) and php_empty(lambda : blogs):
         url = user_admin_url(path, scheme)
@@ -3305,7 +3305,7 @@ def get_dashboard_url(user_id=0, path="", scheme="admin", *args_):
 #//
 def get_edit_profile_url(user_id=0, scheme="admin", *args_):
     
-    user_id = int(user_id) if user_id else get_current_user_id()
+    user_id = php_int(user_id) if user_id else get_current_user_id()
     if is_user_admin():
         url = user_admin_url("profile.php", scheme)
     elif is_network_admin():
@@ -3670,7 +3670,7 @@ def get_avatar_data(id_or_email=None, args=None, *args_):
             break
         # end if
     # end for
-    args["force_default"] = bool(args["force_default"])
+    args["force_default"] = php_bool(args["force_default"])
     args["rating"] = php_strtolower(args["rating"])
     args["found_avatar"] = False
     #// 
@@ -3713,7 +3713,7 @@ def get_avatar_data(id_or_email=None, args=None, *args_):
         user = id_or_email
     elif type(id_or_email).__name__ == "WP_Post":
         #// Post object.
-        user = get_user_by("id", int(id_or_email.post_author))
+        user = get_user_by("id", php_int(id_or_email.post_author))
     elif type(id_or_email).__name__ == "WP_Comment":
         if (not is_avatar_comment_type(get_comment_type(id_or_email))):
             args["url"] = False
@@ -3721,7 +3721,7 @@ def get_avatar_data(id_or_email=None, args=None, *args_):
             return apply_filters("get_avatar_data", args, id_or_email)
         # end if
         if (not php_empty(lambda : id_or_email.user_id)):
-            user = get_user_by("id", int(id_or_email.user_id))
+            user = get_user_by("id", php_int(id_or_email.user_id))
         # end if
         if (not user) or is_wp_error(user) and (not php_empty(lambda : id_or_email.comment_author_email)):
             email = id_or_email.comment_author_email
@@ -3894,9 +3894,9 @@ def get_parent_theme_file_path(file="", *args_):
 def get_privacy_policy_url(*args_):
     
     url = ""
-    policy_page_id = int(get_option("wp_page_for_privacy_policy"))
+    policy_page_id = php_int(get_option("wp_page_for_privacy_policy"))
     if (not php_empty(lambda : policy_page_id)) and get_post_status(policy_page_id) == "publish":
-        url = str(get_permalink(policy_page_id))
+        url = php_str(get_permalink(policy_page_id))
     # end if
     #// 
     #// Filters the URL of the privacy policy page.
@@ -3936,7 +3936,7 @@ def get_the_privacy_policy_link(before="", after="", *args_):
     
     link = ""
     privacy_policy_url = get_privacy_policy_url()
-    policy_page_id = int(get_option("wp_page_for_privacy_policy"))
+    policy_page_id = php_int(get_option("wp_page_for_privacy_policy"))
     page_title = get_the_title(policy_page_id) if policy_page_id else ""
     if privacy_policy_url and page_title:
         link = php_sprintf("<a class=\"privacy-policy-link\" href=\"%s\">%s</a>", esc_url(privacy_policy_url), esc_html(page_title))

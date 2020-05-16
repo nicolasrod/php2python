@@ -73,7 +73,7 @@ def has_blocks(post=None, *args_):
             post = wp_post.post_content
         # end if
     # end if
-    return False != php_strpos(str(post), "<!-- wp:")
+    return False != php_strpos(php_str(post), "<!-- wp:")
 # end def has_blocks
 #// 
 #// Determine whether a $post or a string contains a specific block type.
@@ -192,7 +192,7 @@ def strip_core_block_namespace(block_name=None, *args_):
 #//
 def get_comment_delimited_block_content(block_name=None, block_attributes=None, block_content=None, *args_):
     
-    if php_is_null(block_name):
+    if is_null(block_name):
         return block_content
     # end if
     serialized_block_name = strip_core_block_namespace(block_name)
@@ -409,7 +409,7 @@ def render_block(block=None, *args_):
     #// @param array       $block      The block being rendered.
     #//
     pre_render = apply_filters("pre_render_block", None, block)
-    if (not php_is_null(pre_render)):
+    if (not is_null(pre_render)):
         return pre_render
     # end if
     source_block = block

@@ -37,7 +37,7 @@ if '__PHP2PY_LOADED__' not in globals():
 def has_post_thumbnail(post=None, *args_):
     
     thumbnail_id = get_post_thumbnail_id(post)
-    has_thumbnail = bool(thumbnail_id)
+    has_thumbnail = php_bool(thumbnail_id)
     #// 
     #// Filters whether a post has a post thumbnail.
     #// 
@@ -47,7 +47,7 @@ def has_post_thumbnail(post=None, *args_):
     #// @param int|WP_Post|null $post          Post ID or WP_Post object. Default is global `$post`.
     #// @param int|string       $thumbnail_id  Post thumbnail ID or empty string.
     #//
-    return bool(apply_filters("has_post_thumbnail", has_thumbnail, post, thumbnail_id))
+    return php_bool(apply_filters("has_post_thumbnail", has_thumbnail, post, thumbnail_id))
 # end def has_post_thumbnail
 #// 
 #// Retrieve post thumbnail ID.
@@ -64,7 +64,7 @@ def get_post_thumbnail_id(post=None, *args_):
     if (not post):
         return ""
     # end if
-    return int(get_post_meta(post.ID, "_thumbnail_id", True))
+    return php_int(get_post_meta(post.ID, "_thumbnail_id", True))
 # end def get_post_thumbnail_id
 #// 
 #// Display the post thumbnail.

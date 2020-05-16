@@ -62,22 +62,22 @@ class ParagonIE_Sodium_Core_HChaCha20(ParagonIE_Sodium_Core_ChaCha20):
     #//
     def hchacha20bytes(self, ctx=None):
         
-        x0 = int(ctx[0])
-        x1 = int(ctx[1])
-        x2 = int(ctx[2])
-        x3 = int(ctx[3])
-        x4 = int(ctx[4])
-        x5 = int(ctx[5])
-        x6 = int(ctx[6])
-        x7 = int(ctx[7])
-        x8 = int(ctx[8])
-        x9 = int(ctx[9])
-        x10 = int(ctx[10])
-        x11 = int(ctx[11])
-        x12 = int(ctx[12])
-        x13 = int(ctx[13])
-        x14 = int(ctx[14])
-        x15 = int(ctx[15])
+        x0 = php_int(ctx[0])
+        x1 = php_int(ctx[1])
+        x2 = php_int(ctx[2])
+        x3 = php_int(ctx[3])
+        x4 = php_int(ctx[4])
+        x5 = php_int(ctx[5])
+        x6 = php_int(ctx[6])
+        x7 = php_int(ctx[7])
+        x8 = php_int(ctx[8])
+        x9 = php_int(ctx[9])
+        x10 = php_int(ctx[10])
+        x11 = php_int(ctx[11])
+        x12 = php_int(ctx[12])
+        x13 = php_int(ctx[13])
+        x14 = php_int(ctx[14])
+        x15 = php_int(ctx[15])
         i = 0
         while i < 10:
             
@@ -99,6 +99,6 @@ class ParagonIE_Sodium_Core_HChaCha20(ParagonIE_Sodium_Core_ChaCha20):
             x3, x4, x9, x14 = self.quarterround(x3, x4, x9, x14)
             i += 1
         # end while
-        return self.store32_le(int(x0 & 4294967295)) + self.store32_le(int(x1 & 4294967295)) + self.store32_le(int(x2 & 4294967295)) + self.store32_le(int(x3 & 4294967295)) + self.store32_le(int(x12 & 4294967295)) + self.store32_le(int(x13 & 4294967295)) + self.store32_le(int(x14 & 4294967295)) + self.store32_le(int(x15 & 4294967295))
+        return self.store32_le(php_int(x0 & 4294967295)) + self.store32_le(php_int(x1 & 4294967295)) + self.store32_le(php_int(x2 & 4294967295)) + self.store32_le(php_int(x3 & 4294967295)) + self.store32_le(php_int(x12 & 4294967295)) + self.store32_le(php_int(x13 & 4294967295)) + self.store32_le(php_int(x14 & 4294967295)) + self.store32_le(php_int(x15 & 4294967295))
     # end def hchacha20bytes
 # end class ParagonIE_Sodium_Core_HChaCha20

@@ -27,7 +27,7 @@ action = PHP_POST["action"] if (php_isset(lambda : PHP_POST["action"])) else ""
 if (not php_empty(lambda : action)):
     check_admin_referer(action)
     if "set-privacy-page" == action:
-        privacy_policy_page_id = int(PHP_POST["page_for_privacy_policy"]) if (php_isset(lambda : PHP_POST["page_for_privacy_policy"])) else 0
+        privacy_policy_page_id = php_int(PHP_POST["page_for_privacy_policy"]) if (php_isset(lambda : PHP_POST["page_for_privacy_policy"])) else 0
         update_option("wp_page_for_privacy_policy", privacy_policy_page_id)
         privacy_page_updated_message = __("Privacy Policy page updated successfully.")
         if privacy_policy_page_id:
@@ -60,7 +60,7 @@ if (not php_empty(lambda : action)):
 # end if
 #// If a Privacy Policy page ID is available, make sure the page actually exists. If not, display an error.
 privacy_policy_page_exists = False
-privacy_policy_page_id = int(get_option("wp_page_for_privacy_policy"))
+privacy_policy_page_id = php_int(get_option("wp_page_for_privacy_policy"))
 if (not php_empty(lambda : privacy_policy_page_id)):
     privacy_policy_page = get_post(privacy_policy_page_id)
     if (not type(privacy_policy_page).__name__ == "WP_Post"):
@@ -122,7 +122,7 @@ php_print("""               </label>
 </th>
 <td>
 """)
-has_pages = bool(get_posts(Array({"post_type": "page", "posts_per_page": 1, "post_status": Array("publish", "draft")})))
+has_pages = php_bool(get_posts(Array({"post_type": "page", "posts_per_page": 1, "post_status": Array("publish", "draft")})))
 if has_pages:
     php_print("                 <form method=\"post\" action=\"\">\n                        <input type=\"hidden\" name=\"action\" value=\"set-privacy-page\" />\n                      ")
     wp_dropdown_pages(Array({"name": "page_for_privacy_policy", "show_option_none": __("&mdash; Select &mdash;"), "option_none_value": "0", "selected": privacy_policy_page_id, "post_status": Array("draft", "publish")}))

@@ -81,7 +81,7 @@ class Walker_Nav_Menu_Edit(Walker_Nav_Menu):
         removed_args = Array("action", "customlink-tab", "edit-menu-item", "menu-item", "page-tab", "_wpnonce")
         original_title = False
         if "taxonomy" == item.type:
-            original_object = get_term(int(item.object_id), item.object)
+            original_object = get_term(php_int(item.object_id), item.object)
             if original_object and (not is_wp_error(original_title)):
                 original_title = original_object.name
             # end if

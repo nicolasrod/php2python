@@ -57,7 +57,7 @@ if (not php_is_callable("RandomCompat_strlen")):
             if (not php_is_string(binary_string)):
                 raise php_new_class("TypeError", lambda : TypeError("RandomCompat_strlen() expects a string"))
             # end if
-            return int(php_mb_strlen(binary_string, "8bit"))
+            return php_int(php_mb_strlen(binary_string, "8bit"))
         # end def RandomCompat_strlen
     else:
         #// 
@@ -76,7 +76,7 @@ if (not php_is_callable("RandomCompat_strlen")):
             if (not php_is_string(binary_string)):
                 raise php_new_class("TypeError", lambda : TypeError("RandomCompat_strlen() expects a string"))
             # end if
-            return int(php_strlen(binary_string))
+            return php_int(php_strlen(binary_string))
         # end def RandomCompat_strlen
     # end if
 # end if
@@ -120,7 +120,7 @@ if (not php_is_callable("RandomCompat_substr")):
             if start > RandomCompat_strlen(binary_string):
                 return ""
             # end if
-            return str(php_mb_substr(binary_string, start, length, "8bit"))
+            return php_str(php_mb_substr(binary_string, start, length, "8bit"))
         # end def RandomCompat_substr
     else:
         #// 
@@ -148,9 +148,9 @@ if (not php_is_callable("RandomCompat_substr")):
                 if (not php_is_int(length)):
                     raise php_new_class("TypeError", lambda : TypeError("RandomCompat_substr(): Third argument should be an integer, or omitted"))
                 # end if
-                return str(php_substr(binary_string, start, length))
+                return php_str(php_substr(binary_string, start, length))
             # end if
-            return str(php_substr(binary_string, start))
+            return php_str(php_substr(binary_string, start))
         # end def RandomCompat_substr
     # end if
 # end if

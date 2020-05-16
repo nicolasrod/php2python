@@ -556,7 +556,7 @@ class SimplePie_IRI():
             self.scheme, self.iuserinfo, self.ihost, self.port, self.ipath, self.iquery, self.ifragment, return_ = cache[iri]
             return return_
         else:
-            parsed = self.parse_iri(str(iri))
+            parsed = self.parse_iri(php_str(iri))
             if (not parsed):
                 return False
             # end if
@@ -701,7 +701,7 @@ class SimplePie_IRI():
             self.port = None
             return True
         elif strspn(port, "0123456789") == php_strlen(port):
-            self.port = int(port)
+            self.port = php_int(port)
             self.scheme_normalization()
             return True
         else:
@@ -721,9 +721,9 @@ class SimplePie_IRI():
         if (not cache):
             cache = Array()
         # end if
-        ipath = str(ipath)
+        ipath = php_str(ipath)
         if (php_isset(lambda : cache[ipath])):
-            self.ipath = cache[ipath][int(self.scheme != None)]
+            self.ipath = cache[ipath][php_int(self.scheme != None)]
         else:
             valid = self.replace_invalid_with_pct_encoding(ipath, "!$&'()*+,;=@:/")
             removed = self.remove_dot_segments(valid)

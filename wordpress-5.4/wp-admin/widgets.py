@@ -80,7 +80,7 @@ retrieve_widgets()
 if (php_isset(lambda : PHP_POST["savewidget"])) or (php_isset(lambda : PHP_POST["removewidget"])):
     widget_id = PHP_POST["widget-id"]
     check_admin_referer(str("save-delete-widget-") + str(widget_id))
-    number = int(PHP_POST["multi_number"]) if (php_isset(lambda : PHP_POST["multi_number"])) else ""
+    number = php_int(PHP_POST["multi_number"]) if (php_isset(lambda : PHP_POST["multi_number"])) else ""
     if number:
         for key,val in PHP_POST:
             if php_is_array(val) and php_preg_match("/__i__|%i%/", key(val)):
@@ -90,7 +90,7 @@ if (php_isset(lambda : PHP_POST["savewidget"])) or (php_isset(lambda : PHP_POST[
         # end for
     # end if
     sidebar_id = PHP_POST["sidebar"]
-    position = int(PHP_POST[sidebar_id + "_position"]) - 1 if (php_isset(lambda : PHP_POST[sidebar_id + "_position"])) else 0
+    position = php_int(PHP_POST[sidebar_id + "_position"]) - 1 if (php_isset(lambda : PHP_POST[sidebar_id + "_position"])) else 0
     id_base = PHP_POST["id_base"]
     sidebar = sidebars_widgets[sidebar_id] if (php_isset(lambda : sidebars_widgets[sidebar_id])) else Array()
     #// Delete.
@@ -167,7 +167,7 @@ if (php_isset(lambda : PHP_REQUEST["editwidget"])) and PHP_REQUEST["editwidget"]
             for control in wp_registered_widget_controls:
                 if PHP_REQUEST["base"] == control["id_base"]:
                     control_callback = control["callback"]
-                    multi_number = int(PHP_REQUEST["num"])
+                    multi_number = php_int(PHP_REQUEST["num"])
                     control["params"][0]["number"] = -1
                     control["id"] = control["id_base"] + "-" + multi_number
                     widget_id = control["id"]
@@ -195,7 +195,7 @@ if (php_isset(lambda : PHP_REQUEST["editwidget"])) and PHP_REQUEST["editwidget"]
     id_base = control["id_base"] if (php_isset(lambda : control["id_base"])) else control["id"]
     #// Show the widget form.
     width = " style=\"width:" + php_max(control["width"], 350) + "px\""
-    key = int(PHP_REQUEST["key"]) if (php_isset(lambda : PHP_REQUEST["key"])) else 0
+    key = php_int(PHP_REQUEST["key"]) if (php_isset(lambda : PHP_REQUEST["key"])) else 0
     php_include_file(ABSPATH + "wp-admin/admin-header.php", once=True)
     php_print(" <div class=\"wrap\">\n  <h1>")
     php_print(esc_html(title))
@@ -397,7 +397,7 @@ split = 0
 single_sidebar_class = ""
 sidebars_count = php_count(theme_sidebars)
 if sidebars_count > 1:
-    split = int(ceil(sidebars_count / 2))
+    split = php_int(ceil(sidebars_count / 2))
 else:
     single_sidebar_class = " single-sidebar"
 # end if

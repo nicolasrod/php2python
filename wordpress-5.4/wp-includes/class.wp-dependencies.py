@@ -386,7 +386,7 @@ class WP_Dependencies():
     #//
     def set_group(self, handle=None, recursion=None, group=None):
         
-        group = int(group)
+        group = php_int(group)
         if (php_isset(lambda : self.groups[handle])) and self.groups[handle] <= group:
             return False
         # end if

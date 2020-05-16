@@ -549,7 +549,7 @@ class WP_Query():
                 # end if
             # end if
             if (not php_empty(lambda : self.queried_object)):
-                self.queried_object_id = int(self.queried_object.ID)
+                self.queried_object_id = php_int(self.queried_object.ID)
             else:
                 self.queried_object = None
             # end if
@@ -1229,7 +1229,7 @@ class WP_Query():
             q["posts_per_page"] = get_option("posts_per_page")
         # end if
         if (php_isset(lambda : q["showposts"])) and q["showposts"]:
-            q["showposts"] = int(q["showposts"])
+            q["showposts"] = php_int(q["showposts"])
             q["posts_per_page"] = q["showposts"]
         # end if
         if (php_isset(lambda : q["posts_per_archive_page"])) and 0 != q["posts_per_archive_page"] and self.is_archive or self.is_search:
@@ -1251,7 +1251,7 @@ class WP_Query():
             # end if
             q["nopaging"] = False
         # end if
-        q["posts_per_page"] = int(q["posts_per_page"])
+        q["posts_per_page"] = php_int(q["posts_per_page"])
         if q["posts_per_page"] < -1:
             q["posts_per_page"] = abs(q["posts_per_page"])
         elif 0 == q["posts_per_page"]:
@@ -1271,7 +1271,7 @@ class WP_Query():
         # end if
         #// If true, forcibly turns off SQL_CALC_FOUND_ROWS even when limits are present.
         if (php_isset(lambda : q["no_found_rows"])):
-            q["no_found_rows"] = bool(q["no_found_rows"])
+            q["no_found_rows"] = php_bool(q["no_found_rows"])
         else:
             q["no_found_rows"] = False
         # end if
@@ -1926,7 +1926,7 @@ class WP_Query():
             self.comment_count = php_count(self.comments)
             post_ids = Array()
             for comment in self.comments:
-                post_ids[-1] = int(comment.comment_post_ID)
+                post_ids[-1] = php_int(comment.comment_post_ID)
             # end for
             post_ids = join(",", post_ids)
             join = ""
@@ -2200,9 +2200,9 @@ class WP_Query():
             self.set_found_posts(q, limits)
             r = Array()
             for key,post in self.posts:
-                self.posts[key].ID = int(post.ID)
-                self.posts[key].post_parent = int(post.post_parent)
-                r[int(post.ID)] = int(post.post_parent)
+                self.posts[key].ID = php_int(post.ID)
+                self.posts[key].post_parent = php_int(post.post_parent)
+                r[php_int(post.ID)] = php_int(post.post_parent)
             # end for
             return r
         # end if
@@ -2283,7 +2283,7 @@ class WP_Query():
         #// Check post status to determine if post should be displayed.
         if (not php_empty(lambda : self.posts)) and self.is_single or self.is_page:
             status = get_post_status(self.posts[0])
-            if "attachment" == self.posts[0].post_type and 0 == int(self.posts[0].post_parent):
+            if "attachment" == self.posts[0].post_type and 0 == php_int(self.posts[0].post_parent):
                 self.is_page = False
                 self.is_single = True
                 self.is_attachment = True
@@ -2672,7 +2672,7 @@ class WP_Query():
             # end if
             if (not php_empty(lambda : term)) and (not is_wp_error(term)):
                 self.queried_object = term
-                self.queried_object_id = int(term.term_id)
+                self.queried_object_id = php_int(term.term_id)
                 if self.is_category and "category" == self.queried_object.taxonomy:
                     _make_cat_compat(self.queried_object)
                 # end if
@@ -2686,12 +2686,12 @@ class WP_Query():
         elif self.is_posts_page:
             page_for_posts = get_option("page_for_posts")
             self.queried_object = get_post(page_for_posts)
-            self.queried_object_id = int(self.queried_object.ID)
+            self.queried_object_id = php_int(self.queried_object.ID)
         elif self.is_singular and (not php_empty(lambda : self.post)):
             self.queried_object = self.post
-            self.queried_object_id = int(self.post.ID)
+            self.queried_object_id = php_int(self.post.ID)
         elif self.is_author:
-            self.queried_object_id = int(self.get("author"))
+            self.queried_object_id = php_int(self.get("author"))
             self.queried_object = get_userdata(self.queried_object_id)
         # end if
         return self.queried_object
@@ -2781,7 +2781,7 @@ class WP_Query():
     #//
     def is_archive(self):
         
-        return bool(self.is_archive)
+        return php_bool(self.is_archive)
     # end def is_archive
     #// 
     #// Is the query for an existing post type archive page?
@@ -2795,7 +2795,7 @@ class WP_Query():
     def is_post_type_archive(self, post_types=""):
         
         if php_empty(lambda : post_types) or (not self.is_post_type_archive):
-            return bool(self.is_post_type_archive)
+            return php_bool(self.is_post_type_archive)
         # end if
         post_type = self.get("post_type")
         if php_is_array(post_type):
@@ -2823,7 +2823,7 @@ class WP_Query():
         # end if
         attachment = php_array_map("strval", attachment)
         post_obj = self.get_queried_object()
-        if php_in_array(str(post_obj.ID), attachment):
+        if php_in_array(php_str(post_obj.ID), attachment):
             return True
         elif php_in_array(post_obj.post_title, attachment):
             return True
@@ -2854,7 +2854,7 @@ class WP_Query():
         # end if
         author_obj = self.get_queried_object()
         author = php_array_map("strval", author)
-        if php_in_array(str(author_obj.ID), author):
+        if php_in_array(php_str(author_obj.ID), author):
             return True
         elif php_in_array(author_obj.nickname, author):
             return True
@@ -2885,7 +2885,7 @@ class WP_Query():
         # end if
         cat_obj = self.get_queried_object()
         category = php_array_map("strval", category)
-        if php_in_array(str(cat_obj.term_id), category):
+        if php_in_array(php_str(cat_obj.term_id), category):
             return True
         elif php_in_array(cat_obj.name, category):
             return True
@@ -2916,7 +2916,7 @@ class WP_Query():
         # end if
         tag_obj = self.get_queried_object()
         tag = php_array_map("strval", tag)
-        if php_in_array(str(tag_obj.term_id), tag):
+        if php_in_array(php_str(tag_obj.term_id), tag):
             return True
         elif php_in_array(tag_obj.name, tag):
             return True
@@ -2991,7 +2991,7 @@ class WP_Query():
     #//
     def is_date(self):
         
-        return bool(self.is_date)
+        return php_bool(self.is_date)
     # end def is_date
     #// 
     #// Is the query for an existing day archive?
@@ -3002,7 +3002,7 @@ class WP_Query():
     #//
     def is_day(self):
         
-        return bool(self.is_day)
+        return php_bool(self.is_day)
     # end def is_day
     #// 
     #// Is the query for a feed?
@@ -3016,7 +3016,7 @@ class WP_Query():
     def is_feed(self, feeds=""):
         
         if php_empty(lambda : feeds) or (not self.is_feed):
-            return bool(self.is_feed)
+            return php_bool(self.is_feed)
         # end if
         qv = self.get("feed")
         if "feed" == qv:
@@ -3033,7 +3033,7 @@ class WP_Query():
     #//
     def is_comment_feed(self):
         
-        return bool(self.is_comment_feed)
+        return php_bool(self.is_comment_feed)
     # end def is_comment_feed
     #// 
     #// Is the query for the front page of the site?
@@ -3080,7 +3080,7 @@ class WP_Query():
     #//
     def is_home(self):
         
-        return bool(self.is_home)
+        return php_bool(self.is_home)
     # end def is_home
     #// 
     #// Is the query for the Privacy Policy page?
@@ -3112,7 +3112,7 @@ class WP_Query():
     #//
     def is_month(self):
         
-        return bool(self.is_month)
+        return php_bool(self.is_month)
     # end def is_month
     #// 
     #// Is the query for an existing single page?
@@ -3139,7 +3139,7 @@ class WP_Query():
         # end if
         page_obj = self.get_queried_object()
         page = php_array_map("strval", page)
-        if php_in_array(str(page_obj.ID), page):
+        if php_in_array(php_str(page_obj.ID), page):
             return True
         elif php_in_array(page_obj.post_title, page):
             return True
@@ -3167,7 +3167,7 @@ class WP_Query():
     #//
     def is_paged(self):
         
-        return bool(self.is_paged)
+        return php_bool(self.is_paged)
     # end def is_paged
     #// 
     #// Is the query for a post or page preview?
@@ -3178,7 +3178,7 @@ class WP_Query():
     #//
     def is_preview(self):
         
-        return bool(self.is_preview)
+        return php_bool(self.is_preview)
     # end def is_preview
     #// 
     #// Is the query for the robots.txt file?
@@ -3189,7 +3189,7 @@ class WP_Query():
     #//
     def is_robots(self):
         
-        return bool(self.is_robots)
+        return php_bool(self.is_robots)
     # end def is_robots
     #// 
     #// Is the query for the favicon.ico file?
@@ -3200,7 +3200,7 @@ class WP_Query():
     #//
     def is_favicon(self):
         
-        return bool(self.is_favicon)
+        return php_bool(self.is_favicon)
     # end def is_favicon
     #// 
     #// Is the query for a search?
@@ -3211,7 +3211,7 @@ class WP_Query():
     #//
     def is_search(self):
         
-        return bool(self.is_search)
+        return php_bool(self.is_search)
     # end def is_search
     #// 
     #// Is the query for an existing single post?
@@ -3240,7 +3240,7 @@ class WP_Query():
         # end if
         post_obj = self.get_queried_object()
         post = php_array_map("strval", post)
-        if php_in_array(str(post_obj.ID), post):
+        if php_in_array(php_str(post_obj.ID), post):
             return True
         elif php_in_array(post_obj.post_title, post):
             return True
@@ -3279,7 +3279,7 @@ class WP_Query():
     def is_singular(self, post_types=""):
         
         if php_empty(lambda : post_types) or (not self.is_singular):
-            return bool(self.is_singular)
+            return php_bool(self.is_singular)
         # end if
         post_obj = self.get_queried_object()
         return php_in_array(post_obj.post_type, post_types)
@@ -3293,7 +3293,7 @@ class WP_Query():
     #//
     def is_time(self):
         
-        return bool(self.is_time)
+        return php_bool(self.is_time)
     # end def is_time
     #// 
     #// Is the query for a trackback endpoint call?
@@ -3304,7 +3304,7 @@ class WP_Query():
     #//
     def is_trackback(self):
         
-        return bool(self.is_trackback)
+        return php_bool(self.is_trackback)
     # end def is_trackback
     #// 
     #// Is the query for an existing year archive?
@@ -3315,7 +3315,7 @@ class WP_Query():
     #//
     def is_year(self):
         
-        return bool(self.is_year)
+        return php_bool(self.is_year)
     # end def is_year
     #// 
     #// Is the query a 404 (returns no results)?
@@ -3326,7 +3326,7 @@ class WP_Query():
     #//
     def is_404(self):
         
-        return bool(self.is_404)
+        return php_bool(self.is_404)
     # end def is_404
     #// 
     #// Is the query for an embedded post?
@@ -3337,7 +3337,7 @@ class WP_Query():
     #//
     def is_embed(self):
         
-        return bool(self.is_embed)
+        return php_bool(self.is_embed)
     # end def is_embed
     #// 
     #// Is the query the main query?
@@ -3424,7 +3424,7 @@ class WP_Query():
         if (not post):
             return False
         # end if
-        id = int(post.ID)
+        id = php_int(post.ID)
         authordata = get_userdata(post.post_author)
         currentday = mysql2date("d.m.y", post.post_date, False)
         currentmonth = mysql2date("m", post.post_date, False)

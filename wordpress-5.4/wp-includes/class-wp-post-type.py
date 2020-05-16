@@ -115,7 +115,7 @@ class WP_Post_Type():
         # end if
         #// If not set, default to the setting for 'show_in_menu'.
         if None == args["show_in_admin_bar"]:
-            args["show_in_admin_bar"] = bool(args["show_in_menu"])
+            args["show_in_admin_bar"] = php_bool(args["show_in_menu"])
         # end if
         #// If not set, default to the setting for 'public'.
         if None == args["show_in_nav_menus"]:
@@ -163,7 +163,7 @@ class WP_Post_Type():
                 args["rewrite"]["pages"] = True
             # end if
             if (not (php_isset(lambda : args["rewrite"]["feeds"]))) or (not args["has_archive"]):
-                args["rewrite"]["feeds"] = bool(args["has_archive"])
+                args["rewrite"]["feeds"] = php_bool(args["has_archive"])
             # end if
             if (not (php_isset(lambda : args["rewrite"]["ep_mask"]))):
                 if (php_isset(lambda : args["permalink_epmask"])):

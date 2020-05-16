@@ -64,10 +64,10 @@ if (not php_is_callable("RandomCompat_intval")):
             number += 0
         # end if
         if php_is_float(number) and number > (1 << (PHP_INT_MAX).bit_length()) - 1 - PHP_INT_MAX and number < PHP_INT_MAX:
-            number = int(number)
+            number = php_int(number)
         # end if
         if php_is_int(number):
-            return int(number)
+            return php_int(number)
         elif (not fail_open):
             raise php_new_class("TypeError", lambda : TypeError("Expected an integer."))
         # end if

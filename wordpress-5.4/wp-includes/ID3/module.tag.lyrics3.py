@@ -65,7 +65,7 @@ class getid3_lyrics3(getid3_handler):
             lyrics3offset = info["filesize"] - lyrics3size
         elif php_substr(php_strrev(lyrics3_id3v1), 0, 9) == php_strrev("LYRICS200"):
             #// Lyrics3v2, no ID3v1, no APE
-            lyrics3size = int(php_strrev(php_substr(php_strrev(lyrics3_id3v1), 9, 6))) + 6 + php_strlen("LYRICS200")
+            lyrics3size = php_int(php_strrev(php_substr(php_strrev(lyrics3_id3v1), 9, 6))) + 6 + php_strlen("LYRICS200")
             #// LSZ = lyrics + 'LYRICSBEGIN'; add 6-byte size field; add 'LYRICS200'
             lyrics3offset = info["filesize"] - lyrics3size
             lyrics3version = 2
@@ -178,7 +178,7 @@ class getid3_lyrics3(getid3_handler):
                             break
                         # end if
                         fieldname = php_substr(rawdata, 0, 3)
-                        fieldsize = int(php_substr(rawdata, 3, 5))
+                        fieldsize = php_int(php_substr(rawdata, 3, 5))
                         ParsedLyrics3["raw"][fieldname] = php_substr(rawdata, 8, fieldsize)
                         rawdata = php_substr(rawdata, 3 + 5 + fieldsize)
                     # end while
@@ -246,7 +246,7 @@ class getid3_lyrics3(getid3_handler):
     def lyrics3timestamp2seconds(self, rawtimestamp=None):
         
         if php_preg_match("#^\\[([0-9]{2}):([0-9]{2})\\]$#", rawtimestamp, regs):
-            return int(regs[1] * 60 + regs[2])
+            return php_int(regs[1] * 60 + regs[2])
         # end if
         return False
     # end def lyrics3timestamp2seconds

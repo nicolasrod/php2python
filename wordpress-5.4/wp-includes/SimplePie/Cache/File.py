@@ -92,7 +92,7 @@ class SimplePie_Cache_File(SimplePie_Cache_Base):
                 data = data.data
             # end if
             data = serialize(data)
-            return bool(file_put_contents(self.name, data))
+            return php_bool(file_put_contents(self.name, data))
         # end if
         return False
     # end def save

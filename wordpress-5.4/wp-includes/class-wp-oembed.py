@@ -404,8 +404,8 @@ class WP_oEmbed():
     def fetch(self, provider=None, url=None, args=""):
         
         args = wp_parse_args(args, wp_embed_defaults(url))
-        provider = add_query_arg("maxwidth", int(args["width"]), provider)
-        provider = add_query_arg("maxheight", int(args["height"]), provider)
+        provider = add_query_arg("maxwidth", php_int(args["width"]), provider)
+        provider = add_query_arg("maxheight", php_int(args["height"]), provider)
         provider = add_query_arg("url", urlencode(url), provider)
         provider = add_query_arg("dnt", 1, provider)
         #// 
@@ -518,7 +518,7 @@ class WP_oEmbed():
         # end if
         return_ = php_new_class("stdClass", lambda : stdClass())
         for key,value in xml:
-            return_.key = str(value)
+            return_.key = php_str(value)
         # end for
         return return_
     # end def _parse_xml_body

@@ -35,7 +35,7 @@ temp_args = Array("enabled", "disabled", "error")
 PHP_SERVER["REQUEST_URI"] = remove_query_arg(temp_args, PHP_SERVER["REQUEST_URI"])
 referer = remove_query_arg(temp_args, wp_get_referer())
 if (not php_empty(lambda : PHP_REQUEST["paged"])):
-    referer = add_query_arg("paged", int(PHP_REQUEST["paged"]), referer)
+    referer = add_query_arg("paged", php_int(PHP_REQUEST["paged"]), referer)
 # end if
 id = php_intval(PHP_REQUEST["id"]) if (php_isset(lambda : PHP_REQUEST["id"])) else 0
 if (not id):

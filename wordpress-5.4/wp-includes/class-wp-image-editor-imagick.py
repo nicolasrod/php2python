@@ -89,7 +89,7 @@ class WP_Image_Editor_Imagick(WP_Image_Editor):
         # end if
         try: 
             #// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-            return bool(php_no_error(lambda: Imagick.queryformats(imagick_extension)))
+            return php_bool(php_no_error(lambda: Imagick.queryformats(imagick_extension)))
         except Exception as e:
             return False
         # end try

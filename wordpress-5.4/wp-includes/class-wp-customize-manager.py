@@ -108,7 +108,7 @@ class WP_Customize_Manager():
         self._changeset_uuid = args["changeset_uuid"]
         for key in Array("settings_previewed", "autosaved", "branching"):
             if (php_isset(lambda : args[key])):
-                self.key = bool(args[key])
+                self.key = php_bool(args[key])
             # end if
         # end for
         php_include_file(ABSPATH + WPINC + "/class-wp-customize-setting.php", once=True)
@@ -1395,7 +1395,7 @@ class WP_Customize_Manager():
             return default
         # end if
         value = setting.sanitize(value)
-        if php_is_null(value) or is_wp_error(value):
+        if is_null(value) or is_wp_error(value):
             return default
         # end if
         return value
@@ -1739,7 +1739,7 @@ class WP_Customize_Manager():
     #//
     def is_preview(self):
         
-        return bool(self.previewing)
+        return php_bool(self.previewing)
     # end def is_preview
     #// 
     #// Retrieve the template name of the previewed theme.
@@ -1834,7 +1834,7 @@ class WP_Customize_Manager():
             if options["validate_capability"] and (not current_user_can(setting.capability)):
                 validity = php_new_class("WP_Error", lambda : WP_Error("unauthorized", __("Unauthorized to modify setting due to capability.")))
             else:
-                if php_is_null(unsanitized_value):
+                if is_null(unsanitized_value):
                     continue
                 # end if
                 validity = setting.validate(unsanitized_value)
@@ -1848,7 +1848,7 @@ class WP_Customize_Manager():
             # end if
             if (not is_wp_error(validity)):
                 value = setting.sanitize(unsanitized_value)
-                if php_is_null(value):
+                if is_null(value):
                     validity = False
                 elif is_wp_error(value):
                     validity = value
@@ -2119,8 +2119,8 @@ class WP_Customize_Manager():
             # end if
         # end if
         #// The request was made via wp.customize.previewer.save().
-        update_transactionally = bool(args["status"])
-        allow_revision = bool(args["status"])
+        update_transactionally = php_bool(args["status"])
+        allow_revision = php_bool(args["status"])
         #// Amend post values with any supplied data.
         for setting_id,setting_params in args["data"]:
             if php_is_array(setting_params) and php_array_key_exists("value", setting_params):
@@ -2480,7 +2480,7 @@ class WP_Customize_Manager():
     def set_changeset_lock(self, changeset_post_id=None, take_over=False):
         
         if changeset_post_id:
-            can_override = (not bool(get_post_meta(changeset_post_id, "_edit_lock", True)))
+            can_override = (not php_bool(get_post_meta(changeset_post_id, "_edit_lock", True)))
             if take_over:
                 can_override = True
             # end if

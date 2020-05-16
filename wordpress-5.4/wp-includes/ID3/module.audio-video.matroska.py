@@ -880,7 +880,7 @@ class getid3_matroska(getid3_handler):
                                                         pass
                                                     # end if
                                                     if case(EBML_ID_CODECDECODEALL):
-                                                        track_entry[subelement["id_name"]] = bool(getid3_lib.bigendian2int(subelement["data"]))
+                                                        track_entry[subelement["id_name"]] = php_bool(getid3_lib.bigendian2int(subelement["data"]))
                                                         break
                                                     # end if
                                                     if case(EBML_ID_VIDEO):
@@ -928,7 +928,7 @@ class getid3_matroska(getid3_handler):
                                                                     break
                                                                 # end if
                                                                 if case(EBML_ID_FLAGINTERLACED):
-                                                                    track_entry[sub_subelement["id_name"]] = bool(getid3_lib.bigendian2int(sub_subelement["data"]))
+                                                                    track_entry[sub_subelement["id_name"]] = php_bool(getid3_lib.bigendian2int(sub_subelement["data"]))
                                                                     break
                                                                 # end if
                                                                 if case(EBML_ID_GAMMAVALUE):
@@ -1421,7 +1421,7 @@ class getid3_matroska(getid3_handler):
                                                         pass
                                                     # end if
                                                     if case(EBML_ID_EDITIONFLAGORDERED):
-                                                        editionentry_entry[sub_subelement["id_name"]] = bool(getid3_lib.bigendian2int(sub_subelement["data"]))
+                                                        editionentry_entry[sub_subelement["id_name"]] = php_bool(getid3_lib.bigendian2int(sub_subelement["data"]))
                                                         break
                                                     # end if
                                                     if case(EBML_ID_CHAPTERATOM):
@@ -1443,7 +1443,7 @@ class getid3_matroska(getid3_handler):
                                                                     pass
                                                                 # end if
                                                                 if case(EBML_ID_CHAPTERFLAGHIDDEN):
-                                                                    chapteratom_entry[sub_sub_subelement["id_name"]] = bool(getid3_lib.bigendian2int(sub_sub_subelement["data"]))
+                                                                    chapteratom_entry[sub_sub_subelement["id_name"]] = php_bool(getid3_lib.bigendian2int(sub_sub_subelement["data"]))
                                                                     break
                                                                 # end if
                                                                 if case(EBML_ID_CHAPTERUID):
@@ -1822,7 +1822,7 @@ class getid3_matroska(getid3_handler):
                     break
                 # end if
                 if case(EBML_ID_TAGDEFAULT):
-                    simpletag_entry[element["id_name"]] = bool(getid3_lib.bigendian2int(element["data"]))
+                    simpletag_entry[element["id_name"]] = php_bool(getid3_lib.bigendian2int(element["data"]))
                     break
                 # end if
                 if case():
@@ -1854,7 +1854,7 @@ class getid3_matroska(getid3_handler):
         else:
             pass
         # end if
-        block_data["flags"]["invisible"] = bool(block_data["flags_raw"] & 8 >> 3)
+        block_data["flags"]["invisible"] = php_bool(block_data["flags_raw"] & 8 >> 3)
         block_data["flags"]["lacing"] = block_data["flags_raw"] & 6 >> 1
         #// 00=no lacing; 01=Xiph lacing; 11=EBML lacing; 10=fixed-size lacing
         if block_type == EBML_ID_CLUSTERSIMPLEBLOCK:

@@ -174,7 +174,7 @@ class Akismet_Admin():
             return False
         # end if
         for option in Array("akismet_strictness", "akismet_show_user_comments_approved"):
-            update_option(option, "1" if (php_isset(lambda : PHP_POST[option])) and int(PHP_POST[option]) == 1 else "0")
+            update_option(option, "1" if (php_isset(lambda : PHP_POST[option])) and php_int(PHP_POST[option]) == 1 else "0")
         # end for
         if (not php_empty(lambda : PHP_POST["akismet_comment_form_privacy_notice"])):
             self.set_form_privacy_notice_option(PHP_POST["akismet_comment_form_privacy_notice"])
@@ -557,7 +557,7 @@ class Akismet_Admin():
             #// comments
             type = ""
         # end if
-        return int(wpdb.get_var(wpdb.prepare(str("SELECT COUNT(comment_ID) FROM ") + str(wpdb.comments) + str(" WHERE comment_approved = 'spam' AND comment_type = %s"), type)))
+        return php_int(wpdb.get_var(wpdb.prepare(str("SELECT COUNT(comment_ID) FROM ") + str(wpdb.comments) + str(" WHERE comment_approved = 'spam' AND comment_type = %s"), type)))
     # end def get_spam_count
     #// Check connectivity between the WordPress blog and Akismet's servers.
     #// Returns an associative array of server IP addresses, where the key is the IP address, and value is true (available) or false (unable to connect).
@@ -694,7 +694,7 @@ class Akismet_Admin():
     @classmethod
     def display_alert(self):
         
-        Akismet.view("notice", Array({"type": "alert", "code": int(get_option("akismet_alert_code")), "msg": get_option("akismet_alert_msg")}))
+        Akismet.view("notice", Array({"type": "alert", "code": php_int(get_option("akismet_alert_code")), "msg": get_option("akismet_alert_msg")}))
     # end def display_alert
     @classmethod
     def display_privacy_notice_control_warning(self):
@@ -853,7 +853,7 @@ class Akismet_Admin():
             #// This page manages the notices and puts them inline where they make sense.
             return
         # end if
-        if php_in_array(hook_suffix, Array("edit-comments.php")) and int(get_option("akismet_alert_code")) > 0:
+        if php_in_array(hook_suffix, Array("edit-comments.php")) and php_int(get_option("akismet_alert_code")) > 0:
             Akismet.verify_key(Akismet.get_api_key())
             #// verify that the key is still in alert state
             if get_option("akismet_alert_code") > 0:
@@ -865,8 +865,8 @@ class Akismet_Admin():
             self.display_spam_check_warning()
         # end if
         if (php_isset(lambda : PHP_REQUEST["akismet_recheck_complete"])):
-            recheck_count = int(PHP_REQUEST["recheck_count"])
-            spam_count = int(PHP_REQUEST["spam_count"])
+            recheck_count = php_int(PHP_REQUEST["recheck_count"])
+            spam_count = php_int(PHP_REQUEST["spam_count"])
             if recheck_count == 0:
                 message = __("There were no comments to check. Akismet will only check comments awaiting moderation.", "akismet")
             else:
@@ -946,10 +946,10 @@ class Akismet_Admin():
                 #// If WPCOM ever reaches 100 billion users, this will fail. :-)
                 if php_preg_match("/^[a-f0-9]{12}$/i", first_response_value):
                     api_key = first_response_value
-                    user_id = int(second_response_value)
+                    user_id = php_int(second_response_value)
                 else:
                     api_key = second_response_value
-                    user_id = int(first_response_value)
+                    user_id = php_int(first_response_value)
                 # end if
                 return compact("api_key", "user_id")
             # end if
@@ -1022,7 +1022,7 @@ class Akismet_Admin():
         
         items_removed = False
         number = 50
-        page = int(page)
+        page = php_int(page)
         comments = get_comments(Array({"author_email": email_address, "number": number, "paged": page, "order_by": "comment_ID", "order": "ASC"}))
         for comment in comments:
             comment_as_submitted = get_comment_meta(comment.comment_ID, "akismet_as_submitted", True)

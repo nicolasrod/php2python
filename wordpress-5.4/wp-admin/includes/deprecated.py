@@ -374,8 +374,8 @@ if (not php_class_exists("WP_User_Search", False)):
             
             _deprecated_function(__FUNCTION__, "3.1.0", "WP_User_Query")
             self.search_term = wp_unslash(search_term)
-            self.raw_page = False if "" == page else int(page)
-            self.page = 1 if int("" == page) else page
+            self.raw_page = False if "" == page else php_int(page)
+            self.page = 1 if php_int("" == page) else page
             self.role = role
             self.prepare_query()
             self.query()

@@ -147,8 +147,8 @@ class getid3_asf(getid3_handler):
                     offset += 8
                     thisfile_asf_filepropertiesobject["flags_raw"] = getid3_lib.littleendian2int(php_substr(ASFHeaderData, offset, 4))
                     offset += 4
-                    thisfile_asf_filepropertiesobject["flags"]["broadcast"] = bool(thisfile_asf_filepropertiesobject["flags_raw"] & 1)
-                    thisfile_asf_filepropertiesobject["flags"]["seekable"] = bool(thisfile_asf_filepropertiesobject["flags_raw"] & 2)
+                    thisfile_asf_filepropertiesobject["flags"]["broadcast"] = php_bool(thisfile_asf_filepropertiesobject["flags_raw"] & 1)
+                    thisfile_asf_filepropertiesobject["flags"]["seekable"] = php_bool(thisfile_asf_filepropertiesobject["flags_raw"] & 2)
                     thisfile_asf_filepropertiesobject["min_packet_size"] = getid3_lib.littleendian2int(php_substr(ASFHeaderData, offset, 4))
                     offset += 4
                     thisfile_asf_filepropertiesobject["max_packet_size"] = getid3_lib.littleendian2int(php_substr(ASFHeaderData, offset, 4))
@@ -209,7 +209,7 @@ class getid3_asf(getid3_handler):
                     StreamPropertiesObjectData["flags_raw"] = getid3_lib.littleendian2int(php_substr(ASFHeaderData, offset, 2))
                     offset += 2
                     StreamPropertiesObjectStreamNumber = StreamPropertiesObjectData["flags_raw"] & 127
-                    StreamPropertiesObjectData["flags"]["encrypted"] = bool(StreamPropertiesObjectData["flags_raw"] & 32768)
+                    StreamPropertiesObjectData["flags"]["encrypted"] = php_bool(StreamPropertiesObjectData["flags_raw"] & 32768)
                     offset += 4
                     #// reserved - DWORD
                     StreamPropertiesObjectData["type_specific_data"] = php_substr(ASFHeaderData, offset, StreamPropertiesObjectData["type_data_length"])
@@ -343,14 +343,14 @@ class getid3_asf(getid3_handler):
                                 AudioCodecBitrate, AudioCodecFrequency, AudioCodecChannels = php_explode(",", self.trimconvert(thisfile_asf_codeclistobject_codecentries_current["description"]))
                                 thisfile_audio["codec"] = self.trimconvert(thisfile_asf_codeclistobject_codecentries_current["name"])
                                 if (not (php_isset(lambda : thisfile_audio["bitrate"]))) and php_strstr(AudioCodecBitrate, "kbps"):
-                                    thisfile_audio["bitrate"] = int(php_trim(php_str_replace("kbps", "", AudioCodecBitrate)) * 1000)
+                                    thisfile_audio["bitrate"] = php_int(php_trim(php_str_replace("kbps", "", AudioCodecBitrate)) * 1000)
                                 # end if
                                 #// if (!isset($thisfile_video['bitrate']) && isset($thisfile_audio['bitrate']) && isset($thisfile_asf['file_properties_object']['max_bitrate']) && ($thisfile_asf_codeclistobject['codec_entries_count'] > 1)) {
                                 if php_empty(lambda : thisfile_video["bitrate"]) and (not php_empty(lambda : thisfile_audio["bitrate"])) and (not php_empty(lambda : info["bitrate"])):
                                     #// $thisfile_video['bitrate'] = $thisfile_asf['file_properties_object']['max_bitrate'] - $thisfile_audio['bitrate'];
                                     thisfile_video["bitrate"] = info["bitrate"] - thisfile_audio["bitrate"]
                                 # end if
-                                AudioCodecFrequency = int(php_trim(php_str_replace("kHz", "", AudioCodecFrequency)))
+                                AudioCodecFrequency = php_int(php_trim(php_str_replace("kHz", "", AudioCodecFrequency)))
                                 for case in Switch(AudioCodecFrequency):
                                     if case(8):
                                         pass
@@ -752,7 +752,7 @@ class getid3_asf(getid3_handler):
                             # end if
                             if case(2):
                                 #// BOOL
-                                thisfile_asf_extendedcontentdescriptionobject_contentdescriptor_current["value"] = bool(getid3_lib.littleendian2int(thisfile_asf_extendedcontentdescriptionobject_contentdescriptor_current["value"]))
+                                thisfile_asf_extendedcontentdescriptionobject_contentdescriptor_current["value"] = php_bool(getid3_lib.littleendian2int(thisfile_asf_extendedcontentdescriptionobject_contentdescriptor_current["value"]))
                                 break
                             # end if
                             if case(3):
@@ -1411,7 +1411,7 @@ class getid3_asf(getid3_handler):
         # end if
         if (not php_empty(lambda : thisfile_video["dataformat"])):
             thisfile_video["lossless"] = thisfile_audio["lossless"] if (php_isset(lambda : thisfile_audio["lossless"])) else False
-            thisfile_video["pixel_aspect_ratio"] = thisfile_audio["pixel_aspect_ratio"] if (php_isset(lambda : thisfile_audio["pixel_aspect_ratio"])) else float(1)
+            thisfile_video["pixel_aspect_ratio"] = thisfile_audio["pixel_aspect_ratio"] if (php_isset(lambda : thisfile_audio["pixel_aspect_ratio"])) else php_float(1)
             thisfile_video["dataformat"] = thisfile_video["dataformat"] if (not php_empty(lambda : thisfile_video["dataformat"])) else "asf"
         # end if
         if (not php_empty(lambda : thisfile_video["streams"])):
@@ -1629,10 +1629,10 @@ class getid3_asf(getid3_handler):
                     offset += 4
                     thisObject["flags_raw"] = getid3_lib.littleendian2int(php_substr(asf_header_extension_object_data, offset, 4))
                     offset += 4
-                    thisObject["flags"]["reliable"] = bool(thisObject["flags_raw"]) & 1
-                    thisObject["flags"]["seekable"] = bool(thisObject["flags_raw"]) & 2
-                    thisObject["flags"]["no_cleanpoints"] = bool(thisObject["flags_raw"]) & 4
-                    thisObject["flags"]["resend_live_cleanpoints"] = bool(thisObject["flags_raw"]) & 8
+                    thisObject["flags"]["reliable"] = php_bool(thisObject["flags_raw"]) & 1
+                    thisObject["flags"]["seekable"] = php_bool(thisObject["flags_raw"]) & 2
+                    thisObject["flags"]["no_cleanpoints"] = php_bool(thisObject["flags_raw"]) & 4
+                    thisObject["flags"]["resend_live_cleanpoints"] = php_bool(thisObject["flags_raw"]) & 8
                     thisObject["stream_number"] = getid3_lib.littleendian2int(php_substr(asf_header_extension_object_data, offset, 2))
                     offset += 2
                     thisObject["stream_language_id_index"] = getid3_lib.littleendian2int(php_substr(asf_header_extension_object_data, offset, 2))
@@ -1712,7 +1712,7 @@ class getid3_asf(getid3_handler):
                             # end if
                             if case(2):
                                 #// BOOL
-                                descriptionRecord["data"] = bool(getid3_lib.littleendian2int(descriptionRecord["data"]))
+                                descriptionRecord["data"] = php_bool(getid3_lib.littleendian2int(descriptionRecord["data"]))
                                 break
                             # end if
                             if case(3):

@@ -49,7 +49,7 @@ def wpmu_update_blogs_date(*args_):
 #//
 def get_blogaddress_by_id(blog_id=None, *args_):
     
-    bloginfo = get_site(int(blog_id))
+    bloginfo = get_site(php_int(blog_id))
     if php_empty(lambda : bloginfo):
         return ""
     # end if
@@ -174,7 +174,7 @@ def get_blog_details(fields=None, get_all=True, *args_):
             blog_id = fields
         # end if
     # end if
-    blog_id = int(blog_id)
+    blog_id = php_int(blog_id)
     all = "" if get_all else "short"
     details = wp_cache_get(blog_id + all, "blog-details")
     if details:
@@ -254,7 +254,7 @@ def get_blog_details(fields=None, get_all=True, *args_):
 #//
 def refresh_blog_details(blog_id=0, *args_):
     
-    blog_id = int(blog_id)
+    blog_id = php_int(blog_id)
     if (not blog_id):
         blog_id = get_current_blog_id()
     # end if
@@ -296,7 +296,7 @@ def update_blog_details(blog_id=None, details=Array(), *args_):
 #//
 def clean_site_details_cache(site_id=0, *args_):
     
-    site_id = int(site_id)
+    site_id = php_int(site_id)
     if (not site_id):
         site_id = get_current_blog_id()
     # end if
@@ -322,7 +322,7 @@ def clean_site_details_cache(site_id=0, *args_):
 #//
 def get_blog_option(id=None, option=None, default=False, *args_):
     
-    id = int(id)
+    id = php_int(id)
     if php_empty(lambda : id):
         id = get_current_blog_id()
     # end if
@@ -365,7 +365,7 @@ def get_blog_option(id=None, option=None, default=False, *args_):
 #//
 def add_blog_option(id=None, option=None, value=None, *args_):
     
-    id = int(id)
+    id = php_int(id)
     if php_empty(lambda : id):
         id = get_current_blog_id()
     # end if
@@ -388,7 +388,7 @@ def add_blog_option(id=None, option=None, value=None, *args_):
 #//
 def delete_blog_option(id=None, option=None, *args_):
     
-    id = int(id)
+    id = php_int(id)
     if php_empty(lambda : id):
         id = get_current_blog_id()
     # end if
@@ -413,7 +413,7 @@ def delete_blog_option(id=None, option=None, *args_):
 #//
 def update_blog_option(id=None, option=None, value=None, deprecated=None, *args_):
     
-    id = int(id)
+    id = php_int(id)
     if None != deprecated:
         _deprecated_argument(__FUNCTION__, "3.1.0")
     # end if

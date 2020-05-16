@@ -470,7 +470,7 @@ class WP_Widget_Text(WP_Widget):
     @classmethod
     def render_control_template_scripts(self):
         
-        dismissed_pointers = php_explode(",", str(get_user_meta(get_current_user_id(), "dismissed_wp_pointers", True)))
+        dismissed_pointers = php_explode(",", php_str(get_user_meta(get_current_user_id(), "dismissed_wp_pointers", True)))
         php_print("""       <script type=\"text/html\" id=\"tmpl-widget-text-control-fields\">
         <# var elementIdPrefix = 'el' + String( Math.random() ).replace( /\\D/g, '' ) + '_' #>
         <p>

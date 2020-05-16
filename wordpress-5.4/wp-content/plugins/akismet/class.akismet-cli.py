@@ -161,7 +161,7 @@ class Akismet_CLI(WP_CLI_Command):
             WP_CLI.error(__("Currently unable to fetch stats. Please try again.", "akismet"))
         # end if
         response_body = php_json_decode(response[1], True)
-        if php_is_null(response_body):
+        if is_null(response_body):
             WP_CLI.error(__("Stats response could not be decoded.", "akismet"))
         # end if
         if (php_isset(lambda : assoc_args["summary"])):

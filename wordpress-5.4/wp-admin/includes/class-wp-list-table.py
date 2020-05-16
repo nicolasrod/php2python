@@ -337,7 +337,7 @@ class WP_List_Table():
     #//
     def bulk_actions(self, which=""):
         
-        if php_is_null(self._actions):
+        if is_null(self._actions):
             self._actions = self.get_bulk_actions()
             #// 
             #// Filters the list table Bulk Actions drop-down.
@@ -462,7 +462,7 @@ class WP_List_Table():
         if (not month_count) or 1 == month_count and 0 == months[0].month:
             return
         # end if
-        m = int(PHP_REQUEST["m"]) if (php_isset(lambda : PHP_REQUEST["m"])) else 0
+        m = php_int(PHP_REQUEST["m"]) if (php_isset(lambda : PHP_REQUEST["m"])) else 0
         php_print("     <label for=\"filter-by-date\" class=\"screen-reader-text\">")
         _e("Filter by date")
         php_print("</label>\n       <select name=\"m\" id=\"filter-by-date\">\n         <option")
@@ -560,7 +560,7 @@ class WP_List_Table():
     #//
     def get_items_per_page(self, option=None, default=20):
         
-        per_page = int(get_user_option(option))
+        per_page = php_int(get_user_option(option))
         if php_empty(lambda : per_page) or per_page < 1:
             per_page = default
         # end if
@@ -577,7 +577,7 @@ class WP_List_Table():
         #// 
         #// @param int $per_page Number of items to be displayed. Default 20.
         #//
-        return int(apply_filters(str(option), per_page))
+        return php_int(apply_filters(str(option), per_page))
     # end def get_items_per_page
     #// 
     #// Display the pagination.

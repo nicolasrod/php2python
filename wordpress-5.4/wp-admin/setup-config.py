@@ -60,7 +60,7 @@ if php_file_exists(ABSPATH + "wp-config.php"):
 if php_no_error(lambda: php_file_exists(ABSPATH + "../wp-config.php")) and (not php_no_error(lambda: php_file_exists(ABSPATH + "../wp-settings.php"))):
     wp_die("<p>" + php_sprintf(__("The file %1$s already exists one level above your WordPress installation. If you need to reset any of the configuration items in this file, please delete it first. You may try <a href=\"%2$s\">installing now</a>."), "<code>wp-config.php</code>", "install.php") + "</p>")
 # end if
-step = int(PHP_REQUEST["step"]) if (php_isset(lambda : PHP_REQUEST["step"])) else -1
+step = php_int(PHP_REQUEST["step"]) if (php_isset(lambda : PHP_REQUEST["step"])) else -1
 #// 
 #// Display setup wp-config.php file header.
 #// 

@@ -223,7 +223,7 @@ class WP_Image_Editor():
     #//
     def update_size(self, width=None, height=None):
         
-        self.size = Array({"width": int(width), "height": int(height)})
+        self.size = Array({"width": php_int(width), "height": php_int(height)})
         return True
     # end def update_size
     #// 
@@ -376,7 +376,7 @@ class WP_Image_Editor():
         ext = pathinfo(self.file, PATHINFO_EXTENSION)
         name = wp_basename(self.file, str(".") + str(ext))
         new_ext = php_strtolower(extension if extension else ext)
-        if (not php_is_null(dest_path)):
+        if (not is_null(dest_path)):
             _dest_path = php_realpath(dest_path)
             if _dest_path:
                 dir = _dest_path
@@ -412,7 +412,7 @@ class WP_Image_Editor():
         if php_is_callable("exif_read_data") and "image/jpeg" == self.mime_type:
             exif_data = php_no_error(lambda: exif_read_data(self.file))
             if (not php_empty(lambda : exif_data["Orientation"])):
-                orientation = int(exif_data["Orientation"])
+                orientation = php_int(exif_data["Orientation"])
             # end if
         # end if
         #// 

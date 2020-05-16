@@ -21,7 +21,7 @@ if '__PHP2PY_LOADED__' not in globals():
 #// WordPress Administration Bootstrap
 php_include_file(__DIR__ + "/admin.php", once=True)
 wp_reset_vars(Array("action", "user_id", "wp_http_referer"))
-user_id = int(user_id)
+user_id = php_int(user_id)
 current_user = wp_get_current_user()
 if (not php_defined("IS_PROFILE_PAGE")):
     php_define("IS_PROFILE_PAGE", user_id == current_user.ID)

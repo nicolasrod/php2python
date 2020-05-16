@@ -83,7 +83,7 @@ def post_submit_meta_box(post=None, args=Array(), *args_):
         php_print("<a class=\"preview button\" href=\"")
         php_print(preview_link)
         php_print("\" target=\"wp-preview-")
-        php_print(int(post.ID))
+        php_print(php_int(post.ID))
         php_print("\" id=\"post-preview\">")
         php_print(preview_button)
         php_print("""</a>
@@ -1607,7 +1607,7 @@ def register_and_do_post_meta_boxes(post=None, *args_):
         add_meta_box("trackbacksdiv", __("Send Trackbacks"), "post_trackback_meta_box", None, "normal", "core", Array({"__back_compat_meta_box": True}))
     # end if
     if post_type_supports(post_type, "custom-fields"):
-        add_meta_box("postcustom", __("Custom Fields"), "post_custom_meta_box", None, "normal", "core", Array({"__back_compat_meta_box": (not bool(get_user_meta(get_current_user_id(), "enable_custom_fields", True))), "__block_editor_compatible_meta_box": True}))
+        add_meta_box("postcustom", __("Custom Fields"), "post_custom_meta_box", None, "normal", "core", Array({"__back_compat_meta_box": (not php_bool(get_user_meta(get_current_user_id(), "enable_custom_fields", True))), "__block_editor_compatible_meta_box": True}))
     # end if
     #// 
     #// Fires in the middle of built-in meta box registration.

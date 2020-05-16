@@ -54,7 +54,7 @@ php_print("""
 the_content(php_sprintf(__("Continue reading<span class=\"screen-reader-text\"> \"%s\"</span>", "twentyseventeen"), get_the_title()))
 php_print("         </div><!-- .entry-content -->\n\n           ")
 #// Show recent blog posts if is blog posts page (Note that get_option returns a string, so we're casting the result as an int).
-if get_the_ID() == int(get_option("page_for_posts")):
+if get_the_ID() == php_int(get_option("page_for_posts")):
     php_print("\n               ")
     #// Show three most recent posts.
     recent_posts = php_new_class("WP_Query", lambda : WP_Query(Array({"posts_per_page": 3, "post_status": "publish", "ignore_sticky_posts": True, "no_found_rows": True})))

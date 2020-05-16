@@ -131,7 +131,7 @@ def wpmu_delete_user(id=None, *args_):
     if (not php_is_numeric(id)):
         return False
     # end if
-    id = int(id)
+    id = php_int(id)
     user = php_new_class("WP_User", lambda : WP_User(id))
     if (not user.exists()):
         return False
@@ -276,7 +276,7 @@ def upload_space_setting(id=None, *args_):
 #//
 def refresh_user_details(id=None, *args_):
     
-    id = int(id)
+    id = php_int(id)
     user = get_userdata(id)
     if (not user):
         return False
@@ -749,7 +749,7 @@ def network_edit_site_nav(args=Array(), *args_):
     #//
     links = apply_filters("network_edit_site_nav_links", Array({"site-info": Array({"label": __("Info"), "url": "site-info.php", "cap": "manage_sites"})}, {"site-users": Array({"label": __("Users"), "url": "site-users.php", "cap": "manage_sites"})}, {"site-themes": Array({"label": __("Themes"), "url": "site-themes.php", "cap": "manage_sites"})}, {"site-settings": Array({"label": __("Settings"), "url": "site-settings.php", "cap": "manage_sites"})}))
     #// Parse arguments.
-    parsed_args = wp_parse_args(args, Array({"blog_id": int(PHP_REQUEST["blog_id"]) if (php_isset(lambda : PHP_REQUEST["blog_id"])) else 0, "links": links, "selected": "site-info"}))
+    parsed_args = wp_parse_args(args, Array({"blog_id": php_int(PHP_REQUEST["blog_id"]) if (php_isset(lambda : PHP_REQUEST["blog_id"])) else 0, "links": links, "selected": "site-info"}))
     #// Setup the links array.
     screen_links = Array()
     #// Loop through tabs.

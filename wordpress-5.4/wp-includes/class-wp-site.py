@@ -62,7 +62,7 @@ class WP_Site():
         
         global wpdb
         php_check_if_defined("wpdb")
-        site_id = int(site_id)
+        site_id = php_int(site_id)
         if (not site_id):
             return False
         # end if
@@ -121,10 +121,10 @@ class WP_Site():
         
         for case in Switch(key):
             if case("id"):
-                return int(self.blog_id)
+                return php_int(self.blog_id)
             # end if
             if case("network_id"):
-                return int(self.site_id)
+                return php_int(self.site_id)
             # end if
             if case("blogname"):
                 pass
@@ -213,11 +213,11 @@ class WP_Site():
         
         for case in Switch(key):
             if case("id"):
-                self.blog_id = str(value)
+                self.blog_id = php_str(value)
                 break
             # end if
             if case("network_id"):
-                self.site_id = str(value)
+                self.site_id = php_str(value)
                 break
             # end if
             if case():

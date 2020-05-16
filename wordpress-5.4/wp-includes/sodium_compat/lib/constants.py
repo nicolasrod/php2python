@@ -20,7 +20,7 @@ if not php_defined("Sodium"):
 class Sodium(Sodium):
     _namespace__ = "Sodium"
     php_include_file(php_dirname(php_dirname(__FILE__)) + "/autoload.php", once=True)
-    php_new_class("P", lambda *args, **kwargs: P(*args, **kwargs))
+    ParagonIE_Sodium_Compat = php_new_class("ParagonIE_Sodium_Compat", lambda *args, **kwargs: ParagonIE_Sodium_Compat(*args, **kwargs))
     CRYPTO_AEAD_AES256GCM_KEYBYTES = ParagonIE_Sodium_Compat.CRYPTO_AEAD_AES256GCM_KEYBYTES
     CRYPTO_AEAD_AES256GCM_NSECBYTES = ParagonIE_Sodium_Compat.CRYPTO_AEAD_AES256GCM_NSECBYTES
     CRYPTO_AEAD_AES256GCM_NPUBBYTES = ParagonIE_Sodium_Compat.CRYPTO_AEAD_AES256GCM_NPUBBYTES

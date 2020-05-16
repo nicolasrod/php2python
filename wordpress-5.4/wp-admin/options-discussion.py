@@ -111,7 +111,7 @@ php_print(" />\n")
 #// 
 #// @param int $max_depth The maximum depth of threaded comments. Default 10.
 #//
-maxdeep = int(apply_filters("thread_comments_depth_max", 10))
+maxdeep = php_int(apply_filters("thread_comments_depth_max", 10))
 thread_comments_depth = "</label> <label for=\"thread_comments_depth\"><select name=\"thread_comments_depth\" id=\"thread_comments_depth\">"
 i = 2
 while i <= maxdeep:

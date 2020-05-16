@@ -314,7 +314,7 @@ def wp_dequeue_script(handle=None, *args_):
 def wp_script_is(handle=None, list="enqueued", *args_):
     
     _wp_scripts_maybe_doing_it_wrong(__FUNCTION__)
-    return bool(wp_scripts().query(handle, list))
+    return php_bool(wp_scripts().query(handle, list))
 # end def wp_script_is
 #// 
 #// Add metadata to a script.

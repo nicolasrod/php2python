@@ -120,7 +120,7 @@ def wp_insert_site(data=None, *args_):
         #//
         do_action_deprecated("wpmu_new_blog", Array(new_site.id, user_id, new_site.domain, new_site.path, new_site.network_id, meta), "5.1.0", "wp_insert_site")
     # end if
-    return int(new_site.id)
+    return php_int(new_site.id)
 # end def wp_insert_site
 #// 
 #// Updates a site in the database.
@@ -145,7 +145,7 @@ def wp_update_site(site_id=None, data=None, *args_):
         return php_new_class("WP_Error", lambda : WP_Error("site_not_exist", __("Site does not exist.")))
     # end if
     defaults = old_site.to_array()
-    defaults["network_id"] = int(defaults["site_id"])
+    defaults["network_id"] = php_int(defaults["site_id"])
     defaults["last_updated"] = current_time("mysql", True)
     defaults["blog_id"] = None
     defaults["site_id"] = None
@@ -167,7 +167,7 @@ def wp_update_site(site_id=None, data=None, *args_):
     #// @param WP_Site $old_site Old site object.
     #//
     do_action("wp_update_site", new_site, old_site)
-    return int(new_site.id)
+    return php_int(new_site.id)
 # end def wp_update_site
 #// 
 #// Deletes a site from the database.
@@ -499,13 +499,13 @@ def wp_normalize_site_data(data=None, *args_):
     # end if
     #// Sanitize network ID if passed.
     if php_array_key_exists("network_id", data):
-        data["network_id"] = int(data["network_id"])
+        data["network_id"] = php_int(data["network_id"])
     # end if
     #// Sanitize status fields if passed.
     status_fields = Array("public", "archived", "mature", "spam", "deleted")
     for status_field in status_fields:
         if php_array_key_exists(status_field, data):
-            data[status_field] = int(data[status_field])
+            data[status_field] = php_int(data[status_field])
         # end if
     # end for
     #// Strip date fields if empty.
@@ -652,7 +652,7 @@ def wp_initialize_site(site_id=None, args=Array(), *args_):
         # end if
     # end if
     #// Populate the site's options.
-    populate_options(php_array_merge(Array({"home": untrailingslashit(home_scheme + "://" + site.domain + site.path), "siteurl": untrailingslashit(siteurl_scheme + "://" + site.domain + site.path), "blogname": wp_unslash(args["title"]), "admin_email": "", "upload_path": UPLOADBLOGSDIR + str("/") + str(site.id) + str("/files") if get_network_option(network.id, "ms_files_rewriting") else get_blog_option(network.site_id, "upload_path"), "blog_public": int(site.public), "WPLANG": get_network_option(network.id, "WPLANG")}), args["options"]))
+    populate_options(php_array_merge(Array({"home": untrailingslashit(home_scheme + "://" + site.domain + site.path), "siteurl": untrailingslashit(siteurl_scheme + "://" + site.domain + site.path), "blogname": wp_unslash(args["title"]), "admin_email": "", "upload_path": UPLOADBLOGSDIR + str("/") + str(site.id) + str("/files") if get_network_option(network.id, "ms_files_rewriting") else get_blog_option(network.site_id, "upload_path"), "blog_public": php_int(site.public), "WPLANG": get_network_option(network.id, "WPLANG")}), args["options"]))
     #// Clean blog cache after populating options.
     clean_blog_cache(site)
     #// Populate the site's roles.
@@ -808,7 +808,7 @@ def wp_is_site_initialized(site_id=None, *args_):
     if php_is_object(site_id):
         site_id = site_id.blog_id
     # end if
-    site_id = int(site_id)
+    site_id = php_int(site_id)
     #// 
     #// Filters the check for whether a site is initialized before the database is accessed.
     #// 
@@ -823,7 +823,7 @@ def wp_is_site_initialized(site_id=None, *args_):
     #//
     pre = apply_filters("pre_wp_is_site_initialized", None, site_id)
     if None != pre:
-        return bool(pre)
+        return php_bool(pre)
     # end if
     switch = False
     if get_current_blog_id() != site_id:
@@ -832,7 +832,7 @@ def wp_is_site_initialized(site_id=None, *args_):
         switch_to_blog(site_id)
     # end if
     suppress = wpdb.suppress_errors()
-    result = bool(wpdb.get_results(str("DESCRIBE ") + str(wpdb.posts)))
+    result = php_bool(wpdb.get_results(str("DESCRIBE ") + str(wpdb.posts)))
     wpdb.suppress_errors(suppress)
     if switch:
         restore_current_blog()

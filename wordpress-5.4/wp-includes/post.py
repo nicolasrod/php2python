@@ -213,14 +213,14 @@ def get_children(args="", output=OBJECT, *args_):
     kids = Array()
     if php_empty(lambda : args):
         if (php_isset(lambda : PHP_GLOBALS["post"])):
-            args = Array({"post_parent": int(PHP_GLOBALS["post"].post_parent)})
+            args = Array({"post_parent": php_int(PHP_GLOBALS["post"].post_parent)})
         else:
             return kids
         # end if
     elif php_is_object(args):
-        args = Array({"post_parent": int(args.post_parent)})
+        args = Array({"post_parent": php_int(args.post_parent)})
     elif php_is_numeric(args):
-        args = Array({"post_parent": int(args)})
+        args = Array({"post_parent": php_int(args)})
     # end if
     defaults = Array({"numberposts": -1, "post_type": "any", "post_status": "any", "post_parent": 0})
     parsed_args = wp_parse_args(args, defaults)
@@ -689,7 +689,7 @@ def is_post_type_hierarchical(post_type=None, *args_):
 #//
 def post_type_exists(post_type=None, *args_):
     
-    return bool(get_post_type_object(post_type))
+    return php_bool(get_post_type_object(post_type))
 # end def post_type_exists
 #// 
 #// Retrieves the post type of the current post or of a given post.
@@ -1733,7 +1733,7 @@ def sanitize_post_field(field=None, value=None, post_id=None, context="display",
     
     int_fields = Array("ID", "post_parent", "menu_order")
     if php_in_array(field, int_fields):
-        value = int(value)
+        value = php_int(value)
     # end if
     #// Fields which contain arrays of integers.
     array_int_fields = Array("ancestors")
@@ -2585,7 +2585,7 @@ def wp_untrash_post_comments(post=None, *args_):
 #//
 def wp_get_post_categories(post_id=0, args=Array(), *args_):
     
-    post_id = int(post_id)
+    post_id = php_int(post_id)
     defaults = Array({"fields": "ids"})
     args = wp_parse_args(args, defaults)
     cats = wp_get_object_terms(post_id, "category", args)
@@ -2630,7 +2630,7 @@ def wp_get_post_tags(post_id=0, args=Array(), *args_):
 #//
 def wp_get_post_terms(post_id=0, taxonomy="post_tag", args=Array(), *args_):
     
-    post_id = int(post_id)
+    post_id = php_int(post_id)
     defaults = Array({"fields": "all"})
     args = wp_parse_args(args, defaults)
     tags = wp_get_object_terms(post_id, taxonomy, args)
@@ -2746,7 +2746,7 @@ def wp_insert_post(postarr=None, wp_error=False, *args_):
         #// Get the post ID and GUID.
         post_ID = postarr["ID"]
         post_before = get_post(post_ID)
-        if php_is_null(post_before):
+        if is_null(post_before):
             if wp_error:
                 return php_new_class("WP_Error", lambda : WP_Error("invalid_post", __("Invalid post ID.")))
             # end if
@@ -2914,7 +2914,7 @@ def wp_insert_post(postarr=None, wp_error=False, *args_):
     #// Previously, these variables would have already been extracted
     #//
     if (php_isset(lambda : postarr["menu_order"])):
-        menu_order = int(postarr["menu_order"])
+        menu_order = php_int(postarr["menu_order"])
     else:
         menu_order = 0
     # end if
@@ -2923,7 +2923,7 @@ def wp_insert_post(postarr=None, wp_error=False, *args_):
         post_password = ""
     # end if
     if (php_isset(lambda : postarr["post_parent"])):
-        post_parent = int(postarr["post_parent"])
+        post_parent = php_int(postarr["post_parent"])
     else:
         post_parent = 0
     # end if
@@ -3027,7 +3027,7 @@ def wp_insert_post(postarr=None, wp_error=False, *args_):
     else:
         #// If there is a suggested ID, use it if not already present.
         if (not php_empty(lambda : import_id)):
-            import_id = int(import_id)
+            import_id = php_int(import_id)
             if (not wpdb.get_var(wpdb.prepare(str("SELECT ID FROM ") + str(wpdb.posts) + str(" WHERE ID = %d"), import_id))):
                 data["ID"] = import_id
             # end if
@@ -3039,7 +3039,7 @@ def wp_insert_post(postarr=None, wp_error=False, *args_):
                 return 0
             # end if
         # end if
-        post_ID = int(wpdb.insert_id)
+        post_ID = php_int(wpdb.insert_id)
         #// Use the newly generated $post_ID.
         where = Array({"ID": post_ID})
     # end if
@@ -3249,7 +3249,7 @@ def wp_update_post(postarr=Array(), wp_error=False, *args_):
     # end if
     #// First, get all of the original fields.
     post = get_post(postarr["ID"], ARRAY_A)
-    if php_is_null(post):
+    if is_null(post):
         if wp_error:
             return php_new_class("WP_Error", lambda : WP_Error("invalid_post", __("Invalid post ID.")))
         # end if
@@ -3600,7 +3600,7 @@ def wp_set_post_tags(post_id=0, tags="", append=False, *args_):
 #//
 def wp_set_post_terms(post_id=0, tags="", taxonomy="post_tag", append=False, *args_):
     
-    post_id = int(post_id)
+    post_id = php_int(post_id)
     if (not post_id):
         return False
     # end if
@@ -3641,7 +3641,7 @@ def wp_set_post_terms(post_id=0, tags="", taxonomy="post_tag", append=False, *ar
 #//
 def wp_set_post_categories(post_ID=0, post_categories=Array(), append=False, *args_):
     
-    post_ID = int(post_ID)
+    post_ID = php_int(post_ID)
     post_type = get_post_type(post_ID)
     post_status = get_post_status(post_ID)
     #// If $post_categories isn't already an array, make it one:
@@ -4212,9 +4212,9 @@ def get_pages(args=Array(), *args_):
     php_check_if_defined("wpdb")
     defaults = Array({"child_of": 0, "sort_order": "ASC", "sort_column": "post_title", "hierarchical": 1, "exclude": Array(), "include": Array(), "meta_key": "", "meta_value": "", "authors": "", "parent": -1, "exclude_tree": Array(), "number": "", "offset": 0, "post_type": "page", "post_status": "publish"})
     parsed_args = wp_parse_args(args, defaults)
-    number = int(parsed_args["number"])
-    offset = int(parsed_args["offset"])
-    child_of = int(parsed_args["child_of"])
+    number = php_int(parsed_args["number"])
+    offset = php_int(parsed_args["offset"])
+    child_of = php_int(parsed_args["child_of"])
     hierarchical = parsed_args["hierarchical"]
     exclude = parsed_args["exclude"]
     meta_key = parsed_args["meta_key"]
@@ -4649,7 +4649,7 @@ def wp_delete_attachment_files(post_id=None, meta=None, backup_sizes=None, file=
 #//
 def wp_get_attachment_metadata(attachment_id=0, unfiltered=False, *args_):
     
-    attachment_id = int(attachment_id)
+    attachment_id = php_int(attachment_id)
     post = get_post(attachment_id)
     if (not post):
         return False
@@ -4680,7 +4680,7 @@ def wp_get_attachment_metadata(attachment_id=0, unfiltered=False, *args_):
 #//
 def wp_update_attachment_metadata(attachment_id=None, data=None, *args_):
     
-    attachment_id = int(attachment_id)
+    attachment_id = php_int(attachment_id)
     post = get_post(attachment_id)
     if (not post):
         return False
@@ -4712,7 +4712,7 @@ def wp_update_attachment_metadata(attachment_id=None, data=None, *args_):
 #//
 def wp_get_attachment_url(attachment_id=0, *args_):
     
-    attachment_id = int(attachment_id)
+    attachment_id = php_int(attachment_id)
     post = get_post(attachment_id)
     if (not post):
         return False
@@ -4775,7 +4775,7 @@ def wp_get_attachment_url(attachment_id=0, *args_):
 #//
 def wp_get_attachment_caption(post_id=0, *args_):
     
-    post_id = int(post_id)
+    post_id = php_int(post_id)
     post = get_post(post_id)
     if (not post):
         return False
@@ -4804,7 +4804,7 @@ def wp_get_attachment_caption(post_id=0, *args_):
 #//
 def wp_get_attachment_thumb_file(post_id=0, *args_):
     
-    post_id = int(post_id)
+    post_id = php_int(post_id)
     post = get_post(post_id)
     if (not post):
         return False
@@ -4840,7 +4840,7 @@ def wp_get_attachment_thumb_file(post_id=0, *args_):
 #//
 def wp_get_attachment_thumb_url(post_id=0, *args_):
     
-    post_id = int(post_id)
+    post_id = php_int(post_id)
     post = get_post(post_id)
     if (not post):
         return False
@@ -4949,10 +4949,10 @@ def wp_mime_type_icon(mime=0, *args_):
     if php_empty(lambda : icon):
         post_mimes = Array()
         if php_is_numeric(mime):
-            mime = int(mime)
+            mime = php_int(mime)
             post = get_post(mime)
             if post:
-                post_id = int(post.ID)
+                post_id = php_int(post.ID)
                 file = get_attached_file(post_id)
                 ext = php_preg_replace("/^.+?\\.([^.]+)$/", "$1", file)
                 if (not php_empty(lambda : ext)):
@@ -5219,7 +5219,7 @@ def get_posts_by_author_sql(post_type=None, full=True, post_author=None, public_
                 id = get_current_user_id()
                 if None == post_author or (not full):
                     post_status_sql += str(" OR post_status = 'private' AND post_author = ") + str(id)
-                elif id == int(post_author):
+                elif id == php_int(post_author):
                     post_status_sql += " OR post_status = 'private'"
                 # end if
                 pass
@@ -5532,7 +5532,7 @@ def clean_attachment_cache(id=None, clean_terms=False, *args_):
     if (not php_empty(lambda : _wp_suspend_cache_invalidation)):
         return
     # end if
-    id = int(id)
+    id = php_int(id)
     wp_cache_delete(id, "posts")
     wp_cache_delete(id, "post_meta")
     if clean_terms:
@@ -5666,7 +5666,7 @@ def wp_get_post_parent_id(post=None, *args_):
     if (not post) or is_wp_error(post):
         return False
     # end if
-    return int(post.post_parent)
+    return php_int(post.post_parent)
 # end def wp_get_post_parent_id
 #// 
 #// Check the given subset of the post hierarchy for hierarchy loops.

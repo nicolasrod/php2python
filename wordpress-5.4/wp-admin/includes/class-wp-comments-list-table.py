@@ -89,7 +89,7 @@ class WP_Comments_List_Table(WP_List_Table):
         comments_per_page = self.get_per_page(comment_status)
         doing_ajax = wp_doing_ajax()
         if (php_isset(lambda : PHP_REQUEST["number"])):
-            number = int(PHP_REQUEST["number"])
+            number = php_int(PHP_REQUEST["number"])
         else:
             number = comments_per_page + php_min(8, comments_per_page)
             pass

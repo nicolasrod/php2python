@@ -158,7 +158,7 @@ class WP_Customize_Nav_Menu_Setting(WP_Customize_Setting):
         index = -1
         #// Find the existing menu item's position in the list.
         for i,menu in menus:
-            if int(self.term_id) == int(menu.term_id) or int(self.previous_term_id) == int(menu.term_id):
+            if php_int(self.term_id) == php_int(menu.term_id) or php_int(self.previous_term_id) == php_int(menu.term_id):
                 index = i
                 break
             # end if
@@ -377,7 +377,7 @@ class WP_Customize_Nav_Menu_Setting(WP_Customize_Setting):
                     continue
                 # end if
                 post_value = setting.post_value(None)
-                if (not php_is_null(post_value)) and php_intval(post_value) == self.previous_term_id:
+                if (not is_null(post_value)) and php_intval(post_value) == self.previous_term_id:
                     self.manager.set_post_value(setting.id, self.term_id)
                     setting.save()
                 # end if

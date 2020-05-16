@@ -451,7 +451,7 @@ class wpdb():
             if None == blog_id:
                 blog_id = self.blogid
             # end if
-            blog_id = int(blog_id)
+            blog_id = php_int(blog_id)
             if php_defined("MULTISITE") and 0 == blog_id or 1 == blog_id:
                 return self.base_prefix
             else:
@@ -558,7 +558,7 @@ class wpdb():
     #//
     def select(self, db=None, dbh=None):
         
-        if php_is_null(dbh):
+        if is_null(dbh):
             dbh = self.dbh
         # end if
         if self.use_mysqli:
@@ -745,7 +745,7 @@ class wpdb():
     #//
     def prepare(self, query=None, *args):
         
-        if php_is_null(query):
+        if is_null(query):
             return
         # end if
         #// This is not meant to be foolproof -- but it will catch obviously incorrect usage.
@@ -760,7 +760,7 @@ class wpdb():
             args = args[0]
         # end if
         for arg in args:
-            if (not is_scalar(arg)) and (not php_is_null(arg)):
+            if (not is_scalar(arg)) and (not is_null(arg)):
                 wp_load_translations_early()
                 _doing_it_wrong("wpdb::prepare", php_sprintf(__("Unsupported value type (%s)."), gettype(arg)), "4.8.2")
             # end if
@@ -943,7 +943,7 @@ class wpdb():
     def suppress_errors(self, suppress=True):
         
         errors = self.suppress_errors
-        self.suppress_errors = bool(suppress)
+        self.suppress_errors = php_bool(suppress)
         return errors
     # end def suppress_errors
     #// 
@@ -1412,7 +1412,7 @@ class wpdb():
             #// If ext/hash is not present, compat.php's hash_hmac() does not support sha256.
             algo = "sha256" if php_function_exists("hash") else "sha1"
             #// Old WP installs may not have AUTH_SALT defined.
-            salt = AUTH_SALT if php_defined("AUTH_SALT") and AUTH_SALT else str(rand())
+            salt = AUTH_SALT if php_defined("AUTH_SALT") and AUTH_SALT else php_str(rand())
             placeholder = "{" + hash_hmac(algo, uniqid(salt, True), salt) + "}"
         # end if
         #// 
@@ -1536,7 +1536,7 @@ class wpdb():
         formats = Array()
         values = Array()
         for value in data:
-            if php_is_null(value["value"]):
+            if is_null(value["value"]):
                 formats[-1] = "NULL"
                 continue
             # end if
@@ -1596,7 +1596,7 @@ class wpdb():
         conditions = Array()
         values = Array()
         for field,value in data:
-            if php_is_null(value["value"]):
+            if is_null(value["value"]):
                 fields[-1] = str("`") + str(field) + str("` = NULL")
                 continue
             # end if
@@ -1604,7 +1604,7 @@ class wpdb():
             values[-1] = value["value"]
         # end for
         for field,value in where:
-            if php_is_null(value["value"]):
+            if is_null(value["value"]):
                 conditions[-1] = str("`") + str(field) + str("` IS NULL")
                 continue
             # end if
@@ -1651,7 +1651,7 @@ class wpdb():
         conditions = Array()
         values = Array()
         for field,value in where:
-            if php_is_null(value["value"]):
+            if is_null(value["value"]):
                 conditions[-1] = str("`") + str(field) + str("` IS NULL")
                 continue
             # end if
@@ -2137,13 +2137,13 @@ class wpdb():
                 pass
             # end if
             if case("varchar"):
-                return Array({"type": "char", "length": int(length)})
+                return Array({"type": "char", "length": php_int(length)})
             # end if
             if case("binary"):
                 pass
             # end if
             if case("varbinary"):
-                return Array({"type": "byte", "length": int(length)})
+                return Array({"type": "byte", "length": php_int(length)})
             # end if
             if case("tinyblob"):
                 pass

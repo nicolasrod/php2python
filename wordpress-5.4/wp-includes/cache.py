@@ -42,7 +42,7 @@ def wp_cache_add(key=None, data=None, group="", expire=0, *args_):
     
     global wp_object_cache
     php_check_if_defined("wp_object_cache")
-    return wp_object_cache.add(key, data, group, int(expire))
+    return wp_object_cache.add(key, data, group, php_int(expire))
 # end def wp_cache_add
 #// 
 #// Closes the cache.
@@ -187,7 +187,7 @@ def wp_cache_replace(key=None, data=None, group="", expire=0, *args_):
     
     global wp_object_cache
     php_check_if_defined("wp_object_cache")
-    return wp_object_cache.replace(key, data, group, int(expire))
+    return wp_object_cache.replace(key, data, group, php_int(expire))
 # end def wp_cache_replace
 #// 
 #// Saves the data to the cache.
@@ -211,7 +211,7 @@ def wp_cache_set(key=None, data=None, group="", expire=0, *args_):
     
     global wp_object_cache
     php_check_if_defined("wp_object_cache")
-    return wp_object_cache.set(key, data, group, int(expire))
+    return wp_object_cache.set(key, data, group, php_int(expire))
 # end def wp_cache_set
 #// 
 #// Switches the internal blog ID.

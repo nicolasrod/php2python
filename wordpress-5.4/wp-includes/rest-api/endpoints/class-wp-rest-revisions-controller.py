@@ -72,10 +72,10 @@ class WP_REST_Revisions_Controller(WP_REST_Controller):
     def get_parent(self, parent=None):
         
         error = php_new_class("WP_Error", lambda : WP_Error("rest_post_invalid_parent", __("Invalid post parent ID."), Array({"status": 404})))
-        if int(parent) <= 0:
+        if php_int(parent) <= 0:
             return error
         # end if
-        parent = get_post(int(parent))
+        parent = get_post(php_int(parent))
         if php_empty(lambda : parent) or php_empty(lambda : parent.ID) or self.parent_post_type != parent.post_type:
             return error
         # end if
@@ -112,10 +112,10 @@ class WP_REST_Revisions_Controller(WP_REST_Controller):
     def get_revision(self, id=None):
         
         error = php_new_class("WP_Error", lambda : WP_Error("rest_post_invalid_id", __("Invalid revision ID."), Array({"status": 404})))
-        if int(id) <= 0:
+        if php_int(id) <= 0:
             return error
         # end if
-        revision = get_post(int(id))
+        revision = get_post(php_int(id))
         if php_empty(lambda : revision) or php_empty(lambda : revision.ID) or "revision" != revision.post_type:
             return error
         # end if
@@ -161,8 +161,8 @@ class WP_REST_Revisions_Controller(WP_REST_Controller):
             query_args = self.prepare_items_query(args, request)
             revisions_query = php_new_class("WP_Query", lambda : WP_Query())
             revisions = revisions_query.query(query_args)
-            offset = int(query_args["offset"]) if (php_isset(lambda : query_args["offset"])) else 0
-            page = int(query_args["paged"])
+            offset = php_int(query_args["offset"]) if (php_isset(lambda : query_args["offset"])) else 0
+            page = php_int(query_args["paged"])
             total_revisions = revisions_query.found_posts
             if total_revisions < 1:
                 query_args["paged"] = None
@@ -172,7 +172,7 @@ class WP_REST_Revisions_Controller(WP_REST_Controller):
                 total_revisions = count_query.found_posts
             # end if
             if revisions_query.query_vars["posts_per_page"] > 0:
-                max_pages = ceil(total_revisions / int(revisions_query.query_vars["posts_per_page"]))
+                max_pages = ceil(total_revisions / php_int(revisions_query.query_vars["posts_per_page"]))
             else:
                 max_pages = 1 if total_revisions > 0 else 0
             # end if
@@ -187,7 +187,7 @@ class WP_REST_Revisions_Controller(WP_REST_Controller):
             revisions = Array()
             total_revisions = 0
             max_pages = 0
-            page = int(request["page"])
+            page = php_int(request["page"])
         # end if
         response = Array()
         for revision in revisions:
@@ -195,8 +195,8 @@ class WP_REST_Revisions_Controller(WP_REST_Controller):
             response[-1] = self.prepare_response_for_collection(data)
         # end for
         response = rest_ensure_response(response)
-        response.header("X-WP-Total", int(total_revisions))
-        response.header("X-WP-TotalPages", int(max_pages))
+        response.header("X-WP-Total", php_int(total_revisions))
+        response.header("X-WP-TotalPages", php_int(max_pages))
         request_params = request.get_query_params()
         base = add_query_arg(urlencode_deep(request_params), rest_url(php_sprintf("%s/%s/%d/%s", self.namespace, self.parent_base, request["parent"], self.rest_base)))
         if page > 1:
@@ -293,7 +293,7 @@ class WP_REST_Revisions_Controller(WP_REST_Controller):
         if is_wp_error(revision):
             return revision
         # end if
-        force = bool(request["force"]) if (php_isset(lambda : request["force"])) else False
+        force = php_bool(request["force"]) if (php_isset(lambda : request["force"])) else False
         #// We don't support trashing for revisions.
         if (not force):
             return php_new_class("WP_Error", lambda : WP_Error("rest_trash_not_supported", php_sprintf(__("Revisions do not support trashing. Set '%s' to delete."), "force=true"), Array({"status": 501})))
@@ -361,7 +361,7 @@ class WP_REST_Revisions_Controller(WP_REST_Controller):
         fields = self.get_fields_for_response(request)
         data = Array()
         if php_in_array("author", fields, True):
-            data["author"] = int(post.post_author)
+            data["author"] = php_int(post.post_author)
         # end if
         if php_in_array("date", fields, True):
             data["date"] = self.prepare_date_response(post.post_date_gmt, post.post_date)
@@ -379,7 +379,7 @@ class WP_REST_Revisions_Controller(WP_REST_Controller):
             data["modified_gmt"] = self.prepare_date_response(post.post_modified_gmt)
         # end if
         if php_in_array("parent", fields, True):
-            data["parent"] = int(post.post_parent)
+            data["parent"] = php_int(post.post_parent)
         # end if
         if php_in_array("slug", fields, True):
             data["slug"] = post.post_name

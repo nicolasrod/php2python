@@ -60,7 +60,7 @@ class getid3_flac(getid3_handler):
             BlockHeader = self.fread(4)
             LBFBT = getid3_lib.bigendian2int(php_substr(BlockHeader, 0, 1))
             #// LBFBT = LastBlockFlag + BlockType
-            LastBlockFlag = bool(LBFBT & 128)
+            LastBlockFlag = php_bool(LBFBT & 128)
             BlockType = LBFBT & 127
             BlockLength = getid3_lib.bigendian2int(php_substr(BlockHeader, 1, 3))
             BlockTypeText = self.metablocktypelookup(BlockType)
@@ -339,7 +339,7 @@ class getid3_flac(getid3_handler):
         offset += 128
         info["flac"]["CUESHEET"]["lead_in_samples"] = getid3_lib.bigendian2int(php_substr(BlockData, offset, 8))
         offset += 8
-        info["flac"]["CUESHEET"]["flags"]["is_cd"] = bool(getid3_lib.bigendian2int(php_substr(BlockData, offset, 1)) & 128)
+        info["flac"]["CUESHEET"]["flags"]["is_cd"] = php_bool(getid3_lib.bigendian2int(php_substr(BlockData, offset, 1)) & 128)
         offset += 1
         offset += 258
         #// reserved
@@ -357,8 +357,8 @@ class getid3_flac(getid3_handler):
             offset += 12
             TrackFlagsRaw = getid3_lib.bigendian2int(php_substr(BlockData, offset, 1))
             offset += 1
-            info["flac"]["CUESHEET"]["tracks"][TrackNumber]["flags"]["is_audio"] = bool(TrackFlagsRaw & 128)
-            info["flac"]["CUESHEET"]["tracks"][TrackNumber]["flags"]["pre_emphasis"] = bool(TrackFlagsRaw & 64)
+            info["flac"]["CUESHEET"]["tracks"][TrackNumber]["flags"]["is_audio"] = php_bool(TrackFlagsRaw & 128)
+            info["flac"]["CUESHEET"]["tracks"][TrackNumber]["flags"]["pre_emphasis"] = php_bool(TrackFlagsRaw & 64)
             offset += 13
             #// reserved
             info["flac"]["CUESHEET"]["tracks"][TrackNumber]["index_points"] = getid3_lib.bigendian2int(php_substr(BlockData, offset, 1))

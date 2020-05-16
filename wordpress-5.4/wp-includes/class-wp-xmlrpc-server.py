@@ -198,7 +198,7 @@ class wp_xmlrpc_server(IXR_Server):
     #//
     def login_pass_ok(self, username=None, password=None):
         
-        return bool(self.login(username, password))
+        return php_bool(self.login(username, password))
     # end def login_pass_ok
     #// 
     #// Escape string or array of strings for database.
@@ -232,7 +232,7 @@ class wp_xmlrpc_server(IXR_Server):
     #//
     def get_custom_fields(self, post_id=None):
         
-        post_id = int(post_id)
+        post_id = php_int(post_id)
         custom_fields = Array()
         for meta in has_meta(post_id):
             #// Don't expose protected fields.
@@ -253,10 +253,10 @@ class wp_xmlrpc_server(IXR_Server):
     #//
     def set_custom_fields(self, post_id=None, fields=None):
         
-        post_id = int(post_id)
+        post_id = php_int(post_id)
         for meta in fields:
             if (php_isset(lambda : meta["id"])):
-                meta["id"] = int(meta["id"])
+                meta["id"] = php_int(meta["id"])
                 pmeta = get_metadata_by_mid("post", meta["id"])
                 if (not pmeta) or pmeta.post_id != post_id:
                     continue
@@ -288,7 +288,7 @@ class wp_xmlrpc_server(IXR_Server):
     #//
     def get_term_custom_fields(self, term_id=None):
         
-        term_id = int(term_id)
+        term_id = php_int(term_id)
         custom_fields = Array()
         for meta in has_term_meta(term_id):
             if (not current_user_can("edit_term_meta", term_id)):
@@ -308,10 +308,10 @@ class wp_xmlrpc_server(IXR_Server):
     #//
     def set_term_custom_fields(self, term_id=None, fields=None):
         
-        term_id = int(term_id)
+        term_id = php_int(term_id)
         for meta in fields:
             if (php_isset(lambda : meta["id"])):
-                meta["id"] = int(meta["id"])
+                meta["id"] = php_int(meta["id"])
                 pmeta = get_metadata_by_mid("term", meta["id"])
                 if (php_isset(lambda : meta["key"])):
                     meta["key"] = wp_unslash(meta["key"])
@@ -402,7 +402,7 @@ class wp_xmlrpc_server(IXR_Server):
         primary_blog_id = 0
         active_blog = get_active_blog_for_user(user.ID)
         if active_blog:
-            primary_blog_id = int(active_blog.blog_id)
+            primary_blog_id = php_int(active_blog.blog_id)
         # end if
         for blog in blogs:
             #// Don't include blogs that aren't hosted at this site.
@@ -412,8 +412,8 @@ class wp_xmlrpc_server(IXR_Server):
             blog_id = blog.userblog_id
             switch_to_blog(blog_id)
             is_admin = current_user_can("manage_options")
-            is_primary = int(blog_id) == primary_blog_id
-            struct[-1] = Array({"isAdmin": is_admin, "isPrimary": is_primary, "url": home_url("/"), "blogid": str(blog_id), "blogName": get_option("blogname"), "xmlrpc": site_url("xmlrpc.php", "rpc")})
+            is_primary = php_int(blog_id) == primary_blog_id
+            struct[-1] = Array({"isAdmin": is_admin, "isPrimary": is_primary, "url": home_url("/"), "blogid": php_str(blog_id), "blogName": get_option("blogname"), "xmlrpc": site_url("xmlrpc.php", "rpc")})
             restore_current_blog()
         # end for
         return struct
@@ -444,7 +444,7 @@ class wp_xmlrpc_server(IXR_Server):
     #//
     def _prepare_taxonomy(self, taxonomy=None, fields=None):
         
-        _taxonomy = Array({"name": taxonomy.name, "label": taxonomy.label, "hierarchical": bool(taxonomy.hierarchical), "public": bool(taxonomy.public), "show_ui": bool(taxonomy.show_ui), "_builtin": bool(taxonomy._builtin)})
+        _taxonomy = Array({"name": taxonomy.name, "label": taxonomy.label, "hierarchical": php_bool(taxonomy.hierarchical), "public": php_bool(taxonomy.public), "show_ui": php_bool(taxonomy.show_ui), "_builtin": php_bool(taxonomy._builtin)})
         if php_in_array("labels", fields):
             _taxonomy["labels"] = taxonomy.labels
         # end if
@@ -452,7 +452,7 @@ class wp_xmlrpc_server(IXR_Server):
             _taxonomy["cap"] = taxonomy.cap
         # end if
         if php_in_array("menu", fields):
-            _taxonomy["show_in_menu"] = bool(_taxonomy.show_in_menu)
+            _taxonomy["show_in_menu"] = php_bool(_taxonomy.show_in_menu)
         # end if
         if php_in_array("object_type", fields):
             _taxonomy["object_type"] = array_unique(taxonomy.object_type)
@@ -580,7 +580,7 @@ class wp_xmlrpc_server(IXR_Server):
             if (not php_empty(lambda : enclosures)):
                 encdata = php_explode("\n", enclosures[0])
                 _post["enclosure"]["url"] = php_trim(htmlspecialchars(encdata[0]))
-                _post["enclosure"]["length"] = int(php_trim(encdata[1]))
+                _post["enclosure"]["length"] = php_int(php_trim(encdata[1]))
                 _post["enclosure"]["type"] = php_trim(encdata[2])
             # end if
         # end if
@@ -607,18 +607,18 @@ class wp_xmlrpc_server(IXR_Server):
     #//
     def _prepare_post_type(self, post_type=None, fields=None):
         
-        _post_type = Array({"name": post_type.name, "label": post_type.label, "hierarchical": bool(post_type.hierarchical), "public": bool(post_type.public), "show_ui": bool(post_type.show_ui), "_builtin": bool(post_type._builtin), "has_archive": bool(post_type.has_archive), "supports": get_all_post_type_supports(post_type.name)})
+        _post_type = Array({"name": post_type.name, "label": post_type.label, "hierarchical": php_bool(post_type.hierarchical), "public": php_bool(post_type.public), "show_ui": php_bool(post_type.show_ui), "_builtin": php_bool(post_type._builtin), "has_archive": php_bool(post_type.has_archive), "supports": get_all_post_type_supports(post_type.name)})
         if php_in_array("labels", fields):
             _post_type["labels"] = post_type.labels
         # end if
         if php_in_array("cap", fields):
             _post_type["cap"] = post_type.cap
-            _post_type["map_meta_cap"] = bool(post_type.map_meta_cap)
+            _post_type["map_meta_cap"] = php_bool(post_type.map_meta_cap)
         # end if
         if php_in_array("menu", fields):
-            _post_type["menu_position"] = int(post_type.menu_position)
+            _post_type["menu_position"] = php_int(post_type.menu_position)
             _post_type["menu_icon"] = post_type.menu_icon
-            _post_type["show_in_menu"] = bool(post_type.show_in_menu)
+            _post_type["show_in_menu"] = php_bool(post_type.show_in_menu)
         # end if
         if php_in_array("taxonomies", fields):
             _post_type["taxonomies"] = get_object_taxonomies(post_type.name, "names")
@@ -697,7 +697,7 @@ class wp_xmlrpc_server(IXR_Server):
         if php_empty(lambda : page_template):
             page_template = "default"
         # end if
-        _page = Array({"dateCreated": page_date, "userid": page.post_author, "page_id": page.ID, "page_status": page.post_status, "description": full_page["main"], "title": page.post_title, "link": link, "permaLink": link, "categories": categories, "excerpt": page.post_excerpt, "text_more": full_page["extended"], "mt_allow_comments": allow_comments, "mt_allow_pings": allow_pings, "wp_slug": page.post_name, "wp_password": page.post_password, "wp_author": author.display_name, "wp_page_parent_id": page.post_parent, "wp_page_parent_title": parent_title, "wp_page_order": page.menu_order, "wp_author_id": str(author.ID), "wp_author_display_name": author.display_name, "date_created_gmt": page_date_gmt, "custom_fields": self.get_custom_fields(page.ID), "wp_page_template": page_template})
+        _page = Array({"dateCreated": page_date, "userid": page.post_author, "page_id": page.ID, "page_status": page.post_status, "description": full_page["main"], "title": page.post_title, "link": link, "permaLink": link, "categories": categories, "excerpt": page.post_excerpt, "text_more": full_page["extended"], "mt_allow_comments": allow_comments, "mt_allow_pings": allow_pings, "wp_slug": page.post_name, "wp_password": page.post_password, "wp_author": author.display_name, "wp_page_parent_id": page.post_parent, "wp_page_parent_title": parent_title, "wp_page_order": page.menu_order, "wp_author_id": php_str(author.ID), "wp_author_display_name": author.display_name, "date_created_gmt": page_date_gmt, "custom_fields": self.get_custom_fields(page.ID), "wp_page_template": page_template})
         #// 
         #// Filters XML-RPC-prepared data for the given page.
         #// 
@@ -1040,7 +1040,7 @@ class wp_xmlrpc_server(IXR_Server):
                         if (not term):
                             return php_new_class("IXR_Error", lambda : IXR_Error(403, __("Invalid term ID.")))
                         # end if
-                        terms[taxonomy][-1] = int(term_id)
+                        terms[taxonomy][-1] = php_int(term_id)
                     # end for
                 # end for
             # end if
@@ -1083,9 +1083,9 @@ class wp_xmlrpc_server(IXR_Server):
                             if is_wp_error(term_info):
                                 return php_new_class("IXR_Error", lambda : IXR_Error(500, term_info.get_error_message()))
                             # end if
-                            terms[taxonomy][-1] = int(term_info["term_id"])
+                            terms[taxonomy][-1] = php_int(term_info["term_id"])
                         else:
-                            terms[taxonomy][-1] = int(term.term_id)
+                            terms[taxonomy][-1] = php_int(term.term_id)
                         # end if
                     # end for
                 # end for
@@ -1154,7 +1154,7 @@ class wp_xmlrpc_server(IXR_Server):
         self.escape(args)
         username = args[1]
         password = args[2]
-        post_id = int(args[3])
+        post_id = php_int(args[3])
         content_struct = args[4]
         user = self.login(username, password)
         if (not user):
@@ -1225,7 +1225,7 @@ class wp_xmlrpc_server(IXR_Server):
         self.escape(args)
         username = args[1]
         password = args[2]
-        post_id = int(args[3])
+        post_id = php_int(args[3])
         user = self.login(username, password)
         if (not user):
             return self.error
@@ -1302,7 +1302,7 @@ class wp_xmlrpc_server(IXR_Server):
         self.escape(args)
         username = args[1]
         password = args[2]
-        post_id = int(args[3])
+        post_id = php_int(args[3])
         if (php_isset(lambda : args[4])):
             fields = args[4]
         else:
@@ -1377,7 +1377,7 @@ class wp_xmlrpc_server(IXR_Server):
         query = Array()
         if (php_isset(lambda : filter["post_type"])):
             post_type = get_post_type_object(filter["post_type"])
-            if (not bool(post_type)):
+            if (not php_bool(post_type)):
                 return php_new_class("IXR_Error", lambda : IXR_Error(403, __("Invalid post type.")))
             # end if
         else:
@@ -1471,7 +1471,7 @@ class wp_xmlrpc_server(IXR_Server):
             if (not taxonomy["hierarchical"]):
                 return php_new_class("IXR_Error", lambda : IXR_Error(403, __("This taxonomy is not hierarchical.")))
             # end if
-            parent_term_id = int(content_struct["parent"])
+            parent_term_id = php_int(content_struct["parent"])
             parent_term = get_term(parent_term_id, taxonomy["name"])
             if is_wp_error(parent_term):
                 return php_new_class("IXR_Error", lambda : IXR_Error(500, parent_term.get_error_message()))
@@ -1528,7 +1528,7 @@ class wp_xmlrpc_server(IXR_Server):
         self.escape(args)
         username = args[1]
         password = args[2]
-        term_id = int(args[3])
+        term_id = php_int(args[3])
         content_struct = args[4]
         user = self.login(username, password)
         if (not user):
@@ -1563,7 +1563,7 @@ class wp_xmlrpc_server(IXR_Server):
             if (not taxonomy["hierarchical"]):
                 return php_new_class("IXR_Error", lambda : IXR_Error(403, __("Cannot set parent term, taxonomy is not hierarchical.")))
             # end if
-            parent_term_id = int(content_struct["parent"])
+            parent_term_id = php_int(content_struct["parent"])
             parent_term = get_term(parent_term_id, taxonomy["name"])
             if is_wp_error(parent_term):
                 return php_new_class("IXR_Error", lambda : IXR_Error(500, parent_term.get_error_message()))
@@ -1619,7 +1619,7 @@ class wp_xmlrpc_server(IXR_Server):
         username = args[1]
         password = args[2]
         taxonomy = args[3]
-        term_id = int(args[4])
+        term_id = php_int(args[4])
         user = self.login(username, password)
         if (not user):
             return self.error
@@ -1685,7 +1685,7 @@ class wp_xmlrpc_server(IXR_Server):
         username = args[1]
         password = args[2]
         taxonomy = args[3]
-        term_id = int(args[4])
+        term_id = php_int(args[4])
         user = self.login(username, password)
         if (not user):
             return self.error
@@ -1937,7 +1937,7 @@ class wp_xmlrpc_server(IXR_Server):
         self.escape(args)
         username = args[1]
         password = args[2]
-        user_id = int(args[3])
+        user_id = php_int(args[3])
         if (php_isset(lambda : args[4])):
             fields = args[4]
         else:
@@ -2174,7 +2174,7 @@ class wp_xmlrpc_server(IXR_Server):
     def wp_getpage(self, args=None):
         
         self.escape(args)
-        page_id = int(args[1])
+        page_id = php_int(args[1])
         username = args[2]
         password = args[3]
         user = self.login(username, password)
@@ -2218,7 +2218,7 @@ class wp_xmlrpc_server(IXR_Server):
         self.escape(args)
         username = args[1]
         password = args[2]
-        num_pages = int(args[3]) if (php_isset(lambda : args[3])) else 10
+        num_pages = php_int(args[3]) if (php_isset(lambda : args[3])) else 10
         user = self.login(username, password)
         if (not user):
             return self.error
@@ -2295,7 +2295,7 @@ class wp_xmlrpc_server(IXR_Server):
         self.escape(args)
         username = args[1]
         password = args[2]
-        page_id = int(args[3])
+        page_id = php_int(args[3])
         user = self.login(username, password)
         if (not user):
             return self.error
@@ -2349,7 +2349,7 @@ class wp_xmlrpc_server(IXR_Server):
     def wp_editpage(self, args=None):
         
         #// Items will be escaped in mw_editPost().
-        page_id = int(args[1])
+        page_id = php_int(args[1])
         username = args[2]
         password = args[3]
         content = args[4]
@@ -2553,7 +2553,7 @@ class wp_xmlrpc_server(IXR_Server):
         cat_id = wp_insert_category(new_category, True)
         if is_wp_error(cat_id):
             if "term_exists" == cat_id.get_error_code():
-                return int(cat_id.get_error_data())
+                return php_int(cat_id.get_error_data())
             else:
                 return php_new_class("IXR_Error", lambda : IXR_Error(500, __("Sorry, the category could not be created.")))
             # end if
@@ -2592,7 +2592,7 @@ class wp_xmlrpc_server(IXR_Server):
         self.escape(args)
         username = args[1]
         password = args[2]
-        category_id = int(args[3])
+        category_id = php_int(args[3])
         user = self.login(username, password)
         if (not user):
             return self.error
@@ -2639,7 +2639,7 @@ class wp_xmlrpc_server(IXR_Server):
         username = args[1]
         password = args[2]
         category = args[3]
-        max_results = int(args[4])
+        max_results = php_int(args[4])
         user = self.login(username, password)
         if (not user):
             return self.error
@@ -2676,7 +2676,7 @@ class wp_xmlrpc_server(IXR_Server):
         self.escape(args)
         username = args[1]
         password = args[2]
-        comment_id = int(args[3])
+        comment_id = php_int(args[3])
         user = self.login(username, password)
         if (not user):
             return self.error
@@ -2790,7 +2790,7 @@ class wp_xmlrpc_server(IXR_Server):
         self.escape(args)
         username = args[1]
         password = args[2]
-        comment_ID = int(args[3])
+        comment_ID = php_int(args[3])
         user = self.login(username, password)
         if (not user):
             return self.error
@@ -2850,7 +2850,7 @@ class wp_xmlrpc_server(IXR_Server):
         self.escape(args)
         username = args[1]
         password = args[2]
-        comment_ID = int(args[3])
+        comment_ID = php_int(args[3])
         content_struct = args[4]
         user = self.login(username, password)
         if (not user):
@@ -3074,7 +3074,7 @@ class wp_xmlrpc_server(IXR_Server):
         self.escape(args)
         username = args[1]
         password = args[2]
-        post_id = int(args[3])
+        post_id = php_int(args[3])
         user = self.login(username, password)
         if (not user):
             return self.error
@@ -3309,7 +3309,7 @@ class wp_xmlrpc_server(IXR_Server):
         self.escape(args)
         username = args[1]
         password = args[2]
-        attachment_id = int(args[3])
+        attachment_id = php_int(args[3])
         user = self.login(username, password)
         if (not user):
             return self.error
@@ -3563,7 +3563,7 @@ class wp_xmlrpc_server(IXR_Server):
         self.escape(args)
         username = args[1]
         password = args[2]
-        post_id = int(args[3])
+        post_id = php_int(args[3])
         if (php_isset(lambda : args[4])):
             fields = args[4]
         else:
@@ -3636,7 +3636,7 @@ class wp_xmlrpc_server(IXR_Server):
         self.escape(args)
         username = args[1]
         password = args[2]
-        revision_id = int(args[3])
+        revision_id = php_int(args[3])
         user = self.login(username, password)
         if (not user):
             return self.error
@@ -3662,7 +3662,7 @@ class wp_xmlrpc_server(IXR_Server):
             return php_new_class("IXR_Error", lambda : IXR_Error(401, __("Sorry, revisions are disabled.")))
         # end if
         post = wp_restore_post_revision(revision_id)
-        return bool(post)
+        return php_bool(post)
     # end def wp_restorerevision
     #// 
     #// Blogger API functions.
@@ -3791,7 +3791,7 @@ class wp_xmlrpc_server(IXR_Server):
     def blogger_getpost(self, args=None):
         
         self.escape(args)
-        post_ID = int(args[1])
+        post_ID = php_int(args[1])
         username = args[2]
         password = args[3]
         user = self.login(username, password)
@@ -3811,7 +3811,7 @@ class wp_xmlrpc_server(IXR_Server):
         content = "<title>" + wp_unslash(post_data["post_title"]) + "</title>"
         content += "<category>" + categories + "</category>"
         content += wp_unslash(post_data["post_content"])
-        struct = Array({"userid": post_data["post_author"], "dateCreated": self._convert_date(post_data["post_date"]), "content": content, "postid": str(post_data["ID"])})
+        struct = Array({"userid": post_data["post_author"], "dateCreated": self._convert_date(post_data["post_date"]), "content": content, "postid": php_str(post_data["ID"])})
         return struct
     # end def blogger_getpost
     #// 
@@ -3865,7 +3865,7 @@ class wp_xmlrpc_server(IXR_Server):
             content = "<title>" + wp_unslash(entry["post_title"]) + "</title>"
             content += "<category>" + categories + "</category>"
             content += wp_unslash(entry["post_content"])
-            recent_posts[-1] = Array({"userid": entry["post_author"], "dateCreated": post_date, "content": content, "postid": str(entry["ID"])})
+            recent_posts[-1] = Array({"userid": entry["post_author"], "dateCreated": post_date, "content": content, "postid": php_str(entry["ID"])})
         # end for
         return recent_posts
     # end def blogger_getrecentposts
@@ -3977,7 +3977,7 @@ class wp_xmlrpc_server(IXR_Server):
     def blogger_editpost(self, args=None):
         
         self.escape(args)
-        post_ID = int(args[1])
+        post_ID = php_int(args[1])
         username = args[2]
         password = args[3]
         content = args[4]
@@ -4042,7 +4042,7 @@ class wp_xmlrpc_server(IXR_Server):
     def blogger_deletepost(self, args=None):
         
         self.escape(args)
-        post_ID = int(args[1])
+        post_ID = php_int(args[1])
         username = args[2]
         password = args[3]
         user = self.login(username, password)
@@ -4276,7 +4276,7 @@ class wp_xmlrpc_server(IXR_Server):
                     # end if
                 # end for
             else:
-                for case in Switch(int(content_struct["mt_allow_comments"])):
+                for case in Switch(php_int(content_struct["mt_allow_comments"])):
                     if case(0):
                         pass
                     # end if
@@ -4314,7 +4314,7 @@ class wp_xmlrpc_server(IXR_Server):
                     # end if
                 # end for
             else:
-                for case in Switch(int(content_struct["mt_allow_pings"])):
+                for case in Switch(php_int(content_struct["mt_allow_pings"])):
                     if case(0):
                         ping_status = "closed"
                         break
@@ -4485,7 +4485,7 @@ class wp_xmlrpc_server(IXR_Server):
     def mw_editpost(self, args=None):
         
         self.escape(args)
-        post_ID = int(args[0])
+        post_ID = php_int(args[0])
         username = args[1]
         password = args[2]
         content_struct = args[3]
@@ -4596,7 +4596,7 @@ class wp_xmlrpc_server(IXR_Server):
                     # end if
                 # end for
             else:
-                for case in Switch(int(content_struct["mt_allow_comments"])):
+                for case in Switch(php_int(content_struct["mt_allow_comments"])):
                     if case(0):
                         pass
                     # end if
@@ -4632,7 +4632,7 @@ class wp_xmlrpc_server(IXR_Server):
                     # end if
                 # end for
             else:
-                for case in Switch(int(content_struct["mt_allow_pings"])):
+                for case in Switch(php_int(content_struct["mt_allow_pings"])):
                     if case(0):
                         ping_status = "closed"
                         break
@@ -4796,7 +4796,7 @@ class wp_xmlrpc_server(IXR_Server):
     def mw_getpost(self, args=None):
         
         self.escape(args)
-        post_ID = int(args[0])
+        post_ID = php_int(args[0])
         username = args[1]
         password = args[2]
         user = self.login(username, password)
@@ -4857,13 +4857,13 @@ class wp_xmlrpc_server(IXR_Server):
                     for enc in val:
                         encdata = php_explode("\n", enc)
                         enclosure["url"] = php_trim(htmlspecialchars(encdata[0]))
-                        enclosure["length"] = int(php_trim(encdata[1]))
+                        enclosure["length"] = php_int(php_trim(encdata[1]))
                         enclosure["type"] = php_trim(encdata[2])
                         break
                     # end for
                 # end if
             # end for
-            resp = Array({"dateCreated": post_date, "userid": postdata["post_author"], "postid": postdata["ID"], "description": post["main"], "title": postdata["post_title"], "link": link, "permaLink": link, "categories": categories, "mt_excerpt": postdata["post_excerpt"], "mt_text_more": post["extended"], "wp_more_text": post["more_text"], "mt_allow_comments": allow_comments, "mt_allow_pings": allow_pings, "mt_keywords": tagnames, "wp_slug": postdata["post_name"], "wp_password": postdata["post_password"], "wp_author_id": str(author.ID), "wp_author_display_name": author.display_name, "date_created_gmt": post_date_gmt, "post_status": postdata["post_status"], "custom_fields": self.get_custom_fields(post_ID), "wp_post_format": post_format, "sticky": sticky, "date_modified": post_modified, "date_modified_gmt": post_modified_gmt})
+            resp = Array({"dateCreated": post_date, "userid": postdata["post_author"], "postid": postdata["ID"], "description": post["main"], "title": postdata["post_title"], "link": link, "permaLink": link, "categories": categories, "mt_excerpt": postdata["post_excerpt"], "mt_text_more": post["extended"], "wp_more_text": post["more_text"], "mt_allow_comments": allow_comments, "mt_allow_pings": allow_pings, "mt_keywords": tagnames, "wp_slug": postdata["post_name"], "wp_password": postdata["post_password"], "wp_author_id": php_str(author.ID), "wp_author_display_name": author.display_name, "date_created_gmt": post_date_gmt, "post_status": postdata["post_status"], "custom_fields": self.get_custom_fields(post_ID), "wp_post_format": post_format, "sticky": sticky, "date_modified": post_modified, "date_modified_gmt": post_modified_gmt})
             if (not php_empty(lambda : enclosure)):
                 resp["enclosure"] = enclosure
             # end if
@@ -4950,7 +4950,7 @@ class wp_xmlrpc_server(IXR_Server):
             if php_empty(lambda : post_format):
                 post_format = "standard"
             # end if
-            recent_posts[-1] = Array({"dateCreated": post_date, "userid": entry["post_author"], "postid": str(entry["ID"]), "description": post["main"], "title": entry["post_title"], "link": link, "permaLink": link, "categories": categories, "mt_excerpt": entry["post_excerpt"], "mt_text_more": post["extended"], "wp_more_text": post["more_text"], "mt_allow_comments": allow_comments, "mt_allow_pings": allow_pings, "mt_keywords": tagnames, "wp_slug": entry["post_name"], "wp_password": entry["post_password"], "wp_author_id": str(author.ID), "wp_author_display_name": author.display_name, "date_created_gmt": post_date_gmt, "post_status": entry["post_status"], "custom_fields": self.get_custom_fields(entry["ID"]), "wp_post_format": post_format, "date_modified": post_modified, "date_modified_gmt": post_modified_gmt, "sticky": "post" == entry["post_type"] and is_sticky(entry["ID"]), "wp_post_thumbnail": get_post_thumbnail_id(entry["ID"])})
+            recent_posts[-1] = Array({"dateCreated": post_date, "userid": entry["post_author"], "postid": php_str(entry["ID"]), "description": post["main"], "title": entry["post_title"], "link": link, "permaLink": link, "categories": categories, "mt_excerpt": entry["post_excerpt"], "mt_text_more": post["extended"], "wp_more_text": post["more_text"], "mt_allow_comments": allow_comments, "mt_allow_pings": allow_pings, "mt_keywords": tagnames, "wp_slug": entry["post_name"], "wp_password": entry["post_password"], "wp_author_id": php_str(author.ID), "wp_author_display_name": author.display_name, "date_created_gmt": post_date_gmt, "post_status": entry["post_status"], "custom_fields": self.get_custom_fields(entry["ID"]), "wp_post_format": post_format, "date_modified": post_modified, "date_modified_gmt": post_modified_gmt, "sticky": "post" == entry["post_type"] and is_sticky(entry["ID"]), "wp_post_thumbnail": get_post_thumbnail_id(entry["ID"])})
         # end for
         return recent_posts
     # end def mw_getrecentposts
@@ -5067,7 +5067,7 @@ class wp_xmlrpc_server(IXR_Server):
         #// Construct the attachment array.
         post_id = 0
         if (not php_empty(lambda : data["post_id"])):
-            post_id = int(data["post_id"])
+            post_id = php_int(data["post_id"])
             if (not current_user_can("edit_post", post_id)):
                 return php_new_class("IXR_Error", lambda : IXR_Error(401, __("Sorry, you are not allowed to edit this post.")))
             # end if
@@ -5140,7 +5140,7 @@ class wp_xmlrpc_server(IXR_Server):
             # end if
             post_date = self._convert_date(entry["post_date"])
             post_date_gmt = self._convert_date_gmt(entry["post_date_gmt"], entry["post_date"])
-            recent_posts[-1] = Array({"dateCreated": post_date, "userid": entry["post_author"], "postid": str(entry["ID"]), "title": entry["post_title"], "post_status": entry["post_status"], "date_created_gmt": post_date_gmt})
+            recent_posts[-1] = Array({"dateCreated": post_date, "userid": entry["post_author"], "postid": php_str(entry["ID"]), "title": entry["post_title"], "post_status": entry["post_status"], "date_created_gmt": post_date_gmt})
         # end for
         return recent_posts
     # end def mt_getrecentposttitles
@@ -5201,7 +5201,7 @@ class wp_xmlrpc_server(IXR_Server):
     def mt_getpostcategories(self, args=None):
         
         self.escape(args)
-        post_ID = int(args[0])
+        post_ID = php_int(args[0])
         username = args[1]
         password = args[2]
         user = self.login(username, password)
@@ -5221,7 +5221,7 @@ class wp_xmlrpc_server(IXR_Server):
         #// First listed category will be the primary category.
         isPrimary = True
         for catid in catids:
-            categories[-1] = Array({"categoryName": get_cat_name(catid), "categoryId": str(catid), "isPrimary": isPrimary})
+            categories[-1] = Array({"categoryName": get_cat_name(catid), "categoryId": php_str(catid), "isPrimary": isPrimary})
             isPrimary = False
         # end for
         return categories
@@ -5244,7 +5244,7 @@ class wp_xmlrpc_server(IXR_Server):
     def mt_setpostcategories(self, args=None):
         
         self.escape(args)
-        post_ID = int(args[0])
+        post_ID = php_int(args[0])
         username = args[1]
         password = args[2]
         categories = args[3]
@@ -5349,7 +5349,7 @@ class wp_xmlrpc_server(IXR_Server):
     def mt_publishpost(self, args=None):
         
         self.escape(args)
-        post_ID = int(args[0])
+        post_ID = php_int(args[0])
         username = args[1]
         password = args[2]
         user = self.login(username, password)
@@ -5427,16 +5427,16 @@ class wp_xmlrpc_server(IXR_Server):
         elif (php_isset(lambda : urltest["path"])) and php_preg_match("#p/[0-9]{1,}#", urltest["path"], match):
             #// The path defines the post_ID (archives/p/XXXX).
             blah = php_explode("/", match[0])
-            post_ID = int(blah[1])
+            post_ID = php_int(blah[1])
         elif (php_isset(lambda : urltest["query"])) and php_preg_match("#p=[0-9]{1,}#", urltest["query"], match):
             #// The query string defines the post_ID (?p=XXXX).
             blah = php_explode("=", match[0])
-            post_ID = int(blah[1])
+            post_ID = php_int(blah[1])
         elif (php_isset(lambda : urltest["fragment"])):
             #// An #anchor is there, it's either...
             if php_intval(urltest["fragment"]):
                 #// ...an integer #XXXX (simplest case),
-                post_ID = int(urltest["fragment"])
+                post_ID = php_int(urltest["fragment"])
             elif php_preg_match("/post-[0-9]+/", urltest["fragment"]):
                 #// ...a post ID in the form 'post-###',
                 post_ID = php_preg_replace("/[^0-9]+/", "", urltest["fragment"])
@@ -5454,7 +5454,7 @@ class wp_xmlrpc_server(IXR_Server):
             #// TODO: Attempt to extract a post ID from the given URL.
             return self.pingback_error(33, __("The specified target URL cannot be used as a target. It either doesn&#8217;t exist, or it is not a pingback-enabled resource."))
         # end if
-        post_ID = int(post_ID)
+        post_ID = php_int(post_ID)
         post = get_post(post_ID)
         if (not post):
             #// Post not found.
@@ -5544,7 +5544,7 @@ class wp_xmlrpc_server(IXR_Server):
         pagelinkedfrom = php_str_replace("&", "&amp;", pagelinkedfrom)
         context = "[&#8230;] " + esc_html(excerpt) + " [&#8230;]"
         pagelinkedfrom = self.escape(pagelinkedfrom)
-        comment_post_ID = int(post_ID)
+        comment_post_ID = php_int(post_ID)
         comment_author = title
         comment_author_email = ""
         self.escape(comment_author)

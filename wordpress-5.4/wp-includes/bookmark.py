@@ -84,7 +84,7 @@ def get_bookmark(bookmark=None, output=OBJECT, filter="raw", *args_):
 #//
 def get_bookmark_field(field=None, bookmark=None, context="display", *args_):
     
-    bookmark = int(bookmark)
+    bookmark = php_int(bookmark)
     bookmark = get_bookmark(bookmark)
     if is_wp_error(bookmark):
         return bookmark
@@ -362,7 +362,7 @@ def sanitize_bookmark_field(field=None, value=None, bookmark_id=None, context=No
             pass
         # end if
         if case("link_rating"):
-            value = int(value)
+            value = php_int(value)
             break
         # end if
         if case("link_category"):

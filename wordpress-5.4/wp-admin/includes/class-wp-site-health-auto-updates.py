@@ -39,15 +39,15 @@ class WP_Site_Health_Auto_Updates():
         
         tests = Array(self.test_constants("WP_AUTO_UPDATE_CORE", True), self.test_wp_version_check_attached(), self.test_filters_automatic_updater_disabled(), self.test_wp_automatic_updates_disabled(), self.test_if_failed_update(), self.test_vcs_abspath(), self.test_check_wp_filesystem_method(), self.test_all_files_writable(), self.test_accepts_dev_updates(), self.test_accepts_minor_updates())
         tests = php_array_filter(tests)
-        def _closure_2c1673a6(test = None):
+        def _closure_83348c6c(test = None):
             
             test = test
             if php_empty(lambda : test.severity):
                 test.severity = "warning"
             # end if
             return test
-        # end def _closure_2c1673a6
-        tests = php_array_map((lambda *args, **kwargs: _closure_2c1673a6(*args, **kwargs)), tests)
+        # end def _closure_83348c6c
+        tests = php_array_map((lambda *args, **kwargs: _closure_83348c6c(*args, **kwargs)), tests)
         return tests
     # end def run_tests
     #// 
@@ -249,7 +249,7 @@ class WP_Site_Health_Auto_Updates():
         dev = False != php_strpos(wp_version, "-")
         #// Get the last stable version's files and test against that.
         if (not checksums) and dev:
-            checksums = get_core_checksums(float(wp_version) - 0.1, "en_US")
+            checksums = get_core_checksums(php_float(wp_version) - 0.1, "en_US")
         # end if
         #// There aren't always checksums for development releases, so just skip the test if we still can't find any.
         if (not checksums) and dev:

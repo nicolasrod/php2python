@@ -134,7 +134,7 @@ def _wp_personal_data_handle_actions(*args_):
 def _wp_personal_data_cleanup_requests(*args_):
     
     #// This filter is documented in wp-includes/user.php
-    expires = int(apply_filters("user_request_key_expiration", DAY_IN_SECONDS))
+    expires = php_int(apply_filters("user_request_key_expiration", DAY_IN_SECONDS))
     requests_query = php_new_class("WP_Query", lambda : WP_Query(Array({"post_type": "user_request", "posts_per_page": -1, "post_status": "request-pending", "fields": "ids", "date_query": Array(Array({"column": "post_modified_gmt", "before": expires + " seconds ago"}))})))
     request_ids = requests_query.posts
     for request_id in request_ids:

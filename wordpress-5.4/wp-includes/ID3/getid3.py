@@ -308,7 +308,7 @@ class getID3():
                 # end if
                 raise php_new_class("getid3_exception", lambda : getid3_exception("Could not open \"" + filename + "\" (" + php_implode("; ", errormessagelist) + ")"))
             # end if
-            self.info["filesize"] = filesize if (not php_is_null(filesize)) else filesize(filename)
+            self.info["filesize"] = filesize if (not is_null(filesize)) else filesize(filename)
             #// set redundant parameters - might be needed in some include file
             #// filenames / filepaths in getID3 are always expressed with forward slashes (unix-style) for both Windows and other to try and minimize confusion
             filename = php_str_replace("\\", "/", filename)

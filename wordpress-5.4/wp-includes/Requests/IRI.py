@@ -574,7 +574,7 @@ class Requests_IRI():
             self.scheme, self.iuserinfo, self.ihost, self.port, self.ipath, self.iquery, self.ifragment, return_ = cache[iri]
             return return_
         # end if
-        parsed = self.parse_iri(str(iri))
+        parsed = self.parse_iri(php_str(iri))
         return_ = self.set_scheme(parsed["scheme"]) and self.set_authority(parsed["authority"]) and self.set_path(parsed["path"]) and self.set_query(parsed["query"]) and self.set_fragment(parsed["fragment"])
         cache[iri] = Array(self.scheme, self.iuserinfo, self.ihost, self.port, self.ipath, self.iquery, self.ifragment, return_)
         return return_
@@ -717,7 +717,7 @@ class Requests_IRI():
             return True
         # end if
         if strspn(port, "0123456789") == php_strlen(port):
-            self.port = int(port)
+            self.port = php_int(port)
             self.scheme_normalization()
             return True
         # end if
@@ -736,9 +736,9 @@ class Requests_IRI():
         if (not cache):
             cache = Array()
         # end if
-        ipath = str(ipath)
+        ipath = php_str(ipath)
         if (php_isset(lambda : cache[ipath])):
-            self.ipath = cache[ipath][int(self.scheme != None)]
+            self.ipath = cache[ipath][php_int(self.scheme != None)]
         else:
             valid = self.replace_invalid_with_pct_encoding(ipath, "!$&'()*+,;=@:/")
             removed = self.remove_dot_segments(valid)

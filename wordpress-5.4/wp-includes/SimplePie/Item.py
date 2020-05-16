@@ -633,7 +633,7 @@ class SimplePie_Item():
             # end if
         # end if
         if self.data["date"]:
-            date_format = str(date_format)
+            date_format = php_str(date_format)
             for case in Switch(date_format):
                 if case(""):
                     return self.sanitize(self.data["date"]["raw"], SIMPLEPIE_CONSTRUCT_TEXT)
@@ -675,7 +675,7 @@ class SimplePie_Item():
             # end if
         # end if
         if self.data["updated"]:
-            date_format = str(date_format)
+            date_format = php_str(date_format)
             for case in Switch(date_format):
                 if case(""):
                     return self.sanitize(self.data["updated"]["raw"], SIMPLEPIE_CONSTRUCT_TEXT)
@@ -1099,14 +1099,14 @@ class SimplePie_Item():
                 if (php_isset(lambda : duration_parent[0]["data"])):
                     temp = php_explode(":", self.sanitize(duration_parent[0]["data"], SIMPLEPIE_CONSTRUCT_TEXT))
                     if sizeof(temp) > 0:
-                        seconds = int(php_array_pop(temp))
+                        seconds = php_int(php_array_pop(temp))
                     # end if
                     if sizeof(temp) > 0:
-                        minutes = int(php_array_pop(temp))
+                        minutes = php_int(php_array_pop(temp))
                         seconds += minutes * 60
                     # end if
                     if sizeof(temp) > 0:
-                        hours = int(php_array_pop(temp))
+                        hours = php_int(php_array_pop(temp))
                         seconds += hours * 3600
                     # end if
                     temp = None
@@ -2216,10 +2216,10 @@ class SimplePie_Item():
         
         return_ = self.get_item_tags(SIMPLEPIE_NAMESPACE_W3C_BASIC_GEO, "lat")
         if return_:
-            return float(return_[0]["data"])
+            return php_float(return_[0]["data"])
         elif self.get_item_tags(SIMPLEPIE_NAMESPACE_GEORSS, "point") and php_preg_match("/^((?:-)?[0-9]+(?:\\.[0-9]+)) ((?:-)?[0-9]+(?:\\.[0-9]+))$/", php_trim(return_[0]["data"]), match):
             return_ = self.get_item_tags(SIMPLEPIE_NAMESPACE_GEORSS, "point")
-            return float(match[1])
+            return php_float(match[1])
         else:
             return None
         # end if
@@ -2240,13 +2240,13 @@ class SimplePie_Item():
         
         return_ = self.get_item_tags(SIMPLEPIE_NAMESPACE_W3C_BASIC_GEO, "long")
         if return_:
-            return float(return_[0]["data"])
+            return php_float(return_[0]["data"])
         elif self.get_item_tags(SIMPLEPIE_NAMESPACE_W3C_BASIC_GEO, "lon"):
             return_ = self.get_item_tags(SIMPLEPIE_NAMESPACE_W3C_BASIC_GEO, "lon")
-            return float(return_[0]["data"])
+            return php_float(return_[0]["data"])
         elif self.get_item_tags(SIMPLEPIE_NAMESPACE_GEORSS, "point") and php_preg_match("/^((?:-)?[0-9]+(?:\\.[0-9]+)) ((?:-)?[0-9]+(?:\\.[0-9]+))$/", php_trim(return_[0]["data"]), match):
             return_ = self.get_item_tags(SIMPLEPIE_NAMESPACE_GEORSS, "point")
-            return float(match[2])
+            return php_float(match[2])
         else:
             return None
         # end if

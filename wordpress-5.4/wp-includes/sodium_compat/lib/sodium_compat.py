@@ -20,7 +20,7 @@ if not php_defined("Sodium"):
 class Sodium(Sodium):
     _namespace__ = "Sodium"
     php_include_file(php_dirname(php_dirname(__FILE__)) + "/autoload.php", once=True)
-    php_new_class("P", lambda *args, **kwargs: P(*args, **kwargs))
+    ParagonIE_Sodium_Compat = php_new_class("ParagonIE_Sodium_Compat", lambda *args, **kwargs: ParagonIE_Sodium_Compat(*args, **kwargs))
     #// 
     #// This file will monkey patch the pure-PHP implementation in place of the
     #// PECL functions, but only if they do not already exist.

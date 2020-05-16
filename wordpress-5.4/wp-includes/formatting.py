@@ -786,7 +786,7 @@ def seems_utf8(str=None, *args_):
 #//
 def _wp_specialchars(string=None, quote_style=ENT_NOQUOTES, charset=False, double_encode=False, *args_):
     
-    string = str(string)
+    string = php_str(string)
     if 0 == php_strlen(string):
         return ""
     # end if
@@ -853,7 +853,7 @@ def _wp_specialchars(string=None, quote_style=ENT_NOQUOTES, charset=False, doubl
 #//
 def wp_specialchars_decode(string=None, quote_style=ENT_NOQUOTES, *args_):
     
-    string = str(string)
+    string = php_str(string)
     if 0 == php_strlen(string):
         return ""
     # end if
@@ -906,7 +906,7 @@ def wp_specialchars_decode(string=None, quote_style=ENT_NOQUOTES, *args_):
 #//
 def wp_check_invalid_utf8(string=None, strip=False, *args_):
     
-    string = str(string)
+    string = php_str(string)
     if 0 == php_strlen(string):
         return ""
     # end if
@@ -1773,7 +1773,7 @@ def convert_invalid_entities(content=None, *args_):
 def balanceTags(text=None, force=False, *args_):
     
     #// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
-    if force or int(get_option("use_balanceTags")) == 1:
+    if force or php_int(get_option("use_balanceTags")) == 1:
         return force_balance_tags(text)
     else:
         return text
@@ -2945,7 +2945,7 @@ def human_time_diff(from_=None, to=0, *args_):
     if php_empty(lambda : to):
         to = time()
     # end if
-    diff = int(abs(to - from_))
+    diff = php_int(abs(to - from_))
     if diff < MINUTE_IN_SECONDS:
         secs = diff
         if secs <= 1:
@@ -3043,7 +3043,7 @@ def wp_trim_excerpt(text="", post=None, *args_):
         #// 
         #// @param int $number The maximum number of words. Default 55.
         #//
-        excerpt_length = int(apply_filters("excerpt_length", excerpt_length))
+        excerpt_length = php_int(apply_filters("excerpt_length", excerpt_length))
         #// 
         #// Filters the string in the "more" link displayed after a trimmed excerpt.
         #// 
@@ -3085,7 +3085,7 @@ def wp_trim_words(text=None, num_words=55, more=None, *args_):
     # end if
     original_text = text
     text = wp_strip_all_tags(text)
-    num_words = int(num_words)
+    num_words = php_int(num_words)
     #// 
     #// translators: If your word count is based on single characters (e.g. East Asian characters),
     #// enter 'characters_excluding_spaces' or 'characters_including_spaces'. Otherwise, enter 'words'.
@@ -3197,7 +3197,7 @@ def format_for_editor(text=None, default_editor=None, *args_):
 #//
 def _deep_replace(search=None, subject=None, *args_):
     
-    subject = str(subject)
+    subject = php_str(subject)
     count = 1
     while True:
         
@@ -3603,7 +3603,7 @@ def sanitize_option(option=None, value=None, *args_):
             pass
         # end if
         if case("posts_per_rss"):
-            value = int(value)
+            value = php_int(value)
             if php_empty(lambda : value):
                 value = 1
             # end if
@@ -4284,7 +4284,7 @@ def _sanitize_text_fields(str=None, keep_newlines=False, *args_):
     if php_is_object(str) or php_is_array(str):
         return ""
     # end if
-    str = str(str)
+    str = php_str(str)
     filtered = wp_check_invalid_utf8(str)
     if php_strpos(filtered, "<") != False:
         filtered = wp_pre_kses_less_than(filtered)

@@ -47,7 +47,7 @@ for case in Switch(action):
         # end if
         deleted = 0
         for link_id in linkcheck:
-            link_id = int(link_id)
+            link_id = php_int(link_id)
             if wp_delete_link(link_id):
                 deleted += 1
             # end if
@@ -80,14 +80,14 @@ for case in Switch(action):
         php_exit(0)
     # end if
     if case("save"):
-        link_id = int(PHP_POST["link_id"])
+        link_id = php_int(PHP_POST["link_id"])
         check_admin_referer("update-bookmark_" + link_id)
         edit_link(link_id)
         wp_redirect(this_file)
         php_exit(0)
     # end if
     if case("delete"):
-        link_id = int(PHP_REQUEST["link_id"])
+        link_id = php_int(PHP_REQUEST["link_id"])
         check_admin_referer("delete-bookmark_" + link_id)
         wp_delete_link(link_id)
         wp_redirect(this_file)
@@ -102,7 +102,7 @@ for case in Switch(action):
         parent_file = "link-manager.php"
         submenu_file = "link-manager.php"
         title = __("Edit Link")
-        link_id = int(PHP_REQUEST["link_id"])
+        link_id = php_int(PHP_REQUEST["link_id"])
         link = get_link_to_edit(link_id)
         if (not link):
             wp_die(__("Link not found."))

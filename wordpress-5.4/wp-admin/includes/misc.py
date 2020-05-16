@@ -206,7 +206,7 @@ def insert_with_markers(filename=None, marker=None, insertion=None, *args_):
     php_fflush(fp)
     flock(fp, LOCK_UN)
     php_fclose(fp)
-    return bool(bytes)
+    return php_bool(bytes)
 # end def insert_with_markers
 #// 
 #// Updates the htaccess file with the current rules if it is writable.
@@ -661,7 +661,7 @@ def set_screen_options(*args_):
                 pass
             # end if
             if case("site_themes_network_per_page"):
-                value = int(value)
+                value = php_int(value)
                 if value < 1 or value > 999:
                     return
                 # end if
@@ -1308,7 +1308,7 @@ def wp_check_php_version(*args_):
         #// @param bool   $is_acceptable Whether the PHP version is considered acceptable. Default true.
         #// @param string $version       PHP version checked.
         #//
-        response["is_acceptable"] = bool(apply_filters("wp_is_php_version_acceptable", True, version))
+        response["is_acceptable"] = php_bool(apply_filters("wp_is_php_version_acceptable", True, version))
     # end if
     return response
 # end def wp_check_php_version

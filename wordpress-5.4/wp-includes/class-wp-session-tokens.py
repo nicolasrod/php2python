@@ -105,7 +105,7 @@ class WP_Session_Tokens():
     def verify(self, token=None):
         
         verifier = self.hash_token(token)
-        return bool(self.get_session(verifier))
+        return php_bool(self.get_session(verifier))
     # end def verify
     #// 
     #// Generates a session token and attaches session information to it.

@@ -101,7 +101,7 @@ class _WP_Editors():
                 _deprecated_argument("wp_editor()", "3.9.0", "TinyMCE editor IDs cannot have brackets.")
             # end if
         # end if
-        self.this_quicktags = bool(set["quicktags"])
+        self.this_quicktags = php_bool(set["quicktags"])
         if self.this_tinymce:
             self.has_tinymce = True
         # end if
@@ -113,7 +113,7 @@ class _WP_Editors():
         # end if
         if "content" == editor_id and php_empty(lambda : set["tinymce"]["wp_autoresize_on"]):
             #// A cookie (set when a user resizes the editor) overrides the height.
-            cookie = int(get_user_setting("ed_size"))
+            cookie = php_int(get_user_setting("ed_size"))
             if cookie:
                 set["editor_height"] = cookie
             # end if
@@ -140,7 +140,7 @@ class _WP_Editors():
         
         set = self.parse_settings(editor_id, settings)
         editor_class = " class=\"" + php_trim(esc_attr(set["editor_class"]) + " wp-editor-area") + "\""
-        tabindex = " tabindex=\"" + int(set["tabindex"]) + "\"" if set["tabindex"] else ""
+        tabindex = " tabindex=\"" + php_int(set["tabindex"]) + "\"" if set["tabindex"] else ""
         default_editor = "html"
         buttons = ""
         autocomplete = ""
@@ -149,9 +149,9 @@ class _WP_Editors():
             self.drag_drop_upload = True
         # end if
         if (not php_empty(lambda : set["editor_height"])):
-            height = " style=\"height: " + int(set["editor_height"]) + "px\""
+            height = " style=\"height: " + php_int(set["editor_height"]) + "px\""
         else:
-            height = " rows=\"" + int(set["textarea_rows"]) + "\""
+            height = " rows=\"" + php_int(set["textarea_rows"]) + "\""
         # end if
         if (not current_user_can("upload_files")):
             set["media_buttons"] = False
@@ -573,7 +573,7 @@ class _WP_Editors():
                 body_class += " " + set["tinymce"]["body_class"]
                 set["tinymce"]["body_class"] = None
             # end if
-            mceInit = Array({"selector": str("#") + str(editor_id), "wpautop": bool(set["wpautop"]), "indent": (not set["wpautop"]), "toolbar1": php_implode(",", mce_buttons), "toolbar2": php_implode(",", mce_buttons_2), "toolbar3": php_implode(",", mce_buttons_3), "toolbar4": php_implode(",", mce_buttons_4), "tabfocus_elements": set["tabfocus_elements"], "body_class": body_class})
+            mceInit = Array({"selector": str("#") + str(editor_id), "wpautop": php_bool(set["wpautop"]), "indent": (not set["wpautop"]), "toolbar1": php_implode(",", mce_buttons), "toolbar2": php_implode(",", mce_buttons_2), "toolbar3": php_implode(",", mce_buttons_3), "toolbar4": php_implode(",", mce_buttons_4), "tabfocus_elements": set["tabfocus_elements"], "body_class": body_class})
             #// Merge with the first part of the init array.
             mceInit = php_array_merge(self.first_init, mceInit)
             if php_is_array(set["tinymce"]):

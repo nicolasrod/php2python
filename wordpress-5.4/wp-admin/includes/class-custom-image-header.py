@@ -89,7 +89,7 @@ class Custom_Image_Header():
         if (not (php_isset(lambda : PHP_REQUEST["step"]))):
             return 1
         # end if
-        step = int(PHP_REQUEST["step"])
+        step = php_int(PHP_REQUEST["step"])
         if step < 1 or 3 < step or 2 == step and (not wp_verify_nonce(PHP_REQUEST["_wpnonce-custom-header-upload"], "custom-header-upload")) or 3 == step and (not wp_verify_nonce(PHP_REQUEST["_wpnonce"], "custom-header-crop-image")):
             return 1
         # end if
@@ -797,7 +797,7 @@ class Custom_Image_Header():
         height = dimensions["dst_height"]
         width = dimensions["dst_width"]
         if php_empty(lambda : PHP_POST["skip-cropping"]):
-            cropped = wp_crop_image(attachment_id, int(PHP_POST["x1"]), int(PHP_POST["y1"]), int(PHP_POST["width"]), int(PHP_POST["height"]), width, height)
+            cropped = wp_crop_image(attachment_id, php_int(PHP_POST["x1"]), php_int(PHP_POST["y1"]), php_int(PHP_POST["width"]), php_int(PHP_POST["height"]), width, height)
         elif (not php_empty(lambda : PHP_POST["create-new-attachment"])):
             cropped = _copy_image_file(attachment_id)
         else:
@@ -1072,7 +1072,7 @@ class Custom_Image_Header():
         crop_details = PHP_POST["cropDetails"]
         dimensions = self.get_header_dimensions(Array({"height": crop_details["height"], "width": crop_details["width"]}))
         attachment_id = absint(PHP_POST["id"])
-        cropped = wp_crop_image(attachment_id, int(crop_details["x1"]), int(crop_details["y1"]), int(crop_details["width"]), int(crop_details["height"]), int(dimensions["dst_width"]), int(dimensions["dst_height"]))
+        cropped = wp_crop_image(attachment_id, php_int(crop_details["x1"]), php_int(crop_details["y1"]), php_int(crop_details["width"]), php_int(crop_details["height"]), php_int(dimensions["dst_width"]), php_int(dimensions["dst_height"]))
         if (not cropped) or is_wp_error(cropped):
             wp_send_json_error(Array({"message": __("Image could not be processed. Please go back and try again.")}))
         # end if

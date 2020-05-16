@@ -101,9 +101,9 @@ class WP_REST_Search_Controller(WP_REST_Controller):
             data = self.prepare_item_for_response(id, request)
             results[-1] = self.prepare_response_for_collection(data)
         # end for
-        total = int(result[WP_REST_Search_Handler.RESULT_TOTAL])
-        page = int(request["page"])
-        per_page = int(request["per_page"])
+        total = php_int(result[WP_REST_Search_Handler.RESULT_TOTAL])
+        page = php_int(request["page"])
+        per_page = php_int(request["per_page"])
         max_pages = ceil(total / per_page)
         if page > max_pages and total > 0:
             return php_new_class("WP_Error", lambda : WP_Error("rest_search_invalid_page_number", __("The page number requested is larger than the number of pages available."), Array({"status": 400})))

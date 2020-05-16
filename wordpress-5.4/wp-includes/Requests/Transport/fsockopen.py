@@ -161,7 +161,7 @@ class Requests_Transport_fsockopen(Requests_Transport):
             options["hooks"].dispatch("fsockopen.after_request", Array(fake_headers))
             return ""
         # end if
-        timeout_sec = int(floor(options["timeout"]))
+        timeout_sec = php_int(floor(options["timeout"]))
         if timeout_sec == options["timeout"]:
             timeout_msec = 0
         else:

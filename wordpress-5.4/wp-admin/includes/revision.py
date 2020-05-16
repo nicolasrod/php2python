@@ -178,9 +178,9 @@ def wp_prepare_revisions_for_js(post=None, selected_revision_id=None, from_=None
             restore_link = php_str_replace("&amp;", "&", wp_nonce_url(add_query_arg(Array({"revision": revision.ID, "action": "restore"}), admin_url("revision.php")), str("restore-post_") + str(revision.ID)))
         # end if
         if (not (php_isset(lambda : authors[revision.post_author]))):
-            authors[revision.post_author] = Array({"id": int(revision.post_author), "avatar": get_avatar(revision.post_author, 32) if show_avatars else "", "name": get_the_author_meta("display_name", revision.post_author)})
+            authors[revision.post_author] = Array({"id": php_int(revision.post_author), "avatar": get_avatar(revision.post_author, 32) if show_avatars else "", "name": get_the_author_meta("display_name", revision.post_author)})
         # end if
-        autosave = bool(wp_is_post_autosave(revision))
+        autosave = php_bool(wp_is_post_autosave(revision))
         current = (not autosave) and revision.post_modified_gmt == post.post_modified_gmt
         if current and (not php_empty(lambda : current_id)):
             #// If multiple revisions have the same post_modified_gmt, highest ID is current.

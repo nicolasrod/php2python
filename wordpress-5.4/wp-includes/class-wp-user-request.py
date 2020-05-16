@@ -47,8 +47,8 @@ class WP_User_Request():
         self.status = post.post_status
         self.created_timestamp = strtotime(post.post_date_gmt)
         self.modified_timestamp = strtotime(post.post_modified_gmt)
-        self.confirmed_timestamp = int(get_post_meta(post.ID, "_wp_user_request_confirmed_timestamp", True))
-        self.completed_timestamp = int(get_post_meta(post.ID, "_wp_user_request_completed_timestamp", True))
+        self.confirmed_timestamp = php_int(get_post_meta(post.ID, "_wp_user_request_confirmed_timestamp", True))
+        self.completed_timestamp = php_int(get_post_meta(post.ID, "_wp_user_request_completed_timestamp", True))
         self.request_data = php_json_decode(post.post_content, True)
         self.confirm_key = post.post_password
     # end def __init__

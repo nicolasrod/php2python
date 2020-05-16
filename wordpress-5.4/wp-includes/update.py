@@ -162,7 +162,7 @@ def wp_version_check(extra_stats=Array(), force_check=False, *args_):
     # end if
     set_site_transient("update_core", updates)
     if (not php_empty(lambda : body["ttl"])):
-        ttl = int(body["ttl"])
+        ttl = php_int(body["ttl"])
         if ttl and time() + ttl < wp_next_scheduled("wp_version_check"):
             #// Queue an event to re-run the update check in $ttl seconds.
             wp_schedule_single_event(time() + ttl, "wp_version_check")
@@ -277,7 +277,7 @@ def wp_update_plugins(extra_stats=Array(), *args_):
         timeout = 30
     else:
         #// Three seconds, plus one extra second for every 10 plugins.
-        timeout = 3 + int(php_count(plugins) / 10)
+        timeout = 3 + php_int(php_count(plugins) / 10)
     # end if
     options = Array({"timeout": timeout, "body": Array({"plugins": wp_json_encode(to_send), "translations": wp_json_encode(translations), "locale": wp_json_encode(locales), "all": wp_json_encode(True)})}, {"user-agent": "WordPress/" + wp_version + "; " + home_url("/")})
     if extra_stats:
@@ -425,7 +425,7 @@ def wp_update_themes(extra_stats=Array(), *args_):
         timeout = 30
     else:
         #// Three seconds, plus one extra second for every 10 themes.
-        timeout = 3 + int(php_count(themes) / 10)
+        timeout = 3 + php_int(php_count(themes) / 10)
     # end if
     options = Array({"timeout": timeout, "body": Array({"themes": wp_json_encode(request), "translations": wp_json_encode(translations), "locale": wp_json_encode(locales)})}, {"user-agent": "WordPress/" + wp_version + "; " + home_url("/")})
     if extra_stats:

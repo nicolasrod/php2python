@@ -810,7 +810,7 @@ class getid3_quicktime(getid3_handler):
                 # end if
                 if case("play"):
                     #// auto-PLAY atom
-                    atom_structure["autoplay"] = bool(getid3_lib.bigendian2int(php_substr(atom_data, 0, 1)))
+                    atom_structure["autoplay"] = php_bool(getid3_lib.bigendian2int(php_substr(atom_data, 0, 1)))
                     info["quicktime"]["autoplay"] = atom_structure["autoplay"]
                     break
                 # end if
@@ -869,7 +869,7 @@ class getid3_quicktime(getid3_handler):
                     #// Reference movie Data ReFerence atom
                     atom_structure["version"] = getid3_lib.bigendian2int(php_substr(atom_data, 0, 1))
                     atom_structure["flags_raw"] = getid3_lib.bigendian2int(php_substr(atom_data, 1, 3))
-                    atom_structure["flags"]["internal_data"] = bool(atom_structure["flags_raw"] & 1)
+                    atom_structure["flags"]["internal_data"] = php_bool(atom_structure["flags_raw"] & 1)
                     atom_structure["reference_type_name"] = php_substr(atom_data, 4, 4)
                     atom_structure["reference_length"] = getid3_lib.bigendian2int(php_substr(atom_data, 8, 4))
                     for case in Switch(atom_structure["reference_type_name"]):
@@ -960,8 +960,8 @@ class getid3_quicktime(getid3_handler):
                     #// hardcoded: 0x0000
                     atom_structure["slide_show_flag"] = getid3_lib.bigendian2int(php_substr(atom_data, 6, 1))
                     atom_structure["play_on_open_flag"] = getid3_lib.bigendian2int(php_substr(atom_data, 7, 1))
-                    atom_structure["flags"]["play_on_open"] = bool(atom_structure["play_on_open_flag"])
-                    atom_structure["flags"]["slide_show"] = bool(atom_structure["slide_show_flag"])
+                    atom_structure["flags"]["play_on_open"] = php_bool(atom_structure["play_on_open_flag"])
+                    atom_structure["flags"]["slide_show"] = php_bool(atom_structure["slide_show_flag"])
                     ptv_lookup[0] = "normal"
                     ptv_lookup[1] = "double"
                     ptv_lookup[2] = "half"
@@ -1209,7 +1209,7 @@ class getid3_quicktime(getid3_handler):
                                             info["video"]["bits_per_sample"] = info["quicktime"]["video"]["color_depth"]
                                         # end if
                                         info["video"]["lossless"] = False
-                                        info["video"]["pixel_aspect_ratio"] = float(1)
+                                        info["video"]["pixel_aspect_ratio"] = php_float(1)
                                         break
                                     # end if
                                 # end for
@@ -1416,7 +1416,7 @@ class getid3_quicktime(getid3_handler):
                         drefDataOffset += 3
                         atom_structure["data_references"][i]["data"] = php_substr(atom_data, drefDataOffset, atom_structure["data_references"][i]["size"] - 4 - 4 - 1 - 3)
                         drefDataOffset += atom_structure["data_references"][i]["size"] - 4 - 4 - 1 - 3
-                        atom_structure["data_references"][i]["flags"]["self_reference"] = bool(atom_structure["data_references"][i]["flags_raw"] & 1)
+                        atom_structure["data_references"][i]["flags"]["self_reference"] = php_bool(atom_structure["data_references"][i]["flags_raw"] & 1)
                         i += 1
                     # end while
                     break
@@ -1451,7 +1451,7 @@ class getid3_quicktime(getid3_handler):
                     atom_structure["opcolor_red"] = getid3_lib.bigendian2int(php_substr(atom_data, 6, 2))
                     atom_structure["opcolor_green"] = getid3_lib.bigendian2int(php_substr(atom_data, 8, 2))
                     atom_structure["opcolor_blue"] = getid3_lib.bigendian2int(php_substr(atom_data, 10, 2))
-                    atom_structure["flags"]["no_lean_ahead"] = bool(atom_structure["flags_raw"] & 1)
+                    atom_structure["flags"]["no_lean_ahead"] = php_bool(atom_structure["flags_raw"] & 1)
                     break
                 # end if
                 if case("hdlr"):
@@ -1523,8 +1523,8 @@ class getid3_quicktime(getid3_handler):
                     atom_structure["preload_duration"] = getid3_lib.bigendian2int(php_substr(atom_data, 4, 4))
                     atom_structure["preload_flags_raw"] = getid3_lib.bigendian2int(php_substr(atom_data, 8, 4))
                     atom_structure["default_hints_raw"] = getid3_lib.bigendian2int(php_substr(atom_data, 12, 4))
-                    atom_structure["default_hints"]["double_buffer"] = bool(atom_structure["default_hints_raw"] & 32)
-                    atom_structure["default_hints"]["high_quality"] = bool(atom_structure["default_hints_raw"] & 256)
+                    atom_structure["default_hints"]["double_buffer"] = php_bool(atom_structure["default_hints_raw"] & 32)
+                    atom_structure["default_hints"]["high_quality"] = php_bool(atom_structure["default_hints_raw"] & 256)
                     break
                 # end if
                 if case("tmcd"):
@@ -1656,10 +1656,10 @@ class getid3_quicktime(getid3_handler):
                     atom_structure["matrix_w"] = getid3_lib.fixedpoint2_30(php_substr(atom_data, 72, 4))
                     atom_structure["width"] = getid3_lib.fixedpoint16_16(php_substr(atom_data, 76, 4))
                     atom_structure["height"] = getid3_lib.fixedpoint16_16(php_substr(atom_data, 80, 4))
-                    atom_structure["flags"]["enabled"] = bool(atom_structure["flags_raw"] & 1)
-                    atom_structure["flags"]["in_movie"] = bool(atom_structure["flags_raw"] & 2)
-                    atom_structure["flags"]["in_preview"] = bool(atom_structure["flags_raw"] & 4)
-                    atom_structure["flags"]["in_poster"] = bool(atom_structure["flags_raw"] & 8)
+                    atom_structure["flags"]["enabled"] = php_bool(atom_structure["flags_raw"] & 1)
+                    atom_structure["flags"]["in_movie"] = php_bool(atom_structure["flags_raw"] & 2)
+                    atom_structure["flags"]["in_preview"] = php_bool(atom_structure["flags_raw"] & 4)
+                    atom_structure["flags"]["in_poster"] = php_bool(atom_structure["flags_raw"] & 8)
                     atom_structure["creation_time_unix"] = getid3_lib.datemac2unix(atom_structure["creation_time"])
                     atom_structure["modify_time_unix"] = getid3_lib.datemac2unix(atom_structure["modify_time"])
                     #// https://www.getid3.org/phpBB3/viewtopic.php?t=1908
@@ -2107,7 +2107,7 @@ class getid3_quicktime(getid3_handler):
                                         GPS_this_GPRMC["variation"] *= -1 if GPS_this_GPRMC["raw"]["variation_direction"] == "W" else 1
                                     # end if
                                     atom_structure["gps_entries"][key] = GPS_this_GPRMC
-                                    php_no_error(lambda: info["quicktime"]["gps_track"][GPS_this_GPRMC["timestamp"]] = Array({"latitude": float(GPS_this_GPRMC["latitude"]), "longitude": float(GPS_this_GPRMC["longitude"]), "speed_kmh": float(GPS_this_GPRMC["speed_kmh"]), "heading": float(GPS_this_GPRMC["heading"])}))
+                                    php_no_error(lambda: info["quicktime"]["gps_track"][GPS_this_GPRMC["timestamp"]] = Array({"latitude": php_float(GPS_this_GPRMC["latitude"]), "longitude": php_float(GPS_this_GPRMC["longitude"]), "speed_kmh": php_float(GPS_this_GPRMC["speed_kmh"]), "heading": php_float(GPS_this_GPRMC["heading"])}))
                                 else:
                                     self.warning("Unhandled GPS format in \"free\" atom at offset " + gps_pointer["offset"])
                                 # end if
@@ -2796,7 +2796,7 @@ class getid3_quicktime(getid3_handler):
                         if denomninator == 0:
                             data[i] = False
                         else:
-                            data[i] = float(numerator) / denomninator
+                            data[i] = php_float(numerator) / denomninator
                         # end if
                         i += 1
                     # end while
@@ -2863,7 +2863,7 @@ class getid3_quicktime(getid3_handler):
                         timezone = 0 - 65536 - timezone
                     # end if
                     timezone /= 60
-                    dst = bool(getid3_lib.bigendian2int(php_substr(data, 2, 1)))
+                    dst = php_bool(getid3_lib.bigendian2int(php_substr(data, 2, 1)))
                     for case in Switch(getid3_lib.bigendian2int(php_substr(data, 3, 1))):
                         if case(2):
                             datedisplayformat = "D/M/Y"
@@ -2886,7 +2886,7 @@ class getid3_quicktime(getid3_handler):
                 # end if
                 if case(33554563):
                     #// LensType
-                    data = Array({"mf": bool(data & 1), "d": bool(data & 2), "g": bool(data & 4), "vr": bool(data & 8)})
+                    data = Array({"mf": php_bool(data & 1), "d": php_bool(data & 2), "g": php_bool(data & 4), "vr": php_bool(data & 8)})
                     break
                 # end if
             # end for

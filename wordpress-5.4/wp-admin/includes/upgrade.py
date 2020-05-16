@@ -914,7 +914,7 @@ def upgrade_230(*args_):
     have_tags = False
     categories = wpdb.get_results(str("SELECT * FROM ") + str(wpdb.categories) + str(" ORDER BY cat_ID"))
     for category in categories:
-        term_id = int(category.cat_ID)
+        term_id = php_int(category.cat_ID)
         name = category.cat_name
         description = category.category_description
         slug = category.category_nicename
@@ -944,29 +944,29 @@ def upgrade_230(*args_):
         wpdb.query(wpdb.prepare(str("INSERT INTO ") + str(wpdb.terms) + str(" (term_id, name, slug, term_group) VALUES\n        (%d, %s, %s, %d)"), term_id, name, slug, term_group))
         count = 0
         if (not php_empty(lambda : category.category_count)):
-            count = int(category.category_count)
+            count = php_int(category.category_count)
             taxonomy = "category"
             wpdb.query(wpdb.prepare(str("INSERT INTO ") + str(wpdb.term_taxonomy) + str(" (term_id, taxonomy, description, parent, count) VALUES ( %d, %s, %s, %d, %d)"), term_id, taxonomy, description, parent, count))
-            tt_ids[term_id][taxonomy] = int(wpdb.insert_id)
+            tt_ids[term_id][taxonomy] = php_int(wpdb.insert_id)
         # end if
         if (not php_empty(lambda : category.link_count)):
-            count = int(category.link_count)
+            count = php_int(category.link_count)
             taxonomy = "link_category"
             wpdb.query(wpdb.prepare(str("INSERT INTO ") + str(wpdb.term_taxonomy) + str(" (term_id, taxonomy, description, parent, count) VALUES ( %d, %s, %s, %d, %d)"), term_id, taxonomy, description, parent, count))
-            tt_ids[term_id][taxonomy] = int(wpdb.insert_id)
+            tt_ids[term_id][taxonomy] = php_int(wpdb.insert_id)
         # end if
         if (not php_empty(lambda : category.tag_count)):
             have_tags = True
-            count = int(category.tag_count)
+            count = php_int(category.tag_count)
             taxonomy = "post_tag"
             wpdb.insert(wpdb.term_taxonomy, compact("term_id", "taxonomy", "description", "parent", "count"))
-            tt_ids[term_id][taxonomy] = int(wpdb.insert_id)
+            tt_ids[term_id][taxonomy] = php_int(wpdb.insert_id)
         # end if
         if php_empty(lambda : count):
             count = 0
             taxonomy = "category"
             wpdb.insert(wpdb.term_taxonomy, compact("term_id", "taxonomy", "description", "parent", "count"))
-            tt_ids[term_id][taxonomy] = int(wpdb.insert_id)
+            tt_ids[term_id][taxonomy] = php_int(wpdb.insert_id)
         # end if
     # end for
     select = "post_id, category_id"
@@ -975,8 +975,8 @@ def upgrade_230(*args_):
     # end if
     posts = wpdb.get_results(str("SELECT ") + str(select) + str(" FROM ") + str(wpdb.post2cat) + str(" GROUP BY post_id, category_id"))
     for post in posts:
-        post_id = int(post.post_id)
-        term_id = int(post.category_id)
+        post_id = php_int(post.post_id)
+        term_id = php_int(post.category_id)
         taxonomy = "category"
         if (not php_empty(lambda : post.rel_type)) and "tag" == post.rel_type:
             taxonomy = "tag"
@@ -998,7 +998,7 @@ def upgrade_230(*args_):
         tt_ids = Array()
         link_cats = wpdb.get_results("SELECT cat_id, cat_name FROM " + wpdb.prefix + "linkcategories")
         for category in link_cats:
-            cat_id = int(category.cat_id)
+            cat_id = php_int(category.cat_id)
             term_id = 0
             name = wp_slash(category.cat_name)
             slug = sanitize_title(name)
@@ -1011,12 +1011,12 @@ def upgrade_230(*args_):
             # end if
             if php_empty(lambda : term_id):
                 wpdb.insert(wpdb.terms, compact("name", "slug", "term_group"))
-                term_id = int(wpdb.insert_id)
+                term_id = php_int(wpdb.insert_id)
             # end if
             link_cat_id_map[cat_id] = term_id
             default_link_cat = term_id
             wpdb.insert(wpdb.term_taxonomy, Array({"term_id": term_id, "taxonomy": "link_category", "description": "", "parent": 0, "count": 0}))
-            tt_ids[term_id] = int(wpdb.insert_id)
+            tt_ids[term_id] = php_int(wpdb.insert_id)
         # end for
         #// Associate links to categories.
         links = wpdb.get_results(str("SELECT link_id, link_category FROM ") + str(wpdb.links))
@@ -1041,8 +1041,8 @@ def upgrade_230(*args_):
     else:
         links = wpdb.get_results(str("SELECT link_id, category_id FROM ") + str(wpdb.link2cat) + str(" GROUP BY link_id, category_id"))
         for link in links:
-            link_id = int(link.link_id)
-            term_id = int(link.category_id)
+            link_id = php_int(link.link_id)
+            term_id = php_int(link.category_id)
             taxonomy = "link_category"
             tt_id = tt_ids[term_id][taxonomy]
             if php_empty(lambda : tt_id):
@@ -1546,7 +1546,7 @@ def upgrade_430_fix_comments(*args_):
     if False == content_length:
         content_length = Array({"type": "byte", "length": 65535})
     elif (not php_is_array(content_length)):
-        length = int(content_length) if int(content_length) > 0 else 65535
+        length = php_int(content_length) if php_int(content_length) > 0 else 65535
         content_length = Array({"type": "byte", "length": length})
     # end if
     if "byte" != content_length["type"] or 0 == content_length["length"]:

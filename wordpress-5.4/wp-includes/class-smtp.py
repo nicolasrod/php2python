@@ -114,7 +114,7 @@ class SMTP():
         streamok = None
         #// This is enabled by default since 5.0.0 but some providers disable it
         #// Check this once and cache the result
-        if php_is_null(streamok):
+        if is_null(streamok):
             streamok = php_function_exists("stream_socket_client")
         # end if
         #// Clear errors to avoid confusion
@@ -455,7 +455,7 @@ class SMTP():
     def hello(self, host=""):
         
         #// Try extended hello first (RFC 2821)
-        return bool(self.sendhello("EHLO", host) or self.sendhello("HELO", host))
+        return php_bool(self.sendhello("EHLO", host) or self.sendhello("HELO", host))
     # end def hello
     #// 
     #// Send an SMTP HELO or EHLO command.

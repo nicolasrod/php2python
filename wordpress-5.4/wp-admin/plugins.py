@@ -446,7 +446,7 @@ elif (php_isset(lambda : PHP_REQUEST["deleted"])):
         php_print("         </p>\n      </div>\n        ")
     else:
         php_print("     <div id=\"message\" class=\"updated notice is-dismissible\">\n          <p>\n               ")
-        if 1 == int(PHP_REQUEST["deleted"]):
+        if 1 == php_int(PHP_REQUEST["deleted"]):
             _e("The selected plugin has been deleted.")
         else:
             _e("The selected plugins have been deleted.")

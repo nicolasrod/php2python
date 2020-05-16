@@ -33,26 +33,26 @@ class ParagonIE_Sodium_Core_X25519(ParagonIE_Sodium_Core_Curve25519):
     @classmethod
     def fe_cswap(self, f=None, g=None, b=0):
         
-        f0 = int(f[0])
-        f1 = int(f[1])
-        f2 = int(f[2])
-        f3 = int(f[3])
-        f4 = int(f[4])
-        f5 = int(f[5])
-        f6 = int(f[6])
-        f7 = int(f[7])
-        f8 = int(f[8])
-        f9 = int(f[9])
-        g0 = int(g[0])
-        g1 = int(g[1])
-        g2 = int(g[2])
-        g3 = int(g[3])
-        g4 = int(g[4])
-        g5 = int(g[5])
-        g6 = int(g[6])
-        g7 = int(g[7])
-        g8 = int(g[8])
-        g9 = int(g[9])
+        f0 = php_int(f[0])
+        f1 = php_int(f[1])
+        f2 = php_int(f[2])
+        f3 = php_int(f[3])
+        f4 = php_int(f[4])
+        f5 = php_int(f[5])
+        f6 = php_int(f[6])
+        f7 = php_int(f[7])
+        f8 = php_int(f[8])
+        f9 = php_int(f[9])
+        g0 = php_int(g[0])
+        g1 = php_int(g[1])
+        g2 = php_int(g[2])
+        g3 = php_int(g[3])
+        g4 = php_int(g[4])
+        g5 = php_int(g[5])
+        g6 = php_int(g[6])
+        g7 = php_int(g[7])
+        g8 = php_int(g[8])
+        g9 = php_int(g[9])
         b = -b
         x0 = f0 ^ g0 & b
         x1 = f1 ^ g1 & b
@@ -94,7 +94,7 @@ class ParagonIE_Sodium_Core_X25519(ParagonIE_Sodium_Core_Curve25519):
     @classmethod
     def fe_mul121666(self, f=None):
         
-        h = Array(self.mul(int(f[0]), 121666, 17), self.mul(int(f[1]), 121666, 17), self.mul(int(f[2]), 121666, 17), self.mul(int(f[3]), 121666, 17), self.mul(int(f[4]), 121666, 17), self.mul(int(f[5]), 121666, 17), self.mul(int(f[6]), 121666, 17), self.mul(int(f[7]), 121666, 17), self.mul(int(f[8]), 121666, 17), self.mul(int(f[9]), 121666, 17))
+        h = Array(self.mul(php_int(f[0]), 121666, 17), self.mul(php_int(f[1]), 121666, 17), self.mul(php_int(f[2]), 121666, 17), self.mul(php_int(f[3]), 121666, 17), self.mul(php_int(f[4]), 121666, 17), self.mul(php_int(f[5]), 121666, 17), self.mul(php_int(f[6]), 121666, 17), self.mul(php_int(f[7]), 121666, 17), self.mul(php_int(f[8]), 121666, 17), self.mul(php_int(f[9]), 121666, 17))
         #// @var int $carry9
         carry9 = h[9] + 1 << 24 >> 25
         h[0] += self.mul(carry9, 19, 5)
@@ -136,7 +136,7 @@ class ParagonIE_Sodium_Core_X25519(ParagonIE_Sodium_Core_Curve25519):
         h[9] += carry8
         h[8] -= carry8 << 26
         for i,value in h:
-            h[i] = int(value)
+            h[i] = php_int(value)
         # end for
         return ParagonIE_Sodium_Core_Curve25519_Fe.fromarray(h)
     # end def fe_mul121666
@@ -180,7 +180,7 @@ class ParagonIE_Sodium_Core_X25519(ParagonIE_Sodium_Core_Curve25519):
             
             #// # b = e[pos / 8] >> (pos & 7);
             #// @var int $b
-            b = self.chrtoint(e[int(floor(pos / 8))]) >> pos & 7
+            b = self.chrtoint(e[php_int(floor(pos / 8))]) >> pos & 7
             #// # b &= 1;
             b &= 1
             #// # swap ^= b;

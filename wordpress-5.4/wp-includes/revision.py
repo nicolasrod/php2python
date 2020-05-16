@@ -39,7 +39,7 @@ def _wp_post_revision_fields(post=Array(), deprecated=False, *args_):
     if (not php_is_array(post)):
         post = get_post(post, ARRAY_A)
     # end if
-    if php_is_null(fields):
+    if is_null(fields):
         #// Allow these to be versioned.
         fields = Array({"post_title": __("Title"), "post_content": __("Content"), "post_excerpt": __("Excerpt")})
     # end if
@@ -172,7 +172,7 @@ def wp_save_post_revision(post_id=None, *args_):
             #// @param WP_Post $last_revision    The last revision post object.
             #// @param WP_Post $post             The post object.
             #//
-            post_has_changed = bool(apply_filters("wp_save_post_revision_post_has_changed", post_has_changed, last_revision, post))
+            post_has_changed = php_bool(apply_filters("wp_save_post_revision_post_has_changed", post_has_changed, last_revision, post))
             #// Don't save revision if post unchanged.
             if (not post_has_changed):
                 return
@@ -243,7 +243,7 @@ def wp_is_post_revision(post=None, *args_):
     if (not post):
         return False
     # end if
-    return int(post.post_parent)
+    return php_int(post.post_parent)
 # end def wp_is_post_revision
 #// 
 #// Determines if the specified post is an autosave.
@@ -260,7 +260,7 @@ def wp_is_post_autosave(post=None, *args_):
         return False
     # end if
     if False != php_strpos(post.post_name, str(post.post_parent) + str("-autosave")):
-        return int(post.post_parent)
+        return php_int(post.post_parent)
     # end if
     return False
 # end def wp_is_post_autosave
@@ -489,7 +489,7 @@ def wp_revisions_to_keep(post=None, *args_):
     #// @param int     $num  Number of revisions to store.
     #// @param WP_Post $post Post object.
     #//
-    return int(apply_filters("wp_revisions_to_keep", num, post))
+    return php_int(apply_filters("wp_revisions_to_keep", num, post))
 # end def wp_revisions_to_keep
 #// 
 #// Sets up the post object for preview based on the post autosave.
@@ -526,7 +526,7 @@ def _set_preview(post=None, *args_):
 def _show_post_preview(*args_):
     
     if (php_isset(lambda : PHP_REQUEST["preview_id"])) and (php_isset(lambda : PHP_REQUEST["preview_nonce"])):
-        id = int(PHP_REQUEST["preview_id"])
+        id = php_int(PHP_REQUEST["preview_id"])
         if False == wp_verify_nonce(PHP_REQUEST["preview_nonce"], "post_preview_" + id):
             wp_die(__("Sorry, you are not allowed to preview drafts."), 403)
         # end if
@@ -607,7 +607,7 @@ def _wp_get_post_revision_version(revision=None, *args_):
         return False
     # end if
     if php_preg_match("/^\\d+-(?:autosave|revision)-v(\\d+)$/", revision["post_name"], matches):
-        return int(matches[1])
+        return php_int(matches[1])
     # end if
     return 0
 # end def _wp_get_post_revision_version

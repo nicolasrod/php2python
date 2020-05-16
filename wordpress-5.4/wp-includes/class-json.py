@@ -316,13 +316,13 @@ if (not php_class_exists("Services_JSON")):
                     return "null"
                 # end if
                 if case("integer"):
-                    return int(var)
+                    return php_int(var)
                 # end if
                 if case("double"):
                     pass
                 # end if
                 if case("float"):
-                    return float(var)
+                    return php_float(var)
                 # end if
                 if case("string"):
                     #// STRINGS ARE EXPECTED TO BE IN ASCII OR UTF-8 FORMAT
@@ -583,7 +583,7 @@ if (not php_class_exists("Services_JSON")):
                         #// good about returning integers where appropriate:
                         #// return (float)$str;
                         #// Return float or int, as appropriate
-                        return int(str) if float(str) == int(str) else float(str)
+                        return php_int(str) if php_float(str) == php_int(str) else php_float(str)
                     elif php_preg_match("/^(\"|').*(\\1)$/s", str, m) and m[1] == m[2]:
                         #// STRINGS RETURNED IN UTF-8 FORMAT
                         delim = self.substr8(str, 0, 1)

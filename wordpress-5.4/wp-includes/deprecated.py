@@ -1008,7 +1008,7 @@ def get_linkrating(link=None, *args_):
 def get_linkcatname(id=0, *args_):
     
     _deprecated_function(__FUNCTION__, "2.1.0", "get_category()")
-    id = int(id)
+    id = php_int(id)
     if php_empty(lambda : id):
         return ""
     # end if
@@ -1016,7 +1016,7 @@ def get_linkcatname(id=0, *args_):
     if php_empty(lambda : cats) or (not php_is_array(cats)):
         return ""
     # end if
-    cat_id = int(cats[0])
+    cat_id = php_int(cats[0])
     #// Take the first cat.
     cat = get_category(cat_id)
     return cat.name
@@ -1757,7 +1757,7 @@ def get_alloptions(*args_):
 def get_the_attachment_link(id=0, fullsize=False, max_dims=False, permalink=False, *args_):
     
     _deprecated_function(__FUNCTION__, "2.5.0", "wp_get_attachment_link()")
-    id = int(id)
+    id = php_int(id)
     _post = get_post(id)
     url = wp_get_attachment_url(_post.ID)
     if "attachment" != _post.post_type or (not url):
@@ -1784,7 +1784,7 @@ def get_the_attachment_link(id=0, fullsize=False, max_dims=False, permalink=Fals
 def get_attachment_icon_src(id=0, fullsize=False, *args_):
     
     _deprecated_function(__FUNCTION__, "2.5.0", "wp_get_attachment_image_src()")
-    id = int(id)
+    id = php_int(id)
     post = get_post(id)
     if (not post):
         return False
@@ -1824,7 +1824,7 @@ def get_attachment_icon_src(id=0, fullsize=False, *args_):
 def get_attachment_icon(id=0, fullsize=False, max_dims=False, *args_):
     
     _deprecated_function(__FUNCTION__, "2.5.0", "wp_get_attachment_image()")
-    id = int(id)
+    id = php_int(id)
     post = get_post(id)
     if (not post):
         return False
@@ -1876,7 +1876,7 @@ def get_attachment_icon(id=0, fullsize=False, max_dims=False, *args_):
 def get_attachment_innerHTML(id=0, fullsize=False, max_dims=False, *args_):
     
     _deprecated_function(__FUNCTION__, "2.5.0", "wp_get_attachment_image()")
-    id = int(id)
+    id = php_int(id)
     post = get_post(id)
     if (not post):
         return False
@@ -2170,7 +2170,7 @@ def get_usermeta(user_id=None, meta_key="", *args_):
     _deprecated_function(__FUNCTION__, "3.0.0", "get_user_meta()")
     global wpdb
     php_check_if_defined("wpdb")
-    user_id = int(user_id)
+    user_id = php_int(user_id)
     if (not user_id):
         return False
     # end if
@@ -3206,7 +3206,7 @@ def wp_convert_bytes_to_hr(bytes=None, *args_):
     _deprecated_function(__FUNCTION__, "3.6.0", "size_format()")
     units = Array({0: "B", 1: "KB", 2: "MB", 3: "GB", 4: "TB"})
     log = log(bytes, KB_IN_BYTES)
-    power = int(log)
+    power = php_int(log)
     size = KB_IN_BYTES ^ log - power
     if (not is_nan(size)) and php_array_key_exists(power, units):
         unit = units[power]
@@ -3725,8 +3725,8 @@ def _sort_nav_menu_items(a=None, b=None, *args_):
     if (not (php_isset(lambda : a._menu_item_sort_prop))) or (not (php_isset(lambda : b._menu_item_sort_prop))):
         return 0
     # end if
-    _a = int(a._menu_item_sort_prop)
-    _b = int(b._menu_item_sort_prop)
+    _a = php_int(a._menu_item_sort_prop)
+    _b = php_int(b._menu_item_sort_prop)
     if a._menu_item_sort_prop == b._menu_item_sort_prop:
         return 0
     elif _a == a._menu_item_sort_prop and _b == b._menu_item_sort_prop:

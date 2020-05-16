@@ -150,9 +150,9 @@ class WP_Widget_Categories(WP_Widget):
         
         #// Defaults.
         instance = wp_parse_args(instance, Array({"title": ""}))
-        count = bool(instance["count"]) if (php_isset(lambda : instance["count"])) else False
-        hierarchical = bool(instance["hierarchical"]) if (php_isset(lambda : instance["hierarchical"])) else False
-        dropdown = bool(instance["dropdown"]) if (php_isset(lambda : instance["dropdown"])) else False
+        count = php_bool(instance["count"]) if (php_isset(lambda : instance["count"])) else False
+        hierarchical = php_bool(instance["hierarchical"]) if (php_isset(lambda : instance["hierarchical"])) else False
+        dropdown = php_bool(instance["dropdown"]) if (php_isset(lambda : instance["dropdown"])) else False
         php_print("     <p><label for=\"")
         php_print(self.get_field_id("title"))
         php_print("\">")

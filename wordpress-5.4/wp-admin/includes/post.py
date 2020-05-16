@@ -35,7 +35,7 @@ def _wp_translate_postdata(update=False, post_data=None, *args_):
         post_data = PHP_POST
     # end if
     if update:
-        post_data["ID"] = int(post_data["post_ID"])
+        post_data["ID"] = php_int(post_data["post_ID"])
     # end if
     ptype = get_post_type_object(post_data["post_type"])
     if update and (not current_user_can("edit_post", post_data["ID"])):
@@ -58,19 +58,19 @@ def _wp_translate_postdata(update=False, post_data=None, *args_):
         post_data["post_excerpt"] = post_data["excerpt"]
     # end if
     if (php_isset(lambda : post_data["parent_id"])):
-        post_data["post_parent"] = int(post_data["parent_id"])
+        post_data["post_parent"] = php_int(post_data["parent_id"])
     # end if
     if (php_isset(lambda : post_data["trackback_url"])):
         post_data["to_ping"] = post_data["trackback_url"]
     # end if
     post_data["user_ID"] = get_current_user_id()
     if (not php_empty(lambda : post_data["post_author_override"])):
-        post_data["post_author"] = int(post_data["post_author_override"])
+        post_data["post_author"] = php_int(post_data["post_author_override"])
     else:
         if (not php_empty(lambda : post_data["post_author"])):
-            post_data["post_author"] = int(post_data["post_author"])
+            post_data["post_author"] = php_int(post_data["post_author"])
         else:
-            post_data["post_author"] = int(post_data["user_ID"])
+            post_data["post_author"] = php_int(post_data["user_ID"])
         # end if
     # end if
     if (php_isset(lambda : post_data["user_ID"])) and post_data["post_author"] != post_data["user_ID"] and (not current_user_can(ptype.cap.edit_others_posts)):
@@ -215,7 +215,7 @@ def edit_post(post_data=None, *args_):
         post_data = PHP_POST
     # end if
     post_data["filter"] = None
-    post_ID = int(post_data["post_ID"])
+    post_ID = php_int(post_data["post_ID"])
     post = get_post(post_ID)
     post_data["post_type"] = post.post_type
     post_data["post_mime_type"] = post.post_mime_type
@@ -456,8 +456,8 @@ def bulk_edit_posts(post_data=None, *args_):
             # end if
         # end for
     # end if
-    if (php_isset(lambda : post_data["post_parent"])) and int(post_data["post_parent"]):
-        parent = int(post_data["post_parent"])
+    if (php_isset(lambda : post_data["post_parent"])) and php_int(post_data["post_parent"]):
+        parent = php_int(post_data["post_parent"])
         pages = wpdb.get_results(str("SELECT ID, post_parent FROM ") + str(wpdb.posts) + str(" WHERE post_type = 'page'"))
         children = Array()
         i = 0
@@ -601,7 +601,7 @@ def get_default_post_to_edit(post_type="post", create_in_db=False, *args_):
     #// @param string  $post_content Default post content.
     #// @param WP_Post $post         Post object.
     #//
-    post.post_content = str(apply_filters("default_content", post_content, post))
+    post.post_content = php_str(apply_filters("default_content", post_content, post))
     #// 
     #// Filters the default post title initially used in the "Write Post" form.
     #// 
@@ -610,7 +610,7 @@ def get_default_post_to_edit(post_type="post", create_in_db=False, *args_):
     #// @param string  $post_title Default post title.
     #// @param WP_Post $post       Post object.
     #//
-    post.post_title = str(apply_filters("default_title", post_title, post))
+    post.post_title = php_str(apply_filters("default_title", post_title, post))
     #// 
     #// Filters the default post excerpt initially used in the "Write Post" form.
     #// 
@@ -619,7 +619,7 @@ def get_default_post_to_edit(post_type="post", create_in_db=False, *args_):
     #// @param string  $post_excerpt Default post excerpt.
     #// @param WP_Post $post         Post object.
     #//
-    post.post_excerpt = str(apply_filters("default_excerpt", post_excerpt, post))
+    post.post_excerpt = php_str(apply_filters("default_excerpt", post_excerpt, post))
     return post
 # end def get_default_post_to_edit
 #// 
@@ -663,7 +663,7 @@ def post_exists(title=None, content="", date="", type="", *args_):
         args[-1] = post_type
     # end if
     if (not php_empty(lambda : args)):
-        return int(wpdb.get_var(wpdb.prepare(query, args)))
+        return php_int(wpdb.get_var(wpdb.prepare(query, args)))
     # end if
     return 0
 # end def post_exists
@@ -763,7 +763,7 @@ def write_post(*args_):
 #//
 def add_meta(post_ID=None, *args_):
     
-    post_ID = int(post_ID)
+    post_ID = php_int(post_ID)
     metakeyselect = wp_unslash(php_trim(PHP_POST["metakeyselect"])) if (php_isset(lambda : PHP_POST["metakeyselect"])) else ""
     metakeyinput = wp_unslash(php_trim(PHP_POST["metakeyinput"])) if (php_isset(lambda : PHP_POST["metakeyinput"])) else ""
     metavalue = PHP_POST["metavalue"] if (php_isset(lambda : PHP_POST["metavalue"])) else ""
@@ -887,7 +887,7 @@ def _fix_attachment_links(post=None, *args_):
         return
     # end if
     site_url = get_bloginfo("url")
-    site_url = php_substr(site_url, int(php_strpos(site_url, "://")))
+    site_url = php_substr(site_url, php_int(php_strpos(site_url, "://")))
     #// Remove the http(s).
     replace = ""
     for key,value in link_matches[1]:
@@ -896,8 +896,8 @@ def _fix_attachment_links(post=None, *args_):
         # end if
         quote = url_match[1]
         #// The quote (single or double).
-        url_id = int(url_match[2])
-        rel_id = int(rel_match[1])
+        url_id = php_int(url_match[2])
+        rel_id = php_int(rel_match[1])
         if (not url_id) or (not rel_id) or url_id != rel_id or php_strpos(url_match[0], site_url) == False:
             continue
         # end if
@@ -938,8 +938,8 @@ def wp_edit_posts_query(q=False, *args_):
     if False == q:
         q = PHP_REQUEST
     # end if
-    q["m"] = int(q["m"]) if (php_isset(lambda : q["m"])) else 0
-    q["cat"] = int(q["cat"]) if (php_isset(lambda : q["cat"])) else 0
+    q["m"] = php_int(q["m"]) if (php_isset(lambda : q["m"])) else 0
+    q["cat"] = php_int(q["cat"]) if (php_isset(lambda : q["cat"])) else 0
     post_stati = get_post_stati()
     if (php_isset(lambda : q["post_type"])) and php_in_array(q["post_type"], get_post_types()):
         post_type = q["post_type"]
@@ -966,7 +966,7 @@ def wp_edit_posts_query(q=False, *args_):
         order = "ASC"
     # end if
     per_page = str("edit_") + str(post_type) + str("_per_page")
-    posts_per_page = int(get_user_option(per_page))
+    posts_per_page = php_int(get_user_option(per_page))
     if php_empty(lambda : posts_per_page) or posts_per_page < 1:
         posts_per_page = 20
     # end if
@@ -1022,8 +1022,8 @@ def wp_edit_attachments_query_vars(q=False, *args_):
     if False == q:
         q = PHP_REQUEST
     # end if
-    q["m"] = int(q["m"]) if (php_isset(lambda : q["m"])) else 0
-    q["cat"] = int(q["cat"]) if (php_isset(lambda : q["cat"])) else 0
+    q["m"] = php_int(q["m"]) if (php_isset(lambda : q["m"])) else 0
+    q["cat"] = php_int(q["cat"]) if (php_isset(lambda : q["cat"])) else 0
     q["post_type"] = "attachment"
     post_type = get_post_type_object("attachment")
     states = "inherit"
@@ -1032,7 +1032,7 @@ def wp_edit_attachments_query_vars(q=False, *args_):
     # end if
     q["post_status"] = "trash" if (php_isset(lambda : q["status"])) and "trash" == q["status"] else states
     q["post_status"] = "trash" if (php_isset(lambda : q["attachment-filter"])) and "trash" == q["attachment-filter"] else states
-    media_per_page = int(get_user_option("upload_per_page"))
+    media_per_page = php_int(get_user_option("upload_per_page"))
     if php_empty(lambda : media_per_page) or media_per_page < 1:
         media_per_page = 20
     # end if
@@ -1150,7 +1150,7 @@ def get_sample_permalink(id=None, title=None, name=None, *args_):
     # end if
     #// If the user wants to set a new name -- override the current one.
     #// Note: if empty name is supplied -- use the title instead, see #6072.
-    if (not php_is_null(name)):
+    if (not is_null(name)):
         post.post_name = sanitize_title(name if name else title, post.ID)
     # end if
     post.post_name = wp_unique_post_slug(post.post_name, post.ID, post.post_status, post.post_type, post.post_parent)
@@ -1549,7 +1549,7 @@ def wp_create_post_autosave(post_data=None, *args_):
         post_id = post_data
         post_data = PHP_POST
     else:
-        post_id = int(post_data["post_ID"])
+        post_id = php_int(post_data["post_ID"])
     # end if
     post_data = _wp_translate_postdata(True, post_data)
     if is_wp_error(post_data):
@@ -1600,7 +1600,7 @@ def wp_create_post_autosave(post_data=None, *args_):
 #//
 def post_preview(*args_):
     global PHP_POST
-    post_ID = int(PHP_POST["post_ID"])
+    post_ID = php_int(PHP_POST["post_ID"])
     PHP_POST["ID"] = post_ID
     post = get_post(post_ID)
     if (not post):
@@ -1652,7 +1652,7 @@ def wp_autosave(post_data=None, *args_):
     if (not php_defined("DOING_AUTOSAVE")):
         php_define("DOING_AUTOSAVE", True)
     # end if
-    post_id = int(post_data["post_id"])
+    post_id = php_int(post_data["post_id"])
     post_data["ID"] = post_id
     post_data["post_ID"] = post_id
     if False == wp_verify_nonce(post_data["_wpnonce"], "update-post_" + post_id):
@@ -1988,7 +1988,7 @@ def the_block_editor_meta_boxes(*args_):
     #// If the 'postcustom' meta box is enabled, then we need to perform some
     #// extra initialization on it.
     #//
-    enable_custom_fields = bool(get_user_meta(get_current_user_id(), "enable_custom_fields", True))
+    enable_custom_fields = php_bool(get_user_meta(get_current_user_id(), "enable_custom_fields", True))
     if enable_custom_fields:
         script = str("""( function( $ ) {\n         if ( $('#postcustom').length ) {\n              $( '#the-list' ).wpList( {\n                    addBefore: function( s ) {\n                        s.data += '&post_id=""") + str(post.ID) + str("""';\n                       return s;\n                 },\n                    addAfter: function() {\n                        $('table#list-table').show();\n                 }\n             });\n           }\n     } )( jQuery );""")
         wp_enqueue_script("wp-lists")
@@ -2038,7 +2038,7 @@ def the_block_editor_meta_box_post_form_hidden_fields(post=None, *args_):
         # end if
     # end for
     php_print(" <input type=\"hidden\" id=\"user-id\" name=\"user_ID\" value=\"")
-    php_print(int(user_id))
+    php_print(php_int(user_id))
     php_print("\" />\n  <input type=\"hidden\" id=\"hiddenaction\" name=\"action\" value=\"")
     php_print(esc_attr(form_action))
     php_print("\" />\n  <input type=\"hidden\" id=\"originalaction\" name=\"originalaction\" value=\"")

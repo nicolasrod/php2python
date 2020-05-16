@@ -703,7 +703,7 @@ def get_comment_link(comment=None, args=Array(), *args_):
     args = wp_parse_args(args, defaults)
     link = get_permalink(comment.comment_post_ID)
     #// The 'cpage' param takes precedence.
-    if (not php_is_null(args["cpage"])):
+    if (not is_null(args["cpage"])):
         cpage = args["cpage"]
         pass
     else:
@@ -1314,12 +1314,12 @@ def comments_template(file="/comments.php", separate_comments=False, *args_):
     # end if
     per_page = 0
     if get_option("page_comments"):
-        per_page = int(get_query_var("comments_per_page"))
+        per_page = php_int(get_query_var("comments_per_page"))
         if 0 == per_page:
-            per_page = int(get_option("comments_per_page"))
+            per_page = php_int(get_option("comments_per_page"))
         # end if
         comment_args["number"] = per_page
-        page = int(get_query_var("cpage"))
+        page = php_int(get_query_var("cpage"))
         if page:
             comment_args["offset"] = page - 1 * per_page
         elif "oldest" == get_option("default_comments_page"):
@@ -1704,7 +1704,7 @@ def get_comment_id_fields(id=0, *args_):
     if php_empty(lambda : id):
         id = get_the_ID()
     # end if
-    replytoid = int(PHP_REQUEST["replytocom"]) if (php_isset(lambda : PHP_REQUEST["replytocom"])) else 0
+    replytoid = php_int(PHP_REQUEST["replytocom"]) if (php_isset(lambda : PHP_REQUEST["replytocom"])) else 0
     result = str("<input type='hidden' name='comment_post_ID' value='") + str(id) + str("' id='comment_post_ID' />\n")
     result += str("<input type='hidden' name='comment_parent' id='comment_parent' value='") + str(replytoid) + str("' />\n")
     #// 
@@ -1760,7 +1760,7 @@ def comment_form_title(noreplytext=False, replytext=False, linktoparent=True, *a
         #// translators: %s: Author of the comment being replied to.
         replytext = __("Leave a Reply to %s")
     # end if
-    replytoid = int(PHP_REQUEST["replytocom"]) if (php_isset(lambda : PHP_REQUEST["replytocom"])) else 0
+    replytoid = php_int(PHP_REQUEST["replytocom"]) if (php_isset(lambda : PHP_REQUEST["replytocom"])) else 0
     if 0 == replytoid:
         php_print(noreplytext)
     else:

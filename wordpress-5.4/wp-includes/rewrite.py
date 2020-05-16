@@ -403,7 +403,7 @@ def wp_resolve_numeric_slug_conflicts(query_vars=Array(), *args_):
         maybe_page = query_vars["day"]
     # end if
     #// Bug found in #11694 - 'page' was returning '/4'.
-    maybe_page = int(php_trim(maybe_page, "/"))
+    maybe_page = php_int(php_trim(maybe_page, "/"))
     post_page_count = php_substr_count(post.post_content, "<!--nextpage-->") + 1
     #// If the post doesn't have multiple pages, but a 'page' candidate is found, resolve to the date archive.
     if 1 == post_page_count and maybe_page:
@@ -483,7 +483,7 @@ def url_to_postid(url=None, *args_):
     if php_trim(url, "/") == home_url() and "page" == get_option("show_on_front"):
         page_on_front = get_option("page_on_front")
         if page_on_front and type(get_post(page_on_front)).__name__ == "WP_Post":
-            return int(page_on_front)
+            return php_int(page_on_front)
         # end if
     # end if
     #// Check to see if we are using rewrite rules.

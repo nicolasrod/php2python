@@ -153,7 +153,7 @@ class WP_MS_Themes_List_Table(WP_List_Table):
     def _search_callback(self, theme=None):
         
         term = None
-        if php_is_null(term):
+        if is_null(term):
             term = wp_unslash(PHP_REQUEST["s"])
         # end if
         for field in Array("Name", "Description", "Author", "Author", "AuthorURI"):

@@ -229,11 +229,11 @@ class WP():
             # end if
             if (not php_empty(lambda : self.query_vars[wpvar])):
                 if (not php_is_array(self.query_vars[wpvar])):
-                    self.query_vars[wpvar] = str(self.query_vars[wpvar])
+                    self.query_vars[wpvar] = php_str(self.query_vars[wpvar])
                 else:
                     for vkey,v in self.query_vars[wpvar]:
                         if is_scalar(v):
-                            self.query_vars[wpvar][vkey] = str(v)
+                            self.query_vars[wpvar][vkey] = php_str(v)
                         # end if
                     # end for
                 # end if
@@ -318,7 +318,7 @@ class WP():
             headers = php_array_merge(headers, wp_get_nocache_headers())
         # end if
         if (not php_empty(lambda : self.query_vars["error"])):
-            status = int(self.query_vars["error"])
+            status = php_int(self.query_vars["error"])
             if 404 == status:
                 if (not is_user_logged_in()):
                     headers = php_array_merge(headers, wp_get_nocache_headers())
@@ -551,7 +551,7 @@ class WP():
                 next = "<!--nextpage-->"
                 if p and False != php_strpos(p.post_content, next) and (not php_empty(lambda : self.query_vars["page"])):
                     page = php_trim(self.query_vars["page"], "/")
-                    success = int(page) <= php_substr_count(p.post_content, next) + 1
+                    success = php_int(page) <= php_substr_count(p.post_content, next) + 1
                 # end if
             # end if
             if success:

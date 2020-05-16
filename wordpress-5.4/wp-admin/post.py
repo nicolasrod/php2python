@@ -25,12 +25,12 @@ php_include_file(__DIR__ + "/admin.php", once=True)
 parent_file = "edit.php"
 submenu_file = "edit.php"
 wp_reset_vars(Array("action"))
-if (php_isset(lambda : PHP_REQUEST["post"])) and (php_isset(lambda : PHP_POST["post_ID"])) and int(PHP_REQUEST["post"]) != int(PHP_POST["post_ID"]):
+if (php_isset(lambda : PHP_REQUEST["post"])) and (php_isset(lambda : PHP_POST["post_ID"])) and php_int(PHP_REQUEST["post"]) != php_int(PHP_POST["post_ID"]):
     wp_die(__("A post ID mismatch has been detected."), __("Sorry, you are not allowed to edit this item."), 400)
 elif (php_isset(lambda : PHP_REQUEST["post"])):
-    post_id = int(PHP_REQUEST["post"])
+    post_id = php_int(PHP_REQUEST["post"])
 elif (php_isset(lambda : PHP_POST["post_ID"])):
-    post_id = int(PHP_POST["post_ID"])
+    post_id = php_int(PHP_POST["post_ID"])
 else:
     post_id = 0
 # end if
@@ -277,7 +277,7 @@ for case in Switch(action):
         check_admin_referer("toggle-custom-fields")
         current_user_id = get_current_user_id()
         if current_user_id:
-            enable_custom_fields = bool(get_user_meta(current_user_id, "enable_custom_fields", True))
+            enable_custom_fields = php_bool(get_user_meta(current_user_id, "enable_custom_fields", True))
             update_user_meta(current_user_id, "enable_custom_fields", (not enable_custom_fields))
         # end if
         wp_safe_redirect(wp_get_referer())

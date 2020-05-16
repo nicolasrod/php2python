@@ -43,7 +43,7 @@ def edit_user(user_id=0, *args_):
     
     wp_roles = wp_roles()
     user = php_new_class("stdClass", lambda : stdClass())
-    user_id = int(user_id)
+    user_id = php_int(user_id)
     if user_id:
         update = True
         user.ID = user_id
@@ -314,7 +314,7 @@ def wp_delete_user(id=None, reassign=None, *args_):
     if (not php_is_numeric(id)):
         return False
     # end if
-    id = int(id)
+    id = php_int(id)
     user = php_new_class("WP_User", lambda : WP_User(id))
     if (not user.exists()):
         return False
@@ -323,7 +323,7 @@ def wp_delete_user(id=None, reassign=None, *args_):
     if "novalue" == reassign:
         reassign = None
     elif None != reassign:
-        reassign = int(reassign)
+        reassign = php_int(reassign)
     # end if
     #// 
     #// Fires immediately before a user is deleted from the database.
@@ -415,7 +415,7 @@ def wp_delete_user(id=None, reassign=None, *args_):
 #//
 def wp_revoke_user(id=None, *args_):
     
-    id = int(id)
+    id = php_int(id)
     user = php_new_class("WP_User", lambda : WP_User(id))
     user.remove_all_caps()
 # end def wp_revoke_user

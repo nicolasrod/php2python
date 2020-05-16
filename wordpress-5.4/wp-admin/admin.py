@@ -74,7 +74,7 @@ elif get_option("db_version") != wp_db_version and php_empty(lambda : PHP_POST):
         #// If there are 50 or fewer sites, run every time. Otherwise, throttle to reduce load:
         #// attempt to do no more than threshold value, with some +/- allowed.
         #//
-        if c <= 50 or c > 50 and mt_rand(0, int(c / 50)) == 1:
+        if c <= 50 or c > 50 and mt_rand(0, php_int(c / 50)) == 1:
             php_include_file(ABSPATH + WPINC + "/http.php", once=True)
             response = wp_remote_get(admin_url("upgrade.php?step=1"), Array({"timeout": 120, "httpversion": "1.1"}))
             #// This action is documented in wp-admin/network/upgrade.php

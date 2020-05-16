@@ -30,7 +30,7 @@ class ParagonIE_Sodium_Core32_Int64():
     #//
     def __init__(self, array=Array(0, 0, 0, 0), unsignedInt=False):
         
-        self.limbs = Array(int(array[0]), int(array[1]), int(array[2]), int(array[3]))
+        self.limbs = Array(php_int(array[0]), php_int(array[1]), php_int(array[2]), php_int(array[3]))
         self.overflow = 0
         self.unsignedInt = unsignedInt
     # end def __init__
@@ -79,7 +79,7 @@ class ParagonIE_Sodium_Core32_Int64():
         
         ParagonIE_Sodium_Core32_Util.declarescalartype(int, "int", 1)
         #// @var int $int
-        int = int(int)
+        int = php_int(int)
         i0 = self.limbs[0]
         i1 = self.limbs[1]
         i2 = self.limbs[2]
@@ -177,9 +177,9 @@ class ParagonIE_Sodium_Core32_Int64():
         ParagonIE_Sodium_Core32_Util.declarescalartype(int, "int", 1)
         ParagonIE_Sodium_Core32_Util.declarescalartype(size, "int", 2)
         #// @var int $int
-        int = int(int)
+        int = php_int(int)
         #// @var int $size
-        size = int(size)
+        size = php_int(size)
         if (not size):
             size = 63
         # end if
@@ -294,7 +294,7 @@ class ParagonIE_Sodium_Core32_Int64():
                 b_j = b[j]
                 product = a_i * b_j + r[i + j]
                 carry = product >> baseLog2 & 65535
-                r[i + j] = product - int(carry * base) & 65535
+                r[i + j] = product - php_int(carry * base) & 65535
                 r[i + j + 1] += carry
                 j += 1
             # end while
@@ -451,7 +451,7 @@ class ParagonIE_Sodium_Core32_Int64():
         b3 = b.limbs[3]
         #// @var int $size
         #// @var int $i
-        i = int(size)
+        i = php_int(size)
         while i >= 0:
             
             mask = -b3 & 1
@@ -510,7 +510,7 @@ class ParagonIE_Sodium_Core32_Int64():
         
         return_ = php_new_class("ParagonIE_Sodium_Core32_Int64", lambda : ParagonIE_Sodium_Core32_Int64())
         return_.unsignedInt = self.unsignedInt
-        return_.limbs = Array(int(self.limbs[0] | b.limbs[0]), int(self.limbs[1] | b.limbs[1]), int(self.limbs[2] | b.limbs[2]), int(self.limbs[3] | b.limbs[3]))
+        return_.limbs = Array(php_int(self.limbs[0] | b.limbs[0]), php_int(self.limbs[1] | b.limbs[1]), php_int(self.limbs[2] | b.limbs[2]), php_int(self.limbs[3] | b.limbs[3]))
         return return_
     # end def orint64
     #// 
@@ -524,7 +524,7 @@ class ParagonIE_Sodium_Core32_Int64():
         
         ParagonIE_Sodium_Core32_Util.declarescalartype(c, "int", 1)
         #// @var int $c
-        c = int(c)
+        c = php_int(c)
         return_ = php_new_class("ParagonIE_Sodium_Core32_Int64", lambda : ParagonIE_Sodium_Core32_Int64())
         return_.unsignedInt = self.unsignedInt
         c &= 63
@@ -547,7 +547,7 @@ class ParagonIE_Sodium_Core32_Int64():
                 j = i + idx_shift & 3
                 #// @var int $k
                 k = i + idx_shift + 1 & 3
-                limbs[i] = int(int(myLimbs[j]) << sub_shift | int(myLimbs[k]) >> 16 - sub_shift & 65535)
+                limbs[i] = php_int(php_int(myLimbs[j]) << sub_shift | php_int(myLimbs[k]) >> 16 - sub_shift & 65535)
                 i -= 1
             # end while
         # end if
@@ -566,7 +566,7 @@ class ParagonIE_Sodium_Core32_Int64():
         
         ParagonIE_Sodium_Core32_Util.declarescalartype(c, "int", 1)
         #// @var int $c
-        c = int(c)
+        c = php_int(c)
         #// @var ParagonIE_Sodium_Core32_Int64 $return
         return_ = php_new_class("ParagonIE_Sodium_Core32_Int64", lambda : ParagonIE_Sodium_Core32_Int64())
         return_.unsignedInt = self.unsignedInt
@@ -591,7 +591,7 @@ class ParagonIE_Sodium_Core32_Int64():
                 j = i - idx_shift & 3
                 #// @var int $k
                 k = i - idx_shift - 1 & 3
-                limbs[i] = int(int(myLimbs[j]) >> int(sub_shift) | int(myLimbs[k]) << 16 - int(sub_shift) & 65535)
+                limbs[i] = php_int(php_int(myLimbs[j]) >> php_int(sub_shift) | php_int(myLimbs[k]) << 16 - php_int(sub_shift) & 65535)
                 i -= 1
             # end while
         # end if
@@ -607,7 +607,7 @@ class ParagonIE_Sodium_Core32_Int64():
         
         ParagonIE_Sodium_Core32_Util.declarescalartype(c, "int", 1)
         #// @var int $c
-        c = int(c)
+        c = php_int(c)
         return_ = php_new_class("ParagonIE_Sodium_Core32_Int64", lambda : ParagonIE_Sodium_Core32_Int64())
         return_.unsignedInt = self.unsignedInt
         c &= 63
@@ -637,7 +637,7 @@ class ParagonIE_Sodium_Core32_Int64():
                 
                 #// @var int $tmp
                 tmp = self.limbs[i] << c | carry & 65535
-                return_.limbs[i] = int(tmp & 65535)
+                return_.limbs[i] = php_int(tmp & 65535)
                 #// @var int $carry
                 carry = tmp >> 16
                 i -= 1
@@ -654,7 +654,7 @@ class ParagonIE_Sodium_Core32_Int64():
     def shiftright(self, c=0):
         
         ParagonIE_Sodium_Core32_Util.declarescalartype(c, "int", 1)
-        c = int(c)
+        c = php_int(c)
         #// @var int $c
         return_ = php_new_class("ParagonIE_Sodium_Core32_Int64", lambda : ParagonIE_Sodium_Core32_Int64())
         return_.unsignedInt = self.unsignedInt
@@ -662,11 +662,11 @@ class ParagonIE_Sodium_Core32_Int64():
         negative = -self.limbs[0] >> 15 & 1
         if c >= 16:
             if c >= 48:
-                return_.limbs = Array(int(negative & 65535), int(negative & 65535), int(negative & 65535), int(self.limbs[0]))
+                return_.limbs = Array(php_int(negative & 65535), php_int(negative & 65535), php_int(negative & 65535), php_int(self.limbs[0]))
             elif c >= 32:
-                return_.limbs = Array(int(negative & 65535), int(negative & 65535), int(self.limbs[0]), int(self.limbs[1]))
+                return_.limbs = Array(php_int(negative & 65535), php_int(negative & 65535), php_int(self.limbs[0]), php_int(self.limbs[1]))
             else:
-                return_.limbs = Array(int(negative & 65535), int(self.limbs[0]), int(self.limbs[1]), int(self.limbs[2]))
+                return_.limbs = Array(php_int(negative & 65535), php_int(self.limbs[0]), php_int(self.limbs[1]), php_int(self.limbs[2]))
             # end if
             return return_.shiftright(c & 15)
         # end if
@@ -680,12 +680,12 @@ class ParagonIE_Sodium_Core32_Int64():
             # end if
             #// @var int $carryRight
             carryRight = negative & 65535
-            mask = int(1 << c + 1 - 1 & 65535)
+            mask = php_int(1 << c + 1 - 1 & 65535)
             i = 0
             while i < 4:
                 
-                return_.limbs[i] = int(self.limbs[i] >> c | carryRight << 16 - c & 65535)
-                carryRight = int(self.limbs[i] & mask)
+                return_.limbs[i] = php_int(self.limbs[i] >> c | carryRight << 16 - c & 65535)
+                carryRight = php_int(self.limbs[i] & mask)
                 i += 1
             # end while
         # end if
@@ -702,7 +702,7 @@ class ParagonIE_Sodium_Core32_Int64():
     def subint(self, int=None):
         
         ParagonIE_Sodium_Core32_Util.declarescalartype(int, "int", 1)
-        int = int(int)
+        int = php_int(int)
         return_ = php_new_class("ParagonIE_Sodium_Core32_Int64", lambda : ParagonIE_Sodium_Core32_Int64())
         return_.unsignedInt = self.unsignedInt
         #// @var int $carry
@@ -714,7 +714,7 @@ class ParagonIE_Sodium_Core32_Int64():
             tmp = self.limbs[i] - int >> 16 & 65535 + carry
             #// @var int $carry
             carry = tmp >> 16
-            return_.limbs[i] = int(tmp & 65535)
+            return_.limbs[i] = php_int(tmp & 65535)
             i -= 1
         # end while
         return return_
@@ -738,7 +738,7 @@ class ParagonIE_Sodium_Core32_Int64():
             tmp = self.limbs[i] - b.limbs[i] + carry
             #// @var int $carry
             carry = tmp >> 16
-            return_.limbs[i] = int(tmp & 65535)
+            return_.limbs[i] = php_int(tmp & 65535)
             i -= 1
         # end while
         return return_
@@ -753,7 +753,7 @@ class ParagonIE_Sodium_Core32_Int64():
         
         return_ = php_new_class("ParagonIE_Sodium_Core32_Int64", lambda : ParagonIE_Sodium_Core32_Int64())
         return_.unsignedInt = self.unsignedInt
-        return_.limbs = Array(int(self.limbs[0] ^ b.limbs[0]), int(self.limbs[1] ^ b.limbs[1]), int(self.limbs[2] ^ b.limbs[2]), int(self.limbs[3] ^ b.limbs[3]))
+        return_.limbs = Array(php_int(self.limbs[0] ^ b.limbs[0]), php_int(self.limbs[1] ^ b.limbs[1]), php_int(self.limbs[2] ^ b.limbs[2]), php_int(self.limbs[3] ^ b.limbs[3]))
         return return_
     # end def xorint64
     #// 
@@ -768,9 +768,9 @@ class ParagonIE_Sodium_Core32_Int64():
         
         ParagonIE_Sodium_Core32_Util.declarescalartype(low, "int", 1)
         ParagonIE_Sodium_Core32_Util.declarescalartype(high, "int", 2)
-        high = int(high)
-        low = int(low)
-        return php_new_class("ParagonIE_Sodium_Core32_Int64", lambda : ParagonIE_Sodium_Core32_Int64(Array(int(high >> 16 & 65535), int(high & 65535), int(low >> 16 & 65535), int(low & 65535))))
+        high = php_int(high)
+        low = php_int(low)
+        return php_new_class("ParagonIE_Sodium_Core32_Int64", lambda : ParagonIE_Sodium_Core32_Int64(Array(php_int(high >> 16 & 65535), php_int(high & 65535), php_int(low >> 16 & 65535), php_int(low & 65535))))
     # end def fromints
     #// 
     #// @param int $low
@@ -782,15 +782,15 @@ class ParagonIE_Sodium_Core32_Int64():
     def fromint(self, low=None):
         
         ParagonIE_Sodium_Core32_Util.declarescalartype(low, "int", 1)
-        low = int(low)
-        return php_new_class("ParagonIE_Sodium_Core32_Int64", lambda : ParagonIE_Sodium_Core32_Int64(Array(0, 0, int(low >> 16 & 65535), int(low & 65535))))
+        low = php_int(low)
+        return php_new_class("ParagonIE_Sodium_Core32_Int64", lambda : ParagonIE_Sodium_Core32_Int64(Array(0, 0, php_int(low >> 16 & 65535), php_int(low & 65535))))
     # end def fromint
     #// 
     #// @return int
     #//
     def toint(self):
         
-        return int(self.limbs[2] & 65535 << 16 | self.limbs[3] & 65535)
+        return php_int(self.limbs[2] & 65535 << 16 | self.limbs[3] & 65535)
     # end def toint
     #// 
     #// @param string $string
@@ -802,18 +802,18 @@ class ParagonIE_Sodium_Core32_Int64():
     def fromstring(self, string=None):
         
         ParagonIE_Sodium_Core32_Util.declarescalartype(string, "string", 1)
-        string = str(string)
+        string = php_str(string)
         if ParagonIE_Sodium_Core32_Util.strlen(string) != 8:
             raise php_new_class("RangeException", lambda : RangeException("String must be 8 bytes; " + ParagonIE_Sodium_Core32_Util.strlen(string) + " given."))
         # end if
         return_ = php_new_class("ParagonIE_Sodium_Core32_Int64", lambda : ParagonIE_Sodium_Core32_Int64())
-        return_.limbs[0] = int(ParagonIE_Sodium_Core32_Util.chrtoint(string[0]) & 255 << 8)
+        return_.limbs[0] = php_int(ParagonIE_Sodium_Core32_Util.chrtoint(string[0]) & 255 << 8)
         return_.limbs[0] |= ParagonIE_Sodium_Core32_Util.chrtoint(string[1]) & 255
-        return_.limbs[1] = int(ParagonIE_Sodium_Core32_Util.chrtoint(string[2]) & 255 << 8)
+        return_.limbs[1] = php_int(ParagonIE_Sodium_Core32_Util.chrtoint(string[2]) & 255 << 8)
         return_.limbs[1] |= ParagonIE_Sodium_Core32_Util.chrtoint(string[3]) & 255
-        return_.limbs[2] = int(ParagonIE_Sodium_Core32_Util.chrtoint(string[4]) & 255 << 8)
+        return_.limbs[2] = php_int(ParagonIE_Sodium_Core32_Util.chrtoint(string[4]) & 255 << 8)
         return_.limbs[2] |= ParagonIE_Sodium_Core32_Util.chrtoint(string[5]) & 255
-        return_.limbs[3] = int(ParagonIE_Sodium_Core32_Util.chrtoint(string[6]) & 255 << 8)
+        return_.limbs[3] = php_int(ParagonIE_Sodium_Core32_Util.chrtoint(string[6]) & 255 << 8)
         return_.limbs[3] |= ParagonIE_Sodium_Core32_Util.chrtoint(string[7]) & 255
         return return_
     # end def fromstring
@@ -827,18 +827,18 @@ class ParagonIE_Sodium_Core32_Int64():
     def fromreversestring(self, string=None):
         
         ParagonIE_Sodium_Core32_Util.declarescalartype(string, "string", 1)
-        string = str(string)
+        string = php_str(string)
         if ParagonIE_Sodium_Core32_Util.strlen(string) != 8:
             raise php_new_class("RangeException", lambda : RangeException("String must be 8 bytes; " + ParagonIE_Sodium_Core32_Util.strlen(string) + " given."))
         # end if
         return_ = php_new_class("ParagonIE_Sodium_Core32_Int64", lambda : ParagonIE_Sodium_Core32_Int64())
-        return_.limbs[0] = int(ParagonIE_Sodium_Core32_Util.chrtoint(string[7]) & 255 << 8)
+        return_.limbs[0] = php_int(ParagonIE_Sodium_Core32_Util.chrtoint(string[7]) & 255 << 8)
         return_.limbs[0] |= ParagonIE_Sodium_Core32_Util.chrtoint(string[6]) & 255
-        return_.limbs[1] = int(ParagonIE_Sodium_Core32_Util.chrtoint(string[5]) & 255 << 8)
+        return_.limbs[1] = php_int(ParagonIE_Sodium_Core32_Util.chrtoint(string[5]) & 255 << 8)
         return_.limbs[1] |= ParagonIE_Sodium_Core32_Util.chrtoint(string[4]) & 255
-        return_.limbs[2] = int(ParagonIE_Sodium_Core32_Util.chrtoint(string[3]) & 255 << 8)
+        return_.limbs[2] = php_int(ParagonIE_Sodium_Core32_Util.chrtoint(string[3]) & 255 << 8)
         return_.limbs[2] |= ParagonIE_Sodium_Core32_Util.chrtoint(string[2]) & 255
-        return_.limbs[3] = int(ParagonIE_Sodium_Core32_Util.chrtoint(string[1]) & 255 << 8)
+        return_.limbs[3] = php_int(ParagonIE_Sodium_Core32_Util.chrtoint(string[1]) & 255 << 8)
         return_.limbs[3] |= ParagonIE_Sodium_Core32_Util.chrtoint(string[0]) & 255
         return return_
     # end def fromreversestring
@@ -847,7 +847,7 @@ class ParagonIE_Sodium_Core32_Int64():
     #//
     def toarray(self):
         
-        return Array(int(self.limbs[0] & 65535 << 16 | self.limbs[1] & 65535), int(self.limbs[2] & 65535 << 16 | self.limbs[3] & 65535))
+        return Array(php_int(self.limbs[0] & 65535 << 16 | self.limbs[1] & 65535), php_int(self.limbs[2] & 65535 << 16 | self.limbs[3] & 65535))
     # end def toarray
     #// 
     #// @return ParagonIE_Sodium_Core32_Int32
@@ -855,10 +855,10 @@ class ParagonIE_Sodium_Core32_Int64():
     def toint32(self):
         
         return_ = php_new_class("ParagonIE_Sodium_Core32_Int32", lambda : ParagonIE_Sodium_Core32_Int32())
-        return_.limbs[0] = int(self.limbs[2])
-        return_.limbs[1] = int(self.limbs[3])
+        return_.limbs[0] = php_int(self.limbs[2])
+        return_.limbs[1] = php_int(self.limbs[3])
         return_.unsignedInt = self.unsignedInt
-        return_.overflow = int(ParagonIE_Sodium_Core32_Util.abs(self.limbs[1], 16) & 65535)
+        return_.overflow = php_int(ParagonIE_Sodium_Core32_Util.abs(self.limbs[1], 16) & 65535)
         return return_
     # end def toint32
     #// 
@@ -867,10 +867,10 @@ class ParagonIE_Sodium_Core32_Int64():
     def toint64(self):
         
         return_ = php_new_class("ParagonIE_Sodium_Core32_Int64", lambda : ParagonIE_Sodium_Core32_Int64())
-        return_.limbs[0] = int(self.limbs[0])
-        return_.limbs[1] = int(self.limbs[1])
-        return_.limbs[2] = int(self.limbs[2])
-        return_.limbs[3] = int(self.limbs[3])
+        return_.limbs[0] = php_int(self.limbs[0])
+        return_.limbs[1] = php_int(self.limbs[1])
+        return_.limbs[2] = php_int(self.limbs[2])
+        return_.limbs[3] = php_int(self.limbs[3])
         return_.unsignedInt = self.unsignedInt
         return_.overflow = ParagonIE_Sodium_Core32_Util.abs(self.overflow)
         return return_

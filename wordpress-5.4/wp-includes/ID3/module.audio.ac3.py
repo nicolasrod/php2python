@@ -104,25 +104,25 @@ class getid3_ac3(getid3_handler):
                 thisfile_ac3_raw_bsi["dsurmod"] = self.readheaderbsi(2)
                 thisfile_ac3["dolby_surround_mode"] = self.dolbysurroundmodelookup(thisfile_ac3_raw_bsi["dsurmod"])
             # end if
-            thisfile_ac3_raw_bsi["flags"]["lfeon"] = bool(self.readheaderbsi(1))
+            thisfile_ac3_raw_bsi["flags"]["lfeon"] = php_bool(self.readheaderbsi(1))
             #// This indicates how far the average dialogue level is below digital 100 percent. Valid values are 1-31.
             #// The value of 0 is reserved. The values of 1 to 31 are interpreted as -1 dB to -31 dB with respect to digital 100 percent.
             thisfile_ac3_raw_bsi["dialnorm"] = self.readheaderbsi(5)
             #// 5.4.2.8 dialnorm: Dialogue Normalization, 5 Bits
-            thisfile_ac3_raw_bsi["flags"]["compr"] = bool(self.readheaderbsi(1))
+            thisfile_ac3_raw_bsi["flags"]["compr"] = php_bool(self.readheaderbsi(1))
             #// 5.4.2.9 compre: Compression Gain Word Exists, 1 Bit
             if thisfile_ac3_raw_bsi["flags"]["compr"]:
                 thisfile_ac3_raw_bsi["compr"] = self.readheaderbsi(8)
                 #// 5.4.2.10 compr: Compression Gain Word, 8 Bits
                 thisfile_ac3["heavy_compression"] = self.heavycompression(thisfile_ac3_raw_bsi["compr"])
             # end if
-            thisfile_ac3_raw_bsi["flags"]["langcod"] = bool(self.readheaderbsi(1))
+            thisfile_ac3_raw_bsi["flags"]["langcod"] = php_bool(self.readheaderbsi(1))
             #// 5.4.2.11 langcode: Language Code Exists, 1 Bit
             if thisfile_ac3_raw_bsi["flags"]["langcod"]:
                 thisfile_ac3_raw_bsi["langcod"] = self.readheaderbsi(8)
                 pass
             # end if
-            thisfile_ac3_raw_bsi["flags"]["audprodinfo"] = bool(self.readheaderbsi(1))
+            thisfile_ac3_raw_bsi["flags"]["audprodinfo"] = php_bool(self.readheaderbsi(1))
             #// 5.4.2.13 audprodie: Audio Production Information Exists, 1 Bit
             if thisfile_ac3_raw_bsi["flags"]["audprodinfo"]:
                 thisfile_ac3_raw_bsi["mixlevel"] = self.readheaderbsi(5)
@@ -136,20 +136,20 @@ class getid3_ac3(getid3_handler):
             #// 5.4.2.16 dialnorm2: Dialogue Normalization, ch2, 5 Bits
             thisfile_ac3["dialogue_normalization2"] = "-" + thisfile_ac3_raw_bsi["dialnorm2"] + "dB"
             #// This indicates how far the average dialogue level is below digital 100 percent. Valid values are 1-31. The value of 0 is reserved. The values of 1 to 31 are interpreted as -1 dB to -31 dB with respect to digital 100 percent.
-            thisfile_ac3_raw_bsi["flags"]["compr2"] = bool(self.readheaderbsi(1))
+            thisfile_ac3_raw_bsi["flags"]["compr2"] = php_bool(self.readheaderbsi(1))
             #// 5.4.2.17 compr2e: Compression Gain Word Exists, ch2, 1 Bit
             if thisfile_ac3_raw_bsi["flags"]["compr2"]:
                 thisfile_ac3_raw_bsi["compr2"] = self.readheaderbsi(8)
                 #// 5.4.2.18 compr2: Compression Gain Word, ch2, 8 Bits
                 thisfile_ac3["heavy_compression2"] = self.heavycompression(thisfile_ac3_raw_bsi["compr2"])
             # end if
-            thisfile_ac3_raw_bsi["flags"]["langcod2"] = bool(self.readheaderbsi(1))
+            thisfile_ac3_raw_bsi["flags"]["langcod2"] = php_bool(self.readheaderbsi(1))
             #// 5.4.2.19 langcod2e: Language Code Exists, ch2, 1 Bit
             if thisfile_ac3_raw_bsi["flags"]["langcod2"]:
                 thisfile_ac3_raw_bsi["langcod2"] = self.readheaderbsi(8)
                 pass
             # end if
-            thisfile_ac3_raw_bsi["flags"]["audprodinfo2"] = bool(self.readheaderbsi(1))
+            thisfile_ac3_raw_bsi["flags"]["audprodinfo2"] = php_bool(self.readheaderbsi(1))
             #// 5.4.2.21 audprodi2e: Audio Production Information Exists, ch2, 1 Bit
             if thisfile_ac3_raw_bsi["flags"]["audprodinfo2"]:
                 thisfile_ac3_raw_bsi["mixlevel2"] = self.readheaderbsi(5)
@@ -159,9 +159,9 @@ class getid3_ac3(getid3_handler):
                 thisfile_ac3["mixing_level2"] = 80 + thisfile_ac3_raw_bsi["mixlevel2"] + "dB"
                 thisfile_ac3["room_type2"] = self.roomtypelookup(thisfile_ac3_raw_bsi["roomtyp2"])
             # end if
-            thisfile_ac3_raw_bsi["copyright"] = bool(self.readheaderbsi(1))
+            thisfile_ac3_raw_bsi["copyright"] = php_bool(self.readheaderbsi(1))
             #// 5.4.2.24 copyrightb: Copyright Bit, 1 Bit
-            thisfile_ac3_raw_bsi["original"] = bool(self.readheaderbsi(1))
+            thisfile_ac3_raw_bsi["original"] = php_bool(self.readheaderbsi(1))
             #// 5.4.2.25 origbs: Original Bit Stream, 1 Bit
             thisfile_ac3_raw_bsi["flags"]["timecod1"] = self.readheaderbsi(2)
             #// 5.4.2.26 timecod1e, timcode2e: Time Code (first and second) Halves Exist, 2 Bits
@@ -187,7 +187,7 @@ class getid3_ac3(getid3_handler):
                 thisfile_ac3["timecode2"] += thisfile_ac3_raw_bsi["timecod2"] & 63 >> 0 * 1 / 30 / 60
                 pass
             # end if
-            thisfile_ac3_raw_bsi["flags"]["addbsi"] = bool(self.readheaderbsi(1))
+            thisfile_ac3_raw_bsi["flags"]["addbsi"] = php_bool(self.readheaderbsi(1))
             if thisfile_ac3_raw_bsi["flags"]["addbsi"]:
                 thisfile_ac3_raw_bsi["addbsi_length"] = self.readheaderbsi(6) + 1
                 #// This 6-bit code, which exists only if addbside is a 1, indicates the length in bytes of additional bit stream information. The valid range of addbsil is 0�63, indicating 1�64 additional bytes, respectively.
@@ -212,30 +212,30 @@ class getid3_ac3(getid3_handler):
             # end if
             thisfile_ac3["bsi"]["blocks_per_sync_frame"] = self.blockspersyncframe(thisfile_ac3_raw_bsi["numblkscod"])
             thisfile_ac3_raw_bsi["acmod"] = self.readheaderbsi(3)
-            thisfile_ac3_raw_bsi["flags"]["lfeon"] = bool(self.readheaderbsi(1))
+            thisfile_ac3_raw_bsi["flags"]["lfeon"] = php_bool(self.readheaderbsi(1))
             thisfile_ac3_raw_bsi["bsid"] = self.readheaderbsi(5)
             #// we already know this from pre-parsing the version identifier, but re-read it to let the bitstream flow as intended
             thisfile_ac3_raw_bsi["dialnorm"] = self.readheaderbsi(5)
-            thisfile_ac3_raw_bsi["flags"]["compr"] = bool(self.readheaderbsi(1))
+            thisfile_ac3_raw_bsi["flags"]["compr"] = php_bool(self.readheaderbsi(1))
             if thisfile_ac3_raw_bsi["flags"]["compr"]:
                 thisfile_ac3_raw_bsi["compr"] = self.readheaderbsi(8)
             # end if
             if thisfile_ac3_raw_bsi["acmod"] == 0:
                 #// if 1+1 mode (dual mono, so some items need a second value)
                 thisfile_ac3_raw_bsi["dialnorm2"] = self.readheaderbsi(5)
-                thisfile_ac3_raw_bsi["flags"]["compr2"] = bool(self.readheaderbsi(1))
+                thisfile_ac3_raw_bsi["flags"]["compr2"] = php_bool(self.readheaderbsi(1))
                 if thisfile_ac3_raw_bsi["flags"]["compr2"]:
                     thisfile_ac3_raw_bsi["compr2"] = self.readheaderbsi(8)
                 # end if
             # end if
             if thisfile_ac3_raw_bsi["strmtyp"] == 1:
                 #// if dependent stream
-                thisfile_ac3_raw_bsi["flags"]["chanmap"] = bool(self.readheaderbsi(1))
+                thisfile_ac3_raw_bsi["flags"]["chanmap"] = php_bool(self.readheaderbsi(1))
                 if thisfile_ac3_raw_bsi["flags"]["chanmap"]:
                     thisfile_ac3_raw_bsi["chanmap"] = self.readheaderbsi(8)
                 # end if
             # end if
-            thisfile_ac3_raw_bsi["flags"]["mixmdat"] = bool(self.readheaderbsi(1))
+            thisfile_ac3_raw_bsi["flags"]["mixmdat"] = php_bool(self.readheaderbsi(1))
             if thisfile_ac3_raw_bsi["flags"]["mixmdat"]:
                 #// Mixing metadata
                 if thisfile_ac3_raw_bsi["acmod"] > 2:
@@ -254,33 +254,33 @@ class getid3_ac3(getid3_handler):
                 # end if
                 if thisfile_ac3_raw_bsi["flags"]["lfeon"]:
                     #// if the LFE channel exists
-                    thisfile_ac3_raw_bsi["flags"]["lfemixlevcod"] = bool(self.readheaderbsi(1))
+                    thisfile_ac3_raw_bsi["flags"]["lfemixlevcod"] = php_bool(self.readheaderbsi(1))
                     if thisfile_ac3_raw_bsi["flags"]["lfemixlevcod"]:
                         thisfile_ac3_raw_bsi["lfemixlevcod"] = self.readheaderbsi(5)
                     # end if
                 # end if
                 if thisfile_ac3_raw_bsi["strmtyp"] == 0:
                     #// if independent stream
-                    thisfile_ac3_raw_bsi["flags"]["pgmscl"] = bool(self.readheaderbsi(1))
+                    thisfile_ac3_raw_bsi["flags"]["pgmscl"] = php_bool(self.readheaderbsi(1))
                     if thisfile_ac3_raw_bsi["flags"]["pgmscl"]:
                         thisfile_ac3_raw_bsi["pgmscl"] = self.readheaderbsi(6)
                     # end if
                     if thisfile_ac3_raw_bsi["acmod"] == 0:
                         #// if 1+1 mode (dual mono, so some items need a second value)
-                        thisfile_ac3_raw_bsi["flags"]["pgmscl2"] = bool(self.readheaderbsi(1))
+                        thisfile_ac3_raw_bsi["flags"]["pgmscl2"] = php_bool(self.readheaderbsi(1))
                         if thisfile_ac3_raw_bsi["flags"]["pgmscl2"]:
                             thisfile_ac3_raw_bsi["pgmscl2"] = self.readheaderbsi(6)
                         # end if
                     # end if
-                    thisfile_ac3_raw_bsi["flags"]["extpgmscl"] = bool(self.readheaderbsi(1))
+                    thisfile_ac3_raw_bsi["flags"]["extpgmscl"] = php_bool(self.readheaderbsi(1))
                     if thisfile_ac3_raw_bsi["flags"]["extpgmscl"]:
                         thisfile_ac3_raw_bsi["extpgmscl"] = self.readheaderbsi(6)
                     # end if
                     thisfile_ac3_raw_bsi["mixdef"] = self.readheaderbsi(2)
                     if thisfile_ac3_raw_bsi["mixdef"] == 1:
                         #// mixing option 2
-                        thisfile_ac3_raw_bsi["premixcmpsel"] = bool(self.readheaderbsi(1))
-                        thisfile_ac3_raw_bsi["drcsrc"] = bool(self.readheaderbsi(1))
+                        thisfile_ac3_raw_bsi["premixcmpsel"] = php_bool(self.readheaderbsi(1))
+                        thisfile_ac3_raw_bsi["drcsrc"] = php_bool(self.readheaderbsi(1))
                         thisfile_ac3_raw_bsi["premixcmpscl"] = self.readheaderbsi(3)
                     elif thisfile_ac3_raw_bsi["mixdef"] == 2:
                         #// mixing option 3
@@ -290,66 +290,66 @@ class getid3_ac3(getid3_handler):
                         mixdefbitsread = 0
                         thisfile_ac3_raw_bsi["mixdeflen"] = self.readheaderbsi(5)
                         mixdefbitsread += 5
-                        thisfile_ac3_raw_bsi["flags"]["mixdata2"] = bool(self.readheaderbsi(1))
+                        thisfile_ac3_raw_bsi["flags"]["mixdata2"] = php_bool(self.readheaderbsi(1))
                         mixdefbitsread += 1
                         if thisfile_ac3_raw_bsi["flags"]["mixdata2"]:
-                            thisfile_ac3_raw_bsi["premixcmpsel"] = bool(self.readheaderbsi(1))
+                            thisfile_ac3_raw_bsi["premixcmpsel"] = php_bool(self.readheaderbsi(1))
                             mixdefbitsread += 1
-                            thisfile_ac3_raw_bsi["drcsrc"] = bool(self.readheaderbsi(1))
+                            thisfile_ac3_raw_bsi["drcsrc"] = php_bool(self.readheaderbsi(1))
                             mixdefbitsread += 1
                             thisfile_ac3_raw_bsi["premixcmpscl"] = self.readheaderbsi(3)
                             mixdefbitsread += 3
-                            thisfile_ac3_raw_bsi["flags"]["extpgmlscl"] = bool(self.readheaderbsi(1))
+                            thisfile_ac3_raw_bsi["flags"]["extpgmlscl"] = php_bool(self.readheaderbsi(1))
                             mixdefbitsread += 1
                             if thisfile_ac3_raw_bsi["flags"]["extpgmlscl"]:
                                 thisfile_ac3_raw_bsi["extpgmlscl"] = self.readheaderbsi(4)
                                 mixdefbitsread += 4
                             # end if
-                            thisfile_ac3_raw_bsi["flags"]["extpgmcscl"] = bool(self.readheaderbsi(1))
+                            thisfile_ac3_raw_bsi["flags"]["extpgmcscl"] = php_bool(self.readheaderbsi(1))
                             mixdefbitsread += 1
                             if thisfile_ac3_raw_bsi["flags"]["extpgmcscl"]:
                                 thisfile_ac3_raw_bsi["extpgmcscl"] = self.readheaderbsi(4)
                                 mixdefbitsread += 4
                             # end if
-                            thisfile_ac3_raw_bsi["flags"]["extpgmrscl"] = bool(self.readheaderbsi(1))
+                            thisfile_ac3_raw_bsi["flags"]["extpgmrscl"] = php_bool(self.readheaderbsi(1))
                             mixdefbitsread += 1
                             if thisfile_ac3_raw_bsi["flags"]["extpgmrscl"]:
                                 thisfile_ac3_raw_bsi["extpgmrscl"] = self.readheaderbsi(4)
                             # end if
-                            thisfile_ac3_raw_bsi["flags"]["extpgmlsscl"] = bool(self.readheaderbsi(1))
+                            thisfile_ac3_raw_bsi["flags"]["extpgmlsscl"] = php_bool(self.readheaderbsi(1))
                             mixdefbitsread += 1
                             if thisfile_ac3_raw_bsi["flags"]["extpgmlsscl"]:
                                 thisfile_ac3_raw_bsi["extpgmlsscl"] = self.readheaderbsi(4)
                                 mixdefbitsread += 4
                             # end if
-                            thisfile_ac3_raw_bsi["flags"]["extpgmrsscl"] = bool(self.readheaderbsi(1))
+                            thisfile_ac3_raw_bsi["flags"]["extpgmrsscl"] = php_bool(self.readheaderbsi(1))
                             mixdefbitsread += 1
                             if thisfile_ac3_raw_bsi["flags"]["extpgmrsscl"]:
                                 thisfile_ac3_raw_bsi["extpgmrsscl"] = self.readheaderbsi(4)
                                 mixdefbitsread += 4
                             # end if
-                            thisfile_ac3_raw_bsi["flags"]["extpgmlfescl"] = bool(self.readheaderbsi(1))
+                            thisfile_ac3_raw_bsi["flags"]["extpgmlfescl"] = php_bool(self.readheaderbsi(1))
                             mixdefbitsread += 1
                             if thisfile_ac3_raw_bsi["flags"]["extpgmlfescl"]:
                                 thisfile_ac3_raw_bsi["extpgmlfescl"] = self.readheaderbsi(4)
                                 mixdefbitsread += 4
                             # end if
-                            thisfile_ac3_raw_bsi["flags"]["dmixscl"] = bool(self.readheaderbsi(1))
+                            thisfile_ac3_raw_bsi["flags"]["dmixscl"] = php_bool(self.readheaderbsi(1))
                             mixdefbitsread += 1
                             if thisfile_ac3_raw_bsi["flags"]["dmixscl"]:
                                 thisfile_ac3_raw_bsi["dmixscl"] = self.readheaderbsi(4)
                                 mixdefbitsread += 4
                             # end if
-                            thisfile_ac3_raw_bsi["flags"]["addch"] = bool(self.readheaderbsi(1))
+                            thisfile_ac3_raw_bsi["flags"]["addch"] = php_bool(self.readheaderbsi(1))
                             mixdefbitsread += 1
                             if thisfile_ac3_raw_bsi["flags"]["addch"]:
-                                thisfile_ac3_raw_bsi["flags"]["extpgmaux1scl"] = bool(self.readheaderbsi(1))
+                                thisfile_ac3_raw_bsi["flags"]["extpgmaux1scl"] = php_bool(self.readheaderbsi(1))
                                 mixdefbitsread += 1
                                 if thisfile_ac3_raw_bsi["flags"]["extpgmaux1scl"]:
                                     thisfile_ac3_raw_bsi["extpgmaux1scl"] = self.readheaderbsi(4)
                                     mixdefbitsread += 4
                                 # end if
-                                thisfile_ac3_raw_bsi["flags"]["extpgmaux2scl"] = bool(self.readheaderbsi(1))
+                                thisfile_ac3_raw_bsi["flags"]["extpgmaux2scl"] = php_bool(self.readheaderbsi(1))
                                 mixdefbitsread += 1
                                 if thisfile_ac3_raw_bsi["flags"]["extpgmaux2scl"]:
                                     thisfile_ac3_raw_bsi["extpgmaux2scl"] = self.readheaderbsi(4)
@@ -357,19 +357,19 @@ class getid3_ac3(getid3_handler):
                                 # end if
                             # end if
                         # end if
-                        thisfile_ac3_raw_bsi["flags"]["mixdata3"] = bool(self.readheaderbsi(1))
+                        thisfile_ac3_raw_bsi["flags"]["mixdata3"] = php_bool(self.readheaderbsi(1))
                         mixdefbitsread += 1
                         if thisfile_ac3_raw_bsi["flags"]["mixdata3"]:
                             thisfile_ac3_raw_bsi["spchdat"] = self.readheaderbsi(5)
                             mixdefbitsread += 5
-                            thisfile_ac3_raw_bsi["flags"]["addspchdat"] = bool(self.readheaderbsi(1))
+                            thisfile_ac3_raw_bsi["flags"]["addspchdat"] = php_bool(self.readheaderbsi(1))
                             mixdefbitsread += 1
                             if thisfile_ac3_raw_bsi["flags"]["addspchdat"]:
                                 thisfile_ac3_raw_bsi["spchdat1"] = self.readheaderbsi(5)
                                 mixdefbitsread += 5
                                 thisfile_ac3_raw_bsi["spchan1att"] = self.readheaderbsi(2)
                                 mixdefbitsread += 2
-                                thisfile_ac3_raw_bsi["flags"]["addspchdat1"] = bool(self.readheaderbsi(1))
+                                thisfile_ac3_raw_bsi["flags"]["addspchdat1"] = php_bool(self.readheaderbsi(1))
                                 mixdefbitsread += 1
                                 if thisfile_ac3_raw_bsi["flags"]["addspchdat1"]:
                                     thisfile_ac3_raw_bsi["spchdat2"] = self.readheaderbsi(5)
@@ -389,21 +389,21 @@ class getid3_ac3(getid3_handler):
                     # end if
                     if thisfile_ac3_raw_bsi["acmod"] < 2:
                         #// if mono or dual mono source
-                        thisfile_ac3_raw_bsi["flags"]["paninfo"] = bool(self.readheaderbsi(1))
+                        thisfile_ac3_raw_bsi["flags"]["paninfo"] = php_bool(self.readheaderbsi(1))
                         if thisfile_ac3_raw_bsi["flags"]["paninfo"]:
                             thisfile_ac3_raw_bsi["panmean"] = self.readheaderbsi(8)
                             thisfile_ac3_raw_bsi["paninfo"] = self.readheaderbsi(6)
                         # end if
                         if thisfile_ac3_raw_bsi["acmod"] == 0:
                             #// if 1+1 mode (dual mono, so some items need a second value)
-                            thisfile_ac3_raw_bsi["flags"]["paninfo2"] = bool(self.readheaderbsi(1))
+                            thisfile_ac3_raw_bsi["flags"]["paninfo2"] = php_bool(self.readheaderbsi(1))
                             if thisfile_ac3_raw_bsi["flags"]["paninfo2"]:
                                 thisfile_ac3_raw_bsi["panmean2"] = self.readheaderbsi(8)
                                 thisfile_ac3_raw_bsi["paninfo2"] = self.readheaderbsi(6)
                             # end if
                         # end if
                     # end if
-                    thisfile_ac3_raw_bsi["flags"]["frmmixcfginfo"] = bool(self.readheaderbsi(1))
+                    thisfile_ac3_raw_bsi["flags"]["frmmixcfginfo"] = php_bool(self.readheaderbsi(1))
                     if thisfile_ac3_raw_bsi["flags"]["frmmixcfginfo"]:
                         #// mixing configuration information
                         if thisfile_ac3_raw_bsi["numblkscod"] == 0:
@@ -412,7 +412,7 @@ class getid3_ac3(getid3_handler):
                             blk = 0
                             while blk < thisfile_ac3_raw_bsi["numblkscod"]:
                                 
-                                thisfile_ac3_raw_bsi["flags"]["blkmixcfginfo" + blk] = bool(self.readheaderbsi(1))
+                                thisfile_ac3_raw_bsi["flags"]["blkmixcfginfo" + blk] = php_bool(self.readheaderbsi(1))
                                 if thisfile_ac3_raw_bsi["flags"]["blkmixcfginfo" + blk]:
                                     #// mixing configuration information
                                     thisfile_ac3_raw_bsi["blkmixcfginfo"][blk] = self.readheaderbsi(5)
@@ -423,12 +423,12 @@ class getid3_ac3(getid3_handler):
                     # end if
                 # end if
             # end if
-            thisfile_ac3_raw_bsi["flags"]["infomdat"] = bool(self.readheaderbsi(1))
+            thisfile_ac3_raw_bsi["flags"]["infomdat"] = php_bool(self.readheaderbsi(1))
             if thisfile_ac3_raw_bsi["flags"]["infomdat"]:
                 #// Informational metadata
                 thisfile_ac3_raw_bsi["bsmod"] = self.readheaderbsi(3)
-                thisfile_ac3_raw_bsi["flags"]["copyrightb"] = bool(self.readheaderbsi(1))
-                thisfile_ac3_raw_bsi["flags"]["origbs"] = bool(self.readheaderbsi(1))
+                thisfile_ac3_raw_bsi["flags"]["copyrightb"] = php_bool(self.readheaderbsi(1))
+                thisfile_ac3_raw_bsi["flags"]["origbs"] = php_bool(self.readheaderbsi(1))
                 if thisfile_ac3_raw_bsi["acmod"] == 2:
                     #// if in 2/0 mode
                     thisfile_ac3_raw_bsi["dsurmod"] = self.readheaderbsi(2)
@@ -438,29 +438,29 @@ class getid3_ac3(getid3_handler):
                     #// if both surround channels exist
                     thisfile_ac3_raw_bsi["dsurexmod"] = self.readheaderbsi(2)
                 # end if
-                thisfile_ac3_raw_bsi["flags"]["audprodi"] = bool(self.readheaderbsi(1))
+                thisfile_ac3_raw_bsi["flags"]["audprodi"] = php_bool(self.readheaderbsi(1))
                 if thisfile_ac3_raw_bsi["flags"]["audprodi"]:
                     thisfile_ac3_raw_bsi["mixlevel"] = self.readheaderbsi(5)
                     thisfile_ac3_raw_bsi["roomtyp"] = self.readheaderbsi(2)
-                    thisfile_ac3_raw_bsi["flags"]["adconvtyp"] = bool(self.readheaderbsi(1))
+                    thisfile_ac3_raw_bsi["flags"]["adconvtyp"] = php_bool(self.readheaderbsi(1))
                 # end if
                 if thisfile_ac3_raw_bsi["acmod"] == 0:
                     #// if 1+1 mode (dual mono, so some items need a second value)
-                    thisfile_ac3_raw_bsi["flags"]["audprodi2"] = bool(self.readheaderbsi(1))
+                    thisfile_ac3_raw_bsi["flags"]["audprodi2"] = php_bool(self.readheaderbsi(1))
                     if thisfile_ac3_raw_bsi["flags"]["audprodi2"]:
                         thisfile_ac3_raw_bsi["mixlevel2"] = self.readheaderbsi(5)
                         thisfile_ac3_raw_bsi["roomtyp2"] = self.readheaderbsi(2)
-                        thisfile_ac3_raw_bsi["flags"]["adconvtyp2"] = bool(self.readheaderbsi(1))
+                        thisfile_ac3_raw_bsi["flags"]["adconvtyp2"] = php_bool(self.readheaderbsi(1))
                     # end if
                 # end if
                 if thisfile_ac3_raw_bsi["fscod"] < 3:
                     #// if not half sample rate
-                    thisfile_ac3_raw_bsi["flags"]["sourcefscod"] = bool(self.readheaderbsi(1))
+                    thisfile_ac3_raw_bsi["flags"]["sourcefscod"] = php_bool(self.readheaderbsi(1))
                 # end if
             # end if
             if thisfile_ac3_raw_bsi["strmtyp"] == 0 and thisfile_ac3_raw_bsi["numblkscod"] != 3:
                 #// if both surround channels exist
-                thisfile_ac3_raw_bsi["flags"]["convsync"] = bool(self.readheaderbsi(1))
+                thisfile_ac3_raw_bsi["flags"]["convsync"] = php_bool(self.readheaderbsi(1))
             # end if
             if thisfile_ac3_raw_bsi["strmtyp"] == 2:
                 #// if bit stream converted from AC-3
@@ -468,13 +468,13 @@ class getid3_ac3(getid3_handler):
                     #// 6 blocks per syncframe
                     thisfile_ac3_raw_bsi["flags"]["blkid"] = 1
                 else:
-                    thisfile_ac3_raw_bsi["flags"]["blkid"] = bool(self.readheaderbsi(1))
+                    thisfile_ac3_raw_bsi["flags"]["blkid"] = php_bool(self.readheaderbsi(1))
                 # end if
                 if thisfile_ac3_raw_bsi["flags"]["blkid"]:
                     thisfile_ac3_raw_bsi["frmsizecod"] = self.readheaderbsi(6)
                 # end if
             # end if
-            thisfile_ac3_raw_bsi["flags"]["addbsi"] = bool(self.readheaderbsi(1))
+            thisfile_ac3_raw_bsi["flags"]["addbsi"] = php_bool(self.readheaderbsi(1))
             if thisfile_ac3_raw_bsi["flags"]["addbsi"]:
                 thisfile_ac3_raw_bsi["addbsil"] = self.readheaderbsi(6)
                 thisfile_ac3_raw_bsi["addbsi"] = self.readheaderbsi(thisfile_ac3_raw_bsi["addbsil"] + 1 * 8)
@@ -667,7 +667,7 @@ class getid3_ac3(getid3_handler):
     @classmethod
     def channelsenabledlookup(self, acmod=None, lfeon=None):
         
-        lookup = Array({"ch1": acmod == 0, "ch2": acmod == 0, "left": acmod > 1, "right": acmod > 1, "center": bool(acmod & 1), "surround_mono": False, "surround_left": False, "surround_right": False, "lfe": lfeon})
+        lookup = Array({"ch1": acmod == 0, "ch2": acmod == 0, "left": acmod > 1, "right": acmod > 1, "center": php_bool(acmod & 1), "surround_mono": False, "surround_left": False, "surround_right": False, "lfe": lfeon})
         for case in Switch(acmod):
             if case(4):
                 pass
@@ -758,7 +758,7 @@ class getid3_ac3(getid3_handler):
     def framesizelookup(self, frmsizecod=None, fscod=None):
         
         #// LSB is whether padding is used or not
-        padding = bool(frmsizecod & 1)
+        padding = php_bool(frmsizecod & 1)
         framesizeid = frmsizecod & 62 >> 1
         frameSizeLookup = Array()
         if php_empty(lambda : frameSizeLookup):
@@ -781,7 +781,7 @@ class getid3_ac3(getid3_handler):
     def bitratelookup(self, frmsizecod=None):
         
         #// LSB is whether padding is used or not
-        padding = bool(frmsizecod & 1)
+        padding = php_bool(frmsizecod & 1)
         framesizeid = frmsizecod & 62 >> 1
         bitrateLookup = Array({0: 32000, 1: 40000, 2: 48000, 3: 56000, 4: 64000, 5: 80000, 6: 96000, 7: 112000, 8: 128000, 9: 160000, 10: 192000, 11: 224000, 12: 256000, 13: 320000, 14: 384000, 15: 448000, 16: 512000, 17: 576000, 18: 640000})
         return bitrateLookup[framesizeid] if (php_isset(lambda : bitrateLookup[framesizeid])) else False

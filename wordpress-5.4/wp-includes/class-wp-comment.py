@@ -58,7 +58,7 @@ class WP_Comment():
         
         global wpdb
         php_check_if_defined("wpdb")
-        comment_id = int(id)
+        comment_id = php_int(id)
         if (not comment_id):
             return False
         # end if
@@ -139,7 +139,7 @@ class WP_Comment():
         defaults = Array({"format": "tree", "status": "all", "hierarchical": "threaded", "orderby": ""})
         _args = wp_parse_args(args, defaults)
         _args["parent"] = self.comment_ID
-        if php_is_null(self.children):
+        if is_null(self.children):
             if self.populated_children:
                 self.children = Array()
             else:
@@ -199,7 +199,7 @@ class WP_Comment():
     #//
     def populated_children(self, set=None):
         
-        self.populated_children = bool(set)
+        self.populated_children = php_bool(set)
     # end def populated_children
     #// 
     #// Check whether a non-public property is set.
@@ -213,7 +213,7 @@ class WP_Comment():
     #//
     def __isset(self, name=None):
         
-        if php_in_array(name, self.post_fields) and 0 != int(self.comment_post_ID):
+        if php_in_array(name, self.post_fields) and 0 != php_int(self.comment_post_ID):
             post = get_post(self.comment_post_ID)
             return property_exists(post, name)
         # end if

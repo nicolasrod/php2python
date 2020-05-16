@@ -19,6 +19,7 @@ from keyword import iskeyword
 # TODO: preg patterns to python
 # TODO: pre/post inc and decrement
 # TODO: closures
+# TODO: handle \\ namespaces in class names (php_is_callable for example)
 
 _ = lambda x: x.replace('\r', ' ').replace('\n', '\\n').strip()
 __ = lambda x: re.sub('\n+', '\\n', x)
@@ -758,11 +759,7 @@ def {name}({params}):
     def Stmt_Use(self, node):
         #  TODO: include class if not defined instead!
         uses = self.parse_children(node, 'uses')
-        return self.with_docs(
-            node, '\n'.join([
-                f'php_new_class({quote(x[0])}, lambda *args, **kwargs: {x[0]}(*args, **kwargs))'
-                for x in uses if x is not None
-            ]))
+        return self.with_docs(node, '\n'.join(uses))
 
     def Expr_PropertyFetch(self, node):
         var = self.parse(node['var'])
@@ -795,8 +792,8 @@ def {name}({params}):
         qklass = quote(klass)
 
         if alias is None:
-            return f'{klass_var} = php_new_class({qklass}, lambda : {klass}())'
-        return f'{alias} = php_new_class({qklass}, lambda : {klass}())'
+            return f'{klass_var} = php_new_class({qklass}, lambda *args, **kwargs: {klass}(*args, **kwargs))'
+        return f'{alias} = php_new_class({qklass}, lambda *args, **kwargs: {klass}(*args, **kwargs))'
 
     def Stmt_InlineHTML(self, node):
         val = quote(node['value'])
@@ -1056,19 +1053,19 @@ if {cond}:
 
     def Expr_Cast_Bool(self, node):
         expr = self.parse(node['expr'])
-        return f'bool({expr})'
+        return f'php_bool({expr})'
 
     def Expr_Cast_Double(self, node):
         expr = self.parse(node['expr'])
-        return f'float({expr})'
+        return f'php_float({expr})'
 
     def Expr_Cast_Int(self, node):
         expr = self.parse(node['expr'])
-        return f'int({expr})'
+        return f'php_int({expr})'
 
     def Expr_Cast_String(self, node):
         expr = self.parse(node['expr'])
-        return f'str({expr})'
+        return f'php_str({expr})'
 
     def Expr_ErrorSuppress(self, node):
         expr = self.parse(node['expr'])

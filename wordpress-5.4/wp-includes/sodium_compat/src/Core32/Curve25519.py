@@ -278,7 +278,7 @@ class ParagonIE_Sodium_Core32_Curve25519(ParagonIE_Sodium_Core32_Curve25519_H):
         #// 
         #// @var array<int, int>
         #//
-        s = Array(int(h0 >> 0 & 255), int(h0 >> 8 & 255), int(h0 >> 16 & 255), int(h0 >> 24 | h1 << 2 & 255), int(h1 >> 6 & 255), int(h1 >> 14 & 255), int(h1 >> 22 | h2 << 3 & 255), int(h2 >> 5 & 255), int(h2 >> 13 & 255), int(h2 >> 21 | h3 << 5 & 255), int(h3 >> 3 & 255), int(h3 >> 11 & 255), int(h3 >> 19 | h4 << 6 & 255), int(h4 >> 2 & 255), int(h4 >> 10 & 255), int(h4 >> 18 & 255), int(h5 >> 0 & 255), int(h5 >> 8 & 255), int(h5 >> 16 & 255), int(h5 >> 24 | h6 << 1 & 255), int(h6 >> 7 & 255), int(h6 >> 15 & 255), int(h6 >> 23 | h7 << 3 & 255), int(h7 >> 5 & 255), int(h7 >> 13 & 255), int(h7 >> 21 | h8 << 4 & 255), int(h8 >> 4 & 255), int(h8 >> 12 & 255), int(h8 >> 20 | h9 << 6 & 255), int(h9 >> 2 & 255), int(h9 >> 10 & 255), int(h9 >> 18 & 255))
+        s = Array(php_int(h0 >> 0 & 255), php_int(h0 >> 8 & 255), php_int(h0 >> 16 & 255), php_int(h0 >> 24 | h1 << 2 & 255), php_int(h1 >> 6 & 255), php_int(h1 >> 14 & 255), php_int(h1 >> 22 | h2 << 3 & 255), php_int(h2 >> 5 & 255), php_int(h2 >> 13 & 255), php_int(h2 >> 21 | h3 << 5 & 255), php_int(h3 >> 3 & 255), php_int(h3 >> 11 & 255), php_int(h3 >> 19 | h4 << 6 & 255), php_int(h4 >> 2 & 255), php_int(h4 >> 10 & 255), php_int(h4 >> 18 & 255), php_int(h5 >> 0 & 255), php_int(h5 >> 8 & 255), php_int(h5 >> 16 & 255), php_int(h5 >> 24 | h6 << 1 & 255), php_int(h6 >> 7 & 255), php_int(h6 >> 15 & 255), php_int(h6 >> 23 | h7 << 3 & 255), php_int(h7 >> 5 & 255), php_int(h7 >> 13 & 255), php_int(h7 >> 21 | h8 << 4 & 255), php_int(h8 >> 4 & 255), php_int(h8 >> 12 & 255), php_int(h8 >> 20 | h9 << 6 & 255), php_int(h9 >> 2 & 255), php_int(h9 >> 10 & 255), php_int(h9 >> 18 & 255))
         return self.intarraytostring(s)
     # end def fe_tobytes
     #// 
@@ -295,7 +295,7 @@ class ParagonIE_Sodium_Core32_Curve25519(ParagonIE_Sodium_Core32_Curve25519_H):
     def fe_isnegative(self, f=None):
         
         str = self.fe_tobytes(f)
-        return int(self.chrtoint(str[0]) & 1)
+        return php_int(self.chrtoint(str[0]) & 1)
     # end def fe_isnegative
     #// 
     #// Returns 0 if this field element results in all NUL bytes.
@@ -1240,7 +1240,7 @@ class ParagonIE_Sodium_Core32_Curve25519(ParagonIE_Sodium_Core32_Curve25519_H):
         i = 0
         while i < 256:
             
-            r[i] = int(1 & self.chrtoint(a[i >> 3]) >> i & 7)
+            r[i] = php_int(1 & self.chrtoint(a[i >> 3]) >> i & 7)
             i += 1
         # end while
         i = 0
@@ -1581,7 +1581,7 @@ class ParagonIE_Sodium_Core32_Curve25519(ParagonIE_Sodium_Core32_Curve25519_H):
     @classmethod
     def equal(self, b=None, c=None):
         
-        return int(b ^ c - 1 & 4294967295 >> 31)
+        return php_int(b ^ c - 1 & 4294967295 >> 31)
     # end def equal
     #// 
     #// @internal You should not use this directly from another application
@@ -1600,7 +1600,7 @@ class ParagonIE_Sodium_Core32_Curve25519(ParagonIE_Sodium_Core32_Curve25519_H):
         #// @var string $char
         #// @var int $x
         x = self.chrtoint(self.substr(char, 0, 1))
-        return int(x >> 31)
+        return php_int(x >> 31)
     # end def negative
     #// 
     #// Conditional move
@@ -1798,13 +1798,13 @@ class ParagonIE_Sodium_Core32_Curve25519(ParagonIE_Sodium_Core32_Curve25519_H):
                 #// # ge_p1p1_to_p3(&u,&t);
                 #// # ge_add(&t,&u,&Ai[aslide[i]/2]);
                 u = self.ge_p1p1_to_p3(t)
-                t = self.ge_add(u, Ai[int(floor(aslide[i] / 2))])
+                t = self.ge_add(u, Ai[php_int(floor(aslide[i] / 2))])
                 pass
             elif aslide[i] < 0:
                 #// # ge_p1p1_to_p3(&u,&t);
                 #// # ge_sub(&t,&u,&Ai[(-aslide[i])/2]);
                 u = self.ge_p1p1_to_p3(t)
-                t = self.ge_sub(u, Ai[int(floor(-aslide[i] / 2))])
+                t = self.ge_sub(u, Ai[php_int(floor(-aslide[i] / 2))])
             # end if
             #// @var array<int, ParagonIE_Sodium_Core32_Curve25519_Ge_Precomp> $Bi
             #// # if (bslide[i] > 0) {
@@ -1813,7 +1813,7 @@ class ParagonIE_Sodium_Core32_Curve25519(ParagonIE_Sodium_Core32_Curve25519_H):
                 #// # ge_madd(&t,&u,&Bi[bslide[i]/2]);
                 u = self.ge_p1p1_to_p3(t)
                 #// @var int $index
-                index = int(floor(bslide[i] / 2))
+                index = php_int(floor(bslide[i] / 2))
                 #// @var ParagonIE_Sodium_Core32_Curve25519_Ge_Precomp $thisB
                 thisB = Bi[index]
                 t = self.ge_madd(t, u, thisB)
@@ -1823,7 +1823,7 @@ class ParagonIE_Sodium_Core32_Curve25519(ParagonIE_Sodium_Core32_Curve25519_H):
                 #// # ge_msub(&t,&u,&Bi[(-bslide[i])/2]);
                 u = self.ge_p1p1_to_p3(t)
                 #// @var int $index
-                index = int(floor(-bslide[i] / 2))
+                index = php_int(floor(-bslide[i] / 2))
                 #// @var ParagonIE_Sodium_Core32_Curve25519_Ge_Precomp $thisB
                 thisB = Bi[index]
                 t = self.ge_msub(t, u, thisB)
@@ -1854,9 +1854,9 @@ class ParagonIE_Sodium_Core32_Curve25519(ParagonIE_Sodium_Core32_Curve25519_H):
         while i < 32:
             
             #// @var int $dbl
-            dbl = int(i) << 1
-            e[dbl] = int(self.chrtoint(a[i])) & 15
-            e[dbl + 1] = int(self.chrtoint(a[i]) >> 4) & 15
+            dbl = php_int(i) << 1
+            e[dbl] = php_int(self.chrtoint(a[i])) & 15
+            e[dbl + 1] = php_int(self.chrtoint(a[i]) >> 4) & 15
             i += 1
         # end while
         #// @var int $carry
@@ -1873,12 +1873,12 @@ class ParagonIE_Sodium_Core32_Curve25519(ParagonIE_Sodium_Core32_Curve25519_H):
             i += 1
         # end while
         #// @var array<int, int> $e
-        e[63] += int(carry)
+        e[63] += php_int(carry)
         h = self.ge_p3_0()
         i = 1
         while i < 64:
             
-            t = self.ge_select(int(floor(i / 2)), int(e[i]))
+            t = self.ge_select(php_int(floor(i / 2)), php_int(e[i]))
             r = self.ge_madd(r, h, t)
             h = self.ge_p1p1_to_p3(r)
             i += 2
@@ -1894,7 +1894,7 @@ class ParagonIE_Sodium_Core32_Curve25519(ParagonIE_Sodium_Core32_Curve25519_H):
         i = 0
         while i < 64:
             
-            t = self.ge_select(i >> 1, int(e[i]))
+            t = self.ge_select(i >> 1, php_int(e[i]))
             r = self.ge_madd(r, h, t)
             h = self.ge_p1p1_to_p3(r)
             i += 2
@@ -2312,7 +2312,7 @@ class ParagonIE_Sodium_Core32_Curve25519(ParagonIE_Sodium_Core32_Curve25519_H):
         #// 
         #// @var array<int, int>
         #//
-        arr = Array(int(255 & S0 >> 0), int(255 & S0 >> 8), int(255 & S0 >> 16 | S1 << 5), int(255 & S1 >> 3), int(255 & S1 >> 11), int(255 & S1 >> 19 | S2 << 2), int(255 & S2 >> 6), int(255 & S2 >> 14 | S3 << 7), int(255 & S3 >> 1), int(255 & S3 >> 9), int(255 & S3 >> 17 | S4 << 4), int(255 & S4 >> 4), int(255 & S4 >> 12), int(255 & S4 >> 20 | S5 << 1), int(255 & S5 >> 7), int(255 & S5 >> 15 | S6 << 6), int(255 & S6 >> 2), int(255 & S6 >> 10), int(255 & S6 >> 18 | S7 << 3), int(255 & S7 >> 5), int(255 & S7 >> 13), int(255 & S8 >> 0), int(255 & S8 >> 8), int(255 & S8 >> 16 | S9 << 5), int(255 & S9 >> 3), int(255 & S9 >> 11), int(255 & S9 >> 19 | S10 << 2), int(255 & S10 >> 6), int(255 & S10 >> 14 | S11 << 7), int(255 & S11 >> 1), int(255 & S11 >> 9), int(255 & S11 >> 17))
+        arr = Array(php_int(255 & S0 >> 0), php_int(255 & S0 >> 8), php_int(255 & S0 >> 16 | S1 << 5), php_int(255 & S1 >> 3), php_int(255 & S1 >> 11), php_int(255 & S1 >> 19 | S2 << 2), php_int(255 & S2 >> 6), php_int(255 & S2 >> 14 | S3 << 7), php_int(255 & S3 >> 1), php_int(255 & S3 >> 9), php_int(255 & S3 >> 17 | S4 << 4), php_int(255 & S4 >> 4), php_int(255 & S4 >> 12), php_int(255 & S4 >> 20 | S5 << 1), php_int(255 & S5 >> 7), php_int(255 & S5 >> 15 | S6 << 6), php_int(255 & S6 >> 2), php_int(255 & S6 >> 10), php_int(255 & S6 >> 18 | S7 << 3), php_int(255 & S7 >> 5), php_int(255 & S7 >> 13), php_int(255 & S8 >> 0), php_int(255 & S8 >> 8), php_int(255 & S8 >> 16 | S9 << 5), php_int(255 & S9 >> 3), php_int(255 & S9 >> 11), php_int(255 & S9 >> 19 | S10 << 2), php_int(255 & S10 >> 6), php_int(255 & S10 >> 14 | S11 << 7), php_int(255 & S11 >> 1), php_int(255 & S11 >> 9), php_int(255 & S11 >> 17))
         return self.intarraytostring(arr)
     # end def sc_muladd
     #// 
@@ -2615,7 +2615,7 @@ class ParagonIE_Sodium_Core32_Curve25519(ParagonIE_Sodium_Core32_Curve25519_H):
         #// 
         #// @var array<int, int>
         #//
-        arr = Array(int(S0 >> 0), int(S0 >> 8), int(S0 >> 16 | S1 << 5), int(S1 >> 3), int(S1 >> 11), int(S1 >> 19 | S2 << 2), int(S2 >> 6), int(S2 >> 14 | S3 << 7), int(S3 >> 1), int(S3 >> 9), int(S3 >> 17 | S4 << 4), int(S4 >> 4), int(S4 >> 12), int(S4 >> 20 | S5 << 1), int(S5 >> 7), int(S5 >> 15 | S6 << 6), int(S6 >> 2), int(S6 >> 10), int(S6 >> 18 | S7 << 3), int(S7 >> 5), int(S7 >> 13), int(S8 >> 0), int(S8 >> 8), int(S8 >> 16 | S9 << 5), int(S9 >> 3), int(S9 >> 11), int(S9 >> 19 | S10 << 2), int(S10 >> 6), int(S10 >> 14 | S11 << 7), int(S11 >> 1), int(S11 >> 9), int(S11) >> 17)
+        arr = Array(php_int(S0 >> 0), php_int(S0 >> 8), php_int(S0 >> 16 | S1 << 5), php_int(S1 >> 3), php_int(S1 >> 11), php_int(S1 >> 19 | S2 << 2), php_int(S2 >> 6), php_int(S2 >> 14 | S3 << 7), php_int(S3 >> 1), php_int(S3 >> 9), php_int(S3 >> 17 | S4 << 4), php_int(S4 >> 4), php_int(S4 >> 12), php_int(S4 >> 20 | S5 << 1), php_int(S5 >> 7), php_int(S5 >> 15 | S6 << 6), php_int(S6 >> 2), php_int(S6 >> 10), php_int(S6 >> 18 | S7 << 3), php_int(S7 >> 5), php_int(S7 >> 13), php_int(S8 >> 0), php_int(S8 >> 8), php_int(S8 >> 16 | S9 << 5), php_int(S9 >> 3), php_int(S9 >> 11), php_int(S9 >> 19 | S10 << 2), php_int(S10 >> 6), php_int(S10 >> 14 | S11 << 7), php_int(S11 >> 1), php_int(S11 >> 9), php_int(S11) >> 17)
         return self.intarraytostring(arr)
     # end def sc_reduce
     #// 
@@ -2659,12 +2659,12 @@ class ParagonIE_Sodium_Core32_Curve25519(ParagonIE_Sodium_Core32_Curve25519_H):
                 #// # ge_p1p1_to_p3(&u, &t);
                 u = self.ge_p1p1_to_p3(t)
                 #// # ge_add(&t, &u, &Ai[aslide[i] / 2]);
-                t = self.ge_add(u, Ai[int(aslide[i] / 2)])
+                t = self.ge_add(u, Ai[php_int(aslide[i] / 2)])
             elif aslide[i] < 0:
                 #// # ge_p1p1_to_p3(&u, &t);
                 u = self.ge_p1p1_to_p3(t)
                 #// # ge_sub(&t, &u, &Ai[(-aslide[i]) / 2]);
-                t = self.ge_sub(u, Ai[int(-aslide[i] / 2)])
+                t = self.ge_sub(u, Ai[php_int(-aslide[i] / 2)])
             # end if
             i -= 1
         # end while

@@ -196,7 +196,7 @@ class WP_Links_List_Table(WP_List_Table):
                 php_print(cat.get_error_message())
             # end if
             cat_name = cat.name
-            if int(cat_id) != category:
+            if php_int(cat_id) != category:
                 cat_name = str("<a href='link-manager.php?cat_id=") + str(category) + str("'>") + str(cat_name) + str("</a>")
             # end if
             cat_names[-1] = cat_name
