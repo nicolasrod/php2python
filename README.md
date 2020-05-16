@@ -13,7 +13,7 @@ Requirements
 Converting WordPress source code to Python
 ------------------------------------------
 
-In ./wordpress-5.4 is a copy of WP and its convertion with the tool:
+In the folder ./wordpress-5.4 there's a copy of WP and its convertion with the tool:
 
 ```
 $ python3 php2py.py --keep-ast ./wordpress-5.4
