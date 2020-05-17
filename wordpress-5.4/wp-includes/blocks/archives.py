@@ -34,7 +34,7 @@ def render_block_core_archives(attributes_=None, *_args_):
     # end if
     if (not php_empty(lambda : attributes_["displayAsDropdown"])):
         class_ += " wp-block-archives-dropdown"
-        dropdown_id_ = esc_attr(uniqid("wp-block-archives-"))
+        dropdown_id_ = esc_attr(php_uniqid("wp-block-archives-"))
         title_ = __("Archives")
         #// This filter is documented in wp-includes/widgets/class-wp-widget-archives.php
         dropdown_args_ = apply_filters("widget_archives_dropdown_args", Array({"type": "monthly", "format": "option", "show_post_count": show_post_count_}))

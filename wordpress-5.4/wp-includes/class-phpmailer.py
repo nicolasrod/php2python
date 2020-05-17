@@ -2012,7 +2012,7 @@ class PHPMailer():
     def generateid(self):
         
         
-        return php_md5(uniqid(time()))
+        return php_md5(php_uniqid(time()))
     # end def generateid
     #// 
     #// Assemble the message body.

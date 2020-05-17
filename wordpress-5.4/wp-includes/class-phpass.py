@@ -56,7 +56,7 @@ class PasswordHash():
         # end if
         self.iteration_count_log2 = iteration_count_log2_
         self.portable_hashes = portable_hashes_
-        self.random_state = php_microtime() + uniqid(rand(), True)
+        self.random_state = php_microtime() + php_uniqid(rand(), True)
         pass
     # end def __init__
     #// 

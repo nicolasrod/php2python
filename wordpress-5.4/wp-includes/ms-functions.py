@@ -290,11 +290,11 @@ def remove_user_from_blog(user_id_=None, blog_id_=0, reassign_=0, *_args_):
         link_ids_ = wpdb_.get_col(wpdb_.prepare(str("SELECT link_id FROM ") + str(wpdb_.links) + str(" WHERE link_owner = %d"), user_id_))
         if (not php_empty(lambda : post_ids_)):
             wpdb_.query(wpdb_.prepare(str("UPDATE ") + str(wpdb_.posts) + str(" SET post_author = %d WHERE post_author = %d"), reassign_, user_id_))
-            array_walk(post_ids_, "clean_post_cache")
+            php_array_walk(post_ids_, "clean_post_cache")
         # end if
         if (not php_empty(lambda : link_ids_)):
             wpdb_.query(wpdb_.prepare(str("UPDATE ") + str(wpdb_.links) + str(" SET link_owner = %d WHERE link_owner = %d"), reassign_, user_id_))
-            array_walk(link_ids_, "clean_bookmark_cache")
+            php_array_walk(link_ids_, "clean_bookmark_cache")
         # end if
     # end if
     restore_current_blog()

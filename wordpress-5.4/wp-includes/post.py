@@ -5558,7 +5558,7 @@ def _get_last_post_time(timezone_=None, field_=None, post_type_="any", *_args_):
     # end if
     if "any" == post_type_:
         post_types_ = get_post_types(Array({"public": True}))
-        array_walk(post_types_, Array(wpdb_, "escape_by_ref"))
+        php_array_walk(post_types_, Array(wpdb_, "escape_by_ref"))
         post_types_ = "'" + php_implode("', '", post_types_) + "'"
     else:
         post_types_ = "'" + sanitize_key(post_type_) + "'"

@@ -27,8 +27,8 @@ class Text_Diff_Engine_xdiff():
     def diff(self, from_lines_=None, to_lines_=None):
         
         
-        array_walk(from_lines_, Array("Text_Diff", "trimNewlines"))
-        array_walk(to_lines_, Array("Text_Diff", "trimNewlines"))
+        php_array_walk(from_lines_, Array("Text_Diff", "trimNewlines"))
+        php_array_walk(to_lines_, Array("Text_Diff", "trimNewlines"))
         #// Convert the two input arrays into strings for xdiff processing.
         from_string_ = php_implode("\n", from_lines_)
         to_string_ = php_implode("\n", to_lines_)

@@ -38,8 +38,8 @@ class Text_Diff_Engine_native():
     def diff(self, from_lines_=None, to_lines_=None):
         
         
-        array_walk(from_lines_, Array("Text_Diff", "trimNewlines"))
-        array_walk(to_lines_, Array("Text_Diff", "trimNewlines"))
+        php_array_walk(from_lines_, Array("Text_Diff", "trimNewlines"))
+        php_array_walk(to_lines_, Array("Text_Diff", "trimNewlines"))
         n_from_ = php_count(from_lines_)
         n_to_ = php_count(to_lines_)
         self.xchanged = self.ychanged = Array()

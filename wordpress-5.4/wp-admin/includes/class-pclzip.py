@@ -1821,7 +1821,7 @@ class PclZip():
         #// ----- Go to beginning of File
         php_no_error(lambda: rewind(self.zip_fd))
         #// ----- Creates a temporary file
-        v_zip_temp_name_ = PCLZIP_TEMPORARY_DIR + uniqid("pclzip-") + ".tmp"
+        v_zip_temp_name_ = PCLZIP_TEMPORARY_DIR + php_uniqid("pclzip-") + ".tmp"
         #// ----- Open the temporary file in write mode
         v_zip_temp_fd_ = php_no_error(lambda: fopen(v_zip_temp_name_, "wb"))
         if v_zip_temp_fd_ == 0:
@@ -2336,7 +2336,7 @@ class PclZip():
             return PclZip.errorcode()
         # end if
         #// ----- Creates a compressed temporary file
-        v_gzip_temp_name_ = PCLZIP_TEMPORARY_DIR + uniqid("pclzip-") + ".gz"
+        v_gzip_temp_name_ = PCLZIP_TEMPORARY_DIR + php_uniqid("pclzip-") + ".gz"
         v_file_compressed_ = php_no_error(lambda: gzopen(v_gzip_temp_name_, "wb"))
         if v_file_compressed_ == 0:
             php_fclose(v_file_)
@@ -3229,7 +3229,7 @@ class PclZip():
         
         v_result_ = 1
         #// ----- Creates a temporary file
-        v_gzip_temp_name_ = PCLZIP_TEMPORARY_DIR + uniqid("pclzip-") + ".gz"
+        v_gzip_temp_name_ = PCLZIP_TEMPORARY_DIR + php_uniqid("pclzip-") + ".gz"
         v_dest_file_ = php_no_error(lambda: fopen(v_gzip_temp_name_, "wb"))
         if v_dest_file_ == 0:
             php_fclose(v_file_)
@@ -3918,7 +3918,7 @@ class PclZip():
         #// ----- Look if something need to be deleted
         if v_nb_extracted_ > 0:
             #// ----- Creates a temporary file
-            v_zip_temp_name_ = PCLZIP_TEMPORARY_DIR + uniqid("pclzip-") + ".tmp"
+            v_zip_temp_name_ = PCLZIP_TEMPORARY_DIR + php_uniqid("pclzip-") + ".tmp"
             #// ----- Creates a temporary zip archive
             v_temp_zip_ = php_new_class("PclZip", lambda : PclZip(v_zip_temp_name_))
             #// ----- Open the temporary zip file in write mode
@@ -4153,7 +4153,7 @@ class PclZip():
         #// ----- Go to beginning of File
         php_no_error(lambda: rewind(p_archive_to_add_.zip_fd))
         #// ----- Creates a temporary file
-        v_zip_temp_name_ = PCLZIP_TEMPORARY_DIR + uniqid("pclzip-") + ".tmp"
+        v_zip_temp_name_ = PCLZIP_TEMPORARY_DIR + php_uniqid("pclzip-") + ".tmp"
         #// ----- Open the temporary file in write mode
         v_zip_temp_fd_ = php_no_error(lambda: fopen(v_zip_temp_name_, "wb"))
         if v_zip_temp_fd_ == 0:

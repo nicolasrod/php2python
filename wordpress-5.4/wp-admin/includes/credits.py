@@ -127,12 +127,12 @@ def wp_credits_section_list(credits_=None, slug_="", *_args_):
     # end if
     for case in Switch(group_data_["type"]):
         if case("list"):
-            array_walk(group_data_["data"], "_wp_credits_add_profile_link", credits_data_["profiles"])
+            php_array_walk(group_data_["data"], "_wp_credits_add_profile_link", credits_data_["profiles"])
             php_print("<p class=\"wp-credits-list\">" + wp_sprintf("%l.", group_data_["data"]) + "</p>\n\n")
             break
         # end if
         if case("libraries"):
-            array_walk(group_data_["data"], "_wp_credits_build_object_link")
+            php_array_walk(group_data_["data"], "_wp_credits_build_object_link")
             php_print("<p class=\"wp-credits-list\">" + wp_sprintf("%l.", group_data_["data"]) + "</p>\n\n")
             break
         # end if

@@ -455,7 +455,7 @@ def wp_tempnam(filename_="", dir_="", *_args_):
         dir_ = get_temp_dir()
     # end if
     if php_empty(lambda : filename_) or "." == filename_ or "/" == filename_ or "\\" == filename_:
-        filename_ = uniqid()
+        filename_ = php_uniqid()
     # end if
     #// Use the basename of the given file without the extension as the name for the temporary directory.
     temp_filename_ = php_basename(filename_)
@@ -1486,7 +1486,7 @@ def get_filesystem_method(args_=None, context_="", allow_relaxed_file_ownership_
     # end if
     context_ = trailingslashit(context_)
     if (not method_):
-        temp_file_name_ = context_ + "temp-write-test-" + php_str_replace(".", "-", uniqid("", True))
+        temp_file_name_ = context_ + "temp-write-test-" + php_str_replace(".", "-", php_uniqid("", True))
         temp_handle_ = php_no_error(lambda: fopen(temp_file_name_, "w"))
         if temp_handle_:
             #// Attempt to determine the file owner of the WordPress files, and that of newly created files.

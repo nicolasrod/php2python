@@ -511,7 +511,7 @@ class WP_REST_Controller():
         if php_in_array("id", fields_, True):
             requested_fields_[-1] = "id"
         # end if
-        def _closure_d61567d7(response_fields_=None, field_=None):
+        def _closure_770298a5(response_fields_=None, field_=None):
             
             
             if php_in_array(field_, fields_, True):
@@ -526,12 +526,12 @@ class WP_REST_Controller():
                 response_fields_[-1] = field_
             # end if
             return response_fields_
-        # end def _closure_d61567d7
+        # end def _closure_770298a5
         #// Return the list of all requested fields which appear in the schema.
         response_fields_[-1] = field_
         nested_fields_ = php_explode(".", field_)
         response_fields_[-1] = field_
-        return array_reduce(requested_fields_, (lambda *args, **kwargs: _closure_d61567d7(*args, **kwargs)), Array())
+        return array_reduce(requested_fields_, (lambda *args, **kwargs: _closure_770298a5(*args, **kwargs)), Array())
     # end def get_fields_for_response
     #// 
     #// Retrieves an array of endpoint arguments from the item schema for the controller.

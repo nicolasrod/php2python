@@ -1036,7 +1036,7 @@ class wpdb():
         
         if self.dbh:
             if self.use_mysqli:
-                escaped_ = mysqli_real_escape_string(self.dbh, string_)
+                escaped_ = php_mysqli_real_escape_string(self.dbh, string_)
             else:
                 escaped_ = mysql_real_escape_string(string_, self.dbh)
             # end if
@@ -1217,9 +1217,8 @@ class wpdb():
         query_ = php_preg_replace(str("/%(?:%|$|(?!(") + str(allowed_format_) + str(")?[sdF]))/"), "%%\\1", query_)
         #// Escape any unescaped percents.
         #// Count the number of valid placeholders in the query.
-        matches_ = 0
+        matches_ = Array()
         placeholders_ = preg_match_all(str("/(^|[^%]|(%%)+)%(") + str(allowed_format_) + str(")?[sdF]/"), query_, matches_)
-        placeholders_ = 0
         if php_count(args_) != placeholders_:
             if 1 == placeholders_ and passed_as_array_:
                 #// If the passed query only expected one argument, but the wrong number of arguments were sent as an array, bail.
@@ -1235,7 +1234,7 @@ class wpdb():
                 _doing_it_wrong("wpdb::prepare", php_sprintf(__("The query does not contain the correct number of placeholders (%1$d) for the number of arguments passed (%2$d)."), placeholders_, php_count(args_)), "4.8.3")
             # end if
         # end if
-        array_walk(args_, Array(self, "escape_by_ref"))
+        php_array_walk(args_, Array(self, "escape_by_ref"))
         query_ = vsprintf(query_, args_)
         return self.add_placeholder_escape(query_)
     # end def prepare
@@ -1860,7 +1859,7 @@ class wpdb():
             algo_ = "sha256" if php_function_exists("hash") else "sha1"
             #// Old WP installs may not have AUTH_SALT defined.
             salt_ = AUTH_SALT if php_defined("AUTH_SALT") and AUTH_SALT else php_str(rand())
-            placeholder_ = "{" + hash_hmac(algo_, uniqid(salt_, True), salt_) + "}"
+            placeholder_ = "{" + hash_hmac(algo_, php_uniqid(salt_, True), salt_) + "}"
         # end if
         #// 
         #// Add the filter to remove the placeholder escaper. Uses priority 0, so that anything

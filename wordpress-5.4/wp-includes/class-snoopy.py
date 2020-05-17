@@ -1122,7 +1122,7 @@ if (not php_class_exists("Snoopy", False)):
                     break
                 # end if
                 if case("multipart/form-data"):
-                    self._mime_boundary = "Snoopy" + php_md5(uniqid(php_microtime()))
+                    self._mime_boundary = "Snoopy" + php_md5(php_uniqid(php_microtime()))
                     reset(formvars_)
                     while True:
                         key_, val_ = each(formvars_)

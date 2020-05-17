@@ -2305,7 +2305,7 @@ if (not php_function_exists("wp_rand")):
             else:
                 seed_ = get_transient("random_seed")
             # end if
-            rnd_value_ = php_md5(uniqid(php_microtime() + mt_rand(), True) + seed_)
+            rnd_value_ = php_md5(php_uniqid(php_microtime() + mt_rand(), True) + seed_)
             rnd_value_ += sha1(rnd_value_)
             rnd_value_ += sha1(rnd_value_ + seed_)
             seed_ = php_md5(seed_ + rnd_value_)

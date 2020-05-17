@@ -16,6 +16,7 @@ import random
 import re
 import sys
 import tempfile
+import uuid
 
 from collections import namedtuple
 from contextlib import redirect_stdout
@@ -53,7 +54,7 @@ def php_empty(var_):
     >>> php_empty(Array())
     True
     """
-    # if var_ is a lambda, evaluate its value
+    # if var_ is a lambda, evaluate it
     if callable(var_):
         try:
             var_ = var_()
@@ -196,9 +197,14 @@ class Array():
             self.extend(item, _preserve=_preserve)
 
     def __getitem__(self, k):
-        if not k in self.data:
-            self.data[k] = Array()
-        return self.data[k]
+        if isinstance(k, int):
+            if not k in self.data:
+                self.data[k] = Array()
+            return self.data[k]
+        if isinstance(k, str):
+            return self.data[k]
+        else:
+            return list(self.data.items())[k.start:k.stop:k.step]
 
     def get(self, k, def_):
         if self.has_key(k):
@@ -431,6 +437,8 @@ SORT_REGULAR = _Id()
 SORT_STRING = _Id()
 SSH2_TERM_UNIT_CHARS = _Id()
 STR_PAD_RIGHT = _Id()
+STR_PAD_LEFT = _Id()
+STR_PAD_BOTH = _Id()
 STREAM_CLIENT_CONNECT = _Id()
 ZLIB_ENCODING_RAW = _Id()
 
@@ -1022,6 +1030,14 @@ def php_basename(_path, _suffix=None):
 def php_call_user_func(_fn, *args):
     if callable(_fn):
         return _fn(*args)
+
+    if isinstance(_fn, Array):
+        if not isinstance(_fn[0], str):
+            fn = _fn[0]
+            for it in _fn[1:]:
+                fn = getattr(fn, it[1])
+            return fn(*args)
+        _fn = ".".join(_fn)
 
     if _fn.find(".") != -1:
         *klass, method = _fn.split(".")
@@ -1700,6 +1716,7 @@ def php_sprintf(_format, *args):
 
     _format = re.sub(
         '%(?P<argnum>\d+)?\$?(?P<flags>[-+0])?(?P<fillchar>\'[\w\.])?(?P<width>\d+)?\.?(?P<precision>\d+)?(?P<spec>[%bcdeEfFgGosuxX])', _fix, _format)
+
     return _format.format(*args)
 
 
@@ -1721,9 +1738,17 @@ def php_strlen(_string):
     return len(_string)
 
 
-def php_str_pad(_input, _pad_length, _pad_string=" ", _pad_type=STR_PAD_RIGHT):
-    assert False
-    return _input
+def php_str_pad(_input, _pad_length, _pad_char=' ', _pad_type=STR_PAD_RIGHT):
+    """
+    """
+    if len(_input) <= _pad_length:
+        return _input
+
+    if _pad_type == STR_PAD_RIGHT:
+        return _input.ljust(_pad_length, _pad_char)
+    elif _pad_type == STR_PAD_LEFT:
+        return _input.rjust(_pad_length, _pad_char)
+    return _input.center(_pad_length, _pad_char)
 
 
 def php_strpos(_haystack, _needle, _offset=0):
@@ -2281,12 +2306,49 @@ def php_mysqli_free_result(r):
 def php_is_scalar(v):
     if v is None:
         return False
-
     return isinstance(v, (int, float, str, bool))
 
 
-def preg_match_all(*args):
-    return Array()
+def preg_match_all(pattern, subject, matches, flags=None, offset=0):
+    """
+    string $pattern , string $subject [, array &$matches [, int $flags = PREG_PATTERN_ORDER [, int $offset = 0 ]]] ) : int
+    string $pattern , string $subject [, array &$matches [, int $flags = PREG_PATTERN_ORDER [, int $offset = 0 ]]] ) : int
+    """
+    assert isinstance(matches, Array), 'parameter matches must be an Array!'
+
+    m = re.findall(pattern, subject)
+
+    for it in m:
+        matches[-1] = it
+
+    return len(m)
+
+
+def php_array_walk(arr, fn, user_data=None):
+    if not php_is_array(arr):
+        arr = Array(arr)
+
+    for k, v in arr.items():
+        if user_data:
+            php_call_user_func(fn, v, user_data)
+        else:
+            php_call_user_func(fn, v)
+
+
+def php_mysqli_real_escape_string(dbh, s):
+    return dbh.cnx._cmysql.escape_string(s)
+
+
+def php_uniqid(prefix=None, more_entropy=False):
+    data = str(uuid.uuid4()).replace('-', '')
+
+    if prefix is None:
+        return data[:13]
+
+    if more_entropy:
+        return data[:23]
+
+    return data
 
 # ========================================================================================
 

@@ -2051,10 +2051,10 @@ def win_is_writable(path_=None, *_args_):
     
     if "/" == path_[php_strlen(path_) - 1]:
         #// If it looks like a directory, check a random file within the directory.
-        return win_is_writable(path_ + uniqid(mt_rand()) + ".tmp")
+        return win_is_writable(path_ + php_uniqid(mt_rand()) + ".tmp")
     elif php_is_dir(path_):
         #// If it's a directory (and not a file), check a random file within the directory.
-        return win_is_writable(path_ + "/" + uniqid(mt_rand()) + ".tmp")
+        return win_is_writable(path_ + "/" + php_uniqid(mt_rand()) + ".tmp")
     # end if
     #// Check tmp file for read/write capabilities.
     should_delete_tmp_file_ = (not php_file_exists(path_))

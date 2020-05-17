@@ -36,7 +36,7 @@ class WP_Site_Health_Auto_Updates():
         
         tests_ = Array(self.test_constants("WP_AUTO_UPDATE_CORE", True), self.test_wp_version_check_attached(), self.test_filters_automatic_updater_disabled(), self.test_wp_automatic_updates_disabled(), self.test_if_failed_update(), self.test_vcs_abspath(), self.test_check_wp_filesystem_method(), self.test_all_files_writable(), self.test_accepts_dev_updates(), self.test_accepts_minor_updates())
         tests_ = php_array_filter(tests_)
-        def _closure_05fbdf67(test_=None):
+        def _closure_19845215(test_=None):
             
             
             test_ = test_
@@ -44,8 +44,8 @@ class WP_Site_Health_Auto_Updates():
                 test_.severity = "warning"
             # end if
             return test_
-        # end def _closure_05fbdf67
-        tests_ = php_array_map((lambda *args, **kwargs: _closure_05fbdf67(*args, **kwargs)), tests_)
+        # end def _closure_19845215
+        tests_ = php_array_map((lambda *args, **kwargs: _closure_19845215(*args, **kwargs)), tests_)
         return tests_
     # end def run_tests
     #// 

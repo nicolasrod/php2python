@@ -40,8 +40,8 @@ class Text_Diff_Engine_shell():
     def diff(self, from_lines_=None, to_lines_=None):
         
         
-        array_walk(from_lines_, Array("Text_Diff", "trimNewlines"))
-        array_walk(to_lines_, Array("Text_Diff", "trimNewlines"))
+        php_array_walk(from_lines_, Array("Text_Diff", "trimNewlines"))
+        php_array_walk(to_lines_, Array("Text_Diff", "trimNewlines"))
         temp_dir_ = Text_Diff._gettempdir()
         #// Execute gnu diff or similar to get a standard diff file.
         from_file_ = php_tempnam(temp_dir_, "Text_Diff")
